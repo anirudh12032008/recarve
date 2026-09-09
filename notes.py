@@ -203,6 +203,33 @@ def subject_dir(library, code, kind):
     return d
 
 
+LOG_PATH = None  # set by serve(); None means console only
+
+
+def log(msg, tag="", indent=0):
+    """One line of progress. Timestamped, aligned, and kept on disk.
+
+    Everything the tool does goes through here so the console, the log file
+    and the phone all tell the same story.
+    """
+    import datetime
+
+    stamp = datetime.datetime.now().strftime("%H:%M:%S")
+    line = f"{stamp}  {'  ' * indent}{tag:<12}{msg}" if tag else f"{stamp}  {'  ' * indent}{msg}"
+    print(line, file=sys.stderr, flush=True)
+    if LOG_PATH:
+        try:
+            with open(LOG_PATH, "a") as fh:
+                fh.write(line + "\n")
+        except OSError:
+            pass
+
+
+def hhmm(seconds):
+    seconds = max(0, int(seconds))
+    return f"{seconds // 60}m{seconds % 60:02d}s" if seconds >= 60 else f"{seconds}s"
+
+
 AUDIO_EXTS = {".m4a", ".mp3", ".wav", ".mp4", ".mov", ".aac", ".ogg", ".opus", ".flac", ".mkv", ".webm"}
 
 
@@ -219,7 +246,14 @@ def collect_audio(paths):
     return found
 
 
-def transcribe(audio_path, model, language, verbose=True, checkpoint=None):
+# Whisper confuses Hindi with its acoustic neighbours and then writes Hindi
+# speech in Arabic or Gurmukhi script, which is unreadable garbage. The
+# professors speak Hindi and English, so anything else is a misdetection.
+EXPECTED_LANGS = {"en", "hi"}
+HINDI_CONFUSABLE = {"ur", "pa", "ne", "sa", "mr", "bn", "gu", "fa", "ar", "ps", "sd"}
+
+
+def transcribe(audio_path, model, language, verbose=True, checkpoint=None, on_progress=None):
     """Transcribe in chunks, re-detecting language each chunk.
 
     Whisper detects language once from the first 30 seconds and applies it to the
@@ -238,6 +272,7 @@ def transcribe(audio_path, model, language, verbose=True, checkpoint=None):
     step = CHUNK_SECONDS * SAMPLE_RATE
     repo = WHISPER_REPOS[model]
 
+    t_start = time.time()
     pos, segments, languages = 0, [], []
     # Resume a run that was interrupted partway through an hour-long lecture.
     if checkpoint and checkpoint.exists():
@@ -256,14 +291,23 @@ def transcribe(audio_path, model, language, verbose=True, checkpoint=None):
             break
         is_last = pos + step >= total
 
-        result = mlx_whisper.transcribe(
-            window,
-            path_or_hf_repo=repo,
-            language=language,  # None => detect this chunk on its own
-            initial_prompt=HINGLISH_PROMPT,
-            condition_on_previous_text=False,  # stops one bad chunk poisoning the rest
-            verbose=None,
-        )
+        def run(lang):
+            return mlx_whisper.transcribe(
+                window,
+                path_or_hf_repo=repo,
+                language=lang,  # None => detect this chunk on its own
+                initial_prompt=HINGLISH_PROMPT,
+                condition_on_previous_text=False,  # one bad chunk must not poison the rest
+                verbose=None,
+            )
+
+        result = run(language)
+        detected = result.get("language", "?")
+        if language is None and detected in HINDI_CONFUSABLE:
+            # Redo just this chunk as Hindi. Cheap: only the misdetected ones.
+            log(f"{detected} looks like Hindi misheard, redoing this chunk", "retry", 1)
+            result = run("hi")
+            detected = "hi*"
 
         chunk_segs = result.get("segments") or []
         if not chunk_segs:
@@ -275,14 +319,17 @@ def transcribe(audio_path, model, language, verbose=True, checkpoint=None):
         offset = pos / SAMPLE_RATE
         for seg in keep:
             segments.append((offset + seg["start"], seg["text"].strip()))
-        languages.append(result.get("language", "?"))
+        languages.append(detected)
 
+        done_sec = min((pos + step) / SAMPLE_RATE, total / SAMPLE_RATE)
+        if on_progress:
+            on_progress(done_sec, total / SAMPLE_RATE, detected)
         if verbose:
-            mins = int(offset // 60)
-            print(
-                f"  [{mins:>3}m] {result.get('language', '?')}  {keep[-1]['text'].strip()[:70]}",
-                file=sys.stderr,
-            )
+            pct = int(done_sec / (total / SAMPLE_RATE) * 100)
+            eta = (time.time() - t_start) / max(done_sec, 1) * (total / SAMPLE_RATE - done_sec)
+            log(f"{pct:>3}%  {int(done_sec)//60:>2}/{int(total/SAMPLE_RATE)//60}min  "
+                f"{detected:<4} eta {hhmm(eta):<7} {keep[-1]['text'].strip()[:52]}",
+                "transcribe", 1)
 
         advance = int(keep[-1]["end"] * SAMPLE_RATE)
         pos += advance if advance > SAMPLE_RATE else step
@@ -557,6 +604,15 @@ body.reading #fab{display:none}
 #prog .fill{height:100%;width:0;background:var(--accent);transition:width .18s linear}
 #prog .txt{margin-top:9px;font-size:13px;color:var(--mut);text-align:center}
 #prog.err .fill{background:#e5484d}
+.job .bar{height:4px;border-radius:2px;background:var(--line);margin-top:6px;overflow:hidden}
+.job .bar i{display:block;height:100%;background:var(--accent);width:0;transition:width .3s}
+.job .col{flex:1;min-width:0}
+#logbtn{width:100%;margin-top:10px;min-height:var(--tap);border-radius:11px;
+  background:var(--surface);font-size:13px;color:var(--mut)}
+#logbox{display:none;margin-top:8px;padding:12px;border-radius:11px;background:var(--surface);
+  font:12px/1.5 ui-monospace,SFMono-Regular,Menlo,monospace;white-space:pre;
+  overflow-x:auto;max-height:44vh;overflow-y:auto}
+#logbox.on{display:block}
 #jobs{padding:0 16px}
 .job{display:flex;align-items:center;gap:11px;padding:11px 12px;margin-top:8px;
   border-radius:11px;background:var(--surface);font-size:16px}
@@ -593,6 +649,10 @@ body:not(.reading) .dock{display:none}
     <input id="q" placeholder="Search notes and transcripts" autocomplete="off" enterkeyhint="search">
   </div>
   <div id="jobs"></div>
+  <div style="padding:0 16px">
+    <button id="logbtn">Show activity log</button>
+    <pre id="logbox"></pre>
+  </div>
   <nav id="nav"></nav>
 </section>
 
@@ -814,11 +874,33 @@ function jobRow(j) {
   const el = document.createElement('div');
   el.className = 'job' + (j.state === 'failed' ? ' failed' : '');
   const busy = j.state === 'queued' || j.state === 'transcribing';
+  const pct = (j.detail.match(/^(\d+)%/) || [])[1];
   el.innerHTML = (busy ? '<i class="spin"></i>' : '') +
-    '<span class="nm"></span><span class="st"></span>';
-  el.querySelector('.nm').textContent = j.name;
+    '<div class="col"><div class="nm"></div>' +
+    (pct ? '<div class="bar"><i></i></div>' : '') +
+    '</div><span class="st"></span>';
+  el.querySelector('.nm').textContent = j.name.replace(/^[A-Z]{2}\d{4}-/, '');
   el.querySelector('.st').textContent = j.detail || j.state;
+  if (pct) el.querySelector('.bar i').style.width = pct + '%';
   return el;
+}
+
+const logbtn = document.getElementById('logbtn'), logbox = document.getElementById('logbox');
+let logOpen = false;
+logbtn.onclick = async () => {
+  logOpen = !logOpen;
+  logbox.classList.toggle('on', logOpen);
+  logbtn.textContent = logOpen ? 'Hide activity log' : 'Show activity log';
+  if (logOpen) await pullLog();
+};
+async function pullLog() {
+  if (!logOpen) return;
+  try {
+    const r = await fetch('/log');
+    const {lines} = await r.json();
+    logbox.textContent = lines.slice(-120).join('\n') || 'Nothing yet.';
+    logbox.scrollTop = logbox.scrollHeight;
+  } catch {}
 }
 
 let lastDone = 0;
@@ -947,7 +1029,8 @@ document.getElementById('opt-revise').onclick = async () => {
 };
 
 refresh();
-setInterval(pollJobs, 2500);
+setInterval(pollJobs, 2000);
+setInterval(pullLog, 3000);
 
 // ---- Explain: highlight anything in a note, tap the button ----
 const ask = document.getElementById('ask'), panel = document.getElementById('panel');
@@ -1138,7 +1221,7 @@ def revise(args):
     cost = msg.usage.input_tokens / 1e6 * rate_in + msg.usage.output_tokens / 1e6 * rate_out
     print(f"  {msg.usage.input_tokens} in / {msg.usage.output_tokens} out (~${cost:.3f})",
           file=sys.stderr)
-    print(f"  -> {out}", file=sys.stderr)
+    log(f"-> {out}", "written", 1)
 
 
 class Jobs:
@@ -1202,16 +1285,31 @@ class Jobs:
     def _process(self, job, path):
         import argparse as _ap
 
-        self._set(job, "transcribing", "this takes about a minute per 5 min of audio")
+        self._set(job, "transcribing", "starting…")
+
+        def progress(done_sec, total_sec, lang):
+            pct = int(done_sec / max(total_sec, 1) * 100)
+            elapsed = time.time() - t0
+            eta = elapsed / max(done_sec, 1) * (total_sec - done_sec)
+            self._set(job, "transcribing",
+                      f"{pct}% · {int(done_sec)//60} of {int(total_sec)//60} min · ~{hhmm(eta)} left")
+
+        t0 = time.time()
         # Reuse the CLI path exactly, so the web route and the terminal route
         # can never drift apart.
         opts = _ap.Namespace(
             library=self.args.library, subject=job["subject"], lang=None,
             model="large-v3", notes_lang="english", notes_model=self.args.notes_model,
             no_notes=False, outdir=None, force=False, redo_notes=False,
-            max_cost=self.args.max_cost, context=False,
+            max_cost=self.args.max_cost, context=False, on_progress=progress,
         )
+        self._set(job, "transcribing", "starting…")
         process(path, opts)
+        try:
+            path.unlink(missing_ok=True)  # transcript is cached; audio is the bulk
+            log(f"removed {path.name} from the inbox", "cleanup", 1)
+        except OSError:
+            pass
         self._set(job, "done", "notes ready")
 
 
@@ -1241,12 +1339,25 @@ def serve(args):
     root = Path(__file__).resolve().parent
     export(args)  # always serve the current library
 
+    global LOG_PATH
+    Path(args.library).mkdir(parents=True, exist_ok=True)
+    LOG_PATH = Path(args.library) / "recarve.log"
     cache_dir = Path(args.library) / ".explains"
     cache_dir.mkdir(parents=True, exist_ok=True)
     inbox = Path(args.library) / ".inbox"
     inbox.mkdir(parents=True, exist_ok=True)
     budget = {"left": args.max_explains}
     jobs = Jobs(args)
+
+    # The queue lives in memory but the audio lives on disk, so a restart used
+    # to strand an upload forever. Anything still in the inbox gets re-queued;
+    # transcription resumes from its checkpoint rather than starting over.
+    for leftover in sorted(inbox.glob("*")):
+        if leftover.suffix.lower() in AUDIO_EXTS:
+            code = leftover.name.split("-", 1)[0]
+            if code in SUBJECTS:
+                jobs.add(leftover, code, "audio")
+                log(f"re-queued {leftover.name} from a previous run", "resume")
 
     class Handler(SimpleHTTPRequestHandler):
         def log_message(self, fmt, *a):
@@ -1265,6 +1376,12 @@ def serve(args):
                                                   for c, (n, _) in SUBJECTS.items()]})
             if self.path == "/jobs":
                 return self.reply(200, {"jobs": jobs.snapshot()})
+            if self.path == "/log":
+                try:
+                    tail = LOG_PATH.read_text().splitlines()[-200:]
+                except OSError:
+                    tail = []
+                return self.reply(200, {"lines": tail})
             return super().do_GET()
 
         def do_POST(self):
@@ -1307,8 +1424,7 @@ def serve(args):
                 hit.write_text(out)
                 rate_in, rate_out = price_of(args.notes_model)
                 cost = msg.usage.input_tokens / 1e6 * rate_in + msg.usage.output_tokens / 1e6 * rate_out
-                print(f"  explain: ~${cost:.4f}, {budget['left']} left, cached as {key[:8]}",
-                      file=sys.stderr)
+                log(f"~${cost:.4f}, {budget['left']} left, cached {key[:8]}", "explain", 1)
                 self.reply(200, {"text": out})
             except Exception as e:
                 # Surface the real reason on the phone; a silent failure here is
@@ -1361,8 +1477,7 @@ def serve(args):
                             got += len(chunk)
                 except (ConnectionResetError, BrokenPipeError, OSError) as e:
                     part.unlink(missing_ok=True)
-                    print(f"  upload of {name} dropped at {got}/{n} bytes ({e})",
-                          file=sys.stderr)
+                    log(f"{name} dropped at {got}/{n} bytes ({e})", "upload-fail", 1)
                     return  # socket is gone; replying would only raise again
 
                 part.replace(dest)
@@ -1404,8 +1519,9 @@ def serve(args):
         print("no ANTHROPIC_API_KEY set - Explain will return an error", file=sys.stderr)
 
     srv = ThreadingHTTPServer((args.host, args.port), partial(Handler, directory=str(root)))
-    print(f"\n  http://{lan_ip()}:{args.port}   <- open this on your phone", file=sys.stderr)
-    print(f"  serving {args.library}", file=sys.stderr)
+    log(f"http://{lan_ip()}:{args.port}   <- open this on your phone", "ready")
+    log(f"library {args.library}", "ready")
+    log(f"log file {LOG_PATH}", "ready")
     if args.host == "0.0.0.0":
         print("  reachable by anyone on this wifi; Explain is capped at "
               f"{args.max_explains} calls this run. Ctrl-C to stop.\n", file=sys.stderr)
@@ -1437,13 +1553,13 @@ def list_subjects(args):
 
 
 def process(path, args):
-    print(f"\n{path.name}", file=sys.stderr)
+    log(path.name, "file")
     outdir, code = destination(path, args, "lectures")
     out = outdir / f"{path.stem}.md"
 
     # Never pay for the same lecture twice.
     if out.exists() and not (args.force or args.redo_notes):
-        print(f"  already done: {out} (--force to redo)", file=sys.stderr)
+        log(f"already done: {out.name} (--force to redo)", "skip", 1)
         return
 
     # Transcribing is free but slow; caching it means a failed or re-run notes
@@ -1452,25 +1568,24 @@ def process(path, args):
     partial = cache.with_suffix(".partial.json")
     if cache.exists() and not args.force:
         transcript = cache.read_text()
-        print(f"  reusing cached transcript ({len(transcript.splitlines())} lines)", file=sys.stderr)
+        log(f"reusing cached transcript, {len(transcript.splitlines())} lines", "cache", 1)
     else:
         if args.force and partial.exists():
             partial.unlink()
         t0 = time.time()
-        segments, languages = transcribe(path, args.model, args.lang, checkpoint=partial)
+        segments, languages = transcribe(path, args.model, args.lang, checkpoint=partial,
+                                         on_progress=getattr(args, "on_progress", None))
         if not segments:
-            print("  no speech found, skipping", file=sys.stderr)
+            log("no speech found, skipping", "warn", 1)
             return
         kept = drop_repeats(segments)
         transcript = format_transcript(kept)
         mins = segments[-1][0] / 60
         dropped = len(segments) - len(kept)
         note = f", dropped {dropped} repeated" if dropped else ""
-        print(
-            f"  transcribed {mins:.0f} min in {time.time() - t0:.0f}s "
-            f"(detected: {', '.join(sorted(set(languages)))}{note})",
-            file=sys.stderr,
-        )
+        langs = ", ".join(f"{l}x{languages.count(l)}" for l in sorted(set(languages)))
+        log(f"{mins:.0f} min of audio in {hhmm(time.time() - t0)}  [{langs}]{note}",
+            "done", 1)
         cache.parent.mkdir(parents=True, exist_ok=True)
         cache.write_text(transcript)
         partial.unlink(missing_ok=True)  # full transcript supersedes the checkpoint
@@ -1492,19 +1607,15 @@ def process(path, args):
         if code and args.context:
             context, included, skipped = subject_context(args.library, code)
             if included:
-                print(f"  using {len(included)} file(s) from {code}: {', '.join(included)}",
-                      file=sys.stderr)
+                log(f"context: {len(included)} file(s) - {', '.join(included)}", "context", 1)
             if skipped:
-                print(f"  SKIPPED (over {MAX_CONTEXT_BYTES // 1024 // 1024}MB): "
-                      f"{', '.join(skipped)}", file=sys.stderr)
+                log(f"SKIPPED over {MAX_CONTEXT_BYTES // 1024 // 1024}MB: "
+                    f"{', '.join(skipped)}", "warn", 1)
 
         notes, usage = make_notes(transcript, args.notes_lang, args.notes_model, context)
         cost = usage.input_tokens / 1e6 * rate_in + usage.output_tokens / 1e6 * rate_out
-        print(
-            f"  notes: {usage.input_tokens} in / {usage.output_tokens} out "
-            f"(~${cost:.3f} on {args.notes_model})",
-            file=sys.stderr,
-        )
+        log(f"{usage.input_tokens} in / {usage.output_tokens} out  ~${cost:.4f}  "
+            f"{args.notes_model}", "notes", 1)
         body += f"{notes}\n\n---\n\n<details><summary>Full transcript</summary>\n\n```\n{transcript}\n```\n\n</details>\n"
 
     out.write_text(body)
