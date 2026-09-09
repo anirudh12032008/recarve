@@ -334,140 +334,312 @@ def search(args):
 
 
 # Raw string: this is JavaScript, and its backslash escapes are not Python's.
+# Raw string: this is JavaScript, and its backslash escapes are not Python's.
 PAGE = r"""<!doctype html>
-<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#fcfcfd" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#0f1115" media="(prefers-color-scheme: dark)">
 <title>recarve — Section I</title>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/marked/15.0.7/marked.min.js"></script>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.11/katex.min.css">
 <script defer src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.11/katex.min.js"></script>
 <script defer src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.11/contrib/auto-render.min.js"></script>
 <style>
-:root{--bg:#fff;--fg:#16181d;--mut:#666e7a;--line:#e3e6ea;--accent:#2f6df6;--card:#f7f8fa}
-@media(prefers-color-scheme:dark){:root{--bg:#14161a;--fg:#e8eaed;--mut:#9aa3ad;--line:#2a2e35;--accent:#7aa2ff;--card:#1b1e24}}
-*{box-sizing:border-box}
-body{margin:0;font:15px/1.6 -apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;background:var(--bg);color:var(--fg);display:flex;min-height:100vh}
-aside{width:270px;flex:none;border-right:1px solid var(--line);padding:18px 14px;overflow-y:auto;height:100vh;position:sticky;top:0}
-h1{font-size:15px;margin:0 0 14px;letter-spacing:.02em}
-#q{width:100%;padding:8px 10px;margin-bottom:14px;border:1px solid var(--line);border-radius:8px;background:var(--card);color:var(--fg);font-size:14px}
-.subj{font-size:11px;text-transform:uppercase;letter-spacing:.07em;color:var(--mut);margin:16px 0 6px}
-a.item{display:block;padding:6px 9px;border-radius:7px;color:var(--fg);text-decoration:none;font-size:13.5px;cursor:pointer}
-a.item:hover{background:var(--card)}
-a.item.on{background:var(--accent);color:#fff}
-main{flex:1;padding:34px 44px;max-width:860px;overflow-x:auto}
-main img{max-width:100%}
-pre{background:var(--card);padding:12px;border-radius:8px;overflow-x:auto;font-size:12.5px}
-table{border-collapse:collapse}td,th{border:1px solid var(--line);padding:5px 9px}
-details{margin:6px 0;padding:8px 12px;background:var(--card);border-radius:8px}
-summary{cursor:pointer;color:var(--accent)}
-.empty{color:var(--mut)}
-.bar{display:flex;gap:8px;margin-bottom:22px;flex-wrap:wrap}
-.bar button{font:inherit;font-size:13px;padding:6px 13px;border:1px solid var(--line);
-  border-radius:7px;background:var(--card);color:var(--fg);cursor:pointer}
-.bar button:hover{border-color:var(--accent);color:var(--accent)}
-@media print{
-  aside,.bar{display:none}
-  main{padding:0;max-width:none}
-  details{border:1px solid #ccc}
-  details[open] summary{font-weight:600}
+:root{
+  --bg:#fcfcfd; --surface:#f2f3f7;
+  --fg:#14161b; --mut:#656b76; --line:#e1e4ea;
+  --accent:#3355e8; --accent-fg:#fff;
+  --sat:62%; --lum:38%; --chip-lum:94%; --chip-text:28%;
+  --tap:44px;
 }
-@media(max-width:720px){body{flex-direction:column}aside{width:100%;height:auto;position:static;border-right:0;border-bottom:1px solid var(--line)}main{padding:20px}}
+@media (prefers-color-scheme:dark){
+  :root{
+    --bg:#0f1115; --surface:#171a20;
+    --fg:#e7e9ee; --mut:#98a0ad; --line:#262a32;
+    --accent:#7c93ff; --accent-fg:#0f1115;
+    --sat:48%; --lum:70%; --chip-lum:22%; --chip-text:78%;
+  }
+}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html{-webkit-text-size-adjust:100%}
+body{
+  margin:0;background:var(--bg);color:var(--fg);
+  font:16px/1.65 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;
+  overflow-wrap:break-word;
+}
+button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
+:focus-visible{outline:2px solid var(--accent);outline-offset:2px;border-radius:4px}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+
+#read{display:none}
+body.reading #list{display:none}
+body.reading #read{display:block}
+
+.top{
+  position:sticky;top:0;z-index:5;background:var(--bg);
+  border-bottom:1px solid var(--line);
+  padding:max(10px,env(safe-area-inset-top)) 16px 10px;
+}
+.brand{display:flex;align-items:baseline;gap:8px;margin-bottom:10px}
+.brand b{font-size:17px;letter-spacing:-.01em}
+.brand span{font-size:13px;color:var(--mut)}
+#q{
+  width:100%;height:var(--tap);padding:0 14px;font-size:16px;
+  border:1px solid var(--line);border-radius:11px;background:var(--surface);color:var(--fg);
+}
+#q::placeholder{color:var(--mut)}
+
+.group{padding:18px 16px 2px}
+.code{
+  display:inline-block;padding:3px 9px;border-radius:7px;
+  font-size:12.5px;font-weight:650;
+  background:hsl(var(--h) var(--sat) var(--chip-lum));
+  color:hsl(var(--h) var(--sat) var(--chip-text));
+}
+.group h2{display:inline;margin:0 0 0 9px;font-size:13.5px;font-weight:500;color:var(--mut)}
+.rows{padding:6px 8px 0}
+.row{
+  display:flex;align-items:center;gap:12px;width:100%;
+  min-height:var(--tap);padding:11px 12px;border-radius:11px;
+  text-align:left;text-decoration:none;color:inherit;font-size:15.5px;
+}
+.row:active{background:var(--surface)}
+.row .tick{width:3px;align-self:stretch;border-radius:2px;background:hsl(var(--h) var(--sat) var(--lum));flex:none}
+.row .name{flex:1;min-width:0}
+.row .meta{font-size:12.5px;color:var(--mut);flex:none}
+.blank{padding:64px 24px;text-align:center;color:var(--mut)}
+
+.rtop{display:flex;align-items:center;gap:6px}
+.back{display:flex;align-items:center;gap:5px;height:var(--tap);padding:0 10px 0 4px;
+  margin-left:-4px;font-size:15px;color:var(--accent);font-weight:500}
+.rtop .code{margin-left:auto}
+article{padding:22px 18px 118px;max-width:70ch;margin:0 auto}
+article h1{font-size:23px;line-height:1.25;letter-spacing:-.02em;margin:0 0 22px}
+article h2{font-size:18px;margin:34px 0 10px;padding-bottom:6px;border-bottom:1px solid var(--line)}
+article h3{font-size:16px;margin:24px 0 8px}
+article ul,article ol{padding-left:22px}
+article li{margin:5px 0}
+article code{background:var(--surface);padding:2px 5px;border-radius:5px;font-size:.9em}
+article pre{background:var(--surface);padding:13px;border-radius:11px;overflow-x:auto;font-size:13px}
+article img{max-width:100%;height:auto}
+.katex-display{overflow-x:auto;overflow-y:hidden;padding:4px 0}
+.scroll-x{overflow-x:auto;-webkit-overflow-scrolling:touch;margin:12px 0}
+table{border-collapse:collapse;font-size:14.5px;min-width:100%}
+td,th{border:1px solid var(--line);padding:7px 11px;text-align:left}
+th{background:var(--surface)}
+details{margin:9px 0;background:var(--surface);border-radius:11px;overflow:hidden}
+summary{min-height:var(--tap);display:flex;align-items:center;padding:0 14px;color:var(--accent);font-size:14.5px}
+details[open] summary{border-bottom:1px solid var(--line)}
+details>:not(summary){padding:0 14px}
+
+.dock{
+  position:fixed;left:0;right:0;bottom:0;z-index:6;display:flex;gap:8px;
+  padding:9px 14px calc(9px + env(safe-area-inset-bottom));
+  background:color-mix(in srgb,var(--bg) 88%,transparent);
+  backdrop-filter:blur(12px);border-top:1px solid var(--line);
+}
+.dock button{
+  flex:1;min-height:var(--tap);border-radius:11px;background:var(--surface);
+  font-size:14px;font-weight:500;display:flex;align-items:center;justify-content:center;
+}
+.dock button.primary{background:var(--accent);color:var(--accent-fg)}
+.dock button:active{opacity:.75}
+body:not(.reading) .dock{display:none}
+
+@media (min-width:760px){
+  body{display:flex}
+  #list{width:320px;flex:none;border-right:1px solid var(--line);height:100dvh;overflow-y:auto;position:sticky;top:0}
+  #read{flex:1;display:block;min-width:0}
+  body.reading #list{display:block}
+  .back{display:none}
+  article{padding:30px 40px 110px}
+  .dock{left:320px}
+  body:not(.reading) .dock{display:flex}
+}
+@media print{
+  .top,.dock,#list,.rtop{display:none!important}
+  #read{display:block!important}
+  article{padding:0;max-width:none}
+  details{background:none;border:1px solid #999}
+}
 </style>
-<aside>
-  <h1>recarve · Section I</h1>
-  <input id="q" placeholder="Search all notes…" autocomplete="off">
+
+<section id="list">
+  <div class="top">
+    <div class="brand"><b>recarve</b><span>Section I</span></div>
+    <input id="q" placeholder="Search notes and transcripts" autocomplete="off" enterkeyhint="search">
+  </div>
   <nav id="nav"></nav>
-</aside>
-<main id="body"><p class="empty">Pick a lecture on the left.</p></main>
+</section>
+
+<section id="read">
+  <div class="top rtop">
+    <button class="back" id="back" aria-label="Back to all notes">&lsaquo; Notes</button>
+    <span class="code" id="rcode"></span>
+  </div>
+  <article id="body"><p class="blank">Pick a lecture to start reading.</p></article>
+</section>
+
+<div class="dock">
+  <button id="share" class="primary">Share</button>
+  <button id="dl">Download</button>
+  <button id="print">Print</button>
+</div>
+
 <script>
 const DATA = __DATA__;
-const nav = document.getElementById('nav'), body = document.getElementById('body'), q = document.getElementById('q');
+const nav = document.getElementById('nav'), body = document.getElementById('body');
+const q = document.getElementById('q'), rcode = document.getElementById('rcode');
 let current = null;
 
+// Hue per department prefix. Colour says which subject you are in, so the code
+// chip reads at a glance without parsing the number.
+const HUES = {MC:245, CY:150, EE:38, ME:210, BS:175, HS:345, SA:275, NC:80};
+const hue = code => HUES[code.slice(0, 2)] ?? 220;
+
 function render(filter) {
+  const needle = (filter || '').trim().toLowerCase();
   nav.innerHTML = '';
-  const needle = (filter || '').toLowerCase();
+  let shown = 0;
+
   for (const s of DATA) {
-    // A hit on the subject itself ("chemistry", "CY1107") shows everything under it.
     const subjHit = !needle || (s.code + ' ' + s.name).toLowerCase().includes(needle);
-    const items = s.notes.filter(n =>
-      subjHit || n.title.toLowerCase().includes(needle) || n.md.toLowerCase().includes(needle));
+    const notes = s.notes.filter(n => subjHit
+      || n.title.toLowerCase().includes(needle) || n.md.toLowerCase().includes(needle));
     const files = s.uploads.filter(u => subjHit || u.name.toLowerCase().includes(needle));
-    if (!items.length && !files.length) continue;
-    const h = document.createElement('div');
-    h.className = 'subj'; h.textContent = s.code + ' · ' + s.name;
-    nav.appendChild(h);
-    for (const n of items) {
-      const a = document.createElement('a');
-      a.className = 'item' + (current === n ? ' on' : ''); a.textContent = n.title;
-      a.onclick = () => { current = n; show(n); render(q.value); };
-      nav.appendChild(a);
+    if (!notes.length && !files.length) continue;
+    shown += notes.length + files.length;
+
+    const g = document.createElement('div');
+    g.className = 'group';
+    g.style.setProperty('--h', hue(s.code));
+    g.innerHTML = '<span class="code"></span><h2></h2>';
+    g.querySelector('.code').textContent = s.code;
+    g.querySelector('h2').textContent = s.name;
+    nav.appendChild(g);
+
+    const rows = document.createElement('div');
+    rows.className = 'rows';
+    rows.style.setProperty('--h', hue(s.code));
+
+    for (const n of notes) {
+      const b = document.createElement('button');
+      b.className = 'row';
+      b.innerHTML = '<i class="tick"></i><span class="name"></span>';
+      b.querySelector('.name').textContent = n.title;
+      b.onclick = () => open_(n, s);
+      rows.appendChild(b);
     }
     for (const u of files) {
       const a = document.createElement('a');
-      a.className = 'item'; a.textContent = '📎 ' + u.name; a.href = u.path; a.target = '_blank';
-      nav.appendChild(a);
+      a.className = 'row'; a.href = u.path; a.target = '_blank'; a.rel = 'noopener';
+      a.innerHTML = '<i class="tick"></i><span class="name"></span><span class="meta">file</span>';
+      a.querySelector('.name').textContent = u.name;
+      rows.appendChild(a);
     }
+    nav.appendChild(rows);
   }
-  if (!nav.children.length) nav.innerHTML = '<p class="empty">No matches.</p>';
+
+  if (!shown) {
+    const p = document.createElement('p');
+    p.className = 'blank';
+    p.textContent = 'Nothing matches that. Try a subject code like CY1107.';
+    nav.appendChild(p);
+  }
 }
-function download(name, text, mime) {
+
+function open_(n, s) {
+  current = n;
+  rcode.textContent = s.code;
+  rcode.style.setProperty('--h', hue(s.code));
+  body.innerHTML = marked.parse(n.md);
+
+  // Wide tables scroll inside their own box instead of stretching the page.
+  body.querySelectorAll('table').forEach(t => {
+    const box = document.createElement('div');
+    box.className = 'scroll-x';
+    t.replaceWith(box); box.appendChild(t);
+  });
+
+  if (window.renderMathInElement) {
+    renderMathInElement(body, {
+      delimiters: [
+        {left:'$$', right:'$$', display:true},
+        {left:'$', right:'$', display:false},
+        {left:'\\(', right:'\\)', display:false},
+        {left:'\\[', right:'\\]', display:true},
+      ],
+      throwOnError: false,
+    });
+  }
+
+  document.body.classList.add('reading');
+  window.scrollTo(0, 0);
+  // A real history entry, so the Android back gesture and the browser back
+  // button return to the list instead of leaving the page.
+  history.pushState({note: n.title}, '', '#' + encodeURIComponent(n.title));
+}
+
+function close_() {
+  document.body.classList.remove('reading');
+  current = null;
+}
+
+function plain(md) {
+  return md.replace(/^#+ /gm, '').replace(/\*\*/g, '')
+           .replace(/<\/?details>|<\/?summary>/g, '').replace(/\n{3,}/g, '\n\n');
+}
+
+function save(name, text, mime) {
   const url = URL.createObjectURL(new Blob([text], {type: mime}));
   const a = document.createElement('a');
   a.href = url; a.download = name;
   document.body.appendChild(a); a.click(); a.remove();
-  URL.revokeObjectURL(url);
+  setTimeout(() => URL.revokeObjectURL(url), 1000);
 }
 
-function show(n) {
-  const bar = document.createElement('div');
-  bar.className = 'bar';
+function flash(btn, word) {
+  const was = btn.textContent;
+  btn.textContent = word;
+  setTimeout(() => { btn.textContent = was; }, 1400);
+}
 
-  const md = document.createElement('button');
-  md.textContent = '⬇ Markdown';
-  md.onclick = () => download(n.title + '.md', n.md, 'text/markdown');
+document.getElementById('back').onclick = () => history.back();
+window.onpopstate = close_;
 
-  const txt = document.createElement('button');
-  txt.textContent = '⬇ Plain text';
-  // Strip the markdown scaffolding so it pastes cleanly into WhatsApp.
-  txt.onclick = () => download(n.title + '.txt',
-    n.md.replace(/^#+ /gm, '').replace(/\*\*/g, '').replace(/<\/?details>|<\/?summary>/g, ''),
-    'text/plain');
-
-  const pdf = document.createElement('button');
-  pdf.textContent = '🖨 Print / PDF';
-  // Answers are collapsed by default; a printed copy with hidden answers is
-  // useless, so open them all first.
-  pdf.onclick = () => {
-    body.querySelectorAll('details').forEach(d => d.open = true);
-    window.print();
-  };
-
-  const copy = document.createElement('button');
-  copy.textContent = '📋 Copy';
-  copy.onclick = () => navigator.clipboard.writeText(n.md)
-    .then(() => { copy.textContent = '✓ Copied'; setTimeout(() => copy.textContent = '📋 Copy', 1500); })
-    .catch(() => { copy.textContent = 'Copy failed'; });
-
-  bar.append(md, txt, pdf, copy);
-
-  body.innerHTML = marked.parse(n.md);
-  body.prepend(bar);
-  // Notes are full of LaTeX; markdown alone renders it as literal $$ noise.
-  if (window.renderMathInElement) {
-    renderMathInElement(body, {
-      delimiters: [
-        {left: '$$', right: '$$', display: true},
-        {left: '$', right: '$', display: false},
-        {left: '\\(', right: '\\)', display: false},
-        {left: '\\[', right: '\\]', display: true},
-      ],
-      throwOnError: false,  // a malformed formula shows as red text, not a blank page
-    });
+document.getElementById('share').onclick = async (e) => {
+  if (!current) return;
+  const text = plain(current.md);
+  // On a phone this opens the system sheet, so notes go straight to WhatsApp.
+  if (navigator.share) {
+    try { await navigator.share({title: current.title, text}); return; }
+    catch (err) { if (err.name === 'AbortError') return; }
   }
-  body.scrollIntoView();
-}
+  try { await navigator.clipboard.writeText(text); flash(e.currentTarget, 'Copied'); }
+  catch { flash(e.currentTarget, 'Copy failed'); }
+};
+
+document.getElementById('dl').onclick = () => {
+  if (current) save(current.title + '.md', current.md, 'text/markdown');
+};
+
+document.getElementById('print').onclick = () => {
+  body.querySelectorAll('details').forEach(d => d.open = true);
+  window.print();
+};
+
 q.oninput = () => render(q.value);
 render('');
+
+// Deep link: opening #<title> goes straight to that note.
+const want = decodeURIComponent(location.hash.slice(1));
+if (want) {
+  for (const s of DATA) {
+    const n = s.notes.find(x => x.title === want);
+    if (n) { open_(n, s); break; }
+  }
+}
 </script>
 """
 
