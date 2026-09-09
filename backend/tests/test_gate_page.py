@@ -107,15 +107,17 @@ def test_every_control_takes_the_page_font(selector):
         f"{selector} falls back to the UA default without it"
 
 
-def test_the_role_picker_has_a_boundary_you_can_see():
+@pytest.mark.parametrize("selector", [".row select", "input"])
+def test_every_control_has_a_boundary_you_can_see(selector):
     """WCAG 1.4.11 wants 3:1 for the edge of a control. --line is 1.24:1 on the
-    ground here, and with a transparent background mobile Safari draws no
-    arrow either -- so the one control that can promote anybody to admin read
-    as the static text beside it."""
-    token = re.search(r"border:1px solid var\((--[\w-]+)\)", rule(".row select")).group(1)
+    ground here, and every control on these screens draws no background at all
+    -- so the picker that can promote anybody to admin, and the password boxes
+    on /login and the forced-change screen, read as the static text beside
+    them."""
+    token = re.search(r"border:1px solid var\((--[\w-]+)\)", rule(selector)).group(1)
     for mode, tokens in (("light", LIGHT), ("dark", DARK)):
         ratio = contrast(tokens[token], tokens["--bg"])
-        assert ratio >= 3, f"the picker's only edge is {ratio:.2f}:1 in {mode}"
+        assert ratio >= 3, f"{selector}'s only edge is {ratio:.2f}:1 in {mode}"
 
 
 def test_the_admin_screen_has_a_way_back():
@@ -282,7 +284,8 @@ CHECKS = """
     counts: {pending: 1, members: 3, blocked: 1, reports: 1},
     pending: [{id: 'p-1', name: 'Joiner', roll_no: 'R1', phone: '9', asked: 990}],
     members: [{id: 'me-1', name: 'Me', role: 'admin', status: 'approved', roll_no: 'R0'},
-              {id: 'm-2', name: 'Other', role: 'student', status: 'approved', roll_no: 'R2'},
+              {id: 'm-2', name: 'Other', role: 'student', status: 'approved', roll_no: 'R2',
+               password: 'member-password'},
               {id: 'm-3', name: 'Out', role: 'student', status: 'blocked', roll_no: 'R3'}],
     reports: [{id: 'rep-1', material_id: 'mat-9', filename: 'f.pdf', status: 'open',
                subject: 'CY1107', reason: 'wrong', by: 'Someone', at: 900}],
@@ -330,6 +333,17 @@ CHECKS = """
                    {path: '/block', body: {id: 'm-2', blocked: true}});
   assert.deepEqual(await tap('Unblock'),
                    {path: '/block', body: {id: 'm-3', blocked: false}});
+
+  // Reset password was appended to that same .acts row. Pointed at /block it
+  // locks the classmate out instead of letting them back in, and deleted
+  // altogether it takes the only recovery path off the screen.
+  assert.deepEqual(await tap('Reset password'), {path: '/reset', body: {id: 'm-2'}});
+  assert.equal(drawn.filter(b => b.textContent === 'Reset password').length, 1,
+               'no reset button on a row that has never set a password');
+  // The whole reason the password is stored as typed: an admin reads it back
+  // down the phone. Blank it and the screen loses the one thing it is for.
+  assert.ok(byId.members.text.includes('password member-password'),
+            'a set password must be readable off the member row');
 
   // A report carries two ids and only one of them is a file that can go.
   assert.deepEqual(await tap('Remove'), {path: '/remove', body: {id: 'mat-9'}},

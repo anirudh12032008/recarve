@@ -3388,7 +3388,10 @@ main{width:100%;max-width:23rem}
 h1{font-size:1.45rem;margin:0 0 .3rem;letter-spacing:-.01em}
 p{color:var(--mut);margin:0 0 1.4rem}
 label{display:block;font-size:.8rem;color:var(--mut);margin:0 0 .3rem}
-input{width:100%;padding:.7rem .8rem;margin:0 0 .9rem;font:inherit;border:1px solid var(--line);
+/* --mut, not --line, for the same reason .row select takes it below: --line is
+   1.24:1 on the ground and 1.4.11 wants 3:1 for a control's boundary. With
+   background:transparent that border is the only thing saying a box is here. */
+input{width:100%;padding:.7rem .8rem;margin:0 0 .9rem;font:inherit;border:1px solid var(--mut);
   border-radius:10px;background:transparent;color:var(--fg)}
 input:focus{outline:2px solid var(--accent);outline-offset:-1px;border-color:transparent}
 button{min-height:44px;width:100%;font:inherit;font-weight:600;line-height:1;border:0;
