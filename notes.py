@@ -508,6 +508,23 @@ details>:not(summary){padding:0 14px}
   font-size:16px;font-weight:500;display:flex;align-items:center;justify-content:center;
 }
 .dock button.primary{background:var(--accent);color:var(--accent-fg)}
+#ask{position:absolute;z-index:9;display:none;padding:9px 15px;border-radius:10px;
+  background:var(--accent);color:var(--accent-fg);font-size:16px;font-weight:600;
+  box-shadow:0 6px 20px rgba(0,0,0,.28)}
+#ask.on{display:block}
+#panel{position:fixed;left:0;right:0;bottom:0;z-index:10;transform:translateY(101%);
+  transition:transform .22s ease;background:var(--bg);border-top:1px solid var(--line);
+  border-radius:16px 16px 0 0;max-height:76dvh;display:flex;flex-direction:column;
+  box-shadow:0 -8px 34px rgba(0,0,0,.22)}
+#panel.on{transform:none}
+@media (prefers-reduced-motion:reduce){#panel{transition:none}}
+#panel header{display:flex;align-items:center;gap:10px;padding:12px 16px;border-bottom:1px solid var(--line)}
+#panel header b{font-size:16px;flex:1}
+#panel .quote{font-size:13px;color:var(--mut);padding:10px 16px 0;
+  overflow:hidden;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical}
+#panel .out{padding:12px 16px calc(20px + env(safe-area-inset-bottom));overflow-y:auto;font-size:16px}
+#panel .out .katex-display{overflow-x:auto}
+#close{min-width:var(--tap);min-height:var(--tap);font-size:16px;color:var(--mut)}
 .dock button:active{opacity:.75}
 body:not(.reading) .dock{display:none}
 
@@ -544,6 +561,14 @@ body:not(.reading) .dock{display:none}
   </div>
   <article id="body"><p class="blank">Pick a lecture to start reading.</p></article>
 </section>
+
+<button id="ask">Explain</button>
+
+<div id="panel" role="dialog" aria-label="Explanation">
+  <header><b>Explain</b><button id="close" aria-label="Close">Close</button></header>
+  <p class="quote" id="quote"></p>
+  <div class="out" id="out"></div>
+</div>
 
 <div class="dock">
   <button id="share" class="primary">Share</button>
@@ -693,6 +718,58 @@ document.getElementById('print').onclick = () => {
   window.print();
 };
 
+// ---- Explain: highlight anything in a note, tap the button ----
+const ask = document.getElementById('ask'), panel = document.getElementById('panel');
+const out = document.getElementById('out'), quote = document.getElementById('quote');
+let picked = '';
+
+function hideAsk() { ask.classList.remove('on'); }
+
+document.addEventListener('selectionchange', () => {
+  const sel = document.getSelection();
+  const text = sel ? sel.toString().trim() : '';
+  // Only offer it for a real phrase inside a note, not a stray tap.
+  if (!text || text.length < 12 || !current
+      || !body.contains(sel.anchorNode) || panel.classList.contains('on')) {
+    return hideAsk();
+  }
+  picked = text;
+  const r = sel.getRangeAt(0).getBoundingClientRect();
+  ask.style.top = (window.scrollY + r.top - 52) + 'px';
+  ask.style.left = Math.max(12, Math.min(window.innerWidth - 130,
+                                         r.left + r.width / 2 - 55)) + 'px';
+  ask.classList.add('on');
+});
+
+ask.onclick = async () => {
+  hideAsk();
+  quote.textContent = picked;
+  out.textContent = 'Thinking...';
+  panel.classList.add('on');
+  try {
+    const res = await fetch('/explain', {
+      method: 'POST',
+      headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify({text: picked, title: current ? current.title : ''}),
+    });
+    const data = await res.json();
+    if (!res.ok) throw new Error(data.error || res.status);
+    out.innerHTML = marked.parse(data.text);
+    if (window.renderMathInElement) {
+      renderMathInElement(out, {delimiters: [
+        {left:'$$', right:'$$', display:true}, {left:'$', right:'$', display:false},
+      ], throwOnError: false});
+    }
+  } catch (err) {
+    // The static export has no server, so say that rather than "failed".
+    out.textContent = String(err).includes('JSON') || String(err).includes('Failed to fetch')
+      ? 'Explain needs the server. Run: notes.py serve'
+      : 'Could not explain that: ' + err.message;
+  }
+};
+
+document.getElementById('close').onclick = () => panel.classList.remove('on');
+
 q.oninput = () => render(q.value);
 render('');
 
@@ -721,6 +798,9 @@ def export(args):
     for code, (name, _) in SUBJECTS.items():
         folder = lib / f"{code}-{name}"
         notes, uploads = [], []
+        rev = folder / "revision.md"
+        if rev.is_file():
+            notes.append({"title": "Revision sheet", "md": rev.read_text()})
         for md in sorted((folder / "lectures").glob("*.md")):
             notes.append({"title": md.stem, "md": md.read_text()})
         for f in sorted((folder / "uploads").glob("*")) if (folder / "uploads").exists() else []:
@@ -738,6 +818,190 @@ def export(args):
     lectures = sum(len(s["notes"]) for s in data)
     files = sum(len(s["uploads"]) for s in data)
     print(f"{lectures} lectures, {files} uploads, {len(data)} subjects -> {out}", file=sys.stderr)
+
+
+REVISE_PROMPT = """You are given every lecture note from one course this semester, in order.
+
+Produce one revision sheet a student can study the night before the exam.
+
+## Covered
+A compact map of what the course actually covered, lecture by lecture, one line each.
+
+## Formulas
+Every formula from the whole course in a single table: formula, what it is for, which lecture.
+This is the section students photograph before walking into the exam, so miss nothing.
+
+## Threads
+Ideas that recur across lectures, and how the later ones build on the earlier ones. This is the
+part individual lecture notes cannot show and the reason this sheet exists.
+
+## Likely questions
+8-12 questions spanning the whole course, weighted toward what the professor repeated or
+explicitly called important. Answers in collapsible blocks:
+<details><summary>Answer</summary>
+
+...answer...
+
+</details>
+
+## Gaps
+Topics the syllabus implies but no lecture covered, and anything the notes flagged as unclear.
+
+Rules:
+- Start at "## Covered". No title heading.
+- Maths as LaTeX: $...$ inline, $$...$$ display.
+- Use only what is in these notes. Never add material from outside them.
+- Where two lectures disagree, say so rather than silently picking one."""
+
+
+def revise(args):
+    """Consolidate every lecture in a subject into one revision sheet."""
+    code = resolve_subject(args.subject)
+    folder = Path(args.library) / f"{code}-{SUBJECTS[code][0]}"
+    notes = sorted((folder / "lectures").glob("*.md")) if (folder / "lectures").is_dir() else []
+    if not notes:
+        raise SystemExit(f"no lectures under {code} yet")
+
+    # Feed the notes, not the transcripts: they are already condensed, so a whole
+    # semester still costs less than one lecture's PDFs would.
+    parts = []
+    for f in notes:
+        text = f.read_text().split("---\n\n<details><summary>Full transcript")[0]
+        parts.append(f"# {f.stem}\n\n{text}")
+    body = "\n\n".join(parts)
+
+    rate_in, rate_out = price_of(args.notes_model)
+    est = len(body) / 4 / 1e6 * rate_in + 16000 / 1e6 * rate_out
+    if est > args.max_cost:
+        raise SystemExit(f"would cost up to ${est:.2f}, over --max-cost ${args.max_cost:.2f}")
+
+    print(f"{code}: {len(notes)} lectures, {len(body) // 1000}k chars", file=sys.stderr)
+
+    import anthropic
+
+    msg = anthropic.Anthropic().messages.create(
+        model=args.notes_model,
+        max_tokens=16000,
+        system=REVISE_PROMPT,
+        messages=[{"role": "user", "content": body}],
+    )
+    if msg.stop_reason == "refusal":
+        raise SystemExit("Claude declined to summarise these notes.")
+    text = "".join(b.text for b in msg.content if b.type == "text")
+
+    out = folder / "revision.md"
+    out.write_text(f"# Revision — {SUBJECTS[code][0].replace('-', ' ')}\n\n{text}\n")
+    cost = msg.usage.input_tokens / 1e6 * rate_in + msg.usage.output_tokens / 1e6 * rate_out
+    print(f"  {msg.usage.input_tokens} in / {msg.usage.output_tokens} out (~${cost:.3f})",
+          file=sys.stderr)
+    print(f"  -> {out}", file=sys.stderr)
+
+
+EXPLAIN_PROMPT = """A student is reading their lecture notes and highlighted a passage they do not
+understand. Explain just that passage.
+
+Rules:
+- 3-5 sentences. This is a quick doubt, not a lecture.
+- Plain language first, then the technical statement.
+- If it is a formula, say what each symbol means and when you would use it.
+- Maths as LaTeX: $...$ inline, $$...$$ display.
+- Answer only what was highlighted. Do not summarise the whole note.
+- If the passage is too fragmentary to explain, say so and ask what specifically is unclear."""
+
+
+def serve(args):
+    """Serve the library and answer 'explain this' taps from the phone.
+
+    The API key never leaves the Mac: the phone posts the highlighted text here
+    and gets prose back.
+    """
+    import json
+    from functools import partial
+    from http.server import SimpleHTTPRequestHandler, ThreadingHTTPServer
+
+    root = Path(__file__).resolve().parent
+    export(args)  # always serve the current library
+
+    budget = {"left": args.max_explains}
+
+    class Handler(SimpleHTTPRequestHandler):
+        def log_message(self, fmt, *a):
+            if args.verbose:
+                super().log_message(fmt, *a)
+
+        def translate_path(self, path):
+            if path in ("/", "/index.html"):
+                return str(args.out)
+            return super().translate_path(path)
+
+        def do_POST(self):
+            if self.path != "/explain":
+                return self.send_error(404)
+            try:
+                n = int(self.headers.get("Content-Length", 0))
+                if n > 20000:
+                    return self.reply(413, {"error": "selection too long"})
+                req = json.loads(self.rfile.read(n) or b"{}")
+                text = (req.get("text") or "").strip()[:8000]
+                if not text:
+                    return self.reply(400, {"error": "nothing selected"})
+                if budget["left"] <= 0:
+                    return self.reply(429, {"error": "explain limit reached for this session"})
+                budget["left"] -= 1
+
+                import anthropic
+
+                msg = anthropic.Anthropic().messages.create(
+                    model=args.notes_model,
+                    max_tokens=1200,
+                    system=EXPLAIN_PROMPT,
+                    messages=[{"role": "user", "content":
+                               f"From the note \"{req.get('title', '')}\":\n\n{text}"}],
+                )
+                out = "".join(b.text for b in msg.content if b.type == "text")
+                rate_in, rate_out = price_of(args.notes_model)
+                cost = msg.usage.input_tokens / 1e6 * rate_in + msg.usage.output_tokens / 1e6 * rate_out
+                print(f"  explain: ~${cost:.4f}, {budget['left']} left", file=sys.stderr)
+                self.reply(200, {"text": out})
+            except Exception as e:
+                # Surface the real reason on the phone; a silent failure here is
+                # indistinguishable from a network problem.
+                self.reply(500, {"error": f"{type(e).__name__}: {e}"})
+
+        def reply(self, code, obj):
+            body = json.dumps(obj).encode()
+            self.send_response(code)
+            self.send_header("Content-Type", "application/json")
+            self.send_header("Content-Length", str(len(body)))
+            self.end_headers()
+            self.wfile.write(body)
+
+    if not os.environ.get("ANTHROPIC_API_KEY"):
+        print("no ANTHROPIC_API_KEY set - Explain will return an error", file=sys.stderr)
+
+    srv = ThreadingHTTPServer((args.host, args.port), partial(Handler, directory=str(root)))
+    print(f"\n  http://{lan_ip()}:{args.port}   <- open this on your phone", file=sys.stderr)
+    print(f"  serving {args.library}", file=sys.stderr)
+    if args.host == "0.0.0.0":
+        print("  reachable by anyone on this wifi; Explain is capped at "
+              f"{args.max_explains} calls this run. Ctrl-C to stop.\n", file=sys.stderr)
+    try:
+        srv.serve_forever()
+    except KeyboardInterrupt:
+        print("stopped", file=sys.stderr)
+
+
+def lan_ip():
+    import socket
+
+    s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+    try:
+        s.connect(("10.255.255.255", 1))  # never sends a packet; just picks the route
+        return s.getsockname()[0]
+    except Exception:
+        return "localhost"
+    finally:
+        s.close()
 
 
 def list_subjects(args):
@@ -801,7 +1065,7 @@ def process(path, args):
                 f"  Transcript is cached, so raise --max-cost and re-run without re-transcribing."
             )
         context = []
-        if code and not args.no_context:
+        if code and args.context:
             context, included, skipped = subject_context(args.library, code)
             if included:
                 print(f"  using {len(included)} file(s) from {code}: {', '.join(included)}",
@@ -950,8 +1214,9 @@ def main():
     t.add_argument("--no-notes", action="store_true", help="transcript only, no API call")
     t.add_argument("--outdir", type=Path, help="write here instead of the library")
     t.add_argument("--force", action="store_true", help="redo everything, including transcription")
-    t.add_argument("--no-context", action="store_true",
-                   help="do not attach the subject's slides/PDFs to the notes call")
+    t.add_argument("--context", action="store_true",
+                   help="attach the subject's slides/PDFs (~2900 tokens per PDF page, so "
+                        "a 30-slide deck adds roughly $0.09 to this lecture)")
     t.add_argument(
         "--redo-notes",
         action="store_true",
@@ -972,6 +1237,22 @@ def main():
     f = sub.add_parser("search", help="search across all your notes")
     f.add_argument("query")
     f.set_defaults(func=search)
+
+    rv = sub.add_parser("revise", help="one revision sheet from every lecture in a subject")
+    rv.add_argument("subject", help="subject code or alias, e.g. CY1107 or chem")
+    rv.add_argument("--notes-model", default="claude-haiku-4-5")
+    rv.add_argument("--max-cost", type=float, default=1.00)
+    rv.set_defaults(func=revise)
+
+    sv = sub.add_parser("serve", help="open the library on your phone, with Explain")
+    sv.add_argument("--host", default="0.0.0.0", help="0.0.0.0 exposes it to your wifi")
+    sv.add_argument("--port", type=int, default=8000)
+    sv.add_argument("--out", type=Path, default=Path(__file__).parent / "site" / "index.html")
+    sv.add_argument("--notes-model", default="claude-haiku-4-5")
+    sv.add_argument("--max-explains", type=int, default=300,
+                    help="spend guard: stop answering after this many taps")
+    sv.add_argument("--verbose", action="store_true")
+    sv.set_defaults(func=serve)
 
     e = sub.add_parser("export", help="build a browsable HTML page of the whole library")
     e.add_argument("--out", type=Path, default=Path(__file__).parent / "site" / "index.html")
