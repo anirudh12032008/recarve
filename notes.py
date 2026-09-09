@@ -2582,6 +2582,7 @@ import html
 import http.cookies
 import json
 import secrets
+import threading
 import uuid
 
 import psycopg
@@ -2593,7 +2594,7 @@ ENV_PATH = Path(__file__).resolve().parent / ".env"
 # Requests are gated before they are dispatched, so a route added later is
 # protected whether or not whoever adds it remembers auth exists. These are the
 # only paths that opt out, and adding to this set is the deliberate act.
-PUBLIC_PATHS = {"/join"}
+PUBLIC_PATHS = {"/join", "/login"}
 
 # Three roles, in order. A student reads everything the class has; trusted adds
 # the things that write content or spend money on the API; admin adds the class
@@ -2619,7 +2620,73 @@ ROLE_REQUIRED = {
     "/role": "admin",
     "/block": "admin",
     "/remove": "admin",
+    "/reset": "admin",
 }
+
+# Passwords are stored as typed. The one thing that goes with that decision is
+# on the screen where somebody picks one: SET_PASSWORD_BODY says not to reuse a
+# password from anywhere else, before the box rather than after a refusal.
+#
+# A null password means never set. It logs in with the roll number, opens
+# nothing until it is replaced, and is what an admin reset puts back.
+MIN_PASSWORD = 8
+
+# Failed logins per roll number and per client, in a sliding window. The two
+# numbers are far apart on purpose: five is a fat-fingered password on one
+# account, and thirty is a browser that cannot be walking a list of 110 roll
+# numbers. Fifteen minutes is long enough to make guessing pointless and short
+# enough that a classmate who mistyped theirs is not out for the evening.
+LOGIN_TRIES = 5
+LOGIN_TRIES_PER_CLIENT = 30
+LOGIN_WINDOW = 15 * 60
+
+# What a member who has not set a password may reach, and nothing else is. The
+# gate reads this beside PUBLIC_PATHS and for the same reason: a route added
+# later starts out shut to somebody mid-change rather than open.
+PASSWORD_PATHS = {"/password"}
+
+
+class Limiter:
+    """Failed attempts per key, in a sliding window.
+
+    In memory, because there is one server: a restart forgiving the guesses so
+    far costs less than a table to write them to and a row to clean up.
+
+    ponytail: per process, so a second server would double every limit. Move
+    the counts into Postgres if there is ever more than one.
+    """
+
+    def __init__(self, window=LOGIN_WINDOW):
+        self.window = window
+        self.hits = {}
+        self.lock = threading.Lock()
+
+    def _live(self, key, now):
+        """Whatever is still inside the window, with the rest forgotten."""
+        got = [t for t in self.hits.get(key, ()) if now - t < self.window]
+        if got:
+            self.hits[key] = got
+        else:
+            self.hits.pop(key, None)
+        return got
+
+    def locked(self, key, limit, now=None):
+        now = time.time() if now is None else now
+        with self.lock:
+            return len(self._live(key, now)) >= limit
+
+    def fail(self, key, now=None):
+        now = time.time() if now is None else now
+        with self.lock:
+            got = self._live(key, now)
+            got.append(now)
+            self.hits[key] = got
+
+    def clear(self, *keys):
+        """Getting it right forgives everything that came before it."""
+        with self.lock:
+            for key in keys:
+                self.hits.pop(key, None)
 
 
 def session_secret(env_path=ENV_PATH):
@@ -2781,14 +2848,95 @@ def db_principal(conn, profile_id):
     never-created profile comes back empty rather than trusted."""
     try:
         row = conn.execute(
-            "select name, status, role from profiles where id = %s", (profile_id,)
+            "select name, status, role, password is null from profiles where id = %s",
+            (profile_id,),
         ).fetchone()
     except psycopg.errors.InvalidTextRepresentation:
         return None  # signed, but not by a version of us that minted uuids
     if not row:
         return None
+    # must_set is the whole forced-change flow: it is re-read here on every
+    # request, like status, so an admin's reset lands on somebody's next tap
+    # rather than whenever their cookie happens to expire.
     return {"id": str(profile_id), "name": row[0], "status": row[1],
-            "role": row[2], "admin": row[2] == "admin"}
+            "role": row[2], "admin": row[2] == "admin", "must_set": row[3]}
+
+
+def db_login(conn, roll, password):
+    """(profile_id, status, must_set) for a correct pair, None for anything else.
+
+    One None for a wrong password, an unknown roll number and a blank box
+    alike, because the caller turns all three into the same sentence: a form
+    that answers "no such roll number" differently is a way to read the class
+    list off a page anyone can load.
+
+    Runs on the owning connection, which is the only one available: the caller
+    has no session yet, so there is no auth.uid() for a policy to be about.
+
+    A password that was never set is the roll number, matched without regard to
+    case. That one is typed on a phone keyboard that capitalises, and it is a
+    password on its way to being replaced before anything opens.
+    """
+    roll = (roll or "").strip()
+    password = password or ""
+    if not roll or not password:
+        return None
+    row = conn.execute(
+        "select id, status, roll_no, password from profiles "
+        "where upper(roll_no) = upper(%s)",
+        (roll,),
+    ).fetchone()
+    if not row:
+        return None
+    profile_id, status, roll_no, stored = row
+    if stored is None:
+        ok = hmac.compare_digest(password.upper().encode(),
+                                 (roll_no or "").upper().encode())
+    else:
+        ok = hmac.compare_digest(password.encode(), stored.encode())
+    if not ok:
+        return None
+    return str(profile_id), status, stored is None
+
+
+def db_set_password(conn, user_id, new):
+    """A member picks their own password. Nobody else's.
+
+    The "edit own name only" policy is what makes that the truth rather than
+    the intention: it confines the update to their own row and pins status and
+    role to what they already are, so this statement cannot be more than a
+    password however it is written.
+
+    The roll number is refused because it is what they just logged in with. A
+    forced change that accepts the thing it is replacing is a screen, not a
+    change.
+    """
+    new = (new or "").strip()
+    if len(new) < MIN_PASSWORD:
+        raise ValueError(f"a password needs at least {MIN_PASSWORD} characters")
+    row = conn.execute("select roll_no from profiles where id = %s",
+                       (user_id,)).fetchone()
+    if not row:
+        raise ValueError("no such member")
+    if new.upper() == (row[0] or "").upper():
+        raise ValueError("that is your roll number - pick something else")
+    conn.execute("update profiles set password = %s where id = %s", (new, user_id))
+    return True
+
+
+def db_reset_password(conn, profile_id):
+    """Put somebody back to their roll number, and back through the forced
+    change on their next login.
+
+    Admin-gated by "admins manage profiles", which is the layer under the
+    handler's check: a member's own connection has no policy that reaches
+    another row, so this updates nothing at all when it is not an admin asking.
+    """
+    n = conn.execute("update profiles set password = null where id = %s",
+                     (profile_id,)).rowcount
+    if not n:
+        raise ValueError("no such member")
+    return True
 
 
 def db_pending(conn):
@@ -2811,12 +2959,18 @@ def db_pending(conn):
 
 
 def db_members(conn):
-    """Everyone in the class and what they may do, for the admin screen."""
+    """Everyone in the class and what they may do, for the admin screen.
+
+    The password rides along because it is stored as typed and this screen is
+    the only place that is any use: somebody rings the admin from a corridor,
+    and the admin reads it back instead of resetting an account they cannot see
+    into. Only /admin ever calls this, and only an admin reaches /admin.
+    """
     return [
         {"id": str(r[0]), "name": r[1], "roll_no": r[2], "status": r[3],
-         "role": r[4], "phone": r[5]}
+         "role": r[4], "phone": r[5], "password": r[6]}
         for r in conn.execute(
-            "select id, name, roll_no, status, role, phone from profiles "
+            "select id, name, roll_no, status, role, phone, password from profiles "
             "where status <> 'pending' order by name"
         )
     ]
@@ -3284,11 +3438,20 @@ button.ghost{background:transparent;color:var(--admin);
 .counts span{font-size:.8rem;color:var(--mut)}
 /* A queue with somebody in it is the whole reason this screen gets opened. */
 .counts .hot{border-color:var(--admin)}
-.acts{display:flex;align-items:center;gap:.4rem;flex:none}
+/* Three controls now on the widest row -- a role picker, Block and Reset
+   password -- and 390px is the width that has to hold them. flex:none would
+   rather push the page sideways than wrap, and a members list that scrolls
+   sideways is a members list with a control off the edge of it. */
+.acts{display:flex;align-items:center;gap:.4rem;flex:0 1 auto;flex-wrap:wrap;
+  justify-content:flex-end}
 .acts button{width:auto;padding:0 .75rem}
 .invite{font-size:1.45rem;font-weight:700;letter-spacing:.05em;
   font-variant-numeric:tabular-nums}
 .none{color:var(--mut);font-size:.88rem;margin:.5rem 0 0;overflow-wrap:anywhere}
+/* What a password has to be, said above the box rather than after a refusal:
+   a rule you learn from an error message is a rule you learn twice. --mut is
+   5.24:1 on the ground in both themes. */
+.hint{color:var(--mut);font-size:.8rem;margin:0 0 .8rem}
 </style>
 <main>__BODY__</main>
 """
@@ -3308,6 +3471,7 @@ __INVITED__
   <button>Join</button>
   <p class="err" id="err"></p>
 </form>
+<p><a href="/login">Already joined? Log in</a></p>
 <script>
 const $ = i => document.getElementById(i);
 $('f').onsubmit = async e => {
@@ -3357,6 +3521,93 @@ def join_body(code="", inviter=None):
                      .replace("__CODE__", html.escape(code, quote=True)))
 
 
+LOGIN_BODY = r"""<h1>recarve</h1>
+<p>Section I notes. Sign in with your roll number.</p>
+<form id="f">
+  <label for="roll">Roll number</label>
+  <input id="roll" required autocomplete="username" autocapitalize="characters"
+         autocorrect="off" spellcheck="false" placeholder="I0">
+  <label for="pw">Password</label>
+  <input id="pw" required type="password" autocomplete="current-password">
+  <button>Log in</button>
+  <p class="err" id="err"></p>
+</form>
+<p class="hint">Never set one? Your password is your roll number until you pick one.</p>
+<p><a href="/">New here? Join with an invite code</a></p>
+<script>
+const $ = i => document.getElementById(i);
+$('f').onsubmit = async e => {
+  e.preventDefault();
+  $('err').textContent = '';
+  // /login opens a database connection before it answers, exactly as /join
+  // does. Left alone the button looks dead on mobile data and the second tap
+  // races the first -- and two taps here spend two of five tries.
+  const b = $('f').querySelector('button');
+  b.disabled = true;
+  b.textContent = 'Signing in\u2026';
+  try {
+    const res = await fetch('/login', {method: 'POST',
+      headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify({roll_no: $('roll').value, password: $('pw').value})});
+    const j = await res.json().catch(() => ({}));
+    // Always '/', whatever came back. The gate there is the one thing that
+    // decides between the library, the waiting screen and the one that asks
+    // for a password; a page that routed itself would be a second opinion
+    // about who is allowed where, and the wrong one the day they disagree.
+    if (res.ok) return location.assign('/');
+    $('err').textContent = j.error || 'could not sign in';
+  } catch (e) { $('err').textContent = 'no connection to the server'; }
+  b.disabled = false;
+  b.textContent = 'Log in';
+};
+</script>
+"""
+
+
+SET_PASSWORD_BODY = r"""<h1>Pick a password</h1>
+<p>One thing before the library opens. Until you set a password, anyone who
+knows your roll number can sign in as you — and a roll number is on every list
+in the institute.</p>
+<form id="f">
+  <label for="pw">New password</label>
+  <p class="hint">At least __MIN__ characters, and not your roll number. Use
+  something you do not use anywhere else.</p>
+  <input id="pw" required type="password" autocomplete="new-password" minlength="__MIN__">
+  <label for="pw2">Type it again</label>
+  <input id="pw2" required type="password" autocomplete="new-password">
+  <button>Save and open the library</button>
+  <p class="err" id="err"></p>
+</form>
+<script>
+const $ = i => document.getElementById(i);
+$('f').onsubmit = async e => {
+  e.preventDefault();
+  $('err').textContent = '';
+  // Caught here because only this screen has both boxes. The server sees one
+  // password and cannot tell a typo from a choice -- and the cost of a typo is
+  // an account whose owner is locked out of it a minute after setting it.
+  if ($('pw').value !== $('pw2').value) {
+    $('err').textContent = 'those two do not match';
+    return;
+  }
+  const b = $('f').querySelector('button');
+  b.disabled = true;
+  b.textContent = 'Saving\u2026';
+  try {
+    const res = await fetch('/password', {method: 'POST',
+      headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify({password: $('pw').value})});
+    const j = await res.json().catch(() => ({}));
+    if (res.ok) return location.assign('/');
+    $('err').textContent = j.error || 'could not save that';
+  } catch (e) { $('err').textContent = 'no connection to the server'; }
+  b.disabled = false;
+  b.textContent = 'Save and open the library';
+};
+</script>
+""".replace("__MIN__", str(MIN_PASSWORD))
+
+
 WAIT_BODY = r"""<h1>Almost in</h1>
 <p>Your request is with the admin. This page lets you through the moment they
 approve you — leave it open, it rechecks itself.</p>
@@ -3377,8 +3628,10 @@ ADMIN_BODY = r"""<p><a href="/">&lsaquo; Back to recarve</a></p>
 
 <h2>Members</h2>
 <p>Students read. Trusted members upload, record and use Explain &mdash; that one
-spends money. Admins also let people in. You cannot change your own row: an
-admin who demotes themselves leaves a class nobody can approve anyone into.</p>
+spends money. Admins also let people in. Resetting a password puts somebody
+back to signing in with their roll number until they pick a new one. You cannot
+change your own row: an admin who demotes themselves leaves a class nobody can
+approve anyone into.</p>
 <div id="members">loading&hellip;</div>
 
 <h2>Invite code</h2>
@@ -3564,7 +3817,13 @@ async function load() {
   for (const p of j.members || []) {
     const row = document.createElement('div');
     row.className = 'row';
-    const sub = dot(p.roll_no, p.phone, p.status === 'blocked' ? 'blocked' : '');
+    // The password is here because it is stored as typed, and this screen is
+    // the only place that is any use: a classmate rings from a corridor and
+    // the admin reads it back, rather than resetting an account they cannot
+    // see into and then having to reach them twice.
+    const sub = dot(p.roll_no, p.phone,
+                    p.password ? 'password ' + p.password : 'no password set yet',
+                    p.status === 'blocked' ? 'blocked' : '');
     // Your own row has no controls: dropping your own admin, or blocking
     // yourself, would leave nobody who can let the next person in. The server
     // refuses both, and the database refuses them after that.
@@ -3579,6 +3838,10 @@ async function load() {
       acts.append(roleSelect(p),
                   btn(blocked ? 'Unblock' : 'Block', 'ghost',
                       () => post('/block', {id: p.id, blocked: !blocked})));
+      // Only where there is one to reset. On a row that has never set a
+      // password the button would do nothing and say it had.
+      if (p.password) acts.append(btn('Reset password', 'ghost',
+                                      () => post('/reset', {id: p.id})));
       row.append(who(p.name, sub), acts);
     }
     mem.append(row);
@@ -3630,6 +3893,7 @@ def build_server(args):
     inbox.mkdir(parents=True, exist_ok=True)
     budget = {"left": args.max_explains}
     jobs = Jobs(args)
+    logins = Limiter()
 
     secret = b"" if args.no_auth else session_secret()
     if not args.no_auth:
@@ -3704,6 +3968,18 @@ def build_server(args):
             if path in PUBLIC_PATHS:
                 return True
             if self.me and self.me["status"] == "approved":
+                # A member who has never set a password has exactly one door,
+                # and it is the one that sets it. Here rather than by showing a
+                # different screen: somebody mid-change is holding a valid
+                # cookie, and a screen that hides the library is one curl away
+                # from every route behind it.
+                if self.me["must_set"] and path not in PASSWORD_PATHS:
+                    if path in ("/", "/index.html"):
+                        self.send_html(GATE_PAGE.replace("__BODY__", SET_PASSWORD_BODY))
+                        return False
+                    self.reply(403, {"error": "pick a password before anything "
+                                              "else opens", "set_password": True})
+                    return False
                 # Approved says you are a classmate. Role says what you may do
                 # with that, and this is where a student is refused -- before
                 # dispatch, so curl is refused exactly as the app's own screens
@@ -3760,6 +4036,8 @@ def build_server(args):
                 return db_principal(conn, profile_id)
 
         def do_GET(self):
+            if self.path.split("?")[0] == "/login":
+                return self.send_html(GATE_PAGE.replace("__BODY__", LOGIN_BODY))
             if self.path == "/data":
                 subjects = build_data(args.library, args.out.parent)
                 # `now` is this machine's clock, and the mtimes in `subjects`
@@ -3863,6 +4141,12 @@ def build_server(args):
         def do_POST(self):
             if self.path == "/join":
                 return self.do_join()
+            if self.path == "/login":
+                return self.do_login()
+            if self.path == "/password":
+                return self.do_password()
+            if self.path == "/reset":
+                return self.do_reset()
             if self.path == "/approve":
                 return self.do_approve()
             if self.path == "/role":
@@ -3963,6 +4247,112 @@ def build_server(args):
             cookie = (f"{SESSION_COOKIE}={sign_session(profile_id, secret)}; Path=/; "
                       "HttpOnly; SameSite=Lax; Max-Age=31536000")
             return self.reply(200, {"status": status, "admin": is_admin}, cookie=cookie)
+
+        def do_login(self):
+            """A roll number and a password in, the same signed cookie /join
+            mints out -- so everything downstream of a session is unchanged.
+
+            Public by necessity, and rate limited because of it: 110 roll
+            numbers is a list somebody can type out in an evening.
+            """
+            if args.no_auth:
+                return self.reply(404, {"error": "this server is running with --no-auth"})
+            try:
+                req = self.body(4000)
+                if req is None:
+                    return
+                roll = (req.get("roll_no") or "").strip()[:40]
+                password = (req.get("password") or "")[:200]
+                # Behind the tunnel every socket comes from 127.0.0.1, so the
+                # forwarded address is the only thing that tells two phones
+                # apart at all.
+                #
+                # ponytail: a client can write that header, so this half is a
+                # brake on a naive grinder rather than a wall. The per-roll
+                # limit is the one that protects an account, and nothing the
+                # caller sends can move it -- it is keyed on the roll number
+                # they are guessing at.
+                fwd = self.headers.get("X-Forwarded-For", "").split(",")[0].strip()
+                client = fwd[:64] or self.client_address[0]
+                limits = ((f"roll:{roll.upper()}", LOGIN_TRIES, "roll number"),
+                          (f"ip:{client}", LOGIN_TRIES_PER_CLIENT, "device"))
+                for key, limit, what in limits:
+                    if logins.locked(key, limit):
+                        # Say the number. "Try again later" is what a locked
+                        # out classmate reads as "it is broken".
+                        return self.reply(429, {
+                            "error": f"too many wrong tries - {limit} per {what}, "
+                                     f"then a {LOGIN_WINDOW // 60} minute wait"})
+                with db() as conn:
+                    got = db_login(conn, roll, password)
+            except Exception as e:
+                return self.reply(500, {"error": f"{type(e).__name__}: {e}"})
+            if not got:
+                for key, _, _ in limits:
+                    logins.fail(key)
+                # One sentence for a wrong password and for a roll number
+                # nobody holds. Two would make this form the class list.
+                return self.reply(403, {"error": "that roll number and password "
+                                                 "do not match"})
+            profile_id, status, must_set = got
+            logins.clear(*(key for key, _, _ in limits))
+            log(f"{roll} signed in" + (", and has no password yet" if must_set else ""),
+                "login")
+            cookie = (f"{SESSION_COOKIE}={sign_session(profile_id, secret)}; Path=/; "
+                      "HttpOnly; SameSite=Lax; Max-Age=31536000")
+            # status rides back so the screen knows it is about to land on the
+            # waiting room rather than the library. Where it actually lands is
+            # still the gate's decision, not this answer's.
+            return self.reply(200, {"status": status, "set_password": must_set},
+                              cookie=cookie)
+
+        def do_password(self):
+            """Where a member sets their own password, first time or later.
+
+            Not in ROLE_REQUIRED, and it is the one path open to somebody
+            mid-change: your own password is not a privilege. What stops it
+            being more than that is the database, where "edit own name only"
+            pins the row to them and status and role to what they already are.
+            """
+            if not self.me:
+                return self.reply(404, {"error": "this server is running with --no-auth"})
+            try:
+                req = self.body(4000)
+                if req is None:
+                    return
+                with db(self.me["id"]) as conn:
+                    db_set_password(conn, self.me["id"], req.get("password"))
+            except ValueError as e:
+                return self.reply(400, {"error": str(e)})
+            except Exception as e:
+                return self.reply(500, {"error": f"{type(e).__name__}: {e}"})
+            log(f"{self.me['name']} set a password", "login")
+            return self.reply(200, {"ok": True})
+
+        def do_reset(self):
+            """An admin puts somebody back to their roll number.
+
+            Admin-only twice over: the gate refused everyone else before this
+            was reached, and the update runs on the caller's own connection,
+            where "admins manage profiles" has to allow it too.
+            """
+            if not self.is_admin():
+                return self.reply(403, {"error": "admins only", "required": "admin"})
+            try:
+                req = self.body(4000)
+                if req is None:
+                    return
+                target = (req.get("id") or "").strip()
+                with db(self.me["id"]) as conn:
+                    db_reset_password(conn, target)
+            except ValueError as e:
+                return self.reply(404, {"error": str(e)})
+            except psycopg.errors.InvalidTextRepresentation:
+                return self.reply(404, {"error": "no such member"})
+            except Exception as e:
+                return self.reply(500, {"error": f"{type(e).__name__}: {e}"})
+            log(f"{self.me['name']} reset the password for {target}", "admin")
+            return self.reply(200, {"ok": True})
 
         def do_approve(self):
             if not self.is_admin():

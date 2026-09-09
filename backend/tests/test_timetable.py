@@ -150,8 +150,8 @@ def server(tmp_path_factory):
                                     ("Chan", False, "pending")):
             uid = make_user(conn)
             conn.execute(
-                "insert into profiles (id, name, roll_no, status, role) "
-                "values (%s, %s, %s, %s, %s)",
+                "insert into profiles (id, name, roll_no, status, role, password) "
+                "values (%s, %s, %s, %s, %s, 'a-real-password')",
                 (uid, name, name, status, "admin" if admin else "trusted"))
             people[name] = uid
 

@@ -387,6 +387,13 @@ def join(port, name, roll, code="LETMEIN", phone="9876543210"):
     cookie = None
     if headers.get("Set-Cookie"):
         cookie = headers["Set-Cookie"].split(";")[0].split("=", 1)[1]
+    if status == 200:
+        # A profile with no password is walled until it picks one -- that is
+        # test_login.py's subject. These tests are about the gate around it, so
+        # the joiner is given a password here rather than in every one of them.
+        with psycopg.connect(DB_URL, autocommit=True) as conn:
+            conn.execute("update profiles set password = 'a-real-password' "
+                         "where roll_no = %s", (roll,))
     return status, json.loads(body), cookie
 
 

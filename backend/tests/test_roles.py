@@ -302,13 +302,15 @@ def server(tmp_path_factory):
         for role in ("student", "trusted", "admin"):
             uid = make_user(conn)
             conn.execute(
-                "insert into profiles (id, name, roll_no, status, role) "
-                "values (%s, %s, %s, 'approved', %s)", (uid, role.title(), role, role))
+                "insert into profiles (id, name, roll_no, status, role, password) "
+                "values (%s, %s, %s, 'approved', %s, 'a-real-password')",
+                (uid, role.title(), role, role))
             people[role] = uid
         # Someone approved but blocked later, to prove role is not the only axis.
         blocked = make_user(conn)
-        conn.execute("insert into profiles (id, name, roll_no, status, role) "
-                     "values (%s, 'Gone', 'gone', 'blocked', 'admin')", (blocked,))
+        conn.execute("insert into profiles (id, name, roll_no, status, role, password) "
+                     "values (%s, 'Gone', 'gone', 'blocked', 'admin', 'a-real-password')",
+                     (blocked,))
         people["blocked"] = blocked
         conn.execute("insert into invites (code, expires_at) "
                      "values ('ROLETEST', now() + interval '1 day')")

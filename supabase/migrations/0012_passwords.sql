@@ -1,0 +1,22 @@
+-- A password, so clearing your cookies is not the same as losing the library.
+--
+-- Until now a session was the only way in and /join was the only way to get
+-- one, so a member who cleared Safari's data was locked out for good: joining
+-- again fails on their own roll number, which is the unique key.
+--
+-- Null means "never set". That is the whole state machine: a null password
+-- logs in with the roll number and opens nothing until it is replaced, and an
+-- admin reset is `set password = null`. A separate must_change flag would be a
+-- second truth that can disagree with this one.
+--
+-- Stored as typed. That is the product owner's decision, made twice with the
+-- risk in front of them, and it is what makes the admin panel able to read a
+-- password back to somebody over the phone.
+--
+-- No new policies: the ones on profiles already say everything this column
+-- needs. "edit own name only" confines a member to their own row and pins
+-- status and role there, so setting a password is the only thing that update
+-- can be; "admins manage profiles" is what lets an admin reset somebody
+-- else's; and the login lookup itself runs on the owning connection, before
+-- there is a session for a policy to be about.
+alter table profiles add column password text;
