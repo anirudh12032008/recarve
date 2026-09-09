@@ -1,0 +1,7 @@
+.venv/
+__pycache__/
+library/
+site/
+.env
+supabase/.temp/
+.pytest_cache/
