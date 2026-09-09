@@ -333,7 +333,8 @@ def search(args):
     print(f"\n{hits} match{'es' if hits != 1 else ''}", file=sys.stderr)
 
 
-PAGE = """<!doctype html>
+# Raw string: this is JavaScript, and its backslash escapes are not Python's.
+PAGE = r"""<!doctype html>
 <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
 <title>recarve — Section I</title>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/marked/15.0.7/marked.min.js"></script>
@@ -359,6 +360,16 @@ table{border-collapse:collapse}td,th{border:1px solid var(--line);padding:5px 9p
 details{margin:6px 0;padding:8px 12px;background:var(--card);border-radius:8px}
 summary{cursor:pointer;color:var(--accent)}
 .empty{color:var(--mut)}
+.bar{display:flex;gap:8px;margin-bottom:22px;flex-wrap:wrap}
+.bar button{font:inherit;font-size:13px;padding:6px 13px;border:1px solid var(--line);
+  border-radius:7px;background:var(--card);color:var(--fg);cursor:pointer}
+.bar button:hover{border-color:var(--accent);color:var(--accent)}
+@media print{
+  aside,.bar{display:none}
+  main{padding:0;max-width:none}
+  details{border:1px solid #ccc}
+  details[open] summary{font-weight:600}
+}
 @media(max-width:720px){body{flex-direction:column}aside{width:100%;height:auto;position:static;border-right:0;border-bottom:1px solid var(--line)}main{padding:20px}}
 </style>
 <aside>
@@ -399,16 +410,56 @@ function render(filter) {
   }
   if (!nav.children.length) nav.innerHTML = '<p class="empty">No matches.</p>';
 }
+function download(name, text, mime) {
+  const url = URL.createObjectURL(new Blob([text], {type: mime}));
+  const a = document.createElement('a');
+  a.href = url; a.download = name;
+  document.body.appendChild(a); a.click(); a.remove();
+  URL.revokeObjectURL(url);
+}
+
 function show(n) {
+  const bar = document.createElement('div');
+  bar.className = 'bar';
+
+  const md = document.createElement('button');
+  md.textContent = '⬇ Markdown';
+  md.onclick = () => download(n.title + '.md', n.md, 'text/markdown');
+
+  const txt = document.createElement('button');
+  txt.textContent = '⬇ Plain text';
+  // Strip the markdown scaffolding so it pastes cleanly into WhatsApp.
+  txt.onclick = () => download(n.title + '.txt',
+    n.md.replace(/^#+ /gm, '').replace(/\*\*/g, '').replace(/<\/?details>|<\/?summary>/g, ''),
+    'text/plain');
+
+  const pdf = document.createElement('button');
+  pdf.textContent = '🖨 Print / PDF';
+  // Answers are collapsed by default; a printed copy with hidden answers is
+  // useless, so open them all first.
+  pdf.onclick = () => {
+    body.querySelectorAll('details').forEach(d => d.open = true);
+    window.print();
+  };
+
+  const copy = document.createElement('button');
+  copy.textContent = '📋 Copy';
+  copy.onclick = () => navigator.clipboard.writeText(n.md)
+    .then(() => { copy.textContent = '✓ Copied'; setTimeout(() => copy.textContent = '📋 Copy', 1500); })
+    .catch(() => { copy.textContent = 'Copy failed'; });
+
+  bar.append(md, txt, pdf, copy);
+
   body.innerHTML = marked.parse(n.md);
+  body.prepend(bar);
   // Notes are full of LaTeX; markdown alone renders it as literal $$ noise.
   if (window.renderMathInElement) {
     renderMathInElement(body, {
       delimiters: [
         {left: '$$', right: '$$', display: true},
         {left: '$', right: '$', display: false},
-        {left: '\\\\(', right: '\\\\)', display: false},
-        {left: '\\\\[', right: '\\\\]', display: true},
+        {left: '\\(', right: '\\)', display: false},
+        {left: '\\[', right: '\\]', display: true},
       ],
       throwOnError: false,  // a malformed formula shows as red text, not a blank page
     });
