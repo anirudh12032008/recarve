@@ -382,7 +382,7 @@ body.reading #read{display:block}
   padding:max(10px,env(safe-area-inset-top)) 16px 10px;
 }
 .brand{display:flex;align-items:baseline;gap:8px;margin-bottom:10px}
-.brand b{font-size:17px;letter-spacing:-.01em}
+.brand b{font-size:20px;letter-spacing:-.015em;font-weight:700}
 .brand span{font-size:13px;color:var(--mut)}
 #q{
   width:100%;height:var(--tap);padding:0 14px;font-size:16px;
@@ -393,43 +393,46 @@ body.reading #read{display:block}
 .group{padding:18px 16px 2px}
 .code{
   display:inline-block;padding:3px 9px;border-radius:7px;
-  font-size:12.5px;font-weight:650;
+  font-size:13px;font-weight:650;
   background:hsl(var(--h) var(--sat) var(--chip-lum));
   color:hsl(var(--h) var(--sat) var(--chip-text));
 }
-.group h2{display:inline;margin:0 0 0 9px;font-size:13.5px;font-weight:500;color:var(--mut)}
+.group h2{display:inline;margin:0 0 0 9px;font-size:13px;font-weight:500;color:var(--mut)}
 .rows{padding:6px 8px 0}
 .row{
   display:flex;align-items:center;gap:12px;width:100%;
   min-height:var(--tap);padding:11px 12px;border-radius:11px;
-  text-align:left;text-decoration:none;color:inherit;font-size:15.5px;
+  text-align:left;text-decoration:none;color:inherit;font-size:16px;
 }
 .row:active{background:var(--surface)}
 .row .tick{width:3px;align-self:stretch;border-radius:2px;background:hsl(var(--h) var(--sat) var(--lum));flex:none}
 .row .name{flex:1;min-width:0}
-.row .meta{font-size:12.5px;color:var(--mut);flex:none}
+.row .meta{font-size:13px;color:var(--mut);flex:none}
 .blank{padding:64px 24px;text-align:center;color:var(--mut)}
 
 .rtop{display:flex;align-items:center;gap:6px}
 .back{display:flex;align-items:center;gap:5px;height:var(--tap);padding:0 10px 0 4px;
-  margin-left:-4px;font-size:15px;color:var(--accent);font-weight:500}
+  margin-left:-4px;font-size:16px;color:var(--accent);font-weight:500}
 .rtop .code{margin-left:auto}
+/* Four sizes only -- 26/20/16/13, roughly a 1.25 step. h3 separates itself by
+   weight and colour rather than a fifth size that would read as body text. */
 article{padding:22px 18px 118px;max-width:70ch;margin:0 auto}
-article h1{font-size:23px;line-height:1.25;letter-spacing:-.02em;margin:0 0 22px}
-article h2{font-size:18px;margin:34px 0 10px;padding-bottom:6px;border-bottom:1px solid var(--line)}
-article h3{font-size:16px;margin:24px 0 8px}
+article h1{font-size:26px;line-height:1.2;letter-spacing:-.022em;font-weight:700;margin:0 0 24px}
+article h2{font-size:20px;line-height:1.3;letter-spacing:-.012em;font-weight:650;
+  margin:38px 0 12px;padding-bottom:7px;border-bottom:1px solid var(--line)}
+article h3{font-size:16px;font-weight:700;color:var(--accent);margin:26px 0 6px}
 article ul,article ol{padding-left:22px}
 article li{margin:5px 0}
-article code{background:var(--surface);padding:2px 5px;border-radius:5px;font-size:.9em}
+article code{background:var(--surface);padding:2px 5px;border-radius:5px;font-size:.92em}
 article pre{background:var(--surface);padding:13px;border-radius:11px;overflow-x:auto;font-size:13px}
 article img{max-width:100%;height:auto}
 .katex-display{overflow-x:auto;overflow-y:hidden;padding:4px 0}
 .scroll-x{overflow-x:auto;-webkit-overflow-scrolling:touch;margin:12px 0}
-table{border-collapse:collapse;font-size:14.5px;min-width:100%}
-td,th{border:1px solid var(--line);padding:7px 11px;text-align:left}
+table{border-collapse:collapse;font-size:16px;min-width:100%}
+td,th{border:1px solid var(--line);padding:8px 12px;text-align:left}
 th{background:var(--surface)}
 details{margin:9px 0;background:var(--surface);border-radius:11px;overflow:hidden}
-summary{min-height:var(--tap);display:flex;align-items:center;padding:0 14px;color:var(--accent);font-size:14.5px}
+summary{min-height:var(--tap);display:flex;align-items:center;padding:0 14px;color:var(--accent);font-size:16px;font-weight:500}
 details[open] summary{border-bottom:1px solid var(--line)}
 details>:not(summary){padding:0 14px}
 
@@ -441,7 +444,7 @@ details>:not(summary){padding:0 14px}
 }
 .dock button{
   flex:1;min-height:var(--tap);border-radius:11px;background:var(--surface);
-  font-size:14px;font-weight:500;display:flex;align-items:center;justify-content:center;
+  font-size:16px;font-weight:500;display:flex;align-items:center;justify-content:center;
 }
 .dock button.primary{background:var(--accent);color:var(--accent-fg)}
 .dock button:active{opacity:.75}
