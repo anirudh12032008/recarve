@@ -529,7 +529,26 @@ body.reading #read{display:block}
 .row .name small{display:block;font-size:13px;color:var(--mut)}
 .row .meta{font-size:13px;color:var(--mut);flex:none}
 .row .code{flex:none}
+.row a.name{text-decoration:none;color:inherit}
 .blank{padding:64px 24px;text-align:center;color:var(--mut)}
+
+/* One vote per person, so this is a two-state toggle and not a counter you can
+   lean on. The count sits inside the control: what you are pressing and what
+   it did are the same object. */
+.vote{display:flex;align-items:center;gap:6px;flex:none;min-height:var(--tap);
+  padding:0 12px;border-radius:11px;border:1px solid var(--line);background:var(--surface);
+  font-size:13px;font-weight:650;color:var(--mut);font-variant-numeric:tabular-nums}
+.vote.on{border-color:var(--accent);color:var(--accent);
+  background:color-mix(in srgb,var(--accent) 13%,transparent)}
+.vote:active{opacity:.7}
+.vote[disabled]{opacity:.45}
+.mine{margin:10px 16px 0;padding:16px;border-radius:12px;background:var(--surface)}
+.mine .score{font-size:26px;font-weight:700;letter-spacing:-.02em}
+.mine p{margin:5px 0 0;font-size:13px;color:var(--mut)}
+.tally{display:flex;gap:22px;margin-top:14px}
+.tally div{font-size:13px;color:var(--mut)}
+.tally b{display:block;font-size:20px;font-weight:650;color:var(--fg);
+  font-variant-numeric:tabular-nums}
 
 .rtop{display:flex;align-items:center;gap:6px}
 .back{display:flex;align-items:center;gap:5px;height:var(--tap);padding:0 10px 0 4px;
@@ -829,19 +848,59 @@ function noteRow(n, s) {
   const b = document.createElement('button');
   b.className = 'row';
   b.style.setProperty('--h', hue(s.code));
-  b.innerHTML = '<i class="tick"></i><span class="name"></span>';
-  b.querySelector('.name').textContent = n.title;
+  b.innerHTML = '<i class="tick"></i><span class="name"><b></b><small></small></span>';
+  b.querySelector('b').textContent = n.title;
+  // Blank until the server says who: the static export has no database behind
+  // it, and "recorded by nobody" would be a worse answer than silence.
+  b.querySelector('small').textContent = n.by ? 'recorded by ' + n.by : '';
   b.onclick = () => go(s.code, n.title);
   return b;
 }
 
+// One vote per person per item -- the votes primary key says so, and this is
+// only the switch. The count lives inside the control, so pressing it and
+// seeing what it did are the same place.
+function voteBtn(u) {
+  const b = document.createElement('button');
+  b.className = 'vote' + (u.voted ? ' on' : '');
+  b.setAttribute('aria-pressed', u.voted ? 'true' : 'false');
+  b.setAttribute('aria-label', (u.voted ? 'Remove your upvote from ' : 'Upvote ') + u.name);
+  b.innerHTML = '▲ <span class="n"></span>';
+  b.querySelector('.n').textContent = u.votes;
+  b.onclick = async () => {
+    b.disabled = true;
+    try {
+      const r = await fetch('/vote', {
+        method: 'POST', headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify({id: u.id, on: !u.voted}),
+      });
+      const d = await r.json().catch(() => ({}));
+      if (!r.ok) throw new Error(d.error || 'could not register that vote');
+      // Refetch rather than patch: the vote changes the ranking too, and one
+      // source of order beats two that can disagree.
+      await refresh();
+    } catch (e) {
+      b.disabled = false;
+      busyDone(e.message);
+    }
+  };
+  return b;
+}
+
 function fileRow(u, s) {
-  const a = document.createElement('a');
-  a.className = 'row'; a.href = u.path; a.target = '_blank'; a.rel = 'noopener';
-  a.style.setProperty('--h', hue(s.code));
-  a.innerHTML = '<i class="tick"></i><span class="name"></span><span class="meta">file</span>';
-  a.querySelector('.name').textContent = u.name;
-  return a;
+  const el = document.createElement('div');
+  el.className = 'row';
+  el.style.setProperty('--h', hue(s.code));
+  el.innerHTML = '<i class="tick"></i>'
+               + '<a class="name" target="_blank" rel="noopener"><b></b><small></small></a>';
+  const a = el.querySelector('a');
+  a.href = u.path;
+  a.querySelector('b').textContent = u.name;
+  a.querySelector('small').textContent = u.by ? 'added by ' + u.by : 'file';
+  // No id means no row behind it: a static export, or a file the database has
+  // not adopted. Showing a vote button that cannot work is worse than none.
+  if (u.id) el.appendChild(voteBtn(u));
+  return el;
 }
 
 function block(label, items) {
@@ -865,9 +924,19 @@ function blank(text) {
 // LEVEL 1: every subject, empty ones included. Nobody can add a chemistry
 // recording to a subject the app never told them was there.
 function renderSubjects() {
-  const rows = document.createElement('div');
-  rows.className = 'rows';
-  for (const s of DATA) {
+  // Only with a server behind it: a static export has no session and nothing
+  // to count.
+  if (live) {
+    const b = document.createElement('button');
+    b.className = 'row';
+    b.style.setProperty('--h', 210);
+    b.innerHTML = '<i class="tick"></i><span class="name"><b></b><small></small></span>';
+    b.querySelector('b').textContent = 'Your contributions';
+    b.querySelector('small').textContent = 'what you have added, and the votes it got';
+    b.onclick = () => go('me', null);
+    block('You', [b]);
+  }
+  block('Subjects', DATA.map(s => {
     const b = document.createElement('button');
     b.className = 'row';
     b.style.setProperty('--h', hue(s.code));
@@ -877,9 +946,8 @@ function renderSubjects() {
     b.querySelector('small').textContent = counts(s);
     b.querySelector('.code').textContent = s.code;
     b.onclick = () => go(s.code, null);
-    rows.appendChild(b);
-  }
-  nav.appendChild(rows);
+    return b;
+  }));
 }
 
 // LEVEL 2: one subject, grouped.
@@ -903,6 +971,56 @@ function renderSubject(s) {
   block('Revision sheet', rev ? [noteRow(rev, s)] : []);
   if (!s.notes.length && !s.uploads.length) {
     blank('Nothing in ' + s.code + ' yet. Tap + to record a class or add slides.');
+  }
+}
+
+// LEVEL 2, sideways: what you personally have put in.
+//
+// Points are status and nothing else. Nothing in this app asks for a score
+// before it shows you something, and no screen here has a lock on it -- that
+// was the product decision, and this view is the whole of it.
+async function renderMe() {
+  const box = document.createElement('div');
+  box.className = 'mine';
+  nav.appendChild(box);
+  waiting(box, 'Counting up what you have added…');
+  let d;
+  try {
+    const r = await fetch('/me');
+    if (!r.ok) throw new Error();
+    d = await r.json();
+  } catch (e) {
+    box.textContent = 'Contributions need the server. Run: notes.py serve';
+    return;
+  }
+  if (view.code !== 'me') return;    // they navigated on while this was in flight
+  const p = d.points;
+  box.innerHTML = '<div class="score"></div><p></p>'
+    + '<div class="tally"><div><b class="u"></b>uploads</div>'
+    + '<div><b class="r"></b>recordings</div><div><b class="v"></b>votes received</div></div>';
+  box.querySelector('.score').textContent = p.score + (p.score === 1 ? ' point' : ' points');
+  box.querySelector('p').textContent =
+    'Points are a thank-you, not a key. Everything in the library is open to everyone.';
+  box.querySelector('.u').textContent = p.uploads;
+  box.querySelector('.r').textContent = p.recordings;
+  box.querySelector('.v').textContent = p.votes_received;
+
+  const line = (main, sub) => {
+    const el = document.createElement('div');
+    el.className = 'row';
+    el.style.setProperty('--h', 210);
+    el.innerHTML = '<i class="tick"></i><span class="name"><b></b><small></small></span>';
+    el.querySelector('b').textContent = main;
+    el.querySelector('small').textContent = sub;
+    return el;
+  };
+  block('Notes & slides you added', d.uploads.map(u => line(
+    u.name, u.subject + ' · ' + plural(u.votes, 'vote')
+            + (u.status === 'visible' ? '' : ' · ' + u.status))));
+  block('Classes you recorded', d.recordings.map(r => line(
+    r.title, r.subject + ' · ' + (r.status === 'done' ? 'notes ready' : r.status))));
+  if (!d.uploads.length && !d.recordings.length) {
+    blank('Nothing from you yet. Tap + to record a class or add your slides.');
   }
 }
 
@@ -946,6 +1064,7 @@ function render() {
     sname.textContent = s.name;
   }
   if (needle) renderSearch(needle);
+  else if (view.code === 'me') renderMe();
   else if (s) renderSubject(s);
   else renderSubjects();
 }
@@ -957,6 +1076,14 @@ function route() {
   if (quiz.hidden === false) quiz.hidden = true;
   const [code, title] =
     location.hash.slice(1).split('/').filter(Boolean).map(decodeURIComponent);
+  // Your own contributions sit beside the subjects rather than inside one, so
+  // back climbs out of it to level 1 like everything else. 'me' is not a
+  // subject code and never will be; the twelve are fixed.
+  if (code === 'me') {
+    view = {code: 'me', title: null};
+    closeRead();
+    return render();
+  }
   // Links shared before the three levels existed are just '#<note title>'.
   // Point them at the note and upgrade the URL in place.
   if (code && !title && !subjectOf(code)) {
@@ -1754,6 +1881,18 @@ class Jobs:
         )
         self._set(job, "transcribing", "starting…")
         process(path, opts)
+        # The notes exist now, so the lecture row that was queued at upload is
+        # done -- which is what makes it count toward its uploader's points.
+        # The queue is not a person and has no session to act as; this is the
+        # worker role the schema grants claim_lecture() to, keyed on the file
+        # it just finished.
+        if not getattr(self.args, "no_auth", False):
+            try:
+                with db() as conn:
+                    conn.execute("update lectures set status = 'done' "
+                                 "where audio_key = %s", (str(path),))
+            except psycopg.Error as e:
+                log(f"could not mark {path.name} done: {e}", "db", 1)
         try:
             path.unlink(missing_ok=True)  # transcript is cached; audio is the bulk
             log(f"removed {path.name} from the inbox", "cleanup", 1)
@@ -1873,8 +2012,12 @@ def db_join(conn, code, name, roll_no):
         # otherwise, so the invite that bootstraps the class also elects them.
         act_as(conn, None, local=True)
         if conn.execute("select count(*) from profiles").fetchone()[0] == 1:
+            # trusted too: an untrusted uploader's files are forced pending by
+            # the materials trigger, and the admin is the one person nobody
+            # else can ever publish.
             conn.execute(
-                "update profiles set status = 'approved', is_admin = true where id = %s",
+                "update profiles set status = 'approved', is_admin = true, "
+                "trusted = true where id = %s",
                 (user_id,),
             )
         row = conn.execute("select status, is_admin from profiles where id = %s",
@@ -1922,10 +2065,13 @@ def db_approve(conn, profile_id):
 def db_record_upload(conn, user_id, code, filename, dest, is_audio):
     """Remember who sent a file, so the library can say so later."""
     if is_audio:
+        # dest.stem, not filename: process() writes its notes to
+        # lectures/<dest.stem>.md, and that name is the only handle the
+        # library has on this row afterwards.
         conn.execute(
             "insert into lectures (subject_code, uploader_id, title, audio_key) "
             "values (%s, %s, %s, %s)",
-            (code, user_id, Path(filename).stem, str(dest)),
+            (code, user_id, dest.stem, str(dest)),
         )
     else:
         conn.execute(
@@ -1933,6 +2079,147 @@ def db_record_upload(conn, user_id, code, filename, dest, is_audio):
             "size_bytes) values (%s, %s, %s, %s, %s)",
             (code, user_id, filename, str(dest), dest.stat().st_size),
         )
+
+
+def db_meta(conn, user_id):
+    """Who added each file, and how the class voted on it.
+
+    Keyed the way build_data names things -- (subject, filename) for an upload,
+    (subject, note title) for a lecture -- because the library on disk is still
+    the truth about what exists. The database only says who, and how popular.
+
+    Read as the caller, so a pending upload nobody may see yet comes back with
+    no attribution rather than leaking one.
+    """
+    mats, lecs = {}, {}
+    for mid, code, filename, who, votes, mine in conn.execute(
+        "select m.id, m.subject_code, m.filename, p.name, "
+        "  (select count(*) from votes v where v.material_id = m.id), "
+        "  exists (select 1 from votes v "
+        "           where v.material_id = m.id and v.voter_id = %s) "
+        "from materials m join profiles p on p.id = m.uploader_id",
+        (user_id,),
+    ):
+        mats[(code, filename)] = {"id": str(mid), "by": who,
+                                  "votes": votes, "voted": mine}
+    for code, title, who in conn.execute(
+        "select l.subject_code, l.title, p.name from lectures l "
+        "join profiles p on p.id = l.uploader_id"
+    ):
+        lecs[(code, title)] = who
+    return mats, lecs
+
+
+def apply_meta(subjects, mats, lecs):
+    """Fold attribution and votes into the library, and rank the uploads.
+
+    Lectures keep their date order: they are the class's record of what
+    happened, and ranking Tuesday against Wednesday is nonsense. Uploaded notes
+    are ranked, so the set everyone found useful sits at the top of the subject.
+    """
+    for s in subjects:
+        for n in s["notes"]:
+            n["by"] = lecs.get((s["code"], n["title"]))
+        for u in s["uploads"]:
+            u.update(mats.get((s["code"], u["name"]), {}))
+        s["uploads"].sort(key=lambda u: (-u.get("votes", 0), u["name"]))
+    return subjects
+
+
+def db_vote(conn, material_id, user_id, on):
+    """Add or drop one person's vote, and return the item's new state.
+
+    Nothing here checks whether they have voted already: the votes primary key
+    does, and a second insert raises. That is the point -- one place decides,
+    and it is the same place in production as in the tests.
+    """
+    if on:
+        conn.execute("insert into votes (material_id, voter_id) values (%s, %s)",
+                     (material_id, user_id))
+    else:
+        conn.execute("delete from votes where material_id = %s and voter_id = %s",
+                     (material_id, user_id))
+    row = conn.execute(
+        "select count(*), bool_or(voter_id = %s) from votes where material_id = %s",
+        (user_id, material_id),
+    ).fetchone()
+    return {"votes": row[0], "voted": bool(row[1])}
+
+
+def db_contributions(conn, user_id):
+    """What one member has put in, and the points view's read of it.
+
+    Points are status, never a key. Nothing in this app asks what your score is
+    before it shows you something; reading a note has no price.
+    """
+    row = conn.execute(
+        "select uploads, recordings, votes_received, score from points where id = %s",
+        (user_id,),
+    ).fetchone() or (0, 0, 0, 0)
+    uploads = [
+        {"name": name, "subject": code, "votes": votes, "status": status}
+        for name, code, votes, status in conn.execute(
+            "select m.filename, m.subject_code, "
+            "  (select count(*) from votes v where v.material_id = m.id), m.status "
+            "from materials m where m.uploader_id = %s order by m.created_at desc",
+            (user_id,),
+        )
+    ]
+    recordings = [
+        {"title": title, "subject": code, "status": status}
+        for title, code, status in conn.execute(
+            "select coalesce(l.title, l.audio_key), l.subject_code, l.status "
+            "from lectures l where l.uploader_id = %s order by l.recorded_at desc",
+            (user_id,),
+        )
+    ]
+    return {
+        "points": dict(zip(("uploads", "recordings", "votes_received", "score"), row)),
+        "uploads": uploads,
+        "recordings": recordings,
+    }
+
+
+def db_backfill(conn, library):
+    """Register whatever is already on disk, once, in the admin's name.
+
+    Everything here predates the database and somebody has to own it. The admin
+    is the only account certain to exist, and this runs as them rather than as
+    the table owner, so the same policies apply as to any other upload.
+    """
+    row = conn.execute(
+        "select id from profiles where is_admin and status = 'approved' "
+        "order by created_at limit 1"
+    ).fetchone()
+    if not row:
+        return 0                     # nobody has joined; nothing to attribute to
+    admin = str(row[0])
+    act_as(conn, admin)
+    mats, lecs = db_meta(conn, admin)
+    added = 0
+    for code, (name, _) in SUBJECTS.items():
+        folder = Path(library) / f"{code}-{name}"
+        lectures, uploads = folder / "lectures", folder / "uploads"
+        for md in sorted(lectures.glob("*.md")) if lectures.is_dir() else []:
+            if (code, md.stem) in lecs:
+                continue
+            conn.execute(
+                "insert into lectures (subject_code, uploader_id, title, audio_key, "
+                "status) values (%s, %s, %s, %s, 'done')",
+                (code, admin, md.stem, str(md)),
+            )
+            added += 1
+        for f in sorted(uploads.glob("*")) if uploads.is_dir() else []:
+            if not f.is_file() or (code, f.name) in mats:
+                continue
+            conn.execute(
+                "insert into materials (subject_code, uploader_id, filename, file_key, "
+                "size_bytes) values (%s, %s, %s, %s, %s)",
+                (code, admin, f.name, str(f), f.stat().st_size),
+            )
+            added += 1
+    act_as(conn, None)
+    return added
 
 
 def db_bootstrap(conn):
@@ -2099,6 +2386,12 @@ def build_server(args):
     if not args.no_auth:
         with db() as conn:
             first = db_bootstrap(conn)
+            # Files that predate the database have nobody on them. Adopt them
+            # once, in the admin's name, so every item on a shelf says who put
+            # it there rather than half of them saying nothing.
+            adopted = db_backfill(conn, args.library)
+        if adopted:
+            log(f"registered {adopted} existing file(s) under the admin", "backfill")
         if first:
             log(f"nobody has joined yet — whoever uses invite code {first} first "
                 f"becomes the admin", "invite")
@@ -2189,9 +2482,21 @@ def build_server(args):
 
         def do_GET(self):
             if self.path == "/data":
-                return self.reply(200, {"subjects": build_data(args.library, args.out.parent),
+                subjects = build_data(args.library, args.out.parent)
+                # Disk says what exists; the database says who added it and how
+                # the class voted. --no-auth has neither a database nor anyone
+                # to credit, which is the whole point of --no-auth.
+                if self.me:
+                    with db(self.me["id"]) as conn:
+                        apply_meta(subjects, *db_meta(conn, self.me["id"]))
+                return self.reply(200, {"subjects": subjects,
                                         "codes": [{"code": c, "name": n.replace("-", " ")}
                                                   for c, (n, _) in SUBJECTS.items()]})
+            if self.path == "/me":
+                if not self.me:
+                    return self.reply(404, {"error": "this server is running with --no-auth"})
+                with db(self.me["id"]) as conn:
+                    return self.reply(200, db_contributions(conn, self.me["id"]))
             if self.path == "/jobs":
                 return self.reply(200, {"jobs": jobs.snapshot()})
             if self.path == "/log":
@@ -2221,6 +2526,8 @@ def build_server(args):
                 return self.do_approve()
             if self.path == "/upload":
                 return self.do_upload()
+            if self.path == "/vote":
+                return self.do_vote()
             if self.path == "/revise":
                 return self.do_revise()
             if self.path != "/explain":
@@ -2375,6 +2682,34 @@ def build_server(args):
                 return self.reply(400, {"error": str(e)})
             except Exception as e:
                 return self.reply(500, {"error": f"{type(e).__name__}: {e}"})
+
+        def do_vote(self):
+            """One vote per person per item. The primary key is the referee.
+
+            An unauthenticated caller never reaches this: /vote is not in
+            PUBLIC_PATHS, so parse_request has already refused them.
+            """
+            if not self.me:
+                return self.reply(404, {"error": "this server is running with --no-auth"})
+            try:
+                n = int(self.headers.get("Content-Length", 0))
+                if n > 4000:
+                    self.close_connection = True
+                    return self.reply(413, {"error": "too much"})
+                req = json.loads(self.rfile.read(n) or b"{}")
+                target = (req.get("id") or "").strip()
+                if not target:
+                    return self.reply(400, {"error": "which item?"})
+                with db(self.me["id"]) as conn:
+                    state = db_vote(conn, target, self.me["id"], bool(req.get("on", True)))
+            except psycopg.errors.UniqueViolation:
+                return self.reply(409, {"error": "you have already voted for this"})
+            except (psycopg.errors.InvalidTextRepresentation,
+                    psycopg.errors.ForeignKeyViolation):
+                return self.reply(404, {"error": "no such item"})
+            except Exception as e:
+                return self.reply(500, {"error": f"{type(e).__name__}: {e}"})
+            return self.reply(200, state)
 
         def do_revise(self):
             import json as _json

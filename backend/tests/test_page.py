@@ -269,6 +269,43 @@ qz = null; qOpen(mc, null);
 const subjectKey = qz.key;
 qz = null; qOpen(mc, mc.notes[0]);
 assert.ok(qz.key !== subjectKey, 'a note quiz and its subject quiz keep separate runs');
+
+// ---- Attribution and votes. ----
+// Only a file the database actually holds a row for can be voted on: an id is
+// the page's evidence that there is something to vote against.
+writes = [];
+fileRow({name: 'slides.pdf', path: 'p', by: 'Asha', id: 'm1', votes: 3, voted: false}, mc);
+assert.ok(wrote(['textContent', 'added by Asha']), 'a file says who added it');
+assert.ok(wrote(['className', 'vote']), 'a registered file gets a vote control');
+assert.ok(wrote(['textContent', 3]), 'the count rides inside the control');
+
+writes = [];
+fileRow({name: 'orphan.pdf', path: 'p'}, mc);
+assert.ok(!wrote(['className', 'vote']), 'no row behind it, no vote button');
+
+writes = [];
+fileRow({name: 'mine.pdf', path: 'p', id: 'm2', votes: 1, voted: true}, mc);
+assert.ok(wrote(['className', 'vote on']), 'your own vote reads as pressed');
+assert.ok(wrote(['()', 'aria-pressed', 'true']), 'and says so to a screen reader');
+
+// A lecture is not voted on -- it is the record of a class -- but it still
+// says who recorded it.
+writes = [];
+noteRow({title: 'week1', kind: 'lecture', md: '', by: 'Bilal'}, mc);
+assert.ok(wrote(['textContent', 'recorded by Bilal']));
+writes = [];
+noteRow({title: 'week2', kind: 'lecture', md: ''}, mc);
+assert.ok(wrote(['textContent', '']), 'an unattributed note says nothing, not "by nobody"');
+
+// Contributions is a level of its own, so back climbs out of it rather than
+// leaving the app.
+location.hash = '#me';
+route();
+assert.equal(view.code, 'me');
+assert.equal(current, null, 'the contributions screen is not a note');
+location.hash = '#';
+route();
+assert.equal(view.code, null);
 """
 
 
@@ -306,6 +343,28 @@ def test_practice_is_wired_up():
                    # The dock's one accent follows the primary action.
                    "classList.toggle('primary', practice.hidden)"):
         assert wiring in notes.PAGE, f"practice button not wired: {wiring}"
+
+
+def test_the_vote_control_is_wired_to_the_server_and_nothing_else():
+    """The stub cannot see an onclick assigned to a proxy, so the checks above
+    build the control and this is the other half: what pressing it does."""
+    for wiring in (
+        # One request, carrying which item and which direction.
+        "body: JSON.stringify({id: u.id, on: !u.voted})",
+        # And then the whole list again, because a vote changes the ranking.
+        "await refresh();",
+        "if (u.id) el.appendChild(voteBtn(u));",
+        "b.onclick = () => go('me', null);",
+    ):
+        assert wiring in notes.PAGE, f"vote control not wired: {wiring}"
+
+
+def test_points_never_gate_anything_on_the_page():
+    """An explicit product decision, and the kind that rots quietly. Nothing on
+    this page may branch on a score."""
+    for lock in ("points <", "score <", "score >=", "points >=", "if (score",
+                 "score &&", "unlock"):
+        assert lock not in notes.PAGE, f"points became a gate: {lock!r}"
 
 
 def test_back_closes_practice_first():
