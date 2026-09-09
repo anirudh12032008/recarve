@@ -225,6 +225,27 @@ def test_a_nonsense_week_is_refused_with_a_reason(server):
     assert data(port, cookies["Bilal"])["timetable"] == MONDAY, "and nothing was lost"
 
 
+def test_a_missing_timetable_cannot_take_the_library_with_it(server, monkeypatch):
+    """Home's extras are extras.
+
+    This table is newer than the database some machine is running, and the read
+    used to kill the handler mid-reply: not a 500, no reply at all. The phone
+    reads a dropped connection as "no server" and falls back to the baked
+    snapshot -- stale notes, no uploads, no attribution, no vote buttons, no
+    job polling. The library has to outlive its Today section.
+    """
+    port, cookies = server
+
+    def gone(conn, user_id):
+        raise psycopg.errors.UndefinedTable('relation "timetable" does not exist')
+
+    monkeypatch.setattr(notes, "db_timetable", gone)
+    d = data(port, cookies["Bilal"])
+    assert d["subjects"][0]["code"] == "MC1101", "the library is still served"
+    assert "timetable" not in d, "the page already reads a missing timetable as none"
+    assert data(port, cookies["Asha"])["subjects"], "and the admin's extras fail the same way"
+
+
 def test_a_stranger_has_no_timetable_to_save(server):
     """/timetable is not in PUBLIC_PATHS, so the gate refuses it before any
     handler sees it -- and a pending joiner is a stranger too."""

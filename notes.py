@@ -558,7 +558,9 @@ body.reading #read{display:block}
 .rtop .code{margin-left:auto}
 /* Four sizes only -- 26/20/16/13, roughly a 1.25 step. h3 separates itself by
    weight and colour rather than a fifth size that would read as body text. */
-article{padding:22px 18px 118px;max-width:70ch;margin:0 auto}
+/* Bottom padding is #nav's 142px: the FAB reaches 76 + 58 = 134px up, and at
+   118 it sat on the last <summary> of every note. */
+article{padding:22px 18px 142px;max-width:70ch;margin:0 auto}
 article h1{font-size:26px;line-height:1.2;letter-spacing:-.022em;font-weight:700;margin:0 0 24px}
 article h2{font-size:20px;line-height:1.3;letter-spacing:-.012em;font-weight:650;
   margin:38px 0 12px;padding-bottom:7px;border-bottom:1px solid var(--line)}
@@ -1707,7 +1709,11 @@ let recorder = null, chunks = [], ticker = null, started = 0, live = false;
 async function refresh() {
   try {
     const r = await fetch('/data');
-    if (!r.ok) return;
+    // Same road as a dead socket: 403 (blocked mid-visit) and 503 (Postgres
+    // down) are both answers Home has to be able to say something about, and
+    // returning here left it on "Checking your timetable…" with the job poll
+    // switched off and nothing to switch it back on.
+    if (!r.ok) throw new Error(r.status);
     const d = await r.json();
     DATA.length = 0; DATA.push(...d.subjects);
     // Everything Home needs rides on this one request.
@@ -2051,6 +2057,22 @@ def parse_questions(md):
     return out
 
 
+def mtime(f):
+    """The file's mtime in epoch seconds, or 0 if it went away underneath us.
+
+    Listing a folder and stat-ing what came back are two moments, and an upload
+    lands between them: do_upload writes `<name>.part` and renames it into
+    place, so a phone refreshing while a classmate uploads can stat a name that
+    no longer exists. That costs one row out of one payload -- the next refresh
+    has the real file -- and must never cost the whole library, which is what
+    letting the error reach the socket does.
+    """
+    try:
+        return int(f.stat().st_mtime)
+    except OSError:
+        return 0
+
+
 def build_data(library, relative_to):
     """The whole library as plain data: one entry per subject, empty ones too.
 
@@ -2077,16 +2099,16 @@ def build_data(library, relative_to):
         if rev.is_file():
             text = rev.read_text()
             notes.append({"title": "Revision sheet", "kind": "revision", "md": text,
-                          "at": int(rev.stat().st_mtime),
+                          "at": mtime(rev),
                           "questions": parse_questions(text)})
         for md in sorted((folder / "lectures").glob("*.md")):
             text = md.read_text()
             notes.append({"title": md.stem, "kind": "lecture", "md": text,
-                          "at": int(md.stat().st_mtime),
+                          "at": mtime(md),
                           "questions": parse_questions(text)})
         if (folder / "uploads").is_dir():
             for f in sorted((folder / "uploads").glob("*")):
-                uploads.append({"name": f.name, "at": int(f.stat().st_mtime),
+                uploads.append({"name": f.name, "at": mtime(f),
                                 "path": os.path.relpath(f, relative_to)})
         data.append({"code": code, "name": name.replace("-", " "),
                      "notes": notes, "uploads": uploads})
@@ -2969,12 +2991,23 @@ def build_server(args):
                 if self.me:
                     with db(self.me["id"]) as conn:
                         apply_meta(subjects, *db_meta(conn, self.me["id"]))
-                        out["timetable"] = db_timetable(conn, self.me["id"])
-                        # Everything Home needs rides on the request it already
-                        # makes. A second round trip for a number is a second
-                        # thing that can be slow on a phone in a corridor.
-                        if self.me["admin"]:
-                            out["pending"] = len(db_pending(conn))
+                        # Home's extras are extras. A migration not yet applied
+                        # on this machine used to kill the handler mid-reply,
+                        # and a dropped connection reads to the phone as "no
+                        # server": stale baked data, no uploads, no votes, no
+                        # jobs. The page already copes with a missing
+                        # timetable, so a failure here costs the Today section
+                        # and nothing else.
+                        try:
+                            out["timetable"] = db_timetable(conn, self.me["id"])
+                            # Everything Home needs rides on the request it
+                            # already makes. A second round trip for a number
+                            # is a second thing that can be slow on a phone in
+                            # a corridor.
+                            if self.me["admin"]:
+                                out["pending"] = len(db_pending(conn))
+                        except psycopg.Error as e:
+                            log(f"Home's extras are unavailable: {e}", "data")
                 return self.reply(200, out)
             if self.path == "/me":
                 if not self.me:

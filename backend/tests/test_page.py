@@ -149,14 +149,23 @@ let qvalue = '';   // whatever is in the search box, so its scope can be tested
 // in is the first thing CHECKS looks at.
 const location = {hash: '#classes/MC1101/week1'};
 let hist = ['#classes/MC1101/week1'];   // every entry pushed, so back can be reasoned about
+let backs = 0;                          // and every press of it, so a save can be shown to leave
 const history = {
   pushState: (a, b, h) => { hist.push(h); location.hash = h; },
   replaceState: (a, b, h) => { hist[hist.length - 1] = h; location.hash = h; },
-  back: () => {},
+  back: () => { backs++; },
 };
 const window = {scrollTo: () => {}, print: () => {}};
 const marked = {parse: md => md};
-const fetch = () => new Promise(() => {});
+// Every request the script makes, and what the next one is answered with.
+// `reply = null` hangs, which is what the page sees before a check sets one --
+// including the refresh() it fires on the way in.
+let fetches = [], reply = null;
+const fetch = (url, init) => {
+  fetches.push([url, init]);
+  return reply ? Promise.resolve(reply) : new Promise(() => {});
+};
+const answer = (ok, body) => ({ok, status: ok ? 200 : 503, json: async () => body});
 const setInterval = () => 0, setTimeout = () => 0, clearInterval = () => {};
 """
 
@@ -388,20 +397,23 @@ assert.ok(wrote(['textContent', 'Your contributions']), 'and that header must na
 // everyone else's, because #lback -- the only back button at this depth --
 // lives inside it; the search box belongs to Classes and the activity log to
 // Me; and #lback itself only appears where there is a level above to climb to.
-// render() writes .hidden in one order: brand, shead, lback, scode, q, tools.
+// The jobs box is chrome too, and Home is the one screen that must not show
+// it: Home draws the same running transcription under "Needs you", and two
+// copies of it on one screen is one copy too many.
+// render() writes .hidden in one order: brand, shead, lback, scode, q, tools, jobs.
 const chrome = h => {
   location.hash = h; route(); writes = []; render();
-  return writes.filter(w => w[0] === 'hidden').map(w => w[1]).slice(0, 6);
+  return writes.filter(w => w[0] === 'hidden').map(w => w[1]).slice(0, 7);
 };
-assert.deepStrictEqual(chrome('#home'), [false, true, true, true, true, true],
+assert.deepStrictEqual(chrome('#home'), [false, true, true, true, true, true, true],
                        'Home keeps the brand and nothing else');
-assert.deepStrictEqual(chrome('#classes'), [true, false, true, true, false, true],
+assert.deepStrictEqual(chrome('#classes'), [true, false, true, true, false, true, false],
                        'the search box is the Classes tab\\'s');
-assert.deepStrictEqual(chrome('#classes/MC1101'), [true, false, false, false, false, true],
+assert.deepStrictEqual(chrome('#classes/MC1101'), [true, false, false, false, false, true, false],
                        'a subject is the one level with a way back up');
-assert.deepStrictEqual(chrome('#campus'), [true, false, true, true, true, true],
+assert.deepStrictEqual(chrome('#campus'), [true, false, true, true, true, true, false],
                        'Campus has no search box and no log');
-assert.deepStrictEqual(chrome('#me'), [true, false, true, true, true, false],
+assert.deepStrictEqual(chrome('#me'), [true, false, true, true, true, false, false],
                        'the activity log is the Me tab\\'s');
 
 // + from here must leave the dropdown alone: 'me' matches no option, so the
@@ -524,12 +536,93 @@ writes = []; location.hash = '#home/timetable'; route();
 assert.deepStrictEqual([view.tab, view.edit], ['home', true], 'the editor is a level');
 assert.ok(says('Period 1') && says('Period 8'), 'every period of the day is editable');
 assert.ok(says('Save timetable'), 'and there is a way to save it');
-assert.deepStrictEqual(chrome('#home/timetable'), [true, false, false, true, true, true],
+assert.deepStrictEqual(chrome('#home/timetable'), [true, false, false, true, true, true, true],
                        'the editor names itself and keeps a way back up');
 assert.equal(draft['3-1'], 'MC1101', 'the editor opens on what is already saved');
 draft['3-2'] = 'CY1107';
 location.hash = '#home'; route();
 assert.equal(draft, null, 'walking away drops an unsaved week rather than saving it');
+
+// ---- Everything that waits on a promise, in one pass at the end. This file
+// is CommonJS, so top-level await is a syntax error; a rejection in here still
+// exits node non-zero, which is what the pytest wrapper reads.
+(async () => {
+
+// A /data that answers badly is not a page opened as a file. 403 (blocked
+// mid-visit) and 503 (Postgres down) are both real answers from this server,
+// and returning on them left Home on 'Checking your timetable...' with `live`
+// false, the job poll switched off, and nothing left to switch it back on.
+TT = null; live = true;
+reply = answer(false, {error: 'the library is offline'});
+await refresh();
+assert.equal(live, false, 'a refused /data means there is no server to save to');
+assert.deepStrictEqual(TT, [], 'and Home is told, rather than left waiting');
+home();
+assert.ok(!says('Checking your timetable'), 'Home may not sit on checking forever');
+assert.ok(says('Your timetable needs the server'), 'it has to say what is wrong');
+
+// ---- Saving the week. The stub swallows save.onclick, so this drives
+// saveTimetable() by name, the way the practice checks drive the quiz.
+TT = []; draft = {'3-1': 'MC1101', '3-3': ''};
+fetches = []; backs = 0;
+reply = answer(true, {saved: 1});
+await saveTimetable();
+assert.equal(fetches[0][0], '/timetable', 'the save is the one request Home makes');
+assert.deepStrictEqual(JSON.parse(fetches[0][1].body),
+                       {slots: [{day: 3, period: 1, code: 'MC1101'}]},
+                       'day then period, and a period put back to free is not a slot');
+assert.deepStrictEqual(TT, [{day: 3, period: 1, code: 'MC1101'}],
+                       'Home shows the week that was just saved, not the old one');
+assert.equal(draft, null, 'a saved week is no longer a draft');
+assert.equal(backs, 1, 'and saving leaves the editor');
+
+// A refused save may not read as a saved one: the week on screen stays
+// whatever the server actually holds, and the reason is on screen.
+const saved = TT;
+draft = {'3-1': 'CY1107'};
+reply = answer(false, {error: 'day 9 is not a day'});
+writes = []; backs = 0;
+await saveTimetable();
+assert.deepStrictEqual(TT, saved, 'a refused save changes nothing');
+assert.ok(says('day 9 is not a day'), 'and says why it was refused');
+assert.ok(!says('Timetable saved'), 'a refused save must never report success');
+assert.equal(backs, 0, 'and leaves the student in the editor to fix it');
+
+// Every pick has to land in the draft: those selects are the only input the
+// save has, and an onchange that does nothing re-posts the old week in silence.
+location.hash = '#home/timetable'; route();
+writes = [];
+renderTimetable();
+const picks = writes.filter(w => w[0] === 'onchange');
+assert.equal(picks.length, PERIODS, 'one select per period');
+qvalue = 'CY1107';
+picks[PERIODS - 1][1]();
+assert.equal(draft[slotKey(draftDay, PERIODS)], 'CY1107', 'a pick must land in the draft');
+qvalue = ''; draft = null;
+
+// ---- The jobs poll, which is the only thing that keeps 'Needs you' current.
+// 'Needs you' is written by Home's render and by nothing else; the job's own
+// text is written by the jobs box either way, so it cannot tell them apart.
+live = true; JOBS = []; lastJobs = '';
+const moving = d => answer(true, {jobs: [
+  {id: 1, name: 'CY1107-lec.m4a', state: 'transcribing', detail: d}]});
+reply = moving('10% - 1 of 5 min');
+home(); writes = [];
+await pollJobs();
+assert.ok(says('Needs you'), 'a job that moved must redraw Home under the student');
+writes = [];
+await pollJobs();
+assert.ok(!says('Needs you'), 'a job that has not moved must not fight the thumb');
+reply = moving('60% - 3 of 5 min');
+writes = [];
+await pollJobs();
+assert.ok(says('Needs you'), 'and the next step of it redraws again');
+reply = moving('80% - 4 of 5 min');
+location.hash = '#classes/MC1101'; route(); writes = [];
+await pollJobs();
+assert.ok(!says('Needs you'), 'it is Home that is redrawn, not whatever else is open');
+
+})().catch(e => { console.error(e); process.exit(1); });
 """
 
 
@@ -605,9 +698,13 @@ def test_the_tab_bar_is_wired_and_gives_way_to_the_reading_dock():
     # it covered the bottom 54px of the list -- the last row's vote button with
     # it -- with no scroll left to escape.
     assert "#nav{padding-bottom:calc(142px + env(safe-area-inset-bottom))}" in notes.PAGE
+    # An open note is the same problem: every generated note ends in a
+    # <details><summary>Full transcript</summary>, and at 118px the FAB sat on
+    # the bottom 16px of it and took the taps meant for it.
+    assert "article{padding:22px 18px 142px" in notes.PAGE
     fab = re.search(r"#fab\{(.*?)\}", notes.PAGE, re.S).group(1)
     assert "bottom:calc(76px + env(safe-area-inset-bottom))" in fab and "height:58px" in fab, \
-        "if the FAB moves, #nav's padding has to move with it"
+        "if the FAB moves, #nav's and article's padding have to move with it"
 
 
 def test_home_costs_no_request_of_its_own():
@@ -659,6 +756,24 @@ def test_the_library_says_when_each_thing_arrived(tmp_path):
     assert mc["notes"][0]["at"] > 0 and mc["uploads"][0]["at"] > 0
     assert all(isinstance(x["at"], int)
                for x in mc["notes"] + mc["uploads"]), "seconds, like the server's clock"
+
+
+def test_a_file_that_vanishes_does_not_take_the_library_with_it(tmp_path):
+    """Listing a folder and stat-ing what came back are two moments, and an
+    upload lands between them: do_upload writes `<name>.part` and renames it
+    into place. A dangling symlink is that race held still. Letting it raise
+    dropped the whole /data response, which the phone reads as "no server".
+    """
+    folder = tmp_path / "library" / "MC1101-Mathematics-1"
+    (folder / "uploads").mkdir(parents=True)
+    (folder / "uploads" / "real.pdf").write_bytes(b"%PDF-1.4")
+    (folder / "uploads" / "gone.pdf").symlink_to(folder / "uploads" / "never.pdf")
+
+    mc = next(s for s in notes.build_data(tmp_path / "library", tmp_path)
+              if s["code"] == "MC1101")             # must not raise
+    at = {u["name"]: u["at"] for u in mc["uploads"]}
+    assert at["real.pdf"] > 0, "the file that is there keeps its arrival time"
+    assert at["gone.pdf"] == 0, "and the one that went away is never new"
 
 
 def test_the_me_tab_carries_the_two_admin_things():
