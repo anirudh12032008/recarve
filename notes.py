@@ -525,6 +525,38 @@ details>:not(summary){padding:0 14px}
 #panel .out{padding:12px 16px calc(20px + env(safe-area-inset-bottom));overflow-y:auto;font-size:16px}
 #panel .out .katex-display{overflow-x:auto}
 #close{min-width:var(--tap);min-height:var(--tap);font-size:16px;color:var(--mut)}
+#fab{position:fixed;right:16px;bottom:calc(76px + env(safe-area-inset-bottom));z-index:7;
+  width:58px;height:58px;border-radius:50%;background:var(--accent);color:var(--accent-fg);
+  font-size:30px;line-height:1;box-shadow:0 6px 22px rgba(0,0,0,.3)}
+body.reading #fab{display:none}
+#sheet{position:fixed;inset:0;z-index:11;display:none;background:rgba(0,0,0,.45)}
+#sheet.on{display:block}
+#sheet .card{position:absolute;left:0;right:0;bottom:0;background:var(--bg);
+  border-radius:16px 16px 0 0;padding:18px 16px calc(18px + env(safe-area-inset-bottom));
+  max-height:88dvh;overflow-y:auto}
+#sheet h3{margin:0 0 14px;font-size:20px}
+#sheet label{display:block;font-size:13px;color:var(--mut);margin:14px 0 6px}
+#sheet select,#sheet .opt{width:100%;min-height:var(--tap);font-size:16px;border-radius:11px;
+  border:1px solid var(--line);background:var(--surface);color:var(--fg);padding:0 12px}
+#sheet .opt{display:flex;align-items:center;gap:11px;margin-top:9px;text-align:left}
+#sheet .opt b{font-weight:600}
+#sheet .opt span{color:var(--mut);font-size:13px}
+#rec{margin-top:14px;padding:16px;border-radius:12px;background:var(--surface);text-align:center;display:none}
+#rec.on{display:block}
+#rec .time{font-size:26px;font-weight:700;font-variant-numeric:tabular-nums}
+#rec .dot{display:inline-block;width:11px;height:11px;border-radius:50%;background:#e5484d;
+  margin-right:8px;animation:pulse 1.4s infinite}
+@keyframes pulse{50%{opacity:.25}}
+@media (prefers-reduced-motion:reduce){#rec .dot{animation:none}}
+#jobs{padding:0 16px}
+.job{display:flex;align-items:center;gap:11px;padding:11px 12px;margin-top:8px;
+  border-radius:11px;background:var(--surface);font-size:16px}
+.job .st{font-size:13px;color:var(--mut);margin-left:auto;text-align:right}
+.job.failed{border:1px solid #e5484d}
+.job.failed .st{color:#e5484d}
+.spin{width:14px;height:14px;border:2px solid var(--line);border-top-color:var(--accent);
+  border-radius:50%;animation:spin .8s linear infinite;flex:none}
+@keyframes spin{to{transform:rotate(360deg)}}
 .dock button:active{opacity:.75}
 body:not(.reading) .dock{display:none}
 
@@ -551,6 +583,7 @@ body:not(.reading) .dock{display:none}
     <div class="brand"><b>recarve</b><span>Section I</span></div>
     <input id="q" placeholder="Search notes and transcripts" autocomplete="off" enterkeyhint="search">
   </div>
+  <div id="jobs"></div>
   <nav id="nav"></nav>
 </section>
 
@@ -561,6 +594,26 @@ body:not(.reading) .dock{display:none}
   </div>
   <article id="body"><p class="blank">Pick a lecture to start reading.</p></article>
 </section>
+
+<button id="fab" aria-label="Add a lecture or notes">+</button>
+
+<div id="sheet">
+  <div class="card">
+    <h3>Add to the library</h3>
+    <label for="subj">Subject</label>
+    <select id="subj"></select>
+    <button class="opt" id="opt-rec"><b>Record this class</b><span>keep the screen on</span></button>
+    <button class="opt" id="opt-audio"><b>Upload a recording</b><span>m4a, mp3, mp4</span></button>
+    <button class="opt" id="opt-doc"><b>Upload notes or slides</b><span>pdf, txt, md</span></button>
+    <button class="opt" id="opt-revise"><b>Make a revision sheet</b><span>from every lecture in this subject</span></button>
+    <div id="rec">
+      <div class="time"><span class="dot"></span><span id="clock">0:00</span></div>
+      <button class="opt" id="opt-stop" style="justify-content:center"><b>Stop and upload</b></button>
+    </div>
+    <button class="opt" id="opt-close" style="justify-content:center;margin-top:16px">Cancel</button>
+    <input type="file" id="file" accept="audio/*,video/*,.pdf,.txt,.md" hidden>
+  </div>
+</div>
 
 <button id="ask">Explain</button>
 
@@ -718,6 +771,134 @@ document.getElementById('print').onclick = () => {
   window.print();
 };
 
+// ---- Adding things: record, upload, revise. All work happens on the Mac. ----
+const sheet = document.getElementById('sheet'), subj = document.getElementById('subj');
+const fileInput = document.getElementById('file'), rec = document.getElementById('rec');
+const clock = document.getElementById('clock'), jobsBox = document.getElementById('jobs');
+let recorder = null, chunks = [], ticker = null, started = 0, live = false;
+
+// The server is the source of truth once it is running; a plain exported file
+// keeps the data that was baked into it.
+async function refresh() {
+  try {
+    const r = await fetch('/data');
+    if (!r.ok) return;
+    const d = await r.json();
+    DATA.length = 0; DATA.push(...d.subjects);
+    if (!subj.options.length) {
+      for (const c of d.codes) {
+        const o = document.createElement('option');
+        o.value = c.code; o.textContent = c.code + ' — ' + c.name;
+        subj.appendChild(o);
+      }
+    }
+    render(q.value);
+    live = true;
+  } catch { live = false; }
+}
+
+function jobRow(j) {
+  const el = document.createElement('div');
+  el.className = 'job' + (j.state === 'failed' ? ' failed' : '');
+  const busy = j.state === 'queued' || j.state === 'transcribing';
+  el.innerHTML = (busy ? '<i class="spin"></i>' : '') +
+    '<span class="nm"></span><span class="st"></span>';
+  el.querySelector('.nm').textContent = j.name;
+  el.querySelector('.st').textContent = j.detail || j.state;
+  return el;
+}
+
+let lastDone = 0;
+async function pollJobs() {
+  if (!live) return;
+  try {
+    const r = await fetch('/jobs');
+    const {jobs} = await r.json();
+    const active = jobs.filter(j => j.state !== 'done' || Date.now() - lastDone < 8000);
+    jobsBox.innerHTML = '';
+    jobs.slice(0, 4).forEach(j => jobsBox.appendChild(jobRow(j)));
+    const done = jobs.filter(j => j.state === 'done').length;
+    if (done !== lastDone) { lastDone = done; refresh(); }
+  } catch {}
+}
+
+const openSheet = () => { sheet.classList.add('on'); };
+const closeSheet = () => { sheet.classList.remove('on'); rec.classList.remove('on'); };
+document.getElementById('fab').onclick = openSheet;
+document.getElementById('opt-close').onclick = closeSheet;
+sheet.onclick = e => { if (e.target === sheet) closeSheet(); };
+
+async function upload(blob, name) {
+  closeSheet();
+  const r = await fetch('/upload', {
+    method: 'POST',
+    headers: {'X-Filename': encodeURIComponent(name), 'X-Subject': subj.value,
+              'Content-Type': 'application/octet-stream'},
+    body: blob,
+  });
+  const d = await r.json().catch(() => ({}));
+  if (!r.ok) return alert(d.error || 'Upload failed');
+  pollJobs();
+}
+
+document.getElementById('opt-audio').onclick = () => {
+  fileInput.accept = 'audio/*,video/*'; fileInput.click();
+};
+document.getElementById('opt-doc').onclick = () => {
+  fileInput.accept = '.pdf,.txt,.md'; fileInput.click();
+};
+fileInput.onchange = () => {
+  const f = fileInput.files[0];
+  if (f) upload(f, f.name);
+  fileInput.value = '';
+};
+
+document.getElementById('opt-rec').onclick = async () => {
+  try {
+    const stream = await navigator.mediaDevices.getUserMedia({audio: true});
+    chunks = [];
+    recorder = new MediaRecorder(stream);
+    recorder.ondataavailable = e => e.data.size && chunks.push(e.data);
+    recorder.onstop = () => {
+      stream.getTracks().forEach(t => t.stop());
+      // Safari records mp4, Chrome webm; ffmpeg on the Mac reads both.
+      const type = recorder.mimeType || 'audio/webm';
+      const ext = type.includes('mp4') ? 'mp4' : 'webm';
+      const stamp = new Date().toISOString().slice(0, 16).replace(/[:T]/g, '-');
+      upload(new Blob(chunks, {type}), `${subj.value}-${stamp}.${ext}`);
+    };
+    recorder.start(5000);  // flush every 5s so a crash does not lose everything
+    started = Date.now();
+    rec.classList.add('on');
+    ticker = setInterval(() => {
+      const s = Math.floor((Date.now() - started) / 1000);
+      clock.textContent = `${Math.floor(s / 60)}:${String(s % 60).padStart(2, '0')}`;
+    }, 500);
+  } catch (e) {
+    alert('Microphone blocked. On iPhone this needs https or localhost.');
+  }
+};
+
+document.getElementById('opt-stop').onclick = () => {
+  if (recorder && recorder.state !== 'inactive') recorder.stop();
+  clearInterval(ticker);
+  rec.classList.remove('on');
+};
+
+document.getElementById('opt-revise').onclick = async () => {
+  closeSheet();
+  const r = await fetch('/revise', {
+    method: 'POST', headers: {'Content-Type': 'application/json'},
+    body: JSON.stringify({subject: subj.value}),
+  });
+  const d = await r.json().catch(() => ({}));
+  if (!r.ok) return alert(d.error || 'Could not build a revision sheet');
+  refresh();
+};
+
+refresh();
+setInterval(pollJobs, 2500);
+
 // ---- Explain: highlight anything in a note, tap the button ----
 const ask = document.getElementById('ask'), panel = document.getElementById('panel');
 const out = document.getElementById('out'), quote = document.getElementById('quote');
@@ -785,15 +966,13 @@ if (want) {
 """
 
 
-def export(args):
-    """Write the whole library to one self-contained HTML page."""
-    import json
+def build_data(library, relative_to):
+    """The whole library as plain data: one entry per subject that has content.
 
-    lib = Path(args.library)
-    if not lib.exists():
-        raise SystemExit(f"no library at {lib} yet — transcribe or add something first")
-
-    out = args.out
+    Shared by `export` (baked into the page) and the server's /data endpoint
+    (fetched live), so the browser sees the same shape either way.
+    """
+    lib = Path(library)
     data = []
     for code, (name, _) in SUBJECTS.items():
         folder = lib / f"{code}-{name}"
@@ -803,10 +982,25 @@ def export(args):
             notes.append({"title": "Revision sheet", "md": rev.read_text()})
         for md in sorted((folder / "lectures").glob("*.md")):
             notes.append({"title": md.stem, "md": md.read_text()})
-        for f in sorted((folder / "uploads").glob("*")) if (folder / "uploads").exists() else []:
-            uploads.append({"name": f.name, "path": os.path.relpath(f, out.parent)})
+        if (folder / "uploads").is_dir():
+            for f in sorted((folder / "uploads").glob("*")):
+                uploads.append({"name": f.name, "path": os.path.relpath(f, relative_to)})
         if notes or uploads:
-            data.append({"code": code, "name": name.replace("-", " "), "notes": notes, "uploads": uploads})
+            data.append({"code": code, "name": name.replace("-", " "),
+                         "notes": notes, "uploads": uploads})
+    return data
+
+
+def export(args):
+    """Write the whole library to one self-contained HTML page."""
+    import json
+
+    lib = Path(args.library)
+    if not lib.exists():
+        raise SystemExit(f"no library at {lib} yet — transcribe or add something first")
+
+    out = args.out
+    data = build_data(lib, out.parent)
 
     if not data:
         raise SystemExit("library is empty — nothing to export")
@@ -897,6 +1091,80 @@ def revise(args):
     print(f"  -> {out}", file=sys.stderr)
 
 
+class Jobs:
+    """Uploads waiting to be turned into notes.
+
+    One worker thread, deliberately: transcription is the expensive thing and
+    every API call in this system happens here, on this machine. Two students
+    uploading at once queue up rather than racing.
+    """
+
+    def __init__(self, args):
+        import threading
+
+        self.args = args
+        self.items = []            # newest first, what /jobs returns
+        self.lock = threading.Lock()
+        self.pending = []
+        self.wake = threading.Event()
+        self.seq = 0
+        threading.Thread(target=self._run, daemon=True).start()
+
+    def add(self, path, subject, kind):
+        # A document is already on disk by the time we get here, so it is done.
+        # Queuing it would park a 2-second PDF behind an 11-minute lecture.
+        done = kind == "document"
+        with self.lock:
+            self.seq += 1
+            job = {"id": self.seq, "name": path.name, "subject": subject, "kind": kind,
+                   "state": "done" if done else "queued",
+                   "detail": f"filed under {subject}" if done else ""}
+            self.items.insert(0, job)
+            if not done:
+                self.pending.append((job, path))
+        if not done:
+            self.wake.set()
+        return job
+
+    def snapshot(self):
+        with self.lock:
+            return list(self.items)
+
+    def _set(self, job, state, detail=""):
+        with self.lock:
+            job["state"] = state
+            job["detail"] = detail
+
+    def _run(self):
+        while True:
+            self.wake.wait()
+            while True:
+                with self.lock:
+                    if not self.pending:
+                        self.wake.clear()
+                        break
+                    job, path = self.pending.pop(0)
+                try:
+                    self._process(job, path)
+                except Exception as e:
+                    self._set(job, "failed", f"{type(e).__name__}: {e}")
+
+    def _process(self, job, path):
+        import argparse as _ap
+
+        self._set(job, "transcribing", "this takes about a minute per 5 min of audio")
+        # Reuse the CLI path exactly, so the web route and the terminal route
+        # can never drift apart.
+        opts = _ap.Namespace(
+            library=self.args.library, subject=job["subject"], lang=None,
+            model="large-v3", notes_lang="english", notes_model=self.args.notes_model,
+            no_notes=False, outdir=None, force=False, redo_notes=False,
+            max_cost=self.args.max_cost, context=False,
+        )
+        process(path, opts)
+        self._set(job, "done", "notes ready")
+
+
 EXPLAIN_PROMPT = """A student is reading their lecture notes and highlighted a passage they do not
 understand. Explain just that passage.
 
@@ -925,7 +1193,10 @@ def serve(args):
 
     cache_dir = Path(args.library) / ".explains"
     cache_dir.mkdir(parents=True, exist_ok=True)
+    inbox = Path(args.library) / ".inbox"
+    inbox.mkdir(parents=True, exist_ok=True)
     budget = {"left": args.max_explains}
+    jobs = Jobs(args)
 
     class Handler(SimpleHTTPRequestHandler):
         def log_message(self, fmt, *a):
@@ -933,11 +1204,24 @@ def serve(args):
                 super().log_message(fmt, *a)
 
         def translate_path(self, path):
-            if path in ("/", "/index.html"):
+            if path.split("?")[0] in ("/", "/index.html"):
                 return str(args.out)
             return super().translate_path(path)
 
+        def do_GET(self):
+            if self.path == "/data":
+                return self.reply(200, {"subjects": build_data(args.library, args.out.parent),
+                                        "codes": [{"code": c, "name": n.replace("-", " ")}
+                                                  for c, (n, _) in SUBJECTS.items()]})
+            if self.path == "/jobs":
+                return self.reply(200, {"jobs": jobs.snapshot()})
+            return super().do_GET()
+
         def do_POST(self):
+            if self.path == "/upload":
+                return self.do_upload()
+            if self.path == "/revise":
+                return self.do_revise()
             if self.path != "/explain":
                 return self.send_error(404)
             try:
@@ -980,6 +1264,65 @@ def serve(args):
                 # Surface the real reason on the phone; a silent failure here is
                 # indistinguishable from a network problem.
                 self.reply(500, {"error": f"{type(e).__name__}: {e}"})
+
+        def do_upload(self):
+            """Raw body upload: filename and subject ride in headers.
+
+            Deliberately not multipart -- the cgi module is gone in Python 3.13+
+            and a hand-rolled parser is a bug farm for zero benefit here.
+            """
+            import json as _json
+            import re
+            import urllib.parse
+
+            try:
+                n = int(self.headers.get("Content-Length", 0))
+                if n <= 0:
+                    return self.reply(400, {"error": "empty upload"})
+                if n > 500 * 1024 * 1024:
+                    return self.reply(413, {"error": "file over 500MB"})
+
+                raw = urllib.parse.unquote(self.headers.get("X-Filename", "upload"))
+                # Never trust a client-supplied filename with a path in it.
+                name = re.sub(r"[^A-Za-z0-9._-]", "_", Path(raw).name)[:120] or "upload"
+                subject = self.headers.get("X-Subject", "").strip()
+                code = resolve_subject(subject) if subject else guess_subject(name)
+                if not code:
+                    return self.reply(400, {"error": f"pick a subject for {name}"})
+
+                data = self.rfile.read(n)
+                ext = Path(name).suffix.lower()
+                is_audio = ext in AUDIO_EXTS
+
+                if is_audio:
+                    dest = inbox / f"{code}-{name}"
+                    dest.write_bytes(data)
+                    job = jobs.add(dest, code, "audio")
+                else:
+                    dest = subject_dir(args.library, code, "uploads") / name
+                    dest.write_bytes(data)
+                    job = jobs.add(dest, code, "document")
+                return self.reply(200, {"job": job})
+            except SystemExit as e:
+                return self.reply(400, {"error": str(e)})
+            except Exception as e:
+                return self.reply(500, {"error": f"{type(e).__name__}: {e}"})
+
+        def do_revise(self):
+            import json as _json
+            from argparse import Namespace
+
+            try:
+                n = int(self.headers.get("Content-Length", 0))
+                req = _json.loads(self.rfile.read(n) or b"{}")
+                code = resolve_subject(req.get("subject", ""))
+                revise(Namespace(library=args.library, subject=code,
+                                 notes_model=args.notes_model, max_cost=args.max_cost))
+                return self.reply(200, {"ok": True})
+            except SystemExit as e:
+                return self.reply(400, {"error": str(e)})
+            except Exception as e:
+                return self.reply(500, {"error": f"{type(e).__name__}: {e}"})
 
         def reply(self, code, obj):
             body = json.dumps(obj).encode()
@@ -1262,6 +1605,7 @@ def main():
     sv.add_argument("--port", type=int, default=8000)
     sv.add_argument("--out", type=Path, default=Path(__file__).parent / "site" / "index.html")
     sv.add_argument("--notes-model", default="claude-haiku-4-5")
+    sv.add_argument("--max-cost", type=float, default=1.00)
     sv.add_argument("--max-explains", type=int, default=300,
                     help="spend guard: stop answering after this many taps")
     sv.add_argument("--verbose", action="store_true")
