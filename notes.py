@@ -2356,6 +2356,7 @@ class Jobs:
 
 import hashlib
 import hmac
+import html
 import http.cookies
 import json
 import secrets
@@ -2449,7 +2450,7 @@ def db(user_id=None):
     return conn
 
 
-def db_join(conn, code, name, roll_no):
+def db_join(conn, code, name, roll_no, phone=None):
     """Put a new person through join_with_invite. (id, status, is_admin) or None.
 
     None means the code was wrong, expired or used up -- and nothing is left
@@ -2468,8 +2469,8 @@ def db_join(conn, code, name, roll_no):
             (user_id, f"{user_id}@recarve.local"),
         )
         act_as(conn, user_id, local=True)
-        ok = conn.execute("select join_with_invite(%s, %s, %s)",
-                          (code, name, roll_no)).fetchone()[0]
+        ok = conn.execute("select join_with_invite(%s, %s, %s, %s)",
+                          (code, name, roll_no, phone)).fetchone()[0]
         if not ok:
             raise psycopg.Rollback(tx)
         # The first person in is the admin. Nobody can approve anybody
@@ -2488,6 +2489,65 @@ def db_join(conn, code, name, roll_no):
                            (user_id,)).fetchone()
         result = (user_id, row[0], row[1] == "admin")
     return result
+
+
+def normalise_phone(raw):
+    """One stored form for a number people type six different ways.
+
+    +91 98765 43210, 091-98765-43210 and 9876543210 are one person, and a class
+    list that holds the same student three ways is not a list anybody can ring.
+    Indian mobiles are ten digits starting 6-9; a foreign number or a mistyped
+    one is refused here with a sentence a first-year can act on, rather than
+    stored as a number that will never connect.
+
+    Returns +91XXXXXXXXXX. Raises ValueError, whose message is what the joiner
+    is shown.
+
+    ponytail: a landline whose STD code survives the leading-0 strip -- 0755
+    2670000, Bhopal -- is ten digits starting 7 and passes. Nothing in the
+    length or the prefix separates it from a mobile; only a live HLR lookup
+    would, and a wrong "that is not a number" costs more than a number nobody
+    texts. Refuse those at the point somebody actually sends an SMS.
+    """
+    digits = re.sub(r"\D", "", raw or "")
+    # Longest first: "0091..." also starts with "0", and stripping the "0"
+    # would leave "0919876543210" looking like nothing at all.
+    for prefix in ("0091", "091", "91", "0"):
+        if len(digits) > 10 and digits.startswith(prefix):
+            digits = digits[len(prefix):]
+            break
+    if not re.fullmatch(r"[6-9]\d{9}", digits):
+        raise ValueError("that does not look like a mobile number - "
+                         "10 digits, or +91 and 10 digits")
+    return "+91" + digits
+
+
+def db_inviter(conn, code):
+    """The name for "Invited by", or None while nobody can invite anybody yet.
+
+    Whoever minted this code if the code is live and we know who minted it,
+    otherwise the admin who has been here longest -- which is the answer today,
+    since the bootstrap invite has no author to credit.
+
+    Read on the owning connection: the caller is a stranger with no session at
+    all, and invites deliberately has no select policy for anyone.
+
+    ponytail: with two admins the line differs by whether the code is live, so
+    it is a weak yes/no about a code somebody already holds. One admin today
+    and the fallback answers identically. If the class ever has two, look the
+    creator up only after a successful join.
+    """
+    row = conn.execute(
+        "select p.name from invites i join profiles p on p.id = i.created_by "
+        "where i.code = %s and i.expires_at > now() and i.uses < i.max_uses",
+        (code,),
+    ).fetchone() if code else None
+    if not row:
+        row = conn.execute(
+            "select name from profiles where role = 'admin' and status = 'approved' "
+            "order by created_at limit 1"
+        ).fetchone()
+    return row[0] if row else None
 
 
 def db_principal(conn, profile_id):
@@ -2852,16 +2912,27 @@ button[disabled]{opacity:.5}
   background:transparent;border:1px solid var(--line);border-radius:10px;padding:0 .5rem}
 .row small{display:block;color:var(--mut);font-size:.8rem}
 h2{font-size:1rem;margin:2rem 0 .2rem}
+.by{color:var(--fg);margin:0 0 .35rem}
+/* The section is shown, not asked: there is one, and a box you can type in
+   invites somebody to type the wrong one. Still an input so it sits in the
+   same column as the fields around it, greyed the way its label is. */
+input[readonly]{color:var(--mut)}
 </style>
 <main>__BODY__</main>
 """
 
 JOIN_BODY = r"""<h1>recarve</h1>
-<p>Section I notes. You need the invite code from someone already in.</p>
+__INVITED__
+<p>__INTRO__</p>
 <form id="f">
   <label for="nm">Name</label><input id="nm" required autocomplete="name">
   <label for="roll">Roll number</label><input id="roll" required autocomplete="off">
-  <label for="code">Invite code</label><input id="code" required autocomplete="off" autocapitalize="off">
+  <label for="ph">Phone number</label>
+  <input id="ph" required type="tel" inputmode="tel" autocomplete="tel">
+  <label for="sec">Section</label>
+  <input id="sec" value="Section I" readonly tabindex="-1">
+  <label for="code">Invite code</label>
+  <input id="code" required autocomplete="off" autocapitalize="off" value="__CODE__">
   <button>Join</button>
   <p class="err" id="err"></p>
 </form>
@@ -2872,7 +2943,8 @@ $('f').onsubmit = async e => {
   $('err').textContent = '';
   try {
     const res = await fetch('/join', {method: 'POST', headers: {'Content-Type': 'application/json'},
-      body: JSON.stringify({name: $('nm').value, roll_no: $('roll').value, code: $('code').value})});
+      body: JSON.stringify({name: $('nm').value, roll_no: $('roll').value,
+                            phone: $('ph').value, code: $('code').value})});
     const j = await res.json().catch(() => ({}));
     if (res.ok) return location.reload();
     $('err').textContent = j.error || 'could not join';
@@ -2880,6 +2952,30 @@ $('f').onsubmit = async e => {
 };
 </script>
 """
+
+
+def join_body(code="", inviter=None):
+    """The join form, carrying whatever the invite link brought with it.
+
+    Both substitutions are escaped. The code is a query parameter a stranger
+    writes, and the name is whatever an admin typed into this same form on the
+    day they joined -- neither is a place to run script from.
+
+    The code is not checked here, on purpose: a page anyone can load that says
+    whether a code is good is a code checker. It is validated where a typed one
+    is, by join_with_invite when the form is submitted, and a bad one fails
+    there with the same sentence whichever way it arrived.
+    """
+    line = f'<p class="by">Invited by {html.escape(inviter)}</p>' if inviter else ""
+    # Telling somebody who tapped a link that they need a code they can see in
+    # the box is how a form reads as broken before it has been used.
+    intro = ("Section I notes. Your code is already in — add your details."
+             if code else
+             "Section I notes. You need the invite code from someone already in.")
+    return (JOIN_BODY.replace("__INVITED__", line)
+                     .replace("__INTRO__", intro)
+                     .replace("__CODE__", html.escape(code, quote=True)))
+
 
 WAIT_BODY = r"""<h1>Almost in</h1>
 <p>Your request is with the admin. This page lets you through the moment they
@@ -3108,12 +3204,33 @@ def build_server(args):
             # The front page is the one thing an outsider may see, and only so
             # they can ask to be let in.
             if path in ("/", "/index.html"):
-                body = JOIN_BODY if not self.me else (
+                body = self.join_screen() if not self.me else (
                     BLOCKED_BODY if self.me["status"] == "blocked" else WAIT_BODY)
                 self.send_html(GATE_PAGE.replace("__BODY__", body))
                 return False
             self.reply(403, {"error": "you are not approved to read this yet"})
             return False
+
+        def join_screen(self):
+            """The front door, with the invite link's code already in the box.
+
+            The whole point of the link is a cold tap from WhatsApp: no
+            session, no app, one hand, and nothing to copy across. Everything
+            it saves is typing -- the code still has to survive join_with_invite
+            on the way through.
+            """
+            import urllib.parse
+
+            code = urllib.parse.parse_qs(
+                self.path.partition("?")[2]).get("code", [""])[0].strip()[:64]
+            inviter = None
+            try:
+                with db() as conn:
+                    inviter = db_inviter(conn, code)
+            except psycopg.Error as e:
+                # Who is inviting them is a nicety; being able to join is not.
+                log(f"cannot say who is inviting: {e}", "join")
+            return join_body(code, inviter)
 
         def principal(self):
             """Whose session this is, re-read from the database every request.
@@ -3271,14 +3388,19 @@ def build_server(args):
                 req = json.loads(self.rfile.read(n) or b"{}")
                 name = (req.get("name") or "").strip()[:80]
                 roll = (req.get("roll_no") or "").strip()[:40]
+                phone = (req.get("phone") or "").strip()[:32]
                 code = (req.get("code") or "").strip()[:64]
-                if not (name and roll and code):
-                    return self.reply(
-                        400, {"error": "name, roll number and invite code are all required"})
+                if not (name and roll and phone and code):
+                    return self.reply(400, {"error": "name, roll number, phone number "
+                                                     "and invite code are all required"})
+                try:
+                    phone = normalise_phone(phone)
+                except ValueError as e:
+                    return self.reply(400, {"error": str(e)})
                 with db() as conn:
-                    got = db_join(conn, code, name, roll)
+                    got = db_join(conn, code, name, roll, phone)
             except psycopg.errors.UniqueViolation:
-                return self.reply(409, {"error": "that roll number has already joined"})
+                return self.reply(409, {"error": "that roll number is already registered"})
             except Exception as e:
                 return self.reply(500, {"error": f"{type(e).__name__}: {e}"})
             if not got:

@@ -108,6 +108,61 @@ def test_a_name_with_no_spaces_in_it_cannot_push_the_gate_sideways():
     assert "overflow-wrap:break-word" in rule("body")
 
 
+# --------------------------------------------------------- the join form
+
+
+def test_the_form_asks_for_the_four_things_and_shows_the_fifth():
+    body = notes.join_body()
+    for field in ('id="nm"', 'id="roll"', 'id="ph"', 'id="code"'):
+        assert field in body, f"{field} is not on the form"
+    assert 'id="sec" value="Section I" readonly' in body, \
+        "there is one section; a box you can type in invites the wrong one"
+    assert "phone: $('ph').value" in body, "collected but never sent"
+
+
+def test_the_number_field_opens_a_keypad_and_does_not_zoom_the_page():
+    """type=tel is the keypad. The 16px comes from font:inherit on input --
+    anything smaller and iOS zooms the whole form on focus and the joiner is
+    left scrolling sideways with one thumb."""
+    body = notes.join_body()
+    assert 'type="tel"' in body and 'inputmode="tel"' in body
+    assert "font:inherit" in rule("input")
+
+
+def test_a_form_nobody_was_linked_to_carries_no_code_and_no_name():
+    body = notes.join_body()
+    assert 'id="code" required autocomplete="off" autocapitalize="off" value=""' in body
+    assert "Invited by" not in body, "an empty name is worse than no line"
+    assert "You need the invite code" in body, "say where the code comes from"
+
+
+def test_a_form_that_came_from_a_link_does_not_ask_for_what_it_already_has():
+    """"You need the invite code" over a box that already holds one is how a
+    form reads as broken before it has been used."""
+    body = notes.join_body("392b9ea7")
+    assert "You need the invite code" not in body
+    assert "already in" in body
+
+
+def test_the_inviter_is_named_when_the_database_knows_one():
+    assert '<p class="by">Invited by Anirudh</p>' in notes.join_body("392b9ea7", "Anirudh")
+
+
+@pytest.mark.parametrize("hostile", [
+    '"><script>alert(1)</script>',
+    "' onfocus=alert(1) autofocus '",
+    "</form><form action=//evil",
+])
+def test_neither_the_code_nor_the_name_can_get_out_of_the_page(hostile):
+    """The code is a query parameter a stranger writes and the page reflects.
+    The name is whatever an admin typed into this same form months ago."""
+    body = notes.join_body(hostile, hostile)
+    assert hostile not in body, "reflected verbatim"
+    assert "<script>alert" not in body
+    value = body.split('id="code"')[1].split('value="')[1].split('"')[0]
+    assert not set(value) & set("<>'"), f"attribute is escapable: {value}"
+
+
 # ------------------------------------------ what the admin screen does on a no
 
 ADMIN_SCRIPT = re.search(r"<script>\n(.*)\n</script>", notes.ADMIN_BODY, re.S).group(1)

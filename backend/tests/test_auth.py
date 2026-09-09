@@ -15,6 +15,7 @@ import socket
 import sys
 import threading
 import urllib.error
+import urllib.parse
 import urllib.request
 import uuid
 
@@ -222,6 +223,82 @@ def test_bootstrap_offers_a_code_only_while_the_class_is_empty(db):
     assert notes.db_bootstrap(db) is None, "the admin hands out invites from here on"
 
 
+# ------------------------------------------------- the number and the inviter
+
+
+@pytest.mark.parametrize("typed", [
+    "9876543210", "+919876543210", "+91 98765 43210", "98765-43210",
+    "098765 43210", " +91-98765-43210 ", "0091 9876543210", "(+91) 98765 43210",
+])
+def test_one_number_typed_seven_ways_is_stored_once(typed):
+    """A class list that holds the same student three ways is not a list."""
+    assert notes.normalise_phone(typed) == "+919876543210"
+
+
+@pytest.mark.parametrize("bad", [
+    "", "   ", "12345", "5876543210", "1234567890", "98765 4321",
+    "98765432100", "+1 202 555 0134", "not a number", "+91",
+])
+def test_a_number_nobody_could_ring_is_refused_with_a_reason(bad):
+    with pytest.raises(ValueError, match="10 digits"):
+        notes.normalise_phone(bad)
+
+
+def seed_admin(conn, name, roll, days_ago):
+    uid = make_user(conn)
+    conn.execute(
+        "insert into profiles (id, name, roll_no, status, role, created_at) values "
+        "(%s, %s, %s, 'approved', 'admin', now() - (%s || ' days')::interval)",
+        (uid, name, roll, str(days_ago)),
+    )
+    return uid
+
+
+def test_invited_by_names_whoever_made_the_code(db):
+    db.execute("delete from profiles")
+    db.execute("delete from invites where code = 'VANSHCODE'")
+    seed_admin(db, "Anirudh", "I60", 9)
+    vansh = seed_admin(db, "Vansh", "I61", 2)
+    db.execute("insert into invites (code, created_by, expires_at) "
+               "values ('VANSHCODE', %s, now() + interval '1 day')", (vansh,))
+    assert notes.db_inviter(db, "VANSHCODE") == "Vansh"
+
+
+def test_invited_by_falls_back_to_the_admin_who_has_been_here_longest(db):
+    """The live invite was minted by the bootstrap, before anybody existed to
+    credit it to, so this fallback is the branch that actually runs today."""
+    db.execute("delete from profiles")
+    seed_admin(db, "Anirudh", "I60", 9)
+    seed_admin(db, "Vansh", "I61", 2)
+    db.execute("delete from invites where code = 'NOAUTHOR'")
+    db.execute("insert into invites (code, expires_at) "
+               "values ('NOAUTHOR', now() + interval '1 day')")
+    assert notes.db_inviter(db, "NOAUTHOR") == "Anirudh"
+    assert notes.db_inviter(db, "NEVER-EXISTED") == "Anirudh", "a bad code says the same"
+    assert notes.db_inviter(db, "") == "Anirudh", "and so does no code at all"
+
+
+def test_a_spent_code_names_the_same_person_a_live_one_does(db):
+    """Otherwise the line under the heading is a checker for invite codes."""
+    db.execute("delete from profiles")
+    anirudh = seed_admin(db, "Anirudh", "I60", 9)
+    db.execute("delete from invites where code = 'SPENT'")
+    db.execute("insert into invites (code, created_by, expires_at, max_uses, uses) "
+               "values ('SPENT', %s, now() + interval '1 day', 1, 1)", (anirudh,))
+    assert notes.db_inviter(db, "SPENT") == "Anirudh"
+
+
+def test_nobody_is_named_before_there_is_an_admin(db):
+    """Day zero: the bootstrap code exists and there is no one to credit."""
+    db.execute("delete from profiles")
+    db.execute("delete from invites where code = 'BOOTSTRAP'")
+    db.execute("insert into invites (code, expires_at) "
+               "values ('BOOTSTRAP', now() + interval '1 day')")
+    assert notes.db_inviter(db, "BOOTSTRAP") is None
+    assert "Invited by" not in notes.join_body("BOOTSTRAP", None), \
+        "an empty name is worse than no line"
+
+
 # ------------------------------------------------------- the real server
 
 
@@ -281,9 +358,10 @@ def call(port, method, path, body=None, cookie=None):
         return e.code, e.read().decode(), e.headers
 
 
-def join(port, name, roll, code="LETMEIN"):
+def join(port, name, roll, code="LETMEIN", phone="9876543210"):
     status, body, headers = call(port, "POST", "/join",
-                                 {"name": name, "roll_no": roll, "code": code})
+                                 {"name": name, "roll_no": roll, "phone": phone,
+                                  "code": code})
     cookie = None
     if headers.get("Set-Cookie"):
         cookie = headers["Set-Cookie"].split(";")[0].split("=", 1)[1]
@@ -425,6 +503,86 @@ def test_an_upload_records_who_sent_it(server):
             "select p.name, m.filename from materials m join profiles p "
             "on p.id = m.uploader_id where m.filename = 'unit1.pdf'").fetchone()
     assert row == ("Asha", "unit1.pdf")
+
+
+# ---------------------------------------------------- the prefilled link
+#
+# The link goes into a WhatsApp group: a cold tap, no session, one hand. Asha
+# is the admin by now, which is who these expect to be named.
+
+
+def test_the_invite_link_lands_on_the_form_with_the_code_already_in_it(server):
+    status, page, _ = call(server, "GET", "/?code=LETMEIN")
+    assert status == 200
+    assert 'value="LETMEIN"' in page, "the code did not survive the trip"
+    assert 'id="ph"' in page and 'id="nm"' in page and 'id="roll"' in page
+    assert 'value="Section I" readonly' in page, "one section, shown not asked"
+    assert "Invited by Asha" in page, "the admin's name, out of the database"
+
+    # And it is a real join, not just a filled box.
+    status, body, cookie = join(server, "Kavya", "24U010", phone="+91 98765 43210")
+    assert (status, body["status"]) == (200, "pending") and cookie
+
+
+def test_typing_the_code_by_hand_still_works(server):
+    """Most of the class will arrive this way -- no query string at all."""
+    status, page, _ = call(server, "GET", "/")
+    assert status == 200 and 'id="code"' in page
+    assert 'value=""' in page, "an empty box, not a stale one"
+    assert join(server, "Rohit", "24U011")[0] == 200
+
+
+def test_a_bad_code_in_the_link_fails_exactly_as_a_typed_one_does(server):
+    """The form must not become a checker for invite codes -- neither the page
+    that carries one nor the answer when it is submitted."""
+    _, bad, _ = call(server, "GET", "/?code=NOPE")
+    _, good, _ = call(server, "GET", "/?code=LETMEIN")
+    assert bad.replace("NOPE", "LETMEIN") == good, "the page reviewed the code"
+
+    from_link = join(server, "Mallory", "24U900", code="NOPE")
+    typed = join(server, "Mallory", "24U901", code="ALSO-NOT-IT")
+    assert from_link == typed == (403, {"error": "that invite code is wrong, expired or used up"},
+                                  None)
+
+
+def test_a_code_in_the_url_cannot_write_html_into_the_page(server):
+    """It is a query parameter: a stranger writes it, and it is reflected."""
+    payload = '"><script>alert(1)</script>'
+    status, page, _ = call(server, "GET", "/?code=" + urllib.parse.quote(payload))
+    assert status == 200
+    assert "<script>alert(1)" not in page
+    assert "&lt;script&gt;" in page, "it must appear, escaped, not vanish"
+
+
+def test_a_roll_number_can_only_be_registered_once(server):
+    """Asha took 24U001 at the top of this file. The second one is a sentence,
+    not a stack trace -- and it must not spend a use of the invite."""
+    with psycopg.connect(DB_URL, autocommit=True) as conn:
+        before = conn.execute("select uses from invites where code = 'LETMEIN'").fetchone()[0]
+    status, body, cookie = join(server, "Not Asha", "24U001")
+    assert (status, cookie) == (409, None)
+    assert body == {"error": "that roll number is already registered"}
+    with psycopg.connect(DB_URL, autocommit=True) as conn:
+        assert conn.execute(
+            "select uses from invites where code = 'LETMEIN'").fetchone()[0] == before
+
+
+def test_the_number_is_stored_in_one_form_however_it_was_typed(server):
+    assert join(server, "Ishan", "24U012", phone="098765 43211")[0] == 200
+    with psycopg.connect(DB_URL, autocommit=True) as conn:
+        assert conn.execute(
+            "select phone from profiles where roll_no = '24U012'").fetchone()[0] \
+            == "+919876543211"
+
+
+@pytest.mark.parametrize("phone", ["", "12345", "+1 202 555 0134"])
+def test_a_join_without_a_number_anyone_could_ring_is_refused(server, phone):
+    status, body, cookie = join(server, "Ghost", "24U099", phone=phone)
+    assert (status, cookie) == (400, None)
+    assert "10 digits" in body["error"] or "required" in body["error"]
+    with psycopg.connect(DB_URL, autocommit=True) as conn:
+        assert not conn.execute(
+            "select count(*) from profiles where roll_no = '24U099'").fetchone()[0]
 
 
 def test_no_auth_keeps_the_old_single_user_behaviour(tmp_path):
