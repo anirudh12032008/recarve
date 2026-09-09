@@ -482,6 +482,7 @@ body{
 button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
 :focus-visible{outline:2px solid var(--accent);outline-offset:2px;border-radius:4px}
 @media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+[hidden]{display:none!important}   /* beats the display: on .brand and .shead */
 
 #read{display:none}
 body.reading #list{display:none}
@@ -509,6 +510,11 @@ body.reading #read{display:block}
   color:hsl(var(--h) var(--sat) var(--chip-text));
 }
 .group h2{display:inline;margin:0 0 0 9px;font-size:13px;font-weight:500;color:var(--mut)}
+.shead{display:flex;align-items:center;gap:9px;min-height:var(--tap);margin-bottom:6px}
+.shead h2{margin:0;font-size:15px;font-weight:500;color:var(--mut);
+  white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.sect{margin:0;padding:20px 16px 2px;font-size:13px;font-weight:600;
+  letter-spacing:.05em;text-transform:uppercase;color:var(--mut)}
 .rows{padding:6px 8px 0}
 .row{
   display:flex;align-items:center;gap:12px;width:100%;
@@ -518,7 +524,10 @@ body.reading #read{display:block}
 .row:active{background:var(--surface)}
 .row .tick{width:3px;align-self:stretch;border-radius:2px;background:hsl(var(--h) var(--sat) var(--lum));flex:none}
 .row .name{flex:1;min-width:0}
+.row .name b{display:block;font-weight:600}
+.row .name small{display:block;font-size:13px;color:var(--mut)}
 .row .meta{font-size:13px;color:var(--mut);flex:none}
+.row .code{flex:none}
 .blank{padding:64px 24px;text-align:center;color:var(--mut)}
 
 .rtop{display:flex;align-items:center;gap:6px}
@@ -578,7 +587,6 @@ details>:not(summary){padding:0 14px}
 #fab{position:fixed;right:16px;bottom:calc(76px + env(safe-area-inset-bottom));z-index:7;
   width:58px;height:58px;border-radius:50%;background:var(--accent);color:var(--accent-fg);
   font-size:30px;line-height:1;box-shadow:0 6px 22px rgba(0,0,0,.3)}
-body.reading #fab{display:none}
 #sheet{position:fixed;inset:0;z-index:11;display:none;background:rgba(0,0,0,.45)}
 #sheet.on{display:block}
 #sheet .card{position:absolute;left:0;right:0;bottom:0;background:var(--bg);
@@ -622,6 +630,19 @@ body.reading #fab{display:none}
 .spin{width:14px;height:14px;border:2px solid var(--line);border-top-color:var(--accent);
   border-radius:50%;animation:spin .8s linear infinite;flex:none}
 @keyframes spin{to{transform:rotate(360deg)}}
+/* One indeterminate indicator for anything slow. It goes in the strip below
+   for page-level work and straight into the Explain panel for a doubt, so a
+   new slow call gets a progress state by calling waiting() and nothing else. */
+.wait{height:4px;border-radius:2px;background:var(--line);overflow:hidden}
+.wait i{display:block;height:100%;width:38%;border-radius:2px;background:var(--accent);
+  animation:slide 1.15s ease-in-out infinite}
+@keyframes slide{0%{transform:translateX(-105%)}100%{transform:translateX(275%)}}
+.waitmsg{margin:9px 0 0;font-size:13px;color:var(--mut)}
+#busy{position:fixed;z-index:12;display:none;left:12px;right:12px;
+  top:calc(10px + env(safe-area-inset-top));max-width:34rem;margin:0 auto;
+  padding:13px 15px;border-radius:12px;background:var(--surface);
+  border:1px solid var(--line);box-shadow:0 8px 26px rgba(0,0,0,.22)}
+#busy.on{display:block}
 .dock button:active{opacity:.75}
 body:not(.reading) .dock{display:none}
 
@@ -630,13 +651,13 @@ body:not(.reading) .dock{display:none}
   #list{width:320px;flex:none;border-right:1px solid var(--line);height:100dvh;overflow-y:auto;position:sticky;top:0}
   #read{flex:1;display:block;min-width:0}
   body.reading #list{display:block}
-  .back{display:none}
+  .rtop .back{display:none}   /* the list is already on screen next to it */
   article{padding:30px 40px 110px}
   .dock{left:320px}
   body:not(.reading) .dock{display:flex}
 }
 @media print{
-  .top,.dock,#list,.rtop{display:none!important}
+  .top,.dock,#list,.rtop,#fab,#busy,#ask{display:none!important}
   #read{display:block!important}
   article{padding:0;max-width:none}
   details{background:none;border:1px solid #999}
@@ -645,7 +666,12 @@ body:not(.reading) .dock{display:none}
 
 <section id="list">
   <div class="top">
-    <div class="brand"><b>recarve</b><span>Section I</span></div>
+    <div class="brand" id="brand"><b>recarve</b><span>Section I</span></div>
+    <div class="shead" id="shead" hidden>
+      <button class="back" id="lback" aria-label="Back to all subjects">&lsaquo; Subjects</button>
+      <span class="code" id="scode"></span>
+      <h2 id="sname"></h2>
+    </div>
     <input id="q" placeholder="Search notes and transcripts" autocomplete="off" enterkeyhint="search">
   </div>
   <div id="jobs"></div>
@@ -658,13 +684,15 @@ body:not(.reading) .dock{display:none}
 
 <section id="read">
   <div class="top rtop">
-    <button class="back" id="back" aria-label="Back to all notes">&lsaquo; Notes</button>
+    <button class="back" id="back" aria-label="Back to the subject">&lsaquo; Back</button>
     <span class="code" id="rcode"></span>
   </div>
   <article id="body"><p class="blank">Pick a lecture to start reading.</p></article>
 </section>
 
 <button id="fab" aria-label="Add a lecture or notes">+</button>
+
+<div id="busy" role="status" aria-live="polite"></div>
 
 <div id="sheet">
   <div class="card">
@@ -705,21 +733,119 @@ body:not(.reading) .dock{display:none}
 <script>
 const DATA = __DATA__;
 const nav = document.getElementById('nav'), body = document.getElementById('body');
+const backBtn = document.getElementById('back');
 const q = document.getElementById('q'), rcode = document.getElementById('rcode');
-let current = null;
+const brand = document.getElementById('brand'), shead = document.getElementById('shead');
+const scode = document.getElementById('scode'), sname = document.getElementById('sname');
+let current = null;                      // the note being read, or null
+let view = {code: null, title: null};    // which level the hash puts us on
 
 // Hue per department prefix. Colour says which subject you are in, so the code
 // chip reads at a glance without parsing the number.
 const HUES = {MC:245, CY:150, EE:38, ME:210, BS:175, HS:345, SA:275, NC:80};
 const hue = code => HUES[code.slice(0, 2)] ?? 220;
 
-function render(filter) {
-  const needle = (filter || '').trim().toLowerCase();
-  nav.innerHTML = '';
-  let shown = 0;
+// ---- Three levels: subjects -> one subject -> one note. -------------------
+// Each level is a real URL and each step down is a pushState, so the Android
+// back gesture and the browser back button both climb one level rather than
+// leaving the page. Nothing keeps its own back stack: route() reads the hash,
+// and the hash is the only thing that decides what is on screen.
+const subjectOf = code => DATA.find(s => s.code === code);
+const lecturesOf = s => s.notes.filter(n => n.kind !== 'revision');
+const revisionOf = s => s.notes.find(n => n.kind === 'revision');
+const plural = (n, word) => n + ' ' + word + (n === 1 ? '' : 's');
 
+function counts(s) {
+  const bits = [];
+  if (lecturesOf(s).length) bits.push(plural(lecturesOf(s).length, 'lecture'));
+  if (s.uploads.length) bits.push(plural(s.uploads.length, 'note'));
+  if (revisionOf(s)) bits.push('revision sheet');
+  return bits.join(' \u00b7 ') || 'Nothing yet';
+}
+
+const hashOf = (code, title) =>
+  '#' + (code ? encodeURIComponent(code) : '')
+      + (title ? '/' + encodeURIComponent(title) : '');
+
+function go(code, title) {
+  history.pushState(null, '', hashOf(code, title));
+  route();
+}
+
+function noteRow(n, s) {
+  const b = document.createElement('button');
+  b.className = 'row';
+  b.style.setProperty('--h', hue(s.code));
+  b.innerHTML = '<i class="tick"></i><span class="name"></span>';
+  b.querySelector('.name').textContent = n.title;
+  b.onclick = () => go(s.code, n.title);
+  return b;
+}
+
+function fileRow(u, s) {
+  const a = document.createElement('a');
+  a.className = 'row'; a.href = u.path; a.target = '_blank'; a.rel = 'noopener';
+  a.style.setProperty('--h', hue(s.code));
+  a.innerHTML = '<i class="tick"></i><span class="name"></span><span class="meta">file</span>';
+  a.querySelector('.name').textContent = u.name;
+  return a;
+}
+
+function block(label, items) {
+  if (!items.length) return;
+  const h = document.createElement('h2');
+  h.className = 'sect';
+  h.textContent = label;
+  const rows = document.createElement('div');
+  rows.className = 'rows';
+  items.forEach(el => rows.appendChild(el));
+  nav.append(h, rows);
+}
+
+function blank(text) {
+  const p = document.createElement('p');
+  p.className = 'blank';
+  p.textContent = text;
+  nav.appendChild(p);
+}
+
+// LEVEL 1: every subject, empty ones included. Nobody can add a chemistry
+// recording to a subject the app never told them was there.
+function renderSubjects() {
+  const rows = document.createElement('div');
+  rows.className = 'rows';
   for (const s of DATA) {
-    const subjHit = !needle || (s.code + ' ' + s.name).toLowerCase().includes(needle);
+    const b = document.createElement('button');
+    b.className = 'row';
+    b.style.setProperty('--h', hue(s.code));
+    b.innerHTML = '<i class="tick"></i><span class="name"><b></b><small></small></span>'
+                + '<span class="code"></span>';
+    b.querySelector('b').textContent = s.name;
+    b.querySelector('small').textContent = counts(s);
+    b.querySelector('.code').textContent = s.code;
+    b.onclick = () => go(s.code, null);
+    rows.appendChild(b);
+  }
+  nav.appendChild(rows);
+}
+
+// LEVEL 2: one subject, grouped.
+function renderSubject(s) {
+  block('Lectures', lecturesOf(s).map(n => noteRow(n, s)));
+  block('Notes & slides', s.uploads.map(u => fileRow(u, s)));
+  const rev = revisionOf(s);
+  block('Revision sheet', rev ? [noteRow(rev, s)] : []);
+  if (!s.notes.length && !s.uploads.length) {
+    blank('Nothing in ' + s.code + ' yet. Tap + to record a class or add slides.');
+  }
+}
+
+// Search cuts across the levels: it answers from every subject whatever screen
+// you typed it on, and a hit goes straight to the note.
+function renderSearch(needle) {
+  let shown = 0;
+  for (const s of DATA) {
+    const subjHit = (s.code + ' ' + s.name).toLowerCase().includes(needle);
     const notes = s.notes.filter(n => subjHit
       || n.title.toLowerCase().includes(needle) || n.md.toLowerCase().includes(needle));
     const files = s.uploads.filter(u => subjHit || u.name.toLowerCase().includes(needle));
@@ -732,42 +858,50 @@ function render(filter) {
     g.innerHTML = '<span class="code"></span><h2></h2>';
     g.querySelector('.code').textContent = s.code;
     g.querySelector('h2').textContent = s.name;
-    nav.appendChild(g);
 
     const rows = document.createElement('div');
     rows.className = 'rows';
-    rows.style.setProperty('--h', hue(s.code));
-
-    for (const n of notes) {
-      const b = document.createElement('button');
-      b.className = 'row';
-      b.innerHTML = '<i class="tick"></i><span class="name"></span>';
-      b.querySelector('.name').textContent = n.title;
-      b.onclick = () => open_(n, s);
-      rows.appendChild(b);
-    }
-    for (const u of files) {
-      const a = document.createElement('a');
-      a.className = 'row'; a.href = u.path; a.target = '_blank'; a.rel = 'noopener';
-      a.innerHTML = '<i class="tick"></i><span class="name"></span><span class="meta">file</span>';
-      a.querySelector('.name').textContent = u.name;
-      rows.appendChild(a);
-    }
-    nav.appendChild(rows);
+    notes.forEach(n => rows.appendChild(noteRow(n, s)));
+    files.forEach(u => rows.appendChild(fileRow(u, s)));
+    nav.append(g, rows);
   }
-
-  if (!shown) {
-    const p = document.createElement('p');
-    p.className = 'blank';
-    p.textContent = 'Nothing matches that. Try a subject code like CY1107.';
-    nav.appendChild(p);
-  }
+  if (!shown) blank('Nothing matches that. Try a subject code like CY1107.');
 }
 
-function open_(n, s) {
+function render() {
+  const needle = q.value.trim().toLowerCase();
+  const s = view.code ? subjectOf(view.code) : null;
+  nav.innerHTML = '';
+  brand.hidden = !!s;
+  shead.hidden = !s;
+  if (s) {
+    scode.textContent = s.code;
+    scode.style.setProperty('--h', hue(s.code));
+    sname.textContent = s.name;
+  }
+  if (needle) renderSearch(needle);
+  else if (s) renderSubject(s);
+  else renderSubjects();
+}
+
+// The router. One place decides which of the three levels you are looking at.
+function route() {
+  const [code, title] =
+    location.hash.slice(1).split('/').filter(Boolean).map(decodeURIComponent);
+  const s = subjectOf(code);
+  view = {code: s ? code : null, title: s && title ? title : null};
+  const n = s && title ? s.notes.find(x => x.title === title) : null;
+  if (n) openNote(n, s); else closeRead();
+  render();
+}
+
+// LEVEL 3: the note itself. Called only by route(), which has already put the
+// right URL in the bar, so this never touches history.
+function openNote(n, s) {
   current = n;
   rcode.textContent = s.code;
   rcode.style.setProperty('--h', hue(s.code));
+  backBtn.textContent = '‹ ' + s.code;   // back goes to the subject, not the top
   body.innerHTML = marked.parse(n.md);
 
   // Wide tables scroll inside their own box instead of stretching the page.
@@ -791,12 +925,9 @@ function open_(n, s) {
 
   document.body.classList.add('reading');
   window.scrollTo(0, 0);
-  // A real history entry, so the Android back gesture and the browser back
-  // button return to the list instead of leaving the page.
-  history.pushState({note: n.title}, '', '#' + encodeURIComponent(n.title));
 }
 
-function close_() {
+function closeRead() {
   document.body.classList.remove('reading');
   current = null;
 }
@@ -820,8 +951,38 @@ function flash(btn, word) {
   setTimeout(() => { btn.textContent = was; }, 1400);
 }
 
-document.getElementById('back').onclick = () => history.back();
-window.onpopstate = close_;
+// ---- One progress indicator, shared by everything slow. ------------------
+// waiting() drops the same indeterminate bar into any element -- that is how
+// the Explain panel gets one. #busy is a strip floating over the header for
+// page-level work. Anything slow added later calls busy()/busyDone() and is
+// finished; nothing slow should ever just sit there looking frozen.
+const busyBox = document.getElementById('busy');
+let held = false;   // a deliberate slow call owns the strip; job news waits
+
+function waiting(el, msg) {
+  el.innerHTML = '<div class="wait"><i></i></div><p class="waitmsg"></p>';
+  el.querySelector('.waitmsg').textContent = msg;
+}
+
+function busy(msg, hold) {
+  if (held && !hold) return;
+  held = held || !!hold;
+  waiting(busyBox, msg);
+  busyBox.classList.add('on');
+}
+
+function busyDone(msg) {
+  if (!msg) { held = false; return busyBox.classList.remove('on'); }
+  held = true;                    // keep the outcome up long enough to read
+  busyBox.innerHTML = '<p class="waitmsg"></p>';
+  busyBox.querySelector('.waitmsg').textContent = msg;
+  busyBox.classList.add('on');
+  setTimeout(() => { held = false; busyBox.classList.remove('on'); }, 3500);
+}
+
+backBtn.onclick = () => history.back();
+document.getElementById('lback').onclick = () => history.back();
+window.onpopstate = route;
 
 document.getElementById('share').onclick = async (e) => {
   if (!current) return;
@@ -865,7 +1026,7 @@ async function refresh() {
         subj.appendChild(o);
       }
     }
-    render(q.value);
+    render();
     live = true;
   } catch { live = false; }
 }
@@ -909,15 +1070,29 @@ async function pollJobs() {
   try {
     const r = await fetch('/jobs');
     const {jobs} = await r.json();
-    const active = jobs.filter(j => j.state !== 'done' || Date.now() - lastDone < 8000);
     jobsBox.innerHTML = '';
     jobs.slice(0, 4).forEach(j => jobsBox.appendChild(jobRow(j)));
+    // The jobs list lives on the subject screens, and + now works while you
+    // are reading, so a lecture uploaded from a note would otherwise
+    // transcribe out of sight. Mirror it into the shared strip.
+    const running = jobs.find(j => j.state === 'queued' || j.state === 'transcribing');
+    if (running && document.body.classList.contains('reading')) {
+      busy(running.name.replace(/^[A-Z]{2}\d{4}-/, '') + ' · '
+           + (running.detail || running.state));
+    } else if (!held) {
+      busyBox.classList.remove('on');
+    }
     const done = jobs.filter(j => j.state === 'done').length;
     if (done !== lastDone) { lastDone = done; refresh(); }
   } catch {}
 }
 
-const openSheet = () => { sheet.classList.add('on'); };
+const openSheet = () => {
+  // Adding a chemistry recording from the chemistry screen should not need
+  // the dropdown at all.
+  if (view.code) subj.value = view.code;
+  sheet.classList.add('on');
+};
 const closeSheet = () => {
   sheet.classList.remove('on'); rec.classList.remove('on'); prog.classList.remove('on');
 };
@@ -1018,14 +1193,24 @@ document.getElementById('opt-stop').onclick = () => {
 };
 
 document.getElementById('opt-revise').onclick = async () => {
+  const code = subj.value;
   closeSheet();
-  const r = await fetch('/revise', {
-    method: 'POST', headers: {'Content-Type': 'application/json'},
-    body: JSON.stringify({subject: subj.value}),
-  });
-  const d = await r.json().catch(() => ({}));
-  if (!r.ok) return alert(d.error || 'Could not build a revision sheet');
-  refresh();
+  if (!code) return busyDone('Pick a subject first');
+  // Closed sheet, strip on, request in flight: the rest of the app keeps
+  // working for the half minute this takes.
+  busy('Building the revision sheet for ' + code + '. This takes 10-40 seconds.', true);
+  try {
+    const r = await fetch('/revise', {
+      method: 'POST', headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify({subject: code}),
+    });
+    const d = await r.json().catch(() => ({}));
+    if (!r.ok) throw new Error(d.error || 'could not build a revision sheet');
+    await refresh();               // the sheet is a note now; show it
+    busyDone('Revision sheet ready for ' + code);
+  } catch (e) {
+    busyDone('Revision sheet failed: ' + e.message);
+  }
 };
 
 refresh();
@@ -1058,7 +1243,7 @@ document.addEventListener('selectionchange', () => {
 ask.onclick = async () => {
   hideAsk();
   quote.textContent = picked;
-  out.textContent = 'Thinking...';
+  waiting(out, 'Reading that passage\u2026');
   panel.classList.add('on');
   try {
     const res = await fetch('/explain', {
@@ -1084,26 +1269,34 @@ ask.onclick = async () => {
 
 document.getElementById('close').onclick = () => panel.classList.remove('on');
 
-q.oninput = () => render(q.value);
-render('');
+q.oninput = render;
 
-// Deep link: opening #<title> goes straight to that note.
-const want = decodeURIComponent(location.hash.slice(1));
-if (want) {
-  for (const s of DATA) {
-    const n = s.notes.find(x => x.title === want);
-    if (n) { open_(n, s); break; }
-  }
+// A deep link arrives as one history entry, so back would leave the app rather
+// than climb a level. Seed the levels above it before the first route.
+const deep = location.hash.slice(1).split('/').filter(Boolean);
+if (deep.length) {
+  const here = location.hash;
+  history.replaceState(null, '', '#');
+  if (deep.length > 1) history.pushState(null, '', '#' + deep[0]);
+  history.pushState(null, '', here);
 }
+route();
 </script>
 """
 
 
 def build_data(library, relative_to):
-    """The whole library as plain data: one entry per subject that has content.
+    """The whole library as plain data: one entry per subject, empty ones too.
 
     Shared by `export` (baked into the page) and the server's /data endpoint
     (fetched live), so the browser sees the same shape either way.
+
+    Every subject ships even when it holds nothing. The first screen on the
+    phone is the list of subjects, and a student has to see that Chemistry is
+    there before they can add a chemistry recording to it.
+
+    `kind` separates the revision sheet from the lectures so the phone can
+    group them without matching on the title text.
     """
     lib = Path(library)
     data = []
@@ -1112,15 +1305,14 @@ def build_data(library, relative_to):
         notes, uploads = [], []
         rev = folder / "revision.md"
         if rev.is_file():
-            notes.append({"title": "Revision sheet", "md": rev.read_text()})
+            notes.append({"title": "Revision sheet", "kind": "revision", "md": rev.read_text()})
         for md in sorted((folder / "lectures").glob("*.md")):
-            notes.append({"title": md.stem, "md": md.read_text()})
+            notes.append({"title": md.stem, "kind": "lecture", "md": md.read_text()})
         if (folder / "uploads").is_dir():
             for f in sorted((folder / "uploads").glob("*")):
                 uploads.append({"name": f.name, "path": os.path.relpath(f, relative_to)})
-        if notes or uploads:
-            data.append({"code": code, "name": name.replace("-", " "),
-                         "notes": notes, "uploads": uploads})
+        data.append({"code": code, "name": name.replace("-", " "),
+                     "notes": notes, "uploads": uploads})
     return data
 
 
@@ -1135,8 +1327,11 @@ def export(args):
     out = args.out
     data = build_data(lib, out.parent)
 
-    if not data:
-        raise SystemExit("library is empty — nothing to export")
+    if not any(s["notes"] or s["uploads"] for s in data):
+        # Not fatal any more: the page lists the twelve subjects, and it is
+        # where you go to put the first thing into one of them.
+        print("library is empty — the page will list the subjects and nothing else",
+              file=sys.stderr)
 
     out.parent.mkdir(parents=True, exist_ok=True)
     # </script> inside note text would close the tag early.
@@ -1629,10 +1824,10 @@ def build_server(args):
     from http.server import SimpleHTTPRequestHandler, ThreadingHTTPServer
 
     root = Path(__file__).resolve().parent
-    export(args)  # always serve the current library
-
     global LOG_PATH
     Path(args.library).mkdir(parents=True, exist_ok=True)
+    export(args)  # always serve the current library
+
     LOG_PATH = Path(args.library) / "recarve.log"
     cache_dir = Path(args.library) / ".explains"
     cache_dir.mkdir(parents=True, exist_ok=True)
