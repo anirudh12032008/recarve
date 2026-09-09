@@ -693,6 +693,26 @@ body.reading .tabs{display:none}
    the last row's vote button with no scroll left to escape it. */
 #nav{padding-bottom:calc(142px + env(safe-area-inset-bottom))}
 
+/* ---- Home: a plain line of prose where a row would lie. -------------- */
+.quiet{padding:10px 20px;margin:0;font-size:13px;color:var(--mut)}
+
+/* ---- The timetable editor. One day at a time, eight native selects: the
+   iOS wheel is the fastest subject picker on a phone and it costs nothing to
+   download. Six days of tapping is under two minutes, which is the whole
+   design brief for this screen. */
+.days{display:flex;gap:6px;padding:14px 16px 6px;overflow-x:auto;-webkit-overflow-scrolling:touch}
+.days button{flex:none;min-height:var(--tap);padding:0 15px;border-radius:11px;
+  background:var(--surface);font-size:16px;color:var(--mut)}
+.days button[aria-current]{background:var(--accent);color:var(--accent-fg);font-weight:650}
+.slot{display:flex;align-items:center;gap:12px;padding:5px 16px}
+.slot span{flex:none;width:5.2em;font-size:13px;color:var(--mut)}
+.slot select{flex:1;min-width:0;min-height:var(--tap);font-size:16px;padding:0 10px;
+  border:1px solid var(--line);border-radius:11px;background:var(--surface);color:var(--fg)}
+.save{display:block;width:calc(100% - 32px);margin:18px 16px 0;min-height:var(--tap);
+  border-radius:11px;background:var(--accent);color:var(--accent-fg);
+  font-size:16px;font-weight:600}
+.save:active{opacity:.75}
+
 /* ---- Practice: one question at a time, over everything else. ---------- */
 #quiz{position:fixed;inset:0;z-index:12;background:var(--bg);display:flex;flex-direction:column}
 .qtop{display:flex;align-items:center;gap:12px;flex:none;
@@ -847,8 +867,15 @@ const scode = document.getElementById('scode'), sname = document.getElementById(
 const lback = document.getElementById('lback'), tools = document.getElementById('tools');
 const tabBtns = document.querySelectorAll('.tabs button');
 let current = null;                      // the note being read, or null
-// Which tab, and how deep inside it. Only Classes has anything under the tab.
-let view = {tab: 'home', code: null, title: null};
+// Which tab, and how deep inside it. Classes goes subject -> note; Home has
+// one level under it, the timetable editor.
+let view = {tab: 'home', code: null, title: null, edit: false};
+
+// What the server told us last, held so Home can draw itself without asking
+// for anything. All three arrive on the /data the page already fetches.
+let TT = null;      // this student's timetable; null until the server answers
+let PENDING = 0;    // classmates waiting for an admin; 0 for everyone else
+let JOBS = [];      // the last /jobs answer
 
 // Hue per department prefix. Colour says which subject you are in, so the code
 // chip reads at a glance without parsing the number.
@@ -975,13 +1002,247 @@ function saying(...lines) {
   nav.appendChild(el);
 }
 
-// HOME and CAMPUS are rooms with nothing in them yet. Saying so, and saying
-// what is coming, beats a blank screen that reads as a bug.
+// One row, two lines of text, optionally a link or a button. Home and the
+// contributions screen both wanted this and each had grown a copy.
+function line(main, sub, el, h) {
+  el = el || document.createElement('div');
+  el.className = 'row';
+  el.style.setProperty('--h', h || 210);
+  el.innerHTML = '<i class="tick"></i><span class="name"><b></b><small></small></span>';
+  el.querySelector('b').textContent = main;
+  el.querySelector('small').textContent = sub;
+  return el;
+}
+
+function chip(code) {
+  const el = document.createElement('span');
+  el.className = 'code';
+  el.style.setProperty('--h', hue(code));
+  el.textContent = code;
+  return el;
+}
+
+// A muted line of prose where a row would go: "no classes today" is an answer,
+// not an empty list.
+function quiet(text) {
+  const p = document.createElement('p');
+  p.className = 'quiet';
+  p.textContent = text;
+  return p;
+}
+
+// ---- HOME: what a student needs in the ten seconds before a class. -------
+// Every section draws from what the page already holds -- DATA, TT, JOBS --
+// so the tab paints the instant it is tapped and nothing here waits on a
+// request. And nothing here invents: an empty timetable says it is empty
+// rather than showing a plausible-looking Monday.
+
+// 1 = Monday .. 6 = Saturday, which is what getDay() already calls them and
+// what the timetable table stores, so there is no translation anywhere.
+const DAYS = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+const PERIODS = 8;
+const dayOf = d => d.getDay();
+const slotsOn = (tt, day) =>
+  (tt || []).filter(s => s.day === day).sort((a, b) => a.period - b.period);
+
+// "Since you last looked" needs a last look. localStorage throws outright in
+// private mode, so both touches are guarded: a failure costs the section, not
+// the page.
+const SEEN_KEY = 'recarve.seen';
+let SEEN = null, seenWritten = false;
+try { SEEN = +localStorage.getItem(SEEN_KEY) || null; } catch (e) {}
+
+// Stamped from the server's clock, because the mtimes it is compared against
+// are that same clock. A phone a few minutes out would otherwise replay
+// yesterday's notes as new, or hide this morning's.
+function markSeen(now) {
+  if (seenWritten || !now) return;
+  seenWritten = true;
+  try { localStorage.setItem(SEEN_KEY, String(now)); } catch (e) {}
+}
+
+// 1. TODAY. Empty is the honest first state: nobody has typed a timetable in,
+// and the institute PDF's columns are ambiguous enough that a guessed one
+// would quietly file lectures under the wrong subject.
+function todayBlock() {
+  const day = dayOf(new Date());
+  if (TT === null) return block('Today', [quiet('Checking your timetable…')]);
+
+  const edit = line('Edit your timetable', 'Add or change a period',
+                    document.createElement('button'));
+  edit.onclick = () => go('home', 'timetable');
+
+  if (!TT.length) {
+    if (!live) {
+      return block('Today', [quiet('Your timetable needs the server. Run: notes.py serve')]);
+    }
+    const start = line('Set up your timetable',
+                       'Six days, one tap per class · about a minute',
+                       document.createElement('button'));
+    start.onclick = () => go('home', 'timetable');
+    return block('Today', [start]);
+  }
+
+  const rows = [];
+  for (const slot of slotsOn(TT, day)) {
+    const s = subjectOf(slot.code);
+    if (!s) continue;                          // a code the library dropped
+    const has = s.notes.length || s.uploads.length;
+    const b = line(s.name, 'Period ' + slot.period + ' · '
+                   + (has ? counts(s) : 'no notes yet'),
+                   document.createElement('button'), hue(slot.code));
+    b.appendChild(chip(slot.code));
+    b.onclick = () => go('classes', slot.code);
+    rows.push(b);
+  }
+  if (!rows.length) rows.push(quiet('No classes on ' + DAYS[day] + '.'));
+  rows.push(edit);
+  block('Today', rows);
+}
+
+// 2. NEEDS YOU. Only what is actually waiting on a person: a transcription
+// still running or failed, and -- for an admin -- classmates at the door.
+// Nothing waiting means no section at all, which block() already does.
+function needsBlock() {
+  const rows = JOBS.filter(j => j.state !== 'done').map(jobRow);
+  if (PENDING) {
+    const a = document.createElement('a');
+    a.href = '/admin';
+    rows.push(line(PENDING === 1 ? 'One person is waiting to be let in'
+                                 : PENDING + ' people are waiting to be let in',
+                   'Tap to approve them', a));
+  }
+  block('Needs you', rows);
+}
+
+// 3. NEW SINCE YOU LAST LOOKED. No last look, no section -- on a first visit
+// everything is new, and saying so is noise rather than news.
+function newBlock() {
+  if (!SEEN) return;
+  const fresh = [];
+  for (const s of DATA) {
+    for (const n of s.notes) {
+      if (!(n.at > SEEN)) continue;
+      fresh.push([n.at, () => {
+        const b = line(n.title, n.by ? 'recorded by ' + n.by
+                       : (n.kind === 'revision' ? 'revision sheet' : 'lecture'),
+                       document.createElement('button'), hue(s.code));
+        b.appendChild(chip(s.code));
+        b.onclick = () => go('classes', s.code, n.title);
+        return b;
+      }]);
+    }
+    for (const u of s.uploads) {
+      if (!(u.at > SEEN)) continue;
+      fresh.push([u.at, () => {
+        const a = document.createElement('a');
+        a.href = u.path; a.target = '_blank'; a.rel = 'noopener';
+        const el = line(u.name, u.by ? 'added by ' + u.by : 'notes or slides',
+                        a, hue(s.code));
+        el.appendChild(chip(s.code));
+        return el;
+      }]);
+    }
+  }
+  if (!fresh.length) {
+    return block('New since you last looked',
+                 [quiet('Nothing new since you last looked.')]);
+  }
+  fresh.sort((a, b) => b[0] - a[0]);
+  const rows = fresh.slice(0, 12).map(f => f[1]());
+  if (fresh.length > rows.length) {
+    rows.push(quiet('and ' + (fresh.length - rows.length) + ' more, under Classes.'));
+  }
+  block('New since you last looked', rows);
+}
+
 function renderHome() {
-  saying('Home is where the next class, the newest notes in your subjects and '
-         + 'what to revise before an exam will show up.',
-         'That is the next thing being built. Until then everything you have is '
-         + 'under Classes.');
+  todayBlock();
+  needsBlock();
+  // 4. An empty library is a real state on day one, and a blank screen reads
+  // as a broken app. Say what the first thing to do is.
+  if (!DATA.some(s => s.notes.length || s.uploads.length)) {
+    return saying('Nothing in the library yet.',
+                  'Tap + to record a class, or to add slides you already have. '
+                  + 'It files itself under the subject you pick, and the notes '
+                  + 'come back here when the Mac has finished making them.');
+  }
+  newBlock();
+}
+
+// The one level inside Home. Six days of native selects: the iOS wheel is the
+// fastest subject picker on a phone, costs nothing to download, and is the
+// difference between filling this in and giving up on it.
+let draft = null, draftDay = 1;
+const slotKey = (d, p) => d + '-' + p;
+
+function renderTimetable() {
+  if (!draft) {
+    draft = {};
+    (TT || []).forEach(s => { draft[slotKey(s.day, s.period)] = s.code; });
+    draftDay = dayOf(new Date()) || 1;      // Sunday has no column: start at Monday
+  }
+
+  const days = document.createElement('div');
+  days.className = 'days';
+  for (let d = 1; d <= 6; d++) {
+    const b = document.createElement('button');
+    b.textContent = DAYS[d].slice(0, 3);
+    b.setAttribute('aria-label', DAYS[d]);
+    if (d === draftDay) b.setAttribute('aria-current', 'true');
+    b.onclick = () => { draftDay = d; render(); };
+    days.appendChild(b);
+  }
+  nav.appendChild(days);
+
+  for (let p = 1; p <= PERIODS; p++) {
+    const row = document.createElement('div');
+    row.className = 'slot';
+    row.innerHTML = '<span></span>';
+    row.querySelector('span').textContent = 'Period ' + p;
+    const sel = document.createElement('select');
+    sel.setAttribute('aria-label', DAYS[draftDay] + ', period ' + p);
+    const free = document.createElement('option');
+    free.value = ''; free.textContent = '— free —';
+    sel.appendChild(free);
+    for (const s of DATA) {
+      const o = document.createElement('option');
+      o.value = s.code; o.textContent = s.code + ' — ' + s.name;
+      sel.appendChild(o);
+    }
+    sel.value = draft[slotKey(draftDay, p)] || '';
+    sel.onchange = () => { draft[slotKey(draftDay, p)] = sel.value; };
+    row.appendChild(sel);
+    nav.appendChild(row);
+  }
+
+  const save = document.createElement('button');
+  save.className = 'save';
+  save.textContent = 'Save timetable';
+  save.onclick = saveTimetable;
+  nav.appendChild(save);
+  nav.appendChild(quiet('Periods are numbered, not timed. The institute grid does '
+                        + 'not say which hour is which clearly enough to print one.'));
+}
+
+async function saveTimetable() {
+  const slots = Object.keys(draft).filter(k => draft[k]).map(k => ({
+    day: +k.split('-')[0], period: +k.split('-')[1], code: draft[k]}));
+  busy('Saving your timetable…', true);
+  try {
+    const r = await fetch('/timetable', {
+      method: 'POST', headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify({slots}),
+    });
+    const d = await r.json().catch(() => ({}));
+    if (!r.ok) throw new Error(d.error || 'could not save that');
+    TT = slots;
+    draft = null;
+    busyDone(slots.length ? 'Timetable saved' : 'Timetable cleared');
+    history.back();
+  } catch (e) {
+    busyDone('Could not save that: ' + e.message);
+  }
 }
 
 function renderCampus() {
@@ -1063,16 +1324,6 @@ async function renderMe() {
   box.querySelector('.r').textContent = p.recordings;
   box.querySelector('.v').textContent = p.votes_received;
 
-  const line = (main, sub, el) => {
-    el = el || document.createElement('div');
-    el.className = 'row';
-    el.style.setProperty('--h', 210);
-    el.innerHTML = '<i class="tick"></i><span class="name"><b></b><small></small></span>';
-    el.querySelector('b').textContent = main;
-    el.querySelector('small').textContent = sub;
-    return el;
-  };
-
   // The two things only an admin can do, on the only screen that is theirs.
   // The server decides: a member's /me carries no invite code at all, and the
   // invites table has no read policy for them either.
@@ -1142,22 +1393,31 @@ function render() {
   // Home keeps the brand; every other tab names itself in the same header,
   // and #lback -- the only back button at this depth -- appears only where
   // there is a level above to climb to.
-  brand.hidden = view.tab !== 'home';
-  shead.hidden = view.tab === 'home';
-  lback.hidden = !s;
+  brand.hidden = view.tab !== 'home' || view.edit;
+  shead.hidden = view.tab === 'home' && !view.edit;
+  lback.hidden = !s && !view.edit;
   scode.hidden = !s;
   q.hidden = view.tab !== 'classes';
   tools.hidden = view.tab !== 'me';
+  // Home shows the same jobs under "Needs you"; two copies of a running
+  // transcription on one screen is one copy too many.
+  jobsBox.hidden = view.tab === 'home';
+  // The one back button at this depth serves two levels now, so it has to say
+  // which one it climbs to.
+  lback.textContent = view.edit ? '‹ Home' : '‹ Subjects';
+  lback.setAttribute('aria-label', view.edit ? 'Back to Home' : 'Back to all subjects');
   if (s) {
     scode.textContent = s.code;
     scode.style.setProperty('--h', hue(s.code));
   }
-  sname.textContent = s ? s.name : TAB_TITLE[view.tab];
+  sname.textContent = s ? s.name
+    : (view.edit ? 'Your timetable' : TAB_TITLE[view.tab]);
   tabBtns.forEach(b => {
     if (b.dataset.tab === view.tab) b.setAttribute('aria-current', 'page');
     else b.removeAttribute('aria-current');
   });
   if (needle) renderSearch(needle);
+  else if (view.edit) renderTimetable();
   else if (view.tab === 'home') renderHome();
   else if (view.tab === 'campus') renderCampus();
   else if (view.tab === 'me') renderMe();
@@ -1188,7 +1448,11 @@ function route() {
   const tab = TABS.includes(parts[0]) ? parts[0] : 'home';
   const s = tab === 'classes' ? subjectOf(parts[1]) : null;
   const title = s ? parts[2] : null;
-  view = {tab, code: s ? s.code : null, title: title || null};
+  // The timetable editor is a level inside Home and therefore a URL, so back
+  // climbs out of it exactly like every other step.
+  const edit = tab === 'home' && parts[1] === 'timetable';
+  view = {tab, code: s ? s.code : null, title: title || null, edit};
+  if (!edit) draft = null;      // walking away drops an unsaved week, not TT
   const n = s && title ? s.notes.find(x => x.title === title) : null;
   if (n) openNote(n, s); else closeRead();
   render();
@@ -1446,6 +1710,10 @@ async function refresh() {
     if (!r.ok) return;
     const d = await r.json();
     DATA.length = 0; DATA.push(...d.subjects);
+    // Everything Home needs rides on this one request.
+    TT = d.timetable || [];
+    PENDING = d.pending || 0;
+    markSeen(d.now);
     if (!subj.options.length) {
       for (const c of d.codes) {
         const o = document.createElement('option');
@@ -1453,9 +1721,17 @@ async function refresh() {
         subj.appendChild(o);
       }
     }
-    render();
+    // Before the render, not after: Home reads `live` to decide whether an
+    // empty timetable means "set one up" or "there is no server to save it
+    // to", and setting it afterwards made a working server say the latter.
     live = true;
-  } catch { live = false; }
+    render();
+  } catch {
+    live = false;
+    // A page opened as a plain file has no server behind it. Home has to be
+    // able to say so rather than sit on "checking…" forever.
+    if (TT === null) { TT = []; render(); }
+  }
 }
 
 function jobRow(j) {
@@ -1491,12 +1767,20 @@ async function pullLog() {
   } catch {}
 }
 
-let lastDone = 0;
+let lastDone = 0, lastJobs = '';
 async function pollJobs() {
   if (!live) return;
   try {
     const r = await fetch('/jobs');
     const {jobs} = await r.json();
+    JOBS = jobs;
+    // Home draws the same jobs under "Needs you", and only when they have
+    // actually moved: a rebuild every two seconds fights the thumb.
+    const shape = JSON.stringify(jobs.map(j => [j.id, j.state, j.detail]));
+    if (shape !== lastJobs) {
+      lastJobs = shape;
+      if (view.tab === 'home' && !view.edit) render();
+    }
     jobsBox.innerHTML = '';
     jobs.slice(0, 4).forEach(j => jobsBox.appendChild(jobRow(j)));
     // The jobs list lives on the subject screens, and + now works while you
@@ -1780,7 +2064,9 @@ def build_data(library, relative_to):
     `kind` separates the revision sheet from the lectures so the phone can
     group them without matching on the title text. `questions` is the note's own
     exam questions, parsed out here so the phone can quiz from them without
-    parsing markdown or costing an API call.
+    parsing markdown or costing an API call. `at` is the file's mtime in epoch
+    seconds, which is how Home decides what arrived since your last visit --
+    disk is what knows, and it knows for the static export too.
     """
     lib = Path(library)
     data = []
@@ -1791,14 +2077,17 @@ def build_data(library, relative_to):
         if rev.is_file():
             text = rev.read_text()
             notes.append({"title": "Revision sheet", "kind": "revision", "md": text,
+                          "at": int(rev.stat().st_mtime),
                           "questions": parse_questions(text)})
         for md in sorted((folder / "lectures").glob("*.md")):
             text = md.read_text()
             notes.append({"title": md.stem, "kind": "lecture", "md": text,
+                          "at": int(md.stat().st_mtime),
                           "questions": parse_questions(text)})
         if (folder / "uploads").is_dir():
             for f in sorted((folder / "uploads").glob("*")):
-                uploads.append({"name": f.name, "path": os.path.relpath(f, relative_to)})
+                uploads.append({"name": f.name, "at": int(f.stat().st_mtime),
+                                "path": os.path.relpath(f, relative_to)})
         data.append({"code": code, "name": name.replace("-", " "),
                      "notes": notes, "uploads": uploads})
     return data
@@ -2307,6 +2596,63 @@ def db_contributions(conn, user_id):
     }
 
 
+DAYS = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"]
+PERIODS = 8
+
+
+def db_timetable(conn, user_id):
+    """One student's week, in the order Home reads it.
+
+    Nobody has typed the institute grid into this app, and the source PDF's
+    columns are ambiguous enough that guessing one would mis-file lectures in
+    silence. So it starts empty and the student fills it in.
+    """
+    return [
+        {"day": day, "period": period, "code": code}
+        for day, period, code in conn.execute(
+            "select day, period, subject_code from timetable "
+            "where profile_id = %s order by day, period",
+            (user_id,),
+        )
+    ]
+
+
+def db_set_timetable(conn, user_id, slots):
+    """Replace the whole week. Returns the rows written.
+
+    Edited whole and never bigger than 48 rows, so replace beats a diff: there
+    is no half-saved state to reason about, and clearing a period is the same
+    operation as setting one.
+
+    Validates here rather than in the handler -- the check constraints and the
+    foreign key would refuse bad input anyway, but as a 500, and every caller
+    routes through this one function.
+    """
+    clean = {}
+    for s in slots:
+        try:
+            day, period = int(s["day"]), int(s["period"])
+        except (KeyError, TypeError, ValueError):
+            raise ValueError("a slot needs a day and a period")
+        code = s.get("code")
+        if not 1 <= day <= 6:
+            raise ValueError(f"day {day} is not Monday to Saturday")
+        if not 1 <= period <= PERIODS:
+            raise ValueError(f"period {period} is not 1 to {PERIODS}")
+        if code not in SUBJECTS:
+            raise ValueError(f"unknown subject {code!r}")
+        clean[(day, period)] = code            # last write wins; the PK would raise
+    with conn.transaction():
+        conn.execute("delete from timetable where profile_id = %s", (user_id,))
+        for (day, period), code in sorted(clean.items()):
+            conn.execute(
+                "insert into timetable (profile_id, day, period, subject_code) "
+                "values (%s, %s, %s, %s)",
+                (user_id, day, period, code),
+            )
+    return len(clean)
+
+
 def db_backfill(conn, library):
     """Register whatever is already on disk, once, in the admin's name.
 
@@ -2610,15 +2956,26 @@ def build_server(args):
         def do_GET(self):
             if self.path == "/data":
                 subjects = build_data(args.library, args.out.parent)
+                # `now` is this machine's clock, and the mtimes in `subjects`
+                # are the same clock. Home's "new since you last looked" is a
+                # comparison between two of these, never against the phone's
+                # own clock, which is minutes out often enough to matter.
+                out = {"subjects": subjects, "now": int(time.time()),
+                       "codes": [{"code": c, "name": n.replace("-", " ")}
+                                 for c, (n, _) in SUBJECTS.items()]}
                 # Disk says what exists; the database says who added it and how
                 # the class voted. --no-auth has neither a database nor anyone
                 # to credit, which is the whole point of --no-auth.
                 if self.me:
                     with db(self.me["id"]) as conn:
                         apply_meta(subjects, *db_meta(conn, self.me["id"]))
-                return self.reply(200, {"subjects": subjects,
-                                        "codes": [{"code": c, "name": n.replace("-", " ")}
-                                                  for c, (n, _) in SUBJECTS.items()]})
+                        out["timetable"] = db_timetable(conn, self.me["id"])
+                        # Everything Home needs rides on the request it already
+                        # makes. A second round trip for a number is a second
+                        # thing that can be slow on a phone in a corridor.
+                        if self.me["admin"]:
+                            out["pending"] = len(db_pending(conn))
+                return self.reply(200, out)
             if self.path == "/me":
                 if not self.me:
                     return self.reply(404, {"error": "this server is running with --no-auth"})
@@ -2661,6 +3018,8 @@ def build_server(args):
                 return self.do_upload()
             if self.path == "/vote":
                 return self.do_vote()
+            if self.path == "/timetable":
+                return self.do_timetable()
             if self.path == "/revise":
                 return self.do_revise()
             if self.path != "/explain":
@@ -2843,6 +3202,31 @@ def build_server(args):
             except Exception as e:
                 return self.reply(500, {"error": f"{type(e).__name__}: {e}"})
             return self.reply(200, state)
+
+        def do_timetable(self):
+            """Save the whole week. It comes back down inside /data.
+
+            No GET of its own: Home already fetches /data on the way in, and a
+            second request for six rows is a second thing to be slow.
+            """
+            if not self.me:
+                return self.reply(404, {"error": "this server is running with --no-auth"})
+            try:
+                n = int(self.headers.get("Content-Length", 0))
+                if n > 20000:
+                    self.close_connection = True
+                    return self.reply(413, {"error": "too much"})
+                req = json.loads(self.rfile.read(n) or b"{}")
+                slots = req.get("slots")
+                if not isinstance(slots, list):
+                    return self.reply(400, {"error": "expected a list of slots"})
+                with db(self.me["id"]) as conn:
+                    saved = db_set_timetable(conn, self.me["id"], slots)
+            except ValueError as e:
+                return self.reply(400, {"error": str(e)})
+            except Exception as e:
+                return self.reply(500, {"error": f"{type(e).__name__}: {e}"})
+            return self.reply(200, {"saved": saved})
 
         def do_revise(self):
             import json as _json

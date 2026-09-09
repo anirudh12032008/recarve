@@ -413,12 +413,10 @@ location.hash = '#';
 route();
 assert.equal(view.code, null);
 
-// The two tabs with nothing in them yet say what is coming rather than showing
-// an empty screen that reads as a bug -- and the router is what has to reach
-// them, so this goes through the hash rather than calling them by name.
+// Campus has nothing in it yet and says what is coming rather than showing an
+// empty screen that reads as a bug -- and the router is what has to reach it,
+// so this goes through the hash rather than calling it by name.
 const says = word => writes.some(w => w[0] === 'textContent' && String(w[1]).includes(word));
-writes = []; location.hash = '#home'; route();
-assert.ok(says('Classes'), 'Home must say where everything currently is');
 writes = []; location.hash = '#campus'; route();
 assert.ok(says('Clubs'), 'Campus must name what will live there');
 
@@ -431,6 +429,107 @@ assert.ok(wrote(['textContent', nomatch]), 'Classes answers the search box');
 writes = []; location.hash = '#campus'; route();
 assert.ok(!wrote(['textContent', nomatch]) && says('Clubs'), 'Campus must not be searched');
 qvalue = '';
+
+// ---- HOME. Every section is a function of what the page already holds --
+// TT, JOBS, PENDING, DATA -- so all of it can be driven from here.
+const home = () => { writes = []; location.hash = '#home'; route(); };
+
+// "Today" has to be the day it actually is. 9 September 2026 is a Wednesday.
+assert.equal(dayOf(new Date(2026, 8, 9)), 3, 'Wednesday is day 3');
+assert.equal(dayOf(new Date(2026, 8, 12)), 6, 'Saturday is the last taught day');
+assert.equal(dayOf(new Date(2026, 8, 13)), 0, 'Sunday is day 0 and has no periods');
+const week = [{day: 3, period: 2, code: 'CY1107'}, {day: 4, period: 1, code: 'MC1101'},
+              {day: 3, period: 1, code: 'MC1101'}];
+assert.deepStrictEqual(slotsOn(week, 3).map(s => s.period), [1, 2],
+                       'today is only today, and in period order');
+assert.deepStrictEqual(slotsOn(week, 6), [], 'a day with no classes has none');
+assert.deepStrictEqual(slotsOn(null, 3), [], 'no timetable at all is not a crash');
+
+// Nothing heard from the server yet: say so. Never draw a plausible Monday.
+TT = null; JOBS = []; PENDING = 0; SEEN = null;
+home();
+assert.ok(says('Checking your timetable'), 'Home must not invent a timetable');
+assert.ok(!says('Needs you'), 'nothing is waiting, so there is no section');
+assert.ok(!says('New since'), 'no last visit, nothing to call new');
+
+// Empty is the honest first state, and it offers the way to fill it in.
+TT = []; live = true;
+home();
+assert.ok(says('Set up your timetable'), 'an empty timetable says how to fill it');
+
+// A day with classes lists them in order, tappable, marked with what is there.
+TT = [{day: 3, period: 3, code: 'CY1107'}, {day: 3, period: 1, code: 'MC1101'}];
+const wed = new Date(2026, 8, 9);
+const RealDate = Date;
+Date = function () { return wed; };          // "today" is Wednesday for this stretch
+Date.now = RealDate.now;
+home();
+const order = writes.filter(w => w[0] === 'textContent'
+                                && String(w[1]).startsWith('Period ')).map(w => w[1]);
+assert.deepStrictEqual(order, ['Period 1 \\u00b7 1 lecture \\u00b7 revision sheet',
+                               'Period 3 \\u00b7 no notes yet'],
+                       'the day runs in period order, each marked with what it has');
+assert.ok(says('Mathematics 1') && says('Chemistry'), 'and each is the subject itself');
+
+// Sunday is a real answer, not an empty list.
+Date = function () { return new RealDate(2026, 8, 13); };
+Date.now = RealDate.now;
+home();
+assert.ok(says('No classes on Sunday.'), 'a free day says so');
+Date = RealDate;
+
+// NEEDS YOU: only what is actually waiting on a person.
+JOBS = [{id: 1, name: 'CY1107-lec.m4a', state: 'transcribing', detail: '40% · 2 of 5 min'},
+        {id: 2, name: 'slides.pdf', state: 'done', detail: 'filed under CY1107'}];
+home();
+assert.ok(says('Needs you'), 'a running transcription needs you');
+assert.ok(says('40%'), 'and says how far along it is');
+JOBS = [{id: 2, name: 'slides.pdf', state: 'done', detail: 'filed under CY1107'}];
+home();
+assert.ok(!says('Needs you'), 'a finished job is not waiting on anyone');
+PENDING = 2;
+home();
+assert.ok(says('2 people are waiting to be let in'), "the admin's queue needs them");
+PENDING = 1;
+home();
+assert.ok(says('One person is waiting to be let in'), 'and it counts in words');
+PENDING = 0; JOBS = [];
+
+// NEW SINCE YOU LAST LOOKED, against the last look and nothing else.
+SEEN = 1000;
+home();
+assert.ok(says('Nothing new since you last looked.'), 'nothing new must say so');
+DATA[0].notes[0].at = 2000;
+home();
+assert.ok(says('New since you last looked') && says('week1'), 'a newer note is new');
+DATA[0].notes[0].at = 900;
+home();
+assert.ok(says('Nothing new since you last looked.'), 'an older note is not new');
+delete DATA[0].notes[0].at;
+SEEN = null;
+
+// An empty library says what to do first rather than showing a blank screen.
+const keep = DATA.splice(0, DATA.length);
+DATA.push({code: 'MC1101', name: 'Mathematics 1', notes: [], uploads: []});
+SEEN = 1000;
+home();
+assert.ok(says('Nothing in the library yet'), 'day one must say what to do first');
+assert.ok(!says('Nothing new since you last looked'), 'nothing can be new in an empty library');
+DATA.length = 0; DATA.push(...keep);
+SEEN = null;
+
+// The editor is a level inside Home: its own URL, with a way back up.
+TT = [{day: 3, period: 1, code: 'MC1101'}];
+writes = []; location.hash = '#home/timetable'; route();
+assert.deepStrictEqual([view.tab, view.edit], ['home', true], 'the editor is a level');
+assert.ok(says('Period 1') && says('Period 8'), 'every period of the day is editable');
+assert.ok(says('Save timetable'), 'and there is a way to save it');
+assert.deepStrictEqual(chrome('#home/timetable'), [true, false, false, true, true, true],
+                       'the editor names itself and keeps a way back up');
+assert.equal(draft['3-1'], 'MC1101', 'the editor opens on what is already saved');
+draft['3-2'] = 'CY1107';
+location.hash = '#home'; route();
+assert.equal(draft, null, 'walking away drops an unsaved week rather than saving it');
 """
 
 
@@ -509,6 +608,57 @@ def test_the_tab_bar_is_wired_and_gives_way_to_the_reading_dock():
     fab = re.search(r"#fab\{(.*?)\}", notes.PAGE, re.S).group(1)
     assert "bottom:calc(76px + env(safe-area-inset-bottom))" in fab and "height:58px" in fab, \
         "if the FAB moves, #nav's padding has to move with it"
+
+
+def test_home_costs_no_request_of_its_own():
+    """Home is opened between classes on mobile data, so it may not add a round
+    trip: the timetable, the admin queue and the clock all ride on the /data the
+    page fetches on the way in, and the jobs on the poll that already runs."""
+    for wiring in ("TT = d.timetable || [];", "PENDING = d.pending || 0;",
+                   "markSeen(d.now);", "JOBS = jobs;"):
+        assert wiring in notes.PAGE, f"Home not wired: {wiring}"
+    # The editor's save is the only thing that talks to /timetable at all.
+    assert notes.PAGE.count("fetch('/timetable'") == 1
+    assert "body: JSON.stringify({slots})" in notes.PAGE
+    # And Home must not be one of the screens that waits on a fetch to draw.
+    home = re.search(r"\nfunction renderHome\(\) \{.*?\n\}", notes.PAGE, re.S).group(0)
+    assert "await" not in home and "fetch" not in home
+
+
+def test_home_learns_the_server_is_there_before_it_draws():
+    """`live` is what decides whether an empty timetable reads as "set one up"
+    or as "there is no server to save it to". Set after the render rather than
+    before it, a perfectly good server said the second one -- and nothing
+    redrew Home afterwards to correct it."""
+    body = re.search(r"async function refresh\(\) \{.*?\n\}", notes.PAGE, re.S).group(0)
+    assert body.index("live = true;") < body.index("render();")
+
+
+def test_the_timetable_editor_is_reachable_and_leads_back():
+    """A level inside Home, so it is a URL: back climbs out of it like every
+    other step, and the tab bar is never the only way home."""
+    for wiring in ("const edit = tab === 'home' && parts[1] === 'timetable';",
+                   "if (!edit) draft = null;",
+                   "start.onclick = () => go('home', 'timetable');",
+                   "edit.onclick = () => go('home', 'timetable');",
+                   "save.onclick = saveTimetable;"):
+        assert wiring in notes.PAGE, f"the timetable editor is not wired: {wiring}"
+
+
+def test_the_library_says_when_each_thing_arrived(tmp_path):
+    """"New since you last looked" is a comparison against these, and disk is
+    what knows -- so the static export carries them too."""
+    folder = tmp_path / "library" / "MC1101-Mathematics-1"
+    (folder / "lectures").mkdir(parents=True)
+    (folder / "lectures" / "week1.md").write_text("## Summary\nlimits\n")
+    (folder / "uploads").mkdir(parents=True)
+    (folder / "uploads" / "slides.pdf").write_bytes(b"%PDF-1.4")
+
+    mc = next(s for s in notes.build_data(tmp_path / "library", tmp_path)
+              if s["code"] == "MC1101")
+    assert mc["notes"][0]["at"] > 0 and mc["uploads"][0]["at"] > 0
+    assert all(isinstance(x["at"], int)
+               for x in mc["notes"] + mc["uploads"]), "seconds, like the server's clock"
 
 
 def test_the_me_tab_carries_the_two_admin_things():
