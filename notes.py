@@ -688,8 +688,10 @@ body:not(.reading) .dock{display:none}
 .tabs button[aria-current]{color:var(--accent);font-weight:650}
 .tabs button:active{background:var(--surface)}
 body.reading .tabs{display:none}
-/* Clear of the bar, so the last row is never half under it. */
-#nav{padding-bottom:calc(80px + env(safe-area-inset-bottom))}
+/* Clear of the bar AND of the FAB above it (76 + 58), so the last row is never
+   half under either. 80px cleared only the bar, and the FAB then sat on top of
+   the last row's vote button with no scroll left to escape it. */
+#nav{padding-bottom:calc(142px + env(safe-area-inset-bottom))}
 
 /* ---- Practice: one question at a time, over everything else. ---------- */
 #quiz{position:fixed;inset:0;z-index:12;background:var(--bg);display:flex;flex-direction:column}
@@ -1236,6 +1238,11 @@ function openNote(n, s) {
 function closeRead() {
   document.body.classList.remove('reading');
   practice.hidden = true;
+  // The Explain button is positioned in document coordinates and lives above
+  // everything, so leaving a note by the back gesture -- which never taps the
+  // page, so selectionchange never fires -- used to strand it over the list,
+  // eating taps and stretching the scroll. Every exit routes through here.
+  hideAsk();
   current = null;
 }
 

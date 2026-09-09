@@ -125,15 +125,30 @@ STUB = """
 const assert = require('node:assert');
 let writes = [];   // every DOM write and call the script makes, in order
 const any = new Proxy(function () {}, {
-  get: (t, k) => (k === 'value' ? '' : k === Symbol.toPrimitive ? () => '' : any),
+  get: (t, k) => (k === 'value' ? qvalue : k === Symbol.toPrimitive ? () => '' : any),
   set: (t, k, v) => (writes.push([k, v]), true),
   apply: (t, self, a) => (writes.push(['()'].concat(a)), any),
   construct: () => any,
 });
 const wrote = pair => writes.some(w => JSON.stringify(w) === JSON.stringify(pair));
-const document = any;
-const location = {hash: ''};
-let hist = [];     // every entry pushed, so back can be reasoned about
+// #ask is the one element whose class a check has to tell apart from every
+// other 'on', so it is a real object rather than the proxy.
+const askCls = [];
+const askEl = {style: {}, classList: {
+  add: c => askCls.push('+' + c), remove: c => askCls.push('-' + c),
+  contains: () => false,
+}};
+const document = new Proxy(function () {}, {
+  get: (t, k) => (k === 'getElementById' ? (id => (id === 'ask' ? askEl : any)) : any),
+  set: (t, k, v) => (writes.push([k, v]), true),
+  apply: (t, self, a) => (writes.push(['()'].concat(a)), any),
+});
+let qvalue = '';   // whatever is in the search box, so its scope can be tested
+// The page is loaded the way the hard case arrives: a deep link, one history
+// entry, straight into a note. What seedHistory() does about that on the way
+// in is the first thing CHECKS looks at.
+const location = {hash: '#classes/MC1101/week1'};
+let hist = ['#classes/MC1101/week1'];   // every entry pushed, so back can be reasoned about
 const history = {
   pushState: (a, b, h) => { hist.push(h); location.hash = h; },
   replaceState: (a, b, h) => { hist[hist.length - 1] = h; location.hash = h; },
@@ -146,28 +161,46 @@ const setInterval = () => 0, setTimeout = () => 0, clearInterval = () => {};
 """
 
 CHECKS = """
+// Loading was the test: the script called seedHistory() on its way in, so the
+// deep link that arrived as a single entry already has every step above it
+// under it. Delete that call and back leaves the app in one press.
+assert.deepStrictEqual(hist,
+  ['#home', '#classes', '#classes/MC1101', '#classes/MC1101/week1'],
+  'loading a deep link must seed the steps above it');
+hist = [];
+
 // LEVEL 3, inside the Classes tab: three segments open that note.
 location.hash = '#classes/MC1101/week1';
 route();
 assert.equal(current && current.title, 'week1', 'a note hash must open the note');
-assert.deepEqual([view.tab, view.code], ['classes', 'MC1101']);
+assert.deepStrictEqual([view.tab, view.code], ['classes', 'MC1101']);
 
 // LEVEL 2: the subject, and nothing open.
 location.hash = '#classes/MC1101';
 route();
 assert.equal(current, null);
-assert.deepEqual([view.tab, view.code, view.title], ['classes', 'MC1101', null]);
+assert.deepStrictEqual([view.tab, view.code, view.title], ['classes', 'MC1101', null]);
 
 // LEVEL 1: the tab's own root.
 location.hash = '#classes';
 route();
-assert.deepEqual([view.tab, view.code], ['classes', null]);
+assert.deepStrictEqual([view.tab, view.code], ['classes', null]);
 
-// The other three tabs are levels of their own, and none of them is a subject.
+// The other three tabs are levels of their own, none of them is a subject, and
+// tapping one while reading has to put the note away -- with the class that
+// hid the tab bar, and with the Explain button that was floating over the note.
 for (const t of ['home', 'campus', 'me']) {
+  location.hash = '#classes/MC1101/week1';
+  route();
+  assert.ok(current, 'a note is open before the tab is tapped');
+  writes = []; askCls.length = 0;
   location.hash = '#' + t;
   route();
-  assert.deepEqual([view.tab, view.code, current], [t, null, null], t + ' is a tab');
+  assert.deepStrictEqual([view.tab, view.code, current], [t, null, null], t + ' is a tab');
+  assert.ok(wrote(['()', 'reading']),
+            t + ': leaving a note must drop body.reading, or the tab bar never comes back');
+  assert.ok(askCls.includes('-on'),
+            t + ': leaving a note must take the Explain button with it');
 }
 
 // Every link that predates the tabs still has to land, and upgrade in place.
@@ -191,10 +224,10 @@ DATA[0].notes.pop();
 // A hash that means nothing falls back to the first tab instead of throwing.
 location.hash = '#nothing-like-this';
 route();
-assert.deepEqual([view.tab, view.code], ['home', null]);
+assert.deepStrictEqual([view.tab, view.code], ['home', null]);
 location.hash = '#classes/NOPE';
 route();
-assert.deepEqual([view.tab, view.code], ['classes', null], 'no such subject');
+assert.deepStrictEqual([view.tab, view.code], ['classes', null], 'no such subject');
 
 // Back (browser button, Android gesture) climbs a step.
 assert.equal(window.onpopstate, route, 'back must re-route');
@@ -204,24 +237,24 @@ assert.equal(window.onpopstate, route, 'back must re-route');
 hist = ['#classes/MC1101/week1'];
 location.hash = hist[0];
 seedHistory();
-assert.deepEqual(hist, ['#home', '#classes', '#classes/MC1101', '#classes/MC1101/week1'],
+assert.deepStrictEqual(hist, ['#home', '#classes', '#classes/MC1101', '#classes/MC1101/week1'],
                  'a deep link must be reachable by walking back out of it');
 hist = ['#me'];
 location.hash = '#me';
 seedHistory();
-assert.deepEqual(hist, ['#home', '#me'], 'a tab is one step above the root');
+assert.deepStrictEqual(hist, ['#home', '#me'], 'a tab is one step above the root');
 hist = [];
 location.hash = '';
 seedHistory();
-assert.deepEqual(hist, [], 'the root seeds nothing');
+assert.deepStrictEqual(hist, [], 'the root seeds nothing');
 
 // Tapping the tab you are on must not stack history entries to walk back out of.
 location.hash = '#campus';
 hist = [];
 go('campus');
-assert.deepEqual(hist, [], 'the tab you are already on is not a new entry');
+assert.deepStrictEqual(hist, [], 'the tab you are already on is not a new entry');
 go('classes');
-assert.deepEqual(hist, ['#classes']);
+assert.deepStrictEqual(hist, ['#classes']);
 
 // What level 1 prints under each subject.
 assert.equal(counts(DATA[0]), '1 lecture \\u00b7 revision sheet');
@@ -270,7 +303,7 @@ assert.ok(wrote(['textContent', '2 of 2']), 'the counter follows');
 qMark(false);
 assert.ok(wrote(['textContent', '1 of 2 right']), 'the run ends with a score');
 qRetry();
-assert.deepEqual(qz.order, [1], 'retry runs only what was missed');
+assert.deepStrictEqual(qz.order, [1], 'retry runs only what was missed');
 writes = [];
 qReveal(); qMark(true);
 assert.ok(wrote(['textContent', '1 of 1 right']), 'a clean retry scores full marks');
@@ -299,7 +332,7 @@ qReveal(); qMark(true);                       // one answered, one to go
 qz = null;                                    // a refresh: new page, same storage
 qOpen(mc, mc.notes[0]);
 assert.equal(qz.i, 1, 'a half-finished quiz must resume where it stopped');
-assert.deepEqual(qz.marks, [1], 'and remember how it was going');
+assert.deepStrictEqual(qz.marks, [1], 'and remember how it was going');
 
 // The note was re-recorded and now has a third question: the old run is meaningless.
 qz = null;
@@ -347,14 +380,29 @@ location.hash = '#me';
 route();
 assert.equal(view.tab, 'me');
 assert.equal(current, null, 'the contributions screen is not a note');
-// The brand has to give way to the subject header, because #lback -- the only
-// back button at this depth -- lives inside it. Header writes in order:
-// brand.hidden, then shead.hidden.
 writes = [];
 render();
-assert.deepEqual(writes.filter(w => w[0] === 'hidden').map(w => w[1]).slice(0, 2),
-                 [true, false], 'contributions must show the header with the back button');
 assert.ok(wrote(['textContent', 'Your contributions']), 'and that header must name it');
+
+// Which chrome each tab carries. The brand is Home's and the subject header is
+// everyone else's, because #lback -- the only back button at this depth --
+// lives inside it; the search box belongs to Classes and the activity log to
+// Me; and #lback itself only appears where there is a level above to climb to.
+// render() writes .hidden in one order: brand, shead, lback, scode, q, tools.
+const chrome = h => {
+  location.hash = h; route(); writes = []; render();
+  return writes.filter(w => w[0] === 'hidden').map(w => w[1]).slice(0, 6);
+};
+assert.deepStrictEqual(chrome('#home'), [false, true, true, true, true, true],
+                       'Home keeps the brand and nothing else');
+assert.deepStrictEqual(chrome('#classes'), [true, false, true, true, false, true],
+                       'the search box is the Classes tab\\'s');
+assert.deepStrictEqual(chrome('#classes/MC1101'), [true, false, false, false, false, true],
+                       'a subject is the one level with a way back up');
+assert.deepStrictEqual(chrome('#campus'), [true, false, true, true, true, true],
+                       'Campus has no search box and no log');
+assert.deepStrictEqual(chrome('#me'), [true, false, true, true, true, false],
+                       'the activity log is the Me tab\\'s');
 
 // + from here must leave the dropdown alone: 'me' matches no option, so the
 // select blanks, and a recording uploaded with no subject is refused and lost.
@@ -365,16 +413,24 @@ location.hash = '#';
 route();
 assert.equal(view.code, null);
 
-// The two tabs with nothing in them yet say what is coming rather than
-// showing an empty screen that reads as a bug.
-writes = [];
-renderHome();
-assert.ok(writes.some(w => w[0] === 'textContent' && String(w[1]).includes('Classes')),
-          'Home must say where everything currently is');
-writes = [];
-renderCampus();
-assert.ok(writes.some(w => w[0] === 'textContent' && String(w[1]).includes('Clubs')),
-          'Campus must name what will live there');
+// The two tabs with nothing in them yet say what is coming rather than showing
+// an empty screen that reads as a bug -- and the router is what has to reach
+// them, so this goes through the hash rather than calling them by name.
+const says = word => writes.some(w => w[0] === 'textContent' && String(w[1]).includes(word));
+writes = []; location.hash = '#home'; route();
+assert.ok(says('Classes'), 'Home must say where everything currently is');
+writes = []; location.hash = '#campus'; route();
+assert.ok(says('Clubs'), 'Campus must name what will live there');
+
+// Search is the Classes tab's own tool. A needle left in the box must not turn
+// Campus into a list of search hits the moment you tap over to it.
+const nomatch = 'Nothing matches that. Try a subject code like CY1107.';
+qvalue = 'zzz-nothing-matches-this';
+writes = []; location.hash = '#classes'; route();
+assert.ok(wrote(['textContent', nomatch]), 'Classes answers the search box');
+writes = []; location.hash = '#campus'; route();
+assert.ok(!wrote(['textContent', nomatch]) && says('Clubs'), 'Campus must not be searched');
+qvalue = '';
 """
 
 
@@ -445,8 +501,14 @@ def test_the_tab_bar_is_wired_and_gives_way_to_the_reading_dock():
                    # the note and the dock starts at its edge.
                    "body.reading .tabs{display:flex}"):
         assert wiring in notes.PAGE, f"tab bar not wired: {wiring}"
-    # The FAB and the last row of a list must clear the bar, not sit under it.
-    assert "#nav{padding-bottom:calc(80px + env(safe-area-inset-bottom))}" in notes.PAGE
+    # The last row of a list must clear both the bar and the FAB floating above
+    # it, not sit under either: the FAB reaches 76 + 58 = 134px up, and at 80px
+    # it covered the bottom 54px of the list -- the last row's vote button with
+    # it -- with no scroll left to escape.
+    assert "#nav{padding-bottom:calc(142px + env(safe-area-inset-bottom))}" in notes.PAGE
+    fab = re.search(r"#fab\{(.*?)\}", notes.PAGE, re.S).group(1)
+    assert "bottom:calc(76px + env(safe-area-inset-bottom))" in fab and "height:58px" in fab, \
+        "if the FAB moves, #nav's padding has to move with it"
 
 
 def test_the_me_tab_carries_the_two_admin_things():

@@ -424,12 +424,26 @@ def test_the_me_tab_hands_the_invite_code_to_an_admin_and_to_nobody_else(server)
     so /me carries it -- but only theirs. A member's copy has no code in it at
     all, which is the only version of this that cannot leak one."""
     port, cookies = server
+    invite = lambda who: json.loads(call(port, "GET", "/me", cookie=cookies[who])[1])
+    # Cleared first: the pick is table-wide, so anything already live in here
+    # would answer for the code under test.
     with psycopg.connect(DB_URL, autocommit=True) as conn:
-        conn.execute("insert into invites (code, expires_at) values "
-                     "('DEAD', now() - interval '1 day'), ('SEC-I', now() + interval '30 days')")
+        conn.execute("delete from invites")
+        conn.execute(
+            "insert into invites (code, expires_at, max_uses, uses) values "
+            "('DEAD', now() - interval '1 day', 200, 0), "        # ran out of time
+            "('SPENT', now() + interval '90 days', 5, 5)")        # ran out of uses
     try:
-        mine = json.loads(call(port, "GET", "/me", cookie=cookies["Asha"])[1])
-        assert (mine["admin"], mine["invite"]) == (True, "SEC-I"), "an expired code is not one"
+        assert invite("Asha")["invite"] is None, "a dead code is not one to hand out"
+
+        with psycopg.connect(DB_URL, autocommit=True) as conn:
+            conn.execute("insert into invites (code, expires_at) values "
+                         "('SOON', now() + interval '1 day'), "
+                         "('SEC-I', now() + interval '30 days')")
+        mine = invite("Asha")
+        # Of the live ones, the longest-lived: it is the code a new joiner is
+        # most likely to still be able to use by the time they type it.
+        assert (mine["admin"], mine["invite"]) == (True, "SEC-I")
 
         theirs = json.loads(call(port, "GET", "/me", cookie=cookies["Bilal"])[1])
         assert theirs["admin"] is False
@@ -439,4 +453,4 @@ def test_the_me_tab_hands_the_invite_code_to_an_admin_and_to_nobody_else(server)
         assert call(port, "GET", "/admin", cookie=cookies["Asha"])[0] == 200
     finally:
         with psycopg.connect(DB_URL, autocommit=True) as conn:
-            conn.execute("delete from invites where code in ('DEAD', 'SEC-I')")
+            conn.execute("delete from invites")
