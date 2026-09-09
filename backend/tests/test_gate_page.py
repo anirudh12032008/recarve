@@ -74,6 +74,12 @@ def test_the_helper_agrees_with_the_published_numbers():
     ("--fg", "--bg"),
     ("--mut", "--bg"),
     ("--err", "--bg"),
+    # The admin slab: Approve, Copy join link and the Admin tag. Both halves
+    # are written twice, once per theme, and a value copied from the wrong
+    # block is near-white on near-white.
+    ("--admin-fg", "--admin"),
+    # button.ghost is inked text and an inked ring straight on the ground.
+    ("--admin", "--bg"),
 ])
 def test_every_pair_on_the_gate_is_readable_in_both_themes(mode, fg, bg):
     tokens = LIGHT if mode == "light" else DARK
@@ -119,11 +125,24 @@ def test_the_admin_screen_has_a_way_back():
     assert 'href="/"' in notes.ADMIN_BODY, "no way back to the library"
 
 
+def test_the_way_back_is_big_enough_to_hit():
+    """A bare anchor inherits body's 16px/1.5 and gets a ~19px box. Every other
+    control on the gate sets min-height:44px; this one is the sole navigation
+    off /admin, so it is the one that matters most."""
+    assert "min-height:44px" in rule("main>p>a"), \
+        "the only way off /admin is a 19px tap target"
+
+
 def test_a_name_with_no_spaces_in_it_cannot_push_the_gate_sideways():
     """Names are whatever the joiner typed, up to 80 characters, no format
     check -- and an email address in the Name box is the ordinary way one
     arrives with no break in it."""
     assert "overflow-wrap:break-word" in rule("body")
+    # body's rule wraps the text but does not shrink a flex item's automatic
+    # minimum size, so the name in .row still pushed the row -- and the page --
+    # sideways: 170px of horizontal overflow at 390px wide on a 40-char name.
+    assert "overflow-wrap:anywhere" in rule(".row b"), \
+        "the name in a row is a flex item and needs its own"
 
 
 # --------------------------------------------------------- the join form
@@ -189,19 +208,44 @@ STUB = """
 const assert = require('node:assert');
 const alerts = [];
 const alert = m => alerts.push(m);
-const el = () => ({
-  textContent: '', innerHTML: '', className: '', value: '', selected: false,
-  disabled: false, onclick: null, onchange: null,
-  setAttribute() {}, appendChild(c) { return c; }, append() {},
-  querySelector: () => el(),
-});
-const byId = {list: el(), members: el()};
+// Enough DOM to answer three questions: what got built, what it says, and
+// what its buttons post. `kids` is the tree, `text` reads it back, and
+// setting innerHTML clears it the way the real one does -- load() re-renders
+// every list on every action, so a stub that only ever appends double-counts.
+const made = [];
+const el = () => {
+  const e = {
+    textContent: '', className: '', value: '', selected: false, aria: null,
+    disabled: false, onclick: null, onchange: null, kids: [], q: {},
+    setAttribute(k, v) { if (k === 'aria-label') e.aria = v; },
+    appendChild(c) { e.kids.push(c); return c; },
+    append(...c) { e.kids.push(...c); },
+    querySelector(sel) { return e.q[sel] || (e.q[sel] = e.appendChild(el())); },
+    get text() { return e.textContent + e.kids.map(k => k.text).join(' '); },
+  };
+  let html = '';
+  Object.defineProperty(e, 'innerHTML',
+    {get: () => html, set(v) { html = v; e.kids.length = 0; e.q = {}; }});
+  made.push(e);
+  return e;
+};
+const byId = {list: el(), members: el(), counts: el(), invite: el(), reports: el()};
 const document = {getElementById: id => byId[id] || el(), createElement: el};
 // null hangs up the way a dead server does: fetch itself rejects.
 let reply = {ok: true, status: 200, json: async () => ({pending: [], members: [], me: 'x'})};
-const fetch = () => (reply ? Promise.resolve(reply)
-                           : Promise.reject(new TypeError('Failed to fetch')));
+// Every button on this screen posts. What it posts is the whole difference
+// between Reject and Approve, so the payloads are kept and read back.
+const posts = [];
+const fetch = (path, init) => {
+  if (init && init.method === 'POST') {
+    posts.push({path, body: JSON.parse(init.body)});
+    return Promise.resolve({ok: true, status: 200, json: async () => ({})});
+  }
+  return reply ? Promise.resolve(reply) : Promise.reject(new TypeError('Failed to fetch'));
+};
 const answer = (ok, body) => ({ok, status: ok ? 200 : 503, json: async () => body});
+const location = {origin: 'https://notes.workwithani.tech'};
+const navigator = {clipboard: {writeText: async () => {}}};
 """
 
 CHECKS = """
@@ -231,12 +275,74 @@ CHECKS = """
   await load();
   assert.equal(byId.list.textContent, 'Nobody waiting.',
                'and a good answer still renders');
+
+  // ---- one good payload, and the wirings a one-word typo silently inverts.
+  reply = answer(true, {
+    me: 'me-1', now: 1000, invite: 'ab/cd',
+    counts: {pending: 1, members: 3, blocked: 1, reports: 1},
+    pending: [{id: 'p-1', name: 'Joiner', roll_no: 'R1', phone: '9', asked: 990}],
+    members: [{id: 'me-1', name: 'Me', role: 'admin', status: 'approved', roll_no: 'R0'},
+              {id: 'm-2', name: 'Other', role: 'student', status: 'approved', roll_no: 'R2'},
+              {id: 'm-3', name: 'Out', role: 'student', status: 'blocked', roll_no: 'R3'}],
+    reports: [{id: 'rep-1', material_id: 'mat-9', filename: 'f.pdf', status: 'open',
+               subject: 'CY1107', reason: 'wrong', by: 'Someone', at: 900}],
+  });
+  made.length = 0;
+  await load();
+  // Taken now: every button re-runs load(), so a later count would see the
+  // rows from every render at once.
+  const drawn = made.slice();
+
+  // Your own row gets no controls at all. An admin who demotes or blocks
+  // themselves leaves a class nobody can approve anyone into.
+  assert.ok(!drawn.some(b => b.aria === 'Role for Me'),
+            'your own row must not offer a role picker');
+  assert.ok(drawn.some(b => b.aria === 'Role for Other'), 'but everyone else has one');
+  assert.equal(drawn.filter(b => b.textContent === 'Block').length, 1,
+               'your own row must not offer a Block button');
+
+  // The tiles, the code and the reports each ride on this same payload, and
+  // each has its own line in load() that can simply go missing.
+  assert.deepEqual(byId.counts.kids.map(t => t.text),
+                   ['1 waiting', '3 members', '1 blocked', '1 reported'],
+                   'the counts must be drawn, each against its own label');
+  assert.ok(byId.invite.text.includes('/?code=ab%2Fcd'),
+            'the join link is what gets pasted into WhatsApp; ?code is what /  reads');
+  assert.ok(byId.reports.text.includes('f.pdf'), 'a live report must be listed');
+
+  const tap = async label => {
+    const b = made.find(x => x.textContent === label);
+    assert.ok(b, label + ' is not on the screen');
+    posts.length = 0;
+    await b.onclick();
+    return posts[0];
+  };
+
+  // Reject sits next to Approve and is one word away from being it.
+  assert.deepEqual(await tap('Reject'),
+                   {path: '/block', body: {id: 'p-1', blocked: true}},
+                   'Reject must block the joiner, not approve them');
+  assert.deepEqual(await tap('Approve'), {path: '/approve', body: {id: 'p-1'}});
+
+  // Block toggles. Nailed to a constant, either nobody can be blocked or
+  // nobody who has been can ever be let back in.
+  assert.deepEqual(await tap('Block'),
+                   {path: '/block', body: {id: 'm-2', blocked: true}});
+  assert.deepEqual(await tap('Unblock'),
+                   {path: '/block', body: {id: 'm-3', blocked: false}});
+
+  // A report carries two ids and only one of them is a file that can go.
+  assert.deepEqual(await tap('Remove'), {path: '/remove', body: {id: 'mat-9'}},
+                   'Remove takes down the material, not the report row');
 })().catch(e => { console.error(e); process.exit(1); });
 """
 
 
 @pytest.mark.skipif(not NODE, reason="needs node")
-def test_a_refused_pending_leaves_the_admin_something_to_read(tmp_path):
+def test_the_admin_panel_wires_every_button_to_what_it_says(tmp_path):
+    """The panel is the only place roles and access change at all, and until
+    this ran under node its whole script was untested: making Reject approve
+    the person sitting next to Approve left the suite green."""
     f = tmp_path / "admin.js"
     f.write_text(STUB + ADMIN_SCRIPT + CHECKS)
     r = subprocess.run([NODE, str(f)], capture_output=True, text=True)

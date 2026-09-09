@@ -660,6 +660,10 @@ details>:not(summary){padding:0 14px}
 #fab{position:fixed;right:16px;bottom:calc(76px + env(safe-area-inset-bottom));z-index:7;
   width:58px;height:58px;border-radius:50%;background:var(--accent);color:var(--accent-fg);
   font-size:30px;line-height:1;box-shadow:0 6px 22px rgba(0,0,0,.3)}
+/* #ask is clamped to innerWidth-130, which on a 390px screen puts its right
+   edge inside the FAB's band -- and the FAB is z-index 7 above #ask's 4, so a
+   tap there opened the Add sheet instead. They are never both wanted. */
+body:has(#ask.on) #fab{display:none}
 #sheet{position:fixed;inset:0;z-index:11;display:none;background:rgba(0,0,0,.45)}
 #sheet.on{display:block}
 #sheet .card{position:absolute;left:0;right:0;bottom:0;background:var(--bg);
@@ -3245,7 +3249,15 @@ button[disabled]{opacity:.5}
    control on this screen read as static text. --mut is 5.24:1. */
 .row select{width:auto;min-height:44px;font:inherit;font-size:1rem;color:var(--fg);
   background:transparent;border:1px solid var(--mut);border-radius:10px;padding:0 .5rem}
+/* body's overflow-wrap does not shrink a flex item's automatic minimum
+   size, so a 40-character name with no spaces in it still pushed this row --
+   and the page with it -- sideways. Same job .row .name does in PAGE. */
+.row b{overflow-wrap:anywhere}
 .row small{display:block;color:var(--mut);font-size:.8rem}
+/* The one link on these screens, and on /admin the only way back out.
+   An anchor inherits body's 16px/1.5 and gets a ~19px box; nothing else here
+   is under 44. */
+main>p>a{display:inline-flex;align-items:center;min-height:44px}
 h2{font-size:1rem;margin:2rem 0 .2rem}
 .by{color:var(--fg);margin:0 0 .35rem}
 /* The section is shown, not asked: there is one, and a box you can type in

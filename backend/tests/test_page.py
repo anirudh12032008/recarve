@@ -1025,6 +1025,19 @@ def test_the_explain_button_ranks_under_the_reading_header():
                        "and eats the tap meant for the back button")
 
 
+def test_the_fab_does_not_take_the_taps_meant_for_explain():
+    """#ask is clamped to innerWidth-130, so on a 390px screen its right edge
+    lands at 348 -- inside the FAB's 316-374 band. The FAB is z-index 7 to
+    #ask's 4, so the right third of Explain opened the Add sheet instead: the
+    locked one, for the student the button was offered to. They are never both
+    wanted, so the selection hides the FAB outright."""
+    fab = int(re.search(r"#fab\{[^}]*z-index:(\d+)", notes.PAGE, re.S).group(1))
+    ask = int(re.search(r"#ask\{[^}]*z-index:(\d+)", notes.PAGE, re.S).group(1))
+    assert ask < fab, "if #ask is raised above the FAB this rule can go"
+    assert "body:has(#ask.on) #fab{display:none}" in notes.PAGE, \
+        "the two overlap and the FAB is on top"
+
+
 def test_a_refused_upload_is_not_told_to_try_again():
     """403 is the gate's, and its words are a route name and a role. There is
     one sentence for this in the whole page, and a retry cannot work."""
