@@ -877,6 +877,12 @@ let view = {tab: 'home', code: null, title: null, edit: false};
 // for anything. All three arrive on the /data the page already fetches.
 let TT = null;      // this student's timetable; null until the server answers
 let PENDING = 0;    // classmates waiting for an admin; 0 for everyone else
+// student reads, trusted also adds, admin also runs the class. The server is
+// the one that enforces it -- hiding a button is a courtesy, not a lock, and
+// /upload and /explain refuse a student whatever this page shows. A static
+// export has no server and nobody to be, so it assumes the role that leaves
+// every button working and lets each one say what it needs.
+let ROLE = 'trusted';
 let JOBS = [];      // the last /jobs answer
 
 // Hue per department prefix. Colour says which subject you are in, so the code
@@ -1326,6 +1332,14 @@ async function renderMe() {
   box.querySelector('.r').textContent = p.recordings;
   box.querySelector('.v').textContent = p.votes_received;
 
+  // A student is not told off for being one: the page says what they have and
+  // who opens the rest. This is the only screen that mentions roles at all.
+  if (d.role === 'student') {
+    block('Your access', [line('You can read everything the class has',
+                               'Ask an admin for upload access to add notes, '
+                               + 'record a class, or use Explain')]);
+  }
+
   // The two things only an admin can do, on the only screen that is theirs.
   // The server decides: a member's /me carries no invite code at all, and the
   // invites table has no read policy for them either.
@@ -1719,6 +1733,8 @@ async function refresh() {
     // Everything Home needs rides on this one request.
     TT = d.timetable || [];
     PENDING = d.pending || 0;
+    ROLE = d.role || ROLE;
+    applyRole();
     markSeen(d.now);
     if (!subj.options.length) {
       for (const c of d.codes) {
@@ -1802,6 +1818,15 @@ async function pollJobs() {
     const done = jobs.filter(j => j.state === 'done').length;
     if (done !== lastDone) { lastDone = done; refresh(); }
   } catch {}
+}
+
+// Nothing here is the lock. A student's phone simply stops offering the two
+// things the server would refuse anyway -- an Add button that 403s is a worse
+// answer than no Add button.
+// The Explain button is dealt with where it is offered, at the selection.
+function applyRole() {
+  document.getElementById('fab').hidden = ROLE === 'student';
+  if (ROLE === 'student') closeSheet();
 }
 
 const openSheet = () => {
@@ -1947,7 +1972,7 @@ document.addEventListener('selectionchange', () => {
   const sel = document.getSelection();
   const text = sel ? sel.toString().trim() : '';
   // Only offer it for a real phrase inside a note, not a stray tap.
-  if (!text || text.length < 12 || !current
+  if (!text || text.length < 12 || !current || ROLE === 'student'
       || !body.contains(sel.anchorNode) || panel.classList.contains('on')) {
     return hideAsk();
   }
@@ -2347,6 +2372,28 @@ ENV_PATH = Path(__file__).resolve().parent / ".env"
 # only paths that opt out, and adding to this set is the deliberate act.
 PUBLIC_PATHS = {"/join"}
 
+# Three roles, in order. A student reads everything the class has; trusted adds
+# the things that write content or spend money on the API; admin adds the class
+# itself. status is the other axis and is checked separately -- a pending admin
+# is still pending.
+ROLES = ("student", "trusted", "admin")
+RANK = {r: i for i, r in enumerate(ROLES)}
+
+# What each endpoint costs, in the same place as PUBLIC_PATHS and for the same
+# reason: the gate below reads this before dispatch, so a route added later is
+# refused to everyone but an admin until somebody names its price here. The
+# unnamed ones -- /data, /jobs, /log, /vote, /timetable, the library itself --
+# are reads and personal settings, open to any approved member.
+ROLE_REQUIRED = {
+    "/explain": "trusted",     # this is the AI spend
+    "/upload": "trusted",
+    "/revise": "trusted",      # this is the AI spend too
+    "/admin": "admin",
+    "/pending": "admin",
+    "/approve": "admin",
+    "/role": "admin",
+}
+
 
 def session_secret(env_path=ENV_PATH):
     """The cookie-signing key, minted into .env the first time it is wanted.
@@ -2429,17 +2476,17 @@ def db_join(conn, code, name, roll_no):
         # otherwise, so the invite that bootstraps the class also elects them.
         act_as(conn, None, local=True)
         if conn.execute("select count(*) from profiles").fetchone()[0] == 1:
-            # trusted too: an untrusted uploader's files are forced pending by
-            # the materials trigger, and the admin is the one person nobody
-            # else can ever publish.
+            # role 'admin', which carries trusted with it: an untrusted
+            # uploader's files are forced pending by the materials trigger, and
+            # the admin is the one person nobody else can ever publish.
             conn.execute(
-                "update profiles set status = 'approved', is_admin = true, "
-                "trusted = true where id = %s",
+                "update profiles set status = 'approved', role = 'admin' "
+                "where id = %s",
                 (user_id,),
             )
-        row = conn.execute("select status, is_admin from profiles where id = %s",
+        row = conn.execute("select status, role from profiles where id = %s",
                            (user_id,)).fetchone()
-        result = (user_id, row[0], row[1])
+        result = (user_id, row[0], row[1] == "admin")
     return result
 
 
@@ -2448,13 +2495,14 @@ def db_principal(conn, profile_id):
     never-created profile comes back empty rather than trusted."""
     try:
         row = conn.execute(
-            "select name, status, is_admin from profiles where id = %s", (profile_id,)
+            "select name, status, role from profiles where id = %s", (profile_id,)
         ).fetchone()
     except psycopg.errors.InvalidTextRepresentation:
         return None  # signed, but not by a version of us that minted uuids
     if not row:
         return None
-    return {"id": str(profile_id), "name": row[0], "status": row[1], "admin": row[2]}
+    return {"id": str(profile_id), "name": row[0], "status": row[1],
+            "role": row[2], "admin": row[2] == "admin"}
 
 
 def db_pending(conn):
@@ -2465,6 +2513,38 @@ def db_pending(conn):
             "order by created_at"
         )
     ]
+
+
+def db_members(conn):
+    """Everyone in the class and what they may do, for the admin screen."""
+    return [
+        {"id": str(r[0]), "name": r[1], "roll_no": r[2], "status": r[3], "role": r[4]}
+        for r in conn.execute(
+            "select id, name, roll_no, status, role from profiles "
+            "where status <> 'pending' order by name"
+        )
+    ]
+
+
+def db_set_role(conn, actor_id, profile_id, role):
+    """Move somebody between the three roles.
+
+    Admin-gated in the database by the "admins manage profiles" policy, so a
+    member's connection changes nobody -- this function only decides the two
+    things the policy cannot see: that the role is one of the three, and that
+    an admin is not demoting themselves. The second is not paranoia about
+    privilege, it is about the class: the admin is the only account that can
+    approve joiners, and one mis-tap would leave nobody who can.
+    """
+    if role not in ROLES:
+        raise ValueError(f"role must be one of {', '.join(ROLES)}")
+    if str(profile_id) == str(actor_id):
+        raise ValueError("you cannot change your own role")
+    n = conn.execute("update profiles set role = %s where id = %s",
+                     (role, profile_id)).rowcount
+    if not n:
+        raise ValueError("no such member")
+    return role
 
 
 def db_invite(conn):
@@ -2683,7 +2763,7 @@ def db_backfill(conn, library):
     the table owner, so the same policies apply as to any other upload.
     """
     row = conn.execute(
-        "select id from profiles where is_admin and status = 'approved' "
+        "select id from profiles where role = 'admin' and status = 'approved' "
         "order by created_at limit 1"
     ).fetchone()
     if not row:
@@ -2761,7 +2841,10 @@ button[disabled]{opacity:.5}
 .row{display:flex;align-items:center;justify-content:space-between;gap:1rem;padding:.75rem 0;
   border-bottom:1px solid var(--line)}
 .row button{width:auto;padding:0 .9rem}
+.row select{width:auto;min-height:44px;font:inherit;font-size:1rem;color:var(--fg);
+  background:transparent;border:1px solid var(--line);border-radius:10px;padding:0 .5rem}
 .row small{display:block;color:var(--mut);font-size:.8rem}
+h2{font-size:1rem;margin:2rem 0 .2rem}
 </style>
 <main>__BODY__</main>
 """
@@ -2804,21 +2887,43 @@ BLOCKED_BODY = """<h1>No access</h1>
 ADMIN_BODY = r"""<h1>Pending</h1>
 <p>Everyone waiting to be let in.</p>
 <div id="list">loading…</div>
+<h2>Who can do what</h2>
+<p>Students read. Trusted members upload, record and use Explain — that one
+spends money. Admins also let people in.</p>
+<div id="members"></div>
 <script>
+// The name and roll number are whatever the joiner typed, so every one of them
+// goes in with textContent. This screen is the admin account's, and a name is
+// not a place to run script from.
+function who(p) {
+  const el = document.createElement('div');
+  el.innerHTML = '<b></b><small></small>';
+  el.querySelector('b').textContent = p.name;
+  el.querySelector('small').textContent = p.roll_no || '';
+  return el;
+}
+
+function roleSelect(p, onchange) {
+  const sel = document.createElement('select');
+  sel.setAttribute('aria-label', 'Role for ' + p.name);
+  for (const r of ['student', 'trusted', 'admin']) {
+    const o = document.createElement('option');
+    o.value = r; o.textContent = r;
+    if (r === p.role) o.selected = true;
+    sel.appendChild(o);
+  }
+  sel.onchange = () => onchange(sel);
+  return sel;
+}
+
 async function load() {
-  const el = document.getElementById('list');
+  const el = document.getElementById('list'), mem = document.getElementById('members');
   const j = await (await fetch('/pending')).json();
-  if (!j.pending.length) { el.textContent = 'Nobody waiting.'; return; }
   el.innerHTML = '';
+  if (!j.pending.length) el.textContent = 'Nobody waiting.';
   for (const p of j.pending) {
     const row = document.createElement('div');
     row.className = 'row';
-    const who = document.createElement('div');
-    who.innerHTML = '<b></b><small></small>';
-    // textContent, not innerHTML: the name and roll number are whatever the
-    // joiner typed, and this page is looked at by the one admin account.
-    who.querySelector('b').textContent = p.name;
-    who.querySelector('small').textContent = p.roll_no || '';
     const btn = document.createElement('button');
     btn.textContent = 'Approve';
     btn.onclick = async () => {
@@ -2827,8 +2932,31 @@ async function load() {
         body: JSON.stringify({id: p.id})});
       load();
     };
-    row.append(who, btn);
+    row.append(who(p), btn);
     el.append(row);
+  }
+  mem.innerHTML = '';
+  for (const p of j.members || []) {
+    const row = document.createElement('div');
+    row.className = 'row';
+    // Your own row has no picker: dropping your own admin would leave nobody
+    // who can let the next person in, and the server refuses it anyway.
+    if (p.id === j.me) {
+      const you = document.createElement('small');
+      you.textContent = p.role + ' — you';
+      row.append(who(p), you);
+    } else {
+      row.append(who(p), roleSelect(p, async sel => {
+        sel.disabled = true;
+        const r = await fetch('/role', {method: 'POST',
+          headers: {'Content-Type': 'application/json'},
+          body: JSON.stringify({id: p.id, role: sel.value})});
+        if (!r.ok) { const e = await r.json().catch(() => ({}));
+                     alert(e.error || 'could not change that'); }
+        load();
+      }));
+    }
+    mem.append(row);
   }
 }
 load();
@@ -2950,6 +3078,15 @@ def build_server(args):
             if path in PUBLIC_PATHS:
                 return True
             if self.me and self.me["status"] == "approved":
+                # Approved says you are a classmate. Role says what you may do
+                # with that, and this is where a student is refused -- before
+                # dispatch, so curl is refused exactly as the app's own screens
+                # are, and so a route added later starts out shut.
+                need = ROLE_REQUIRED.get(path)
+                if need and RANK.get(self.me["role"], 0) < RANK[need]:
+                    self.reply(403, {"error": f"{path} needs {need} access",
+                                     "required": need, "role": self.me["role"]})
+                    return False
                 return True
             # The front page is the one thing an outsider may see, and only so
             # they can ask to be let in.
@@ -2989,6 +3126,7 @@ def build_server(args):
                 # the class voted. --no-auth has neither a database nor anyone
                 # to credit, which is the whole point of --no-auth.
                 if self.me:
+                    out["role"] = self.me["role"]
                     with db(self.me["id"]) as conn:
                         apply_meta(subjects, *db_meta(conn, self.me["id"]))
                         # Home's extras are extras. A migration not yet applied
@@ -3018,6 +3156,7 @@ def build_server(args):
                     # things. Gated twice on purpose: here, and by the invites
                     # policy that gives a member no read at all.
                     out["admin"] = bool(self.me["admin"])
+                    out["role"] = self.me["role"]
                     out["invite"] = db_invite(conn) if self.me["admin"] else None
                     return self.reply(200, out)
             if self.path == "/jobs":
@@ -3036,7 +3175,9 @@ def build_server(args):
                 if not self.is_admin():
                     return self.reply(403, {"error": "admins only"})
                 with db(self.me["id"]) as conn:
-                    return self.reply(200, {"pending": db_pending(conn)})
+                    return self.reply(200, {"pending": db_pending(conn),
+                                            "members": db_members(conn),
+                                            "me": self.me["id"]})
             return super().do_GET()
 
         def is_admin(self):
@@ -3047,6 +3188,8 @@ def build_server(args):
                 return self.do_join()
             if self.path == "/approve":
                 return self.do_approve()
+            if self.path == "/role":
+                return self.do_role()
             if self.path == "/upload":
                 return self.do_upload()
             if self.path == "/vote":
@@ -3146,6 +3289,35 @@ def build_server(args):
                 return self.reply(500, {"error": f"{type(e).__name__}: {e}"})
             log(f"{self.me['name']} approved {target}, publishing {published} upload(s)", "admin")
             return self.reply(200, {"ok": True, "published": published})
+
+        def do_role(self):
+            """Move somebody between student, trusted and admin.
+
+            Admin-only twice over: the gate refused everyone else before this
+            was reached, and the update inside runs on the caller's own
+            connection, where the "admins manage profiles" policy has to allow
+            it too.
+            """
+            if not self.is_admin():
+                return self.reply(403, {"error": "admins only", "required": "admin"})
+            try:
+                n = int(self.headers.get("Content-Length", 0))
+                if n > 4000:
+                    self.close_connection = True
+                    return self.reply(413, {"error": "too much"})
+                req = json.loads(self.rfile.read(n) or b"{}")
+                target = (req.get("id") or "").strip()
+                role = (req.get("role") or "").strip()
+                with db(self.me["id"]) as conn:
+                    db_set_role(conn, self.me["id"], target, role)
+            except ValueError as e:
+                return self.reply(400, {"error": str(e)})
+            except psycopg.errors.InvalidTextRepresentation:
+                return self.reply(404, {"error": "no such member"})
+            except Exception as e:
+                return self.reply(500, {"error": f"{type(e).__name__}: {e}"})
+            log(f"{self.me['name']} made {target} {role}", "admin")
+            return self.reply(200, {"ok": True, "role": role})
 
         def do_upload(self):
             """Raw body upload: filename and subject ride in headers.

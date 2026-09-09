@@ -139,7 +139,15 @@ const askEl = {style: {}, classList: {
   contains: () => false,
 }};
 const document = new Proxy(function () {}, {
-  get: (t, k) => (k === 'getElementById' ? (id => (id === 'ask' ? askEl : any)) : any),
+  get: (t, k) => (
+    k === 'getElementById' ? (id => els[id] || any)
+    : k === 'getSelection' ? getSelection
+    // The one listener whose decision is worth checking: what a highlight does
+    // is a rule (only inside a note, only a real phrase, only for a member who
+    // may spend), and the proxy would swallow it.
+    : k === 'addEventListener'
+      ? ((ev, fn) => { if (ev === 'selectionchange') onSelectionChange = fn; })
+    : any),
   set: (t, k, v) => (writes.push([k, v]), true),
   apply: (t, self, a) => (writes.push(['()'].concat(a)), any),
 });
@@ -155,7 +163,22 @@ const history = {
   replaceState: (a, b, h) => { hist[hist.length - 1] = h; location.hash = h; },
   back: () => { backs++; },
 };
-const window = {scrollTo: () => {}, print: () => {}};
+const window = {scrollTo: () => {}, print: () => {}, innerWidth: 390, scrollY: 0};
+// What is highlighted, and the one listener that reads it. document.addEventListener
+// goes into the proxy like everything else, so the script's handler is caught
+// here by name instead -- it is the decision that matters, not the event.
+// #panel is real for the same reason #ask is: the Explain guard asks whether
+// the panel is already open, and the proxy answers 'yes' to every question.
+const panelEl = {classList: {add: () => {}, remove: () => {}, contains: () => false}};
+const els = {ask: askEl, panel: panelEl};
+let selection = '';
+let onSelectionChange = () => {};
+const rect = {top: 100, left: 20, width: 80};
+const getSelection = () => ({
+  toString: () => selection,
+  anchorNode: {},
+  getRangeAt: () => ({getBoundingClientRect: () => rect}),
+});
 const marked = {parse: md => md};
 // Every request the script makes, and what the next one is answered with.
 // `reply = null` hangs, which is what the page sees before a check sets one --
@@ -621,6 +644,30 @@ reply = moving('80% - 4 of 5 min');
 location.hash = '#classes/MC1101'; route(); writes = [];
 await pollJobs();
 assert.ok(!says('Needs you'), 'it is Home that is redrawn, not whatever else is open');
+
+// ---- What the server says this session may do. The lock is the server's;
+// what the page owes a student is not offering the two buttons it would refuse.
+location.hash = '#home'; route();
+reply = answer(true, {subjects: [], codes: [], now: 1, role: 'student'});
+writes = [];
+await refresh();
+assert.equal(ROLE, 'student', 'the role rides in on the /data the page already fetches');
+assert.ok(wrote(['hidden', true]), 'a student is not shown the Add button');
+
+// And highlighting a passage does not offer Explain, which is the AI spend.
+askCls.length = 0;
+current = {title: 'week1'};
+selection = 'a long enough phrase to explain';
+onSelectionChange();
+assert.ok(!askCls.includes('+on'), 'a student must not be offered Explain');
+
+reply = answer(true, {subjects: [], codes: [], now: 1, role: 'trusted'});
+writes = []; askCls.length = 0;
+await refresh();
+assert.equal(ROLE, 'trusted');
+assert.ok(wrote(['hidden', false]), 'and a trusted member gets the Add button back');
+onSelectionChange();
+assert.ok(askCls.includes('+on'), 'a trusted member is offered Explain');
 
 })().catch(e => { console.error(e); process.exit(1); });
 """

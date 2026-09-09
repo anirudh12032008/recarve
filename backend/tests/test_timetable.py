@@ -150,8 +150,9 @@ def server(tmp_path_factory):
                                     ("Chan", False, "pending")):
             uid = make_user(conn)
             conn.execute(
-                "insert into profiles (id, name, roll_no, status, trusted, is_admin) "
-                "values (%s, %s, %s, %s, true, %s)", (uid, name, name, status, admin))
+                "insert into profiles (id, name, roll_no, status, role) "
+                "values (%s, %s, %s, %s, %s)",
+                (uid, name, name, status, "admin" if admin else "trusted"))
             people[name] = uid
 
     args = notes.argparse.Namespace(

@@ -40,8 +40,8 @@ def test_status_is_constrained(db):
 def approved(db, admin=False):
     uid = make_user(db)
     db.execute(
-        "insert into profiles (id, name, status, is_admin) "
-        "values (%s, 'A', 'approved', %s)", (uid, admin),
+        "insert into profiles (id, name, status, role) "
+        "values (%s, 'A', 'approved', %s)", (uid, "admin" if admin else "student"),
     )
     return uid
 
@@ -68,14 +68,17 @@ def test_approved_user_sees_the_whole_class(db):
 
 
 def test_nobody_can_promote_themselves_to_admin(db):
+    """role is the one place privilege is written, so this is the whole attack:
+    every earlier version of it -- is_admin, trusted -- is now a generated
+    column that refuses any write at all."""
     me = approved(db)
     as_user(db, me)
     with pytest.raises(psycopg.errors.InsufficientPrivilege), db.transaction():
-        db.execute("update profiles set is_admin = true where id = %s", (me,))
+        db.execute("update profiles set role = 'admin' where id = %s", (me,))
     as_admin_connection(db)
     assert db.execute(
-        "select is_admin from profiles where id = %s", (me,)
-    ).fetchone()[0] is False
+        "select role, is_admin from profiles where id = %s", (me,)
+    ).fetchone() == ("student", False)
 
 
 def test_nobody_can_approve_themselves(db):

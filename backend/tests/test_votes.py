@@ -256,8 +256,9 @@ def server(tmp_path_factory):
         for name, admin in (("Asha", True), ("Bilal", False), ("Chan", False)):
             uid = make_user(conn)
             conn.execute(
-                "insert into profiles (id, name, roll_no, status, trusted, is_admin) "
-                "values (%s, %s, %s, 'approved', true, %s)", (uid, name, name, admin))
+                "insert into profiles (id, name, roll_no, status, role) "
+                "values (%s, %s, %s, 'approved', %s)",
+                (uid, name, name, "admin" if admin else "trusted"))
             people[name] = uid
 
     args = notes.argparse.Namespace(

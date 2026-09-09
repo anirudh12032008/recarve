@@ -1,17 +1,15 @@
 from conftest import as_user, as_admin_connection
-from test_content import member
+from test_content import member, upload_as_owner
 
 
 def upload(db, uploader, key):
-    return db.execute(
-        "insert into materials (subject_code, uploader_id, filename, file_key, size_bytes) "
-        "values ('CY1107', %s, %s, %s, 10) returning id", (uploader, f"{key}.pdf", key),
-    ).fetchone()[0]
+    """Planted on the owner's connection: a student's own session cannot insert
+    a material at all now, which is what the whole backlog is left over from."""
+    return upload_as_owner(db, uploader, f"{key}.pdf", key)
 
 
 def test_approving_publishes_every_pending_upload(db):
     newbie = member(db, trusted=False)
-    as_user(db, newbie)
     for i in range(3):
         upload(db, newbie, f"key{i}")
     # A fourth upload an admin has already taken down. Approval must not
@@ -23,7 +21,6 @@ def test_approving_publishes_every_pending_upload(db):
     # Somebody else waiting in the same queue. Approving `newbie` must not
     # empty their backlog too.
     bystander = member(db, trusted=False)
-    as_user(db, bystander)
     upload(db, bystander, "theirs")
 
     as_admin_connection(db)

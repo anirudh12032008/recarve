@@ -372,7 +372,8 @@ def test_a_pending_joiner_reads_nothing(server):
 def test_a_forged_cookie_is_not_a_session(server):
     """Reading a classmate's cookie must not be enough to mint your own."""
     with psycopg.connect(DB_URL, autocommit=True) as conn:
-        admin_id = conn.execute("select id from profiles where is_admin").fetchone()[0]
+        admin_id = conn.execute(
+            "select id from profiles where role = 'admin'").fetchone()[0]
     tag = pytest.pending_cookie.split(".", 1)[1]
     assert call(server, "GET", "/data", cookie=f"{admin_id}.{tag}")[0] == 403
     assert call(server, "GET", "/data", cookie=f"{admin_id}.")[0] == 403
