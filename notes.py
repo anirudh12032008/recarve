@@ -999,6 +999,9 @@ function openNote(n, s) {
   backBtn.textContent = '‹ ' + s.code;   // back goes to the subject, not the top
   mdInto(body, n.md);
   practice.hidden = !questionsOf(n).length;   // no questions, no practice
+  // The dock carries exactly one accent: Practice when there is something to
+  // practise, Share when there is not. Otherwise it has none at all.
+  document.getElementById('share').classList.toggle('primary', practice.hidden);
 
   // Wide tables scroll inside their own box instead of stretching the page.
   body.querySelectorAll('table').forEach(t => {
@@ -2074,6 +2077,11 @@ def build_server(args):
     from functools import partial
     from http.server import SimpleHTTPRequestHandler, ThreadingHTTPServer
 
+    # An ungated server must not reach the wifi by accident: --no-auth is for
+    # this laptop, so it binds to loopback unless --host says otherwise.
+    if getattr(args, "host", None) is None:
+        args.host = "127.0.0.1" if args.no_auth else "0.0.0.0"
+
     root = Path(__file__).resolve().parent
     global LOG_PATH
     Path(args.library).mkdir(parents=True, exist_ok=True)
@@ -2422,7 +2430,7 @@ def serve(args):
         print("no ANTHROPIC_API_KEY set - Explain will return an error", file=sys.stderr)
 
     srv = build_server(args)
-    ip = lan_ip()
+    ip = lan_ip() if args.host == "0.0.0.0" else args.host   # print what it bound to
     log(f"http://{ip}:{args.port}   <- open this on your phone", "ready")
     log(f"library {args.library}", "ready")
     log(f"log file {LOG_PATH}", "ready")
@@ -2717,7 +2725,8 @@ def main():
     rv.set_defaults(func=revise)
 
     sv = sub.add_parser("serve", help="open the library on your phone, with Explain")
-    sv.add_argument("--host", default="0.0.0.0", help="0.0.0.0 exposes it to your wifi")
+    sv.add_argument("--host", default=None,
+                    help="default 0.0.0.0 (your wifi), but 127.0.0.1 under --no-auth")
     sv.add_argument("--port", type=int, default=8000)
     sv.add_argument("--out", type=Path, default=Path(__file__).parent / "site" / "index.html")
     sv.add_argument("--notes-model", default="claude-haiku-4-5")

@@ -84,6 +84,29 @@ def test_serving_makes_the_library_before_it_exports_it(tmp_path):
     assert args.out.is_file()
 
 
+def test_no_auth_never_reaches_the_wifi_on_its_own(tmp_path):
+    """--no-auth is the whole gate switched off: no invite code, no cookie, no
+    approval. A verification server left running on *:8000 once served the
+    entire library to the wifi, so with no --host it binds loopback only.
+    """
+    was = notes.LOG_PATH
+    try:
+        args = make_args(tmp_path)
+        args.host = None                       # nobody passed --host
+        srv = notes.build_server(args)
+        srv.server_close()
+        assert srv.server_address[0] == "127.0.0.1"
+        assert args.host == "127.0.0.1", "serve() prints the address it bound"
+
+        args = make_args(tmp_path)
+        args.host = "0.0.0.0"                  # asked for on purpose: still given
+        srv = notes.build_server(args)
+        srv.server_close()
+        assert srv.server_address[0] == "0.0.0.0"
+    finally:
+        notes.LOG_PATH = was
+
+
 # ------------------------------------------------------------ the script
 
 DATA_FIXTURE = [
@@ -213,6 +236,39 @@ assert.ok(wrote(['textContent', '1 of 1 right']), 'a clean retry scores full mar
 qAgain();
 assert.equal(qz.i, 0, 'the quiz works with no storage at all');
 assert.equal(qz.order.length, 2);
+
+// Practice is offered only where there is something to practise: a subject with
+// no questions anywhere gets no 'Practice the whole course' row to tap.
+writes = [];
+renderSubject(DATA[1]);
+assert.ok(!wrote(['textContent', 'Practice the whole course']),
+          'a subject with nothing to practise must not offer a whole-course quiz');
+
+// ---- Saved progress. Everything above ran without storage; this is with. ----
+const store = new Map();
+globalThis.localStorage = {
+  getItem: k => (store.has(k) ? store.get(k) : null),
+  setItem: (k, v) => store.set(k, String(v)),
+};
+qOpen(mc, mc.notes[0]);
+qReveal(); qMark(true);                       // one answered, one to go
+qz = null;                                    // a refresh: new page, same storage
+qOpen(mc, mc.notes[0]);
+assert.equal(qz.i, 1, 'a half-finished quiz must resume where it stopped');
+assert.deepEqual(qz.marks, [1], 'and remember how it was going');
+
+// The note was re-recorded and now has a third question: the old run is meaningless.
+qz = null;
+qOpen(mc, {title: 'week1', kind: 'lecture', md: '# x',
+           questions: mc.notes[0].questions.concat([{q: 'q9', a: 'a9'}])});
+assert.equal(qz.i, 0, 'a run against a different set of questions must be dropped');
+
+// One saved run per quiz, not one for the whole app: the subject run and the
+// note run inside it must not overwrite each other.
+qz = null; qOpen(mc, null);
+const subjectKey = qz.key;
+qz = null; qOpen(mc, mc.notes[0]);
+assert.ok(qz.key !== subjectKey, 'a note quiz and its subject quiz keep separate runs');
 """
 
 
@@ -239,8 +295,23 @@ def test_practice_is_wired_up():
     are actually attached to them."""
     for wiring in ("qshow.onclick = qReveal", "qright.onclick = () => qMark(true)",
                    "qwrong.onclick = () => qMark(false)", "qretry.onclick = qRetry",
-                   "qagain.onclick = qAgain", "practice.onclick = ", "b.onclick = () => qOpen(s, null)"):
+                   "qagain.onclick = qAgain", "practice.onclick = ", "b.onclick = () => qOpen(s, null)",
+                   # The overlay is not a URL, so the close button is one of only
+                   # two ways out of it. Break it and the student is trapped.
+                   "document.getElementById('qexit').onclick = () => { quiz.hidden = true; }",
+                   # Offered only where there is something to practise, and gone
+                   # again when the note it belongs to is closed.
+                   "practice.hidden = !questionsOf(n).length",
+                   "practice.hidden = true",
+                   # The dock's one accent follows the primary action.
+                   "classList.toggle('primary', practice.hidden)"):
         assert wiring in notes.PAGE, f"practice button not wired: {wiring}"
+
+
+def test_back_closes_practice_first():
+    """The other way out of the overlay, and this one is the router's. Without
+    it the Android back gesture leaves the app from underneath an open quiz."""
+    assert "if (quiz.hidden === false) quiz.hidden = true;" in notes.PAGE
 
 
 def test_a_note_ships_the_questions_it_already_contains(tmp_path):
