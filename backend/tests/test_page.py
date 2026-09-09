@@ -303,6 +303,20 @@ location.hash = '#me';
 route();
 assert.equal(view.code, 'me');
 assert.equal(current, null, 'the contributions screen is not a note');
+// The brand has to give way to the subject header, because #lback -- the only
+// back button at this depth -- lives inside it. Header writes in order:
+// brand.hidden, then shead.hidden.
+writes = [];
+render();
+assert.deepEqual(writes.filter(w => w[0] === 'hidden').map(w => w[1]).slice(0, 2),
+                 [true, false], 'contributions must show the header with the back button');
+assert.ok(wrote(['textContent', 'Your contributions']), 'and that header must name it');
+
+// + from here must leave the dropdown alone: 'me' matches no option, so the
+// select blanks, and a recording uploaded with no subject is refused and lost.
+writes = [];
+openSheet();
+assert.ok(!writes.some(w => w[0] === 'value'), 'nothing may be filed under #me');
 location.hash = '#';
 route();
 assert.equal(view.code, null);
@@ -351,12 +365,15 @@ def test_the_vote_control_is_wired_to_the_server_and_nothing_else():
     for wiring in (
         # One request, carrying which item and which direction.
         "body: JSON.stringify({id: u.id, on: !u.voted})",
-        # And then the whole list again, because a vote changes the ranking.
-        "await refresh();",
         "if (u.id) el.appendChild(voteBtn(u));",
         "b.onclick = () => go('me', null);",
     ):
         assert wiring in notes.PAGE, f"vote control not wired: {wiring}"
+    # And then the whole list again, because a vote changes the ranking. Read
+    # out of the handler itself: /revise refreshes too, so a page-wide grep for
+    # this line passed with the vote's own refresh deleted.
+    handler = re.search(r"function voteBtn\(u\) \{.*?\n\}", notes.PAGE, re.S).group(0)
+    assert "await refresh();" in handler, "a vote must re-read the list it re-ranks"
 
 
 def test_points_never_gate_anything_on_the_page():

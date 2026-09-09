@@ -143,6 +143,50 @@ def test_meta_says_who_added_a_file_and_how_it_scored(db):
     assert mats[("CY1107", "unit1.pdf")]["voted"] is False
 
 
+def test_a_recording_is_credited_under_the_name_its_notes_will_take(db, tmp_path):
+    """Two halves of one join. The row is titled after the file the transcriber
+    will write -- dest.stem, not what the phone called the blob -- because that
+    title is the only handle the library keeps on it. And the worker marking it
+    done is what turns a recording into points."""
+    me = member(db)
+    as_user(db, me)
+    dest = tmp_path / "inbox" / "CY1107-week1.m4a"
+    dest.parent.mkdir()
+    dest.write_bytes(b"audio")
+    notes.db_record_upload(db, me, "CY1107", "week1.m4a", dest, True)
+    assert notes.db_contributions(db, me)["points"]["recordings"] == 0, "queued is not done"
+
+    notes.db_mark_transcribed(db, dest)          # the worker, once process() returns
+    lectures = tmp_path / "CY1107-Engineering-Chemistry" / "lectures"
+    lectures.mkdir(parents=True)
+    (lectures / "CY1107-week1.md").write_text("## Summary\nmoles\n")
+
+    subjects = notes.apply_meta(notes.build_data(tmp_path, tmp_path),
+                                *notes.db_meta(db, me))
+    cy = next(s for s in subjects if s["code"] == "CY1107")
+    assert [(n["title"], n["by"]) for n in cy["notes"]] == [("CY1107-week1", "M")], \
+        "the row and the note it became have to key the same way"
+    assert notes.db_contributions(db, me)["points"] == {
+        "uploads": 0, "recordings": 1, "votes_received": 0, "score": 10}
+
+
+def test_backfill_adopts_each_file_once_however_often_the_server_restarts(db, tmp_path):
+    """It runs on every boot. Without its guard a restart inserts every file
+    again -- doubling the admin's score, and stranding votes on the duplicate
+    row the page stops keying to."""
+    member(db, admin=True)
+    folder = tmp_path / "CY1107-Engineering-Chemistry"
+    (folder / "lectures").mkdir(parents=True)
+    (folder / "uploads").mkdir(parents=True)
+    (folder / "lectures" / "CY1107-week1.md").write_text("## Summary\nmoles\n")
+    (folder / "uploads" / "unit1.pdf").write_bytes(b"%PDF-1.4")
+
+    assert notes.db_backfill(db, tmp_path) == 2, "one lecture and one upload"
+    assert notes.db_backfill(db, tmp_path) == 0, "a restart adopts nothing twice"
+    assert db.execute("select count(*) from materials where file_key = %s",
+                      (str(folder / "uploads" / "unit1.pdf"),)).fetchone()[0] == 1
+
+
 def test_uploads_are_ranked_by_votes_and_lectures_are_not():
     """Only uploaded notes compete. Lectures are a record of what happened, in
     the order it happened."""

@@ -88,6 +88,21 @@ def test_first_joiner_becomes_the_admin(db):
     assert (status, is_admin) == ("approved", True), "nobody could ever approve anybody"
 
 
+def test_the_first_joiner_can_publish_from_the_first_upload(db):
+    """Admin is not enough. An untrusted uploader's files are forced pending by
+    the materials trigger, and the one person nobody can ever approve is the
+    admin -- so their whole library would be invisible to the class."""
+    db.execute("delete from profiles")
+    make_invite(db)
+    user_id, _, _ = notes.db_join(db, "OPENSESAME", "Asha", "24U001")
+    as_user(db, user_id)
+    assert db.execute(
+        "insert into materials (subject_code, uploader_id, filename, file_key, "
+        "size_bytes) values ('CY1107', %s, 'a.pdf', 'k', 10) returning status",
+        (user_id,),
+    ).fetchone()[0] == "visible"
+
+
 def test_everybody_after_the_first_waits(db):
     db.execute("delete from profiles")
     make_invite(db)

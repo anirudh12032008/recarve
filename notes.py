@@ -1056,13 +1056,17 @@ function render() {
   const needle = q.value.trim().toLowerCase();
   const s = view.code ? subjectOf(view.code) : null;
   nav.innerHTML = '';
-  brand.hidden = !!s;
-  shead.hidden = !s;
+  // Keyed on view.code, not on the subject it resolves to: '#me' is a level
+  // below the top like any subject is, and #lback -- the only back button
+  // there is -- lives inside the subject header.
+  brand.hidden = !!view.code;
+  shead.hidden = !view.code;
+  scode.hidden = !s;
   if (s) {
     scode.textContent = s.code;
     scode.style.setProperty('--h', hue(s.code));
-    sname.textContent = s.name;
   }
+  sname.textContent = s ? s.name : 'Your contributions';
   if (needle) renderSearch(needle);
   else if (view.code === 'me') renderMe();
   else if (s) renderSubject(s);
@@ -1416,8 +1420,10 @@ async function pollJobs() {
 
 const openSheet = () => {
   // Adding a chemistry recording from the chemistry screen should not need
-  // the dropdown at all.
-  if (view.code) subj.value = view.code;
+  // the dropdown at all. '#me' is not a subject, and setting the select to a
+  // value it has no option for blanks it -- which uploads with no subject and
+  // loses the recording.
+  if (subjectOf(view.code)) subj.value = view.code;
   sheet.classList.add('on');
 };
 const closeSheet = () => {
@@ -1889,8 +1895,7 @@ class Jobs:
         if not getattr(self.args, "no_auth", False):
             try:
                 with db() as conn:
-                    conn.execute("update lectures set status = 'done' "
-                                 "where audio_key = %s", (str(path),))
+                    db_mark_transcribed(conn, path)
             except psycopg.Error as e:
                 log(f"could not mark {path.name} done: {e}", "db", 1)
         try:
@@ -2079,6 +2084,12 @@ def db_record_upload(conn, user_id, code, filename, dest, is_audio):
             "size_bytes) values (%s, %s, %s, %s, %s)",
             (code, user_id, filename, str(dest), dest.stat().st_size),
         )
+
+
+def db_mark_transcribed(conn, path):
+    """The audio has notes now, so the lecture row queued at upload is done --
+    which is what makes it count toward its uploader's points."""
+    conn.execute("update lectures set status = 'done' where audio_key = %s", (str(path),))
 
 
 def db_meta(conn, user_id):
