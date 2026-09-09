@@ -8,6 +8,7 @@ Transcription is local (mlx-whisper, free). Notes use the Claude API.
 
 import argparse
 import os
+import re
 import sys
 import time
 from pathlib import Path
@@ -649,6 +650,33 @@ details>:not(summary){padding:0 14px}
 .dock button:active{opacity:.75}
 body:not(.reading) .dock{display:none}
 
+/* ---- Practice: one question at a time, over everything else. ---------- */
+#quiz{position:fixed;inset:0;z-index:12;background:var(--bg);display:flex;flex-direction:column}
+.qtop{display:flex;align-items:center;gap:12px;flex:none;
+  padding:max(10px,env(safe-area-inset-top)) 16px 10px;border-bottom:1px solid var(--line)}
+.qtop b{flex:1;font-size:16px;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+#qcount{font-size:13px;color:var(--mut);font-variant-numeric:tabular-nums;flex:none}
+#qexit{min-width:var(--tap);min-height:var(--tap);font-size:16px;color:var(--mut);flex:none}
+#qbar{flex:none;height:3px;background:var(--line)}
+#qbar i{display:block;height:100%;width:0;background:var(--accent);transition:width .2s}
+#qmain{flex:1;overflow-y:auto;width:100%;max-width:70ch;margin:0 auto;padding:24px 18px 28px}
+#qsrc{margin:0 0 12px;font-size:13px;color:var(--mut)}
+#qq{font-size:20px;line-height:1.4;font-weight:600}
+#qq p{margin:0 0 10px}
+#qq .katex-display{font-weight:400}
+#qscore{font-size:26px;font-weight:700;margin:0 0 6px}
+#qsub{margin:0;color:var(--mut)}
+#qa{margin-top:24px;padding-top:20px;border-top:1px solid var(--line);font-size:16px}
+#qa>:first-child{margin-top:0}
+.qdock{flex:none;display:flex;gap:8px;padding:9px 14px calc(9px + env(safe-area-inset-bottom));
+  border-top:1px solid var(--line)}
+.qdock button{flex:1;min-height:var(--tap);border-radius:11px;background:var(--surface);
+  font-size:16px;font-weight:500;display:flex;align-items:center;justify-content:center}
+.qdock button.primary{background:var(--accent);color:var(--accent-fg)}
+.qdock button:active{opacity:.75}
+/* Practice makes the reading dock four buttons wide on a phone. */
+.dock button{white-space:nowrap}
+
 @media (min-width:760px){
   body{display:flex}
   #list{width:320px;flex:none;border-right:1px solid var(--line);height:100dvh;overflow-y:auto;position:sticky;top:0}
@@ -660,7 +688,7 @@ body:not(.reading) .dock{display:none}
   body:not(.reading) .dock{display:flex}
 }
 @media print{
-  .top,.dock,#list,.rtop,#fab,#busy,#ask{display:none!important}
+  .top,.dock,#list,.rtop,#fab,#busy,#ask,#quiz{display:none!important}
   #read{display:block!important}
   article{padding:0;max-width:none}
   details{background:none;border:1px solid #999}
@@ -727,8 +755,30 @@ body:not(.reading) .dock{display:none}
   <div class="out" id="out"></div>
 </div>
 
+<div id="quiz" role="dialog" aria-label="Practice questions" hidden>
+  <div class="qtop">
+    <button id="qexit" aria-label="Close practice">&lsaquo;</button>
+    <b id="qtitle"></b>
+    <span id="qcount"></span>
+  </div>
+  <div id="qbar"><i></i></div>
+  <div id="qmain" aria-live="polite">
+    <p id="qsrc"></p>
+    <div id="qq"></div>
+    <div id="qa" hidden></div>
+  </div>
+  <div class="qdock">
+    <button id="qshow" class="primary">Show the answer</button>
+    <button id="qright" class="primary" hidden>I got it</button>
+    <button id="qwrong" hidden>I got it wrong</button>
+    <button id="qretry" class="primary" hidden>Try the missed ones</button>
+    <button id="qagain" hidden>Start over</button>
+  </div>
+</div>
+
 <div class="dock">
-  <button id="share" class="primary">Share</button>
+  <button id="practice" class="primary" hidden>Practice</button>
+  <button id="share">Share</button>
   <button id="dl">Download</button>
   <button id="print">Print</button>
 </div>
@@ -834,6 +884,19 @@ function renderSubjects() {
 
 // LEVEL 2: one subject, grouped.
 function renderSubject(s) {
+  // Revising a whole course, not one lecture: every note's questions in one run.
+  const all = quizItems(s, null);
+  if (all.length) {
+    const b = document.createElement('button');
+    b.className = 'row';
+    b.style.setProperty('--h', hue(s.code));
+    b.innerHTML = '<i class="tick"></i><span class="name"><b></b><small></small></span>';
+    b.querySelector('b').textContent = 'Practice the whole course';
+    b.querySelector('small').textContent =
+      plural(all.length, 'question') + ' from every note in ' + s.code;
+    b.onclick = () => qOpen(s, null);
+    block('Practice', [b]);
+  }
   block('Lectures', lecturesOf(s).map(n => noteRow(n, s)));
   block('Notes & slides', s.uploads.map(u => fileRow(u, s)));
   const rev = revisionOf(s);
@@ -889,6 +952,9 @@ function render() {
 
 // The router. One place decides which of the three levels you are looking at.
 function route() {
+  // Back out of practice first: the quiz is not a URL, so without this the
+  // Android back gesture would leave the app from underneath an open quiz.
+  if (quiz.hidden === false) quiz.hidden = true;
   const [code, title] =
     location.hash.slice(1).split('/').filter(Boolean).map(decodeURIComponent);
   // Links shared before the three levels existed are just '#<note title>'.
@@ -907,24 +973,12 @@ function route() {
   render();
 }
 
-// LEVEL 3: the note itself. Called only by route(), which has already put the
-// right URL in the bar, so this never touches history.
-function openNote(n, s) {
-  current = n;
-  rcode.textContent = s.code;
-  rcode.style.setProperty('--h', hue(s.code));
-  backBtn.textContent = '‹ ' + s.code;   // back goes to the subject, not the top
-  body.innerHTML = marked.parse(n.md);
-
-  // Wide tables scroll inside their own box instead of stretching the page.
-  body.querySelectorAll('table').forEach(t => {
-    const box = document.createElement('div');
-    box.className = 'scroll-x';
-    t.replaceWith(box); box.appendChild(t);
-  });
-
+// Markdown in, typeset HTML out. The note, the Explain panel and a practice
+// question all wanted this and each had grown its own copy of the delimiters.
+function mdInto(el, md) {
+  el.innerHTML = marked.parse(md || '');
   if (window.renderMathInElement) {
-    renderMathInElement(body, {
+    renderMathInElement(el, {
       delimiters: [
         {left:'$$', right:'$$', display:true},
         {left:'$', right:'$', display:false},
@@ -934,6 +988,24 @@ function openNote(n, s) {
       throwOnError: false,
     });
   }
+}
+
+// LEVEL 3: the note itself. Called only by route(), which has already put the
+// right URL in the bar, so this never touches history.
+function openNote(n, s) {
+  current = n;
+  rcode.textContent = s.code;
+  rcode.style.setProperty('--h', hue(s.code));
+  backBtn.textContent = '‹ ' + s.code;   // back goes to the subject, not the top
+  mdInto(body, n.md);
+  practice.hidden = !questionsOf(n).length;   // no questions, no practice
+
+  // Wide tables scroll inside their own box instead of stretching the page.
+  body.querySelectorAll('table').forEach(t => {
+    const box = document.createElement('div');
+    box.className = 'scroll-x';
+    t.replaceWith(box); box.appendChild(t);
+  });
 
   document.body.classList.add('reading');
   window.scrollTo(0, 0);
@@ -941,8 +1013,121 @@ function openNote(n, s) {
 
 function closeRead() {
   document.body.classList.remove('reading');
+  practice.hidden = true;
   current = null;
 }
+
+// ---- Practice: the questions every note already ends with. ----------------
+// Nothing is parsed and nothing is asked of an API here: the Mac pulled the
+// question/answer pairs out of the markdown and shipped them inside DATA. A
+// note with none is never offered practice, so no screen here can be empty.
+const quiz = document.getElementById('quiz'), qmain = document.getElementById('qmain');
+const qq = document.getElementById('qq'), qa = document.getElementById('qa');
+const qcount = document.getElementById('qcount'), qsrc = document.getElementById('qsrc');
+const qtitle = document.getElementById('qtitle'), qfill = document.querySelector('#qbar i');
+const qshow = document.getElementById('qshow'), qright = document.getElementById('qright');
+const qwrong = document.getElementById('qwrong'), qretry = document.getElementById('qretry');
+const qagain = document.getElementById('qagain'), practice = document.getElementById('practice');
+
+const questionsOf = n => (n && n.questions) || [];
+
+// One note or the whole subject: the same flat list either way, so nothing
+// below this knows which kind of quiz it is running. Each item remembers the
+// lecture it came from, so a subject quiz can say where to go back and read.
+function quizItems(s, note) {
+  return (note ? [note] : s.notes)
+    .flatMap(n => questionsOf(n).map(x => ({q: x.q, a: x.a, from: n.title})));
+}
+
+let qz = null;   // {key, items, order, i, marks}; order holds indexes into items
+
+// localStorage throws outright in private mode, so every touch is guarded. The
+// cost of a failure is losing your place, never the page.
+function qLoad(key, n) {
+  try {
+    const s = JSON.parse(localStorage.getItem(key));
+    // Notes get regenerated. A half-finished run against a different set of
+    // questions means nothing, so drop it rather than resume the wrong thing.
+    if (s && s.n === n && Array.isArray(s.order) && Array.isArray(s.marks)) return s;
+  } catch (e) {}
+  return null;
+}
+
+function qSave() {
+  if (!qz) return;
+  try {
+    localStorage.setItem(qz.key, JSON.stringify(
+      {n: qz.items.length, order: qz.order, i: qz.i, marks: qz.marks}));
+  } catch (e) {}
+}
+
+function qOpen(s, note) {
+  const items = quizItems(s, note);
+  if (!items.length) return;
+  const key = 'recarve.quiz.' + s.code + (note ? '/' + note.title : '');
+  const was = qLoad(key, items.length);
+  qz = {key, items, oneNote: !!note, order: was ? was.order : items.map((_, k) => k),
+        i: was ? was.i : 0, marks: was ? was.marks : []};
+  qtitle.textContent = note ? note.title : 'Practice ' + s.name;
+  quiz.hidden = false;
+  qStep();
+}
+
+function qStep() {
+  const done = qz.i >= qz.order.length;
+  qa.hidden = true;
+  qshow.hidden = done; qright.hidden = true; qwrong.hidden = true;
+  qretry.hidden = true; qagain.hidden = !done;
+  qfill.style.width = Math.round(qz.i / qz.order.length * 100) + '%';
+  qmain.scrollTop = 0;
+  if (done) return qScore();
+  const item = qz.items[qz.order[qz.i]];
+  qcount.textContent = (qz.i + 1) + ' of ' + qz.order.length;   // where you are
+  qsrc.textContent = qz.oneNote ? '' : item.from;
+  mdInto(qq, item.q);
+}
+
+function qScore() {
+  const right = qz.marks.filter(m => m === 1).length;
+  const missed = qz.order.filter((_, k) => qz.marks[k] !== 1);
+  qcount.textContent = 'Finished';
+  qsrc.textContent = '';
+  qq.innerHTML = '<p id="qscore"></p><p id="qsub"></p>';
+  qq.querySelector('#qscore').textContent = right + ' of ' + qz.order.length + ' right';
+  qq.querySelector('#qsub').textContent = missed.length
+    ? 'Go again on the ones you missed, or start the whole set over.'
+    : 'All of them. Nothing left to redo here.';
+  qretry.hidden = !missed.length;
+  qretry.textContent = 'Try the ' + missed.length + ' I missed';
+}
+
+// A round is a set of items; the retry round is just a shorter one.
+function qRound(order) {
+  qz.order = order; qz.i = 0; qz.marks = [];
+  qSave(); qStep();
+}
+
+// The answer is never on screen until it is asked for; marking is what moves
+// you on, so you cannot skip past a question without saying how it went.
+function qReveal() {
+  mdInto(qa, qz.items[qz.order[qz.i]].a);
+  qa.hidden = false;
+  qshow.hidden = true; qright.hidden = false; qwrong.hidden = false;
+}
+function qMark(ok) { qz.marks[qz.i] = ok ? 1 : 0; qz.i++; qSave(); qStep(); }
+function qRetry() { qRound(qz.order.filter((_, k) => qz.marks[k] !== 1)); }
+function qAgain() { qRound(qz.items.map((_, k) => k)); }
+
+qshow.onclick = qReveal;
+qright.onclick = () => qMark(true);
+qwrong.onclick = () => qMark(false);
+qretry.onclick = qRetry;
+qagain.onclick = qAgain;
+document.getElementById('qexit').onclick = () => { quiz.hidden = true; };
+practice.onclick = () => {
+  const s = subjectOf(view.code);
+  if (s && current) qOpen(s, current);
+};
 
 function plain(md) {
   return md.replace(/^#+ /gm, '').replace(/\*\*/g, '')
@@ -1265,12 +1450,7 @@ ask.onclick = async () => {
     });
     const data = await res.json();
     if (!res.ok) throw new Error(data.error || res.status);
-    out.innerHTML = marked.parse(data.text);
-    if (window.renderMathInElement) {
-      renderMathInElement(out, {delimiters: [
-        {left:'$$', right:'$$', display:true}, {left:'$', right:'$', display:false},
-      ], throwOnError: false});
-    }
+    mdInto(out, data.text);
   } catch (err) {
     // The static export has no server, so say that rather than "failed".
     out.textContent = String(err).includes('JSON') || String(err).includes('Failed to fetch')
@@ -1297,6 +1477,59 @@ route();
 """
 
 
+# A note's questions live in <details><summary>Answer</summary> blocks. The
+# lecture transcript at the bottom is a <details> too, which is why the summary
+# text has to say "answer" before a block counts as one.
+ANSWER_BLOCK = re.compile(
+    r"<details[^>]*>\s*<summary[^>]*>(?P<head>.*?)</summary>(?P<body>.*?)</details>",
+    re.S | re.I,
+)
+# "**3. State the power rule**", "Q3: ...", "3) ..." -- the number is decoration.
+NUMBERED = re.compile(r"^(?:Q(?:uestion)?\s*)?\d+\s*[.):]\s*", re.I)
+
+
+def _question_above(text):
+    """The question sitting directly above an answer block, undecorated."""
+    lines, head = [], ""
+    for line in reversed(text.rstrip().splitlines()):
+        s = line.strip()
+        if not s:
+            break
+        if s.startswith("#"):
+            # "### Q2. State the power rule" is itself the question; "## Questions"
+            # is only the section it lives in. Numbering is what tells them apart.
+            s = s.lstrip("#").strip()
+            head = s if NUMBERED.match(s.strip("*_ ")) else ""
+            break
+        lines.insert(0, s)
+    q = (" ".join(lines) or head).strip("*_ ").strip()
+    return NUMBERED.sub("", q).strip("*_ ").strip()
+
+
+def parse_questions(md):
+    """The exam questions already in a note, as [{"q": ..., "a": ...}, ...].
+
+    Notes are model-generated, so the shape wanders: the heading is "## Questions"
+    in a lecture and "## Likely questions" in a revision sheet, and the question
+    itself may be bold, numbered, a sub-heading, or none of those. The one thing
+    every version does is put an answer block directly under its question, so
+    that pair is what this keys on rather than any heading.
+
+    Deliberately forgiving: anything it cannot read it drops. A note with nothing
+    parseable comes back empty and the phone offers no practice for it, which is
+    the point -- an empty quiz is worse than no quiz.
+    """
+    out, pos = [], 0
+    for m in ANSWER_BLOCK.finditer(md or ""):
+        before, pos = md[pos:m.start()], m.end()
+        if "answer" not in m.group("head").lower():
+            continue
+        q, a = _question_above(before), m.group("body").strip()
+        if q and a:
+            out.append({"q": q, "a": a})
+    return out
+
+
 def build_data(library, relative_to):
     """The whole library as plain data: one entry per subject, empty ones too.
 
@@ -1308,7 +1541,9 @@ def build_data(library, relative_to):
     there before they can add a chemistry recording to it.
 
     `kind` separates the revision sheet from the lectures so the phone can
-    group them without matching on the title text.
+    group them without matching on the title text. `questions` is the note's own
+    exam questions, parsed out here so the phone can quiz from them without
+    parsing markdown or costing an API call.
     """
     lib = Path(library)
     data = []
@@ -1317,9 +1552,13 @@ def build_data(library, relative_to):
         notes, uploads = [], []
         rev = folder / "revision.md"
         if rev.is_file():
-            notes.append({"title": "Revision sheet", "kind": "revision", "md": rev.read_text()})
+            text = rev.read_text()
+            notes.append({"title": "Revision sheet", "kind": "revision", "md": text,
+                          "questions": parse_questions(text)})
         for md in sorted((folder / "lectures").glob("*.md")):
-            notes.append({"title": md.stem, "kind": "lecture", "md": md.read_text()})
+            text = md.read_text()
+            notes.append({"title": md.stem, "kind": "lecture", "md": text,
+                          "questions": parse_questions(text)})
         if (folder / "uploads").is_dir():
             for f in sorted((folder / "uploads").glob("*")):
                 uploads.append({"name": f.name, "path": os.path.relpath(f, relative_to)})
@@ -2390,6 +2629,35 @@ def selftest():
     assert guess_subject("bio-and-math.pdf") == "MC1101"
     # 'bio' and 'iks' are both 3 chars, so nothing breaks the tie -> refuse to guess.
     assert guess_subject("bio-iks-combined.pdf") is None, "ambiguous filename must not be filed"
+
+    # ---- Practice mode reads the questions the notes already carry. ----
+    note = (
+        "# Maths\n\n## Summary\n\nlimits.\n\n## Questions\n\n"
+        "**1. What is the limit definition of $f'(x)$?**\n\n"
+        "<details><summary>Answer</summary>\n\n"
+        "$$f'(x) = \\lim_{h \\to 0} \\frac{f(x+h)-f(x)}{h}$$\n\n</details>\n\n"
+        "### Q2. State the power rule\n\n"                     # question as a heading
+        "<details><summary>Answer</summary>\n\n$nx^{n-1}$\n\n</details>\n\n"
+        "**Q3: Derive it from first principles.**\n"           # no blank line, colon
+        "<details><summary>Answer</summary>\n\nExpand and cancel.\n\n</details>\n\n"
+        "---\n\n<details><summary>Full transcript</summary>\n\n```\n[00:00] hi\n```\n\n</details>\n"
+    )
+    qs = parse_questions(note)
+    assert len(qs) == 3, f"expected 3 questions, got {[q['q'] for q in qs]}"
+    assert qs[0]["q"] == "What is the limit definition of $f'(x)$?", qs[0]["q"]
+    assert qs[1]["q"] == "State the power rule", qs[1]["q"]
+    assert qs[2]["q"] == "Derive it from first principles.", qs[2]["q"]
+    assert "\\lim" in qs[0]["a"], qs[0]["a"]
+    # Every lecture ends in a <details> holding the transcript. It is not a question.
+    assert all("[00:00]" not in q["a"] for q in qs), "the transcript leaked into the quiz"
+
+    # Malformed notes offer no practice at all rather than an empty quiz.
+    assert parse_questions("") == []
+    assert parse_questions("## Questions\n\n1. Where is the answer block?\n") == []
+    assert parse_questions("## Questions\n\n<details><summary>Answer</summary>\n\nx\n</details>") \
+        == [], "an answer with no question above it is not a question"
+    assert parse_questions("**1. Unclosed?**\n\n<details><summary>Answer</summary>\n\nno end") == []
+    assert parse_questions("**1. Empty?**\n\n<details><summary>Answer</summary></details>") == []
 
     print("selftest ok")
 

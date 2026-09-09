@@ -88,8 +88,10 @@ def test_serving_makes_the_library_before_it_exports_it(tmp_path):
 
 DATA_FIXTURE = [
     {"code": "MC1101", "name": "Mathematics 1", "uploads": [],
-     "notes": [{"title": "week1", "kind": "lecture", "md": "# limits"},
-               {"title": "Revision sheet", "kind": "revision", "md": "# all"}]},
+     "notes": [{"title": "week1", "kind": "lecture", "md": "# limits",
+                "questions": [{"q": "q1", "a": "a1"}, {"q": "q2", "a": "a2"}]},
+               {"title": "Revision sheet", "kind": "revision", "md": "# all",
+                "questions": [{"q": "q3", "a": "a3"}]}]},
     {"code": "CY1107", "name": "Chemistry", "notes": [], "uploads": []},
 ]
 
@@ -171,6 +173,46 @@ writes = [];
 busy('transcribing');
 assert.ok(wrote(['textContent', 'transcribing']));
 assert.ok(wrote(['()', 'on']), 'busy() must show the strip');
+
+// ---- Practice, driven the way a student does it. ----
+// The stub swallows an onclick assigned to a proxy, so this calls the handlers
+// by name; test_practice_is_wired_up covers the assignments themselves.
+const mc = DATA[0];
+assert.equal(quizItems(mc, null).length, 3, 'a subject quiz draws from every note');
+assert.equal(quizItems(mc, mc.notes[0]).length, 2, 'a note quiz draws from that note');
+assert.equal(quizItems(mc, null)[2].from, 'Revision sheet', 'items say where they came from');
+
+// A subject with no questions anywhere must not open an empty quiz.
+assert.equal(quizItems(DATA[1], null).length, 0);
+qOpen(DATA[1], null);
+assert.equal(qz, null, 'an empty quiz must never open');
+
+// One question at a time, with the answer withheld until it is asked for.
+writes = [];
+qOpen(mc, mc.notes[0]);
+assert.ok(wrote(['textContent', '1 of 2']), 'progress through the quiz must be visible');
+assert.ok(wrote(['innerHTML', 'q1']), 'the question is on screen');
+assert.ok(!wrote(['innerHTML', 'a1']), 'the answer must stay hidden until asked for');
+qReveal();
+assert.ok(wrote(['innerHTML', 'a1']), 'showing the answer reveals it');
+
+// Self-marked: one right, one wrong, then a score and a retry of just the miss.
+qMark(true);
+assert.equal(qz.i, 1, 'marking moves on');
+assert.ok(wrote(['textContent', '2 of 2']), 'the counter follows');
+qMark(false);
+assert.ok(wrote(['textContent', '1 of 2 right']), 'the run ends with a score');
+qRetry();
+assert.deepEqual(qz.order, [1], 'retry runs only what was missed');
+writes = [];
+qReveal(); qMark(true);
+assert.ok(wrote(['textContent', '1 of 1 right']), 'a clean retry scores full marks');
+
+// localStorage is absent here, which is exactly how it behaves in private
+// mode: it throws. Nothing above may have noticed.
+qAgain();
+assert.equal(qz.i, 0, 'the quiz works with no storage at all');
+assert.equal(qz.order.length, 2);
 """
 
 
@@ -189,6 +231,34 @@ def test_the_router_maps_hashes_to_levels(tmp_path):
     f.write_text(STUB + SCRIPT.replace("__DATA__", json.dumps(DATA_FIXTURE)) + CHECKS)
     r = subprocess.run([NODE, str(f)], capture_output=True, text=True)
     assert r.returncode == 0, r.stdout + r.stderr
+
+
+def test_practice_is_wired_up():
+    """The node stub cannot see an onclick assigned to a proxy, so the checks
+    above drive the handlers by name. This is the other half: that the buttons
+    are actually attached to them."""
+    for wiring in ("qshow.onclick = qReveal", "qright.onclick = () => qMark(true)",
+                   "qwrong.onclick = () => qMark(false)", "qretry.onclick = qRetry",
+                   "qagain.onclick = qAgain", "practice.onclick = ", "b.onclick = () => qOpen(s, null)"):
+        assert wiring in notes.PAGE, f"practice button not wired: {wiring}"
+
+
+def test_a_note_ships_the_questions_it_already_contains(tmp_path):
+    """Quiz mode costs no API call: the questions are parsed out of the note on
+    the way to the phone, and a note without any offers no practice."""
+    folder = tmp_path / "library" / "MC1101-Mathematics-1"
+    (folder / "lectures").mkdir(parents=True)
+    (folder / "lectures" / "week1.md").write_text(
+        "## Questions\n\n**1. Define a limit.**\n\n"
+        "<details><summary>Answer</summary>\n\nWhat $f(x)$ approaches.\n\n</details>\n\n"
+        "<details><summary>Full transcript</summary>\n\n```\n[00:00] hi\n```\n\n</details>\n")
+    (folder / "lectures" / "week2.md").write_text("## Summary\n\nno questions here\n")
+
+    data = notes.build_data(tmp_path / "library", tmp_path)
+    got = {n["title"]: n["questions"] for n in
+           next(s for s in data if s["code"] == "MC1101")["notes"]}
+    assert got["week1"] == [{"q": "Define a limit.", "a": "What $f(x)$ approaches."}]
+    assert got["week2"] == [], "a note with no questions must offer no practice"
 
 
 # The strip is CSS, so this is the one thing here that reads the source rather
