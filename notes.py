@@ -1659,6 +1659,12 @@ def build_server(args):
                 jobs.add(leftover, code, "audio")
                 log(f"re-queued {leftover.name} from a previous run", "resume")
 
+    # The only two things the page ever wants off disk: the built page itself
+    # and the uploads it links to. Approval says you are a classmate, not that
+    # you may read .env -- which holds the API key and the cookie secret -- or
+    # .git, or the source. Serving the repo is how both walked out.
+    servable = (Path(args.out).resolve().parent, Path(args.library).resolve())
+
     class Handler(SimpleHTTPRequestHandler):
         def log_message(self, fmt, *a):
             if args.verbose:
@@ -1668,6 +1674,13 @@ def build_server(args):
             if path.split("?")[0] in ("/", "/index.html"):
                 return str(args.out)
             return super().translate_path(path)
+
+        def send_head(self):
+            """Every static file, GET and HEAD alike, comes through here."""
+            f = Path(self.translate_path(self.path)).resolve()
+            if not any(f == d or d in f.parents for d in servable):
+                return self.send_error(404)
+            return super().send_head()
 
         def parse_request(self):
             """The gate. Every request passes through here, whatever the verb,

@@ -309,6 +309,21 @@ def test_the_first_joiner_is_the_admin_and_can_read(server):
     pytest.admin_cookie = cookie
 
 
+def test_being_let_in_is_not_permission_to_read_the_repo(server):
+    """Approval buys you the library, not the machine it runs on.
+
+    .env holds ANTHROPIC_API_KEY and RECARVE_SECRET; with the latter any
+    session can be minted. The admin is the most privileged session there is,
+    so if it cannot fetch these, no member can.
+    """
+    for path in ["/.env", "/notes.py", "/.git/config", "/backend/",
+                 "/supabase/migrations/0002_profiles_rls.sql"]:
+        code, _, _ = call(server, "GET", path, cookie=pytest.admin_cookie)
+        assert code == 404, f"GET {path} answered {code}"
+        code, _, _ = call(server, "HEAD", path, cookie=pytest.admin_cookie)
+        assert code == 404, f"HEAD {path} answered {code}"
+
+
 def test_a_pending_joiner_reads_nothing(server):
     status, body, cookie = join(server, "Bilal", "24U002")
     assert (status, body) == (200, {"status": "pending", "admin": False})
@@ -350,6 +365,15 @@ def test_the_admin_can_see_and_approve_the_queue(server):
     # Same cookie as before the approval; only the row changed.
     code, data, _ = call(server, "GET", "/data", cookie=pytest.pending_cookie)
     assert code == 200 and json.loads(data)["subjects"][0]["code"] == "MC1101"
+
+
+def test_an_approved_member_is_still_not_an_admin(server):
+    """Bilal is approved now, so the gate lets him through -- and is_admin is
+    the only thing left between him and the approval queue."""
+    for method, path, body in [("GET", "/admin", None), ("GET", "/pending", None),
+                               ("POST", "/approve", {"id": "x"})]:
+        code, _, _ = call(server, method, path, body, cookie=pytest.pending_cookie)
+        assert code == 403, f"{method} {path} answered {code} to an ordinary member"
 
 
 def test_blocking_shuts_the_door_on_the_next_request(server):
