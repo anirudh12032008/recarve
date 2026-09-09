@@ -101,6 +101,24 @@ def test_every_control_takes_the_page_font(selector):
         f"{selector} falls back to the UA default without it"
 
 
+def test_the_role_picker_has_a_boundary_you_can_see():
+    """WCAG 1.4.11 wants 3:1 for the edge of a control. --line is 1.24:1 on the
+    ground here, and with a transparent background mobile Safari draws no
+    arrow either -- so the one control that can promote anybody to admin read
+    as the static text beside it."""
+    token = re.search(r"border:1px solid var\((--[\w-]+)\)", rule(".row select")).group(1)
+    for mode, tokens in (("light", LIGHT), ("dark", DARK)):
+        ratio = contrast(tokens[token], tokens["--bg"])
+        assert ratio >= 3, f"the picker's only edge is {ratio:.2f}:1 in {mode}"
+
+
+def test_the_admin_screen_has_a_way_back():
+    """It is reached by leaving the app entirely -- two full-page navigations
+    out of the SPA -- into a page with no tab bar and no header. In an
+    installed PWA there was nothing on screen to tap."""
+    assert 'href="/"' in notes.ADMIN_BODY, "no way back to the library"
+
+
 def test_a_name_with_no_spaces_in_it_cannot_push_the_gate_sideways():
     """Names are whatever the joiner typed, up to 80 characters, no format
     check -- and an email address in the Name box is the ordinary way one
@@ -221,5 +239,59 @@ CHECKS = """
 def test_a_refused_pending_leaves_the_admin_something_to_read(tmp_path):
     f = tmp_path / "admin.js"
     f.write_text(STUB + ADMIN_SCRIPT + CHECKS)
+    r = subprocess.run([NODE, str(f)], capture_output=True, text=True)
+    assert r.returncode == 0, r.stdout + r.stderr
+
+
+# ------------------------------------------- what the join button does meanwhile
+
+JOIN_SCRIPT = re.search(r"<script>\n(.*)\n</script>", notes.JOIN_BODY, re.S).group(1)
+
+JOIN_STUB = """
+const assert = require('node:assert');
+const btn = {disabled: false, textContent: 'Join'};
+const form = {onsubmit: null, querySelector: () => btn};
+const err = {textContent: ''};
+const boxes = {};
+const document = {getElementById: id => id === 'f' ? form : id === 'err' ? err
+                                      : (boxes[id] = boxes[id] || {value: ''})};
+let reloaded = 0;
+const location = {reload: () => { reloaded++; }};
+// The request is held open, because the whole point is what the button says
+// while it is in flight.
+let land, reply;
+const fetch = () => new Promise(res => { land = () => res(reply); });
+const answer = (ok, body) => ({ok, status: ok ? 200 : 409, json: async () => body});
+"""
+
+JOIN_CHECKS = """
+(async () => {
+  const first = form.onsubmit({preventDefault() {}});
+  assert.equal(btn.disabled, true, 'a second tap during /join races the first');
+  assert.notEqual(btn.textContent, 'Join', 'and the button must say it is working');
+
+  // The 409 the double tap used to produce, and the only one that accuses a
+  // brand new joiner of already existing.
+  reply = answer(false, {error: 'that roll number is already registered'});
+  land(); await first;
+  assert.equal(btn.disabled, false, 'a refusal has to hand the button back');
+  assert.equal(btn.textContent, 'Join');
+  assert.match(err.textContent, /already registered/);
+  assert.equal(reloaded, 0);
+
+  const second = form.onsubmit({preventDefault() {}});
+  reply = answer(true, {});
+  land(); await second;
+  assert.equal(reloaded, 1, 'and a good answer still goes through');
+})().catch(e => { console.error(e); process.exit(1); });
+"""
+
+
+@pytest.mark.skipif(not NODE, reason="needs node")
+def test_the_join_button_says_something_while_it_waits(tmp_path):
+    """/join opens a database connection before it answers. It is the one
+    screen every student sees and the only slow action with no busy state."""
+    f = tmp_path / "join.js"
+    f.write_text(JOIN_STUB + JOIN_SCRIPT + JOIN_CHECKS)
     r = subprocess.run([NODE, str(f)], capture_output=True, text=True)
     assert r.returncode == 0, r.stdout + r.stderr

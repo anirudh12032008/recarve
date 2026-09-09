@@ -188,8 +188,11 @@ const marked = {parse: md => md};
 // `reply = null` hangs, which is what the page sees before a check sets one --
 // including the refresh() it fires on the way in.
 let fetches = [], reply = null;
+// 'gone' is a page with no server behind it at all -- the static export --
+// where fetch itself rejects rather than answering anything.
 const fetch = (url, init) => {
   fetches.push([url, init]);
+  if (reply === 'gone') return Promise.reject(new TypeError('Failed to fetch'));
   return reply ? Promise.resolve(reply) : new Promise(() => {});
 };
 const answer = (ok, body) => ({ok, status: ok ? 200 : 503, json: async () => body});
@@ -197,6 +200,13 @@ const setInterval = () => 0, setTimeout = () => 0, clearInterval = () => {};
 """
 
 CHECKS = """
+// Nothing has answered /data yet -- the refresh() the script fired on the way
+// in is still hanging on `reply = null`. The Add button is already away: it is
+// shown on an answer, not hidden on one, so a student never gets the window in
+// which it is there and /upload would 403 the tap.
+assert.equal(ROLE, null, 'nobody has a role until the server gives them one');
+assert.equal(fabEl.hidden, true, 'the Add button starts hidden, not shown');
+
 // Loading was the test: the script called seedHistory() on its way in, so the
 // deep link that arrived as a single entry already has every step above it
 // under it. Delete that call and back leaves the app in one press.
@@ -673,6 +683,41 @@ assert.equal(fabEl.hidden, false, 'and a trusted member gets the Add button back
 onSelectionChange();
 assert.ok(askCls.includes('+on'), 'a trusted member is offered Explain');
 
+// ---- The two ways /data can fail to say anything.
+// A 503 (Postgres down) or a 403 is an answer, and it is not a yes. Before
+// this, the catch left ROLE alone -- so a student kept the Add button for the
+// life of the page and the sheet's only reply was "/upload needs trusted
+// access", a route name, over "tap an option to try again".
+ROLE = null;
+reply = answer(false, {error: 'the library is offline'});
+await refresh();
+assert.equal(ROLE, null, 'a 503 is not permission');
+fabEl.hidden = null; applyRole();
+assert.equal(fabEl.hidden, true, 'so the Add button stays away');
+askCls.length = 0;
+onSelectionChange();
+assert.ok(!askCls.includes('+on'), 'and Explain, which spends money, is not offered');
+
+// Nothing answered at all, and nothing ever will: that is the exported file,
+// which has no server, nobody to be, and every button worth leaving on.
+ROLE = null;
+reply = 'gone';
+await refresh();
+assert.equal(ROLE, 'trusted', 'a page with no server behind it keeps its buttons');
+assert.equal(fabEl.hidden, false);
+
+// ---- Where the Explain button is allowed to land.
+// At 390px the reading header is 65px tall and the first line of a note sits
+// at y=87, which put the button at 35 -- inside the header, over the back
+// button, with its own onclick eating the tap meant for it.
+rect.top = 87; askEl.style.top = null;
+onSelectionChange();
+assert.equal(askEl.style.top, '70px', 'the button may not land inside the header');
+rect.top = 400;
+onSelectionChange();
+assert.equal(askEl.style.top, '348px', 'and sits at the selection everywhere else');
+rect.top = 100;
+
 // The Me tab is the only screen that explains the roles, so a student has to
 // find there how to get the two things their phone stopped offering above --
 // and somebody who already has them must not be told to go ask for them.
@@ -894,3 +939,23 @@ def test_the_progress_strip_cannot_cover_the_header():
     assert "top:" not in rule, "the strip must not be anchored over the header"
     # + works while you read, so it must not be hidden there.
     assert "body.reading #fab" not in notes.PAGE
+
+
+# Same bug, the other floating thing: #busy was fixed with pointer-events, but
+# #ask has its own onclick and needs the taps it gets, so it is ranked under
+# the sticky header instead. Whatever the clamp does, CSS is the backstop once
+# a scroll carries the button up into the strip.
+def test_the_explain_button_ranks_under_the_reading_header():
+    top = int(re.search(r"\.top\{[^}]*z-index:(\d+)", notes.PAGE, re.S).group(1))
+    ask = int(re.search(r"#ask\{[^}]*z-index:(\d+)", notes.PAGE, re.S).group(1))
+    assert ask < top, (f"#ask at z-index {ask} paints over the header at {top} "
+                       "and eats the tap meant for the back button")
+
+
+def test_a_refused_upload_is_not_told_to_try_again():
+    """403 is the gate's, and its words are a route name and a role. The Me tab
+    already has the sentence for this, and a retry cannot work."""
+    up = re.search(r"function upload\(blob, name\) \{.*?\n\}", notes.PAGE, re.S).group(0)
+    assert "if (xhr.status === 403)" in up, "a no is not a failed upload"
+    assert "Ask an admin for upload access" in up
+    assert "retry ? ' — tap an option to try again' : ''" in up

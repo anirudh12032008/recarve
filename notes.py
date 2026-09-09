@@ -591,7 +591,10 @@ details>:not(summary){padding:0 14px}
   font-size:16px;font-weight:500;display:flex;align-items:center;justify-content:center;
 }
 .dock button.primary{background:var(--accent);color:var(--accent-fg)}
-#ask{position:absolute;z-index:9;display:none;padding:9px 15px;border-radius:10px;
+/* Below .top's 5: it is placed in document coordinates, so a scroll can
+   carry it into the sticky header, where it used to paint over the back
+   button and eat the tap meant for it. */
+#ask{position:absolute;z-index:4;display:none;padding:9px 15px;border-radius:10px;
   background:var(--accent);color:var(--accent-fg);font-size:16px;font-weight:600;
   box-shadow:0 6px 20px rgba(0,0,0,.28)}
 #ask.on{display:block}
@@ -882,7 +885,7 @@ let PENDING = 0;    // classmates waiting for an admin; 0 for everyone else
 // /upload and /explain refuse a student whatever this page shows. A static
 // export has no server and nobody to be, so it assumes the role that leaves
 // every button working and lets each one say what it needs.
-let ROLE = 'trusted';
+let ROLE = null;    // null until /data answers; see refresh() for no server at all
 let JOBS = [];      // the last /jobs answer
 
 // Hue per department prefix. Colour says which subject you are in, so the code
@@ -1721,8 +1724,10 @@ let recorder = null, chunks = [], ticker = null, started = 0, live = false;
 // The server is the source of truth once it is running; a plain exported file
 // keeps the data that was baked into it.
 async function refresh() {
+  let answered = false;
   try {
     const r = await fetch('/data');
+    answered = true;
     // Same road as a dead socket: 403 (blocked mid-visit) and 503 (Postgres
     // down) are both answers Home has to be able to say something about, and
     // returning here left it on "Checking your timetable…" with the job poll
@@ -1752,6 +1757,11 @@ async function refresh() {
     live = false;
     // A page opened as a plain file has no server behind it. Home has to be
     // able to say so rather than sit on "checking…" forever.
+    // Nothing ever answered, so nothing ever will: that is the static export,
+    // which has nobody to be and assumes the role that leaves every button
+    // working. A server that did answer -- 503, 403 -- has said no, and the
+    // Add button stays away rather than 403ing on the tap.
+    if (!answered && ROLE === null) { ROLE = 'trusted'; applyRole(); }
     if (TT === null) { TT = []; render(); }
   }
 }
@@ -1824,9 +1834,10 @@ async function pollJobs() {
 // things the server would refuse anyway -- an Add button that 403s is a worse
 // answer than no Add button.
 // The Explain button is dealt with where it is offered, at the selection.
+const mayAdd = () => ROLE === 'trusted' || ROLE === 'admin';
 function applyRole() {
-  document.getElementById('fab').hidden = ROLE === 'student';
-  if (ROLE === 'student') closeSheet();
+  document.getElementById('fab').hidden = !mayAdd();
+  if (!mayAdd()) closeSheet();
 }
 
 const openSheet = () => {
@@ -1870,15 +1881,20 @@ function upload(blob, name) {
     ptxt.textContent = `${pct}%  ·  ${mb(e.loaded)} of ${mb(e.total)}`;
   };
 
-  const fail = msg => {
+  // Retrying works for a dropped connection; it cannot work for a no.
+  const fail = (msg, retry = true) => {
     prog.classList.add('err');
     fill.style.width = '100%';
-    ptxt.textContent = msg + ' — tap an option to try again';
+    ptxt.textContent = msg + (retry ? ' — tap an option to try again' : '');
   };
 
   xhr.onload = () => {
     let d = {};
     try { d = JSON.parse(xhr.responseText); } catch {}
+    // The gate's own words are a route name and a role. Say what the Me tab
+    // says instead, and do not invite a retry that cannot succeed.
+    if (xhr.status === 403)
+      return fail('Ask an admin for upload access to add notes', false);
     if (xhr.status !== 200) return fail(d.error || `Upload failed (${xhr.status})`);
     fill.style.width = '100%';
     ptxt.textContent = 'Uploaded. Making notes…';
@@ -1957,6 +1973,7 @@ document.getElementById('opt-revise').onclick = async () => {
   }
 };
 
+applyRole();   // hidden until /data says otherwise, not hidden once it says no
 refresh();
 setInterval(pollJobs, 2000);
 setInterval(pullLog, 3000);
@@ -1972,13 +1989,16 @@ document.addEventListener('selectionchange', () => {
   const sel = document.getSelection();
   const text = sel ? sel.toString().trim() : '';
   // Only offer it for a real phrase inside a note, not a stray tap.
-  if (!text || text.length < 12 || !current || ROLE === 'student'
+  if (!text || text.length < 12 || !current || !mayAdd()
       || !body.contains(sel.anchorNode) || panel.classList.contains('on')) {
     return hideAsk();
   }
   picked = text;
   const r = sel.getRangeAt(0).getBoundingClientRect();
-  ask.style.top = (window.scrollY + r.top - 52) + 'px';
+  // Never inside the sticky header: the strip is 65px tall, so this is the
+  // first line under it. Above it the button is only half-visible anyway.
+  ask.style.top = Math.max(window.scrollY + 70,
+                           window.scrollY + r.top - 52) + 'px';
   ask.style.left = Math.max(12, Math.min(window.innerWidth - 130,
                                          r.left + r.width / 2 - 55)) + 'px';
   ask.classList.add('on');
@@ -2908,8 +2928,11 @@ button[disabled]{opacity:.5}
 .row{display:flex;align-items:center;justify-content:space-between;gap:1rem;padding:.75rem 0;
   border-bottom:1px solid var(--line)}
 .row button{width:auto;padding:0 .9rem}
+/* --line is 1.24:1 on the ground, which WCAG 1.4.11 wants at 3:1 for the
+   boundary of a control -- and with no arrow drawn either, the only
+   control on this screen read as static text. --mut is 5.24:1. */
 .row select{width:auto;min-height:44px;font:inherit;font-size:1rem;color:var(--fg);
-  background:transparent;border:1px solid var(--line);border-radius:10px;padding:0 .5rem}
+  background:transparent;border:1px solid var(--mut);border-radius:10px;padding:0 .5rem}
 .row small{display:block;color:var(--mut);font-size:.8rem}
 h2{font-size:1rem;margin:2rem 0 .2rem}
 .by{color:var(--fg);margin:0 0 .35rem}
@@ -2941,6 +2964,12 @@ const $ = i => document.getElementById(i);
 $('f').onsubmit = async e => {
   e.preventDefault();
   $('err').textContent = '';
+  // /join opens a database connection before it replies. Left alone the button
+  // looks dead on mobile data, and the second tap races the first: one wins,
+  // the other comes back 409 and tells the joiner they already exist.
+  const b = $('f').querySelector('button');
+  b.disabled = true;
+  b.textContent = 'Joining\u2026';
   try {
     const res = await fetch('/join', {method: 'POST', headers: {'Content-Type': 'application/json'},
       body: JSON.stringify({name: $('nm').value, roll_no: $('roll').value,
@@ -2949,6 +2978,8 @@ $('f').onsubmit = async e => {
     if (res.ok) return location.reload();
     $('err').textContent = j.error || 'could not join';
   } catch (e) { $('err').textContent = 'no connection to the server'; }
+  b.disabled = false;
+  b.textContent = 'Join';
 };
 </script>
 """
@@ -2987,7 +3018,8 @@ BLOCKED_BODY = """<h1>No access</h1>
 <p>This account has been blocked. Talk to whoever runs the class library.</p>
 """
 
-ADMIN_BODY = r"""<h1>Pending</h1>
+ADMIN_BODY = r"""<p><a href="/">&lsaquo; Back to recarve</a></p>
+<h1>Pending</h1>
 <p>Everyone waiting to be let in.</p>
 <div id="list">loading…</div>
 <h2>Who can do what</h2>

@@ -244,12 +244,14 @@ def test_a_number_nobody_could_ring_is_refused_with_a_reason(bad):
         notes.normalise_phone(bad)
 
 
-def seed_admin(conn, name, roll, days_ago):
+def seed_admin(conn, name, roll, days_ago, role="admin", status="approved"):
+    """An admin by default -- and, with the two keywords, one of the people the
+    fallback has to walk past to find them."""
     uid = make_user(conn)
     conn.execute(
         "insert into profiles (id, name, roll_no, status, role, created_at) values "
-        "(%s, %s, %s, 'approved', 'admin', now() - (%s || ' days')::interval)",
-        (uid, name, roll, str(days_ago)),
+        "(%s, %s, %s, %s, %s, now() - (%s || ' days')::interval)",
+        (uid, name, roll, status, role, str(days_ago)),
     )
     return uid
 
@@ -268,6 +270,13 @@ def test_invited_by_falls_back_to_the_admin_who_has_been_here_longest(db):
     """The live invite was minted by the bootstrap, before anybody existed to
     credit it to, so this fallback is the branch that actually runs today."""
     db.execute("delete from profiles")
+    # Both older than either admin, and neither of them is one to credit: this
+    # line goes on a page anyone can load, so an approved student must not be
+    # named as the inviter, and somebody still pending or blocked must not have
+    # their name shown to a stranger at all. Without these two rows the query
+    # answers the same with either filter deleted.
+    seed_admin(db, "Sneha", "I58", 12, role="student")
+    seed_admin(db, "Mallory", "I59", 20, status="pending")
     seed_admin(db, "Anirudh", "I60", 9)
     seed_admin(db, "Vansh", "I61", 2)
     db.execute("delete from invites where code = 'NOAUTHOR'")
@@ -281,11 +290,18 @@ def test_invited_by_falls_back_to_the_admin_who_has_been_here_longest(db):
 def test_a_spent_code_names_the_same_person_a_live_one_does(db):
     """Otherwise the line under the heading is a checker for invite codes."""
     db.execute("delete from profiles")
-    anirudh = seed_admin(db, "Anirudh", "I60", 9)
-    db.execute("delete from invites where code = 'SPENT'")
+    seed_admin(db, "Anirudh", "I60", 9)
+    # Vansh minted both dead codes, and Anirudh is who the fallback names. With
+    # one admin the branch and the fallback answer the same thing either way,
+    # so the clause this is here to guard could be deleted whole.
+    vansh = seed_admin(db, "Vansh", "I61", 2)
+    db.execute("delete from invites where code in ('SPENT', 'EXPIRED')")
     db.execute("insert into invites (code, created_by, expires_at, max_uses, uses) "
-               "values ('SPENT', %s, now() + interval '1 day', 1, 1)", (anirudh,))
+               "values ('SPENT', %s, now() + interval '1 day', 1, 1)", (vansh,))
+    db.execute("insert into invites (code, created_by, expires_at) "
+               "values ('EXPIRED', %s, now() - interval '1 day')", (vansh,))
     assert notes.db_inviter(db, "SPENT") == "Anirudh"
+    assert notes.db_inviter(db, "EXPIRED") == "Anirudh", "and so does one that ran out"
 
 
 def test_nobody_is_named_before_there_is_an_admin(db):
@@ -411,6 +427,20 @@ def test_the_first_joiner_is_the_admin_and_can_read(server):
 
     assert call(server, "GET", "/admin", cookie=cookie)[0] == 200
     pytest.admin_cookie = cookie
+
+
+def test_the_front_door_opens_when_it_cannot_say_who_invited_you(server, monkeypatch):
+    """Who is inviting them is a nicety; being able to join is not. The lookup
+    runs on the owning connection before anybody has a session, so a dropped
+    connection there used to be a 500 on the one page a stranger may see."""
+    def cannot(conn, code):
+        raise psycopg.OperationalError("the connection is closed")
+
+    monkeypatch.setattr(notes, "db_inviter", cannot)
+    status, body, _ = call(server, "GET", "/?code=LETMEIN")
+    assert status == 200, "a missing name may not take the front door down"
+    assert 'id="code"' in body and 'value="LETMEIN"' in body, "the form still fills in"
+    assert "Invited by" not in body, "and simply says nobody"
 
 
 def test_being_let_in_is_not_permission_to_read_the_repo(server):
