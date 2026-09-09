@@ -1,3 +1,6 @@
+import psycopg
+import pytest
+
 from conftest import as_user, as_admin_connection, make_user
 
 
@@ -32,3 +35,55 @@ def test_status_is_constrained(db):
         assert "check" in str(e).lower()
     else:
         raise AssertionError("an invalid status was accepted")
+
+
+def approved(db, admin=False):
+    uid = make_user(db)
+    db.execute(
+        "insert into profiles (id, name, status, is_admin) "
+        "values (%s, 'A', 'approved', %s)", (uid, admin),
+    )
+    return uid
+
+
+def pending(db):
+    uid = make_user(db)
+    db.execute("insert into profiles (id, name) values (%s, 'P')", (uid,))
+    return uid
+
+
+def test_pending_user_sees_only_their_own_profile(db):
+    me = pending(db)
+    approved(db)
+    as_user(db, me)
+    rows = db.execute("select id from profiles").fetchall()
+    assert [str(r[0]) for r in rows] == [me]
+
+
+def test_approved_user_sees_the_whole_class(db):
+    me = approved(db)
+    approved(db)
+    as_user(db, me)
+    assert db.execute("select count(*) from profiles").fetchone()[0] >= 2
+
+
+def test_nobody_can_promote_themselves_to_admin(db):
+    me = approved(db)
+    as_user(db, me)
+    with pytest.raises(psycopg.errors.InsufficientPrivilege), db.transaction():
+        db.execute("update profiles set is_admin = true where id = %s", (me,))
+    as_admin_connection(db)
+    assert db.execute(
+        "select is_admin from profiles where id = %s", (me,)
+    ).fetchone()[0] is False
+
+
+def test_nobody_can_approve_themselves(db):
+    me = pending(db)
+    as_user(db, me)
+    with pytest.raises(psycopg.errors.InsufficientPrivilege), db.transaction():
+        db.execute("update profiles set status = 'approved' where id = %s", (me,))
+    as_admin_connection(db)
+    assert db.execute(
+        "select status from profiles where id = %s", (me,)
+    ).fetchone()[0] == "pending"
