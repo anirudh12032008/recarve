@@ -92,7 +92,10 @@ SUBJECTS = {
     "CY1107": ("Engineering-Chemistry", ["chem", "chemistry", "engg-chem", "cy1107"]),
     "EE1108": ("Basic-Electrical-Electronics", ["beee", "electrical", "electronics", "ee1108"]),
     "ME1109": ("Manufacturing-Science", ["manufact", "manufacturing", "me1109"]),
-    "CY1110": ("Environmental-Science", ["envsci", "env-sci", "environmental", "cy1110"]),
+    # MANIT calls it Environmental Science; students call it EVS or
+    # Environmental Studies. Same course, CY1110.
+    "CY1110": ("Environmental-Science",
+               ["envsci", "env-sci", "environmental", "environmental-studies", "evs", "cy1110"]),
     "BS1111": ("Biology-for-Engineers", ["bio", "biology", "bs1111"]),
     "HS1112": ("Indian-Knowledge-Systems", ["iks", "hs1112"]),
     "EE1125": ("BEEE-Lab", ["beee-lab", "ee1125"]),
