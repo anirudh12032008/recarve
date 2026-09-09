@@ -317,6 +317,9 @@ PAGE = """<!doctype html>
 <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
 <title>recarve — Section I</title>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/marked/15.0.7/marked.min.js"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.11/katex.min.css">
+<script defer src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.11/katex.min.js"></script>
+<script defer src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.11/contrib/auto-render.min.js"></script>
 <style>
 :root{--bg:#fff;--fg:#16181d;--mut:#666e7a;--line:#e3e6ea;--accent:#2f6df6;--card:#f7f8fa}
 @media(prefers-color-scheme:dark){:root{--bg:#14161a;--fg:#e8eaed;--mut:#9aa3ad;--line:#2a2e35;--accent:#7aa2ff;--card:#1b1e24}}
@@ -378,6 +381,18 @@ function render(filter) {
 }
 function show(n) {
   body.innerHTML = marked.parse(n.md);
+  // Notes are full of LaTeX; markdown alone renders it as literal $$ noise.
+  if (window.renderMathInElement) {
+    renderMathInElement(body, {
+      delimiters: [
+        {left: '$$', right: '$$', display: true},
+        {left: '$', right: '$', display: false},
+        {left: '\\\\(', right: '\\\\)', display: false},
+        {left: '\\\\[', right: '\\\\]', display: true},
+      ],
+      throwOnError: false,  // a malformed formula shows as red text, not a blank page
+    });
+  }
   body.scrollIntoView();
 }
 q.oninput = () => render(q.value);

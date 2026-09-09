@@ -3,5 +3,4 @@ __pycache__/
 library/
 site/
 .env
-supabase/.temp/
-.pytest_cache/
+*.partial.json
