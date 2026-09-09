@@ -1313,6 +1313,299 @@ class Jobs:
         self._set(job, "done", "notes ready")
 
 
+# --------------------------------------------------------------------------
+# Auth: an invite code gets you in, an admin lets you read.
+#
+# The Postgres schema in supabase/migrations owns every decision here; this is
+# a thin client over profiles/invites and the join_with_invite and
+# approve_uploader functions. Every query runs as the caller, using the same
+# request.jwt.claims setting PostgREST populates in production, so the RLS
+# policies are what actually enforce access. The checks in the handler decide
+# which screen you see; they are not the only thing standing between a pending
+# joiner and the notes.
+
+import hashlib
+import hmac
+import http.cookies
+import json
+import secrets
+import uuid
+
+import psycopg
+
+DB_URL = os.environ.get("RECARVE_DB_URL", "postgresql:///recarve_test")
+SESSION_COOKIE = "recarve_session"
+ENV_PATH = Path(__file__).resolve().parent / ".env"
+
+# Requests are gated before they are dispatched, so a route added later is
+# protected whether or not whoever adds it remembers auth exists. These are the
+# only paths that opt out, and adding to this set is the deliberate act.
+PUBLIC_PATHS = {"/join"}
+
+
+def session_secret(env_path=ENV_PATH):
+    """The cookie-signing key, minted into .env the first time it is wanted.
+
+    Regenerating it is the logout-everyone button: every outstanding cookie
+    stops verifying at once.
+    """
+    got = os.environ.get("RECARVE_SECRET")
+    if got:
+        return got.encode()
+    got = secrets.token_urlsafe(32)
+    with env_path.open("a") as fh:
+        fh.write(f"\nRECARVE_SECRET={got}\n")
+    os.environ["RECARVE_SECRET"] = got
+    return got.encode()
+
+
+def sign_session(profile_id, secret):
+    sig = hmac.new(secret, str(profile_id).encode(), hashlib.sha256).hexdigest()
+    return f"{profile_id}.{sig}"
+
+
+def unsign_session(raw, secret):
+    """The profile id inside a cookie, or None if we did not sign it.
+
+    The cookie is readable -- it is just an id -- but not writable: without the
+    secret you cannot produce the tag for an id you did not receive.
+    """
+    profile_id, _, sig = (raw or "").partition(".")
+    if not profile_id or not sig:
+        return None
+    want = hmac.new(secret, profile_id.encode(), hashlib.sha256).hexdigest()
+    return profile_id if hmac.compare_digest(sig, want) else None
+
+
+def act_as(conn, user_id, local=False):
+    """Run subsequent statements as `user_id`, so RLS applies to them.
+
+    user_id=None drops back to the connection's own role, which owns the tables
+    and therefore bypasses RLS -- setup and the first-admin promotion only.
+    """
+    claims = json.dumps({"sub": str(user_id), "role": "authenticated"}) if user_id else ""
+    conn.execute("select set_config('request.jwt.claims', %s, %s)", (claims, local))
+    conn.execute("select set_config('role', %s, %s)",
+                 ("authenticated" if user_id else "none", local))
+
+
+def db(user_id=None):
+    """A fresh connection, optionally already acting as `user_id`."""
+    conn = psycopg.connect(DB_URL, autocommit=True)
+    if user_id:
+        act_as(conn, user_id)
+    return conn
+
+
+def db_join(conn, code, name, roll_no):
+    """Put a new person through join_with_invite. (id, status, is_admin) or None.
+
+    None means the code was wrong, expired or used up -- and nothing is left
+    behind, not the auth row and not the invite use.
+    """
+    user_id = str(uuid.uuid4())
+    result = None
+    with conn.transaction() as tx:
+        # Serialises the count below, so two people joining in the same instant
+        # on day zero cannot both come out as admin.
+        conn.execute("select pg_advisory_xact_lock(hashtext('recarve-join'))")
+        conn.execute(
+            "insert into auth.users (id, instance_id, aud, role, email) values "
+            "(%s, '00000000-0000-0000-0000-000000000000', 'authenticated', "
+            "'authenticated', %s)",
+            (user_id, f"{user_id}@recarve.local"),
+        )
+        act_as(conn, user_id, local=True)
+        ok = conn.execute("select join_with_invite(%s, %s, %s)",
+                          (code, name, roll_no)).fetchone()[0]
+        if not ok:
+            raise psycopg.Rollback(tx)
+        # The first person in is the admin. Nobody can approve anybody
+        # otherwise, so the invite that bootstraps the class also elects them.
+        act_as(conn, None, local=True)
+        if conn.execute("select count(*) from profiles").fetchone()[0] == 1:
+            conn.execute(
+                "update profiles set status = 'approved', is_admin = true where id = %s",
+                (user_id,),
+            )
+        row = conn.execute("select status, is_admin from profiles where id = %s",
+                           (user_id,)).fetchone()
+        result = (user_id, row[0], row[1])
+    return result
+
+
+def db_principal(conn, profile_id):
+    """Who a session belongs to, or None. Read as themselves, so a deleted or
+    never-created profile comes back empty rather than trusted."""
+    try:
+        row = conn.execute(
+            "select name, status, is_admin from profiles where id = %s", (profile_id,)
+        ).fetchone()
+    except psycopg.errors.InvalidTextRepresentation:
+        return None  # signed, but not by a version of us that minted uuids
+    if not row:
+        return None
+    return {"id": str(profile_id), "name": row[0], "status": row[1], "admin": row[2]}
+
+
+def db_pending(conn):
+    return [
+        {"id": str(r[0]), "name": r[1], "roll_no": r[2]}
+        for r in conn.execute(
+            "select id, name, roll_no from profiles where status = 'pending' "
+            "order by created_at"
+        )
+    ]
+
+
+def db_approve(conn, profile_id):
+    """Let someone in, and publish whatever they uploaded while waiting.
+
+    Both statements are admin-gated inside the database -- the update by the
+    "admins manage profiles" policy, approve_uploader by its own is_admin()
+    check -- so this fails for a non-admin connection even if the handler let
+    it through.
+    """
+    conn.execute("update profiles set status = 'approved' where id = %s", (profile_id,))
+    return conn.execute("select approve_uploader(%s)", (profile_id,)).fetchone()[0]
+
+
+def db_record_upload(conn, user_id, code, filename, dest, is_audio):
+    """Remember who sent a file, so the library can say so later."""
+    if is_audio:
+        conn.execute(
+            "insert into lectures (subject_code, uploader_id, title, audio_key) "
+            "values (%s, %s, %s, %s)",
+            (code, user_id, Path(filename).stem, str(dest)),
+        )
+    else:
+        conn.execute(
+            "insert into materials (subject_code, uploader_id, filename, file_key, "
+            "size_bytes) values (%s, %s, %s, %s, %s)",
+            (code, user_id, filename, str(dest), dest.stat().st_size),
+        )
+
+
+def db_bootstrap(conn):
+    """The way in, on an empty database. Returns a usable invite code, or None
+    once somebody has joined and can hand out their own."""
+    if conn.execute("select count(*) from profiles").fetchone()[0]:
+        return None
+    row = conn.execute(
+        "select code from invites where expires_at > now() and uses < max_uses limit 1"
+    ).fetchone()
+    if row:
+        return row[0]
+    code = os.environ.get("RECARVE_BOOTSTRAP_INVITE") or secrets.token_hex(4)
+    conn.execute(
+        "insert into invites (code, expires_at) values (%s, now() + interval '30 days') "
+        "on conflict (code) do nothing",
+        (code,),
+    )
+    return code
+
+
+GATE_PAGE = r"""<!doctype html>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>recarve — Section I</title>
+<style>
+:root{color-scheme:light dark;--bg:#fcfcfd;--fg:#14161b;--mut:#656b76;--line:#e1e4ea;--accent:#3355e8}
+@media (prefers-color-scheme:dark){
+  :root{--bg:#0f1115;--fg:#e7e9ee;--mut:#98a0ad;--line:#262a32;--accent:#7a92ff}}
+*{box-sizing:border-box}
+body{margin:0;min-height:100dvh;display:grid;place-items:center;padding:24px;background:var(--bg);
+  color:var(--fg);font:16px/1.5 -apple-system,BlinkMacSystemFont,"Segoe UI",system-ui,sans-serif}
+main{width:100%;max-width:23rem}
+h1{font-size:1.45rem;margin:0 0 .3rem;letter-spacing:-.01em}
+p{color:var(--mut);margin:0 0 1.4rem}
+label{display:block;font-size:.8rem;color:var(--mut);margin:0 0 .3rem}
+input{width:100%;padding:.7rem .8rem;margin:0 0 .9rem;font-size:1rem;border:1px solid var(--line);
+  border-radius:10px;background:transparent;color:var(--fg)}
+input:focus{outline:2px solid var(--accent);outline-offset:-1px;border-color:transparent}
+button{min-height:44px;width:100%;font:600 1rem/1 inherit;border:0;border-radius:10px;
+  background:var(--accent);color:#fff}
+button[disabled]{opacity:.5}
+.err{color:#d1344b;font-size:.88rem;min-height:1.2em;margin:.7rem 0 0}
+.row{display:flex;align-items:center;justify-content:space-between;gap:1rem;padding:.75rem 0;
+  border-bottom:1px solid var(--line)}
+.row button{width:auto;padding:0 .9rem}
+.row small{display:block;color:var(--mut);font-size:.8rem}
+</style>
+<main>__BODY__</main>
+"""
+
+JOIN_BODY = r"""<h1>recarve</h1>
+<p>Section I notes. You need the invite code from someone already in.</p>
+<form id="f">
+  <label for="nm">Name</label><input id="nm" required autocomplete="name">
+  <label for="roll">Roll number</label><input id="roll" required autocomplete="off">
+  <label for="code">Invite code</label><input id="code" required autocomplete="off" autocapitalize="off">
+  <button>Join</button>
+  <p class="err" id="err"></p>
+</form>
+<script>
+const $ = i => document.getElementById(i);
+$('f').onsubmit = async e => {
+  e.preventDefault();
+  $('err').textContent = '';
+  try {
+    const res = await fetch('/join', {method: 'POST', headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify({name: $('nm').value, roll_no: $('roll').value, code: $('code').value})});
+    const j = await res.json().catch(() => ({}));
+    if (res.ok) return location.reload();
+    $('err').textContent = j.error || 'could not join';
+  } catch (e) { $('err').textContent = 'no connection to the server'; }
+};
+</script>
+"""
+
+WAIT_BODY = r"""<h1>Almost in</h1>
+<p>Your request is with the admin. This page lets you through the moment they
+approve you — leave it open, it rechecks itself.</p>
+<script>setTimeout(() => location.reload(), 15000);</script>
+"""
+
+BLOCKED_BODY = """<h1>No access</h1>
+<p>This account has been blocked. Talk to whoever runs the class library.</p>
+"""
+
+ADMIN_BODY = r"""<h1>Pending</h1>
+<p>Everyone waiting to be let in.</p>
+<div id="list">loading…</div>
+<script>
+async function load() {
+  const el = document.getElementById('list');
+  const j = await (await fetch('/pending')).json();
+  if (!j.pending.length) { el.textContent = 'Nobody waiting.'; return; }
+  el.innerHTML = '';
+  for (const p of j.pending) {
+    const row = document.createElement('div');
+    row.className = 'row';
+    const who = document.createElement('div');
+    who.innerHTML = '<b></b><small></small>';
+    // textContent, not innerHTML: the name and roll number are whatever the
+    // joiner typed, and this page is looked at by the one admin account.
+    who.querySelector('b').textContent = p.name;
+    who.querySelector('small').textContent = p.roll_no || '';
+    const btn = document.createElement('button');
+    btn.textContent = 'Approve';
+    btn.onclick = async () => {
+      btn.disabled = true;
+      await fetch('/approve', {method: 'POST', headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify({id: p.id})});
+      load();
+    };
+    row.append(who, btn);
+    el.append(row);
+  }
+}
+load();
+</script>
+"""
+
+
+
 EXPLAIN_PROMPT = """A student is reading their lecture notes and highlighted a passage they do not
 understand. Explain just that passage.
 
@@ -1325,14 +1618,13 @@ Rules:
 - If the passage is too fragmentary to explain, say so and ask what specifically is unclear."""
 
 
-def serve(args):
-    """Serve the library and answer 'explain this' taps from the phone.
+def build_server(args):
+    """Everything serve() needs, assembled but not yet listening.
 
-    The API key never leaves the Mac: the phone posts the highlighted text here
-    and gets prose back.
+    Split out from serve() so a test can drive the real handler over a real
+    socket. An auth gate is only worth what it does in the server that actually
+    runs, so the tests exercise this one rather than a stand-in.
     """
-    import hashlib
-    import json
     from functools import partial
     from http.server import SimpleHTTPRequestHandler, ThreadingHTTPServer
 
@@ -1348,6 +1640,14 @@ def serve(args):
     inbox.mkdir(parents=True, exist_ok=True)
     budget = {"left": args.max_explains}
     jobs = Jobs(args)
+
+    secret = b"" if args.no_auth else session_secret()
+    if not args.no_auth:
+        with db() as conn:
+            first = db_bootstrap(conn)
+        if first:
+            log(f"nobody has joined yet — whoever uses invite code {first} first "
+                f"becomes the admin", "invite")
 
     # The queue lives in memory but the audio lives on disk, so a restart used
     # to strand an upload forever. Anything still in the inbox gets re-queued;
@@ -1369,6 +1669,57 @@ def serve(args):
                 return str(args.out)
             return super().translate_path(path)
 
+        def parse_request(self):
+            """The gate. Every request passes through here, whatever the verb,
+            before BaseHTTPRequestHandler dispatches it.
+
+            Gating here rather than at the top of each handler is the whole
+            point: a route added later is shut by default and has to be named in
+            PUBLIC_PATHS to be reachable, so forgetting about auth leaves the
+            new endpoint closed rather than open. Returning False is the
+            documented way to say "a response has already been sent".
+            """
+            if not super().parse_request():
+                return False
+            self.me = None
+            if args.no_auth:
+                return True
+            try:
+                self.me = self.principal()
+            except psycopg.Error as e:
+                log(f"cannot reach the database: {e}", "auth")
+                self.reply(503, {"error": "the library is offline"})
+                return False
+
+            path = self.path.split("?")[0]
+            if path in PUBLIC_PATHS:
+                return True
+            if self.me and self.me["status"] == "approved":
+                return True
+            # The front page is the one thing an outsider may see, and only so
+            # they can ask to be let in.
+            if path in ("/", "/index.html"):
+                body = JOIN_BODY if not self.me else (
+                    BLOCKED_BODY if self.me["status"] == "blocked" else WAIT_BODY)
+                self.send_html(GATE_PAGE.replace("__BODY__", body))
+                return False
+            self.reply(403, {"error": "you are not approved to read this yet"})
+            return False
+
+        def principal(self):
+            """Whose session this is, re-read from the database every request.
+
+            Not cached in the cookie: blocking someone has to take effect on
+            their next tap, not whenever their cookie happens to expire.
+            """
+            jar = http.cookies.SimpleCookie(self.headers.get("Cookie", ""))
+            morsel = jar.get(SESSION_COOKIE)
+            profile_id = unsign_session(morsel.value, secret) if morsel else None
+            if not profile_id:
+                return None
+            with db(profile_id) as conn:
+                return db_principal(conn, profile_id)
+
         def do_GET(self):
             if self.path == "/data":
                 return self.reply(200, {"subjects": build_data(args.library, args.out.parent),
@@ -1382,9 +1733,25 @@ def serve(args):
                 except OSError:
                     tail = []
                 return self.reply(200, {"lines": tail})
+            if self.path == "/admin":
+                if not self.is_admin():
+                    return self.reply(403, {"error": "admins only"})
+                return self.send_html(GATE_PAGE.replace("__BODY__", ADMIN_BODY))
+            if self.path == "/pending":
+                if not self.is_admin():
+                    return self.reply(403, {"error": "admins only"})
+                with db(self.me["id"]) as conn:
+                    return self.reply(200, {"pending": db_pending(conn)})
             return super().do_GET()
 
+        def is_admin(self):
+            return bool(self.me and self.me["admin"])
+
         def do_POST(self):
+            if self.path == "/join":
+                return self.do_join()
+            if self.path == "/approve":
+                return self.do_approve()
             if self.path == "/upload":
                 return self.do_upload()
             if self.path == "/revise":
@@ -1431,13 +1798,62 @@ def serve(args):
                 # indistinguishable from a network problem.
                 self.reply(500, {"error": f"{type(e).__name__}: {e}"})
 
+        def do_join(self):
+            """The only way to acquire a session. Public by necessity."""
+            if args.no_auth:
+                return self.reply(404, {"error": "this server is running with --no-auth"})
+            if self.me:
+                return self.reply(400, {"error": "you have already joined"})
+            try:
+                n = int(self.headers.get("Content-Length", 0))
+                if n > 4000:
+                    self.close_connection = True  # body left unread; do not reuse
+                    return self.reply(413, {"error": "too much"})
+                req = json.loads(self.rfile.read(n) or b"{}")
+                name = (req.get("name") or "").strip()[:80]
+                roll = (req.get("roll_no") or "").strip()[:40]
+                code = (req.get("code") or "").strip()[:64]
+                if not (name and roll and code):
+                    return self.reply(
+                        400, {"error": "name, roll number and invite code are all required"})
+                with db() as conn:
+                    got = db_join(conn, code, name, roll)
+            except psycopg.errors.UniqueViolation:
+                return self.reply(409, {"error": "that roll number has already joined"})
+            except Exception as e:
+                return self.reply(500, {"error": f"{type(e).__name__}: {e}"})
+            if not got:
+                # One message for wrong, expired and used-up alike: anything more
+                # specific turns this form into an invite-code oracle.
+                return self.reply(403, {"error": "that invite code is wrong, expired or used up"})
+
+            profile_id, status, is_admin = got
+            log(f"{name} ({roll}) joined as {status}" + (", and is the admin" if is_admin else ""),
+                "join")
+            cookie = (f"{SESSION_COOKIE}={sign_session(profile_id, secret)}; Path=/; "
+                      "HttpOnly; SameSite=Lax; Max-Age=31536000")
+            return self.reply(200, {"status": status, "admin": is_admin}, cookie=cookie)
+
+        def do_approve(self):
+            if not self.is_admin():
+                return self.reply(403, {"error": "admins only"})
+            try:
+                n = int(self.headers.get("Content-Length", 0))
+                req = json.loads(self.rfile.read(n) or b"{}")
+                target = (req.get("id") or "").strip()
+                with db(self.me["id"]) as conn:
+                    published = db_approve(conn, target)
+            except Exception as e:
+                return self.reply(500, {"error": f"{type(e).__name__}: {e}"})
+            log(f"{self.me['name']} approved {target}, publishing {published} upload(s)", "admin")
+            return self.reply(200, {"ok": True, "published": published})
+
         def do_upload(self):
             """Raw body upload: filename and subject ride in headers.
 
             Deliberately not multipart -- the cgi module is gone in Python 3.13+
             and a hand-rolled parser is a bug farm for zero benefit here.
             """
-            import json as _json
             import re
             import urllib.parse
 
@@ -1481,6 +1897,11 @@ def serve(args):
                     return  # socket is gone; replying would only raise again
 
                 part.replace(dest)
+                # Who sent it, so the library can say so later. --no-auth has
+                # nobody to credit, which is the whole point of --no-auth.
+                if self.me:
+                    with db(self.me["id"]) as conn:
+                        db_record_upload(conn, self.me["id"], code, name, dest, is_audio)
                 job = jobs.add(dest, code, "audio" if is_audio else "document")
                 return self.reply(200, {"job": job})
             except SystemExit as e:
@@ -1504,24 +1925,52 @@ def serve(args):
             except Exception as e:
                 return self.reply(500, {"error": f"{type(e).__name__}: {e}"})
 
-        def reply(self, code, obj):
+        def send_html(self, html):
+            body = html.encode()
+            try:
+                self.send_response(200)
+                self.send_header("Content-Type", "text/html; charset=utf-8")
+                self.send_header("Content-Length", str(len(body)))
+                self.send_header("Cache-Control", "no-store")
+                self.end_headers()
+                self.wfile.write(body)
+            except (BrokenPipeError, ConnectionResetError):
+                pass
+
+        def reply(self, code, obj, cookie=None):
             body = json.dumps(obj).encode()
             try:
                 self.send_response(code)
                 self.send_header("Content-Type", "application/json")
                 self.send_header("Content-Length", str(len(body)))
+                if cookie:
+                    self.send_header("Set-Cookie", cookie)
                 self.end_headers()
                 self.wfile.write(body)
             except (BrokenPipeError, ConnectionResetError):
                 pass  # phone hung up; nothing useful left to do
 
+    return ThreadingHTTPServer((args.host, args.port), partial(Handler, directory=str(root)))
+
+
+def serve(args):
+    """Serve the library and answer 'explain this' taps from the phone.
+
+    The API key never leaves the Mac: the phone posts the highlighted text here
+    and gets prose back.
+    """
     if not os.environ.get("ANTHROPIC_API_KEY"):
         print("no ANTHROPIC_API_KEY set - Explain will return an error", file=sys.stderr)
 
-    srv = ThreadingHTTPServer((args.host, args.port), partial(Handler, directory=str(root)))
-    log(f"http://{lan_ip()}:{args.port}   <- open this on your phone", "ready")
+    srv = build_server(args)
+    ip = lan_ip()
+    log(f"http://{ip}:{args.port}   <- open this on your phone", "ready")
     log(f"library {args.library}", "ready")
     log(f"log file {LOG_PATH}", "ready")
+    if args.no_auth:
+        log("running with --no-auth: no join screen, no gate, anyone can read", "ready")
+    else:
+        log(f"http://{ip}:{args.port}/admin   <- approve joiners here", "ready")
     if args.host == "0.0.0.0":
         print("  reachable by anyone on this wifi; Explain is capped at "
               f"{args.max_explains} calls this run. Ctrl-C to stop.\n", file=sys.stderr)
@@ -1787,6 +2236,9 @@ def main():
     sv.add_argument("--max-cost", type=float, default=1.00)
     sv.add_argument("--max-explains", type=int, default=300,
                     help="spend guard: stop answering after this many taps")
+    sv.add_argument("--no-auth", action="store_true",
+                    help="no join screen, no database, no gate — the old single-user "
+                         "behaviour, for working on this laptop")
     sv.add_argument("--verbose", action="store_true")
     sv.set_defaults(func=serve)
 
