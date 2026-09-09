@@ -551,6 +551,12 @@ body.reading #fab{display:none}
   margin-right:8px;animation:pulse 1.4s infinite}
 @keyframes pulse{50%{opacity:.25}}
 @media (prefers-reduced-motion:reduce){#rec .dot{animation:none}}
+#prog{margin-top:16px;display:none}
+#prog.on{display:block}
+#prog .bar{height:10px;border-radius:5px;background:var(--surface);overflow:hidden}
+#prog .fill{height:100%;width:0;background:var(--accent);transition:width .18s linear}
+#prog .txt{margin-top:9px;font-size:13px;color:var(--mut);text-align:center}
+#prog.err .fill{background:#e5484d}
 #jobs{padding:0 16px}
 .job{display:flex;align-items:center;gap:11px;padding:11px 12px;margin-top:8px;
   border-radius:11px;background:var(--surface);font-size:16px}
@@ -609,6 +615,10 @@ body:not(.reading) .dock{display:none}
     <button class="opt" id="opt-audio"><b>Upload a recording</b><span>m4a, mp3, mp4</span></button>
     <button class="opt" id="opt-doc"><b>Upload notes or slides</b><span>pdf, txt, md</span></button>
     <button class="opt" id="opt-revise"><b>Make a revision sheet</b><span>from every lecture in this subject</span></button>
+    <div id="prog">
+      <div class="bar"><div class="fill" id="fill"></div></div>
+      <p class="txt" id="ptxt">Uploading…</p>
+    </div>
     <div id="rec">
       <div class="time"><span class="dot"></span><span id="clock">0:00</span></div>
       <button class="opt" id="opt-stop" style="justify-content:center"><b>Stop and upload</b></button>
@@ -826,22 +836,59 @@ async function pollJobs() {
 }
 
 const openSheet = () => { sheet.classList.add('on'); };
-const closeSheet = () => { sheet.classList.remove('on'); rec.classList.remove('on'); };
+const closeSheet = () => {
+  sheet.classList.remove('on'); rec.classList.remove('on'); prog.classList.remove('on');
+};
 document.getElementById('fab').onclick = openSheet;
 document.getElementById('opt-close').onclick = closeSheet;
 sheet.onclick = e => { if (e.target === sheet) closeSheet(); };
 
-async function upload(blob, name) {
-  closeSheet();
-  const r = await fetch('/upload', {
-    method: 'POST',
-    headers: {'X-Filename': encodeURIComponent(name), 'X-Subject': subj.value,
-              'Content-Type': 'application/octet-stream'},
-    body: blob,
-  });
-  const d = await r.json().catch(() => ({}));
-  if (!r.ok) return alert(d.error || 'Upload failed');
-  pollJobs();
+const prog = document.getElementById('prog'), fill = document.getElementById('fill');
+const ptxt = document.getElementById('ptxt');
+const mb = b => (b / 1048576).toFixed(1) + ' MB';
+
+// XMLHttpRequest, not fetch: fetch cannot report upload progress at all, so a
+// big lecture over wifi looks frozen and people give up mid-transfer.
+function upload(blob, name) {
+  prog.classList.remove('err');
+  prog.classList.add('on');
+  fill.style.width = '0%';
+  ptxt.textContent = 'Starting…';
+
+  const xhr = new XMLHttpRequest();
+  xhr.open('POST', '/upload');
+  xhr.setRequestHeader('X-Filename', encodeURIComponent(name));
+  xhr.setRequestHeader('X-Subject', subj.value);
+  xhr.setRequestHeader('Content-Type', 'application/octet-stream');
+  xhr.timeout = 30 * 60 * 1000;   // an hour-long recording over wifi is slow
+
+  xhr.upload.onprogress = e => {
+    if (!e.lengthComputable) return;
+    const pct = Math.round(e.loaded / e.total * 100);
+    fill.style.width = pct + '%';
+    ptxt.textContent = `${pct}%  ·  ${mb(e.loaded)} of ${mb(e.total)}`;
+  };
+
+  const fail = msg => {
+    prog.classList.add('err');
+    fill.style.width = '100%';
+    ptxt.textContent = msg + ' — tap an option to try again';
+  };
+
+  xhr.onload = () => {
+    let d = {};
+    try { d = JSON.parse(xhr.responseText); } catch {}
+    if (xhr.status !== 200) return fail(d.error || `Upload failed (${xhr.status})`);
+    fill.style.width = '100%';
+    ptxt.textContent = 'Uploaded. Making notes…';
+    pollJobs();
+    setTimeout(() => { closeSheet(); prog.classList.remove('on'); }, 900);
+  };
+  xhr.onerror = () => fail('Lost connection');
+  xhr.ontimeout = () => fail('Upload timed out');
+  xhr.onabort = () => fail('Upload cancelled');
+
+  xhr.send(blob);
 }
 
 document.getElementById('opt-audio').onclick = () => {
@@ -1293,18 +1340,33 @@ def serve(args):
                 if not code:
                     return self.reply(400, {"error": f"pick a subject for {name}"})
 
-                data = self.rfile.read(n)
                 ext = Path(name).suffix.lower()
                 is_audio = ext in AUDIO_EXTS
+                dest = (inbox / f"{code}-{name}") if is_audio \
+                    else (subject_dir(args.library, code, "uploads") / name)
 
-                if is_audio:
-                    dest = inbox / f"{code}-{name}"
-                    dest.write_bytes(data)
-                    job = jobs.add(dest, code, "audio")
-                else:
-                    dest = subject_dir(args.library, code, "uploads") / name
-                    dest.write_bytes(data)
-                    job = jobs.add(dest, code, "document")
+                # Stream to a .part file rather than reading the whole body into
+                # memory. A phone on wifi sending a 100MB lecture would otherwise
+                # buffer all of it here, and a dropped connection would leave a
+                # truncated file looking like a real one.
+                part = dest.with_suffix(dest.suffix + ".part")
+                got = 0
+                try:
+                    with part.open("wb") as fh:
+                        while got < n:
+                            chunk = self.rfile.read(min(262144, n - got))
+                            if not chunk:
+                                raise ConnectionResetError("client stopped sending")
+                            fh.write(chunk)
+                            got += len(chunk)
+                except (ConnectionResetError, BrokenPipeError, OSError) as e:
+                    part.unlink(missing_ok=True)
+                    print(f"  upload of {name} dropped at {got}/{n} bytes ({e})",
+                          file=sys.stderr)
+                    return  # socket is gone; replying would only raise again
+
+                part.replace(dest)
+                job = jobs.add(dest, code, "audio" if is_audio else "document")
                 return self.reply(200, {"job": job})
             except SystemExit as e:
                 return self.reply(400, {"error": str(e)})
@@ -1329,11 +1391,14 @@ def serve(args):
 
         def reply(self, code, obj):
             body = json.dumps(obj).encode()
-            self.send_response(code)
-            self.send_header("Content-Type", "application/json")
-            self.send_header("Content-Length", str(len(body)))
-            self.end_headers()
-            self.wfile.write(body)
+            try:
+                self.send_response(code)
+                self.send_header("Content-Type", "application/json")
+                self.send_header("Content-Length", str(len(body)))
+                self.end_headers()
+                self.wfile.write(body)
+            except (BrokenPipeError, ConnectionResetError):
+                pass  # phone hung up; nothing useful left to do
 
     if not os.environ.get("ANTHROPIC_API_KEY"):
         print("no ANTHROPIC_API_KEY set - Explain will return an error", file=sys.stderr)
