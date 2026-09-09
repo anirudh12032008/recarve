@@ -224,6 +224,7 @@ def server(tmp_path_factory):
     lectures = lib / "MC1101-Mathematics-1" / "lectures"
     lectures.mkdir(parents=True)
     (lectures / "week1.md").write_text("## Summary\nlimits and continuity\n")
+    (lib / "MC1101-Mathematics-1" / "revision.md").write_text("## Revision\nall of it\n")
 
     with psycopg.connect(DB_URL, autocommit=True) as conn:
         conn.execute("delete from profiles")
@@ -303,7 +304,17 @@ def test_the_first_joiner_is_the_admin_and_can_read(server):
     assert code == 200 and "limits and continuity" in page
 
     code, data, _ = call(server, "GET", "/data", cookie=cookie)
-    assert code == 200 and json.loads(data)["subjects"][0]["code"] == "MC1101"
+    assert code == 200
+    subjects = json.loads(data)["subjects"]
+    assert subjects[0]["code"] == "MC1101"
+    # Every subject ships, empty ones included: you cannot file a chemistry
+    # recording under a subject the app never told you was there.
+    assert len(subjects) == len(notes.SUBJECTS) == 12
+    empty = [s for s in subjects if not s["notes"] and not s["uploads"]]
+    assert len(empty) == 11, "the eleven subjects with nothing in them are still listed"
+    # `kind` is what groups Lectures apart from the Revision sheet on the phone.
+    assert {n["title"]: n["kind"] for n in subjects[0]["notes"]} == {
+        "week1": "lecture", "Revision sheet": "revision"}
 
     assert call(server, "GET", "/admin", cookie=cookie)[0] == 200
     pytest.admin_cookie = cookie

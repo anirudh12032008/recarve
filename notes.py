@@ -638,8 +638,11 @@ details>:not(summary){padding:0 14px}
   animation:slide 1.15s ease-in-out infinite}
 @keyframes slide{0%{transform:translateX(-105%)}100%{transform:translateX(275%)}}
 .waitmsg{margin:9px 0 0;font-size:13px;color:var(--mut)}
-#busy{position:fixed;z-index:12;display:none;left:12px;right:12px;
-  top:calc(10px + env(safe-area-inset-top));max-width:34rem;margin:0 auto;
+/* Anchored at the bottom, clear of the FAB (76 + 58) and the dock, and never
+   takes a tap. It used to float over the header, where it covered the back
+   button and the search box and ate the taps meant for them. */
+#busy{position:fixed;z-index:6;display:none;pointer-events:none;left:12px;right:12px;
+  bottom:calc(144px + env(safe-area-inset-bottom));max-width:34rem;margin:0 auto;
   padding:13px 15px;border-radius:12px;background:var(--surface);
   border:1px solid var(--line);box-shadow:0 8px 26px rgba(0,0,0,.22)}
 #busy.on{display:block}
@@ -888,6 +891,15 @@ function render() {
 function route() {
   const [code, title] =
     location.hash.slice(1).split('/').filter(Boolean).map(decodeURIComponent);
+  // Links shared before the three levels existed are just '#<note title>'.
+  // Point them at the note and upgrade the URL in place.
+  if (code && !title && !subjectOf(code)) {
+    const owner = DATA.find(x => x.notes.some(n => n.title === code));
+    if (owner) {
+      history.replaceState(null, '', hashOf(owner.code, code));
+      return route();
+    }
+  }
   const s = subjectOf(code);
   view = {code: s ? code : null, title: s && title ? title : null};
   const n = s && title ? s.notes.find(x => x.title === title) : null;
