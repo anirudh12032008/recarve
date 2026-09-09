@@ -22,10 +22,16 @@ create table if not exists auth.users (
 -- Supabase derives the caller from the JWT that PostgREST puts into the
 -- request.jwt.claims GUC. Reading the same GUC means policies written against
 -- auth.uid() behave identically here and in production.
+-- nullif before the cast, which is what real Supabase does and what this
+-- copy did not. notes.act_as(conn, None) clears the setting by writing an
+-- empty string, and ''::json raises rather than returning null -- so any
+-- statement that reached auth.uid() on the owning connection died instead of
+-- being told there is nobody there. RLS hid that for a long time: the owner
+-- bypasses policies, so nothing called this until a trigger did.
 create or replace function auth.uid() returns uuid
 language sql stable as $$
   select nullif(
-    coalesce(current_setting('request.jwt.claims', true)::json ->> 'sub', ''),
+    coalesce(nullif(current_setting('request.jwt.claims', true), '')::json ->> 'sub', ''),
     ''
   )::uuid;
 $$;

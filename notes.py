@@ -462,6 +462,10 @@ PAGE = r"""<!doctype html>
   --bg:#fcfcfd; --surface:#f2f3f7;
   --fg:#14161b; --mut:#656b76; --line:#e1e4ea;
   --accent:#3355e8; --accent-fg:#fff;
+  /* Admin ink. Red already means error, so power is not red: it is the page's
+     own ink, filled. Accent is every member's action, grey is neutral, ink is
+     the handful of things only an admin may press. 14.5:1 either way round. */
+  --admin:#232733; --admin-fg:#fcfcfd;
   --sat:62%; --lum:38%; --chip-lum:94%; --chip-text:28%;
   --tap:44px;
 }
@@ -470,6 +474,8 @@ PAGE = r"""<!doctype html>
     --bg:#0f1115; --surface:#171a20;
     --fg:#e7e9ee; --mut:#98a0ad; --line:#262a32;
     --accent:#7c93ff; --accent-fg:#0f1115;
+    /* Ink inverts with the paper: near-black on near-black is not a slab. */
+    --admin:#dfe4f0; --admin-fg:#0f1115;
     --sat:48%; --lum:70%; --chip-lum:22%; --chip-text:78%;
   }
 }
@@ -551,6 +557,46 @@ body.reading #read{display:block}
 .tally div{font-size:13px;color:var(--mut)}
 .tally b{display:block;font-size:20px;font-weight:650;color:var(--fg);
   font-variant-numeric:tabular-nums}
+.mine .sub{margin:6px 0 0;font-size:16px;color:var(--mut)}
+.mine .edit{margin-top:14px;min-height:var(--tap);padding:0 14px;border-radius:11px;
+  background:var(--bg);border:1px solid var(--line);font-size:16px;color:var(--accent)}
+/* On the card, which is itself --surface: a surface chip on a surface card is
+   not a chip. The paper behind it plus a keyline is what makes it one. */
+.badge{display:inline-block;margin-top:12px;padding:4px 10px;border-radius:7px;
+  font-size:13px;font-weight:650;background:var(--bg);border:1px solid var(--line);
+  color:var(--mut)}
+.badge.trusted{background:color-mix(in srgb,var(--accent) 16%,transparent);
+  border-color:var(--accent);color:var(--accent)}
+.badge.admin{background:var(--admin);border-color:var(--admin);color:var(--admin-fg)}
+
+/* Your own two fields, in the card they replace. */
+.pform label{display:block;font-size:13px;color:var(--mut);margin:14px 0 5px}
+.pform input{width:100%;min-height:var(--tap);font-size:16px;padding:0 12px;
+  border:1px solid var(--line);border-radius:11px;background:var(--bg);color:var(--fg)}
+.pform .err{margin:10px 0 0;font-size:13px;color:#e5484d;min-height:1.2em}
+.pform .go{display:flex;gap:8px;margin-top:14px}
+.pform .go button{flex:1;min-height:var(--tap);border-radius:11px;background:var(--bg);
+  border:1px solid var(--line);font-size:16px;font-weight:500}
+.pform .go button.primary{background:var(--accent);color:var(--accent-fg);border-color:transparent}
+
+/* ---- Admin ink, the same treatment as the admin screen so the two read as
+   one thing: an inked tick down the row, and the word on the end of it. */
+.row.adm .tick{background:var(--admin)}
+.tag{flex:none;padding:3px 8px;border-radius:6px;background:var(--admin);
+  color:var(--admin-fg);font-size:13px;font-weight:650}
+
+/* ---- Locked. A student sees the control, is told who it is for and what
+   opens it, and never spends a request to find out. Muted on surface is
+   5.2:1 light and 7.2:1 dark -- this is greyed, not unreadable. */
+#fab.locked{background:var(--surface);color:var(--mut);border:1px solid var(--line);
+  box-shadow:none}
+#ask.locked{background:var(--surface);color:var(--mut);border:1px solid var(--line);
+  box-shadow:0 6px 20px rgba(0,0,0,.18)}
+#sheet .opt.locked{background:transparent;border-style:dashed;color:var(--mut)}
+#sheet .opt.locked b{color:var(--mut)}
+#lock{margin-top:14px;padding:14px;border-radius:12px;background:var(--surface);
+  border:1px solid var(--line);font-size:13px;color:var(--fg)}
+#lock b{display:block;font-size:16px;font-weight:650;margin-bottom:5px}
 
 .rtop{display:flex;align-items:center;gap:6px}
 .back{display:flex;align-items:center;gap:5px;height:var(--tap);padding:0 10px 0 4px;
@@ -802,6 +848,12 @@ body.reading .tabs{display:none}
     <h3>Add to the library</h3>
     <label for="subj">Subject</label>
     <select id="subj"></select>
+    <div id="lock" hidden>
+      <b>Adding is for trusted members</b>
+      An admin makes you one &mdash; ask in your class group and say what you want
+      to add. Until then everything here is still yours to read, search,
+      practise from and upvote.
+    </div>
     <button class="opt" id="opt-rec"><b>Record this class</b><span>keep the screen on</span></button>
     <button class="opt" id="opt-audio"><b>Upload a recording</b><span>m4a, mp3, mp4</span></button>
     <button class="opt" id="opt-doc"><b>Upload notes or slides</b><span>pdf, txt, md</span></button>
@@ -900,7 +952,7 @@ const hue = code => HUES[code.slice(0, 2)] ?? 220;
 // than leaving the page. Nothing keeps its own back stack: route() reads the
 // hash, and the hash is the only thing that decides what is on screen.
 const TABS = ['home', 'classes', 'campus', 'me'];
-const TAB_TITLE = {classes: 'Subjects', campus: 'Campus', me: 'Your contributions'};
+const TAB_TITLE = {classes: 'Subjects', campus: 'Campus', me: 'Your profile'};
 const subjectOf = code => DATA.find(s => s.code === code);
 const lecturesOf = s => s.notes.filter(n => n.kind !== 'revision');
 const revisionOf = s => s.notes.find(n => n.kind === 'revision');
@@ -983,15 +1035,33 @@ function fileRow(u, s) {
   return el;
 }
 
-function block(label, items) {
-  if (!items.length) return;
+function heading(label) {
   const h = document.createElement('h2');
   h.className = 'sect';
   h.textContent = label;
+  nav.appendChild(h);
+  return h;
+}
+
+function block(label, items) {
+  if (!items.length) return;
+  heading(label);
   const rows = document.createElement('div');
   rows.className = 'rows';
   items.forEach(el => rows.appendChild(el));
-  nav.append(h, rows);
+  nav.appendChild(rows);
+}
+
+// Ink marks a control only an admin may press. One helper, so the treatment
+// cannot drift between the places it appears -- and the same two tokens dress
+// the admin screen itself, which is the other file this has to agree with.
+function inked(row) {
+  row.className = 'row adm';
+  const tag = document.createElement('span');
+  tag.className = 'tag';
+  tag.textContent = 'Admin';
+  row.appendChild(tag);
+  return row;
 }
 
 function blank(text) {
@@ -1303,51 +1373,138 @@ function renderSubject(s) {
   }
 }
 
-// THE ME TAB: what you personally have put in, and -- if you run the class
-// library -- the code that lets the next person in.
+// THE ME TAB: who you are, what your role lets you do, and what you have put
+// in. Plus -- if you run the class library -- the way into the admin panel.
 //
 // Points are status and nothing else. Nothing in this app asks for a score
-// before it shows you something, and no screen here has a lock on it -- that
-// was the product decision, and this view is the whole of it.
+// before it shows you something, and no lock on this page is opened by one:
+// the locks are roles, and the only thing that moves a role is an admin.
+const ROLE_TITLE = {student: 'Student', trusted: 'Trusted member', admin: 'Admin'};
+const ROLE_SAYS = {
+  student: 'Read everything the class has, search it, practise from it, and '
+         + 'upvote the notes that helped.',
+  trusted: 'Everything a student can, and add notes and slides, record a class, '
+         + 'build a revision sheet, and use Explain.',
+  admin: 'Everything a trusted member can, and let people in, set what each of '
+       + 'them may do, and hold the invite code.',
+};
+// Said in exactly one place, and read by the sheet, the Explain panel and this
+// screen. A lock that gives three different reasons is three locks.
+const LOCK_ADD = 'Adding to the library is for trusted members. An admin makes '
+  + 'you one — ask in your class group and say what you want to add.';
+const LOCK_EXPLAIN = 'Explain is for trusted members: every tap spends the '
+  + 'class’s API budget on the Mac that runs this. An admin makes you '
+  + 'trusted — ask in your class group.';
+
+// Your own two fields, in the card they replace. Nothing else on this screen
+// is yours to change: /profile writes name and phone, and the database pins
+// status and role to what they already are whatever the request asks for.
+function profileCard(box, d) {
+  box.className = 'mine';
+  box.innerHTML = '<div class="score"></div><p class="sub"></p>'
+                + '<div><span class="badge"></span></div>';
+  box.querySelector('.score').textContent = d.name || 'You';
+  box.querySelector('.sub').textContent =
+    [d.roll_no, d.section, d.phone].filter(Boolean).join(' · ');
+  const badge = box.querySelector('.badge');
+  badge.className = 'badge ' + (d.role || 'student');
+  badge.textContent = ROLE_TITLE[d.role] || 'Student';
+  const edit = document.createElement('button');
+  edit.className = 'edit';
+  edit.textContent = 'Edit your name or number';
+  edit.onclick = () => editProfile(box, d);
+  box.appendChild(edit);
+}
+
+function editProfile(box, d) {
+  box.className = 'mine';
+  box.innerHTML = '<div class="score">Your details</div>'
+    + '<div class="pform"><label for="pname">Name</label>'
+    + '<input id="pname" autocomplete="name">'
+    + '<label for="pphone">Phone number</label>'
+    + '<input id="pphone" type="tel" inputmode="tel" autocomplete="tel">'
+    + '<p class="err" id="perr"></p>'
+    + '<div class="go"><button id="pcancel">Cancel</button>'
+    + '<button id="psave" class="primary">Save</button></div></div>';
+  const name = box.querySelector('#pname'), phone = box.querySelector('#pphone');
+  const err = box.querySelector('#perr');
+  name.value = d.name || '';
+  phone.value = d.phone || '';
+  box.querySelector('#pcancel').onclick = () => profileCard(box, d);
+  box.querySelector('#psave').onclick = async () => {
+    err.textContent = '';
+    try {
+      const r = await fetch('/profile', {
+        method: 'POST', headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify({name: name.value, phone: phone.value}),
+      });
+      const j = await r.json().catch(() => ({}));
+      if (!r.ok) throw new Error(j.error || 'could not save that');
+      // The server's answer, not what was typed: it normalises the number, and
+      // showing the typed one would say a different thing is stored.
+      d.name = j.name; d.phone = j.phone;
+      profileCard(box, d);
+      busyDone('Saved');
+    } catch (e) {
+      err.textContent = e.message;
+    }
+  };
+}
+
 async function renderMe() {
+  const mine = painted;
   const box = document.createElement('div');
   box.className = 'mine';
   nav.appendChild(box);
-  waiting(box, 'Counting up what you have added…');
+  waiting(box, 'Reading your profile…');
   let d;
   try {
     const r = await fetch('/me');
     if (!r.ok) throw new Error();
     d = await r.json();
   } catch (e) {
-    box.textContent = 'Contributions need the server. Run: notes.py serve';
+    box.textContent = 'Your profile needs the server. Run: notes.py serve';
     return;
   }
-  if (view.tab !== 'me') return;     // they navigated on while this was in flight
+  // Not just "are we still on this tab": a second paint of this same tab
+  // replaced everything below, and appending to it now would double it.
+  if (mine !== painted) return;
+  profileCard(box, d);
+
+  // What the role actually permits, said once, on the screen somebody comes to
+  // after a control elsewhere told them it was not theirs. A student is not
+  // told off for being one: they are told what they have and what opens more.
+  const can = [line(ROLE_TITLE[d.role] || 'Student',
+                    ROLE_SAYS[d.role] || ROLE_SAYS.student)];
+  if (d.role === 'student') can.push(line('What trusted adds', LOCK_ADD));
+  block('Your access', can);
+
   const p = d.points;
-  box.innerHTML = '<div class="score"></div><p></p>'
+  heading('Contributions');
+  const tally = document.createElement('div');
+  tally.className = 'mine';
+  tally.innerHTML = '<div class="score"></div><p></p>'
     + '<div class="tally"><div><b class="u"></b>uploads</div>'
     + '<div><b class="r"></b>recordings</div><div><b class="v"></b>votes received</div></div>';
-  box.querySelector('.score').textContent = p.score + (p.score === 1 ? ' point' : ' points');
-  box.querySelector('p').textContent =
+  tally.querySelector('.score').textContent = p.score + (p.score === 1 ? ' point' : ' points');
+  tally.querySelector('p').textContent =
     'Points are a thank-you, not a key. Everything in the library is open to everyone.';
-  box.querySelector('.u').textContent = p.uploads;
-  box.querySelector('.r').textContent = p.recordings;
-  box.querySelector('.v').textContent = p.votes_received;
+  tally.querySelector('.u').textContent = p.uploads;
+  tally.querySelector('.r').textContent = p.recordings;
+  tally.querySelector('.v').textContent = p.votes_received;
+  nav.appendChild(tally);
 
-  // A student is not told off for being one: the page says what they have and
-  // who opens the rest. This is the only screen that mentions roles at all.
-  if (d.role === 'student') {
-    block('Your access', [line('You can read everything the class has',
-                               'Ask an admin for upload access to add notes, '
-                               + 'record a class, or use Explain')]);
-  }
-
-  // The two things only an admin can do, on the only screen that is theirs.
-  // The server decides: a member's /me carries no invite code at all, and the
-  // invites table has no read policy for them either.
+  // The things only an admin can do, on the only screen that is theirs, marked
+  // as theirs. The server decides: a member's /me carries no invite code at
+  // all, and the invites table has no read policy for them either.
   if (d.admin) {
     const rows = [];
+    const a = document.createElement('a');
+    a.href = '/admin';
+    rows.push(inked(line('Class admin',
+      d.pending ? (d.pending === 1 ? 'One person is waiting to be let in'
+                                   : d.pending + ' people are waiting to be let in')
+                : 'Members, roles, the invite link, and anything reported', a)));
     if (d.invite) {
       const b = line(d.invite, 'Invite code — tap to copy',
                      document.createElement('button'));
@@ -1356,13 +1513,11 @@ async function renderMe() {
         try { await navigator.clipboard.writeText(d.invite); flash(cap, 'Copied'); }
         catch { flash(cap, 'Copy failed — read it out'); }
       };
-      rows.push(b);
+      rows.push(inked(b));
     } else {
-      rows.push(line('No invite code is live', 'Nobody can join until there is one'));
+      rows.push(inked(line('No invite code is live',
+                           'Nobody can join until there is one')));
     }
-    const a = document.createElement('a');
-    a.href = '/admin';
-    rows.push(line('Approve joiners', 'Everyone waiting to be let in', a));
     block('Admin', rows);
   }
 
@@ -1372,7 +1527,9 @@ async function renderMe() {
   block('Classes you recorded', d.recordings.map(r => line(
     r.title, r.subject + ' · ' + (r.status === 'done' ? 'notes ready' : r.status))));
   if (!d.uploads.length && !d.recordings.length) {
-    blank('Nothing from you yet. Tap + to record a class or add your slides.');
+    blank('Nothing from you yet. '
+          + (d.role === 'student' ? 'Trusted members add the notes and the recordings.'
+                                  : 'Tap + to record a class or add your slides.'));
   }
 }
 
@@ -1404,7 +1561,15 @@ function renderSearch(needle) {
   if (!shown) blank('Nothing matches that. Try a subject code like CY1107.');
 }
 
+// Bumped by every paint. renderMe is the one screen that has to wait on a
+// request before it can draw, so it is the one that can come back to a screen
+// somebody else has already redrawn -- and appending into that one gave an
+// admin two of every row. The tab is opened twice on the way in as a matter of
+// course: once by the router, once when /data answers.
+let painted = 0;
+
 function render() {
+  painted++;
   // Search is the Classes tab's own tool; it must not answer over Campus.
   const needle = view.tab === 'classes' ? q.value.trim().toLowerCase() : '';
   const s = view.code ? subjectOf(view.code) : null;
@@ -1830,14 +1995,31 @@ async function pollJobs() {
   } catch {}
 }
 
-// Nothing here is the lock. A student's phone simply stops offering the two
-// things the server would refuse anyway -- an Add button that 403s is a worse
-// answer than no Add button.
-// The Explain button is dealt with where it is offered, at the selection.
+// Nothing here is the lock -- the server is, and /upload, /revise and /explain
+// refuse a student whatever this page shows. What the page owes a student is
+// the truth in advance: the control stays where it is, says who it is for and
+// what would open it, and never spends a request to come back 403.
+//
+// Hiding it was the old answer and it was the wrong one. A + button that is
+// simply absent reads as an app that does not do that, so the student never
+// learns the thing exists, never learns what a trusted member is, and never
+// asks the one person who could make them one.
 const mayAdd = () => ROLE === 'trusted' || ROLE === 'admin';
 function applyRole() {
-  document.getElementById('fab').hidden = !mayAdd();
-  if (!mayAdd()) closeSheet();
+  const fab = document.getElementById('fab');
+  // Unknown is not a role. Until /data answers there is nothing honest to say
+  // about the + button, so it waits rather than appearing and then locking --
+  // and a 503 or a 403 leaves ROLE null, which is not permission either.
+  fab.hidden = ROLE === null;
+  fab.className = mayAdd() ? '' : 'locked';
+  document.getElementById('lock').hidden = mayAdd();
+  for (const id of ['opt-rec', 'opt-audio', 'opt-doc', 'opt-revise']) {
+    const el = document.getElementById(id);
+    el.className = mayAdd() ? 'opt' : 'opt locked';
+    // aria-disabled rather than disabled: a disabled button is not focusable,
+    // so a screen reader would skip the one row that explains itself.
+    el.setAttribute('aria-disabled', mayAdd() ? 'false' : 'true');
+  }
 }
 
 const openSheet = () => {
@@ -1894,7 +2076,7 @@ function upload(blob, name) {
     // The gate's own words are a route name and a role. Say what the Me tab
     // says instead, and do not invite a retry that cannot succeed.
     if (xhr.status === 403)
-      return fail('Ask an admin for upload access to add notes', false);
+      return fail(LOCK_ADD, false);
     if (xhr.status !== 200) return fail(d.error || `Upload failed (${xhr.status})`);
     fill.style.width = '100%';
     ptxt.textContent = 'Uploaded. Making notes…';
@@ -1908,10 +2090,15 @@ function upload(blob, name) {
   xhr.send(blob);
 }
 
+// Each option refuses to start rather than opening a file picker, filling a
+// progress bar and coming back 403. The reason is already on screen above
+// them, in #lock, so there is nothing left for the tap to say.
 document.getElementById('opt-audio').onclick = () => {
+  if (!mayAdd()) return;
   fileInput.accept = 'audio/*,video/*'; fileInput.click();
 };
 document.getElementById('opt-doc').onclick = () => {
+  if (!mayAdd()) return;
   fileInput.accept = '.pdf,.txt,.md'; fileInput.click();
 };
 fileInput.onchange = () => {
@@ -1921,6 +2108,7 @@ fileInput.onchange = () => {
 };
 
 document.getElementById('opt-rec').onclick = async () => {
+  if (!mayAdd()) return;
   try {
     const stream = await navigator.mediaDevices.getUserMedia({audio: true});
     chunks = [];
@@ -1953,6 +2141,7 @@ document.getElementById('opt-stop').onclick = () => {
 };
 
 document.getElementById('opt-revise').onclick = async () => {
+  if (!mayAdd()) return;
   const code = subj.value;
   closeSheet();
   if (!code) return busyDone('Pick a subject first');
@@ -1989,7 +2178,10 @@ document.addEventListener('selectionchange', () => {
   const sel = document.getSelection();
   const text = sel ? sel.toString().trim() : '';
   // Only offer it for a real phrase inside a note, not a stray tap.
-  if (!text || text.length < 12 || !current || !mayAdd()
+  // ROLE null, not !mayAdd(): until the server has said who this is there is
+  // nothing to offer and nothing to refuse. A student is offered the button
+  // and told, in the panel it opens, who Explain is for.
+  if (!text || text.length < 12 || !current || ROLE === null
       || !body.contains(sel.anchorNode) || panel.classList.contains('on')) {
     return hideAsk();
   }
@@ -2001,14 +2193,20 @@ document.addEventListener('selectionchange', () => {
                            window.scrollY + r.top - 52) + 'px';
   ask.style.left = Math.max(12, Math.min(window.innerWidth - 130,
                                          r.left + r.width / 2 - 55)) + 'px';
+  if (mayAdd()) ask.classList.remove('locked');
+  else ask.classList.add('locked');
   ask.classList.add('on');
 });
 
 ask.onclick = async () => {
   hideAsk();
   quote.textContent = picked;
-  waiting(out, 'Reading that passage\u2026');
   panel.classList.add('on');
+  // The refusal arrives in the panel the button opens, in the same sentence
+  // the Me tab and the add sheet use, rather than as a 403 dressed as a
+  // failure. No request is made: this one costs money when it succeeds.
+  if (!mayAdd()) { out.textContent = LOCK_EXPLAIN; return; }
+  waiting(out, 'Reading that passage\u2026');
   try {
     const res = await fetch('/explain', {
       method: 'POST',
@@ -2397,6 +2595,8 @@ PUBLIC_PATHS = {"/join"}
 # the things that write content or spend money on the API; admin adds the class
 # itself. status is the other axis and is checked separately -- a pending admin
 # is still pending.
+SECTION = "Section I"
+
 ROLES = ("student", "trusted", "admin")
 RANK = {r: i for i, r in enumerate(ROLES)}
 
@@ -2413,6 +2613,8 @@ ROLE_REQUIRED = {
     "/pending": "admin",
     "/approve": "admin",
     "/role": "admin",
+    "/block": "admin",
+    "/remove": "admin",
 }
 
 
@@ -2586,11 +2788,20 @@ def db_principal(conn, profile_id):
 
 
 def db_pending(conn):
+    """Everyone at the door, with the three things an admin decides on.
+
+    The number is here because it is the only one of the three an admin cannot
+    look up elsewhere, and "is this the Rahul from our section" is the whole
+    question this queue asks. `asked` is seconds on the server's clock, like
+    every other timestamp the phone is given, so "2 days ago" is computed
+    against a clock the page already trusts rather than the handset's own.
+    """
     return [
-        {"id": str(r[0]), "name": r[1], "roll_no": r[2]}
+        {"id": str(r[0]), "name": r[1], "roll_no": r[2], "phone": r[3],
+         "asked": int(r[4].timestamp())}
         for r in conn.execute(
-            "select id, name, roll_no from profiles where status = 'pending' "
-            "order by created_at"
+            "select id, name, roll_no, phone, created_at from profiles "
+            "where status = 'pending' order by created_at"
         )
     ]
 
@@ -2598,9 +2809,10 @@ def db_pending(conn):
 def db_members(conn):
     """Everyone in the class and what they may do, for the admin screen."""
     return [
-        {"id": str(r[0]), "name": r[1], "roll_no": r[2], "status": r[3], "role": r[4]}
+        {"id": str(r[0]), "name": r[1], "roll_no": r[2], "status": r[3],
+         "role": r[4], "phone": r[5]}
         for r in conn.execute(
-            "select id, name, roll_no, status, role from profiles "
+            "select id, name, roll_no, status, role, phone from profiles "
             "where status <> 'pending' order by name"
         )
     ]
@@ -2625,6 +2837,97 @@ def db_set_role(conn, actor_id, profile_id, role):
     if not n:
         raise ValueError("no such member")
     return role
+
+
+def db_set_status(conn, actor_id, profile_id, blocked):
+    """Block somebody, or let them back in. Rejecting a joiner is a block.
+
+    Reversible on purpose: nothing here deletes a person. A rejected joiner
+    keeps their row, sees the "No access" screen, and an admin who mis-tapped
+    puts them back with the same control. Deleting would take their uploads and
+    every vote they cast with them.
+
+    The self check is the same one db_set_role makes, for the same reason, and
+    the database makes it again in the profiles_no_self_demotion trigger --
+    which is the one that holds when this handler is not the caller.
+    """
+    if str(profile_id) == str(actor_id):
+        raise ValueError("you cannot block yourself")
+    status = "blocked" if blocked else "approved"
+    n = conn.execute("update profiles set status = %s where id = %s",
+                     (status, profile_id)).rowcount
+    if not n:
+        raise ValueError("no such member")
+    return status
+
+
+def db_reports(conn):
+    """What the class has flagged, newest first, for an admin to look at.
+
+    Read as the caller: "admins read reports" is the only select policy on that
+    table, so a member's connection sees an empty list here rather than a
+    catalogue of what their classmates complained about.
+    """
+    return [
+        {"id": str(r[0]), "material_id": str(r[1]) if r[1] else None,
+         "filename": r[2], "subject": r[3], "reason": r[4], "by": r[5],
+         "status": r[6], "at": int(r[7].timestamp())}
+        for r in conn.execute(
+            "select r.id, m.id, m.filename, m.subject_code, r.reason, p.name, "
+            "  m.status, r.created_at "
+            "from reports r "
+            "left join materials m on m.id = r.material_id "
+            "join profiles p on p.id = r.reporter_id "
+            "order by r.created_at desc"
+        )
+    ]
+
+
+def db_remove_material(conn, material_id):
+    """Take a file off the shelves. Admin-gated by the materials update policy.
+
+    'removed', not a delete: the row is what the reports point at, and a
+    deleted material takes its report with it by cascade -- so the record of
+    the complaint would vanish along with the thing complained about.
+    """
+    n = conn.execute("update materials set status = 'removed' where id = %s",
+                     (material_id,)).rowcount
+    if not n:
+        raise ValueError("no such item")
+    return True
+
+
+def db_profile(conn, user_id):
+    """The identity half of the Me tab. Read as themselves."""
+    row = conn.execute(
+        "select name, roll_no, phone, role, status from profiles where id = %s",
+        (user_id,),
+    ).fetchone()
+    if not row:
+        return {}
+    return {"name": row[0], "roll_no": row[1], "phone": row[2],
+            "role": row[3], "status": row[4]}
+
+
+def db_edit_profile(conn, user_id, name, phone):
+    """A member fixes their own name and number. Nothing else is theirs to fix.
+
+    This writes exactly two columns, and the "edit own name only" policy is what
+    makes that the truth rather than the intention: role and status are pinned
+    to their current values by its with-check, so a hand-written update that
+    reaches for either is refused by the database and not by this function.
+
+    Both are validated here because both are shown to other people: an empty
+    name leaves a blank row on the admin screen, and a number nobody can ring
+    is the same as no number at all.
+    """
+    name = (name or "").strip()[:80]
+    if not name:
+        raise ValueError("a name cannot be blank")
+    phone = normalise_phone(phone) if (phone or "").strip() else None
+    conn.execute("update profiles set name = %s, phone = %s where id = %s",
+                 (name, phone, user_id))
+    return {"name": name, "phone": phone}
 
 
 def db_invite(conn):
@@ -2902,12 +3205,21 @@ GATE_PAGE = r"""<!doctype html>
 <title>recarve — Section I</title>
 <style>
 :root{color-scheme:light dark;--bg:#fcfcfd;--fg:#14161b;--mut:#656b76;--line:#e1e4ea;
-  --accent:#3355e8;--accent-fg:#fff;--err:#d1344b}
+  --accent:#3355e8;--accent-fg:#fff;--err:#d1344b;
+  /* Admin ink. Not a bolted-on red -- red is the error colour and already
+     means something. This is the page's own ink, filled: the accent stays the
+     ordinary blue action, grey stays neutral, and a solid slab of ink is what
+     only an admin can press. The same pair marks the same thing inside the
+     app, on the Me tab, so the treatment is one thing in two files. */
+  --admin:#232733;--admin-fg:#fcfcfd}
 @media (prefers-color-scheme:dark){
   /* The accent goes pale in the dark, so what sits on it has to go dark too --
      white on it is 2.8:1. Same pair PAGE carries. */
   :root{--bg:#0f1115;--fg:#e7e9ee;--mut:#98a0ad;--line:#262a32;
-    --accent:#7a92ff;--accent-fg:#0f1115;--err:#e5484d}}
+    --accent:#7a92ff;--accent-fg:#0f1115;--err:#e5484d;
+    /* Ink inverts with the paper: a near-black slab on a near-black ground is
+       not a slab. Same job, same contrast, opposite end of the ramp. */
+    --admin:#dfe4f0;--admin-fg:#0f1115}}
 *{box-sizing:border-box}
 body{margin:0;min-height:100dvh;display:grid;place-items:center;padding:24px;background:var(--bg);
   color:var(--fg);font:16px/1.5 -apple-system,BlinkMacSystemFont,"Segoe UI",system-ui,sans-serif;
@@ -2940,6 +3252,31 @@ h2{font-size:1rem;margin:2rem 0 .2rem}
    invites somebody to type the wrong one. Still an input so it sits in the
    same column as the fields around it, greyed the way its label is. */
 input[readonly]{color:var(--mut)}
+
+/* ---- The admin panel. Every action on this screen is one only an admin may
+   take, so all of them are inked and the accent is left to navigation. */
+.tag{display:inline-block;vertical-align:middle;margin-left:.45rem;padding:.1rem .45rem;
+  border-radius:6px;background:var(--admin);color:var(--admin-fg);
+  font-size:.72rem;font-weight:650;letter-spacing:.005em}
+button.adm{background:var(--admin);color:var(--admin-fg)}
+/* The quieter half of the same ink, for the reversible no: a ring rather than
+   a slab, so Reject does not shout as loudly as Approve. Its own text is the
+   contrast that matters, and the ring is 14:1 on the ground either way. */
+button.ghost{background:transparent;color:var(--admin);
+  box-shadow:inset 0 0 0 1px var(--admin)}
+.counts{display:flex;gap:.5rem;margin:0 0 1.3rem}
+.counts div{flex:1;min-width:0;padding:.55rem .6rem;border:1px solid var(--line);
+  border-radius:10px}
+.counts b{display:block;font-size:1.45rem;font-weight:700;line-height:1.15;
+  font-variant-numeric:tabular-nums}
+.counts span{font-size:.8rem;color:var(--mut)}
+/* A queue with somebody in it is the whole reason this screen gets opened. */
+.counts .hot{border-color:var(--admin)}
+.acts{display:flex;align-items:center;gap:.4rem;flex:none}
+.acts button{width:auto;padding:0 .75rem}
+.invite{font-size:1.45rem;font-weight:700;letter-spacing:.05em;
+  font-variant-numeric:tabular-nums}
+.none{color:var(--mut);font-size:.88rem;margin:.5rem 0 0;overflow-wrap:anywhere}
 </style>
 <main>__BODY__</main>
 """
@@ -3019,26 +3356,75 @@ BLOCKED_BODY = """<h1>No access</h1>
 """
 
 ADMIN_BODY = r"""<p><a href="/">&lsaquo; Back to recarve</a></p>
-<h1>Pending</h1>
-<p>Everyone waiting to be let in.</p>
-<div id="list">loading…</div>
-<h2>Who can do what</h2>
-<p>Students read. Trusted members upload, record and use Explain — that one
-spends money. Admins also let people in.</p>
-<div id="members">loading…</div>
+<h1>Class admin<span class="tag">Admin</span></h1>
+<p>Who is in, what each of them may do, and how the next person gets in.</p>
+<div class="counts" id="counts"></div>
+
+<h2>Waiting to be let in</h2>
+<div id="list">loading&hellip;</div>
+
+<h2>Members</h2>
+<p>Students read. Trusted members upload, record and use Explain &mdash; that one
+spends money. Admins also let people in. You cannot change your own row: an
+admin who demotes themselves leaves a class nobody can approve anyone into.</p>
+<div id="members">loading&hellip;</div>
+
+<h2>Invite code</h2>
+<div id="invite"></div>
+
+<h2>Reported</h2>
+<div id="reports"></div>
+
 <script>
-// The name and roll number are whatever the joiner typed, so every one of them
-// goes in with textContent. This screen is the admin account's, and a name is
-// not a place to run script from.
-function who(p) {
+const $ = id => document.getElementById(id);
+
+// Both timestamps are seconds on the server's clock -- the same clock the rows
+// were stamped by -- so a handset a few minutes out cannot report a joiner who
+// has not asked yet.
+function ago(then, now) {
+  const d = Math.max(0, (now || 0) - (then || 0));
+  if (d < 90) return 'just now';
+  if (d < 3600) return Math.round(d / 60) + ' min ago';
+  if (d < 172800) return Math.round(d / 3600) + ' h ago';
+  return Math.round(d / 86400) + ' days ago';
+}
+
+// Names, roll numbers, phone numbers and report reasons are all whatever
+// somebody typed into a form, so every one of them goes in with textContent.
+// This screen is the admin account's, and none of that is a place to run
+// script from.
+function who(name, sub) {
   const el = document.createElement('div');
   el.innerHTML = '<b></b><small></small>';
-  el.querySelector('b').textContent = p.name;
-  el.querySelector('small').textContent = p.roll_no || '';
+  el.querySelector('b').textContent = name;
+  el.querySelector('small').textContent = sub;
   return el;
 }
 
-function roleSelect(p, onchange) {
+const dot = (...bits) => bits.filter(Boolean).join(' \u00b7 ');
+
+async function post(path, payload) {
+  try {
+    const r = await fetch(path, {method: 'POST',
+      headers: {'Content-Type': 'application/json'}, body: JSON.stringify(payload)});
+    if (!r.ok) {
+      const e = await r.json().catch(() => ({}));
+      alert(e.error || 'the server refused that');
+    }
+  } catch (e) { alert('no connection to the server'); }
+}
+
+// Every button here does one thing and then re-reads the screen: the counts,
+// the queue and the members list all move together after any of them.
+function btn(label, cls, fn) {
+  const b = document.createElement('button');
+  b.className = cls;
+  b.textContent = label;
+  b.onclick = async () => { b.disabled = true; await fn(); load(); };
+  return b;
+}
+
+function roleSelect(p) {
   const sel = document.createElement('select');
   sel.setAttribute('aria-label', 'Role for ' + p.name);
   for (const r of ['student', 'trusted', 'admin']) {
@@ -3047,67 +3433,150 @@ function roleSelect(p, onchange) {
     if (r === p.role) o.selected = true;
     sel.appendChild(o);
   }
-  sel.onchange = () => onchange(sel);
+  sel.onchange = async () => {
+    sel.disabled = true;
+    await post('/role', {id: p.id, role: sel.value});
+    load();
+  };
   return sel;
 }
 
+function tiles(counts) {
+  const box = $('counts');
+  box.innerHTML = '';
+  // Only the two that are a queue go hot: "members" being non-zero is not news.
+  for (const [n, label, queue] of [[counts.pending, 'waiting', true],
+                                   [counts.members, 'members', false],
+                                   [counts.blocked, 'blocked', false],
+                                   [counts.reports, 'reported', true]]) {
+    const t = document.createElement('div');
+    if (queue && n) t.className = 'hot';
+    t.innerHTML = '<b></b><span></span>';
+    t.querySelector('b').textContent = n;
+    t.querySelector('span').textContent = label;
+    box.appendChild(t);
+  }
+}
+
+function note(el, text) {
+  const p = document.createElement('p');
+  p.className = 'none';
+  p.textContent = text;
+  el.appendChild(p);
+  return p;
+}
+
+function renderInvite(code) {
+  const box = $('invite');
+  box.innerHTML = '';
+  if (!code) {
+    return note(box, 'No code is live. Nobody can join until there is one.');
+  }
+  // Built here, not on the server: this page is reached over the tunnel as
+  // often as over the wifi, and only the browser knows which address the
+  // person on the other end of WhatsApp has to be able to open.
+  const link = location.origin + '/?code=' + encodeURIComponent(code);
+  const row = document.createElement('div');
+  row.className = 'row';
+  const shown = document.createElement('span');
+  shown.className = 'invite';
+  shown.textContent = code;
+  const acts = document.createElement('div');
+  acts.className = 'acts';
+  // Not btn(): that one re-reads the screen afterwards, which would wipe the
+  // word that says the copy worked. Copying is the whole action.
+  const copy = document.createElement('button');
+  copy.className = 'adm';
+  copy.textContent = 'Copy join link';
+  copy.onclick = async () => {
+    try { await navigator.clipboard.writeText(link); copy.textContent = 'Copied'; }
+    catch (e) { copy.textContent = 'Copy failed - read the code out'; }
+  };
+  acts.appendChild(copy);
+  row.append(shown, acts);
+  box.appendChild(row);
+  // The link in full, because a copy that silently failed looks exactly like
+  // one that worked, and this is the fallback somebody can read down a phone.
+  note(box, link);
+}
+
+function renderReports(reports, now) {
+  const box = $('reports');
+  box.innerHTML = '';
+  if (!reports.length) return note(box, 'Nothing has been reported.');
+  for (const r of reports) {
+    const row = document.createElement('div');
+    row.className = 'row';
+    const sub = dot(r.subject, r.reason || 'no reason given',
+                    'reported by ' + r.by, ago(r.at, now));
+    if (!r.material_id || r.status === 'removed') {
+      const gone = document.createElement('small');
+      gone.textContent = r.material_id ? 'removed' : 'already gone';
+      row.append(who(r.filename || 'a file that no longer exists', sub), gone);
+    } else {
+      row.append(who(r.filename, sub),
+                 btn('Remove', 'adm', () => post('/remove', {id: r.material_id})));
+    }
+    box.appendChild(row);
+  }
+}
+
 async function load() {
-  const el = document.getElementById('list'), mem = document.getElementById('members');
+  const el = $('list'), mem = $('members');
   // 503 when Postgres is down, 403 for an admin another admin just demoted:
   // neither body carries `pending`, and reading it blanked the whole screen.
   let j = null;
   try { const r = await fetch('/pending'); if (r.ok) j = await r.json(); } catch (e) {}
   if (!j) {
     el.textContent = mem.textContent =
-      'Could not load this — the library may be offline. Reload to retry.';
+      'Could not load this - the library may be offline. Reload to retry.';
     return;
   }
+  tiles(j.counts || {});
   el.innerHTML = '';
   if (!j.pending.length) el.textContent = 'Nobody waiting.';
   for (const p of j.pending) {
     const row = document.createElement('div');
     row.className = 'row';
-    const btn = document.createElement('button');
-    btn.textContent = 'Approve';
-    btn.onclick = async () => {
-      btn.disabled = true;
-      const r = await fetch('/approve', {method: 'POST',
-        headers: {'Content-Type': 'application/json'}, body: JSON.stringify({id: p.id})});
-      if (!r.ok) { const e = await r.json().catch(() => ({}));
-                   alert(e.error || 'could not approve that'); }
-      load();
-    };
-    row.append(who(p), btn);
+    const acts = document.createElement('div');
+    acts.className = 'acts';
+    // Reject is a block, not a delete: it is reversible from the row below,
+    // and deleting a person would take their uploads and votes with them.
+    acts.append(btn('Approve', 'adm', () => post('/approve', {id: p.id})),
+                btn('Reject', 'ghost', () => post('/block', {id: p.id, blocked: true})));
+    row.append(who(p.name, dot(p.roll_no, p.phone, ago(p.asked, j.now))), acts);
     el.append(row);
   }
   mem.innerHTML = '';
+  if (!(j.members || []).length) mem.textContent = 'Nobody is in yet.';
   for (const p of j.members || []) {
     const row = document.createElement('div');
     row.className = 'row';
-    // Your own row has no picker: dropping your own admin would leave nobody
-    // who can let the next person in, and the server refuses it anyway.
+    const sub = dot(p.roll_no, p.phone, p.status === 'blocked' ? 'blocked' : '');
+    // Your own row has no controls: dropping your own admin, or blocking
+    // yourself, would leave nobody who can let the next person in. The server
+    // refuses both, and the database refuses them after that.
     if (p.id === j.me) {
       const you = document.createElement('small');
-      you.textContent = p.role + ' — you';
-      row.append(who(p), you);
+      you.textContent = p.role + ' - you';
+      row.append(who(p.name, sub), you);
     } else {
-      row.append(who(p), roleSelect(p, async sel => {
-        sel.disabled = true;
-        const r = await fetch('/role', {method: 'POST',
-          headers: {'Content-Type': 'application/json'},
-          body: JSON.stringify({id: p.id, role: sel.value})});
-        if (!r.ok) { const e = await r.json().catch(() => ({}));
-                     alert(e.error || 'could not change that'); }
-        load();
-      }));
+      const acts = document.createElement('div');
+      acts.className = 'acts';
+      const blocked = p.status === 'blocked';
+      acts.append(roleSelect(p),
+                  btn(blocked ? 'Unblock' : 'Block', 'ghost',
+                      () => post('/block', {id: p.id, blocked: !blocked})));
+      row.append(who(p.name, sub), acts);
     }
     mem.append(row);
   }
+  renderInvite(j.invite);
+  renderReports(j.reports || [], j.now);
 }
 load();
 </script>
 """
-
 
 
 EXPLAIN_PROMPT = """A student is reading their lecture notes and highlighted a passage they do not
@@ -3318,12 +3787,24 @@ def build_server(args):
                     return self.reply(404, {"error": "this server is running with --no-auth"})
                 with db(self.me["id"]) as conn:
                     out = db_contributions(conn, self.me["id"])
+                    # Who they are, next to what they have put in. One request:
+                    # the Me tab is opened between classes on mobile data like
+                    # every other screen, and identity and points are one card.
+                    out.update(db_profile(conn, self.me["id"]))
+                    out["section"] = SECTION
                     # The Me tab is also where the admin does the two admin
                     # things. Gated twice on purpose: here, and by the invites
                     # policy that gives a member no read at all.
                     out["admin"] = bool(self.me["admin"])
                     out["role"] = self.me["role"]
                     out["invite"] = db_invite(conn) if self.me["admin"] else None
+                    if self.me["admin"]:
+                        # The badge on the Admin row: a queue you have to open
+                        # a second screen to discover is a queue that waits.
+                        try:
+                            out["pending"] = len(db_pending(conn))
+                        except psycopg.Error as e:
+                            log(f"cannot count the queue: {e}", "me")
                     return self.reply(200, out)
             if self.path == "/jobs":
                 return self.reply(200, {"jobs": jobs.snapshot()})
@@ -3341,9 +3822,27 @@ def build_server(args):
                 if not self.is_admin():
                     return self.reply(403, {"error": "admins only"})
                 with db(self.me["id"]) as conn:
-                    return self.reply(200, {"pending": db_pending(conn),
-                                            "members": db_members(conn),
-                                            "me": self.me["id"]})
+                    pending = db_pending(conn)
+                    members = db_members(conn)
+                    reports = db_reports(conn)
+                    return self.reply(200, {
+                        "pending": pending, "members": members,
+                        "reports": reports, "me": self.me["id"],
+                        # The code is read on the admin's own connection, where
+                        # the invites policy allows it and a member's does not.
+                        "invite": db_invite(conn),
+                        # Counts, so the queue is obvious before anything is
+                        # scrolled to. Computed from the lists that were fetched
+                        # anyway rather than from three more round trips.
+                        "counts": {"pending": len(pending), "members": len(members),
+                                   "blocked": sum(1 for m in members
+                                                  if m["status"] == "blocked"),
+                                   "reports": sum(1 for r in reports
+                                                  if r["status"] != "removed")},
+                        # This machine's clock, which is the one the timestamps
+                        # above are on. "2 days ago" against the handset's own
+                        # clock is minutes out often enough to read wrong.
+                        "now": int(time.time())})
             return super().do_GET()
 
         def is_admin(self):
@@ -3356,6 +3855,12 @@ def build_server(args):
                 return self.do_approve()
             if self.path == "/role":
                 return self.do_role()
+            if self.path == "/block":
+                return self.do_block()
+            if self.path == "/remove":
+                return self.do_remove()
+            if self.path == "/profile":
+                return self.do_profile()
             if self.path == "/upload":
                 return self.do_upload()
             if self.path == "/vote":
@@ -3483,12 +3988,89 @@ def build_server(args):
                     db_set_role(conn, self.me["id"], target, role)
             except ValueError as e:
                 return self.reply(400, {"error": str(e)})
+            except psycopg.errors.RaiseException as e:
+                # The 0011 trigger, which is the layer under db_set_role. Its
+                # sentence is written for a person, so it is passed through
+                # rather than turned into a 500 nobody can act on.
+                return self.reply(400, {"error": str(e).splitlines()[0]})
             except psycopg.errors.InvalidTextRepresentation:
                 return self.reply(404, {"error": "no such member"})
             except Exception as e:
                 return self.reply(500, {"error": f"{type(e).__name__}: {e}"})
             log(f"{self.me['name']} made {target} {role}", "admin")
             return self.reply(200, {"ok": True, "role": role})
+
+        def do_block(self):
+            """Block somebody, or let them back in. Rejecting a joiner is this.
+
+            Admin-only three times over: the gate refused everyone else before
+            this was reached, the update runs on the caller's own connection
+            where "admins manage profiles" has to allow it, and the trigger in
+            0011 refuses an admin who aims it at themselves.
+            """
+            if not self.is_admin():
+                return self.reply(403, {"error": "admins only", "required": "admin"})
+            try:
+                req = self.body(4000)
+                if req is None:
+                    return
+                target = (req.get("id") or "").strip()
+                with db(self.me["id"]) as conn:
+                    status = db_set_status(conn, self.me["id"], target,
+                                           bool(req.get("blocked", True)))
+            except ValueError as e:
+                return self.reply(400, {"error": str(e)})
+            except psycopg.errors.RaiseException as e:
+                return self.reply(400, {"error": str(e).splitlines()[0]})
+            except psycopg.errors.InvalidTextRepresentation:
+                return self.reply(404, {"error": "no such member"})
+            except Exception as e:
+                return self.reply(500, {"error": f"{type(e).__name__}: {e}"})
+            log(f"{self.me['name']} set {target} to {status}", "admin")
+            return self.reply(200, {"ok": True, "status": status})
+
+        def do_remove(self):
+            """Take a reported file off the shelves."""
+            if not self.is_admin():
+                return self.reply(403, {"error": "admins only", "required": "admin"})
+            try:
+                req = self.body(4000)
+                if req is None:
+                    return
+                target = (req.get("id") or "").strip()
+                with db(self.me["id"]) as conn:
+                    db_remove_material(conn, target)
+            except ValueError as e:
+                return self.reply(404, {"error": str(e)})
+            except psycopg.errors.InvalidTextRepresentation:
+                return self.reply(404, {"error": "no such item"})
+            except Exception as e:
+                return self.reply(500, {"error": f"{type(e).__name__}: {e}"})
+            log(f"{self.me['name']} removed material {target}", "admin")
+            return self.reply(200, {"ok": True})
+
+        def do_profile(self):
+            """A member fixes their own name and number, and nothing else.
+
+            Open to every approved member -- it is not in ROLE_REQUIRED -- and
+            that is the point: your own name is not a privilege. What stops it
+            being more than a name is the database, where the "edit own name
+            only" policy pins status and role to what they already are.
+            """
+            if not self.me:
+                return self.reply(404, {"error": "this server is running with --no-auth"})
+            try:
+                req = self.body(4000)
+                if req is None:
+                    return
+                with db(self.me["id"]) as conn:
+                    out = db_edit_profile(conn, self.me["id"],
+                                          req.get("name"), req.get("phone"))
+            except ValueError as e:
+                return self.reply(400, {"error": str(e)})
+            except Exception as e:
+                return self.reply(500, {"error": f"{type(e).__name__}: {e}"})
+            return self.reply(200, out)
 
         def do_upload(self):
             """Raw body upload: filename and subject ride in headers.
@@ -3619,6 +4201,20 @@ def build_server(args):
                 return self.reply(400, {"error": str(e)})
             except Exception as e:
                 return self.reply(500, {"error": f"{type(e).__name__}: {e}"})
+
+        def body(self, cap):
+            """The request's JSON body, or None once a 413 has been sent.
+
+            Answers the oversized case itself, so the three admin POSTs below
+            read as three lines rather than three copies of the same guard --
+            and none of them can be the one that forgets the cap.
+            """
+            n = int(self.headers.get("Content-Length", 0))
+            if n > cap:
+                self.close_connection = True   # body left unread; do not reuse
+                self.reply(413, {"error": "too much"})
+                return None
+            return json.loads(self.rfile.read(n) or b"{}")
 
         def send_html(self, html):
             body = html.encode()

@@ -211,6 +211,73 @@ def test_db_set_role_refuses_junk_and_self_demotion(db):
     assert db.execute("select role from profiles where id = %s", (boss,)).fetchone()[0] == "admin"
 
 
+# ------------------------------------ the last admin, guarded below the handler
+#
+# db_set_role and db_set_status both refuse an admin who aims at themselves, and
+# so does the screen. These are the same attempts one layer lower: raw SQL on a
+# session that is genuinely an admin, which is what a leaked connection string
+# or a handler bug looks like. The cost of getting this wrong is not a
+# privilege escalation, it is a class with nobody left who can approve anybody.
+
+
+def test_an_admin_cannot_demote_themselves_in_sql(db):
+    boss = member(db, role="admin")
+    as_user(db, boss)
+    for want in ("student", "trusted"):
+        with pytest.raises(psycopg.errors.RaiseException), db.transaction():
+            db.execute("update profiles set role = %s where id = %s", (want, boss))
+    as_admin_connection(db)
+    assert db.execute("select role from profiles where id = %s", (boss,)).fetchone()[0] \
+        == "admin"
+
+
+def test_an_admin_cannot_block_themselves_in_sql(db):
+    boss = member(db, role="admin")
+    as_user(db, boss)
+    for want in ("blocked", "pending"):
+        with pytest.raises(psycopg.errors.RaiseException), db.transaction():
+            db.execute("update profiles set status = %s where id = %s", (want, boss))
+    as_admin_connection(db)
+    assert db.execute("select status from profiles where id = %s", (boss,)).fetchone()[0] \
+        == "approved"
+
+
+def test_an_admin_may_still_fix_their_own_name_and_number(db):
+    """The guard is about the two columns that end a class, not about the
+    person. An admin editing their own profile is an ordinary thing to do."""
+    boss = member(db, role="admin")
+    as_user(db, boss)
+    db.execute("update profiles set name = 'Renamed', phone = '+919876500000' "
+               "where id = %s", (boss,))
+    assert db.execute("select name, phone from profiles where id = %s",
+                      (boss,)).fetchone() == ("Renamed", "+919876500000")
+
+
+def test_one_admin_may_still_demote_or_block_another(db):
+    """Only your own row is protected. Two admins who disagree is a problem for
+    the two of them; a class with no admin at all is a problem for everybody."""
+    boss = member(db, role="admin")
+    other = member(db, role="admin")
+    as_user(db, boss)
+    db.execute("update profiles set role = 'student' where id = %s", (other,))
+    db.execute("update profiles set status = 'blocked' where id = %s", (other,))
+    as_admin_connection(db)
+    assert db.execute("select role, status from profiles where id = %s",
+                      (other,)).fetchone() == ("student", "blocked")
+
+
+def test_db_set_status_refuses_blocking_yourself(db):
+    boss = member(db, role="admin")
+    someone = member(db, role="student")
+    as_user(db, boss)
+    with pytest.raises(ValueError):
+        notes.db_set_status(db, boss, boss, True)
+    assert notes.db_set_status(db, boss, someone, True) == "blocked"
+    assert notes.db_set_status(db, boss, someone, False) == "approved"
+    with pytest.raises(ValueError):
+        notes.db_set_status(db, boss, "00000000-0000-0000-0000-000000000000", True)
+
+
 # ----------------------------------------------------- and what the server allows
 
 @pytest.fixture(scope="module")
@@ -298,6 +365,11 @@ MATRIX = [
     ("GET", "/pending", None, "admin"),
     ("POST", "/approve", {"id": "nope"}, "admin"),
     ("POST", "/role", {"id": "nope", "role": "trusted"}, "admin"),
+    # Your own name is not a privilege, so /profile is deliberately not in
+    # ROLE_REQUIRED and every approved member reaches it.
+    ("POST", "/profile", {"name": "Renamed"}, "student"),
+    ("POST", "/block", {"id": "nope"}, "admin"),
+    ("POST", "/remove", {"id": "nope"}, "admin"),
 ]
 
 RANK = notes.RANK
@@ -403,6 +475,155 @@ def test_a_role_is_not_a_reading_lock(server):
     assert code == 200 and "limits and continuity" in page
     data = json.loads(call(port, "GET", "/data", cookie=cookies["student"])[1])
     assert data["subjects"][0]["notes"][0]["title"] == "week1"
+
+
+def test_a_member_edits_their_own_name_and_number(server):
+    """Not a privilege: a student who typed their own name wrong on the way in
+    must be able to fix it without finding an admin."""
+    port, cookies, people = server
+    code, out = call(port, "POST", "/profile",
+                     {"name": "Asha Sharma", "phone": "098765 43210"}, cookies["student"])
+    assert code == 200
+    # The stored form comes back, not what was typed: showing the typed one
+    # would claim something else is on the class list.
+    assert json.loads(out) == {"name": "Asha Sharma", "phone": "+919876543210"}
+    with psycopg.connect(DB_URL, autocommit=True) as conn:
+        assert conn.execute(
+            "select name, phone, role, status from profiles where id = %s",
+            (people["student"],)).fetchone() == \
+            ("Asha Sharma", "+919876543210", "student", "approved")
+
+
+def test_a_member_cannot_smuggle_a_role_through_their_own_profile(server):
+    """The obvious attack on a form that writes your own row."""
+    port, cookies, people = server
+    code, _ = call(port, "POST", "/profile",
+                   {"name": "Still A Student", "phone": "9876543210",
+                    "role": "admin", "status": "approved", "is_admin": True,
+                    "trusted": True},
+                   cookies["student"])
+    assert code == 200, "the extra keys are ignored, not an error"
+    with psycopg.connect(DB_URL, autocommit=True) as conn:
+        assert conn.execute("select role from profiles where id = %s",
+                            (people["student"],)).fetchone()[0] == "student"
+
+
+@pytest.mark.parametrize("bad,says", [({"name": "   ", "phone": "9876543210"}, "blank"),
+                                      ({"name": "Asha", "phone": "12345"}, "10 digits")])
+def test_a_profile_edit_that_would_break_the_class_list_is_refused(server, bad, says):
+    """A blank name leaves an empty row on the admin screen, and a number
+    nobody can ring is the same as no number. Neither may half-apply."""
+    port, cookies, people = server
+    with psycopg.connect(DB_URL, autocommit=True) as conn:
+        before = conn.execute("select name, phone from profiles where id = %s",
+                              (people["student"],)).fetchone()
+    code, out = call(port, "POST", "/profile", bad, cookies["student"])
+    assert code == 400 and says in json.loads(out)["error"]
+    with psycopg.connect(DB_URL, autocommit=True) as conn:
+        assert conn.execute("select name, phone from profiles where id = %s",
+                            (people["student"],)).fetchone() == before
+
+
+def test_blocking_and_unblocking_take_effect_on_the_next_request(server):
+    port, cookies, people = server
+    assert call(port, "GET", "/data", cookie=cookies["trusted"])[0] == 200
+    assert call(port, "POST", "/block", {"id": people["trusted"], "blocked": True},
+                cookies["admin"])[0] == 200
+    assert call(port, "GET", "/data", cookie=cookies["trusted"])[0] == 403, \
+        "the same cookie as a moment ago; only the row changed"
+    assert call(port, "POST", "/block", {"id": people["trusted"], "blocked": False},
+                cookies["admin"])[0] == 200
+    assert call(port, "GET", "/data", cookie=cookies["trusted"])[0] == 200
+
+
+def test_an_admin_cannot_block_themselves_out_of_the_class(server):
+    port, cookies, people = server
+    code, out = call(port, "POST", "/block", {"id": people["admin"], "blocked": True},
+                     cookies["admin"])
+    assert code == 400 and "yourself" in json.loads(out)["error"]
+    assert call(port, "GET", "/pending", cookie=cookies["admin"])[0] == 200
+
+
+def test_rejecting_a_joiner_is_a_block_and_not_a_delete(server):
+    """Reject is one tap next to Approve on a phone, so it has to be undoable
+    -- and deleting the person would take their uploads and votes with them."""
+    port, cookies, _ = server
+    with psycopg.connect(DB_URL, autocommit=True) as conn:
+        joiner = make_user(conn)
+        conn.execute("insert into profiles (id, name, roll_no, status, phone) values "
+                     "(%s, 'Rejected', 'rej', 'pending', '+919000000000')", (joiner,))
+    try:
+        body = json.loads(call(port, "GET", "/pending", cookie=cookies["admin"])[1])
+        mine = [p for p in body["pending"] if p["id"] == joiner]
+        assert [p["phone"] for p in mine] == ["+919000000000"], \
+            "the number is the one thing an admin cannot look up elsewhere"
+        assert mine[0]["asked"] > 0 and body["now"] >= mine[0]["asked"]
+
+        assert call(port, "POST", "/block", {"id": joiner, "blocked": True},
+                    cookies["admin"])[0] == 200
+        after = json.loads(call(port, "GET", "/pending", cookie=cookies["admin"])[1])
+        assert joiner not in [p["id"] for p in after["pending"]], "off the queue"
+        assert [m["status"] for m in after["members"] if m["id"] == joiner] == ["blocked"], \
+            "and onto the members list, so the tap can be taken back"
+    finally:
+        with psycopg.connect(DB_URL, autocommit=True) as conn:
+            conn.execute("delete from profiles where id = %s", (joiner,))
+            conn.execute("delete from auth.users where id = %s", (joiner,))
+
+
+def test_the_panel_gets_the_counts_the_code_and_anything_reported(server):
+    """Everything the admin screen draws arrives on the one request it makes:
+    a second round trip for a number is a second thing to be slow on a phone."""
+    port, cookies, people = server
+    with psycopg.connect(DB_URL, autocommit=True) as conn:
+        mid = conn.execute(
+            "insert into materials (subject_code, uploader_id, filename, file_key, "
+            "size_bytes, status) values ('CY1107', %s, 'noisy.pdf', 'nk', 10, 'visible') "
+            "returning id", (people["trusted"],)).fetchone()[0]
+        conn.execute("insert into reports (material_id, reporter_id, reason) "
+                     "values (%s, %s, 'wrong subject')", (mid, people["student"]))
+
+    body = json.loads(call(port, "GET", "/pending", cookie=cookies["admin"])[1])
+    assert body["invite"] == "ROLETEST", "the code lives on the screen that hands it out"
+    assert body["counts"]["members"] == len(body["members"])
+    assert body["counts"]["pending"] == len(body["pending"])
+    assert body["counts"]["reports"] == 1
+    rep = [r for r in body["reports"] if r["material_id"] == str(mid)]
+    assert len(rep) == 1 and rep[0]["filename"] == "noisy.pdf"
+    assert rep[0]["reason"] == "wrong subject" and rep[0]["status"] == "visible"
+
+    # Removing it takes the file off the shelves and keeps the complaint.
+    assert call(port, "POST", "/remove", {"id": str(mid)}, cookies["admin"])[0] == 200
+    after = json.loads(call(port, "GET", "/pending", cookie=cookies["admin"])[1])
+    gone = [r for r in after["reports"] if r["material_id"] == str(mid)][0]
+    assert gone["status"] == "removed", "the report survives the removal"
+    assert after["counts"]["reports"] == 0, "and stops counting as a queue"
+    with psycopg.connect(DB_URL, autocommit=True) as conn:
+        assert conn.execute("select status from materials where id = %s",
+                            (mid,)).fetchone()[0] == "removed"
+
+
+def test_only_an_admin_reads_what_the_class_reported(db):
+    """The handler's 403 is one layer. This is the other: reports has exactly
+    one select policy, and a member's own connection matches none of it."""
+    owner = member(db, role="trusted")
+    reporter = member(db, role="student")
+    as_user(db, owner)
+    mid = db.execute(
+        "insert into materials (subject_code, uploader_id, filename, file_key, "
+        "size_bytes) values ('CY1107', %s, 'r.pdf', 'rk', 10) returning id",
+        (owner,)).fetchone()[0]
+    as_user(db, reporter)
+    db.execute("insert into reports (material_id, reporter_id, reason) "
+               "values (%s, %s, 'mine')", (mid, reporter))
+    assert notes.db_reports(db) == [], "a member sees nothing, not even their own"
+    as_admin_connection(db)
+    boss = member(db, role="admin")
+    as_user(db, boss)
+    # Filtered to this test's own row: the server fixture above commits, and
+    # its rows are still on the table when this transaction starts.
+    assert [r["filename"] for r in notes.db_reports(db)
+            if r["material_id"] == str(mid)] == ["r.pdf"]
 
 
 def test_the_admin_screen_is_given_everybody_and_told_which_row_is_its_own(server):

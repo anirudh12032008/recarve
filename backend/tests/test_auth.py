@@ -188,7 +188,13 @@ def test_approving_lets_someone_in_and_publishes_what_they_uploaded(db):
                       (joiner_id,)).fetchone()[0] == "pending"
 
     as_user(db, admin_id)
-    assert notes.db_pending(db) == [{"id": joiner_id, "name": "Bilal", "roll_no": "24U002"}]
+    waiting = notes.db_pending(db)
+    # The number rides along now: it is the one of the three an admin cannot
+    # look up anywhere else, and "is this the Bilal from our section" is the
+    # whole question this queue asks.
+    assert [{k: w[k] for k in ("id", "name", "roll_no", "phone")} for w in waiting] == [
+        {"id": joiner_id, "name": "Bilal", "roll_no": "24U002", "phone": None}]
+    assert waiting[0]["asked"] > 0, "and when they asked, on the server's clock"
     published = notes.db_approve(db, joiner_id)
 
     as_admin_connection(db)

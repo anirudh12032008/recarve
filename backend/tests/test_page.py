@@ -173,8 +173,11 @@ const panelEl = {classList: {add: () => {}, remove: () => {}, contains: () => fa
 // #fab is real for the same reason: render() sets .hidden on seven other
 // elements every route, so `wrote(['hidden', true])` was true before applyRole
 // had done anything at all.
-const fabEl = {hidden: null};
-const els = {ask: askEl, panel: panelEl, fab: fabEl};
+const fabEl = {hidden: null, className: null};
+// The banner in the add sheet that says who adding is for. Real, because
+// whether it is showing is the other half of what a locked + button means.
+const lockEl = {hidden: null};
+const els = {ask: askEl, panel: panelEl, fab: fabEl, lock: lockEl};
 let selection = '';
 let onSelectionChange = () => {};
 const rect = {top: 100, left: 20, width: 80};
@@ -428,7 +431,7 @@ assert.equal(view.tab, 'me');
 assert.equal(current, null, 'the contributions screen is not a note');
 writes = [];
 render();
-assert.ok(wrote(['textContent', 'Your contributions']), 'and that header must name it');
+assert.ok(wrote(['textContent', 'Your profile']), 'and that header must name it');
 
 // Which chrome each tab carries. The brand is Home's and the subject header is
 // everyone else's, because #lback -- the only back button at this depth --
@@ -666,22 +669,39 @@ reply = answer(true, {subjects: [], codes: [], now: 1, role: 'student'});
 writes = [];
 await refresh();
 assert.equal(ROLE, 'student', 'the role rides in on the /data the page already fetches');
-assert.equal(fabEl.hidden, true, 'a student is not shown the Add button');
+// Shown, not hidden. A + button that is simply absent reads as an app that
+// does not do that at all, so the student never learns the thing exists or
+// who could give it to them.
+assert.equal(fabEl.hidden, false, 'a student still sees the + button');
+assert.equal(fabEl.className, 'locked', 'and it says it is not theirs yet');
+assert.equal(lockEl.hidden, false, 'the sheet says who adding is for');
 
-// And highlighting a passage does not offer Explain, which is the AI spend.
+// Explain is offered too, and marked -- and tapping it explains itself rather
+// than spending a request that comes back 403.
 askCls.length = 0;
 current = {title: 'week1'};
 selection = 'a long enough phrase to explain';
 onSelectionChange();
-assert.ok(!askCls.includes('+on'), 'a student must not be offered Explain');
+assert.ok(askCls.includes('+on'), 'a student is offered the Explain button');
+assert.ok(askCls.includes('+locked'), 'in a state that says it is not theirs');
+fetches = []; writes = [];
+await askEl.onclick();
+assert.ok(wrote(['textContent', LOCK_EXPLAIN]), 'tapping it says who Explain is for');
+assert.ok(!fetches.some(f => f[0] === '/explain'),
+          'and a locked Explain must never spend the API call it is locked for');
+assert.ok(/trusted/.test(LOCK_EXPLAIN) && /admin/.test(LOCK_EXPLAIN),
+          'the copy has to say what would unlock it, not just that it is locked');
 
 reply = answer(true, {subjects: [], codes: [], now: 1, role: 'trusted'});
 writes = []; askCls.length = 0;
 await refresh();
 assert.equal(ROLE, 'trusted');
 assert.equal(fabEl.hidden, false, 'and a trusted member gets the Add button back');
+assert.equal(fabEl.className, '', 'unlocked');
+assert.equal(lockEl.hidden, true, 'with no lock banner in the sheet');
 onSelectionChange();
 assert.ok(askCls.includes('+on'), 'a trusted member is offered Explain');
+assert.ok(!askCls.includes('+locked'), 'and it is not marked as locked');
 
 // ---- The two ways /data can fail to say anything.
 // A 503 (Postgres down) or a 403 is an answer, and it is not a yes. Before
@@ -693,7 +713,8 @@ reply = answer(false, {error: 'the library is offline'});
 await refresh();
 assert.equal(ROLE, null, 'a 503 is not permission');
 fabEl.hidden = null; applyRole();
-assert.equal(fabEl.hidden, true, 'so the Add button stays away');
+assert.equal(fabEl.hidden, true,
+             'so the Add button stays away -- unknown is not a role to lock');
 askCls.length = 0;
 onSelectionChange();
 assert.ok(!askCls.includes('+on'), 'and Explain, which spends money, is not offered');
@@ -718,21 +739,73 @@ onSelectionChange();
 assert.equal(askEl.style.top, '348px', 'and sits at the selection everywhere else');
 rect.top = 100;
 
-// The Me tab is the only screen that explains the roles, so a student has to
-// find there how to get the two things their phone stopped offering above --
-// and somebody who already has them must not be told to go ask for them.
-const mine = role => answer(true, {role, admin: false, invite: null,
+// The Me tab is the profile: who you are, what your role permits, and what you
+// have put in. It is also the only screen that explains the roles, so it is
+// where a student finds out who opens the controls that told them no -- and
+// somebody who already has them must not be told to go ask for them.
+const mine = (role, extra) => answer(true, Object.assign({
+  role, admin: false, invite: null, name: 'Asha', roll_no: '24U001',
+  phone: '+919876543210', section: 'Section I',
   points: {score: 0, uploads: 0, recordings: 0, votes_received: 0},
-  uploads: [], recordings: []});
+  uploads: [], recordings: []}, extra || {}));
 reply = mine('student');
 location.hash = '#me'; route();
 writes = [];
 await renderMe();
-assert.ok(says('Your access'), 'a student must be told how to get upload access');
+assert.ok(says('Asha'), 'the profile is the person, not just a score');
+assert.ok(says('24U001') && says('Section I') && says('+919876543210'),
+          'roll number, section and number are all on it');
+assert.ok(says('Student'), 'and what they are');
+assert.ok(says('What trusted adds'), 'a student is told what trusted would add');
+assert.ok(/admin/.test(LOCK_ADD), 'and that an admin is what makes one');
+assert.ok(says('Points are a thank-you'), 'the contributions are still here');
+
 reply = mine('trusted');
 writes = [];
 await renderMe();
-assert.ok(!says('Your access'), 'somebody who already has it is not told to ask');
+assert.ok(says('Trusted member'), 'a trusted member is told what they have');
+assert.ok(!says('What trusted adds'), 'and is not told to go ask for it');
+
+// Your own name and number, and nothing else on this screen: there is no
+// control here that could ask for a role or a status at all.
+reply = mine('student');
+writes = []; fetches = [];
+await renderMe();
+const box = {className: '', innerHTML: '', appendChild: () => {},
+             querySelector: () => any};
+qvalue = 'Asha Sharma';
+editProfile(box, {name: 'Asha', phone: '+919876543210'});
+const save = writes.filter(w => w[0] === 'onclick').pop()[1];
+reply = answer(true, {name: 'Asha Sharma', phone: '+919876543211'});
+fetches = [];
+await save();
+assert.equal(fetches[0][0], '/profile', 'saving is one request');
+const sent = JSON.parse(fetches[0][1].body);
+assert.deepStrictEqual(Object.keys(sent).sort(), ['name', 'phone'],
+                       'a member may send their name and their number and nothing else');
+
+// An admin's own rows are marked as an admin's, in the one class the admin
+// screen uses for the same thing.
+reply = mine('admin', {admin: true, invite: 'ABCD', pending: 2});
+writes = [];
+await renderMe();
+assert.ok(says('2 people are waiting to be let in'),
+          'the queue is on the tab, not only behind a second screen');
+assert.ok(wrote(['className', 'row adm']), 'an admin-only row is inked');
+assert.ok(wrote(['textContent', 'Admin']), 'and says so');
+
+// The Me tab is painted twice on the way in -- once by the router, once when
+// /data answers -- and its own /me lands between the two. Both halves used to
+// append, so an admin was shown two of every row and two profile cards.
+location.hash = '#me';
+reply = mine('admin', {admin: true, invite: 'ABCD'});
+route();          // paint one, waiting on /me
+render();         // paint two replaces it, and is also waiting on /me
+writes = [];
+await new Promise(setImmediate);
+await new Promise(setImmediate);
+const rows = writes.filter(w => JSON.stringify(w) === '["className","row adm"]').length;
+assert.equal(rows, 2, 'two inked rows from the paint that survived, not four from both');
 
 })().catch(e => { console.error(e); process.exit(1); });
 """
@@ -953,9 +1026,100 @@ def test_the_explain_button_ranks_under_the_reading_header():
 
 
 def test_a_refused_upload_is_not_told_to_try_again():
-    """403 is the gate's, and its words are a route name and a role. The Me tab
-    already has the sentence for this, and a retry cannot work."""
+    """403 is the gate's, and its words are a route name and a role. There is
+    one sentence for this in the whole page, and a retry cannot work."""
     up = re.search(r"function upload\(blob, name\) \{.*?\n\}", notes.PAGE, re.S).group(0)
     assert "if (xhr.status === 403)" in up, "a no is not a failed upload"
-    assert "Ask an admin for upload access" in up
+    assert "fail(LOCK_ADD, false)" in up, "and it says the same thing every other lock does"
     assert "retry ? ' — tap an option to try again' : ''" in up
+
+
+# -------------------------------------------------- what a student is shown
+
+
+def test_every_way_in_is_locked_rather_than_missing():
+    """A student may not upload, record or Explain. Hiding those controls was
+    the old answer and it taught nobody anything: the app simply looked like an
+    app that does not do that. Each one stays, marked, with the reason."""
+    for wiring in (
+        # The + button is shown and marked, not removed.
+        "fab.hidden = ROLE === null;",
+        "fab.className = mayAdd() ? '' : 'locked';",
+        "document.getElementById('lock').hidden = mayAdd();",
+        "el.className = mayAdd() ? 'opt' : 'opt locked';",
+        # Each option refuses to start rather than 403ing halfway through.
+        "if (!mayAdd()) return;",
+        # Explain is offered, and answers in the panel it opens.
+        "if (!mayAdd()) { out.textContent = LOCK_EXPLAIN; return; }",
+        "else ask.classList.add('locked');",
+    ):
+        assert wiring in notes.PAGE, f"the lock is not wired: {wiring}"
+    assert notes.PAGE.count("if (!mayAdd()) return;") == 4, \
+        "all four options in the add sheet, not the two that were easy"
+
+
+@pytest.mark.parametrize("const", ["LOCK_ADD", "LOCK_EXPLAIN"])
+def test_the_lock_copy_says_what_would_open_it(const):
+    """"You cannot do this" is not an answer a first-year can act on. Both
+    sentences have to name the role and the person who grants it."""
+    said = re.search(rf"const {const} = (.*?);\n", notes.PAGE, re.S).group(1)
+    assert "trusted" in said, f"{const} does not say what role this needs"
+    assert "admin" in said, f"{const} does not say who makes one"
+
+
+def test_a_locked_control_never_costs_a_request():
+    """The point of showing the lock is that the phone already knows the
+    answer. Both handlers have to return before the fetch, not after it."""
+    ask = re.search(r"ask\.onclick = async \(\) => \{.*?\n\};", notes.PAGE, re.S).group(0)
+    assert ask.index("if (!mayAdd())") < ask.index("fetch('/explain'")
+    rev = re.search(r"getElementById\('opt-revise'\)\.onclick = async \(\) => \{.*?\n\};",
+                    notes.PAGE, re.S).group(0)
+    assert rev.index("if (!mayAdd())") < rev.index("fetch('/revise'")
+
+
+# ------------------------------------------------ admin controls, and the ink
+
+
+def test_admin_only_controls_are_marked_the_same_way_in_both_files():
+    """Privileged actions appear on two screens -- the Me tab and the admin
+    page -- and they have to be recognisable as the same thing on both. One
+    pair of tokens, one class name, or it is two treatments that will drift."""
+    for page in (notes.PAGE, notes.GATE_PAGE):
+        assert "--admin:" in page and "--admin-fg:" in page, "the ink is not defined"
+    assert "function inked(row)" in notes.PAGE, "the app has no single place for it"
+    assert "row.className = 'row adm';" in notes.PAGE
+    assert notes.PAGE.count("inked(") >= 4, "every admin row goes through it"
+    # Ink, not a bolted-on red: red is the error colour and already means
+    # something else on both screens.
+    admin_light = re.search(r"--admin:\s*(#[0-9a-fA-F]{6})", notes.PAGE).group(1)
+    assert admin_light != "#e5484d"
+
+
+@pytest.mark.parametrize("mode", ["light", "dark"])
+@pytest.mark.parametrize("fg,bg", [("--admin-fg", "--admin"), ("--admin", "--bg"),
+                                   ("--mut", "--surface"), ("--accent", "--bg")])
+def test_the_ink_reads_in_both_themes(mode, fg, bg):
+    """An inked slab, a muted lock label on the surface it sits on, and the
+    accent it has to be told apart from. PAGE never had a contrast test at all;
+    the gate's helper is the same arithmetic, so it is borrowed rather than
+    written twice."""
+    from test_gate_page import contrast
+
+    css = re.search(r"<style>\n(.*?)\n</style>", notes.PAGE, re.S).group(1)
+    roots = re.findall(r":root\{([^}]*)\}", css)
+    light, dark = ({k: v for k, v in
+                    re.findall(r"(--[\w-]+)\s*:\s*(#[0-9a-fA-F]{3,6})", r)}
+                   for r in roots)
+    tokens = light if mode == "light" else {**light, **dark}
+    ratio = contrast(tokens[fg], tokens[bg])
+    assert ratio >= 4.5, f"{fg} on {bg} in {mode} is only {ratio:.2f}:1"
+
+
+def test_the_profile_edits_two_fields_and_cannot_reach_for_a_third():
+    """Name and phone are yours. Role and status are not, and the screen that
+    could ask for them is the one place this is easy to get wrong -- so there
+    is no control here that names either."""
+    form = re.search(r"function editProfile\(box, d\) \{.*?\n\}\n", notes.PAGE, re.S).group(0)
+    assert "body: JSON.stringify({name: name.value, phone: phone.value})" in form
+    for forbidden in ("role", "status", "trusted", "admin"):
+        assert forbidden not in form, f"the profile form reaches for {forbidden}"
