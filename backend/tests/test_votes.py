@@ -417,3 +417,26 @@ def test_no_auth_offers_no_votes_at_all(tmp_path):
     finally:
         srv.shutdown()
         srv.server_close()
+
+
+def test_the_me_tab_hands_the_invite_code_to_an_admin_and_to_nobody_else(server):
+    """The Me tab is where the class admin fetches the code for a new joiner,
+    so /me carries it -- but only theirs. A member's copy has no code in it at
+    all, which is the only version of this that cannot leak one."""
+    port, cookies = server
+    with psycopg.connect(DB_URL, autocommit=True) as conn:
+        conn.execute("insert into invites (code, expires_at) values "
+                     "('DEAD', now() - interval '1 day'), ('SEC-I', now() + interval '30 days')")
+    try:
+        mine = json.loads(call(port, "GET", "/me", cookie=cookies["Asha"])[1])
+        assert (mine["admin"], mine["invite"]) == (True, "SEC-I"), "an expired code is not one"
+
+        theirs = json.loads(call(port, "GET", "/me", cookie=cookies["Bilal"])[1])
+        assert theirs["admin"] is False
+        assert theirs["invite"] is None, "a member must never be handed an invite code"
+        # And the screen behind the link stays admin-only whatever /me says.
+        assert call(port, "GET", "/admin", cookie=cookies["Bilal"])[0] == 403
+        assert call(port, "GET", "/admin", cookie=cookies["Asha"])[0] == 200
+    finally:
+        with psycopg.connect(DB_URL, autocommit=True) as conn:
+            conn.execute("delete from invites where code in ('DEAD', 'SEC-I')")

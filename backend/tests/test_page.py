@@ -133,9 +133,10 @@ const any = new Proxy(function () {}, {
 const wrote = pair => writes.some(w => JSON.stringify(w) === JSON.stringify(pair));
 const document = any;
 const location = {hash: ''};
+let hist = [];     // every entry pushed, so back can be reasoned about
 const history = {
-  pushState: (a, b, h) => { location.hash = h; },
-  replaceState: (a, b, h) => { location.hash = h; },
+  pushState: (a, b, h) => { hist.push(h); location.hash = h; },
+  replaceState: (a, b, h) => { hist[hist.length - 1] = h; location.hash = h; },
   back: () => {},
 };
 const window = {scrollTo: () => {}, print: () => {}};
@@ -145,47 +146,90 @@ const setInterval = () => 0, setTimeout = () => 0, clearInterval = () => {};
 """
 
 CHECKS = """
-// LEVEL 3: a two-segment hash opens that note.
-location.hash = '#MC1101/week1';
+// LEVEL 3, inside the Classes tab: three segments open that note.
+location.hash = '#classes/MC1101/week1';
 route();
 assert.equal(current && current.title, 'week1', 'a note hash must open the note');
-assert.equal(view.code, 'MC1101');
+assert.deepEqual([view.tab, view.code], ['classes', 'MC1101']);
 
-// LEVEL 2: one segment is the subject, and nothing is open.
-location.hash = '#MC1101';
+// LEVEL 2: the subject, and nothing open.
+location.hash = '#classes/MC1101';
 route();
 assert.equal(current, null);
-assert.deepEqual([view.code, view.title], ['MC1101', null]);
+assert.deepEqual([view.tab, view.code, view.title], ['classes', 'MC1101', null]);
 
-// LEVEL 1.
-location.hash = '#';
+// LEVEL 1: the tab's own root.
+location.hash = '#classes';
 route();
-assert.equal(view.code, null);
+assert.deepEqual([view.tab, view.code], ['classes', null]);
 
-// The shape every link had before the levels existed: '#<note title>'. It has
-// to land on the note and rewrite itself into the three-level URL.
+// The other three tabs are levels of their own, and none of them is a subject.
+for (const t of ['home', 'campus', 'me']) {
+  location.hash = '#' + t;
+  route();
+  assert.deepEqual([view.tab, view.code, current], [t, null, null], t + ' is a tab');
+}
+
+// Every link that predates the tabs still has to land, and upgrade in place.
+location.hash = '#MC1101/week1';
+route();
+assert.equal(location.hash, '#classes/MC1101/week1', 'an old note link must be upgraded');
+assert.equal(current.title, 'week1');
+
+location.hash = '#MC1101';
+route();
+assert.equal(location.hash, '#classes/MC1101', 'an old subject link must be upgraded');
+
+// The shape every link had before the levels existed: '#<note title>'.
 location.hash = '#maths-2026-09-08';
 DATA[0].notes.push({title: 'maths-2026-09-08', kind: 'lecture', md: '# x'});
 route();
-assert.equal(location.hash, '#MC1101/maths-2026-09-08', 'old link must be upgraded');
+assert.equal(location.hash, '#classes/MC1101/maths-2026-09-08', 'oldest link must be upgraded');
 assert.equal(current.title, 'maths-2026-09-08');
 DATA[0].notes.pop();
 
-// A hash that means nothing falls back to level 1 instead of throwing.
+// A hash that means nothing falls back to the first tab instead of throwing.
 location.hash = '#nothing-like-this';
 route();
-assert.equal(view.code, null);
+assert.deepEqual([view.tab, view.code], ['home', null]);
+location.hash = '#classes/NOPE';
+route();
+assert.deepEqual([view.tab, view.code], ['classes', null], 'no such subject');
 
-// Back (browser button, Android gesture) climbs a level.
+// Back (browser button, Android gesture) climbs a step.
 assert.equal(window.onpopstate, route, 'back must re-route');
+
+// Landing deep must never take one press to leave the app: every step above
+// the link is seeded under it first.
+hist = ['#classes/MC1101/week1'];
+location.hash = hist[0];
+seedHistory();
+assert.deepEqual(hist, ['#home', '#classes', '#classes/MC1101', '#classes/MC1101/week1'],
+                 'a deep link must be reachable by walking back out of it');
+hist = ['#me'];
+location.hash = '#me';
+seedHistory();
+assert.deepEqual(hist, ['#home', '#me'], 'a tab is one step above the root');
+hist = [];
+location.hash = '';
+seedHistory();
+assert.deepEqual(hist, [], 'the root seeds nothing');
+
+// Tapping the tab you are on must not stack history entries to walk back out of.
+location.hash = '#campus';
+hist = [];
+go('campus');
+assert.deepEqual(hist, [], 'the tab you are already on is not a new entry');
+go('classes');
+assert.deepEqual(hist, ['#classes']);
 
 // What level 1 prints under each subject.
 assert.equal(counts(DATA[0]), '1 lecture \\u00b7 revision sheet');
 assert.equal(counts(DATA[1]), 'Nothing yet');
-assert.equal(hashOf('MC1101', 'week 1'), '#MC1101/week%201');
+assert.equal(hashOf('classes', 'MC1101', 'week 1'), '#classes/MC1101/week%201');
 
 // + on a subject screen files it under that subject without touching the menu.
-location.hash = '#MC1101';
+location.hash = '#classes/MC1101';
 route();
 writes = [];
 openSheet();
@@ -297,11 +341,11 @@ writes = [];
 noteRow({title: 'week2', kind: 'lecture', md: ''}, mc);
 assert.ok(wrote(['textContent', '']), 'an unattributed note says nothing, not "by nobody"');
 
-// Contributions is a level of its own, so back climbs out of it rather than
-// leaving the app.
+// Contributions is the Me tab, so back climbs out of it rather than leaving
+// the app.
 location.hash = '#me';
 route();
-assert.equal(view.code, 'me');
+assert.equal(view.tab, 'me');
 assert.equal(current, null, 'the contributions screen is not a note');
 // The brand has to give way to the subject header, because #lback -- the only
 // back button at this depth -- lives inside it. Header writes in order:
@@ -320,6 +364,17 @@ assert.ok(!writes.some(w => w[0] === 'value'), 'nothing may be filed under #me')
 location.hash = '#';
 route();
 assert.equal(view.code, null);
+
+// The two tabs with nothing in them yet say what is coming rather than
+// showing an empty screen that reads as a bug.
+writes = [];
+renderHome();
+assert.ok(writes.some(w => w[0] === 'textContent' && String(w[1]).includes('Classes')),
+          'Home must say where everything currently is');
+writes = [];
+renderCampus();
+assert.ok(writes.some(w => w[0] === 'textContent' && String(w[1]).includes('Clubs')),
+          'Campus must name what will live there');
 """
 
 
@@ -366,7 +421,6 @@ def test_the_vote_control_is_wired_to_the_server_and_nothing_else():
         # One request, carrying which item and which direction.
         "body: JSON.stringify({id: u.id, on: !u.voted})",
         "if (u.id) el.appendChild(voteBtn(u));",
-        "b.onclick = () => go('me', null);",
     ):
         assert wiring in notes.PAGE, f"vote control not wired: {wiring}"
     # And then the whole list again, because a vote changes the ranking. Read
@@ -374,6 +428,35 @@ def test_the_vote_control_is_wired_to_the_server_and_nothing_else():
     # this line passed with the vote's own refresh deleted.
     handler = re.search(r"function voteBtn\(u\) \{.*?\n\}", notes.PAGE, re.S).group(0)
     assert "await refresh();" in handler, "a vote must re-read the list it re-ranks"
+
+
+def test_the_tab_bar_is_wired_and_gives_way_to_the_reading_dock():
+    """The bar is the shell. The stub cannot see an onclick on a proxy or read
+    CSS, so this reads the source: that a tab navigates, and that the one place
+    the bar is not shown is under an open note, where the dock takes the strip.
+    """
+    for wiring in ("tabBtns.forEach(b => { b.onclick = () => go(b.dataset.tab); });",
+                   'data-tab="home"', 'data-tab="classes"',
+                   'data-tab="campus"', 'data-tab="me"',
+                   # Reading takes the strip; back gives it straight back,
+                   # because closeRead() drops the class that hid it.
+                   "body.reading .tabs{display:none}",
+                   # ...except on a wide screen, where the list stays beside
+                   # the note and the dock starts at its edge.
+                   "body.reading .tabs{display:flex}"):
+        assert wiring in notes.PAGE, f"tab bar not wired: {wiring}"
+    # The FAB and the last row of a list must clear the bar, not sit under it.
+    assert "#nav{padding-bottom:calc(80px + env(safe-area-inset-bottom))}" in notes.PAGE
+
+
+def test_the_me_tab_carries_the_two_admin_things():
+    """Contributions, plus -- for an admin only -- the invite code and the way
+    to /admin. A member's /me carries no code to leak in the first place."""
+    for wiring in ("if (d.admin) {",
+                   "navigator.clipboard.writeText(d.invite)",
+                   "a.href = '/admin';",
+                   "block('Admin', rows);"):
+        assert wiring in notes.PAGE, f"the Me tab is missing: {wiring}"
 
 
 def test_points_never_gate_anything_on_the_page():

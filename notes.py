@@ -531,6 +531,8 @@ body.reading #read{display:block}
 .row .code{flex:none}
 .row a.name{text-decoration:none;color:inherit}
 .blank{padding:64px 24px;text-align:center;color:var(--mut)}
+.blank p{margin:0 0 12px}
+.blank p:last-child{margin:0}
 
 /* One vote per person, so this is a two-state toggle and not a counter you can
    lean on. The count sits inside the control: what you are pressing and what
@@ -669,6 +671,26 @@ details>:not(summary){padding:0 14px}
 .dock button:active{opacity:.75}
 body:not(.reading) .dock{display:none}
 
+/* ---- The shell: four tabs, thumb-reachable, always there except while
+   reading -- where the dock takes the same strip and back brings them
+   straight back. Labels, not icons: no webfont to download, and eight
+   readable characters beat a glyph nobody has been taught. */
+.tabs{
+  position:fixed;left:0;right:0;bottom:0;z-index:6;display:flex;gap:4px;
+  padding:6px 8px calc(6px + env(safe-area-inset-bottom));
+  background:color-mix(in srgb,var(--bg) 88%,transparent);
+  backdrop-filter:blur(12px);border-top:1px solid var(--line);
+}
+.tabs button{
+  flex:1;min-height:var(--tap);border-radius:11px;font-size:13px;font-weight:500;
+  color:var(--mut);display:flex;align-items:center;justify-content:center;
+}
+.tabs button[aria-current]{color:var(--accent);font-weight:650}
+.tabs button:active{background:var(--surface)}
+body.reading .tabs{display:none}
+/* Clear of the bar, so the last row is never half under it. */
+#nav{padding-bottom:calc(80px + env(safe-area-inset-bottom))}
+
 /* ---- Practice: one question at a time, over everything else. ---------- */
 #quiz{position:fixed;inset:0;z-index:12;background:var(--bg);display:flex;flex-direction:column}
 .qtop{display:flex;align-items:center;gap:12px;flex:none;
@@ -705,9 +727,13 @@ body:not(.reading) .dock{display:none}
   article{padding:30px 40px 110px}
   .dock{left:320px}
   body:not(.reading) .dock{display:flex}
+  /* Two panes, two bars: the tabs stay under the list they navigate, and the
+     dock starts where the note does, so reading no longer costs the tabs. */
+  .tabs{right:auto;width:320px}
+  body.reading .tabs{display:flex}
 }
 @media print{
-  .top,.dock,#list,.rtop,#fab,#busy,#ask,#quiz{display:none!important}
+  .top,.dock,.tabs,#list,.rtop,#fab,#busy,#ask,#quiz{display:none!important}
   #read{display:block!important}
   article{padding:0;max-width:none}
   details{background:none;border:1px solid #999}
@@ -725,7 +751,7 @@ body:not(.reading) .dock{display:none}
     <input id="q" placeholder="Search notes and transcripts" autocomplete="off" enterkeyhint="search">
   </div>
   <div id="jobs"></div>
-  <div style="padding:0 16px">
+  <div id="tools" style="padding:0 16px" hidden>
     <button id="logbtn">Show activity log</button>
     <pre id="logbox"></pre>
   </div>
@@ -802,6 +828,13 @@ body:not(.reading) .dock{display:none}
   <button id="print">Print</button>
 </div>
 
+<nav class="tabs" id="tabs" aria-label="Sections">
+  <button data-tab="home">Home</button>
+  <button data-tab="classes">Classes</button>
+  <button data-tab="campus">Campus</button>
+  <button data-tab="me">Me</button>
+</nav>
+
 <script>
 const DATA = __DATA__;
 const nav = document.getElementById('nav'), body = document.getElementById('body');
@@ -809,19 +842,25 @@ const backBtn = document.getElementById('back');
 const q = document.getElementById('q'), rcode = document.getElementById('rcode');
 const brand = document.getElementById('brand'), shead = document.getElementById('shead');
 const scode = document.getElementById('scode'), sname = document.getElementById('sname');
+const lback = document.getElementById('lback'), tools = document.getElementById('tools');
+const tabBtns = document.querySelectorAll('.tabs button');
 let current = null;                      // the note being read, or null
-let view = {code: null, title: null};    // which level the hash puts us on
+// Which tab, and how deep inside it. Only Classes has anything under the tab.
+let view = {tab: 'home', code: null, title: null};
 
 // Hue per department prefix. Colour says which subject you are in, so the code
 // chip reads at a glance without parsing the number.
 const HUES = {MC:245, CY:150, EE:38, ME:210, BS:175, HS:345, SA:275, NC:80};
 const hue = code => HUES[code.slice(0, 2)] ?? 220;
 
-// ---- Three levels: subjects -> one subject -> one note. -------------------
-// Each level is a real URL and each step down is a pushState, so the Android
-// back gesture and the browser back button both climb one level rather than
-// leaving the page. Nothing keeps its own back stack: route() reads the hash,
-// and the hash is the only thing that decides what is on screen.
+// ---- Four tabs, and inside Classes three levels: subjects -> one subject
+// ---- -> one note.
+// Every tab and every level is a real URL and each step is a pushState, so the
+// Android back gesture and the browser back button both climb one step rather
+// than leaving the page. Nothing keeps its own back stack: route() reads the
+// hash, and the hash is the only thing that decides what is on screen.
+const TABS = ['home', 'classes', 'campus', 'me'];
+const TAB_TITLE = {classes: 'Subjects', campus: 'Campus', me: 'Your contributions'};
 const subjectOf = code => DATA.find(s => s.code === code);
 const lecturesOf = s => s.notes.filter(n => n.kind !== 'revision');
 const revisionOf = s => s.notes.find(n => n.kind === 'revision');
@@ -835,12 +874,13 @@ function counts(s) {
   return bits.join(' \u00b7 ') || 'Nothing yet';
 }
 
-const hashOf = (code, title) =>
-  '#' + (code ? encodeURIComponent(code) : '')
-      + (title ? '/' + encodeURIComponent(title) : '');
+const hashOf = (...parts) =>
+  '#' + parts.filter(Boolean).map(encodeURIComponent).join('/');
 
-function go(code, title) {
-  history.pushState(null, '', hashOf(code, title));
+function go(...parts) {
+  const h = hashOf(...parts);
+  // Tapping the tab you are already on must not stack history entries.
+  if (h !== location.hash) history.pushState(null, '', h);
   route();
 }
 
@@ -853,7 +893,7 @@ function noteRow(n, s) {
   // Blank until the server says who: the static export has no database behind
   // it, and "recorded by nobody" would be a worse answer than silence.
   b.querySelector('small').textContent = n.by ? 'recorded by ' + n.by : '';
-  b.onclick = () => go(s.code, n.title);
+  b.onclick = () => go('classes', s.code, n.title);
   return b;
 }
 
@@ -921,21 +961,36 @@ function blank(text) {
   nav.appendChild(p);
 }
 
+// An honest empty screen: what will be here, and that it is not here yet.
+function saying(...lines) {
+  const el = document.createElement('div');
+  el.className = 'blank';
+  for (const t of lines) {
+    const p = document.createElement('p');
+    p.textContent = t;
+    el.appendChild(p);
+  }
+  nav.appendChild(el);
+}
+
+// HOME and CAMPUS are rooms with nothing in them yet. Saying so, and saying
+// what is coming, beats a blank screen that reads as a bug.
+function renderHome() {
+  saying('Home is where the next class, the newest notes in your subjects and '
+         + 'what to revise before an exam will show up.',
+         'That is the next thing being built. Until then everything you have is '
+         + 'under Classes.');
+}
+
+function renderCampus() {
+  saying('Clubs, events and announcements will live here.',
+         'Nothing has been put up yet — this fills with what your own clubs and '
+         + 'the notice board post, not with anything made up.');
+}
+
 // LEVEL 1: every subject, empty ones included. Nobody can add a chemistry
 // recording to a subject the app never told them was there.
 function renderSubjects() {
-  // Only with a server behind it: a static export has no session and nothing
-  // to count.
-  if (live) {
-    const b = document.createElement('button');
-    b.className = 'row';
-    b.style.setProperty('--h', 210);
-    b.innerHTML = '<i class="tick"></i><span class="name"><b></b><small></small></span>';
-    b.querySelector('b').textContent = 'Your contributions';
-    b.querySelector('small').textContent = 'what you have added, and the votes it got';
-    b.onclick = () => go('me', null);
-    block('You', [b]);
-  }
   block('Subjects', DATA.map(s => {
     const b = document.createElement('button');
     b.className = 'row';
@@ -945,7 +1000,7 @@ function renderSubjects() {
     b.querySelector('b').textContent = s.name;
     b.querySelector('small').textContent = counts(s);
     b.querySelector('.code').textContent = s.code;
-    b.onclick = () => go(s.code, null);
+    b.onclick = () => go('classes', s.code);
     return b;
   }));
 }
@@ -974,7 +1029,8 @@ function renderSubject(s) {
   }
 }
 
-// LEVEL 2, sideways: what you personally have put in.
+// THE ME TAB: what you personally have put in, and -- if you run the class
+// library -- the code that lets the next person in.
 //
 // Points are status and nothing else. Nothing in this app asks for a score
 // before it shows you something, and no screen here has a lock on it -- that
@@ -993,7 +1049,7 @@ async function renderMe() {
     box.textContent = 'Contributions need the server. Run: notes.py serve';
     return;
   }
-  if (view.code !== 'me') return;    // they navigated on while this was in flight
+  if (view.tab !== 'me') return;     // they navigated on while this was in flight
   const p = d.points;
   box.innerHTML = '<div class="score"></div><p></p>'
     + '<div class="tally"><div><b class="u"></b>uploads</div>'
@@ -1005,8 +1061,8 @@ async function renderMe() {
   box.querySelector('.r').textContent = p.recordings;
   box.querySelector('.v').textContent = p.votes_received;
 
-  const line = (main, sub) => {
-    const el = document.createElement('div');
+  const line = (main, sub, el) => {
+    el = el || document.createElement('div');
     el.className = 'row';
     el.style.setProperty('--h', 210);
     el.innerHTML = '<i class="tick"></i><span class="name"><b></b><small></small></span>';
@@ -1014,6 +1070,30 @@ async function renderMe() {
     el.querySelector('small').textContent = sub;
     return el;
   };
+
+  // The two things only an admin can do, on the only screen that is theirs.
+  // The server decides: a member's /me carries no invite code at all, and the
+  // invites table has no read policy for them either.
+  if (d.admin) {
+    const rows = [];
+    if (d.invite) {
+      const b = line(d.invite, 'Invite code — tap to copy',
+                     document.createElement('button'));
+      const cap = b.querySelector('small');
+      b.onclick = async () => {
+        try { await navigator.clipboard.writeText(d.invite); flash(cap, 'Copied'); }
+        catch { flash(cap, 'Copy failed — read it out'); }
+      };
+      rows.push(b);
+    } else {
+      rows.push(line('No invite code is live', 'Nobody can join until there is one'));
+    }
+    const a = document.createElement('a');
+    a.href = '/admin';
+    rows.push(line('Approve joiners', 'Everyone waiting to be let in', a));
+    block('Admin', rows);
+  }
+
   block('Notes & slides you added', d.uploads.map(u => line(
     u.name, u.subject + ' · ' + plural(u.votes, 'vote')
             + (u.status === 'visible' ? '' : ' · ' + u.status))));
@@ -1053,52 +1133,60 @@ function renderSearch(needle) {
 }
 
 function render() {
-  const needle = q.value.trim().toLowerCase();
+  // Search is the Classes tab's own tool; it must not answer over Campus.
+  const needle = view.tab === 'classes' ? q.value.trim().toLowerCase() : '';
   const s = view.code ? subjectOf(view.code) : null;
   nav.innerHTML = '';
-  // Keyed on view.code, not on the subject it resolves to: '#me' is a level
-  // below the top like any subject is, and #lback -- the only back button
-  // there is -- lives inside the subject header.
-  brand.hidden = !!view.code;
-  shead.hidden = !view.code;
+  // Home keeps the brand; every other tab names itself in the same header,
+  // and #lback -- the only back button at this depth -- appears only where
+  // there is a level above to climb to.
+  brand.hidden = view.tab !== 'home';
+  shead.hidden = view.tab === 'home';
+  lback.hidden = !s;
   scode.hidden = !s;
+  q.hidden = view.tab !== 'classes';
+  tools.hidden = view.tab !== 'me';
   if (s) {
     scode.textContent = s.code;
     scode.style.setProperty('--h', hue(s.code));
   }
-  sname.textContent = s ? s.name : 'Your contributions';
+  sname.textContent = s ? s.name : TAB_TITLE[view.tab];
+  tabBtns.forEach(b => {
+    if (b.dataset.tab === view.tab) b.setAttribute('aria-current', 'page');
+    else b.removeAttribute('aria-current');
+  });
   if (needle) renderSearch(needle);
-  else if (view.code === 'me') renderMe();
+  else if (view.tab === 'home') renderHome();
+  else if (view.tab === 'campus') renderCampus();
+  else if (view.tab === 'me') renderMe();
   else if (s) renderSubject(s);
   else renderSubjects();
 }
 
-// The router. One place decides which of the three levels you are looking at.
+// The router. One place decides which tab, and which level inside it, you are
+// looking at.
 function route() {
   // Back out of practice first: the quiz is not a URL, so without this the
   // Android back gesture would leave the app from underneath an open quiz.
   if (quiz.hidden === false) quiz.hidden = true;
-  const [code, title] =
+  const parts =
     location.hash.slice(1).split('/').filter(Boolean).map(decodeURIComponent);
-  // Your own contributions sit beside the subjects rather than inside one, so
-  // back climbs out of it to level 1 like everything else. 'me' is not a
-  // subject code and never will be; the twelve are fixed.
-  if (code === 'me') {
-    view = {code: 'me', title: null};
-    closeRead();
-    return render();
-  }
-  // Links shared before the three levels existed are just '#<note title>'.
-  // Point them at the note and upgrade the URL in place.
-  if (code && !title && !subjectOf(code)) {
-    const owner = DATA.find(x => x.notes.some(n => n.title === code));
+  // Links shared before the tabs existed: '#CY1107', '#CY1107/note', and the
+  // oldest form of all, '#<note title>'. Point them at the note and upgrade
+  // the URL in place, exactly as the two-level form already did.
+  if (parts.length && !TABS.includes(parts[0])) {
+    const s = subjectOf(parts[0]);
+    const owner = s ? parts[0]
+      : (DATA.find(x => x.notes.some(n => n.title === parts[0])) || {}).code;
     if (owner) {
-      history.replaceState(null, '', hashOf(owner.code, code));
+      history.replaceState(null, '', hashOf('classes', owner, s ? parts[1] : parts[0]));
       return route();
     }
   }
-  const s = subjectOf(code);
-  view = {code: s ? code : null, title: s && title ? title : null};
+  const tab = TABS.includes(parts[0]) ? parts[0] : 'home';
+  const s = tab === 'classes' ? subjectOf(parts[1]) : null;
+  const title = s ? parts[2] : null;
+  view = {tab, code: s ? s.code : null, title: title || null};
   const n = s && title ? s.notes.find(x => x.title === title) : null;
   if (n) openNote(n, s); else closeRead();
   render();
@@ -1312,7 +1400,8 @@ function busyDone(msg) {
 }
 
 backBtn.onclick = () => history.back();
-document.getElementById('lback').onclick = () => history.back();
+lback.onclick = () => history.back();
+tabBtns.forEach(b => { b.onclick = () => go(b.dataset.tab); });
 window.onpopstate = route;
 
 document.getElementById('share').onclick = async (e) => {
@@ -1600,14 +1689,19 @@ document.getElementById('close').onclick = () => panel.classList.remove('on');
 q.oninput = render;
 
 // A deep link arrives as one history entry, so back would leave the app rather
-// than climb a level. Seed the levels above it before the first route.
-const deep = location.hash.slice(1).split('/').filter(Boolean);
-if (deep.length) {
+// than climb a step. Seed every step above it -- the tab, then each level
+// inside it -- before the first route, so back walks out the way you would
+// have walked in.
+function seedHistory() {
+  const deep = location.hash.slice(1).split('/').filter(Boolean);
+  if (!deep.length) return;
   const here = location.hash;
-  history.replaceState(null, '', '#');
-  if (deep.length > 1) history.pushState(null, '', '#' + deep[0]);
+  history.replaceState(null, '', '#home');
+  for (let k = 1; k < deep.length; k++)
+    history.pushState(null, '', '#' + deep.slice(0, k).join('/'));
   history.pushState(null, '', here);
 }
+seedHistory();
 route();
 </script>
 """
@@ -2053,6 +2147,21 @@ def db_pending(conn):
             "order by created_at"
         )
     ]
+
+
+def db_invite(conn):
+    """The live code an admin passes on, or None if there is not one.
+
+    Read as whoever is asking: invites has no select policy for members, so a
+    normal session sees an empty table here rather than a code it could hand
+    to the whole college. Never mints one -- issuing invites is a decision,
+    not something a screen does on its own while being looked at.
+    """
+    row = conn.execute(
+        "select code from invites where expires_at > now() and uses < max_uses "
+        "order by expires_at desc limit 1"
+    ).fetchone()
+    return row[0] if row else None
 
 
 def db_approve(conn, profile_id):
@@ -2507,7 +2616,13 @@ def build_server(args):
                 if not self.me:
                     return self.reply(404, {"error": "this server is running with --no-auth"})
                 with db(self.me["id"]) as conn:
-                    return self.reply(200, db_contributions(conn, self.me["id"]))
+                    out = db_contributions(conn, self.me["id"])
+                    # The Me tab is also where the admin does the two admin
+                    # things. Gated twice on purpose: here, and by the invites
+                    # policy that gives a member no read at all.
+                    out["admin"] = bool(self.me["admin"])
+                    out["invite"] = db_invite(conn) if self.me["admin"] else None
+                    return self.reply(200, out)
             if self.path == "/jobs":
                 return self.reply(200, {"jobs": jobs.snapshot()})
             if self.path == "/log":
