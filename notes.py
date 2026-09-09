@@ -53,11 +53,31 @@ Any Hindi word or phrase the professor used for a technical idea, with its Engli
 Anything the transcript garbled badly enough that you had to guess, quoted with your best reading. Skip this section if nothing was unclear.
 
 Rules:
+- Start directly at "## Summary". Do not add a title heading of your own; the file already has one.
+- Write ALL mathematics as LaTeX: $...$ inline, $$...$$ for display equations. Never write maths as
+  plain text like "lim(h->0) [f(x+h)-f(x)]/h" — it is rendered with KaTeX and plain text stays ugly.
 - Write the notes in {notes_lang}.
 - Preserve technical terms in English exactly as a textbook would write them.
 - Where the transcript is clearly a mis-transcription of a known technical term, silently correct it.
 - Never invent content that is not in the transcript. If the lecture was thin, the notes are short.
 """
+
+# $ per million tokens, (input, output). Used for the spend readout and the
+# --max-cost guard; an unlisted model falls back to the priciest rates so a
+# guess never under-reports what a run cost.
+PRICES = {
+    "claude-haiku-4-5": (1.0, 5.0),
+    "claude-sonnet-5": (2.0, 10.0),
+    "claude-opus-5": (5.0, 25.0),
+    "claude-opus-4-8": (5.0, 25.0),
+    "claude-fable-5-1": (10.0, 50.0),
+}
+FALLBACK_PRICE = (10.0, 50.0)
+
+
+def price_of(model):
+    return PRICES.get(model, FALLBACK_PRICE)
+
 
 NOTES_LANG = {
     "english": "English",
@@ -485,17 +505,19 @@ def process(path, args):
     if args.no_notes:
         body += f"## Transcript\n\n```\n{transcript}\n```\n"
     else:
-        # ~4 chars per token, plus a 16k output ceiling, at Opus 5 rates.
-        worst_case = len(transcript) / 4 / 1e6 * 5 + 16000 / 1e6 * 25
+        # ~4 chars per token, plus the 16k output ceiling, at this model's rates.
+        rate_in, rate_out = price_of(args.notes_model)
+        worst_case = len(transcript) / 4 / 1e6 * rate_in + 16000 / 1e6 * rate_out
         if worst_case > args.max_cost:
             raise SystemExit(
                 f"  would cost up to ${worst_case:.2f}, over --max-cost ${args.max_cost:.2f}.\n"
                 f"  Transcript is cached, so raise --max-cost and re-run without re-transcribing."
             )
         notes, usage = make_notes(transcript, args.notes_lang, args.notes_model)
-        cost = usage.input_tokens / 1e6 * 5 + usage.output_tokens / 1e6 * 25
+        cost = usage.input_tokens / 1e6 * rate_in + usage.output_tokens / 1e6 * rate_out
         print(
-            f"  notes: {usage.input_tokens} in / {usage.output_tokens} out (~${cost:.3f})",
+            f"  notes: {usage.input_tokens} in / {usage.output_tokens} out "
+            f"(~${cost:.3f} on {args.notes_model})",
             file=sys.stderr,
         )
         body += f"{notes}\n\n---\n\n<details><summary>Full transcript</summary>\n\n```\n{transcript}\n```\n\n</details>\n"
@@ -606,7 +628,11 @@ def main():
     )
     t.add_argument("--model", default="large-v3", choices=list(WHISPER_REPOS))
     t.add_argument("--notes-lang", default="english", choices=list(NOTES_LANG))
-    t.add_argument("--notes-model", default="claude-opus-5")
+    t.add_argument(
+        "--notes-model",
+        default="claude-haiku-4-5",
+        help="cheapest that works; --notes-model claude-sonnet-5 for harder lectures",
+    )
     t.add_argument("--no-notes", action="store_true", help="transcript only, no API call")
     t.add_argument("--outdir", type=Path, help="write here instead of the library")
     t.add_argument("--force", action="store_true", help="redo everything, including transcription")
