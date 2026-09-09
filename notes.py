@@ -915,6 +915,7 @@ def serve(args):
     The API key never leaves the Mac: the phone posts the highlighted text here
     and gets prose back.
     """
+    import hashlib
     import json
     from functools import partial
     from http.server import SimpleHTTPRequestHandler, ThreadingHTTPServer
@@ -922,6 +923,8 @@ def serve(args):
     root = Path(__file__).resolve().parent
     export(args)  # always serve the current library
 
+    cache_dir = Path(args.library) / ".explains"
+    cache_dir.mkdir(parents=True, exist_ok=True)
     budget = {"left": args.max_explains}
 
     class Handler(SimpleHTTPRequestHandler):
@@ -945,6 +948,14 @@ def serve(args):
                 text = (req.get("text") or "").strip()[:8000]
                 if not text:
                     return self.reply(400, {"error": "nothing selected"})
+                # Compute once, serve many. Two students highlighting the same
+                # formula must cost one API call, not two -- with 110 classmates
+                # this cache is the difference between pennies and a real bill.
+                key = hashlib.sha256(text.encode()).hexdigest()[:32]
+                hit = cache_dir / f"{key}.md"
+                if hit.exists():
+                    return self.reply(200, {"text": hit.read_text(), "cached": True})
+
                 if budget["left"] <= 0:
                     return self.reply(429, {"error": "explain limit reached for this session"})
                 budget["left"] -= 1
@@ -959,9 +970,11 @@ def serve(args):
                                f"From the note \"{req.get('title', '')}\":\n\n{text}"}],
                 )
                 out = "".join(b.text for b in msg.content if b.type == "text")
+                hit.write_text(out)
                 rate_in, rate_out = price_of(args.notes_model)
                 cost = msg.usage.input_tokens / 1e6 * rate_in + msg.usage.output_tokens / 1e6 * rate_out
-                print(f"  explain: ~${cost:.4f}, {budget['left']} left", file=sys.stderr)
+                print(f"  explain: ~${cost:.4f}, {budget['left']} left, cached as {key[:8]}",
+                      file=sys.stderr)
                 self.reply(200, {"text": out})
             except Exception as e:
                 # Surface the real reason on the phone; a silent failure here is
