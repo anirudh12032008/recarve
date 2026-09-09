@@ -134,6 +134,65 @@ def guess_subject(filename):
     return winners.pop() if len(winners) == 1 else None
 
 
+# Course material handed to the model alongside the transcript. Raw bytes, so
+# the base64 expansion still leaves plenty of room under the 32MB request cap.
+CONTEXT_EXTS = {".pdf", ".txt", ".md"}
+MAX_CONTEXT_BYTES = 8 * 1024 * 1024
+
+
+def subject_context(library, code, limit_bytes=MAX_CONTEXT_BYTES):
+    """Build document blocks from a subject's uploads, newest first.
+
+    Returns (blocks, included, skipped). Anything that would push past the byte
+    budget is skipped and named, never silently dropped -- a lecture summarised
+    against half its slides should say so.
+    """
+    import base64
+
+    folder = Path(library) / f"{code}-{SUBJECTS[code][0]}" / "uploads"
+    if not folder.is_dir():
+        return [], [], []
+
+    blocks, included, skipped, used = [], [], [], 0
+    for f in sorted(folder.iterdir(), key=lambda p: -p.stat().st_mtime):
+        if f.suffix.lower() not in CONTEXT_EXTS or not f.is_file():
+            continue
+        size = f.stat().st_size
+        if used + size > limit_bytes:
+            skipped.append(f.name)
+            continue
+        if f.suffix.lower() == ".pdf":
+            source = {
+                "type": "base64",
+                "media_type": "application/pdf",
+                "data": base64.standard_b64encode(f.read_bytes()).decode(),
+            }
+        else:
+            source = {
+                "type": "text",
+                "media_type": "text/plain",
+                "data": f.read_text(errors="replace"),
+            }
+        blocks.append({"type": "document", "source": source, "title": f.name})
+        included.append(f.name)
+        used += size
+
+    return blocks, included, skipped
+
+
+CONTEXT_RULES = """
+You are also given this subject's course material -- the professor's slides, PDFs and notes.
+Use it to:
+- Correct technical terms the transcript mangled, using the material's spelling and notation.
+- Match the professor's symbols, variable names and terminology rather than generic textbook ones.
+- Fill a gap where the audio was unclear but the material makes the intended point obvious.
+- Under Flagged, note anywhere the lecture and the material genuinely disagree.
+
+Do NOT pull in topics the material covers but this lecture did not. These are notes for one
+class, not a summary of the course. If the lecture only reached slide 4, the notes stop there.
+"""
+
+
 def subject_dir(library, code, kind):
     """library/CY1107-Engineering-Chemistry/lectures|uploads/"""
     d = Path(library) / f"{code}-{SUBJECTS[code][0]}" / kind
@@ -263,16 +322,18 @@ def format_transcript(segments):
     return "\n".join(lines)
 
 
-def make_notes(transcript, notes_lang, model):
+def make_notes(transcript, notes_lang, model, context=()):
     import anthropic
 
     client = anthropic.Anthropic()
     system = NOTES_PROMPT.format(notes_lang=NOTES_LANG[notes_lang])
+    if context:
+        system += CONTEXT_RULES
     kwargs = dict(
         model=model,
         max_tokens=16000,
         system=system,
-        messages=[{"role": "user", "content": transcript}],
+        messages=[{"role": "user", "content": [*context, {"type": "text", "text": transcript}]}],
     )
     try:
         msg = client.beta.messages.create(
@@ -739,7 +800,17 @@ def process(path, args):
                 f"  would cost up to ${worst_case:.2f}, over --max-cost ${args.max_cost:.2f}.\n"
                 f"  Transcript is cached, so raise --max-cost and re-run without re-transcribing."
             )
-        notes, usage = make_notes(transcript, args.notes_lang, args.notes_model)
+        context = []
+        if code and not args.no_context:
+            context, included, skipped = subject_context(args.library, code)
+            if included:
+                print(f"  using {len(included)} file(s) from {code}: {', '.join(included)}",
+                      file=sys.stderr)
+            if skipped:
+                print(f"  SKIPPED (over {MAX_CONTEXT_BYTES // 1024 // 1024}MB): "
+                      f"{', '.join(skipped)}", file=sys.stderr)
+
+        notes, usage = make_notes(transcript, args.notes_lang, args.notes_model, context)
         cost = usage.input_tokens / 1e6 * rate_in + usage.output_tokens / 1e6 * rate_out
         print(
             f"  notes: {usage.input_tokens} in / {usage.output_tokens} out "
@@ -811,6 +882,23 @@ def selftest():
     got = {f.name for f in collect_audio([tmp])}
     assert got == {"a.m4a", "b.mp4"}, f"folder expansion wrong: {got}"
 
+    # Subject context: only the right extensions, and the byte cap is honoured.
+    lib = tmp / "lib"
+    up = lib / "CY1107-Engineering-Chemistry" / "uploads"
+    up.mkdir(parents=True)
+    (up / "slides.pdf").write_bytes(b"%PDF-1.4 fake")
+    (up / "notes.md").write_text("prof notes")
+    (up / "photo.jpg").write_bytes(b"\xff\xd8")
+    blocks, included, skipped = subject_context(lib, "CY1107")
+    assert set(included) == {"slides.pdf", "notes.md"}, included
+    assert not skipped and len(blocks) == 2
+    assert blocks[0]["source"]["type"] in ("base64", "text")
+    # A budget smaller than the files must skip them BY NAME, never silently.
+    _, inc2, skip2 = subject_context(lib, "CY1107", limit_bytes=5)
+    assert inc2 == [] and set(skip2) == {"slides.pdf", "notes.md"}, (inc2, skip2)
+    # A subject with no uploads folder is fine, not an error.
+    assert subject_context(lib, "MC1101") == ([], [], [])
+
     # Repetition filter: kill hallucinations, keep genuine repetition.
     assert drop_repeats([(0.0, "hello"), (5.0, "hello")]) == [(0.0, "hello")], "consecutive dupe"
     assert drop_repeats([(0.0, "प्रस्तुति प्रस्तुति")]) == [], "single word repeated is noise"
@@ -862,6 +950,8 @@ def main():
     t.add_argument("--no-notes", action="store_true", help="transcript only, no API call")
     t.add_argument("--outdir", type=Path, help="write here instead of the library")
     t.add_argument("--force", action="store_true", help="redo everything, including transcription")
+    t.add_argument("--no-context", action="store_true",
+                   help="do not attach the subject's slides/PDFs to the notes call")
     t.add_argument(
         "--redo-notes",
         action="store_true",
