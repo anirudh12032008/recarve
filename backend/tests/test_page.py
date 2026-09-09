@@ -170,7 +170,11 @@ const window = {scrollTo: () => {}, print: () => {}, innerWidth: 390, scrollY: 0
 // #panel is real for the same reason #ask is: the Explain guard asks whether
 // the panel is already open, and the proxy answers 'yes' to every question.
 const panelEl = {classList: {add: () => {}, remove: () => {}, contains: () => false}};
-const els = {ask: askEl, panel: panelEl};
+// #fab is real for the same reason: render() sets .hidden on seven other
+// elements every route, so `wrote(['hidden', true])` was true before applyRole
+// had done anything at all.
+const fabEl = {hidden: null};
+const els = {ask: askEl, panel: panelEl, fab: fabEl};
 let selection = '';
 let onSelectionChange = () => {};
 const rect = {top: 100, left: 20, width: 80};
@@ -652,7 +656,7 @@ reply = answer(true, {subjects: [], codes: [], now: 1, role: 'student'});
 writes = [];
 await refresh();
 assert.equal(ROLE, 'student', 'the role rides in on the /data the page already fetches');
-assert.ok(wrote(['hidden', true]), 'a student is not shown the Add button');
+assert.equal(fabEl.hidden, true, 'a student is not shown the Add button');
 
 // And highlighting a passage does not offer Explain, which is the AI spend.
 askCls.length = 0;
@@ -665,9 +669,25 @@ reply = answer(true, {subjects: [], codes: [], now: 1, role: 'trusted'});
 writes = []; askCls.length = 0;
 await refresh();
 assert.equal(ROLE, 'trusted');
-assert.ok(wrote(['hidden', false]), 'and a trusted member gets the Add button back');
+assert.equal(fabEl.hidden, false, 'and a trusted member gets the Add button back');
 onSelectionChange();
 assert.ok(askCls.includes('+on'), 'a trusted member is offered Explain');
+
+// The Me tab is the only screen that explains the roles, so a student has to
+// find there how to get the two things their phone stopped offering above --
+// and somebody who already has them must not be told to go ask for them.
+const mine = role => answer(true, {role, admin: false, invite: null,
+  points: {score: 0, uploads: 0, recordings: 0, votes_received: 0},
+  uploads: [], recordings: []});
+reply = mine('student');
+location.hash = '#me'; route();
+writes = [];
+await renderMe();
+assert.ok(says('Your access'), 'a student must be told how to get upload access');
+reply = mine('trusted');
+writes = [];
+await renderMe();
+assert.ok(!says('Your access'), 'somebody who already has it is not told to ask');
 
 })().catch(e => { console.error(e); process.exit(1); });
 """

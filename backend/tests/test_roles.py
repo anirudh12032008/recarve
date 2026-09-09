@@ -403,3 +403,31 @@ def test_a_role_is_not_a_reading_lock(server):
     assert code == 200 and "limits and continuity" in page
     data = json.loads(call(port, "GET", "/data", cookie=cookies["student"])[1])
     assert data["subjects"][0]["notes"][0]["title"] == "week1"
+
+
+def test_the_admin_screen_is_given_everybody_and_told_which_row_is_its_own(server):
+    """The role picker is drawn from `members`, and `me` is what stops the admin
+    being offered a demotion of themselves. Without those two keys the screen
+    renders an empty list and there is no way left to change anybody's role.
+
+    Runs last in this module: the joiner it adds is left for the fixture's own
+    teardown to clear, like every other row here.
+    """
+    port, cookies, people = server
+    with psycopg.connect(DB_URL, autocommit=True) as conn:
+        joiner = make_user(conn)
+        conn.execute("insert into profiles (id, name, roll_no, status) "
+                     "values (%s, 'Waiting', 'wait', 'pending')", (joiner,))
+
+    body = json.loads(call(port, "GET", "/pending", cookie=cookies["admin"])[1])
+    assert body["me"] == people["admin"], "the admin has to recognise its own row"
+    by_id = {m["id"]: m for m in body["members"]}
+    assert {r: by_id[people[r]]["role"] for r in ("student", "trusted", "admin")} == {
+        "student": "student", "trusted": "trusted", "admin": "admin"}
+    # Blocked is a status, not a role: they stay on the screen so an admin can
+    # put them back.
+    assert by_id[people["blocked"]]["status"] == "blocked"
+    # A joiner is on the waiting list and nowhere else -- letting them in is a
+    # different button from changing what they may do once in.
+    assert [p["id"] for p in body["pending"]] == [joiner]
+    assert joiner not in by_id

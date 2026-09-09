@@ -2821,23 +2821,30 @@ GATE_PAGE = r"""<!doctype html>
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <title>recarve — Section I</title>
 <style>
-:root{color-scheme:light dark;--bg:#fcfcfd;--fg:#14161b;--mut:#656b76;--line:#e1e4ea;--accent:#3355e8}
+:root{color-scheme:light dark;--bg:#fcfcfd;--fg:#14161b;--mut:#656b76;--line:#e1e4ea;
+  --accent:#3355e8;--accent-fg:#fff;--err:#d1344b}
 @media (prefers-color-scheme:dark){
-  :root{--bg:#0f1115;--fg:#e7e9ee;--mut:#98a0ad;--line:#262a32;--accent:#7a92ff}}
+  /* The accent goes pale in the dark, so what sits on it has to go dark too --
+     white on it is 2.8:1. Same pair PAGE carries. */
+  :root{--bg:#0f1115;--fg:#e7e9ee;--mut:#98a0ad;--line:#262a32;
+    --accent:#7a92ff;--accent-fg:#0f1115;--err:#e5484d}}
 *{box-sizing:border-box}
 body{margin:0;min-height:100dvh;display:grid;place-items:center;padding:24px;background:var(--bg);
-  color:var(--fg);font:16px/1.5 -apple-system,BlinkMacSystemFont,"Segoe UI",system-ui,sans-serif}
+  color:var(--fg);font:16px/1.5 -apple-system,BlinkMacSystemFont,"Segoe UI",system-ui,sans-serif;
+  /* A name is whatever the joiner typed: one 80-character word with no spaces
+     in it used to push this page sideways. */
+  overflow-wrap:break-word}
 main{width:100%;max-width:23rem}
 h1{font-size:1.45rem;margin:0 0 .3rem;letter-spacing:-.01em}
 p{color:var(--mut);margin:0 0 1.4rem}
 label{display:block;font-size:.8rem;color:var(--mut);margin:0 0 .3rem}
-input{width:100%;padding:.7rem .8rem;margin:0 0 .9rem;font-size:1rem;border:1px solid var(--line);
+input{width:100%;padding:.7rem .8rem;margin:0 0 .9rem;font:inherit;border:1px solid var(--line);
   border-radius:10px;background:transparent;color:var(--fg)}
 input:focus{outline:2px solid var(--accent);outline-offset:-1px;border-color:transparent}
-button{min-height:44px;width:100%;font:600 1rem/1 inherit;border:0;border-radius:10px;
-  background:var(--accent);color:#fff}
+button{min-height:44px;width:100%;font:inherit;font-weight:600;line-height:1;border:0;
+  border-radius:10px;background:var(--accent);color:var(--accent-fg)}
 button[disabled]{opacity:.5}
-.err{color:#d1344b;font-size:.88rem;min-height:1.2em;margin:.7rem 0 0}
+.err{color:var(--err);font-size:.88rem;min-height:1.2em;margin:.7rem 0 0}
 .row{display:flex;align-items:center;justify-content:space-between;gap:1rem;padding:.75rem 0;
   border-bottom:1px solid var(--line)}
 .row button{width:auto;padding:0 .9rem}
@@ -2890,7 +2897,7 @@ ADMIN_BODY = r"""<h1>Pending</h1>
 <h2>Who can do what</h2>
 <p>Students read. Trusted members upload, record and use Explain — that one
 spends money. Admins also let people in.</p>
-<div id="members"></div>
+<div id="members">loading…</div>
 <script>
 // The name and roll number are whatever the joiner typed, so every one of them
 // goes in with textContent. This screen is the admin account's, and a name is
@@ -2918,7 +2925,15 @@ function roleSelect(p, onchange) {
 
 async function load() {
   const el = document.getElementById('list'), mem = document.getElementById('members');
-  const j = await (await fetch('/pending')).json();
+  // 503 when Postgres is down, 403 for an admin another admin just demoted:
+  // neither body carries `pending`, and reading it blanked the whole screen.
+  let j = null;
+  try { const r = await fetch('/pending'); if (r.ok) j = await r.json(); } catch (e) {}
+  if (!j) {
+    el.textContent = mem.textContent =
+      'Could not load this — the library may be offline. Reload to retry.';
+    return;
+  }
   el.innerHTML = '';
   if (!j.pending.length) el.textContent = 'Nobody waiting.';
   for (const p of j.pending) {
@@ -2928,8 +2943,10 @@ async function load() {
     btn.textContent = 'Approve';
     btn.onclick = async () => {
       btn.disabled = true;
-      await fetch('/approve', {method: 'POST', headers: {'Content-Type': 'application/json'},
-        body: JSON.stringify({id: p.id})});
+      const r = await fetch('/approve', {method: 'POST',
+        headers: {'Content-Type': 'application/json'}, body: JSON.stringify({id: p.id})});
+      if (!r.ok) { const e = await r.json().catch(() => ({}));
+                   alert(e.error || 'could not approve that'); }
       load();
     };
     row.append(who(p), btn);
