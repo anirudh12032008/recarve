@@ -631,6 +631,80 @@ def test_only_an_admin_reads_what_the_class_reported(db):
             if r["material_id"] == str(mid)] == ["r.pdf"]
 
 
+def test_the_standings_route_answers_with_the_real_board(server):
+    """The route, not db_standings.
+
+    Every other test of the board calls db_standings on a psycopg connection.
+    This is the only one that drives the endpoint the phone actually calls, so
+    it is the only one that would notice the handler returning an empty board,
+    a 500, or somebody else's position -- and the matrix row above would not,
+    because "reached" there means "not a 403".
+
+    Read as a difference, not as an absolute: this module's earlier tests have
+    been uploading and renaming people all the way down, and a board that only
+    passes on a pristine class is a board nobody can add a test above.
+    """
+    port, cookies, people = server
+
+    def board(who):
+        code, out = call(port, "GET", "/standings", cookie=cookies[who])
+        assert code == 200, out
+        return json.loads(out)
+
+    before = board("trusted")
+    with psycopg.connect(DB_URL, autocommit=True) as conn:
+        conn.execute(
+            "insert into materials (subject_code, uploader_id, filename, file_key, "
+            "size_bytes) values ('CY1107', %s, 'board.pdf', 'board-k', 10)",
+            (people["trusted"],))
+    try:
+        after = board("trusted")
+        for window in ("all", "week"):
+            you = after[window]["you"]
+            # The pinned viewer is the one thing db_standings exists to
+            # promise: your own row comes back whoever else is on the board.
+            assert you["id"] == str(people["trusted"]), f"{window}: {you}"
+            assert you["you"] is True
+            assert you["score"] == before[window]["you"]["score"] + 5, \
+                f"{window}: one more upload is five more points"
+            top = after[window]["top"]
+            assert [r for r in top if r["id"] == you["id"]] == [you], \
+                f"{window}: the uploader has to be on the board they lead"
+            assert [r["rank"] for r in top] == sorted(r["rank"] for r in top)
+            assert all(r["score"] > 0 for r in top), "nobody with nothing is ranked"
+
+        # And somebody with nothing yet is still told where they stand.
+        mine = board("student")
+        for window in ("all", "week"):
+            assert mine[window]["you"]["id"] == str(people["student"])
+            assert mine[window]["you"]["score"] == 0
+            assert [r["id"] for r in mine[window]["top"]] == \
+                [r["id"] for r in after[window]["top"]], \
+                f"{window}: the same board for everyone who asks"
+    finally:
+        with psycopg.connect(DB_URL, autocommit=True) as conn:
+            conn.execute("delete from materials where file_key = 'board-k'")
+
+
+def test_the_board_is_read_on_the_callers_own_connection():
+    """standings is security_invoker, so the connection the handler hands it is
+    the whole of that protection -- and a service-role connection there quietly
+    ranks the class regardless of who is asking.
+
+    This reads the source rather than the answer on purpose. Today every
+    approved member may see every profile ("approved members read the class"),
+    so db() and db(me) return byte-identical boards and no payload assertion
+    can tell them apart. The day that policy narrows, the wrong connection must
+    not already be sitting there.
+    """
+    import inspect
+
+    src = inspect.getsource(notes.build_server)
+    handler = src.split('if self.path == "/standings":')[1].split("if self.path ==")[0]
+    assert 'with db(self.me["id"]) as conn' in handler, \
+        f"/standings must read as the caller, not as the service role:\n{handler}"
+
+
 def test_the_admin_screen_is_given_everybody_and_told_which_row_is_its_own(server):
     """The role picker is drawn from `members`, and `me` is what stops the admin
     being offered a demotion of themselves. Without those two keys the screen

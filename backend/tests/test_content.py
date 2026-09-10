@@ -98,14 +98,18 @@ def test_cannot_upload_as_someone_else(db):
 
 def test_one_vote_per_person_per_material(db):
     owner = member(db)
+    voter = member(db)
     as_user(db, owner)
     mid = db.execute(
         "insert into materials (subject_code, uploader_id, filename, file_key, size_bytes) "
         "values ('CY1107', %s, 'n.pdf', 'k6', 10) returning id", (owner,),
     ).fetchone()[0]
-    db.execute("insert into votes (material_id, voter_id) values (%s, %s)", (mid, owner))
+    # Somebody else's vote: your own is refused by "vote as yourself" now, and
+    # this test is about the second press, not the first.
+    as_user(db, voter)
+    db.execute("insert into votes (material_id, voter_id) values (%s, %s)", (mid, voter))
     try:
-        db.execute("insert into votes (material_id, voter_id) values (%s, %s)", (mid, owner))
+        db.execute("insert into votes (material_id, voter_id) values (%s, %s)", (mid, voter))
     except Exception as e:
         assert "duplicate" in str(e).lower() or "unique" in str(e).lower()
     else:

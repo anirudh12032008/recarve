@@ -93,6 +93,23 @@ def test_you_cannot_vote_in_somebody_elses_name(db):
         db.execute("insert into votes (material_id, voter_id) values (%s, %s)", (mid, patsy))
 
 
+def test_you_cannot_upvote_your_own_upload(db):
+    """'vote as yourself' means somebody else's work.
+
+    votes_received is a third of the score and the board is public, so a vote
+    for yourself is a point you awarded yourself. The policy refuses it, not a
+    check in the handler -- a leaked connection string gets the same answer.
+    """
+    owner = member(db)
+    as_user(db, owner)
+    mid = material(db, owner)
+
+    with pytest.raises(psycopg.errors.InsufficientPrivilege), db.transaction():
+        notes.db_vote(db, mid, owner, True)
+    assert db.execute("select count(*) from votes where material_id = %s",
+                      (mid,)).fetchone()[0] == 0
+
+
 def test_a_pending_joiner_cannot_vote(db):
     owner = member(db)
     as_user(db, owner)
@@ -327,6 +344,26 @@ def test_voting_once_counts_and_voting_again_is_refused(server):
     assert (got["votes"], got["voted"]) == (1, False)
 
 
+def test_the_server_refuses_a_vote_for_your_own_upload(server):
+    """The 403, in words, over the socket. Asha owns everything the backfill
+    adopted, so every file on this server is her own.
+
+    The toggle loop closes with it: off-and-on re-dates a vote, which is how a
+    single vote could keep somebody on the rolling seven-day board forever
+    without adding anything. A classmate's vote is now the only one that can.
+    """
+    port, cookies = server
+    target = next(u for u in uploads_of(port, cookies["Asha"])["uploads"]
+                  if u["name"] == "z-last.pdf")["id"]
+    before = json.loads(call(port, "GET", "/me", cookie=cookies["Asha"])[1])["points"]
+
+    status, body, _ = call(port, "POST", "/vote", {"id": target}, cookie=cookies["Asha"])
+    assert status == 403, body
+    assert "your own" in json.loads(body)["error"], "not the duplicate-vote wording"
+    assert json.loads(call(port, "GET", "/me", cookie=cookies["Asha"])[1])["points"] \
+        == before, "a refused vote must not move the score"
+
+
 def test_votes_lift_a_note_above_the_others(server):
     """The whole point of ranking: the set the class uses is the one on top."""
     port, cookies = server
@@ -335,7 +372,7 @@ def test_votes_lift_a_note_above_the_others(server):
 
     target = next(u for u in uploads_of(port, cookies["Asha"])["uploads"]
                   if u["name"] == "a-first.pdf")["id"]
-    for who in ("Asha", "Chan"):
+    for who in ("Bilal", "Chan"):
         assert call(port, "POST", "/vote", {"id": target}, cookie=cookies[who])[0] == 200
     s = uploads_of(port, cookies["Asha"])
     assert [(u["name"], u["votes"]) for u in s["uploads"]] \

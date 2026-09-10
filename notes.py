@@ -3516,9 +3516,11 @@ def apply_meta(subjects, mats, lecs):
 def db_vote(conn, material_id, user_id, on):
     """Add or drop one person's vote, and return the item's new state.
 
-    Nothing here checks whether they have voted already: the votes primary key
-    does, and a second insert raises. That is the point -- one place decides,
-    and it is the same place in production as in the tests.
+    Nothing here checks whether they have voted already, or whether the thing
+    they are voting for is their own: the votes primary key does the first and
+    the "vote as yourself" policy does the second, and both raise. That is the
+    point -- one place decides, and it is the same place in production as in
+    the tests.
     """
     if on:
         conn.execute("insert into votes (material_id, voter_id) values (%s, %s)",
@@ -5156,7 +5158,11 @@ def build_server(args):
                 return self.reply(500, {"error": f"{type(e).__name__}: {e}"})
 
         def do_vote(self):
-            """One vote per person per item. The primary key is the referee.
+            """One vote per person per item, and never for your own upload.
+
+            Both referees are in Postgres: the votes primary key, and the
+            "vote as yourself" policy. This handler only puts their refusals
+            into words.
 
             An unauthenticated caller never reaches this: /vote is not in
             PUBLIC_PATHS, so parse_request has already refused them.
@@ -5176,6 +5182,11 @@ def build_server(args):
                     state = db_vote(conn, target, self.me["id"], bool(req.get("on", True)))
             except psycopg.errors.UniqueViolation:
                 return self.reply(409, {"error": "you have already voted for this"})
+            except psycopg.errors.InsufficientPrivilege:
+                # The only insert an approved member's own session can be
+                # refused is a vote on something they uploaded themselves --
+                # the gate has already turned away everybody else.
+                return self.reply(403, {"error": "you cannot upvote your own upload"})
             except (psycopg.errors.InvalidTextRepresentation,
                     psycopg.errors.ForeignKeyViolation):
                 return self.reply(404, {"error": "no such item"})
