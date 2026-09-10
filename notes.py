@@ -233,6 +233,26 @@ def hhmm(seconds):
 
 AUDIO_EXTS = {".m4a", ".mp3", ".wav", ".mp4", ".mov", ".aac", ".ogg", ".opus", ".flac", ".mkv", ".webm"}
 
+# What an upload may weigh, enforced on the server before a byte of the body is
+# read. A browser check is decoration: curl does not run it. 100MB is about
+# three hours of phone audio; 25MB is a fat slide deck. Both numbers reach the
+# page below by substitution, so the limit on screen cannot drift from the one
+# that refuses you.
+MAX_AUDIO_BYTES = 100 * 1024 * 1024
+MAX_DOC_BYTES = 25 * 1024 * 1024
+
+
+def mb(n, up=False):
+    """Megabytes for a person. `up` rounds towards the next tenth, which is
+    what an over-size upload needs: 104857601 bytes reading back as "100.0 MB,
+    over the 100.0 MB limit" is a refusal that looks like a bug."""
+    import math
+
+    size = n / 1048576
+    return f"{math.ceil(size * 10) / 10 if up else size:.1f} MB"
+
+
+
 
 def collect_audio(paths):
     """Expand directories into the audio/video files inside them."""
@@ -371,6 +391,22 @@ def format_transcript(segments):
         if text:
             lines.append(f"[{int(start) // 60:02d}:{int(start) % 60:02d}] {text}")
     return "\n".join(lines)
+
+
+def lecture_title(stem, code):
+    return stem + (f" — {SUBJECTS[code][0].replace('-', ' ')}" if code else "")
+
+
+def lecture_note(stem, code, notes, transcript):
+    """The markdown file a finished lecture becomes.
+
+    One function because there are two callers now: process() here on this
+    machine, and the /worker/done route when a remote worker sends back the
+    same two strings. A second copy of this shape is a second file format.
+    """
+    return (f"# {lecture_title(stem, code)}\n\n{notes}\n\n---\n\n"
+            f"<details><summary>Full transcript</summary>\n\n"
+            f"```\n{transcript}\n```\n\n</details>\n")
 
 
 def make_notes(transcript, notes_lang, model, context=()):
@@ -859,8 +895,8 @@ body.reading .tabs{display:none}
       practise from and upvote.
     </div>
     <button class="opt" id="opt-rec"><b>Record this class</b><span>keep the screen on</span></button>
-    <button class="opt" id="opt-audio"><b>Upload a recording</b><span>m4a, mp3, mp4</span></button>
-    <button class="opt" id="opt-doc"><b>Upload notes or slides</b><span>pdf, txt, md</span></button>
+    <button class="opt" id="opt-audio"><b>Upload a recording</b><span>m4a, mp3, mp4 &middot; up to __AUDIO_MB__ MB</span></button>
+    <button class="opt" id="opt-doc"><b>Upload notes or slides</b><span>pdf, txt, md &middot; up to __DOC_MB__ MB</span></button>
     <button class="opt" id="opt-revise"><b>Make a revision sheet</b><span>from every lecture in this subject</span></button>
     <div id="prog">
       <div class="bar"><div class="fill" id="fill"></div></div>
@@ -2047,11 +2083,24 @@ const mb = b => (b / 1048576).toFixed(1) + ' MB';
 
 // XMLHttpRequest, not fetch: fetch cannot report upload progress at all, so a
 // big lecture over wifi looks frozen and people give up mid-transfer.
+const LIMIT_AUDIO = __AUDIO_MB__ * 1048576, LIMIT_DOC = __DOC_MB__ * 1048576;
+const IS_AUDIO = /\.(m4a|mp3|wav|mp4|mov|aac|ogg|opus|flac|mkv|webm)$/i;
+
 function upload(blob, name) {
   prog.classList.remove('err');
   prog.classList.add('on');
   fill.style.width = '0%';
   ptxt.textContent = 'Starting…';
+
+  // The server refuses this too, and its refusal is the one that counts. This
+  // one saves a phone from spending ten minutes of mobile data on a 413.
+  const cap = IS_AUDIO.test(name) ? LIMIT_AUDIO : LIMIT_DOC;
+  if (blob.size > cap) {
+    prog.classList.add('err');
+    fill.style.width = '100%';
+    ptxt.textContent = `${name} is ${mb(blob.size)} — the limit is ${mb(cap)}`;
+    return;
+  }
 
   const xhr = new XMLHttpRequest();
   xhr.open('POST', '/upload');
@@ -2248,7 +2297,7 @@ function seedHistory() {
 seedHistory();
 route();
 </script>
-"""
+""".replace("__AUDIO_MB__", str(MAX_AUDIO_BYTES // 1048576)).replace("__DOC_MB__", str(MAX_DOC_BYTES // 1048576))
 
 
 # A note's questions live in <details><summary>Answer</summary> blocks. The
@@ -2482,27 +2531,53 @@ class Jobs:
         self.pending = []
         self.wake = threading.Event()
         self.seq = 0
+        # With --remote-workers the Mac is not necessarily the machine serving
+        # this, so lectures go to the database queue and a worker claims them.
+        # The list below is then a display of what the worker is doing, and the
+        # thread has nothing to run -- but the thread still starts, because a
+        # document still finishes here and the two modes must not fork.
+        self.remote = bool(getattr(args, "remote", False))
         threading.Thread(target=self._run, daemon=True).start()
 
-    def add(self, path, subject, kind):
+    def add(self, path, subject, kind, run=True):
         # A document is already on disk by the time we get here, so it is done.
         # Queuing it would park a 2-second PDF behind an 11-minute lecture.
-        done = kind == "document"
+        # run=False lists a lecture without offering to transcribe it: that is
+        # what a row a remote worker already holds needs.
+        done = kind == "document" or not run
         with self.lock:
             self.seq += 1
             job = {"id": self.seq, "name": path.name, "subject": subject, "kind": kind,
-                   "state": "done" if done else "queued",
-                   "detail": f"filed under {subject}" if done else ""}
+                   # `key` is the audio's path, which is also lectures.audio_key
+                   # -- the one handle a remote worker's reports come back with.
+                   "key": str(path),
+                   "state": "done" if kind == "document" else "queued",
+                   "detail": f"filed under {subject}" if kind == "document" else ""}
             self.items.insert(0, job)
-            if not done:
+            if not (done or self.remote):
                 self.pending.append((job, path))
-        if not done:
+        if not (done or self.remote):
             self.wake.set()
         return job
 
     def snapshot(self):
         with self.lock:
             return list(self.items)
+
+    def track(self, path, subject, state, detail=""):
+        """Say what is happening to one lecture, whoever is doing it.
+
+        A remote worker's progress lands here so /jobs still shows a live
+        percentage on the phone. A restart empties this list while the database
+        keeps the queue, so a claim for something not listed adds the row back
+        rather than reporting into nothing.
+        """
+        with self.lock:
+            job = next((j for j in self.items if j.get("key") == str(path)), None)
+        if job is None:
+            job = self.add(path, subject, "audio", run=False)
+        self._set(job, state, detail)
+        return job
 
     def _set(self, job, state, detail=""):
         with self.lock:
@@ -2706,6 +2781,42 @@ def session_secret(env_path=ENV_PATH):
         fh.write(f"\nRECARVE_SECRET={got}\n")
     os.environ["RECARVE_SECRET"] = got
     return got.encode()
+
+
+# How many times a lecture is handed out before the queue gives up on it.
+# claim_lecture() counts the attempts; three is enough to ride out a worker
+# that was killed mid-transcription twice and not enough to hand a broken file
+# round forever.
+MAX_ATTEMPTS = 3
+
+# Every worker route lives under this prefix, and the gate reads the prefix
+# rather than a list, so a fifth worker route cannot be born reachable by a
+# student because somebody forgot to name it.
+WORKER_PREFIX = "/worker/"
+
+
+def worker_token(env_path=ENV_PATH):
+    """The shared secret a remote worker presents, minted into .env like the
+    cookie key above.
+
+    Read out of .env when the environment does not already carry it, which
+    session_secret() has no need to do and this does: the worker is a second
+    process, often started from a shell that never sourced .env, and minting a
+    fresh token there would leave the two halves of one pair holding different
+    secrets and no obvious reason why.
+    """
+    got = os.environ.get("RECARVE_WORKER_TOKEN")
+    if not got and env_path.exists():
+        for line in env_path.read_text().splitlines():
+            key, _, value = line.partition("=")
+            if key.strip() == "RECARVE_WORKER_TOKEN" and value.strip():
+                got = value.strip()
+    if not got:
+        got = secrets.token_urlsafe(32)
+        with env_path.open("a") as fh:
+            fh.write(f"\nRECARVE_WORKER_TOKEN={got}\n")
+    os.environ["RECARVE_WORKER_TOKEN"] = got
+    return got
 
 
 def sign_session(profile_id, secret):
@@ -3953,6 +4064,9 @@ def build_server(args):
     logins = Limiter()
 
     secret = b"" if args.no_auth else session_secret()
+    # Minted even under --no-auth: the worker routes are gated on it whatever
+    # else this server is doing, so there is never a mode in which they are open.
+    worker_key = worker_token()
     if not args.no_auth:
         with db() as conn:
             first = db_bootstrap(conn)
@@ -4012,6 +4126,20 @@ def build_server(args):
             if not super().parse_request():
                 return False
             self.me = None
+            # A worker is not a member. It presents a shared token and gets the
+            # queue and nothing else, and it is settled here -- before the
+            # cookie is read, before --no-auth waves anyone through, and with
+            # its own `return` either way. That is what keeps the two kinds of
+            # credential from leaking into each other: a session never reaches
+            # the branch that could make it a worker, and a token never reaches
+            # the branch that would give it a profile.
+            if self.path.split("?")[0].startswith(WORKER_PREFIX):
+                sent = self.headers.get("X-Worker-Token", "").encode("utf-8", "replace")
+                if not hmac.compare_digest(sent, worker_key.encode()):
+                    # The same refusal for a wrong token as for none at all.
+                    self.reply(403, {"error": "you are not approved to read this yet"})
+                    return False
+                return True
             if args.no_auth:
                 return True
             try:
@@ -4155,6 +4283,8 @@ def build_server(args):
                     return self.reply(200, out)
             if self.path == "/jobs":
                 return self.reply(200, {"jobs": jobs.snapshot()})
+            if self.path.split("?")[0] == "/worker/audio":
+                return self.do_worker_audio()
             if self.path == "/log":
                 try:
                     tail = LOG_PATH.read_text().splitlines()[-200:]
@@ -4216,6 +4346,14 @@ def build_server(args):
                 return self.do_profile()
             if self.path == "/upload":
                 return self.do_upload()
+            if self.path == "/worker/claim":
+                return self.do_worker_claim()
+            if self.path == "/worker/progress":
+                return self.do_worker_progress()
+            if self.path == "/worker/done":
+                return self.do_worker_done()
+            if self.path == "/worker/failed":
+                return self.do_worker_failed()
             if self.path == "/vote":
                 return self.do_vote()
             if self.path == "/timetable":
@@ -4538,6 +4676,176 @@ def build_server(args):
                 return self.reply(500, {"error": f"{type(e).__name__}: {e}"})
             return self.reply(200, out)
 
+        # ---------------------------------------------------------------
+        # The worker API. Four routes, all under WORKER_PREFIX, all reachable
+        # only with the shared token -- see the gate above. This is the whole
+        # of what a machine outside this one may do: take a lecture off the
+        # queue, fetch its audio, and say how it went.
+
+        def lecture(self, lid):
+            """(subject_code, title, audio_key, attempts) for one lecture.
+
+            Returns None for anything that is not an id we hold, which is the
+            same answer for a malformed uuid and for one that simply is not
+            there -- a worker has no business telling those apart.
+            """
+            try:
+                with db() as conn:
+                    return conn.execute(
+                        "select subject_code, title, audio_key, attempts "
+                        "from lectures where id = %s", (lid,)).fetchone()
+            except psycopg.Error:
+                return None
+
+        def audio_of(self, row):
+            return Path(row[2])
+
+        def title_of(self, row):
+            """A filename, never a path: this string came out of the database
+            and ends up naming a file on disk."""
+            raw = row[1] or Path(row[2]).stem
+            return re.sub(r"[^A-Za-z0-9._-]", "_", Path(raw).name)[:120] or "lecture"
+
+        def do_worker_claim(self):
+            """One queued lecture, or an empty object when there is nothing.
+
+            Atomic because claim_lecture() is: its `for update skip locked`
+            means a second worker steps over the row the first is holding
+            rather than being handed it twice.
+            """
+            if not jobs.remote:
+                # Two consumers of one queue would transcribe the same lecture
+                # twice. If this machine is draining the queue itself, nobody
+                # else may.
+                return self.reply(503, {"error": "this server runs its own queue; "
+                                                 "start it with --remote-workers"})
+            try:
+                with db() as conn:
+                    row = conn.execute(
+                        "select id, subject_code, title, audio_key, attempts "
+                        "from claim_lecture()").fetchone()
+            except psycopg.Error as e:
+                return self.reply(503, {"error": f"the library is offline: {e}"})
+            if not row:
+                return self.reply(200, {})
+            lid, code, title, key, attempts = row
+            path = Path(key)
+            title = self.title_of((code, title, key, attempts))
+            if not path.exists():
+                # The audio is gone. Fail it here rather than handing a worker
+                # a job it cannot begin.
+                with db() as conn:
+                    conn.execute("update lectures set status = 'failed', error = %s "
+                                 "where id = %s",
+                                 (f"the audio for {title} is no longer on the server", lid))
+                log(f"{path.name} has no audio left; giving up on it", "worker")
+                return self.reply(200, {})
+            jobs.track(path, code, "transcribing", f"claimed by a worker (try {attempts})")
+            log(f"{path.name} claimed by a worker (try {attempts})", "worker")
+            return self.reply(200, {"id": str(lid), "subject": code, "title": title,
+                                    "name": path.name, "attempts": attempts})
+
+        def do_worker_audio(self):
+            import urllib.parse
+
+            lid = urllib.parse.parse_qs(
+                self.path.partition("?")[2]).get("id", [""])[0][:64]
+            row = self.lecture(lid)
+            if not row:
+                return self.reply(404, {"error": "no such lecture"})
+            path = self.audio_of(row)
+            if not path.exists():
+                return self.reply(404, {"error": "the audio is gone"})
+            size = path.stat().st_size
+            try:
+                self.send_response(200)
+                self.send_header("Content-Type", "application/octet-stream")
+                self.send_header("Content-Length", str(size))
+                self.send_header("X-Filename", path.name)
+                self.end_headers()
+                with path.open("rb") as fh:
+                    while chunk := fh.read(262144):
+                        self.wfile.write(chunk)
+            except (BrokenPipeError, ConnectionResetError):
+                pass  # the worker hung up mid-download; the claim goes stale
+
+        def do_worker_progress(self):
+            """What the phone's job list shows while a remote worker works."""
+            req = self.body(20000)
+            if req is None:
+                return
+            row = self.lecture(str(req.get("id") or "")[:64])
+            if not row:
+                return self.reply(404, {"error": "no such lecture"})
+            jobs.track(self.audio_of(row), row[0], "transcribing",
+                       str(req.get("detail") or "")[:200])
+            return self.reply(200, {"ok": True})
+
+        def do_worker_done(self):
+            """Transcript and notes back from the worker, stored exactly where
+            process() would have put them -- and the audio deleted, because
+            once the notes exist it is the biggest thing on the disk and the
+            one nobody will ever open again."""
+            req = self.body(16 * 1024 * 1024)
+            if req is None:
+                return
+            row = self.lecture(str(req.get("id") or "")[:64])
+            if not row:
+                return self.reply(404, {"error": "no such lecture"})
+            transcript = req.get("transcript") or ""
+            notes_md = req.get("notes") or ""
+            if not (transcript and notes_md):
+                return self.reply(400, {"error": "a transcript and notes are both required"})
+            code, path, title = row[0], self.audio_of(row), self.title_of(row)
+            out = subject_dir(args.library, code, "lectures") / f"{title}.md"
+            out.write_text(lecture_note(title, code, notes_md, transcript))
+            cache = Path(args.library) / ".transcripts" / f"{title}.txt"
+            cache.parent.mkdir(parents=True, exist_ok=True)
+            cache.write_text(transcript)
+            try:
+                with db() as conn:
+                    conn.execute(
+                        "update lectures set status = 'done', error = null, "
+                        "transcript = %s, notes_md = %s where id = %s",
+                        (transcript, notes_md, req["id"]))
+            except psycopg.Error as e:
+                # The notes are on disk, which is what the library reads. Say
+                # so and let the worker move on rather than making it redo an
+                # hour of Whisper over a dropped connection.
+                log(f"could not mark {title} done: {e}", "worker")
+            path.unlink(missing_ok=True)
+            cache.with_suffix(".partial.json").unlink(missing_ok=True)
+            jobs.track(path, code, "done", "notes ready")
+            log(f"{title} came back from a worker; {path.name} deleted", "worker")
+            return self.reply(200, {"ok": True, "notes": out.name})
+
+        def do_worker_failed(self):
+            """It went wrong. Back on the queue, unless it has had its three."""
+            req = self.body(20000)
+            if req is None:
+                return
+            row = self.lecture(str(req.get("id") or "")[:64])
+            if not row:
+                return self.reply(404, {"error": "no such lecture"})
+            code, path, attempts = row[0], self.audio_of(row), row[3]
+            error = str(req.get("error") or "transcription failed")[:500]
+            over = attempts >= MAX_ATTEMPTS
+            try:
+                with db() as conn:
+                    conn.execute("update lectures set status = %s, error = %s where id = %s",
+                                 ("failed" if over else "queued", error, req["id"]))
+            except psycopg.Error as e:
+                return self.reply(503, {"error": f"the library is offline: {e}"})
+            if over:
+                # A file nothing can read may not pin a hundred megabytes of
+                # disk forever.
+                path.unlink(missing_ok=True)
+            jobs.track(path, code, "failed" if over else "queued",
+                       error if over else f"{error} — retrying ({attempts} of {MAX_ATTEMPTS})")
+            log(f"{path.name}: {error}" + ("" if over else f" (try {attempts}, will retry)"),
+                "worker-fail")
+            return self.reply(200, {"retrying": not over})
+
         def do_upload(self):
             """Raw body upload: filename and subject ride in headers.
 
@@ -4551,8 +4859,6 @@ def build_server(args):
                 n = int(self.headers.get("Content-Length", 0))
                 if n <= 0:
                     return self.reply(400, {"error": "empty upload"})
-                if n > 500 * 1024 * 1024:
-                    return self.reply(413, {"error": "file over 500MB"})
 
                 raw = urllib.parse.unquote(self.headers.get("X-Filename", "upload"))
                 # Never trust a client-supplied filename with a path in it.
@@ -4564,6 +4870,18 @@ def build_server(args):
 
                 ext = Path(name).suffix.lower()
                 is_audio = ext in AUDIO_EXTS
+                # Refused on the declared length, before a byte of the body is
+                # read: the point of a limit is not spending ten minutes of
+                # somebody's mobile data before saying no. The name and the
+                # limit are both in the message, because "too large" leaves a
+                # phone with nothing to do about it.
+                cap = MAX_AUDIO_BYTES if is_audio else MAX_DOC_BYTES
+                if n > cap:
+                    self.close_connection = True   # body left unread; do not reuse
+                    what = "a recording" if is_audio else "notes and slides"
+                    return self.reply(413, {
+                        "error": f"{name} is {mb(n, up=True)} — the limit for {what} "
+                                 f"is {mb(cap)}", "limit": cap, "size": n})
                 dest = (inbox / f"{code}-{name}") if is_audio \
                     else (subject_dir(args.library, code, "uploads") / name)
 
@@ -4737,6 +5055,134 @@ def serve(args):
         print("stopped", file=sys.stderr)
 
 
+def worker(args):
+    """Take lectures off a recarve server, transcribe them here, send them back.
+
+        ./notes.py worker --server https://notes.workwithani.tech
+
+    This is the half of the split that needs a GPU. The server hosts the files
+    and the site and keeps running when this Mac is shut; this loop is the only
+    thing that ever loads Whisper, and it can disappear for a day without the
+    class noticing anything but a queue that has stopped moving.
+
+    Nothing here is stateful. A killed worker loses the claim it was holding
+    and claim_lecture() hands the lecture out again two hours later; the audio
+    and the checkpoint are still in --workdir, so that retry resumes where this
+    run stopped rather than starting the hour over.
+    """
+    import shutil
+    import urllib.error
+    import urllib.request
+
+    token = args.token or worker_token()
+    base = args.server.rstrip("/")
+    work = Path(args.workdir)
+    work.mkdir(parents=True, exist_ok=True)
+
+    def call(path, body=None):
+        req = urllib.request.Request(
+            f"{base}{path}", method="POST" if body is not None else "GET",
+            data=json.dumps(body).encode() if body is not None else None,
+            headers={"X-Worker-Token": token,
+                     **({"Content-Type": "application/json"} if body is not None else {})})
+        with urllib.request.urlopen(req, timeout=args.timeout) as r:
+            return json.loads(r.read() or b"{}")
+
+    def download(job):
+        """The audio, straight to disk. An hour of lecture does not go through
+        memory on the way past."""
+        dest = work / job["name"]
+        if dest.exists():
+            log(f"{job['name']} is already here, reusing it", "worker", 1)
+            return dest
+        req = urllib.request.Request(f"{base}/worker/audio?id={job['id']}",
+                                     headers={"X-Worker-Token": token})
+        part = dest.with_suffix(dest.suffix + ".part")
+        with urllib.request.urlopen(req, timeout=args.timeout) as r, part.open("wb") as fh:
+            shutil.copyfileobj(r, fh, 262144)
+        part.replace(dest)
+        log(f"{job['name']}  {mb(dest.stat().st_size)}", "download", 1)
+        return dest
+
+    def run(job):
+        audio = download(job)
+        checkpoint = work / f"{audio.stem}.partial.json"
+        t0 = time.time()
+
+        def progress(done_sec, total_sec, lang):
+            pct = int(done_sec / max(total_sec, 1) * 100)
+            eta = (time.time() - t0) / max(done_sec, 1) * (total_sec - done_sec)
+            try:
+                call("/worker/progress", {
+                    "id": job["id"],
+                    "detail": f"{pct}% · {int(done_sec) // 60} of "
+                              f"{int(total_sec) // 60} min · ~{hhmm(eta)} left"})
+            except Exception:
+                pass  # the phone's percentage is a nicety; the lecture is not
+
+        segments, languages = transcribe(audio, args.model, args.lang,
+                                         checkpoint=checkpoint, on_progress=progress)
+        if not segments:
+            raise ValueError("no speech in this recording")
+        transcript = format_transcript(drop_repeats(segments))
+        langs = ", ".join(f"{l}x{languages.count(l)}" for l in sorted(set(languages)))
+        log(f"{segments[-1][0] / 60:.0f} min in {hhmm(time.time() - t0)}  [{langs}]",
+            "done", 1)
+
+        rate_in, rate_out = price_of(args.notes_model)
+        worst = len(transcript) / 4 / 1e6 * rate_in + 16000 / 1e6 * rate_out
+        if worst > args.max_cost:
+            raise ValueError(f"notes would cost up to ${worst:.2f}, over "
+                             f"--max-cost ${args.max_cost:.2f}")
+        try:
+            call("/worker/progress", {"id": job["id"], "detail": "writing the notes"})
+        except Exception:
+            pass
+        notes, usage = make_notes(transcript, args.notes_lang, args.notes_model)
+        cost = usage.input_tokens / 1e6 * rate_in + usage.output_tokens / 1e6 * rate_out
+        log(f"{usage.input_tokens} in / {usage.output_tokens} out  ~${cost:.4f}  "
+            f"{args.notes_model}", "notes", 1)
+
+        call("/worker/done", {"id": job["id"], "transcript": transcript, "notes": notes})
+        audio.unlink(missing_ok=True)
+        checkpoint.unlink(missing_ok=True)
+        log(f"{job['title']} sent back", "worker", 1)
+
+    log(f"worker on {base}, files in {work}", "ready")
+    wait = args.poll
+    while True:
+        try:
+            job = call("/worker/claim", {})
+        except Exception as e:
+            # The server restarting, the wifi gone, the tunnel down. None of
+            # these is worth a restart by hand, so it is a longer sleep and
+            # another try -- the same path an empty queue takes.
+            log(f"{base} unreachable ({type(e).__name__}: {e}); "
+                f"trying again in {hhmm(wait)}", "worker")
+            time.sleep(wait)
+            wait = min(wait * 2, args.max_poll)
+            continue
+        if not job:
+            time.sleep(wait)
+            wait = min(wait * 2, args.max_poll)   # an idle queue is not hammered
+            continue
+        wait = args.poll                          # work means work is likely
+        log(f"{job['title']} ({job['subject']}), try {job['attempts']}", "claimed")
+        try:
+            run(job)
+        except KeyboardInterrupt:
+            raise
+        except Exception as e:
+            reason = f"{type(e).__name__}: {e}"
+            log(f"{job['title']}: {reason}", "worker-fail")
+            try:
+                call("/worker/failed", {"id": job["id"], "error": reason})
+            except Exception as e2:
+                # Unreported, so the claim simply goes stale and the queue
+                # hands it out again. Nothing is lost either way.
+                log(f"could not report that failure: {e2}", "worker")
+
+
 def lan_ip():
     import socket
 
@@ -4795,11 +5241,9 @@ def process(path, args):
         cache.parent.mkdir(parents=True, exist_ok=True)
         cache.write_text(transcript)
         partial.unlink(missing_ok=True)  # full transcript supersedes the checkpoint
-    title = f"{path.stem}" + (f" — {SUBJECTS[code][0].replace('-', ' ')}" if code else "")
-    body = f"# {title}\n\n"
-
     if args.no_notes:
-        body += f"## Transcript\n\n```\n{transcript}\n```\n"
+        body = (f"# {lecture_title(path.stem, code)}\n\n"
+                f"## Transcript\n\n```\n{transcript}\n```\n")
     else:
         # ~4 chars per token, plus the 16k output ceiling, at this model's rates.
         rate_in, rate_out = price_of(args.notes_model)
@@ -4822,7 +5266,7 @@ def process(path, args):
         cost = usage.input_tokens / 1e6 * rate_in + usage.output_tokens / 1e6 * rate_out
         log(f"{usage.input_tokens} in / {usage.output_tokens} out  ~${cost:.4f}  "
             f"{args.notes_model}", "notes", 1)
-        body += f"{notes}\n\n---\n\n<details><summary>Full transcript</summary>\n\n```\n{transcript}\n```\n\n</details>\n"
+        body = lecture_note(path.stem, code, notes, transcript)
 
     out.write_text(body)
     print(f"  -> {out}", file=sys.stderr)
@@ -5023,11 +5467,30 @@ def main():
     sv.add_argument("--max-cost", type=float, default=1.00)
     sv.add_argument("--max-explains", type=int, default=300,
                     help="spend guard: stop answering after this many taps")
+    sv.add_argument("--remote-workers", dest="remote", action="store_true",
+                    help="hand lectures to `notes.py worker` on another machine "
+                         "instead of transcribing them here (the cloud VM has no GPU)")
     sv.add_argument("--no-auth", action="store_true",
                     help="no join screen, no database, no gate — the old single-user "
                          "behaviour, for working on this laptop")
     sv.add_argument("--verbose", action="store_true")
     sv.set_defaults(func=serve)
+
+    w = sub.add_parser("worker", help="transcribe for a server running elsewhere")
+    w.add_argument("--server", required=True, help="e.g. https://notes.workwithani.tech")
+    w.add_argument("--token", help="default: RECARVE_WORKER_TOKEN, or .env")
+    w.add_argument("--workdir", type=Path, default=Path(__file__).parent / ".worker",
+                   help="where audio and checkpoints live while a lecture is in hand")
+    w.add_argument("--lang", default=None)
+    w.add_argument("--model", default="large-v3", choices=list(WHISPER_REPOS))
+    w.add_argument("--notes-lang", default="english", choices=list(NOTES_LANG))
+    w.add_argument("--notes-model", default="claude-haiku-4-5")
+    w.add_argument("--max-cost", type=float, default=1.00)
+    w.add_argument("--poll", type=float, default=5.0, help="seconds between polls")
+    w.add_argument("--max-poll", type=float, default=120.0,
+                   help="the ceiling the backoff climbs to on an empty queue")
+    w.add_argument("--timeout", type=float, default=120.0)
+    w.set_defaults(func=worker)
 
     e = sub.add_parser("export", help="build a browsable HTML page of the whole library")
     e.add_argument("--out", type=Path, default=Path(__file__).parent / "site" / "index.html")

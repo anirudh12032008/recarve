@@ -4,3 +4,4 @@ library/
 site/
 .env
 *.partial.json
+.worker/
