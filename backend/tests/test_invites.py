@@ -15,7 +15,7 @@ def test_valid_code_creates_a_pending_profile(db):
     uid = make_user(db)
     as_user(db, uid)
     assert db.execute(
-        "select join_with_invite(%s, 'Anirudh', '2026I001')", (code,)
+        "select join_with_invite(%s, 'Anirudh', '2026I001', null, 'a-real-password')", (code,)
     ).fetchone()[0] is True
     as_admin_connection(db)
     assert db.execute(
@@ -27,7 +27,9 @@ def test_wrong_code_is_rejected(db):
     seed_invite(db)
     uid = make_user(db)
     as_user(db, uid)
-    assert db.execute("select join_with_invite('NOPE', 'X', '1')").fetchone()[0] is False
+    assert db.execute(
+        "select join_with_invite('NOPE', 'X', '1', null, 'a-real-password')"
+    ).fetchone()[0] is False
     as_admin_connection(db)
     assert db.execute(
         "select count(*) from profiles where id = %s", (uid,)
@@ -38,21 +40,25 @@ def test_expired_code_is_rejected(db):
     code = seed_invite(db, code="OLD", days=-1)
     uid = make_user(db)
     as_user(db, uid)
-    assert db.execute("select join_with_invite(%s, 'X', '2')", (code,)).fetchone()[0] is False
+    assert db.execute(
+        "select join_with_invite(%s, 'X', '2', null, 'a-real-password')", (code,)
+    ).fetchone()[0] is False
 
 
 def test_exhausted_code_is_rejected(db):
     code = seed_invite(db, code="FULL", uses=200, max_uses=200)
     uid = make_user(db)
     as_user(db, uid)
-    assert db.execute("select join_with_invite(%s, 'X', '3')", (code,)).fetchone()[0] is False
+    assert db.execute(
+        "select join_with_invite(%s, 'X', '3', null, 'a-real-password')", (code,)
+    ).fetchone()[0] is False
 
 
 def test_successful_join_increments_uses(db):
     code = seed_invite(db, code="COUNT")
     uid = make_user(db)
     as_user(db, uid)
-    db.execute("select join_with_invite(%s, 'X', '4')", (code,))
+    db.execute("select join_with_invite(%s, 'X', '4', null, 'a-real-password')", (code,))
     as_admin_connection(db)
     assert db.execute("select uses from invites where code = %s", (code,)).fetchone()[0] == 1
 

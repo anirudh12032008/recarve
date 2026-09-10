@@ -153,6 +153,9 @@ PEOPLE = [
     ("Member",  "M1",  "student", "approved", "member-password"),
     ("Fresh",   "F1",  "student", "approved", None),
     ("Walled",  "F2",  "trusted", "approved", None),
+    # Stands in for the two accounts that predate the join form asking for a
+    # password: null, and marked roll_login by the fixture below.
+    ("Legacy",  "L1",  "student", "approved", None),
     # A roll number long enough to clear the minimum on its own, so the test
     # below is refused for being the roll number and not for being short.
     ("Longroll", "LONGROLL2024", "student", "approved", None),
@@ -185,12 +188,20 @@ def server(tmp_path_factory):
         for table in ("timetable", "votes", "materials", "lectures", "profiles",
                       "invites"):
             conn.execute(f"delete from {table}")
+        # The door itself. The class is not empty below, so somebody coming
+        # through this code lands as pending rather than being elected admin.
+        conn.execute("insert into invites (code, expires_at, max_uses) values "
+                     "('LETMEIN', now() + interval '1 day', 200)")
         for name, roll, role, status, password in PEOPLE:
             uid = make_user(conn)
+            # roll_login mirrors what the database can actually hold: the only
+            # rows without a password are the ones an admin reset (or that
+            # predate the join form asking for one), and those are exactly the
+            # rows allowed to sign in with a roll number. Joining leaves neither.
             conn.execute(
-                "insert into profiles (id, name, roll_no, status, role, password) "
-                "values (%s, %s, %s, %s, %s, %s)",
-                (uid, name, roll, status, role, password))
+                "insert into profiles (id, name, roll_no, status, role, password, "
+                "roll_login) values (%s, %s, %s, %s, %s, %s, %s)",
+                (uid, name, roll, status, role, password, password is None))
             ids[roll] = uid
 
     args = notes.argparse.Namespace(
@@ -244,6 +255,27 @@ def password_of(roll):
     with psycopg.connect(DB_URL, autocommit=True) as conn:
         return conn.execute("select password from profiles where roll_no = %s",
                             (roll,)).fetchone()[0]
+
+
+def row_of(roll):
+    """(password, roll_login), or None if nobody holds that roll number."""
+    with psycopg.connect(DB_URL, autocommit=True) as conn:
+        return conn.execute(
+            "select password, roll_login from profiles where roll_no = %s",
+            (roll,)).fetchone()
+
+
+def join(port, roll, password, name="Joiner", code="LETMEIN",
+         phone="9876543210", client="10.1.0.1"):
+    """Through the front door the way a phone goes, password and all."""
+    status, body, headers = call(
+        port, "POST", "/join",
+        {"name": name, "roll_no": roll, "phone": phone, "code": code,
+         "password": password}, client=client)
+    cookie = None
+    if headers.get("Set-Cookie"):
+        cookie = headers["Set-Cookie"].split(";")[0].split("=", 1)[1]
+    return status, json.loads(body), cookie
 
 
 # ------------------------------------------------------------------ in
@@ -529,3 +561,168 @@ def test_the_admin_screen_is_given_the_passwords_it_shows(server):
     by_roll = {m["roll_no"]: m["password"] for m in body["members"]}
     assert by_roll["M1"] == "member-password"
     assert by_roll["R0"] is None, "and says plainly when there is not one yet"
+
+
+# --------------------------------------------------- the password is picked
+# --------------------------------------------------- at the door, not after it
+
+
+def test_joining_picks_the_password_that_logs_them_in_afterwards(server):
+    port, _ = server
+    status, body, cookie = join(port, "J1", "corridor-lamp-7")
+    assert (status, body["status"]) == (200, "pending")
+    assert cookie, "no cookie means the join did nothing"
+    assert row_of("J1") == ("corridor-lamp-7", False), \
+        "the password is written by the same statement that creates the row"
+
+    # And it is the way back in, from a browser that has never seen this class.
+    code, said, fresh = login(port, "J1", "corridor-lamp-7", client="10.1.0.2")
+    assert (code, said["set_password"]) == (200, False)
+    assert fresh, "the password a joiner chose has to be the one that signs them in"
+
+
+def test_a_joiner_is_never_reachable_with_their_own_roll_number(server):
+    """The whole bug. A roll number is public -- it is on every list in the
+    institute -- so if it is ever a password, the first classmate to type it
+    becomes that person and locks the real one out for good."""
+    port, _ = server
+    assert join(port, "J2", "brass-kettle-4")[0] == 200
+    for guess in ("J2", "j2", " J2 "):
+        code, said, cookie = login(port, "J2", guess, client="10.1.0.3")
+        assert (code, cookie) == (403, None), f"{guess!r} got in as J2"
+        assert said == {"error": SAME}
+    assert row_of("J2") == ("brass-kettle-4", False), "and nothing was taken from them"
+
+
+def test_joining_with_no_password_is_refused_and_says_which_field(server):
+    port, _ = server
+    for blank in (None, "", "   "):
+        code, said, cookie = join(port, "J3", blank)
+        assert (code, cookie) == (400, None)
+        assert "password" in said["error"], said["error"]
+    assert row_of("J3") is None, "a refused join must not leave half an account"
+
+
+def test_joining_with_the_roll_number_as_the_password_is_refused(server):
+    """It is the one password every classmate already knows."""
+    port, _ = server
+    roll = "JOINROLL2024"     # long enough to clear the minimum on its own
+    for attempt in (roll, roll.lower(), f"  {roll}  "):
+        code, said, _ = join(port, roll, attempt)
+        assert code == 400, f"{attempt!r} was accepted at the door"
+        assert "roll number" in said["error"], said["error"]
+    assert row_of(roll) is None
+
+
+def test_joining_with_a_short_password_is_refused_with_the_number(server):
+    port, _ = server
+    code, said, _ = join(port, "J4", "x" * (notes.MIN_PASSWORD - 1))
+    assert code == 400
+    assert str(notes.MIN_PASSWORD) in said["error"], "say the number, not 'too short'"
+    assert row_of("J4") is None
+
+
+def test_a_refused_password_does_not_spend_the_invite_code(server):
+    """A code has a limited number of uses and comes from somebody they had to
+    ask. Burning one on a password that was never accepted is a second thing
+    gone wrong for the same mistake."""
+    port, _ = server
+
+    def uses():
+        with psycopg.connect(DB_URL, autocommit=True) as conn:
+            return conn.execute(
+                "select uses from invites where code = 'LETMEIN'").fetchone()[0]
+
+    before = uses()
+    assert join(port, "J5", "short")[0] == 400
+    assert uses() == before
+    assert join(port, "J5", "harbour-pencil-2")[0] == 200
+    assert uses() == before + 1
+
+
+def test_the_invite_code_is_still_required_and_still_checked(server):
+    port, _ = server
+    code, said, _ = join(port, "J6", "meadow-socket-5", code="")
+    assert code == 400 and "invite code" in said["error"]
+
+    code, said, cookie = join(port, "J6", "meadow-socket-5", code="NOTACODE")
+    assert (code, cookie) == (403, None)
+    assert "invite code" in said["error"]
+    assert row_of("J6") is None, "a wrong code must not leave an account behind"
+
+
+# ------------------------------------------- the two accounts that predate it
+
+
+def test_only_a_row_marked_roll_login_may_sign_in_with_a_roll_number(server):
+    """What the migration did for the two live accounts, and the wall around
+    it. L1 has no password and predates the door, so their roll number is the
+    way in -- once, into the screen that replaces it. Nobody who joins can be
+    put in that state, and this is the pair that says so."""
+    port, _ = server
+    # The legacy account: null password, roll_login true, and it opens nothing.
+    assert row_of("L1") == (None, True)
+    status, body, cookie = login(port, "L1", "L1", client="10.1.0.4")
+    assert (status, body["set_password"]) == (200, True)
+    assert call(port, "GET", "/data", cookie=cookie)[0] == 403
+
+    # The new account: a password, roll_login false, and no way to the above.
+    assert join(port, "J7", "granite-window-8")[0] == 200
+    assert row_of("J7") == ("granite-window-8", False)
+    assert login(port, "J7", "J7", client="10.1.0.5")[0] == 403
+
+
+def test_setting_a_password_spends_the_roll_number_door_for_good(server):
+    port, _ = server
+    _, _, cookie = login(port, "Longroll2024".upper(), "LONGROLL2024",
+                         client="10.1.0.6")
+    assert call(port, "POST", "/password", {"password": "harbour-thistle-1"},
+                cookie=cookie)[0] == 200
+    assert row_of("LONGROLL2024") == ("harbour-thistle-1", False)
+    assert login(port, "LONGROLL2024", "LONGROLL2024", client="10.1.0.7")[0] == 403
+
+
+def test_an_admin_reset_is_the_only_thing_that_opens_that_door_again(server):
+    """Reset has to keep working -- it is the whole recovery path -- and this
+    is the shape of it: back to the roll number, back through the forced
+    change, and out the other side with a password of their own."""
+    port, ids = server
+    _, _, admin = login(port, "A1", "admin-password", client="10.1.0.8")
+    assert join(port, "J8", "cinder-parcel-6")[0] == 200
+    with psycopg.connect(DB_URL, autocommit=True) as conn:
+        target = str(conn.execute(
+            "select id from profiles where roll_no = 'J8'").fetchone()[0])
+    # Approved first: the forced-change screen is behind the same gate as the
+    # library, so somebody still at the door never reaches it.
+    assert call(port, "POST", "/approve", {"id": target}, cookie=admin,
+                client="10.1.0.8")[0] == 200
+
+    assert call(port, "POST", "/reset", {"id": str(target)}, cookie=admin,
+                client="10.1.0.8")[0] == 200
+    assert row_of("J8") == (None, True), "reset is what marks the row, not the null"
+
+    assert login(port, "J8", "cinder-parcel-6", client="10.1.0.9")[0] == 403
+    status, body, cookie = login(port, "J8", "J8", client="10.1.0.9")
+    assert (status, body["set_password"]) == (200, True)
+    assert call(port, "GET", "/data", cookie=cookie)[0] == 403
+    assert call(port, "POST", "/password", {"password": "lantern-copper-3"},
+                cookie=cookie)[0] == 200
+    assert row_of("J8") == ("lantern-copper-3", False)
+    assert login(port, "J8", "J8", client="10.1.0.10")[0] == 403
+    assert login(port, "J8", "lantern-copper-3", client="10.1.0.10")[0] == 200
+
+
+# ------------------------------------------------------ the join screen says so
+
+
+def test_the_join_form_states_the_rules_above_the_box(server):
+    """It is the first screen 110 people see, and a rule you learn from an
+    error message is a rule you learn twice."""
+    port, _ = server
+    page = call(port, "GET", "/")[1]
+    assert 'id="pw"' in page and 'autocomplete="new-password"' in page
+    assert f"At least {notes.MIN_PASSWORD} characters" in page
+    assert "not your roll number" in page
+    assert "do not use anywhere else" in page
+    assert page.index("At least") < page.index('id="pw"'), \
+        "a rule below the box is a rule you read after failing it"

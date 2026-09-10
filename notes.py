@@ -2624,11 +2624,14 @@ ROLE_REQUIRED = {
 }
 
 # Passwords are stored as typed. The one thing that goes with that decision is
-# on the screen where somebody picks one: SET_PASSWORD_BODY says not to reuse a
-# password from anywhere else, before the box rather than after a refusal.
+# on the screens where somebody picks one -- the join form and
+# SET_PASSWORD_BODY -- which both say not to reuse a password from elsewhere,
+# before the box rather than after a refusal.
 #
-# A null password means never set. It logs in with the roll number, opens
-# nothing until it is replaced, and is what an admin reset puts back.
+# A password is chosen at the door, so a joined account is never claimable. The
+# null-password state still exists, but only an admin reset can produce it now:
+# it logs in with the roll number, opens nothing until it is replaced, and the
+# profiles.roll_login column is what says a row is allowed to be in it at all.
 MIN_PASSWORD = 8
 
 # Failed logins per roll number and per client, in a sliding window. The two
@@ -2743,11 +2746,16 @@ def db(user_id=None):
     return conn
 
 
-def db_join(conn, code, name, roll_no, phone=None):
+def db_join(conn, code, name, roll_no, phone, password):
     """Put a new person through join_with_invite. (id, status, is_admin) or None.
 
     None means the code was wrong, expired or used up -- and nothing is left
     behind, not the auth row and not the invite use.
+
+    The password is required here and required in the function, with no default
+    on either. An account that exists without one is an account any classmate
+    who can read a roll number off a list can claim first, and the only way to
+    be sure that state never happens is for there to be no way to ask for it.
     """
     user_id = str(uuid.uuid4())
     result = None
@@ -2762,8 +2770,8 @@ def db_join(conn, code, name, roll_no, phone=None):
             (user_id, f"{user_id}@recarve.local"),
         )
         act_as(conn, user_id, local=True)
-        ok = conn.execute("select join_with_invite(%s, %s, %s, %s)",
-                          (code, name, roll_no, phone)).fetchone()[0]
+        ok = conn.execute("select join_with_invite(%s, %s, %s, %s, %s)",
+                          (code, name, roll_no, phone, password)).fetchone()[0]
         if not ok:
             raise psycopg.Rollback(tx)
         # The first person in is the admin. Nobody can approve anybody
@@ -2873,30 +2881,56 @@ def db_login(conn, roll, password):
     Runs on the owning connection, which is the only one available: the caller
     has no session yet, so there is no auth.uid() for a policy to be about.
 
-    A password that was never set is the roll number, matched without regard to
-    case. That one is typed on a phone keyboard that capitalises, and it is a
-    password on its way to being replaced before anything opens.
+    The roll number is a password only for a row that says so. roll_login is
+    true for the accounts that predate the join form asking for one and for
+    somebody an admin has just reset, and for nobody else: joining writes a
+    password in the same statement that creates the row, so a new member has
+    never been reachable with information printed on a class list. Matched
+    without regard to case, because it is typed on a phone keyboard that
+    capitalises, and it is a password on its way to being replaced before
+    anything opens.
     """
     roll = (roll or "").strip()
     password = password or ""
     if not roll or not password:
         return None
     row = conn.execute(
-        "select id, status, roll_no, password from profiles "
+        "select id, status, roll_no, password, roll_login from profiles "
         "where upper(roll_no) = upper(%s)",
         (roll,),
     ).fetchone()
     if not row:
         return None
-    profile_id, status, roll_no, stored = row
+    profile_id, status, roll_no, stored, roll_login = row
     if stored is None:
-        ok = hmac.compare_digest(password.upper().encode(),
-                                 (roll_no or "").upper().encode())
+        ok = roll_login and hmac.compare_digest(password.upper().encode(),
+                                                (roll_no or "").upper().encode())
     else:
         ok = hmac.compare_digest(password.encode(), stored.encode())
     if not ok:
         return None
     return str(profile_id), status, stored is None
+
+
+def check_password(new, roll_no):
+    """The two rules, in the one place both screens ask about them.
+
+    Shared by the join form and the forced change, so a rule can only be
+    tightened in one place and the joiner cannot be held to a different
+    standard than the member -- which is how the roll number got in as a
+    password the first time.
+
+    The roll number is refused because it is public: it is on every list in the
+    institute, so a password equal to it is a password everybody already has.
+    Returns the password as it will be stored. Raises ValueError, whose message
+    is what the person is shown.
+    """
+    new = (new or "").strip()
+    if len(new) < MIN_PASSWORD:
+        raise ValueError(f"a password needs at least {MIN_PASSWORD} characters")
+    if new.upper() == (roll_no or "").strip().upper():
+        raise ValueError("that is your roll number - pick something else")
+    return new
 
 
 def db_set_password(conn, user_id, new):
@@ -2907,20 +2941,19 @@ def db_set_password(conn, user_id, new):
     role to what they already are, so this statement cannot be more than a
     password however it is written.
 
-    The roll number is refused because it is what they just logged in with. A
-    forced change that accepts the thing it is replacing is a screen, not a
-    change.
+    Clearing roll_login is the other half: whatever put this row into the
+    roll-number state -- an admin's reset, or having existed before the join
+    form asked for a password -- is spent the moment one is chosen, and cannot
+    be re-entered except by another admin reset.
     """
-    new = (new or "").strip()
-    if len(new) < MIN_PASSWORD:
-        raise ValueError(f"a password needs at least {MIN_PASSWORD} characters")
     row = conn.execute("select roll_no from profiles where id = %s",
                        (user_id,)).fetchone()
     if not row:
         raise ValueError("no such member")
-    if new.upper() == (row[0] or "").upper():
-        raise ValueError("that is your roll number - pick something else")
-    conn.execute("update profiles set password = %s where id = %s", (new, user_id))
+    new = check_password(new, row[0])
+    conn.execute(
+        "update profiles set password = %s, roll_login = false where id = %s",
+        (new, user_id))
     return True
 
 
@@ -2928,12 +2961,19 @@ def db_reset_password(conn, profile_id):
     """Put somebody back to their roll number, and back through the forced
     change on their next login.
 
+    This is the only thing that opens the roll-number door, and it opens it for
+    one named person an admin has just been asked by. Between the reset and
+    their next login their account is claimable by anybody who knows the roll
+    number, which is everybody -- so it is a thing an admin does while the
+    person is on the phone, not a thing left standing.
+
     Admin-gated by "admins manage profiles", which is the layer under the
     handler's check: a member's own connection has no policy that reaches
     another row, so this updates nothing at all when it is not an admin asking.
     """
-    n = conn.execute("update profiles set password = null where id = %s",
-                     (profile_id,)).rowcount
+    n = conn.execute(
+        "update profiles set password = null, roll_login = true where id = %s",
+        (profile_id,)).rowcount
     if not n:
         raise ValueError("no such member")
     return True
@@ -3471,6 +3511,10 @@ __INVITED__
   <input id="sec" value="Section I" readonly tabindex="-1">
   <label for="code">Invite code</label>
   <input id="code" required autocomplete="off" autocapitalize="off" value="__CODE__">
+  <label for="pw">Password</label>
+  <p class="hint">At least __MIN__ characters, and not your roll number. Use
+  something you do not use anywhere else.</p>
+  <input id="pw" required type="password" autocomplete="new-password" minlength="__MIN__">
   <button>Join</button>
   <p class="err" id="err"></p>
 </form>
@@ -3489,7 +3533,8 @@ $('f').onsubmit = async e => {
   try {
     const res = await fetch('/join', {method: 'POST', headers: {'Content-Type': 'application/json'},
       body: JSON.stringify({name: $('nm').value, roll_no: $('roll').value,
-                            phone: $('ph').value, code: $('code').value})});
+                            phone: $('ph').value, code: $('code').value,
+                            password: $('pw').value})});
     const j = await res.json().catch(() => ({}));
     if (res.ok) return location.reload();
     $('err').textContent = j.error || 'could not join';
@@ -3498,7 +3543,7 @@ $('f').onsubmit = async e => {
   b.textContent = 'Join';
 };
 </script>
-"""
+""".replace("__MIN__", str(MIN_PASSWORD))
 
 
 def join_body(code="", inviter=None):
@@ -3535,7 +3580,8 @@ LOGIN_BODY = r"""<h1>recarve</h1>
   <button>Log in</button>
   <p class="err" id="err"></p>
 </form>
-<p class="hint">Never set one? Your password is your roll number until you pick one.</p>
+<p class="hint">Had yours reset by the admin? Sign in with your roll number, then
+pick a new one.</p>
 <p><a href="/">New here? Join with an invite code</a></p>
 <script>
 const $ = i => document.getElementById(i);
@@ -4226,15 +4272,22 @@ def build_server(args):
                 roll = (req.get("roll_no") or "").strip()[:40]
                 phone = (req.get("phone") or "").strip()[:32]
                 code = (req.get("code") or "").strip()[:64]
-                if not (name and roll and phone and code):
-                    return self.reply(400, {"error": "name, roll number, phone number "
-                                                     "and invite code are all required"})
+                password = (req.get("password") or "")[:200]
+                if not (name and roll and phone and code and password.strip()):
+                    return self.reply(400, {"error": "name, roll number, phone number, "
+                                                     "password and invite code are all "
+                                                     "required"})
                 try:
                     phone = normalise_phone(phone)
+                    # Before the invite code is spent, so a refused password
+                    # does not cost a use off a code somebody has to ask for
+                    # again -- and so the joiner is told which of the two was
+                    # wrong instead of being sent back to WhatsApp.
+                    password = check_password(password, roll)
                 except ValueError as e:
                     return self.reply(400, {"error": str(e)})
                 with db() as conn:
-                    got = db_join(conn, code, name, roll, phone)
+                    got = db_join(conn, code, name, roll, phone, password)
             except psycopg.errors.UniqueViolation:
                 return self.reply(409, {"error": "that roll number is already registered"})
             except Exception as e:

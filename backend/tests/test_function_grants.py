@@ -46,5 +46,5 @@ def test_signup_rpc_is_reachable_by_a_brand_new_user(db):
     uid = make_user(db)
     as_user(db, uid)
     assert db.execute(
-        "select join_with_invite('GRANT-CHECK', 'New Student', 'ROLL-1')"
+        "select join_with_invite('GRANT-CHECK', 'New Student', 'ROLL-1', null, 'a-real-password')"
     ).fetchone()[0] is True

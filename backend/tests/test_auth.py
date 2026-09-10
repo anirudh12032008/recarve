@@ -82,10 +82,21 @@ def test_secret_is_generated_once_and_reused(tmp_path, monkeypatch):
 # ------------------------------------------------------------------ join
 
 
+def join_db(db, code, name, roll):
+    """db_join with a password, which is the only thing that changed under it.
+
+    Joining picks one now -- that is what stops a new account from being
+    claimable with a roll number anybody can read off a list -- but every test
+    below is about the invite, the first admin or the profile it leaves behind,
+    and passes no phone number for the same reason.
+    """
+    return notes.db_join(db, code, name, roll, None, "joined-password")
+
+
 def test_first_joiner_becomes_the_admin(db):
     db.execute("delete from profiles")  # an empty class, as on day one
     make_invite(db)
-    user_id, status, is_admin = notes.db_join(db, "OPENSESAME", "Asha", "24U001")
+    user_id, status, is_admin = join_db(db, "OPENSESAME", "Asha", "24U001")
     assert (status, is_admin) == ("approved", True), "nobody could ever approve anybody"
 
 
@@ -95,7 +106,7 @@ def test_the_first_joiner_can_publish_from_the_first_upload(db):
     admin -- so their whole library would be invisible to the class."""
     db.execute("delete from profiles")
     make_invite(db)
-    user_id, _, _ = notes.db_join(db, "OPENSESAME", "Asha", "24U001")
+    user_id, _, _ = join_db(db, "OPENSESAME", "Asha", "24U001")
     as_user(db, user_id)
     assert db.execute(
         "insert into materials (subject_code, uploader_id, filename, file_key, "
@@ -107,8 +118,8 @@ def test_the_first_joiner_can_publish_from_the_first_upload(db):
 def test_everybody_after_the_first_waits(db):
     db.execute("delete from profiles")
     make_invite(db)
-    notes.db_join(db, "OPENSESAME", "Asha", "24U001")
-    _, status, is_admin = notes.db_join(db, "OPENSESAME", "Bilal", "24U002")
+    join_db(db, "OPENSESAME", "Asha", "24U001")
+    _, status, is_admin = join_db(db, "OPENSESAME", "Bilal", "24U002")
     assert (status, is_admin) == ("pending", False)
 
 
@@ -116,7 +127,7 @@ def test_a_bad_code_leaves_nothing_behind(db):
     db.execute("delete from profiles")
     make_invite(db)
     before = db.execute("select count(*) from auth.users").fetchone()[0]
-    assert notes.db_join(db, "WRONG", "Mallory", "24U999") is None
+    assert join_db(db, "WRONG", "Mallory", "24U999") is None
     after = db.execute("select count(*) from auth.users").fetchone()[0]
     assert after == before, "a failed join must not leave an auth row"
     assert db.execute("select uses from invites where code = 'OPENSESAME'").fetchone()[0] == 0
@@ -127,16 +138,16 @@ def test_an_expired_or_exhausted_code_does_not_let_anyone_in(db):
     make_invite(db, "STALE", expires="-1 day")
     make_invite(db, "USEDUP", max_uses=1)
     db.execute("update invites set uses = 1 where code = 'USEDUP'")
-    assert notes.db_join(db, "STALE", "A", "24U101") is None
-    assert notes.db_join(db, "USEDUP", "B", "24U102") is None
+    assert join_db(db, "STALE", "A", "24U101") is None
+    assert join_db(db, "USEDUP", "B", "24U102") is None
 
 
 def test_two_people_cannot_take_the_same_roll_number(db):
     db.execute("delete from profiles")
     make_invite(db)
-    notes.db_join(db, "OPENSESAME", "Asha", "24U001")
+    join_db(db, "OPENSESAME", "Asha", "24U001")
     with pytest.raises(psycopg.errors.UniqueViolation):
-        notes.db_join(db, "OPENSESAME", "Imposter", "24U001")
+        join_db(db, "OPENSESAME", "Imposter", "24U001")
 
 
 # ------------------------------------------------------------- principal
@@ -145,7 +156,7 @@ def test_two_people_cannot_take_the_same_roll_number(db):
 def test_a_session_reads_back_as_its_owner(db):
     db.execute("delete from profiles")
     make_invite(db)
-    user_id, _, _ = notes.db_join(db, "OPENSESAME", "Asha", "24U001")
+    user_id, _, _ = join_db(db, "OPENSESAME", "Asha", "24U001")
     as_admin_connection(db)
     who = notes.db_principal(db, user_id)
     assert who["name"] == "Asha" and who["status"] == "approved" and who["admin"]
@@ -163,7 +174,7 @@ def test_a_cookie_that_is_not_a_uuid_is_nobody(db):
 def test_status_is_read_fresh_so_blocking_takes_effect_at_once(db):
     db.execute("delete from profiles")
     make_invite(db)
-    user_id, _, _ = notes.db_join(db, "OPENSESAME", "Asha", "24U001")
+    user_id, _, _ = join_db(db, "OPENSESAME", "Asha", "24U001")
     as_admin_connection(db)
     db.execute("update profiles set status = 'blocked' where id = %s", (user_id,))
     assert notes.db_principal(db, user_id)["status"] == "blocked"
@@ -175,8 +186,8 @@ def test_status_is_read_fresh_so_blocking_takes_effect_at_once(db):
 def test_approving_lets_someone_in_and_publishes_what_they_uploaded(db):
     db.execute("delete from profiles")
     make_invite(db)
-    admin_id, _, _ = notes.db_join(db, "OPENSESAME", "Asha", "24U001")
-    joiner_id, _, _ = notes.db_join(db, "OPENSESAME", "Bilal", "24U002")
+    admin_id, _, _ = join_db(db, "OPENSESAME", "Asha", "24U001")
+    joiner_id, _, _ = join_db(db, "OPENSESAME", "Bilal", "24U002")
 
     as_admin_connection(db)
     db.execute(
@@ -208,9 +219,9 @@ def test_approving_lets_someone_in_and_publishes_what_they_uploaded(db):
 def test_a_member_cannot_approve_anybody(db):
     db.execute("delete from profiles")
     make_invite(db)
-    notes.db_join(db, "OPENSESAME", "Asha", "24U001")          # the admin
-    member_id, _, _ = notes.db_join(db, "OPENSESAME", "Bilal", "24U002")
-    victim_id, _, _ = notes.db_join(db, "OPENSESAME", "Chan", "24U003")
+    join_db(db, "OPENSESAME", "Asha", "24U001")          # the admin
+    member_id, _, _ = join_db(db, "OPENSESAME", "Bilal", "24U002")
+    victim_id, _, _ = join_db(db, "OPENSESAME", "Chan", "24U003")
     as_admin_connection(db)
     db.execute("update profiles set status = 'approved' where id = %s", (member_id,))
 
@@ -225,7 +236,7 @@ def test_bootstrap_offers_a_code_only_while_the_class_is_empty(db):
     code = notes.db_bootstrap(db)
     assert code and notes.db_bootstrap(db) == code, "a restart must not change the code"
 
-    notes.db_join(db, code, "Asha", "24U001")
+    join_db(db, code, "Asha", "24U001")
     assert notes.db_bootstrap(db) is None, "the admin hands out invites from here on"
 
 
@@ -380,20 +391,16 @@ def call(port, method, path, body=None, cookie=None):
         return e.code, e.read().decode(), e.headers
 
 
-def join(port, name, roll, code="LETMEIN", phone="9876543210"):
+def join(port, name, roll, code="LETMEIN", phone="9876543210",
+         password="a-real-password"):
+    """Join the way a phone does. The password is part of the form now, so
+    these tests no longer have to reach into the table and add one."""
     status, body, headers = call(port, "POST", "/join",
                                  {"name": name, "roll_no": roll, "phone": phone,
-                                  "code": code})
+                                  "code": code, "password": password})
     cookie = None
     if headers.get("Set-Cookie"):
         cookie = headers["Set-Cookie"].split(";")[0].split("=", 1)[1]
-    if status == 200:
-        # A profile with no password is walled until it picks one -- that is
-        # test_login.py's subject. These tests are about the gate around it, so
-        # the joiner is given a password here rather than in every one of them.
-        with psycopg.connect(DB_URL, autocommit=True) as conn:
-            conn.execute("update profiles set password = 'a-real-password' "
-                         "where roll_no = %s", (roll,))
     return status, json.loads(body), cookie
 
 
