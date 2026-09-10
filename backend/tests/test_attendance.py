@@ -272,6 +272,34 @@ def test_tomorrow_has_not_happened_yet(db):
                                            "state": "present"}])
 
 
+def test_a_mark_older_than_the_window_is_not_a_mark(db):
+    """The window bounds the past as well. A mark written outside it still
+    counts in the per-subject totals and rides in no payload, so a percentage
+    moves for a class the student can neither see nor clear from any screen.
+    """
+    me = student_with_a_monday(db)
+    today = db.execute("select current_date").fetchone()[0]
+    old = (today - datetime.timedelta(days=notes.ATT_WINDOW + 12)).isoformat()
+    with pytest.raises(ValueError, match="further back"):
+        notes.db_mark_attendance(db, me, [{"date": old, "period": 1,
+                                           "state": "present"}])
+
+
+def test_calling_a_class_off_is_bounded_at_both_ends(db):
+    """Forwards, because a week's notice is as much as anybody ever gives;
+    backwards, because past the window it is a denominator nobody can see."""
+    trusted = member(db, trusted=True)
+    as_user(db, trusted)
+    today = db.execute("select current_date").fetchone()[0]
+    ahead = (today + datetime.timedelta(days=30)).isoformat()
+    old = (today - datetime.timedelta(days=notes.ATT_WINDOW + 12)).isoformat()
+
+    with pytest.raises(ValueError, match="further ahead"):
+        notes.db_set_cancelled(db, trusted, ahead, 1, "MC1101", True)
+    with pytest.raises(ValueError, match="further back"):
+        notes.db_set_cancelled(db, trusted, old, 1, "MC1101", True)
+
+
 @pytest.mark.parametrize("mark", [
     {"date": "not-a-date", "period": 1, "state": "present"},
     {"date": None, "period": 1, "state": "present"},
