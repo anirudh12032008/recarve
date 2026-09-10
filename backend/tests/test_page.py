@@ -1140,6 +1140,30 @@ assert.ok(wrote(['textContent', '9 of 12 · 75.0%']),
           'the per-subject number belongs with the subject');
 assert.ok(wrote(['textContent', 'Miss the next class and you drop below 75%.']));
 
+// One tap for a whole day -- offered only where it saves one, and only over
+// the classes it may actually touch. Monday has three: period 1 is already
+// marked, period 2 was called off, so period 3 is the only thing left and one
+// class is already one tap.
+assert.equal(allPresentRow('2026-09-07', slotsOn(TT, 1)), null,
+             'one class left to mark is not worth a row of its own');
+
+// Give the day a second unmarked class and the row appears. What it posts is
+// the point: never the period that was called off, and never one the student
+// has already answered -- a deliberate 'absent' is not something a bulk button
+// may overwrite.
+TT.push({day: 1, period: 5, code: 'CY1107'});
+writes = []; fetches = []; reply = null;
+assert.ok(allPresentRow('2026-09-07', slotsOn(TT, 1)),
+          'two classes still to mark are worth one tap');
+assert.ok(says('Mark all 2 present'), 'and it counts those two, not the day');
+writes.filter(w => w[0] === 'onclick').pop()[1]();
+assert.equal(fetches.length, 1, 'the whole day is one request');
+assert.deepStrictEqual(JSON.parse(fetches[0][1].body).marks,
+  [{date: '2026-09-07', period: 3, state: 'present'},
+   {date: '2026-09-07', period: 5, state: 'present'}],
+  'only the unmarked classes that actually happened');
+TT.pop();
+
 // No server, no marks: Home still draws today rather than offering a control
 // that cannot save anything.
 ATT = null;
