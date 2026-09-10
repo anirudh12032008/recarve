@@ -633,3 +633,83 @@ def test_missing_attendance_cannot_take_the_library_with_it(server, monkeypatch)
     d = json.loads(body)
     assert d["subjects"][0]["code"] == "MC1101", "the library is still served"
     assert "attendance" not in d, "the page reads a missing payload as none"
+
+
+# ---------------------------------------------------------- the institute's own dates
+#
+# The calendar is the one part of attendance nobody in this section decides.
+# It arrives by migration from a notice the institute publishes once a term,
+# and the only thing the app does with it is refuse to pretend a class happened.
+
+
+def test_a_closed_day_is_named_in_the_payload(db):
+    """The phone cannot do range arithmetic over a term's worth of entries, so
+    the server expands the calendar to one row per date it actually covers."""
+    uid = student_with_a_monday(db)
+    as_admin_connection(db)
+    today = db.execute("select current_date").fetchone()[0]
+    shut = today + datetime.timedelta(days=3)
+    db.execute(
+        "insert into academic_calendar "
+        "(starts_on, ends_on, title, kind, teaching, notable) "
+        "values (%s, %s, 'A day the institute closed', 'holiday', false, false)",
+        (shut, shut))
+    as_user(db, uid)
+
+    closed = {c["date"]: c for c in notes.db_attendance(db, uid)["closed"]}
+    assert shut.isoformat() in closed, "a closed day ahead is in reach of the day view"
+    assert closed[shut.isoformat()]["title"] == "A day the institute closed"
+    assert today.isoformat() not in closed, "an ordinary day is not in the list"
+
+
+def test_a_teaching_day_is_not_closed_however_special_it_is(db):
+    """`teaching` is not "is this day unusual". Mini tests run during class
+    hours with no separate timetable, so classes happen and the day stays open.
+    Getting this backwards would delete a fortnight of everybody's attendance
+    from the denominator."""
+    uid = student_with_a_monday(db)
+    as_admin_connection(db)
+    today = db.execute("select current_date").fetchone()[0]
+    db.execute(
+        "insert into academic_calendar "
+        "(starts_on, ends_on, title, kind, teaching, notable) "
+        "values (%s, %s, 'Quizzes, during class hours', 'exam', true, true)",
+        (today, today + datetime.timedelta(days=5)))
+    as_user(db, uid)
+
+    dates = [c["date"] for c in notes.db_attendance(db, uid)["closed"]]
+    assert today.isoformat() not in dates, "classes run through a teaching window"
+
+
+def test_the_countdown_names_a_window_that_is_already_running(db):
+    """During mid-term week the honest line is "mid-terms, on now", not the
+    date they finish and not the thing after them."""
+    uid = student_with_a_monday(db)
+    as_admin_connection(db)
+    today = db.execute("select current_date").fetchone()[0]
+    db.execute("delete from academic_calendar")
+    db.execute(
+        "insert into academic_calendar "
+        "(starts_on, ends_on, title, kind, teaching, notable) values "
+        "(%s, %s, 'Started already', 'exam', false, true), "
+        "(%s, %s, 'Comes after', 'milestone', true, true)",
+        (today - datetime.timedelta(days=2), today + datetime.timedelta(days=2),
+         today + datetime.timedelta(days=30), today + datetime.timedelta(days=30)))
+    as_user(db, uid)
+
+    nxt = notes.db_attendance(db, uid)["next"]
+    assert nxt["title"] == "Started already", "a window in progress still names itself"
+
+
+def test_the_calendar_is_read_only_to_a_member(db):
+    """It is the same 22 dates for all 110 of them and none of them wrote it.
+    A member who could edit it could move everybody's holidays."""
+    uid = student_with_a_monday(db, role="admin")
+    as_user(db, uid)
+    today = db.execute("select current_date").fetchone()[0]
+    assert db.execute("select count(*) from academic_calendar").fetchone()[0] >= 0
+    with pytest.raises(psycopg.errors.InsufficientPrivilege):
+        db.execute(
+            "insert into academic_calendar "
+            "(starts_on, ends_on, title, kind, teaching, notable) "
+            "values (%s, %s, 'Invented', 'holiday', false, false)", (today, today))

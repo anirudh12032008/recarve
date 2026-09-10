@@ -1236,6 +1236,31 @@ assert.ok(says('Today'));
 DATA[0].notes.pop(); DATA[1].uploads.pop();
 location.hash = '#classes'; route();
 
+// ---- The institute's calendar. A holiday is a Monday like any other as far
+// as the timetable knows, so a screen that asks by weekday draws a full day of
+// classes onto it. 14 Sep 2026 is Ganesh Chaturthi AND a Monday, which is the
+// whole reason this is asked by date.
+ATT.closed = [{date: '2026-09-14', title: 'Ganesh Chaturthi', kind: 'holiday'}];
+dayDate = '2026-09-14';
+location.hash = '#classes/day'; writes = []; route();
+assert.ok(says('Ganesh Chaturthi — no classes.'),
+          'the day names the holiday, not "No classes on Monday"');
+assert.ok(!wrote(['textContent', 'Period 1 · Not marked']),
+          'and offers no class to mark on a day the institute closed');
+assert.equal(slotsFor('2026-09-14').length, 0, 'a closed date holds no periods');
+assert.equal(slotsFor('2026-09-07').length, 3, 'an ordinary Monday still does');
+assert.equal(markable('2026-09-14'), false, 'nothing to mark on a holiday');
+assert.equal(markable('2026-09-07'), true, 'an ordinary past Monday still marks');
+
+// An ordinary empty day still says so the plain way -- the holiday wording
+// must not leak onto a Sunday.
+dayDate = '2026-09-13';                       // the Sunday before it
+writes = []; route();
+assert.ok(says('No classes on Sunday.'), 'a plain empty day keeps the plain line');
+
+ATT.closed = []; dayDate = null;
+location.hash = '#classes'; route();
+
 // No server, no marks: Home still draws today rather than offering a control
 // that cannot save anything.
 ATT = null;
@@ -1690,7 +1715,14 @@ def test_the_day_view_marks_a_class_the_one_way_this_app_marks_a_class():
     # The periods are this student's own timetable, never the section template:
     # Section I splits for the labs, and the seeded per-profile copy is the only
     # thing that knows which batch this phone belongs to.
-    assert "slotsOn(TT, day)" in body
+    #
+    # Asked by DATE rather than by weekday, because the two differ on exactly
+    # the days that matter: Ganesh Chaturthi is a Monday and the timetable is
+    # full of Mondays. slotsFor still reads TT -- asserted where it is defined
+    # rather than by the shape of the call here.
+    assert "slotsFor(date)" in body
+    assert re.search(r"const slotsFor = date =>[^;]*slotsOn\(TT,", notes.PAGE), \
+        "slotsFor must still read this student's own timetable"
     assert "section_timetable" not in notes.PAGE
 
 

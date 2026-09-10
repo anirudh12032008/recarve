@@ -1385,6 +1385,19 @@ const PERIODS = 8;
 const dayOf = d => d.getDay();
 const slotsOn = (tt, day) =>
   (tt || []).filter(s => s.day === day).sort((a, b) => a.period - b.period);
+// What a given DATE holds, which is not the same question as what its weekday
+// holds. Ganesh Chaturthi is a Monday and the timetable is full of Mondays, so
+// asking by weekday alone draws six classes onto a day the institute closed
+// back in July. Every screen that knows its date asks this one instead.
+const slotsFor = date => closedOn(date) ? [] : slotsOn(TT, dayOfISO(date));
+// Why a day is empty, in the words a student would use. The institute's own
+// reason beats "No classes on Monday" -- which is true, but reads like a bug
+// on a day the timetable plainly has classes for.
+const emptyDay = (date, day) => {
+  const shut = closedOn(date);
+  return quiet(shut ? shut.title + ' — no classes.'
+                    : 'No classes on ' + DAYS[day] + '.');
+};
 
 // "Since you last looked" needs a last look. localStorage throws outright in
 // private mode, so both touches are guarded: a failure costs the section, not
@@ -1434,9 +1447,9 @@ function todayBlock() {
   // prints under every subject, one tap away; what it says instead is the one
   // thing only this row can act on.
   const date = attToday();
-  const slots = slotsOn(TT, day);
+  const slots = slotsFor(date);
   const rows = [];
-  for (const slot of slotsOn(TT, day)) {
+  for (const slot of slots) {
     if (!subjectOf(slot.code)) continue;       // a code the library dropped
     // No server, no marks: Home still has to draw today rather than offer a
     // control that cannot save. Calling a class off is not offered here at all.
@@ -1457,7 +1470,7 @@ function todayBlock() {
     const all = allPresentRow(date, slots);
     if (all) rows.push(all);
   }
-  if (!rows.length) rows.push(quiet('No classes on ' + DAYS[day] + '.'));
+  if (!rows.length) rows.push(emptyDay(date, day));
   if (ATT) {
     const back = line('Catch up on another day', 'Mark a class you forgot',
                       document.createElement('button'));
@@ -1673,7 +1686,13 @@ const shiftDay = (date, n) =>
 // a class that has not happened, or a day further back than the payload reaches
 // and the server refuses it -- _att_date says the same three things.
 const markable = date => !!ATT && date <= ATT.today
-                         && date >= shiftDay(ATT.today, -ATT.window);
+                         && date >= shiftDay(ATT.today, -ATT.window)
+                         && !closedOn(date);
+// The institute's own answer for this date -- a holiday, the mid-sem break, an
+// exam window -- or null on an ordinary day. Not a mark and not a cancellation:
+// nobody in this section decided it and nobody here can undo it.
+const closedOn = date =>
+  (ATT && ATT.closed ? ATT.closed.find(c => c.date === date) : null) || null;
 const MONTHS = ['January', 'February', 'March', 'April', 'May', 'June', 'July',
                 'August', 'September', 'October', 'November', 'December'];
 // What to call a day on a heading. The three days a student thinks of by name
@@ -1877,11 +1896,11 @@ function renderAttendance() {
             shiftDay(attToday(), -ATT.window), attToday());
 
   const day = dayOfISO(date);
-  const slots = slotsOn(TT, day);
+  const slots = slotsFor(date);
   const rows = slots.map(sl => classRow(date, sl, mayAdd()));
   const all = allPresentRow(date, slots);
   if (all) rows.push(all);
-  if (!rows.length) rows.push(quiet('No classes on ' + DAYS[day] + '.'));
+  if (!rows.length) rows.push(emptyDay(date, day));
   block(dayName(date), rows);
   block('Every subject', ATT.subjects.map(a => attRow(a, true)));
 }
@@ -2244,7 +2263,7 @@ function renderDay() {
     start.onclick = () => go('home', 'timetable');
     return block(dayName(date), [start]);
   }
-  const slots = slotsOn(TT, day);
+  const slots = slotsFor(date);
   const rows = [];
   const shelved = new Set();
   for (const slot of slots) {
@@ -2270,7 +2289,7 @@ function renderDay() {
       rows.push(b);
     }
   }
-  if (!rows.length) rows.push(quiet('No classes on ' + DAYS[day] + '.'));
+  if (!rows.length) rows.push(emptyDay(date, day));
   // One tap for the whole day, on the days it can save one. Same row the
   // catch-up screen offers, over the same classes, posting the same request.
   const all = markable(date) ? allPresentRow(date, slots) : null;
@@ -2282,11 +2301,15 @@ function renderDay() {
 // recording to a subject the app never told them was there.
 function renderSubjects() {
   // The way into the day view, saying what today holds before it is tapped.
-  const n = TT ? slotsOn(TT, dayOfISO(attToday())).length : 0;
+  const n = TT ? slotsFor(attToday()).length : 0;
   const today = line('Today\u2019s classes',
     TT === null ? 'Checking your timetable…'
     : n ? n + (n === 1 ? ' class' : ' classes') + ' · and any other day'
-    : 'Nothing on ' + DAYS[dayOfISO(attToday())] + ' · step back to any day',
+    // Name the holiday rather than the weekday: "Nothing on Monday" under a
+    // timetable full of Mondays reads as a fault in the app.
+    : (closedOn(attToday()) || {}).title
+      ? (closedOn(attToday()).title + ' · step back to any day')
+      : 'Nothing on ' + DAYS[dayOfISO(attToday())] + ' · step back to any day',
     document.createElement('button'));
   today.onclick = () => go('classes', 'day');
   block('Your day', [today]);
@@ -5047,6 +5070,42 @@ def db_attendance(conn, user_id, window=ATT_WINDOW):
                 "where on_date > current_date - %s order by on_date, period",
                 (window,))
         ],
+        # Days the institute already said would hold no class, expanded to one
+        # entry per date so the phone can answer "is anything on?" with a lookup
+        # rather than by re-implementing range arithmetic.
+        #
+        # Separate from `off` on purpose, though both empty a day. A
+        # cancellation is something a trusted member did last Tuesday and can
+        # undo; a holiday is something the institute published in July. They
+        # read differently on the screen and they are answerable by different
+        # people.
+        #
+        # Sunday is not in here. The timetable has no Sunday rows, so a Sunday
+        # is already empty for the only reason that matters, and announcing
+        # "Sunday: no classes" as though it were news helps nobody.
+        #
+        # Reaches further forward than back: the day view steps forward, and
+        # walking into next week's mid-sem break should say so.
+        "closed": [
+            {"date": d.isoformat(), "title": title, "kind": kind}
+            for d, title, kind in conn.execute(
+                "select g::date, c.title, c.kind "
+                "  from generate_series(current_date - %s::int, "
+                "                       current_date + 21, interval '1 day') g "
+                "  join academic_calendar c "
+                "    on not c.teaching and g::date between c.starts_on and c.ends_on "
+                " order by g", (window,))
+        ],
+        # The next thing worth counting down to. `ends_on >= current_date` so a
+        # window already running still names itself -- during mid-term week the
+        # honest line is "mid-terms, on now", not the date they finish.
+        "next": next(
+            ({"date": s.isoformat(), "ends": e.isoformat(), "title": t, "kind": k}
+             for s, e, t, k in conn.execute(
+                 "select starts_on, ends_on, title, kind from academic_calendar "
+                 " where notable and ends_on >= current_date "
+                 " order by starts_on limit 1")),
+            None),
     }
 
 
