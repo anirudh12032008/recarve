@@ -1173,6 +1173,69 @@ assert.deepStrictEqual(JSON.parse(fetches[0][1].body).marks,
   'only the unmarked classes that actually happened');
 TT.pop();
 
+// ---- THE DAY VIEW. One day, its periods, and what each one holds. ----
+// A level inside Classes, so back climbs to the subject list.
+DATA[0].notes.push({title: '2026-09-07 limits', kind: 'lecture', md: '', questions: []});
+DATA[1].uploads.push({name: 'slides.pdf', path: 'x.pdf'});
+location.hash = '#classes/day';
+writes = [];
+route();
+assert.equal(view.day, true, 'the day view is a level inside Classes');
+assert.equal(view.code, null, "'day' is not a subject");
+assert.ok(wrote(['textContent', 'Your day']), 'and it names itself');
+assert.ok(wrote(['value', '2026-09-07']), 'it opens on the day the server calls today');
+assert.ok(says('Today'), 'and says so in words rather than only in the picker');
+
+// Every period of that Monday, in order, marked by the control that already
+// exists -- the same words the catch-up screen prints, off the same payload.
+assert.ok(wrote(['textContent', 'Period 1 · Present']));
+assert.ok(wrote(['textContent', 'Period 2 · Class off']));
+assert.ok(wrote(['textContent', 'Period 3 · Not marked']));
+
+// What the app already knows about each period: the lecture recorded in that
+// slot, and the way into the rest of the subject's shelf.
+assert.ok(says('2026-09-07 limits'), "the day's own lecture belongs on its period");
+assert.ok(says('Notes & slides in CY1107'), 'and the subject the period is in');
+assert.ok(!says('2026-09-07 limits · '), 'nothing here is invented about it');
+
+// Stepping a day is two taps and no picker: the arrows are the first two
+// controls on the screen, and they are what a thumb reaches for.
+let steps = writes.filter(w => w[0] === 'onclick').map(w => w[1]);
+writes = [];
+steps[0]();                                      // yesterday
+assert.equal(dayDate, '2026-09-06', 'the left arrow is one day back');
+assert.ok(says('Sunday'), 'and Sunday holds no periods, which is an answer');
+assert.ok(says('No classes on Sunday.'));
+
+// Forward the same way, over today, into a day nobody can mark yet: the row is
+// still worth drawing -- it says what you have -- and it loses the buttons.
+dayDate = '2026-09-07'; writes = []; render();
+steps = writes.filter(w => w[0] === 'onclick').map(w => w[1]);
+writes = [];
+steps[1]();                                      // tomorrow
+assert.equal(dayDate, '2026-09-08');
+assert.ok(says('Tomorrow'), 'the three days with names get their name');
+
+// A day further back than the payload reaches is drawn and not marked: the
+// marks exist, they are simply not here, and "Not marked" would be a lie about
+// the one number that costs an exam.
+dayDate = '2026-01-05';                          // also a Monday, months back
+writes = []; render();
+assert.ok(wrote(['textContent', 'Period 1']), 'the day is still worth reading');
+assert.ok(!wrote(['textContent', 'Period 1 · Not marked']),
+          'nothing may claim a mark is missing when it is only out of reach');
+assert.ok(says('Monday 5 January'), 'and a dated day says which one it is');
+
+// Leaving and coming back starts on today again, never on last January.
+location.hash = '#classes'; route();
+assert.equal(dayDate, null);
+writes = []; render();
+assert.ok(says('Today\u2019s classes'), 'the subject list is the way in');
+location.hash = '#classes/day'; writes = []; route();
+assert.ok(says('Today'));
+DATA[0].notes.pop(); DATA[1].uploads.pop();
+location.hash = '#classes'; route();
+
 // No server, no marks: Home still draws today rather than offering a control
 // that cannot save anything.
 ATT = null;
@@ -1562,14 +1625,49 @@ def test_the_catch_up_screen_is_a_url_and_uses_the_platform_date_picker():
                    "if (!att) attDate = null;",
                    "back.onclick = () => go('home', 'attendance');",
                    "mark.onclick = () => go('home', 'attendance');",
-                   '<label for="adate">Day</label><input type="date" id="adate">',
-                   # Bounded by what the server keeps, and by what has happened.
-                   "input.max = attToday();"):
+                   "input.type = 'date';",
+                   # Bounded by what the server keeps, and by what has happened:
+                   # the day view has the same picker and no bounds at all, so
+                   # these two are the caller's, not the picker's.
+                   "shiftDay(attToday(), -ATT.window), attToday());"):
         assert wiring in notes.PAGE, f"the catch-up screen is not wired: {wiring}"
     # The date is built by hand rather than with toISOString(), which is UTC
     # and hands back yesterday for every student this app has.
     day = re.search(r"const isoDay = .*?;", notes.PAGE, re.S).group(0)
     assert "toISOString" not in day and "getFullYear()" in day
+
+
+def test_the_day_view_marks_a_class_the_one_way_this_app_marks_a_class():
+    """A second way to mark is a second denominator, and the number is the one
+    a student plans a term around. The day view draws classRow and posts
+    nothing of its own: no arithmetic, no endpoint, no second control."""
+    body = re.search(r"function renderDay\(\) \{.*?\n\}", notes.PAGE, re.S).group(0)
+    assert "classRow(date, slot, mayAdd())" in body, "the row that already marks"
+    assert "allPresentRow(date, slots)" in body, "and the one tap that marks a day"
+    for forbidden in ("fetch(", "attPost", "pct", "attended", "held", "75"):
+        assert forbidden not in body, f"renderDay reaches for {forbidden}"
+    for once in ("function markCtl(", "function classRow(", "function allPresentRow("):
+        assert notes.PAGE.count(once) == 1, f"{once} must have one definition"
+    # The periods are this student's own timetable, never the section template:
+    # Section I splits for the labs, and the seeded per-profile copy is the only
+    # thing that knows which batch this phone belongs to.
+    assert "slotsOn(TT, day)" in body
+    assert "section_timetable" not in notes.PAGE
+
+
+def test_the_day_view_is_a_url_and_steps_a_day_without_the_picker():
+    """Today by default, and yesterday one tap away. A date picker is the only
+    route on nobody's phone: the step is what gets used walking out of a
+    lecture, and the wheel is for jumping a month."""
+    for wiring in ("const dayv = tab === 'classes' && parts[1] === 'day';",
+                   "if (!dayv) dayDate = null;",
+                   "today.onclick = () => go('classes', 'day');",
+                   "const date = dayDate || attToday();",
+                   "b.setAttribute('aria-label', n < 0 ? 'The day before' : 'The day after');"):
+        assert wiring in notes.PAGE, f"the day view is not wired: {wiring}"
+    # One picker, two screens. A second copy is a second set of bounds to drift.
+    assert notes.PAGE.count("function dayPicker(") == 1
+    assert notes.PAGE.count("dayPicker(") == 3
 
 
 def test_nobody_else_ever_sees_a_students_attendance():
@@ -1703,7 +1801,8 @@ def test_the_composer_is_a_url_like_every_other_level():
     assert "edit.onclick = () => go('campus', a.id);" in notes.PAGE
     assert "const compose = tab === 'campus' ? parts[1] || null : null;" in notes.PAGE
     assert "composing" not in notes.PAGE, "no variable may outlive the URL"
-    assert "lback.hidden = !s && !view.edit && !view.att && !view.compose;" in notes.PAGE
+    assert ("lback.hidden = !s && !view.edit && !view.att && !view.compose && !view.day;"
+            in notes.PAGE)
     compose = re.search(r"function renderCompose\(\) \{.*?\n\}", notes.PAGE, re.S).group(0)
     assert "history.back()" in compose, "Cancel is a step back, like every other one"
 

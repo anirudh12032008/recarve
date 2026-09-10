@@ -621,13 +621,21 @@ body.reading #read{display:block}
 .row.low .tick{background:var(--warn)}
 .flag{flex:none;padding:3px 9px;border-radius:7px;font-size:13px;font-weight:650;
   background:var(--warn-bg);color:var(--warn)}
-/* The catch-up screen's one control. Native date input: the fastest picker on
-   a phone, nothing to download, and it already knows what a month looks like. */
-.dpick{display:flex;align-items:center;gap:12px;padding:10px 16px 0}
-.dpick label{font-size:13px;color:var(--mut)}
+/* The day picker, shared by the day view and the catch-up screen. Native date
+   input: the fastest picker on a phone, nothing to download, and it already
+   knows what a month looks like. */
+.dpick{display:flex;align-items:center;gap:8px;padding:10px 16px 0}
 .dpick input{flex:1;min-width:0;height:var(--tap);padding:0 12px;font:inherit;
   font-size:16px;border:1px solid var(--line);border-radius:11px;
   background:var(--surface);color:var(--fg)}
+/* Yesterday and tomorrow, at thumb size. The picker is for jumping a month;
+   stepping one day is the move somebody makes walking out of a lecture, and it
+   must not cost a modal wheel. */
+.dpick .step{flex:none;width:var(--tap);height:var(--tap);border-radius:11px;
+  border:1px solid var(--line);background:var(--surface);color:var(--fg);
+  font-size:20px;line-height:1}
+.dpick .step:active{opacity:.7}
+.dpick .step[disabled]{opacity:.35}
 .mine{margin:10px 16px 0;padding:16px;border-radius:12px;background:var(--surface)}
 .mine .score{font-size:26px;font-weight:700;letter-spacing:-.02em}
 .mine p{margin:5px 0 0;font-size:13px;color:var(--mut)}
@@ -1553,6 +1561,7 @@ async function saveTimetable() {
 // panel, not in anybody else's /data. It is a private note to yourself.
 let ATT = null;                // the server's attendance payload; null until it answers
 let attDate = null;            // which day the catch-up screen is showing
+let dayDate = null;            // and which day the day view under Classes is on
 
 const attOf = code => (ATT && ATT.subjects.find(a => a.code === code)) || null;
 // 'YYYY-MM-DD' in the phone's own timezone. toISOString() is UTC and would
@@ -1565,6 +1574,24 @@ const isoDay = d => d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2,
 const attToday = () => (ATT && ATT.today) || isoDay(new Date());
 // Midday, so no daylight-saving shift can move the date across a midnight.
 const dayOfISO = s => new Date(s + 'T12:00:00').getDay();
+// One day either side, through midday for the same reason.
+const shiftDay = (date, n) =>
+  isoDay(new Date(new Date(date + 'T12:00:00').getTime() + n * 86400000));
+// Whether a mark on this date could be saved at all: no server behind the page,
+// a class that has not happened, or a day further back than the payload reaches
+// and the server refuses it -- _att_date says the same three things.
+const markable = date => !!ATT && date <= ATT.today
+                         && date >= shiftDay(ATT.today, -ATT.window);
+const MONTHS = ['January', 'February', 'March', 'April', 'May', 'June', 'July',
+                'August', 'September', 'October', 'November', 'December'];
+// What to call a day on a heading. The three days a student thinks of by name
+// get their name; anything else is dated, because "Tuesday" three weeks back is
+// not an answer to which Tuesday.
+const dayName = date =>
+    date === attToday() ? 'Today'
+  : date === shiftDay(attToday(), -1) ? 'Yesterday'
+  : date === shiftDay(attToday(), 1) ? 'Tomorrow'
+  : DAYS[dayOfISO(date)] + ' ' + (+date.slice(8)) + ' ' + MONTHS[+date.slice(5, 7) - 1];
 const markAt = (date, period) =>
   (ATT ? ATT.marks.find(m => m.date === date && m.period === period) : null);
 const offAt = (date, code, period) =>
@@ -1662,12 +1689,49 @@ function classRow(date, slot, mayCancel) {
   // The reason rides with it when there is one: a cancellation moves the
   // denominator of everybody in the section, and whoever it moved has to be
   // able to read why without asking somebody.
-  el.querySelector('small').textContent = 'Period ' + slot.period + ' · '
-    + (gone ? 'Class off' + (gone.reason ? ' · ' + gone.reason : '')
-            : m ? STATE_WORD[m.state] : 'Not marked');
+  // "Not marked" only where a mark is a thing this page can see: with no
+  // server behind it, or on a day older than the payload reaches, the marks
+  // exist and are simply not here -- and saying "Not marked" about them would
+  // be the page inventing an answer about the one number that costs an exam.
+  const said = gone ? 'Class off' + (gone.reason ? ' · ' + gone.reason : '')
+             : m ? STATE_WORD[m.state]
+             : markable(date) ? 'Not marked' : '';
+  el.querySelector('small').textContent =
+    'Period ' + slot.period + (said ? ' · ' + said : '');
   if (s) el.querySelector('.name').onclick = () => go('classes', s.code);
-  el.appendChild(markCtl(date, slot, mayCancel));
+  // Same test, one place: a control that would be refused is worse than none.
+  if (markable(date)) el.appendChild(markCtl(date, slot, mayCancel));
   return el;
+}
+
+// The one control the day view and the catch-up screen share. A native date
+// input for a jump across a month, and an arrow either side for the step that
+// is actually taken -- yesterday, tomorrow -- because a student walking out of
+// a lecture has one thumb and no patience for a wheel.
+function stepDay(date, n, set, min, max) {
+  const to = shiftDay(date, n);
+  const b = document.createElement('button');
+  b.className = 'step';
+  b.textContent = n < 0 ? '‹' : '›';
+  b.setAttribute('aria-label', n < 0 ? 'The day before' : 'The day after');
+  b.disabled = !!(min && to < min) || !!(max && to > max);
+  b.onclick = () => set(to);
+  return b;
+}
+
+function dayPicker(date, set, min, max) {
+  const box = document.createElement('div');
+  box.className = 'dpick';
+  const input = document.createElement('input');
+  input.type = 'date';
+  input.setAttribute('aria-label', 'Day');
+  input.value = date;
+  if (min) input.min = min;
+  if (max) input.max = max;
+  input.onchange = () => set(input.value || date);
+  box.append(stepDay(date, -1, set, min, max), input,
+             stepDay(date, 1, set, min, max));
+  nav.appendChild(box);
 }
 
 // One tap for a whole day. Somebody catching up on a week they forgot has six
@@ -1714,16 +1778,10 @@ function attRow(a, showCode) {
 function renderAttendance() {
   if (!ATT) return block('Attendance', [quiet('Checking your attendance…')]);
   const date = attDate || attToday();
-  const box = document.createElement('div');
-  box.className = 'dpick';
-  box.innerHTML = '<label for="adate">Day</label><input type="date" id="adate">';
-  const input = box.querySelector('input');
-  input.value = date;
-  input.max = attToday();                 // tomorrow has not happened yet
-  input.min = isoDay(new Date(new Date(attToday() + 'T12:00:00').getTime()
-                              - ATT.window * 86400000));
-  input.onchange = () => { attDate = input.value || attToday(); render(); };
-  nav.appendChild(box);
+  // Tomorrow has not happened yet, and further back than the window is further
+  // back than the server will take a mark for.
+  dayPicker(date, d => { attDate = d; render(); },
+            shiftDay(attToday(), -ATT.window), attToday());
 
   const day = dayOfISO(date);
   const slots = slotsOn(TT, day);
@@ -2053,9 +2111,91 @@ async function renderCampus() {
   drawBoard(box);
 }
 
+// ---- THE DAY VIEW. The question the subject list cannot answer. --------
+// A student does not ask "what is in Chemistry", they ask "what have I got
+// today" -- and then "what did I have last Tuesday, when I was asleep". This
+// is that screen: one day, its periods in order, and against each period
+// everything the app already knows about it.
+//
+// It invents nothing and it recomputes nothing. The periods are the student's
+// OWN timetable, which is why the labs come out right: Section I splits by
+// batch, the section template is only what a profile is seeded from, and the
+// per-profile copy is the one that says which lab this student sits in.
+// classRow marks the period -- the same control, on the same payload, and the
+// arithmetic stays where it has always been, on the server.
+
+// Which day a lecture is the record of. Its own name when that carries a date
+// -- audio comes off a phone named for the class it was -- and otherwise the
+// day its notes landed, which is already what Home treats as a note's date.
+const noteDay = n => (/[0-9]{4}-[0-9]{2}-[0-9]{2}/.exec(n.title) || [])[0]
+                     || (n.at ? isoDay(new Date(n.at * 1000)) : null);
+
+function renderDay() {
+  const date = dayDate || attToday();
+  const day = dayOfISO(date);
+  // No min and no max: the timetable knows what a Tuesday holds whichever
+  // Tuesday it is, and a day too old or too far ahead to mark simply loses its
+  // buttons -- classRow decides that, in the one place that decides it.
+  dayPicker(date, d => { dayDate = d; render(); });
+  if (TT === null) return block(dayName(date), [quiet('Checking your timetable…')]);
+  if (!TT.length) {
+    if (!live) {
+      return block(dayName(date),
+        [quiet('Your timetable needs the server. Run: notes.py serve')]);
+    }
+    const start = line('Set up your timetable',
+                       'Six days, one tap per class · about a minute',
+                       document.createElement('button'));
+    start.onclick = () => go('home', 'timetable');
+    return block(dayName(date), [start]);
+  }
+  const slots = slotsOn(TT, day);
+  const rows = [];
+  const shelved = new Set();
+  for (const slot of slots) {
+    rows.push(classRow(date, slot, mayAdd()));
+    const s = subjectOf(slot.code);
+    // Every period gets its own row and its own marking. What hangs off it is
+    // per SUBJECT, so a subject twice in one day gets it once: one recording
+    // was one class, and printing it under both periods claims it was both.
+    if (!s || shelved.has(slot.code)) continue;   // or a code the library dropped
+    shelved.add(slot.code);
+    // What was recorded in THIS slot: the lectures of that subject that carry
+    // this date. Nothing is filed by period, so nothing here pretends to be.
+    for (const n of lecturesOf(s)) {
+      if (noteDay(n) === date) rows.push(noteRow(n, s));
+    }
+    // And the rest of what the subject holds. A count and a way in, not the
+    // whole shelf: the shelf is one tap away and it is already a screen.
+    if (s.uploads.length) {
+      const b = line('Notes & slides in ' + s.code,
+                     plural(s.uploads.length, 'file') + ' under this subject',
+                     document.createElement('button'), hue(slot.code));
+      b.onclick = () => go('classes', slot.code);
+      rows.push(b);
+    }
+  }
+  if (!rows.length) rows.push(quiet('No classes on ' + DAYS[day] + '.'));
+  // One tap for the whole day, on the days it can save one. Same row the
+  // catch-up screen offers, over the same classes, posting the same request.
+  const all = markable(date) ? allPresentRow(date, slots) : null;
+  if (all) rows.push(all);
+  block(dayName(date), rows);
+}
+
 // LEVEL 1: every subject, empty ones included. Nobody can add a chemistry
 // recording to a subject the app never told them was there.
 function renderSubjects() {
+  // The way into the day view, saying what today holds before it is tapped.
+  const n = TT ? slotsOn(TT, dayOfISO(attToday())).length : 0;
+  const today = line('Today\u2019s classes',
+    TT === null ? 'Checking your timetable…'
+    : n ? n + (n === 1 ? ' class' : ' classes') + ' · and any other day'
+    : 'Nothing on ' + DAYS[dayOfISO(attToday())] + ' · step back to any day',
+    document.createElement('button'));
+  today.onclick = () => go('classes', 'day');
+  block('Your day', [today]);
+
   block('Subjects', DATA.map(s => {
     const b = document.createElement('button');
     b.className = 'row';
@@ -2339,7 +2479,7 @@ function render() {
   // there is a level above to climb to.
   brand.hidden = view.tab !== 'home' || view.edit || view.att;
   shead.hidden = view.tab === 'home' && !view.edit && !view.att;
-  lback.hidden = !s && !view.edit && !view.att && !view.compose;
+  lback.hidden = !s && !view.edit && !view.att && !view.compose && !view.day;
   scode.hidden = !s;
   q.hidden = view.tab !== 'classes';
   tools.hidden = view.tab !== 'me';
@@ -2357,6 +2497,7 @@ function render() {
     scode.style.setProperty('--h', hue(s.code));
   }
   sname.textContent = s ? s.name
+    : view.day ? 'Your day'
     : view.edit ? 'Your timetable'
     : view.att ? 'Your attendance'
     : view.compose ? (view.compose === 'new' ? 'New notice' : 'Edit notice')
@@ -2368,6 +2509,7 @@ function render() {
   if (needle) renderSearch(needle);
   else if (view.edit) renderTimetable();
   else if (view.att) renderAttendance();
+  else if (view.day) renderDay();
   else if (view.tab === 'home') renderHome();
   else if (view.tab === 'campus') renderCampus();
   else if (view.tab === 'me') renderMe();
@@ -2403,12 +2545,18 @@ function route() {
   const edit = tab === 'home' && parts[1] === 'timetable';
   // And so is catching up on attendance, for the same reason.
   const att = tab === 'home' && parts[1] === 'attendance';
+  // The day view is the same shape one tab over: a level inside Classes, so
+  // back climbs to the subject list rather than out of the app. 'day' can
+  // never collide with a subject -- every code is letters and digits.
+  const dayv = tab === 'classes' && parts[1] === 'day';
   // So is the composer, for the same reason: without a URL the back gesture
   // dropped what was typed and left the Campus tab stuck on an empty form.
   const compose = tab === 'campus' ? parts[1] || null : null;
-  view = {tab, code: s ? s.code : null, title: title || null, edit, att, compose};
+  view = {tab, code: s ? s.code : null, title: title || null, edit, att, compose,
+          day: dayv};
   if (!edit) draft = null;      // walking away drops an unsaved week, not TT
   if (!att) attDate = null;     // and re-opening it starts on today, not last week
+  if (!dayv) dayDate = null;    // today by default, every time it is opened
   const n = s && title ? s.notes.find(x => x.title === title) : null;
   if (n) openNote(n, s); else closeRead();
   render();
