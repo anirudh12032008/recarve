@@ -128,3 +128,19 @@ create policy "vote as yourself" on votes for insert
     and not exists (select 1 from doubts d
                      where d.id = doubt_id and d.author_id = voter_id)
   );
+
+-- The policies above decide WHO may do what; these decide that the role may
+-- reach the table at all. Both are needed and they fail differently: without
+-- the grant every member gets "permission denied for table doubts", whatever
+-- the policies say.
+--
+-- Easy to leave out, because backend/dev/migrate.py sets default privileges
+-- before it applies anything, so a granted-by-default test database says the
+-- feature works. Production has no such default and said "permission denied"
+-- to the first student who tried to ask a question. Every migration that
+-- creates a table states its grants explicitly, and test_table_grants.py now
+-- fails the build if one does not.
+--
+-- No delete: a doubt is hidden by setting deleted_at, never removed, so the
+-- thread a classmate answered cannot silently lose its question.
+grant select, insert, update on doubts to authenticated;
