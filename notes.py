@@ -632,10 +632,14 @@ body.reading #read{display:block}
    two screens read as one app. */
 .ann{padding:16px;border-bottom:1px solid var(--line)}
 .ann.pin{border-left:3px solid var(--accent);padding-left:13px}
-.ann.gone{opacity:.62}
+/* Set back by its furniture, not by its ink: an alpha on the card dimmed
+   the one word that explains the state. The rule down the edge goes grey,
+   the flag takes the page's muted ink, and every string still reads. */
+.ann.gone{border-left:3px solid var(--line);padding-left:13px}
 .ann h3{margin:0;font-size:20px;line-height:1.3;font-weight:650;letter-spacing:-.012em}
 .ann .meta{margin:5px 0 0;font-size:13px;color:var(--mut)}
 .ann .flag{font-weight:650;color:var(--accent)}
+.ann.gone .flag{color:var(--mut)}
 .ann .md{margin-top:11px;font-size:16px}
 .ann .md>:first-child{margin-top:0}
 .ann .md>:last-child{margin-bottom:0}
@@ -1461,7 +1465,6 @@ async function saveTimetable() {
 // spends a request of its own drawing one.
 let ANN = [];                   // the board as the server sent it
 let NOW = 0;                    // the server's clock, which `at` is stamped by
-let composing = null;           // the notice being written, or null
 const READ_SENT = new Set();    // ids already marked read this visit
 
 // The same three lines as the admin screen's, against the same clock: `at` and
@@ -1514,10 +1517,10 @@ function annCard(a) {
     acts.className = 'acts';
     const edit = document.createElement('button');
     edit.textContent = 'Edit';
-    edit.onclick = () => { composing = a; render(); };
+    edit.onclick = () => go('campus', a.id);
     const del = document.createElement('button');
     del.textContent = a.deleted ? 'Put it back' : 'Delete';
-    del.onclick = () => saveAnn({id: a.id, deleted: !a.deleted});
+    del.onclick = () => saveAnn({id: a.id, deleted: !a.deleted}, null, del);
     acts.append(edit, del);
     el.appendChild(acts);
   }
@@ -1528,7 +1531,10 @@ function annCard(a) {
 // restore -- because they are one row and one policy. The board comes back in
 // the answer, so the screen redraws from what was stored and not from what was
 // typed.
-async function saveAnn(payload, err) {
+async function saveAnn(payload, err, btn) {
+  // Armed for the whole request, a second tap posts the notice twice to a
+  // hundred and ten people, and there is no delete policy to undo it with.
+  if (btn) btn.disabled = true;
   busy('Saving…', true);
   try {
     const r = await fetch('/announce', {
@@ -1538,11 +1544,12 @@ async function saveAnn(payload, err) {
     const d = await r.json().catch(() => ({}));
     if (!r.ok) throw new Error(d.error || 'could not save that');
     ANN = d.announcements || [];
-    composing = null;
     busyDone(payload.deleted ? 'Hidden — you can still put it back'
                              : (payload.id ? 'Saved' : 'Posted'));
-    render();
+    // Out of the composer the way you came in, exactly like the timetable's.
+    if (view.compose) history.back(); else render();
   } catch (e) {
+    if (btn) btn.disabled = false;
     busyDone('');
     if (err) err.textContent = e.message;
     else busyDone('Could not save that: ' + e.message);
@@ -1570,7 +1577,10 @@ function markRead(list) {
 }
 
 function renderCompose() {
-  const a = composing;
+  // The URL is the whole of the state: '#campus/new', or '#campus/<id>'
+  // for one that already exists. Nothing is held in a variable that a
+  // back gesture cannot reach.
+  const a = ANN.find(x => x.id === view.compose) || {};
   const box = document.createElement('div');
   box.className = 'compose';
   box.innerHTML = '<label for="atitle">Title</label>'
@@ -1590,11 +1600,13 @@ function renderCompose() {
   title.value = a.title || '';
   body.value = a.body || '';
   pin.checked = !!a.pinned;
-  box.querySelector('#asave').textContent = a.id ? 'Save changes' : 'Post it';
-  box.querySelector('#acancel').onclick = () => { composing = null; render(); };
-  box.querySelector('#asave').onclick = () => {
+  const save = box.querySelector('#asave');
+  save.textContent = a.id ? 'Save changes' : 'Post it';
+  box.querySelector('#acancel').onclick = () => history.back();
+  save.onclick = () => {
     if (!title.value.trim()) return void (err.textContent = 'A notice needs a title.');
-    saveAnn({id: a.id, title: title.value, body: body.value, pinned: pin.checked}, err);
+    saveAnn({id: a.id, title: title.value, body: body.value, pinned: pin.checked},
+            err, save);
   };
 }
 
@@ -1603,7 +1615,7 @@ function renderAnnouncements() {
   if (ROLE === 'admin') {
     const post = line('Post an announcement', 'Every approved classmate sees it',
                       document.createElement('button'));
-    post.onclick = () => { composing = {}; render(); };
+    post.onclick = () => go('campus', 'new');
     const rows = document.createElement('div');
     rows.className = 'rows';
     rows.appendChild(inked(post));
@@ -1739,7 +1751,7 @@ async function renderCampus() {
   const mine = painted;
   // Writing a notice takes the tab over: it is one thing at a time on a phone,
   // and the board underneath is not what you are doing.
-  if (composing) return renderCompose();
+  if (view.compose && ROLE === 'admin') return renderCompose();
   renderAnnouncements();
   heading('Who has contributed');
   windowPicker();
@@ -2041,7 +2053,7 @@ function render() {
   // there is a level above to climb to.
   brand.hidden = view.tab !== 'home' || view.edit;
   shead.hidden = view.tab === 'home' && !view.edit;
-  lback.hidden = !s && !view.edit;
+  lback.hidden = !s && !view.edit && !view.compose;
   scode.hidden = !s;
   q.hidden = view.tab !== 'classes';
   tools.hidden = view.tab !== 'me';
@@ -2050,14 +2062,17 @@ function render() {
   jobsBox.hidden = view.tab === 'home';
   // The one back button at this depth serves two levels now, so it has to say
   // which one it climbs to.
-  lback.textContent = view.edit ? '‹ Home' : '‹ Subjects';
-  lback.setAttribute('aria-label', view.edit ? 'Back to Home' : 'Back to all subjects');
+  lback.textContent = view.edit ? '‹ Home' : (view.compose ? '‹ Campus' : '‹ Subjects');
+  lback.setAttribute('aria-label', view.edit ? 'Back to Home'
+    : (view.compose ? 'Back to the notice board' : 'Back to all subjects'));
   if (s) {
     scode.textContent = s.code;
     scode.style.setProperty('--h', hue(s.code));
   }
   sname.textContent = s ? s.name
-    : (view.edit ? 'Your timetable' : TAB_TITLE[view.tab]);
+    : view.edit ? 'Your timetable'
+    : view.compose ? (view.compose === 'new' ? 'New notice' : 'Edit notice')
+    : TAB_TITLE[view.tab];
   tabBtns.forEach(b => {
     if (b.dataset.tab === view.tab) b.setAttribute('aria-current', 'page');
     else b.removeAttribute('aria-current');
@@ -2097,7 +2112,10 @@ function route() {
   // The timetable editor is a level inside Home and therefore a URL, so back
   // climbs out of it exactly like every other step.
   const edit = tab === 'home' && parts[1] === 'timetable';
-  view = {tab, code: s ? s.code : null, title: title || null, edit};
+  // So is the composer, for the same reason: without a URL the back gesture
+  // dropped what was typed and left the Campus tab stuck on an empty form.
+  const compose = tab === 'campus' ? parts[1] || null : null;
+  view = {tab, code: s ? s.code : null, title: title || null, edit, compose};
   if (!edit) draft = null;      // walking away drops an unsaved week, not TT
   const n = s && title ? s.notes.find(x => x.title === title) : null;
   if (n) openNote(n, s); else closeRead();

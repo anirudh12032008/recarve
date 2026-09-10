@@ -83,7 +83,37 @@ def test_pending_and_blocked_members_are_not_told_anything(db):
                    "values (%s, 'Outside', %s, 'student')", (uid, status))
         as_user(db, uid)
         assert notes.db_announcements(db, uid) == [], status
+        # At the table, not through the reader: db_announcements joins profiles,
+        # and profiles' own policy is enough to make the line above green with
+        # is_approved() taken off this table entirely. Denormalise the author
+        # name onto the row one day and that would uncover the titles and bodies
+        # with the suite still passing. This is the clause the test is named for.
+        assert db.execute(
+            "select count(*) from announcements").fetchone()[0] == 0, status
         as_admin_connection(db)
+
+
+def test_the_board_a_phone_is_sent_is_capped(db):
+    """/data carries the board to every phone on every app open, so the caps
+    are what decide how big that answer can get. Thirty notices, and a title
+    trimmed by the server rather than left for the check constraint to refuse
+    as "an announcement needs a title"."""
+    boss = member(db, admin=True)
+    as_user(db, boss)
+    # Literal numbers on both sides on purpose: read through notes.ANN_LIMIT
+    # the check agrees with whatever the constant happens to say, including
+    # 100000.
+    for i in range(31):
+        post(db, boss, f"Notice {i}")
+    assert len(notes.db_announcements(db, boss)) == 30
+
+    # Read back by id: every row in this transaction shares one now(), so the
+    # board's order among them is not a thing to reach into.
+    aid = post(db, boss, "x" * 200, "y" * 4050)
+    title, body = db.execute(
+        "select title, body from announcements where id = %s", (aid,)).fetchone()
+    assert title == "x" * 120, "a long title is trimmed, not refused"
+    assert body == "y" * 4000
 
 
 def test_an_admin_edits_their_own_and_only_their_own(db):

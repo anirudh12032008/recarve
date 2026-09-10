@@ -453,6 +453,8 @@ assert.deepStrictEqual(chrome('#classes/MC1101'), [true, false, false, false, fa
                        'a subject is the one level with a way back up');
 assert.deepStrictEqual(chrome('#campus'), [true, false, true, true, true, true, false],
                        'Campus has no search box and no log');
+assert.deepStrictEqual(chrome('#campus/new'), [true, false, false, true, true, true, false],
+                       'the composer is a level inside Campus, so it has a way back up');
 assert.deepStrictEqual(chrome('#me'), [true, false, true, true, true, false, false],
                        'the activity log is the Me tab\\'s');
 
@@ -1038,14 +1040,37 @@ assert.ok(says('Post an announcement'), 'and is given the way in');
 assert.ok(wrote(['className', 'row adm']),
           'inked, like every other control only an admin may press');
 
-// Writing one takes the tab over, and costs no request until it is posted.
-composing = {};
+// Writing one takes the tab over, and costs no request until it is posted --
+// and it is a URL, so the back gesture climbs out of it instead of leaving the
+// app with what was typed, and the Campus tab button lands on the board again.
+ROLE = 'admin'; ANN = [];
 writes = []; fetches = [];
-await renderCampus();
+location.hash = '#campus/new'; route();
+assert.equal(view.compose, 'new', 'the composer is a level, not a variable');
 assert.ok(wrote(['className', 'compose']), 'the composer replaces the board');
 assert.ok(!says('Who has contributed'), 'one thing at a time on a phone');
 assert.equal(fetches.length, 0, 'and nothing is asked for until it is posted');
-composing = null; ROLE = null; ANN = [];
+assert.ok(says('New notice'), 'the header says which level you are on');
+assert.ok(says('\u2039 Campus'), 'and the back button says where it climbs to');
+
+writes = [];
+location.hash = '#campus'; route();
+assert.ok(!wrote(['className', 'compose']),
+          'walking back out of it lands on the board, not on the form again');
+
+ANN = [notice('e1', 'Mine', {mine: true, body: 'the body'})];
+writes = [];
+location.hash = '#campus/e1'; route();
+assert.ok(says('Edit notice'), 'editing one is a URL too');
+assert.ok(wrote(['value', 'Mine']), 'and it opens on the notice that URL names');
+
+// A student who types the URL gets the board, the same answer /announce gives.
+ROLE = 'student';
+writes = [];
+location.hash = '#campus/e1'; route();
+assert.ok(!wrote(['className', 'compose']), 'the composer is admin-only here too');
+location.hash = '#campus'; route();
+ROLE = null; ANN = [];
 
 })().catch(e => { console.error(e); process.exit(1); });
 """
@@ -1350,7 +1375,8 @@ def test_admin_only_controls_are_marked_the_same_way_in_both_files():
 
 @pytest.mark.parametrize("mode", ["light", "dark"])
 @pytest.mark.parametrize("fg,bg", [("--admin-fg", "--admin"), ("--admin", "--bg"),
-                                   ("--mut", "--surface"), ("--accent", "--bg")])
+                                   ("--mut", "--surface"), ("--accent", "--bg"),
+                                   ("--mut", "--bg")])
 def test_the_ink_reads_in_both_themes(mode, fg, bg):
     """An inked slab, a muted lock label on the surface it sits on, and the
     accent it has to be told apart from. PAGE never had a contrast test at all;
@@ -1436,6 +1462,52 @@ def test_posting_is_admin_only_on_the_server_too():
     assert "if (ROLE === 'admin')" in campus, "the composer is offered on the role"
     assert "a.mine && ROLE === 'admin'" in notes.PAGE, \
         "and edit/delete only on your own, which is what the policy allows"
+
+
+def test_a_hidden_notice_is_still_readable():
+    """A hidden notice is the one card whose small print has to be read -- the
+    word "Hidden" and the button that puts it back. An alpha on the card dims
+    those with everything else, and no token test can see it, because the token
+    is fine and the compositing is what fails. So the rule is that the state is
+    said in colour, on the one span that says it, and never in opacity."""
+    css = re.search(r"<style>\n(.*?)\n</style>", notes.PAGE, re.S).group(1)
+    gone = re.search(r"\.ann\.gone\{([^}]*)\}", css).group(1)
+    assert "opacity" not in gone, \
+        "dimming the card dims the one word that explains the state"
+    assert ".ann.gone .flag{color:var(--mut)}" in css, \
+        "so 'Hidden' has to be muted by a token that passes on its own"
+
+
+def test_saving_a_notice_disarms_the_button_that_started_it():
+    """The busy strip is two hundred pixels below the thumb, so the control
+    being tapped has to say for itself that it is working. A second tap posts
+    the same notice to the whole section twice, and there is no delete policy
+    to take one back with."""
+    save = re.search(r"async function saveAnn\(.*?\n\}", notes.PAGE, re.S).group(0)
+    assert "async function saveAnn(payload, err, btn) {" in save
+    assert "if (btn) btn.disabled = true;" in save, "armed all through the request"
+    assert "if (btn) btn.disabled = false;" in save, "and given back on a failure"
+    # Every caller, not just the composer's: Delete and "Put it back" are the
+    # same one-row write and had the same gap.
+    for caller in ("saveAnn({id: a.id, deleted: !a.deleted}, null, del);",
+                   "err, save);"):
+        assert caller in notes.PAGE, f"a saveAnn caller passes no button: {caller}"
+    assert notes.PAGE.count("saveAnn(") == 3, \
+        "one definition and two callers; a third would need the same button"
+
+
+def test_the_composer_is_a_url_like_every_other_level():
+    """Without one the system back gesture threw away what was typed, and the
+    Campus tab button kept landing back on the form. The timetable editor is
+    the pattern; this is the same shape, so back, the header button and Cancel
+    are all the one mechanism."""
+    assert "post.onclick = () => go('campus', 'new');" in notes.PAGE
+    assert "edit.onclick = () => go('campus', a.id);" in notes.PAGE
+    assert "const compose = tab === 'campus' ? parts[1] || null : null;" in notes.PAGE
+    assert "composing" not in notes.PAGE, "no variable may outlive the URL"
+    assert "lback.hidden = !s && !view.edit && !view.compose;" in notes.PAGE
+    compose = re.search(r"function renderCompose\(\) \{.*?\n\}", notes.PAGE, re.S).group(0)
+    assert "history.back()" in compose, "Cancel is a step back, like every other one"
 
 
 def test_a_notice_body_is_never_written_into_the_page_as_it_was_typed():
