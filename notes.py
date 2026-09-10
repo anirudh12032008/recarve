@@ -716,6 +716,43 @@ body.reading #read{display:block}
   font-size:13px;font-weight:650}
 .ann .acts button:active{opacity:.75}
 
+/* ---- Doubts: the thread under a note. Ruled entries, not cards -- a question
+   and the answers to it are one piece of writing between people, and a box
+   around each one turns a conversation into a list of unrelated things. The
+   answers are set in from the question by a rule, which is the only nesting
+   this page has and the only nesting the table allows. */
+#doubts{max-width:70ch;margin:0 auto;padding:0 18px 142px}
+#doubts h2{margin:38px 0 0;font-size:20px;line-height:1.3;letter-spacing:-.012em;
+  font-weight:650;padding-bottom:7px;border-bottom:1px solid var(--line)}
+#doubts .quiet{padding:14px 0 0}
+.dbt{padding:16px 0;border-bottom:1px solid var(--line)}
+/* Somebody's typing, drawn as typing: pre-wrap keeps their line breaks and
+   textContent is what puts it there. Nothing in this block is ever parsed. */
+.said{margin:0;font-size:16px;white-space:pre-wrap;overflow-wrap:anywhere}
+.dbt .meta{margin:5px 0 0;font-size:13px;color:var(--mut)}
+.ans{display:flex;gap:10px;align-items:flex-start;
+  margin:14px 0 0 2px;padding:0 0 0 13px;border-left:2px solid var(--line)}
+.ans .what{flex:1;min-width:0}
+/* The one the class voted up. Said in the rule, never by dimming the others,
+   which are still answers worth reading. */
+.ans.top{border-left-color:var(--accent)}
+#doubts .acts{display:flex;flex-wrap:wrap;gap:8px;margin-top:11px}
+#doubts .acts button{min-height:var(--tap);padding:0 15px;border-radius:11px;
+  background:var(--bg);border:1px solid var(--line);color:var(--accent);
+  font-size:13px;font-weight:650}
+/* Taking down somebody else's is an admin act, marked as one: the page's own
+   ink on a keyline, the same treatment as every other admin control. */
+#doubts .acts button.adm{border-color:var(--admin);color:var(--admin)}
+#doubts .acts button:active{opacity:.75}
+.askbox{padding:14px 0 2px}
+.askbox textarea{width:100%;min-height:5.5em;font-size:16px;line-height:1.6;
+  padding:11px 12px;border:1px solid var(--line);border-radius:11px;
+  background:var(--surface);color:var(--fg);font-family:inherit;resize:vertical}
+.askbox .err{margin:8px 0 0;font-size:13px;color:#e5484d;min-height:1.2em}
+.askbox button{min-height:var(--tap);padding:0 18px;border-radius:11px;
+  background:var(--accent);color:var(--accent-fg);font-size:16px;font-weight:500}
+.askbox button:active{opacity:.75}
+
 /* The composer: a title, a body, and whether it sits at the top. */
 .compose{padding:8px 16px 16px}
 .compose label{display:block;font-size:13px;color:var(--mut);margin:14px 0 5px}
@@ -768,9 +805,9 @@ body.reading #read{display:block}
 .rtop .code{margin-left:auto}
 /* Four sizes only -- 26/20/16/13, roughly a 1.25 step. h3 separates itself by
    weight and colour rather than a fifth size that would read as body text. */
-/* Bottom padding is #nav's 142px: the FAB reaches 76 + 58 = 134px up, and at
-   118 it sat on the last <summary> of every note. */
-article{padding:22px 18px 142px;max-width:70ch;margin:0 auto}
+/* The dock's clearance moved to #doubts, which is the last thing on the
+   reading screen now: 142px is #nav's, and the FAB reaches 76 + 58 = 134. */
+article{padding:22px 18px 8px;max-width:70ch;margin:0 auto}
 article h1{font-size:26px;line-height:1.2;letter-spacing:-.022em;font-weight:700;margin:0 0 24px}
 article h2{font-size:20px;line-height:1.3;letter-spacing:-.012em;font-weight:650;
   margin:38px 0 12px;padding-bottom:7px;border-bottom:1px solid var(--line)}
@@ -1005,6 +1042,7 @@ body.reading .tabs{display:none}
     <span class="code" id="rcode"></span>
   </div>
   <article id="body"><p class="blank">Pick a lecture to start reading.</p></article>
+  <section id="doubts" aria-label="Doubts"></section>
 </section>
 
 <button id="fab" aria-label="Add a lecture or notes">+</button>
@@ -1160,11 +1198,17 @@ function noteRow(n, s) {
 // One vote per person per item -- the votes primary key says so, and this is
 // only the switch. The count lives inside the control, so pressing it and
 // seeing what it did are the same place.
-function voteBtn(u) {
+// `answer` switches which thing is being voted for -- an upload, or somebody's
+// answer to a doubt. One control and one endpoint, because it is one table:
+// what changes is the word the payload is keyed by and what gets refetched
+// afterwards. A second vote button would be a second place for "one per
+// person" to be drawn differently from how the database counts it.
+function voteBtn(u, answer) {
   const b = document.createElement('button');
   b.className = 'vote' + (u.voted ? ' on' : '');
   b.setAttribute('aria-pressed', u.voted ? 'true' : 'false');
-  b.setAttribute('aria-label', (u.voted ? 'Remove your upvote from ' : 'Upvote ') + u.name);
+  b.setAttribute('aria-label', (u.voted ? 'Remove your upvote from ' : 'Upvote ')
+                             + (u.name || 'this answer'));
   b.innerHTML = '▲ <span class="n"></span>';
   b.querySelector('.n').textContent = u.votes;
   b.onclick = async () => {
@@ -1172,13 +1216,14 @@ function voteBtn(u) {
     try {
       const r = await fetch('/vote', {
         method: 'POST', headers: {'Content-Type': 'application/json'},
-        body: JSON.stringify({id: u.id, on: !u.voted}),
+        body: JSON.stringify(answer ? {answer: u.id, on: !u.voted}
+                                    : {id: u.id, on: !u.voted}),
       });
       const d = await r.json().catch(() => ({}));
       if (!r.ok) throw new Error(d.error || 'could not register that vote');
       // Refetch rather than patch: the vote changes the ranking too, and one
       // source of order beats two that can disagree.
-      await refresh();
+      await (answer ? loadDoubts() : refresh());
     } catch (e) {
       b.disabled = false;
       busyDone(e.message);
@@ -2579,6 +2624,184 @@ function mdInto(el, md) {
   }
 }
 
+// ---- DOUBTS: the question one student asks, and the answer the section
+// ---- gives it, under the note it is about.
+//
+// Explain covers a passage; this covers the thing Explain cannot, which is
+// "why did she do it that way" at one in the morning. Anybody approved asks
+// and anybody approved answers -- deliberately including students, who may not
+// upload, may not record and may not spend the class's API budget, and for
+// whom this is the first thing in the whole app they can give rather than
+// take. Nothing here calls an API either: the answers come from classmates,
+// and the one thing that costs money is still Explain, once per passage.
+//
+// Every body on this screen is somebody's typing and every one of them is put
+// on the page with textContent. Not markdown, not innerHTML, not mdSafe: a
+// doubt is a sentence and not a document, so there is nothing to gain from
+// parsing it and a tag inside one is simply four words that look like a tag.
+let THREAD = [];        // the open note's questions, newest first
+let threadOn = null;    // {subject, title} the thread belongs to, or null
+const doubtsBox = document.getElementById('doubts');
+
+// Typing, drawn as typing. The single most important line in this section.
+function said(x) {
+  const p = document.createElement('p');
+  p.className = 'said';
+  p.textContent = x.body;
+  return p;
+}
+
+function saidBy(x) {
+  const m = document.createElement('p');
+  m.className = 'meta';
+  m.textContent = x.by + ' · ' + ago(x.at, NOW);
+  return m;
+}
+
+// Taking your own words back, or -- inked as the power it is -- somebody
+// else's. Offered to nobody else, because the policy would only refuse them.
+function dropBtn(x) {
+  if (!x.mine && ROLE !== 'admin') return null;
+  const b = document.createElement('button');
+  b.textContent = 'Delete';
+  if (!x.mine) b.className = 'adm';
+  b.onclick = () => writeDoubt({id: x.id, delete: true}, b);
+  return b;
+}
+
+function acts(...buttons) {
+  const row = document.createElement('div');
+  row.className = 'acts';
+  buttons.filter(Boolean).forEach(b => row.appendChild(b));
+  return row;
+}
+
+// A textarea and one button. Used for the question at the top of the thread
+// and for an answer under a question, because they are the same act.
+function askBox(placeholder, label, parent) {
+  const box = document.createElement('div');
+  box.className = 'askbox';
+  const ta = document.createElement('textarea');
+  ta.maxLength = 2000;
+  ta.placeholder = placeholder;
+  ta.setAttribute('aria-label', label);
+  const err = document.createElement('p');
+  err.className = 'err';
+  const go = document.createElement('button');
+  go.textContent = label;
+  go.onclick = () => {
+    if (!ta.value.trim()) return void (err.textContent = 'Type something first.');
+    writeDoubt({parent: parent || null, body: ta.value}, go, err);
+  };
+  box.append(ta, err, go);
+  return box;
+}
+
+// The vote sits beside the answer rather than under it, so the column of
+// arrows reads down the thread and the eye finds the top one without reading.
+function answerCard(a, best) {
+  const el = document.createElement('div');
+  el.className = 'ans' + (best ? ' top' : '');
+  const what = document.createElement('div');
+  what.className = 'what';
+  what.append(said(a), saidBy(a));
+  const drop = dropBtn(a);
+  if (drop) what.appendChild(acts(drop));
+  el.append(voteBtn(a, true), what);
+  return el;
+}
+
+function doubtCard(q) {
+  const el = document.createElement('div');
+  el.className = 'dbt';
+  el.append(said(q), saidBy(q));
+  const reply = document.createElement('button');
+  reply.textContent = 'Answer this';
+  const row = acts(reply, dropBtn(q));
+  el.appendChild(row);
+  // The box appears where it was asked for and only there: a form under every
+  // question on the screen is six forms nobody asked for.
+  reply.onclick = () => {
+    reply.disabled = true;
+    el.insertBefore(askBox('Answer ' + q.by + '…', 'Post this answer', q.id), row);
+  };
+  // Only the top answer is marked, and only when the class actually voted for
+  // it: a rule down the side of the one answer with no votes says nothing.
+  q.answers.forEach((a, k) => el.appendChild(answerCard(a, k === 0 && a.votes > 0)));
+  return el;
+}
+
+// One line instead of the thread when there is a reason -- still loading, or
+// no server behind this copy of the page at all. The heading stays either way,
+// so the section does not appear and disappear under the note as it loads.
+function drawDoubts(instead) {
+  doubtsBox.innerHTML = '';
+  const h = document.createElement('h2');
+  h.textContent = 'Doubts';
+  doubtsBox.appendChild(h);
+  if (instead) return doubtsBox.appendChild(quiet(instead));
+  doubtsBox.appendChild(askBox(
+    'Ask the section about this. Somebody who was there will know.',
+    'Ask the section', null));
+  if (!THREAD.length) {
+    return doubtsBox.appendChild(quiet(
+      'No questions on this one yet. Asking is worth as much as answering — '
+      + 'if you are stuck, somebody else is too.'));
+  }
+  THREAD.forEach(q => doubtsBox.appendChild(doubtCard(q)));
+}
+
+async function writeDoubt(payload, btn, err) {
+  // Armed for the whole request: a second tap on Ask is the same question
+  // asked twice, to the whole section, under the same note.
+  if (btn) btn.disabled = true;
+  busy('Saving…', true);
+  try {
+    const r = await fetch('/doubts', {
+      method: 'POST', headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify(Object.assign({}, threadOn, payload)),
+    });
+    const d = await r.json().catch(() => ({}));
+    if (!r.ok) throw new Error(d.error || 'could not save that');
+    busyDone(payload.delete ? 'Deleted' : 'Posted');
+    THREAD = d.doubts || [];
+    drawDoubts();
+  } catch (e) {
+    if (btn) btn.disabled = false;
+    if (err) { err.textContent = e.message; busyDone(''); }
+    else busyDone('Could not save that: ' + e.message);
+  }
+}
+
+// Fetched when the note opens, not carried on /data: the notice board is
+// thirty lines for the whole class, and this would be every question on every
+// lecture in twelve subjects, sent to a phone that is going to read one.
+//
+// The thread is named the way the library names a note -- a subject and a
+// title -- and the server turns that into the lecture it belongs to. A note
+// with no row behind it, a static export or a file the database never adopted,
+// falls back to the subject's own thread rather than to no thread at all.
+async function loadDoubts(note, subject) {
+  if (note) threadOn = {subject: subject.code, title: note.title};
+  if (!threadOn) return;
+  const asked = threadOn;
+  if (note) { THREAD = []; drawDoubts('Looking for questions…'); }
+  try {
+    const r = await fetch('/doubts?subject=' + encodeURIComponent(asked.subject)
+                        + '&title=' + encodeURIComponent(asked.title));
+    if (!r.ok) throw new Error(r.status);
+    const d = await r.json();
+    if (threadOn !== asked) return;   // they tapped through while this flew
+    THREAD = d.doubts || [];
+    drawDoubts();
+  } catch {
+    // A static export has no server to ask, and a form that cannot post is
+    // worse than a sentence saying why.
+    THREAD = [];
+    drawDoubts('Questions need the server. Run: notes.py serve');
+  }
+}
+
 // LEVEL 3: the note itself. Called only by route(), which has already put the
 // right URL in the bar, so this never touches history.
 function openNote(n, s) {
@@ -2601,10 +2824,12 @@ function openNote(n, s) {
 
   document.body.classList.add('reading');
   window.scrollTo(0, 0);
+  loadDoubts(n, s);
 }
 
 function closeRead() {
   document.body.classList.remove('reading');
+  threadOn = null;
   practice.hidden = true;
   // The Explain button is positioned in document coordinates and lives above
   // everything, so leaving a note by the back gesture -- which never taps the
@@ -3571,8 +3796,9 @@ RANK = {r: i for i, r in enumerate(ROLES)}
 # What each endpoint costs, in the same place as PUBLIC_PATHS and for the same
 # reason: the gate below reads this before dispatch, so a route added later is
 # refused to everyone but an admin until somebody names its price here. The
-# unnamed ones -- /data, /jobs, /log, /vote, /timetable, the library itself --
-# are reads and personal settings, open to any approved member.
+# unnamed ones -- /data, /jobs, /log, /vote, /timetable, /doubts, the library
+# itself -- are reads, personal settings, and the one thing a student can give
+# the class back. Asking and answering is deliberately not a privilege.
 ROLE_REQUIRED = {
     "/explain": "trusted",     # this is the AI spend
     "/upload": "trusted",
@@ -4229,26 +4455,151 @@ def apply_meta(subjects, mats, lecs):
     return subjects
 
 
-def db_vote(conn, material_id, user_id, on):
+def db_vote(conn, item_id, user_id, on, col="material_id"):
     """Add or drop one person's vote, and return the item's new state.
 
     Nothing here checks whether they have voted already, or whether the thing
-    they are voting for is their own: the votes primary key does the first and
-    the "vote as yourself" policy does the second, and both raise. That is the
-    point -- one place decides, and it is the same place in production as in
-    the tests.
+    they are voting for is their own: the unique indexes on votes do the first
+    and the "vote as yourself" policy does the second, and both raise. That is
+    the point -- one place decides, and it is the same place in production as
+    in the tests.
+
+    `col` says which kind of thing is being voted for -- an upload, or an
+    answer to somebody's doubt. It is one of exactly two identifiers, both
+    written down right here and neither of them ever taken off a request: the
+    handler maps its own shape of payload onto one of these two words, so
+    there is nothing a caller can put in the middle of that f-string.
     """
+    if col not in ("material_id", "doubt_id"):
+        raise ValueError("nothing votable is called that")
     if on:
-        conn.execute("insert into votes (material_id, voter_id) values (%s, %s)",
-                     (material_id, user_id))
+        conn.execute(f"insert into votes ({col}, voter_id) values (%s, %s)",
+                     (item_id, user_id))
     else:
-        conn.execute("delete from votes where material_id = %s and voter_id = %s",
-                     (material_id, user_id))
+        conn.execute(f"delete from votes where {col} = %s and voter_id = %s",
+                     (item_id, user_id))
     row = conn.execute(
-        "select count(*), bool_or(voter_id = %s) from votes where material_id = %s",
-        (user_id, material_id),
+        f"select count(*), bool_or(voter_id = %s) from votes where {col} = %s",
+        (user_id, item_id),
     ).fetchone()
     return {"votes": row[0], "voted": bool(row[1])}
+
+
+# ---- Doubts: what one student asks, and what the section answers. --------
+#
+# The cap the database also holds (0025). Trimmed here rather than left to the
+# check constraint, because "value too long for type" is not a sentence
+# anybody on a phone can act on.
+DOUBT_BODY = 2000
+
+
+def db_lecture_id(conn, code, title):
+    """The lecture row behind a note, or None when there is not one.
+
+    The library on disk is still the truth about what exists, and the page
+    holds a note by (subject, title) -- see db_meta, which keys the same way.
+    So the phone asks by the two things it has and the id is looked up here,
+    rather than every note on every screen having to carry one.
+
+    None is not an error. A static export, or a file the database has never
+    adopted, has no row -- and the question asked on it belongs to the subject,
+    which always exists. That fallback is the whole reason doubts hang off
+    subject_code as well as off a lecture.
+    """
+    row = conn.execute(
+        "select id from lectures where subject_code = %s and title = %s "
+        "order by recorded_at limit 1", (code, title),
+    ).fetchone() if title else None
+    return str(row[0]) if row else None
+
+
+def db_doubts(conn, user_id, code, lecture_id=None):
+    """One thread: questions newest first, answers under each, best first.
+
+    One query for both depths, grouped here. Two would be two round trips and
+    a window in which an answer arrives between them and lands under nothing.
+
+    Read as the caller, so the select policy decides what is in it -- and a
+    hidden question takes its answers with it, because the left join finds no
+    parent for them and they match no thread at all.
+
+    Answers are sorted by the votes the class gave them and then oldest first:
+    that is the whole point of putting them on the same votes table as the
+    notes. A tie goes to whoever answered first, which is the only tiebreak
+    that cannot be gamed by answering later.
+    """
+    questions, answers = [], {}
+    for did, parent, body, who, at, mine, votes, voted in conn.execute(
+        "select d.id, d.parent_id, d.body, p.name, "
+        "  extract(epoch from d.created_at)::bigint, d.author_id = %(me)s, "
+        "  (select count(*) from votes v where v.doubt_id = d.id), "
+        "  exists (select 1 from votes v "
+        "           where v.doubt_id = d.id and v.voter_id = %(me)s) "
+        "from doubts d join profiles p on p.id = d.author_id "
+        "left join doubts q on q.id = d.parent_id "
+        # An answer is on the thread its question is on. coalesce is what says
+        # so, and it is why an answer carries neither column of its own.
+        "where coalesce(q.subject_code, d.subject_code) = %(code)s "
+        "  and coalesce(q.lecture_id, d.lecture_id) is not distinct from %(lec)s "
+        # Live only. The select policy leaves an author their own hidden row --
+        # it has to, or hiding one would be refused for having hidden it -- so
+        # what the class reads is asked for here. q.deleted_at is null is true
+        # for a question, which has no parent to have been hidden.
+        "  and d.deleted_at is null and q.deleted_at is null "
+        "order by d.created_at",
+        {"me": user_id, "code": code, "lec": lecture_id},
+    ):
+        row = {"id": str(did), "body": body, "by": who, "at": at,
+               "mine": mine, "votes": votes, "voted": voted}
+        (questions if parent is None else
+         answers.setdefault(str(parent), [])).append(row)
+    for q in questions:
+        q["answers"] = sorted(answers.get(q["id"], []),
+                              key=lambda a: (-a["votes"], a["at"]))
+    questions.reverse()   # newest question first; the query gave them oldest
+    return questions
+
+
+def db_ask(conn, user_id, code, lecture_id, parent_id, body):
+    """Ask the section something, or answer somebody who did.
+
+    Which of the two it is, is parent_id and nothing else -- and whether that
+    parent is a question still standing is the insert policy's decision, not
+    this function's, so curl holding a stolen cookie cannot build a thread
+    three deep any more than the app can.
+
+    An answer is written with no subject and no lecture: it belongs to its
+    question, and the question is the one row that says which thread this is.
+    """
+    body = (body or "").strip()[:DOUBT_BODY]
+    if not body:
+        raise ValueError("a question needs something in it")
+    if parent_id:
+        code, lecture_id = None, None
+    return str(conn.execute(
+        "insert into doubts (subject_code, lecture_id, parent_id, author_id, body) "
+        "values (%s, %s, %s, %s, %s) returning id",
+        (code, lecture_id, parent_id, user_id, body),
+    ).fetchone()[0])
+
+
+def db_hide_doubt(conn, doubt_id):
+    """Yours, or anybody's if you are an admin. The row itself stays.
+
+    Nothing here asks whose it is: "your own doubts, or any as admin" is the
+    referee, and an update that matches nothing is the refusal -- for a request
+    from this app and for one from curl holding a stolen cookie alike.
+
+    rowcount rather than `returning id`: a RETURNING clause makes Postgres
+    apply the select policy to the row as it will be, and the row as it will be
+    is hidden -- so the statement that hides one would be refused for having
+    hidden it.
+    """
+    if not conn.execute(
+        "update doubts set deleted_at = now() where id = %s and deleted_at is null",
+        (doubt_id,),
+    ).rowcount:
+        raise ValueError("no such question, or it is not yours to delete")
 
 
 def db_contributions(conn, user_id):
@@ -5665,6 +6016,8 @@ def build_server(args):
                 # can still see who did.
                 with db(self.me["id"]) as conn:
                     return self.reply(200, db_standings(conn, self.me["id"]))
+            if self.path.split("?")[0] == "/doubts":
+                return self.do_doubts_get()
             if self.path == "/jobs":
                 return self.reply(200, {"jobs": jobs.snapshot()})
             if self.path.split("?")[0] == "/worker/audio":
@@ -5740,6 +6093,8 @@ def build_server(args):
                 return self.do_worker_failed()
             if self.path == "/vote":
                 return self.do_vote()
+            if self.path == "/doubts":
+                return self.do_doubts()
             if self.path == "/timetable":
                 return self.do_timetable()
             if self.path == "/attendance":
@@ -6310,9 +6665,15 @@ def build_server(args):
                 return self.reply(500, {"error": f"{type(e).__name__}: {e}"})
 
         def do_vote(self):
-            """One vote per person per item, and never for your own upload.
+            """One vote per person per item, and never for your own.
 
-            Both referees are in Postgres: the votes primary key, and the
+            Two shapes of payload, one route: {"id": ...} is an upload and
+            {"answer": ...} is somebody's answer to a doubt. They share this
+            handler because they share the table, the one-per-person rule and
+            the "not your own" rule -- a second endpoint would be a second copy
+            of all three, kept in step by hand.
+
+            Both referees are in Postgres: the unique indexes on votes, and the
             "vote as yourself" policy. This handler only puts their refusals
             into words.
 
@@ -6321,30 +6682,127 @@ def build_server(args):
             """
             if not self.me:
                 return self.reply(404, {"error": "this server is running with --no-auth"})
+            mine = "your own answer"
             try:
                 n = int(self.headers.get("Content-Length", 0))
                 if n > 4000:
                     self.close_connection = True
                     return self.reply(413, {"error": "too much"})
                 req = json.loads(self.rfile.read(n) or b"{}")
-                target = (req.get("id") or "").strip()
+                # The request picks between two column names written down in
+                # db_vote; it never supplies one.
+                target = (req.get("answer") or "").strip()
+                col = "doubt_id"
+                if not target:
+                    target, col, mine = (req.get("id") or "").strip(), \
+                        "material_id", "your own upload"
                 if not target:
                     return self.reply(400, {"error": "which item?"})
                 with db(self.me["id"]) as conn:
-                    state = db_vote(conn, target, self.me["id"], bool(req.get("on", True)))
+                    state = db_vote(conn, target, self.me["id"],
+                                    bool(req.get("on", True)), col)
             except psycopg.errors.UniqueViolation:
                 return self.reply(409, {"error": "you have already voted for this"})
             except psycopg.errors.InsufficientPrivilege:
                 # The only insert an approved member's own session can be
-                # refused is a vote on something they uploaded themselves --
-                # the gate has already turned away everybody else.
-                return self.reply(403, {"error": "you cannot upvote your own upload"})
+                # refused is a vote on something they wrote themselves -- the
+                # gate has already turned away everybody else.
+                return self.reply(403, {"error": f"you cannot upvote {mine}"})
             except (psycopg.errors.InvalidTextRepresentation,
-                    psycopg.errors.ForeignKeyViolation):
+                    psycopg.errors.ForeignKeyViolation,
+                    psycopg.errors.CheckViolation):
                 return self.reply(404, {"error": "no such item"})
             except Exception as e:
                 return self.reply(500, {"error": f"{type(e).__name__}: {e}"})
             return self.reply(200, state)
+
+        def thread_asked_for(self, conn, req):
+            """(subject code, lecture id) for the thread a request names.
+
+            One place, because the GET reads it and the POST reads it and a
+            question has to land on the thread the reader is looking at.
+
+            The phone names a note the way the library does -- a subject and a
+            title -- and the lecture id is looked up here. A title with no row
+            behind it is not an error: the thread is then the subject's, which
+            is the one every note in it can fall back to.
+            """
+            code = (req.get("subject") or "").strip()[:32]
+            if code not in SUBJECTS:
+                raise ValueError("which subject?")
+            return code, db_lecture_id(conn, code,
+                                       (req.get("title") or "").strip()[:200])
+
+        def do_doubts_get(self):
+            """One thread, fetched when the note is opened.
+
+            Its own request rather than a passenger on /data, unlike the notice
+            board: the board is thirty lines for the whole class, and this
+            would be every question on every lecture in twelve subjects, sent
+            to a phone that is going to read one of them.
+            """
+            if not self.me:
+                return self.reply(404, {"error": "this server is running with --no-auth"})
+            import urllib.parse
+
+            try:
+                q = urllib.parse.parse_qs(self.path.partition("?")[2])
+                with db(self.me["id"]) as conn:
+                    code, lecture = self.thread_asked_for(
+                        conn, {k: v[0] for k, v in q.items()})
+                    thread = db_doubts(conn, self.me["id"], code, lecture)
+            except ValueError as e:
+                return self.reply(400, {"error": str(e)})
+            except Exception as e:
+                return self.reply(500, {"error": f"{type(e).__name__}: {e}"})
+            return self.reply(200, {"doubts": thread})
+
+        def do_doubts(self):
+            """Ask, answer, or take back something you wrote.
+
+            One route for three things because they are one table and one
+            thread, and because every one of them ends the same way: the whole
+            thread comes back, so the screen redraws from what was stored
+            rather than from what was typed.
+
+            Deliberately not in ROLE_REQUIRED. A student may not upload, may
+            not record and may not spend the class's API budget -- and can
+            answer a classmate at one in the morning, which is the whole point
+            of this. What is required is approval, and the gate did that.
+
+            And deliberately nothing here calls anything. A doubt is students
+            answering students: the one place this app spends money on an API
+            is Explain, once per passage, cached by hash on the master device.
+            """
+            if not self.me:
+                return self.reply(404, {"error": "this server is running with --no-auth"})
+            try:
+                req = self.body(8000)
+                if req is None:
+                    return
+                with db(self.me["id"]) as conn:
+                    code, lecture = self.thread_asked_for(conn, req)
+                    if req.get("delete"):
+                        db_hide_doubt(conn, (req.get("id") or "").strip())
+                    else:
+                        db_ask(conn, self.me["id"], code, lecture,
+                               (req.get("parent") or "").strip() or None,
+                               req.get("body"))
+                    thread = db_doubts(conn, self.me["id"], code, lecture)
+            except ValueError as e:
+                return self.reply(400, {"error": str(e)})
+            except psycopg.errors.InsufficientPrivilege:
+                # The insert policy. An approved member is refused exactly one
+                # thing here: answering a question that is not there any more.
+                return self.reply(404, {"error": "that question is gone"})
+            except psycopg.errors.CheckViolation:
+                return self.reply(400, {"error": "a question needs something in it"})
+            except (psycopg.errors.InvalidTextRepresentation,
+                    psycopg.errors.ForeignKeyViolation):
+                return self.reply(404, {"error": "no such question"})
+            except Exception as e:
+                return self.reply(500, {"error": f"{type(e).__name__}: {e}"})
+            return self.reply(200, {"doubts": thread})
 
         def do_timetable(self):
             """Save the whole week. It comes back down inside /data.

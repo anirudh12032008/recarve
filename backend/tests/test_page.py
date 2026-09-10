@@ -1245,6 +1245,38 @@ assert.ok(!wrote(['textContent', 'Period 1 · Not marked']),
 TT = [];
 
 
+// ---- Doubts. What one student typed, put on the page as typing and never as
+// markup: this is the one screen in the app whose words come from a classmate
+// and are not run through marked, and the difference is textContent.
+reply = answer(true, {doubts: [{
+  id: 'q1', body: '<img src=x onerror=alert(1)>', by: 'Chan', at: 1,
+  mine: false, votes: 0, voted: false,
+  answers: [{id: 'a1', body: 'Because the equation balances.', by: 'Dia',
+             at: 2, mine: false, votes: 2, voted: false}],
+}]});
+writes = [];
+await loadDoubts({title: 'week1'}, {code: 'MC1101'});
+assert.ok(fetches.some(f => f[0] === '/doubts?subject=MC1101&title=week1'),
+          'the thread is asked for by the two things the library names a note by');
+assert.ok(wrote(['textContent', '<img src=x onerror=alert(1)>']),
+          'a question is somebody typing, never markup');
+assert.ok(!writes.some(w => w[0] === 'innerHTML' && String(w[1]).includes('img')),
+          'and nothing anybody types is ever parsed');
+assert.ok(wrote(['textContent', 'Because the equation balances.']),
+          'an answer is drawn the same way');
+assert.ok(wrote(['className', 'vote']),
+          "an answer carries the notes' own vote control");
+assert.ok(wrote(['textContent', 2]), 'with the count the class gave it');
+
+// A page with no server behind it says so instead of showing a form that
+// cannot post -- the static export has no /doubts to ask.
+reply = 'gone';
+writes = [];
+await loadDoubts({title: 'week1'}, {code: 'MC1101'});
+assert.ok(wrote(['textContent', 'Questions need the server. Run: notes.py serve']),
+          'no server, no form');
+reply = null;
+
 })().catch(e => { console.error(e); process.exit(1); });
 """
 
@@ -1289,16 +1321,22 @@ def test_the_vote_control_is_wired_to_the_server_and_nothing_else():
     """The stub cannot see an onclick assigned to a proxy, so the checks above
     build the control and this is the other half: what pressing it does."""
     for wiring in (
-        # One request, carrying which item and which direction.
-        "body: JSON.stringify({id: u.id, on: !u.voted})",
+        # One request, carrying which item and which direction. Two shapes of
+        # it, because one control votes for both an upload and an answer to a
+        # doubt -- they are one table and one endpoint.
+        "body: JSON.stringify(answer ? {answer: u.id, on: !u.voted}",
+        ": {id: u.id, on: !u.voted}",
         "if (u.id) el.appendChild(voteBtn(u));",
     ):
         assert wiring in notes.PAGE, f"vote control not wired: {wiring}"
-    # And then the whole list again, because a vote changes the ranking. Read
-    # out of the handler itself: /revise refreshes too, so a page-wide grep for
-    # this line passed with the vote's own refresh deleted.
-    handler = re.search(r"function voteBtn\(u\) \{.*?\n\}", notes.PAGE, re.S).group(0)
-    assert "await refresh();" in handler, "a vote must re-read the list it re-ranks"
+    # And then the whole list again, because a vote changes the ranking -- or
+    # the thread, when it was an answer that was voted for. Read out of the
+    # handler itself: /revise refreshes too, so a page-wide grep for this line
+    # passed with the vote's own refresh deleted.
+    handler = re.search(r"function voteBtn\(u, answer\) \{.*?\n\}",
+                        notes.PAGE, re.S).group(0)
+    assert "await (answer ? loadDoubts() : refresh());" in handler, \
+        "a vote must re-read the list, or the thread, it re-ranks"
 
 
 def test_the_tab_bar_is_wired_and_gives_way_to_the_reading_dock():
@@ -1323,8 +1361,9 @@ def test_the_tab_bar_is_wired_and_gives_way_to_the_reading_dock():
     assert "#nav{padding-bottom:calc(142px + env(safe-area-inset-bottom))}" in notes.PAGE
     # An open note is the same problem: every generated note ends in a
     # <details><summary>Full transcript</summary>, and at 118px the FAB sat on
-    # the bottom 16px of it and took the taps meant for it.
-    assert "article{padding:22px 18px 142px" in notes.PAGE
+    # the bottom 16px of it and took the taps meant for it. The clearance sits
+    # on the Doubts thread now, which is what the note ends in.
+    assert "#doubts{max-width:70ch;margin:0 auto;padding:0 18px 142px}" in notes.PAGE
     fab = re.search(r"#fab\{(.*?)\}", notes.PAGE, re.S).group(1)
     assert "bottom:calc(76px + env(safe-area-inset-bottom))" in fab and "height:58px" in fab, \
         "if the FAB moves, #nav's and article's padding have to move with it"
