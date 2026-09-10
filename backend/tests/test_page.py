@@ -547,6 +547,26 @@ home();
 assert.ok(says('One person is waiting to be let in'), 'and it counts in words');
 PENDING = 0; JOBS = [];
 
+// THE WAY INTO THE ADMIN PANEL, from the dashboard an admin actually opens.
+// On ROLE and nothing else: PENDING is only ever non-zero for an admin, so a
+// queue-shaped row would have hidden a plain admin behind an empty queue.
+ROLE = 'student';
+home();
+assert.ok(!says('Class admin'), 'a student is offered no way into the admin panel');
+ROLE = 'trusted';
+home();
+assert.ok(!says('Class admin'), 'nor is a trusted member');
+ROLE = null;
+home();
+assert.ok(!says('Class admin'), 'and neither is a session nobody has named yet');
+ROLE = 'admin';
+home();
+assert.ok(says('Class admin'), 'an admin is');
+assert.ok(wrote(['className', 'row adm']),
+          'and it is inked, like every other control only they may press');
+assert.ok(wrote(['href', '/admin']), 'pointing at the route the server gates');
+ROLE = null;
+
 // NEW SINCE YOU LAST LOOKED, against the last look and nothing else.
 SEEN = 1000;
 home();
@@ -806,6 +826,116 @@ await new Promise(setImmediate);
 await new Promise(setImmediate);
 const rows = writes.filter(w => JSON.stringify(w) === '["className","row adm"]').length;
 assert.equal(rows, 2, 'two inked rows from the paint that survived, not four from both');
+
+
+// ---- THE CLASS BOARD, on Campus. The server ranks; this draws what it sent.
+const person = (name, rank, score, extra) => Object.assign(
+  {id: name, name, role: 'trusted', rank, score,
+   uploads: 0, recordings: 0, votes_received: 0, you: false}, extra || {});
+const board = (all, week, you) => answer(true, {
+  all: {top: all, you: you === undefined ? null : you},
+  week: {top: week || [], you: you === undefined ? null : you}});
+
+// Day one: nobody has added anything. A blank list reads as a broken screen,
+// and a list of 110 people on nought is not a ranking. Landed on with the
+// answer already waiting, so nothing from the screen before it settles behind.
+BOARD = null; boardWindow = 'all';
+reply = board([], [], person('You', 4, 0, {you: true}));
+location.hash = '#campus'; route();
+writes = [];
+await renderCampus();
+assert.ok(says('Nobody has added anything yet'), 'an empty board says so');
+assert.ok(says('Points are recognition only'),
+          'and says, where it would be assumed otherwise, that nothing is locked');
+
+// A board with people on it: the place, the name, the role, the breakdown, the
+// score -- and ties sharing a place, which is what the server sent.
+BOARD = null;
+reply = board(
+  [person('Asha', 1, 30, {recordings: 3}), person('Bilal', 1, 30, {uploads: 6}),
+   person('Chetan', 3, 5, {uploads: 1, role: 'student'})],
+  [person('Asha', 1, 10, {recordings: 1})],
+  person('You', 41, 1, {you: true, votes_received: 1}));
+writes = [];
+await renderCampus();
+assert.ok(says('Asha') && says('Bilal') && says('Chetan'), 'the board is the class');
+assert.ok(says('#1') && says('#3'), 'a tie shares a place and the next one is third');
+assert.ok(says('Trusted member') && says('Student'), 'each row says what they are');
+assert.ok(says('3 recordings'), 'and the breakdown the score is made of');
+assert.ok(says('You (you)'), 'the viewer is on it from 41st, not only from the top');
+assert.ok(wrote(['className', 'rank you']), 'and their own row is marked as theirs');
+assert.ok(says('Your place'), 'pinned under a break rather than passed off as 21st');
+assert.ok(says('Regular'), 'a level is a word somebody earned, on the row that earned it');
+
+// Somebody already in the top is not printed twice.
+BOARD = null;
+reply = board([person('Asha', 1, 30, {you: true})], [], person('Asha', 1, 30, {you: true}));
+writes = [];
+await renderCampus();
+assert.ok(!says('Your place'), 'a viewer in the top twenty is not also pinned below it');
+
+// This week is its own board, off the same answer: the toggle costs no request.
+BOARD = null;
+reply = board([person('Asha', 1, 300)], [person('Dev', 1, 10)]);
+writes = [];
+await renderCampus();
+boardWindow = 'week';
+fetches = []; writes = [];
+await renderCampus();
+assert.ok(says('Dev'), 'this week is a different ranking');
+assert.ok(!says('Asha'), 'and does not carry the all-time leader into it');
+assert.equal(fetches.length, 0, 'both windows ride on one request');
+
+// An empty week under a busy all-time board is its own sentence.
+BOARD = null;
+reply = board([person('Asha', 1, 300)], []);
+writes = [];
+await renderCampus();
+assert.ok(says('Nobody has added anything this week'), 'an empty week says which window');
+boardWindow = 'all';
+
+// Levels are earned, and only from Regular up: a wall of words on every row is
+// not recognition.
+assert.deepStrictEqual(levelOf(0), [0, 'New here', false]);
+assert.deepStrictEqual(levelOf(1), [1, 'Contributor', false]);
+assert.deepStrictEqual(levelOf(25), [25, 'Regular', true]);
+assert.equal(levelOf(99)[1], 'Regular');
+assert.deepStrictEqual(levelOf(100), [100, 'Mainstay', true]);
+assert.ok(!levelOf(24)[2], 'the first two rungs are not worn on the board');
+assert.deepStrictEqual(nextLevel(0), [1, 'Contributor', false]);
+assert.deepStrictEqual(nextLevel(26), [100, 'Mainstay', true]);
+assert.equal(nextLevel(100), undefined, 'the top of the ladder has nothing above it');
+
+// No server behind the page at all: say so rather than sit on 'reading...'.
+BOARD = null;
+reply = 'gone';
+writes = [];
+await renderCampus();
+assert.ok(says('The class board needs the server'), 'a static export says why it is empty');
+BOARD = null; reply = null;
+
+// ---- The rules, on Me. Nobody should have to guess why they have the number
+// they have, so every weight and what it earned this person is printed.
+reply = mine('trusted', {points: {score: 26, uploads: 1, recordings: 2, votes_received: 1}});
+location.hash = '#me'; route();
+writes = [];
+await renderMe();
+assert.ok(says('26 points'), 'the score is the headline');
+assert.ok(says('How points work'), 'and the rules are under it');
+assert.ok(says('5 points each \u00b7 1 \u00d7 5 = 5 points'), 'an upload is worth five');
+assert.ok(says('10 points each \u00b7 2 \u00d7 10 = 20 points'), 'a recording ten');
+assert.ok(says('1 point each \u00b7 1 \u00d7 1 = 1 point'), 'a vote one');
+assert.ok(says('Regular'), 'the level falls out of the score, nobody awards it');
+assert.ok(says('Mainstay at 100 points'), 'and the next one is named');
+assert.ok(says('Points are a thank-you, not a key'), 'points are still not a key');
+
+reply = mine('student');
+writes = [];
+await renderMe();
+assert.ok(says('nothing from this yet'),
+          'a rule with nothing behind it still says what it is worth');
+assert.ok(says('New here') && says('Contributor at 1 point'),
+          'and the first rung is one point away, not hidden');
 
 })().catch(e => { console.error(e); process.exit(1); });
 """
@@ -1136,3 +1266,35 @@ def test_the_profile_edits_two_fields_and_cannot_reach_for_a_third():
     assert "body: JSON.stringify({name: name.value, phone: phone.value})" in form
     for forbidden in ("role", "status", "trusted", "admin"):
         assert forbidden not in form, f"the profile form reaches for {forbidden}"
+
+
+def test_the_board_is_wired_to_the_server_and_to_the_shell():
+    """The node stub swallows an onclick assigned to a proxy, so the checks
+    above drive the board by name. This is the other half: that the window
+    toggle is attached, that the board is fetched from the one route that
+    serves it, and that a vote -- which re-ranks it -- drops the cached copy."""
+    for wiring in ("await fetch('/standings')",
+                   "b.onclick = () => { boardWindow = key; render(); };",
+                   "else if (view.tab === 'campus') renderCampus();"):
+        assert wiring in notes.PAGE, f"the board is not wired: {wiring}"
+    refresh = re.search(r"async function refresh\(\) \{.*?\n\}", notes.PAGE, re.S).group(0)
+    assert "BOARD = null;" in refresh, "a vote re-ranks the board, so it must be re-read"
+
+
+def test_the_admin_way_in_is_wired_and_gated_on_the_server_too():
+    """Hiding a button is a courtesy. /admin is in ROLE_REQUIRED, so the gate
+    refuses a student's curl exactly as it refuses a student's browser."""
+    assert notes.ROLE_REQUIRED["/admin"] == "admin"
+    assert "if (ROLE !== 'admin') return;" in notes.PAGE, "the Home row is role-gated"
+    assert "adminBlock();" in notes.PAGE, "and Home actually draws it"
+    # Ink, not a fourth colour: the same helper the Me tab's admin rows use.
+    home = re.search(r"function adminBlock\(\) \{.*?\n\}", notes.PAGE, re.S).group(0)
+    assert "inked(" in home, "an admin-only control has to look like one"
+
+
+def test_the_board_never_becomes_a_lock():
+    """Read alongside test_points_never_gate_anything_on_the_page: that one bans
+    the branch, this one keeps the sentence that promises there is not one."""
+    assert "Points are a thank-you, not a key" in notes.PAGE
+    assert "Points are recognition only" in notes.PAGE
+    assert "/standings" not in notes.ROLE_REQUIRED, "seeing who contributed is not a privilege"

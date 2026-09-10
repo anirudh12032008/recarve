@@ -605,6 +605,26 @@ body.reading #read{display:block}
   border-color:var(--accent);color:var(--accent)}
 .badge.admin{background:var(--admin);border-color:var(--admin);color:var(--admin-fg)}
 
+/* ---- The class board. A number, a name, a score -- ruled lines rather than
+   another stack of identical rounded cards, because twenty cards is a wall and
+   not a ranking. Your own row is the one filled one, so finding yourself in it
+   costs no reading. */
+.rank{display:flex;align-items:center;gap:12px;min-height:var(--tap);
+  padding:9px 16px;border-bottom:1px solid var(--line)}
+.rank .pos{flex:none;width:2.6em;font-size:13px;color:var(--mut);
+  font-variant-numeric:tabular-nums}
+.rank .name{flex:1;min-width:0}
+.rank .name b{display:block;font-weight:600}
+.rank .name small{display:block;font-size:13px;color:var(--mut)}
+/* Earned, not decorative: only shown from Regular up, so a word here means
+   somebody did the work. A keyline and the page's own ink, no medal. */
+.rank .lvl{flex:none;padding:3px 8px;border-radius:7px;font-size:13px;
+  font-weight:650;border:1px solid var(--line);color:var(--mut)}
+.rank .pts{flex:none;min-width:2.4em;text-align:right;font-size:20px;
+  font-weight:650;font-variant-numeric:tabular-nums}
+.rank.you{background:var(--surface)}
+.rank.you .pos,.rank.you .pts{color:var(--accent)}
+
 /* Your own two fields, in the card they replace. */
 .pform label{display:block;font-size:13px;color:var(--mut);margin:14px 0 5px}
 .pform input{width:100%;min-height:var(--tap);font-size:16px;padding:0 12px;
@@ -1277,9 +1297,24 @@ function newBlock() {
   block('New since you last looked', rows);
 }
 
+// 2b. THE WAY IN, for the one person who runs the class. An admin opens Home
+// like everybody else, and the panel used to be reachable only from the Me tab
+// or by typing the URL. Inked, like every other admin-only control, and shown
+// on ROLE alone -- which is the server's word, arriving on /data. Hiding it is
+// a courtesy either way: /admin is in ROLE_REQUIRED, so curl gets the same 403
+// a student's browser would.
+function adminBlock() {
+  if (ROLE !== 'admin') return;
+  const a = document.createElement('a');
+  a.href = '/admin';
+  block('Admin', [inked(line('Class admin',
+    'Members, roles, the invite link, and anything reported', a))]);
+}
+
 function renderHome() {
   todayBlock();
   needsBlock();
+  adminBlock();
   // 4. An empty library is a real state on day one, and a blank screen reads
   // as a broken app. Say what the first thing to do is.
   if (!DATA.some(s => s.notes.length || s.uploads.length)) {
@@ -1366,10 +1401,120 @@ async function saveTimetable() {
   }
 }
 
-function renderCampus() {
-  saying('Clubs, events and announcements will live here.',
-         'Nothing has been put up yet — this fills with what your own clubs and '
-         + 'the notice board post, not with anything made up.');
+// ---- CAMPUS: the class, not your own shelf. -----------------------------
+// The board lives here rather than on Me because it is a list of other people.
+// Me is where your own score and the rules behind it are, next to your name and
+// your role; a ranking of a hundred and ten classmates is not a fact about you.
+// Campus is also the tab that had nothing in it, and a leaderboard is the first
+// thing the class as a whole actually owns.
+//
+// Points are status and nothing else. Nothing on this screen is a key, and the
+// empty state says so out loud, because a leaderboard is exactly the place
+// somebody would assume otherwise.
+let BOARD = null;               // the last /standings answer, or null
+let boardWindow = 'all';        // 'all' or 'week'; a toggle, not a URL
+
+// Few, and earned by doing the thing rather than awarded by hand: the ladder is
+// the score, and the score is only ever uploads, recordings and votes. Highest
+// first, so levelOf() is a find(). The third field is whether the word is worth
+// wearing in public -- one on every row of the board is decoration, one on
+// three rows out of twenty is somebody being recognised.
+const LEVELS = [[100, 'Mainstay', true], [25, 'Regular', true],
+                [1, 'Contributor', false], [0, 'New here', false]];
+const levelOf = score => LEVELS.find(l => l[0] <= score);
+const nextLevel = score => LEVELS.filter(l => l[0] > score).pop();
+
+// The whole reason there is a score at all, said in the row it belongs to.
+// Zeroes are dropped: they add nothing to the score, and "0 uploads · 3
+// recordings · 0 votes" wraps to three lines on a 390px phone and buries the
+// one number that was worth reading.
+const breakdown = r => [ROLE_TITLE[r.role] || 'Student'].concat(
+  [[r.uploads, 'upload'], [r.recordings, 'recording'], [r.votes_received, 'vote']]
+    .filter(part => part[0]).map(part => plural(part[0], part[1]))).join(' · ');
+
+function boardRow(r) {
+  const el = document.createElement('div');
+  el.className = 'rank' + (r.you ? ' you' : '');
+  el.innerHTML = '<span class="pos"></span>'
+    + '<span class="name"><b></b><small></small></span>'
+    + '<span class="lvl"></span><span class="pts"></span>';
+  // No score, no place: everybody who has not started yet shares the last rank,
+  // and printing that number would be an invented position.
+  el.querySelector('.pos').textContent = r.score ? '#' + r.rank : '—';
+  el.querySelector('b').textContent = r.you ? r.name + ' (you)' : r.name;
+  el.querySelector('small').textContent = r.score ? breakdown(r)
+    : 'Add a recording or a set of slides and you are on the board';
+  const lvl = el.querySelector('.lvl');
+  const [, word, worn] = levelOf(r.score);
+  lvl.textContent = worn ? word : '';
+  lvl.hidden = !worn;
+  el.querySelector('.pts').textContent = r.score;
+  return el;
+}
+
+function windowPicker() {
+  const row = document.createElement('div');
+  row.className = 'days';
+  for (const [key, label] of [['all', 'All time'], ['week', 'This week']]) {
+    const b = document.createElement('button');
+    b.textContent = label;
+    if (key === boardWindow) b.setAttribute('aria-current', 'true');
+    b.onclick = () => { boardWindow = key; render(); };
+    row.appendChild(b);
+  }
+  nav.appendChild(row);
+}
+
+function drawBoard(box) {
+  const b = BOARD[boardWindow] || {top: [], you: null};
+  box.innerHTML = '';
+  if (!b.top.length) {
+    box.className = 'blank';
+    const one = document.createElement('p'), two = document.createElement('p');
+    one.textContent = boardWindow === 'week'
+      ? 'Nobody has added anything this week yet.'
+      : 'Nobody has added anything yet.';
+    two.textContent = 'The first recording or set of slides puts somebody here. '
+      + 'Points are recognition only — every note in the library is open to '
+      + 'everyone whatever this says.';
+    box.append(one, two);
+    return;
+  }
+  box.className = '';
+  b.top.forEach(r => box.appendChild(boardRow(r)));
+  // Your own place, pinned, when it is not already up there. Appended to the
+  // end of the top twenty without a break it would read as twenty-first.
+  if (b.you && !b.top.some(r => r.id === b.you.id)) {
+    box.appendChild(quiet('Your place'));
+    box.appendChild(boardRow(b.you));
+  }
+}
+
+async function renderCampus() {
+  const mine = painted;
+  heading('Who has contributed');
+  windowPicker();
+  const box = document.createElement('div');
+  nav.appendChild(box);
+  nav.appendChild(quiet('Clubs, events and announcements will live here too. '
+    + 'Nothing has been put up yet — this fills with what your own clubs and '
+    + 'the notice board post, not with anything made up.'));
+  if (!BOARD) {
+    waiting(box, 'Reading the class board…');
+    try {
+      const r = await fetch('/standings');
+      if (!r.ok) throw new Error();
+      const d = await r.json();
+      if (mine !== painted) return;
+      BOARD = d;
+    } catch (e) {
+      if (mine !== painted) return;
+      box.className = 'blank';
+      box.textContent = 'The class board needs the server. Run: notes.py serve';
+      return;
+    }
+  }
+  drawBoard(box);
 }
 
 // LEVEL 1: every subject, empty ones included. Nobody can add a chemistry
@@ -1432,6 +1577,14 @@ const ROLE_SAYS = {
 // screen. A lock that gives three different reasons is three locks.
 const LOCK_ADD = 'Adding to the library is for trusted members. An admin makes '
   + 'you one — ask in your class group and say what you want to add.';
+// What each action is worth, in the order the tally above shows them. The
+// numbers are the view's -- change them there and change them here, and the
+// test that reads both is what says so.
+const POINT_RULES = [
+  ['uploads', 5, 'Notes or slides you add'],
+  ['recordings', 10, 'A class you record'],
+  ['votes_received', 1, 'An upvote on something you added'],
+];
 const LOCK_EXPLAIN = 'Explain is for trusted members: every tap spends the '
   + 'class’s API budget on the Mac that runs this. An admin makes you '
   + 'trusted — ask in your class group.';
@@ -1525,14 +1678,34 @@ async function renderMe() {
   tally.className = 'mine';
   tally.innerHTML = '<div class="score"></div><p></p>'
     + '<div class="tally"><div><b class="u"></b>uploads</div>'
-    + '<div><b class="r"></b>recordings</div><div><b class="v"></b>votes received</div></div>';
+    + '<div><b class="r"></b>recordings</div><div><b class="v"></b>votes received</div></div>'
+    + '<div><span class="badge lvl"></span></div>';
   tally.querySelector('.score').textContent = p.score + (p.score === 1 ? ' point' : ' points');
+  // The level, and the next one, on the card that carries the number they are
+  // both made of. Nothing here is awarded: change the score and the word
+  // follows it the same second.
+  const up = nextLevel(p.score);
   tally.querySelector('p').textContent =
-    'Points are a thank-you, not a key. Everything in the library is open to everyone.';
+    'Points are a thank-you, not a key. Everything in the library is open to everyone.'
+    + (up ? ' ' + up[1] + ' at ' + plural(up[0], 'point') + '.' : '');
   tally.querySelector('.u').textContent = p.uploads;
   tally.querySelector('.r').textContent = p.recordings;
   tally.querySelector('.v').textContent = p.votes_received;
+  tally.querySelector('.lvl').textContent = levelOf(p.score)[1];
   nav.appendChild(tally);
+
+  // The rules, in full, on the screen that shows the score they produced.
+  // Nobody should have to guess why they have the number they have -- so each
+  // row is the action, what it is worth, and what this person has earned from
+  // it. The weights are the database's (0021_standings.sql); these three lines
+  // are what they mean.
+  block('How points work', POINT_RULES.map(([key, weight, what]) => line(
+    what,
+    plural(weight, 'point') + ' each · '
+      + (p[key] ? p[key] + ' × ' + weight + ' = ' + plural(p[key] * weight, 'point')
+                : 'nothing from this yet'))));
+  nav.appendChild(quiet('A recording counts once its notes are made, and a file '
+    + 'once it is visible to the class. Ties share a place on the board.'));
 
   // The things only an admin can do, on the only screen that is theirs, marked
   // as theirs. The server decides: a member's /me carries no invite code at
@@ -1940,6 +2113,10 @@ async function refresh() {
     if (!r.ok) throw new Error(r.status);
     const d = await r.json();
     DATA.length = 0; DATA.push(...d.subjects);
+    // A vote, or a transcription finishing, moves the board. Dropped rather
+    // than refetched: Campus asks for it when Campus is opened, and most
+    // refreshes happen on a screen that is not looking at it.
+    BOARD = null;
     // Everything Home needs rides on this one request.
     TT = d.timetable || [];
     PENDING = d.pending || 0;
@@ -3390,6 +3567,56 @@ def db_contributions(conn, user_id):
     }
 
 
+# How much of the board a phone is sent. The rest of the class is not withheld
+# so much as not useful: nobody scrolls to 74th, and the one row past the top
+# that matters -- your own -- is fetched by name whatever your rank.
+BOARD_TOP = 20
+
+# The two windows the board offers, and the columns each one reads. Written out
+# rather than built by string surgery, because these are identifiers going
+# straight into SQL and there is nothing to interpolate but these.
+BOARD_WINDOWS = {
+    "all": ("uploads", "recordings", "votes_received", "score", "rank"),
+    "week": ("week_uploads", "week_recordings", "week_votes", "week_score",
+             "week_rank"),
+}
+
+
+def db_standings(conn, user_id, top=BOARD_TOP):
+    """The class board: the top of it, and always the person reading it.
+
+    Both decisions are Postgres's. rank() ranks, the where-clause trims, and
+    this function never sees a row it is not going to print -- which is the
+    whole reason standings is a view with a window function in it rather than a
+    sort in Python over a hundred and ten profiles.
+
+    Nobody with nothing yet is on the board. On day one that is everybody, and
+    a hundred and ten rows of zero is not a ranking, it is a class list. The
+    person asking is the one exception, so `you` is an answer even before they
+    have earned a point -- that is what "your position, always visible" means.
+    """
+    out = {}
+    for window, (up, rec, vot, score, rank) in BOARD_WINDOWS.items():
+        rows = [
+            {"id": str(i), "name": n, "role": r, "uploads": u, "recordings": c,
+             "votes_received": v, "score": s, "rank": k, "you": str(i) == str(user_id)}
+            for i, n, r, u, c, v, s, k in conn.execute(
+                f"select id, name, role, {up}, {rec}, {vot}, {score}, {rank} "
+                f"from standings where ({score} > 0 and {rank} <= %s) or id = %s "
+                f"order by {rank}, name",
+                (top, user_id),
+            )
+        ]
+        # Splitting a list of at most twenty-one rows is not ranking; the rank
+        # came off the view. The board and the pinned row are separate because
+        # a viewer at 74th appended to the end of the top twenty reads as 21st.
+        out[window] = {
+            "top": [r for r in rows if r["score"] > 0 and r["rank"] <= top],
+            "you": next((r for r in rows if r["you"]), None),
+        }
+    return out
+
+
 DAYS = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"]
 PERIODS = 8
 
@@ -4281,6 +4508,17 @@ def build_server(args):
                         except psycopg.Error as e:
                             log(f"cannot count the queue: {e}", "me")
                     return self.reply(200, out)
+            if self.path == "/standings":
+                if not self.me:
+                    return self.reply(404, {"error": "this server is running "
+                                                     "with --no-auth"})
+                # Read as themselves: standings is security_invoker, so a
+                # session that may not see the class does not get a board of it.
+                # Deliberately not in ROLE_REQUIRED -- knowing who has put the
+                # most in is not a privilege, and a student who cannot upload
+                # can still see who did.
+                with db(self.me["id"]) as conn:
+                    return self.reply(200, db_standings(conn, self.me["id"]))
             if self.path == "/jobs":
                 return self.reply(200, {"jobs": jobs.snapshot()})
             if self.path.split("?")[0] == "/worker/audio":

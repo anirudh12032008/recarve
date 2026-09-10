@@ -356,6 +356,9 @@ MATRIX = [
     ("GET", "/data", None, "student"),
     ("GET", "/me", None, "student"),
     ("GET", "/jobs", None, "student"),
+    # Who has put the most in is not a privilege: a student who cannot upload
+    # can still see who did.
+    ("GET", "/standings", None, "student"),
     ("GET", "/log", None, "student"),
     ("GET", "/", None, "student"),
     ("POST", "/vote", {"id": "nope"}, "student"),
