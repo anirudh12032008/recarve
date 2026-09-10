@@ -625,6 +625,60 @@ body.reading #read{display:block}
 .rank.you{background:var(--surface)}
 .rank.you .pos,.rank.you .pts{color:var(--accent)}
 
+/* ---- The notice board. Ruled entries, not another stack of rounded cards:
+   a notice is a piece of writing with a title over it, and a box around every
+   one of them turns six notices into six identical boxes. Pinned is a rule
+   down the left edge in the accent -- the same weight as a row's tick, so the
+   two screens read as one app. */
+.ann{padding:16px;border-bottom:1px solid var(--line)}
+.ann.pin{border-left:3px solid var(--accent);padding-left:13px}
+.ann.gone{opacity:.62}
+.ann h3{margin:0;font-size:20px;line-height:1.3;font-weight:650;letter-spacing:-.012em}
+.ann .meta{margin:5px 0 0;font-size:13px;color:var(--mut)}
+.ann .flag{font-weight:650;color:var(--accent)}
+.ann .md{margin-top:11px;font-size:16px}
+.ann .md>:first-child{margin-top:0}
+.ann .md>:last-child{margin-bottom:0}
+.ann .md p{margin:11px 0}
+.ann .md ul,.ann .md ol{padding-left:22px;margin:11px 0}
+.ann .md li{margin:4px 0}
+.ann .md h1,.ann .md h2,.ann .md h3{font-size:16px;font-weight:700;margin:15px 0 4px}
+.ann .md a{color:var(--accent)}
+.ann .md code{background:var(--surface);padding:2px 5px;border-radius:5px;font-size:.92em}
+.ann .md pre{background:var(--surface);padding:12px;border-radius:11px;overflow-x:auto;font-size:13px}
+.ann .md img{max-width:100%;height:auto}
+/* A pasted table is the one thing in a body that can be wider than a phone.
+   It scrolls inside itself rather than taking the page sideways with it. */
+.ann .md table{display:block;overflow-x:auto;min-width:0}
+/* Editing and hiding are admin ink, the same ink as every other control only
+   an admin may press. */
+.ann .acts{display:flex;gap:8px;margin-top:13px}
+/* Outlined rather than a filled slab: two inked slabs under every notice an
+   admin owns outweigh the notice itself. Ink on the page's own paper, keyed
+   by a keyline -- distinct from every member's control, and 14.5:1 either way
+   round. */
+.ann .acts button{min-height:var(--tap);padding:0 15px;border-radius:11px;
+  background:var(--bg);border:1px solid var(--admin);color:var(--admin);
+  font-size:13px;font-weight:650}
+.ann .acts button:active{opacity:.75}
+
+/* The composer: a title, a body, and whether it sits at the top. */
+.compose{padding:8px 16px 16px}
+.compose label{display:block;font-size:13px;color:var(--mut);margin:14px 0 5px}
+.compose input,.compose textarea{width:100%;font-size:16px;
+  border:1px solid var(--line);border-radius:11px;background:var(--surface);
+  color:var(--fg);font-family:inherit}
+.compose input{min-height:var(--tap);padding:0 12px}
+.compose textarea{min-height:9.5em;line-height:1.6;padding:11px 12px;resize:vertical}
+.compose .pinrow{display:flex;align-items:center;gap:11px;min-height:var(--tap);
+  margin-top:14px;font-size:16px;color:var(--fg)}
+.compose .pinrow input{width:22px;height:22px;min-height:0;flex:none;accent-color:var(--accent)}
+.compose .err{margin:10px 0 0;font-size:13px;color:#e5484d;min-height:1.2em}
+.compose .go{display:flex;gap:8px;margin-top:6px}
+.compose .go button{flex:1;min-height:var(--tap);border-radius:11px;background:var(--bg);
+  border:1px solid var(--line);font-size:16px;font-weight:500}
+.compose .go button.primary{background:var(--admin);color:var(--admin-fg);border-color:transparent}
+
 /* Your own two fields, in the card they replace. */
 .pform label{display:block;font-size:13px;color:var(--mut);margin:14px 0 5px}
 .pform input{width:100%;min-height:var(--tap);font-size:16px;padding:0 12px;
@@ -1312,6 +1366,7 @@ function adminBlock() {
 }
 
 function renderHome() {
+  noticeBlock();
   todayBlock();
   needsBlock();
   adminBlock();
@@ -1399,6 +1454,196 @@ async function saveTimetable() {
   } catch (e) {
     busyDone('Could not save that: ' + e.message);
   }
+}
+
+// ---- THE NOTICE BOARD. Read on Campus, surfaced on Home. ----------------
+// Every notice rides on the /data this page already fetches, so neither tab
+// spends a request of its own drawing one.
+let ANN = [];                   // the board as the server sent it
+let NOW = 0;                    // the server's clock, which `at` is stamped by
+let composing = null;           // the notice being written, or null
+const READ_SENT = new Set();    // ids already marked read this visit
+
+// The same three lines as the admin screen's, against the same clock: `at` and
+// NOW are both the server's seconds, so a handset that is minutes out cannot
+// age a notice that went up a moment ago.
+function ago(then, now) {
+  const d = Math.max(0, (now || 0) - (then || 0));
+  if (d < 90) return 'just now';
+  if (d < 3600) return Math.round(d / 60) + ' min ago';
+  if (d < 172800) return Math.round(d / 3600) + ' h ago';
+  return Math.round(d / 86400) + ' days ago';
+}
+
+const liveAnn = () => ANN.filter(a => !a.deleted);
+
+// A notice body is the one thing on this page that a person types and the page
+// renders as markup, so markdown has to be all that can come out of it. Every
+// '<' is escaped before marked sees it, which leaves no way to write a tag at
+// all -- <script>, <img onerror>, anything -- and the links marked does build
+// are then held to http, mailto and in-page anchors, so [tap](javascript:...)
+// lands as a dead link rather than a live one. Notes go through mdInto
+// instead: they are generated on this machine and deliberately carry <details>.
+function mdSafe(src) {
+  return marked.parse(String(src || '').replace(/</g, '&lt;'))
+    .replace(/ (href|src)="(?!https?:|mailto:|#)[^"]*"/gi, '');
+}
+
+function annCard(a) {
+  const el = document.createElement('div');
+  el.className = 'ann' + (a.pinned && !a.deleted ? ' pin' : '') + (a.deleted ? ' gone' : '');
+  el.innerHTML = '<h3></h3><p class="meta"></p><div class="md"></div>';
+  el.querySelector('h3').textContent = a.title;
+  const flags = [a.deleted ? 'Hidden' : (a.pinned ? 'Pinned' : ''),
+                 a.unread && !a.deleted ? 'New' : ''].filter(Boolean);
+  const meta = el.querySelector('.meta');
+  if (flags.length) {
+    const f = document.createElement('span');
+    f.className = 'flag';
+    f.textContent = flags.join(' · ');
+    meta.append(f, document.createTextNode(' · '));
+  }
+  meta.appendChild(document.createTextNode(
+    a.by + ' · ' + ago(a.at, NOW) + (a.edited ? ' · edited' : '')));
+  el.querySelector('.md').innerHTML = mdSafe(a.body);
+  // Their own, because that is what the database allows: "admins edit their
+  // own announcements" refuses anybody else's, and offering a button that
+  // would be refused is worse than not offering it.
+  if (a.mine && ROLE === 'admin') {
+    const acts = document.createElement('div');
+    acts.className = 'acts';
+    const edit = document.createElement('button');
+    edit.textContent = 'Edit';
+    edit.onclick = () => { composing = a; render(); };
+    const del = document.createElement('button');
+    del.textContent = a.deleted ? 'Put it back' : 'Delete';
+    del.onclick = () => saveAnn({id: a.id, deleted: !a.deleted});
+    acts.append(edit, del);
+    el.appendChild(acts);
+  }
+  return el;
+}
+
+// One write for all four things an admin does to a notice -- post, edit, hide,
+// restore -- because they are one row and one policy. The board comes back in
+// the answer, so the screen redraws from what was stored and not from what was
+// typed.
+async function saveAnn(payload, err) {
+  busy('Saving…', true);
+  try {
+    const r = await fetch('/announce', {
+      method: 'POST', headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify(payload),
+    });
+    const d = await r.json().catch(() => ({}));
+    if (!r.ok) throw new Error(d.error || 'could not save that');
+    ANN = d.announcements || [];
+    composing = null;
+    busyDone(payload.deleted ? 'Hidden — you can still put it back'
+                             : (payload.id ? 'Saved' : 'Posted'));
+    render();
+  } catch (e) {
+    busyDone('');
+    if (err) err.textContent = e.message;
+    else busyDone('Could not save that: ' + e.message);
+  }
+}
+
+// "I have seen these", sent once per visit for whatever is actually on screen.
+// Server-side rather than in localStorage: the same person opens this on a
+// phone in a corridor and a laptop that evening, and a notice they have read
+// must not be new again on the second one.
+function markRead(list) {
+  const ids = list.filter(a => a.unread && !a.deleted && !READ_SENT.has(a.id))
+                  .map(a => a.id);
+  if (!ids.length || !live) return;
+  ids.forEach(i => READ_SENT.add(i));
+  fetch('/read', {
+    method: 'POST', headers: {'Content-Type': 'application/json'},
+    body: JSON.stringify({ids}),
+  }).then(r => {
+    // The marks on screen stay put -- you are looking at them -- but Home must
+    // not still be calling them new the moment you go back to it.
+    if (r.ok) ANN.forEach(a => { if (ids.includes(a.id)) a.unread = false; });
+    else ids.forEach(i => READ_SENT.delete(i));
+  }).catch(() => ids.forEach(i => READ_SENT.delete(i)));
+}
+
+function renderCompose() {
+  const a = composing;
+  const box = document.createElement('div');
+  box.className = 'compose';
+  box.innerHTML = '<label for="atitle">Title</label>'
+    + '<input id="atitle" maxlength="120" autocomplete="off" '
+    + 'placeholder="Chemistry lab moved to Friday">'
+    + '<label for="abody">What everyone needs to know</label>'
+    + '<textarea id="abody" maxlength="4000" '
+    + 'placeholder="Markdown works: **bold**, lists, and links."></textarea>'
+    + '<label class="pinrow"><input type="checkbox" id="apin">'
+    + '<span>Keep it at the top</span></label>'
+    + '<p class="err" id="aerr"></p>'
+    + '<div class="go"><button id="acancel">Cancel</button>'
+    + '<button id="asave" class="primary"></button></div>';
+  nav.appendChild(box);
+  const title = box.querySelector('#atitle'), body = box.querySelector('#abody');
+  const pin = box.querySelector('#apin'), err = box.querySelector('#aerr');
+  title.value = a.title || '';
+  body.value = a.body || '';
+  pin.checked = !!a.pinned;
+  box.querySelector('#asave').textContent = a.id ? 'Save changes' : 'Post it';
+  box.querySelector('#acancel').onclick = () => { composing = null; render(); };
+  box.querySelector('#asave').onclick = () => {
+    if (!title.value.trim()) return void (err.textContent = 'A notice needs a title.');
+    saveAnn({id: a.id, title: title.value, body: body.value, pinned: pin.checked}, err);
+  };
+}
+
+function renderAnnouncements() {
+  heading('Announcements');
+  if (ROLE === 'admin') {
+    const post = line('Post an announcement', 'Every approved classmate sees it',
+                      document.createElement('button'));
+    post.onclick = () => { composing = {}; render(); };
+    const rows = document.createElement('div');
+    rows.className = 'rows';
+    rows.appendChild(inked(post));
+    nav.appendChild(rows);
+  }
+  // A hidden notice is still on its author's screen, because they are the one
+  // who might want it back. Nobody else is sent it at all.
+  const list = ANN.filter(a => !a.deleted || a.mine);
+  if (!list.length) {
+    return saying('Nothing on the notice board yet.',
+      ROLE === 'admin'
+        ? 'Anything the whole section needs to know goes here — a moved '
+          + 'lab, a deadline, where the lecture is. Everyone approved sees it, '
+          + 'and pinned ones stay at the top.'
+        : 'This is where the section is told things — a moved lab, a '
+          + 'deadline, where a lecture is. Your class admin puts them up, and '
+          + 'new ones show on Home until you have read them.');
+  }
+  list.forEach(a => nav.appendChild(annCard(a)));
+  markRead(list);
+}
+
+// On HOME: pinned, or not yet read. A notice you have read and nobody pinned
+// is not what you need right now, and three at most either way -- a wall of
+// old notices at the top of Home is how people learn to scroll past the top
+// of Home.
+function noticeBlock() {
+  const show = liveAnn().filter(a => a.pinned || a.unread);
+  if (!show.length) return;
+  const rows = show.slice(0, 3).map(a => {
+    const b = line(a.title, [a.unread ? 'New' : '', a.pinned ? 'Pinned' : '',
+                             ago(a.at, NOW)].filter(Boolean).join(' · '),
+                   document.createElement('button'));
+    b.onclick = () => go('campus');
+    return b;
+  });
+  if (show.length > rows.length) {
+    rows.push(quiet('and ' + (show.length - rows.length) + ' more, under Campus.'));
+  }
+  block('Notices', rows);
 }
 
 // ---- CAMPUS: the class, not your own shelf. -----------------------------
@@ -1492,13 +1737,17 @@ function drawBoard(box) {
 
 async function renderCampus() {
   const mine = painted;
+  // Writing a notice takes the tab over: it is one thing at a time on a phone,
+  // and the board underneath is not what you are doing.
+  if (composing) return renderCompose();
+  renderAnnouncements();
   heading('Who has contributed');
   windowPicker();
   const box = document.createElement('div');
   nav.appendChild(box);
-  nav.appendChild(quiet('Clubs, events and announcements will live here too. '
-    + 'Nothing has been put up yet — this fills with what your own clubs and '
-    + 'the notice board post, not with anything made up.'));
+  nav.appendChild(quiet('Clubs and events will live here too, next to the '
+    + 'notice board above. Nothing is made up: this fills with what your own '
+    + 'clubs put here.'));
   if (!BOARD) {
     waiting(box, 'Reading the class board…');
     try {
@@ -2120,6 +2369,8 @@ async function refresh() {
     // Everything Home needs rides on this one request.
     TT = d.timetable || [];
     PENDING = d.pending || 0;
+    ANN = d.announcements || [];
+    NOW = d.now || NOW;
     ROLE = d.role || ROLE;
     applyRole();
     markSeen(d.now);
@@ -2873,6 +3124,7 @@ ROLE_REQUIRED = {
     "/block": "admin",
     "/remove": "admin",
     "/reset": "admin",
+    "/announce": "admin",     # posting to a hundred and ten people at once
 }
 
 # Passwords are stored as typed. The one thing that goes with that decision is
@@ -3617,6 +3869,100 @@ def db_standings(conn, user_id, top=BOARD_TOP):
             "you": next((r for r in rows if r["you"]), None),
         }
     return out
+
+
+# ---- The notice board. -------------------------------------------------
+#
+# How much of it a phone is sent. A section posts a handful of notices a term,
+# so thirty is every one of them that matters and a cap on the day somebody
+# pastes the whole timetable in one line at a time.
+ANN_LIMIT = 30
+ANN_TITLE = 120
+ANN_BODY = 4000
+
+
+def db_announcements(conn, user_id, limit=ANN_LIMIT):
+    """The board as one person sees it: pinned first, then newest.
+
+    Read as the caller, so the policies decide what comes back rather than this
+    query: a hidden notice reaches the admin who wrote it and nobody else, and
+    `unread` is that person's own read mark and never anybody else's.
+
+    `deleted` rides along because the one person who can see a hidden notice is
+    the one who might want it back.
+    """
+    return [
+        {"id": str(i), "title": t, "body": b, "pinned": pin, "by": by,
+         "at": at, "edited": ed, "mine": mine, "unread": unread, "deleted": gone}
+        for i, t, b, pin, by, at, ed, mine, unread, gone in conn.execute(
+            "select a.id, a.title, a.body, a.pinned, p.name, "
+            "  extract(epoch from a.created_at)::bigint, "
+            "  extract(epoch from a.updated_at)::bigint, "
+            "  a.author_id = %(me)s, r.profile_id is null, a.deleted_at is not null "
+            "from announcements a "
+            "join profiles p on p.id = a.author_id "
+            "left join announcement_reads r "
+            "  on r.announcement_id = a.id and r.profile_id = %(me)s "
+            "order by a.pinned desc, a.created_at desc limit %(limit)s",
+            {"me": user_id, "limit": limit},
+        )
+    ]
+
+
+def db_write_announcement(conn, user_id, aid, title, body, pinned, deleted):
+    """Post one, edit one, hide one, or put a hidden one back.
+
+    One function because it is one row and one policy: "admins edit their own"
+    is what refuses somebody else's notice, and it refuses it here whether the
+    request came from this app or from curl holding a stolen cookie. A hidden
+    notice is never destroyed -- deleted_at is the only thing that moves, and
+    there is no delete policy on the table at all.
+
+    Returns the row as the board will show it, so the screen redraws from what
+    was stored rather than from what was typed.
+    """
+    title = (title or "").strip()[:ANN_TITLE]
+    body = (body or "").strip()[:ANN_BODY]
+    if aid:
+        if deleted is None:
+            if not title:
+                raise ValueError("an announcement needs a title")
+            done = conn.execute(
+                "update announcements set title = %s, body = %s, pinned = %s, "
+                "updated_at = now() where id = %s returning id",
+                (title, body, bool(pinned), aid))
+        else:
+            # now() rather than a timestamp from this process: the row's
+            # created_at is Postgres's clock, and two clocks on one row is how
+            # a notice ends up hidden a minute before it was written.
+            done = conn.execute(
+                "update announcements set deleted_at = case when %s then now() end "
+                "where id = %s returning id", (bool(deleted), aid))
+        if not done.fetchone():
+            raise ValueError("no such announcement, or it is not yours")
+        return aid
+    if not title:
+        raise ValueError("an announcement needs a title")
+    return str(conn.execute(
+        "insert into announcements (author_id, title, body, pinned) "
+        "values (%s, %s, %s, %s) returning id",
+        (user_id, title, body, bool(pinned))).fetchone()[0])
+
+
+def db_mark_read(conn, user_id, ids):
+    """Mark notices read for one person, on the server where every device of
+    theirs can see it.
+
+    `on conflict do nothing`: the phone sends what is on screen, and what is on
+    screen is often something they have already read on the laptop.
+    """
+    ids = [str(i) for i in ids][:ANN_LIMIT]
+    if not ids:
+        return
+    conn.execute(
+        "insert into announcement_reads (announcement_id, profile_id) "
+        "select id, %s from announcements where id = any(%s::uuid[]) "
+        "on conflict do nothing", (user_id, ids))
 
 
 DAYS = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"]
@@ -4481,6 +4827,11 @@ def build_server(args):
                             # already makes. A second round trip for a number
                             # is a second thing that can be slow on a phone in
                             # a corridor.
+                            # The notice board rides on the same request:
+                            # Home draws it without asking for anything, and
+                            # Campus is painted from what is already held.
+                            out["announcements"] = db_announcements(
+                                conn, self.me["id"])
                             if self.me["admin"]:
                                 out["pending"] = len(db_pending(conn))
                         except psycopg.Error as e:
@@ -4598,6 +4949,10 @@ def build_server(args):
                 return self.do_vote()
             if self.path == "/timetable":
                 return self.do_timetable()
+            if self.path == "/announce":
+                return self.do_announce()
+            if self.path == "/read":
+                return self.do_read()
             if self.path == "/revise":
                 return self.do_revise()
             if self.path != "/explain":
@@ -5218,6 +5573,62 @@ def build_server(args):
             except Exception as e:
                 return self.reply(500, {"error": f"{type(e).__name__}: {e}"})
             return self.reply(200, {"saved": saved})
+
+        def do_announce(self):
+            """Post, edit, hide or restore one notice. Admins only.
+
+            Admin-gated twice over, like every other admin route: the gate
+            refused everybody else before this was reached, and the write runs
+            on the caller's own connection where "admins edit their own
+            announcements" has to allow it too -- which is what makes "their
+            own" true rather than intended.
+            """
+            if not self.is_admin():
+                return self.reply(403, {"error": "admins only", "required": "admin"})
+            try:
+                req = self.body(20000)
+                if req is None:
+                    return
+                with db(self.me["id"]) as conn:
+                    aid = db_write_announcement(
+                        conn, self.me["id"], (req.get("id") or "").strip() or None,
+                        req.get("title"), req.get("body"), req.get("pinned"),
+                        req.get("deleted"))
+                    board = db_announcements(conn, self.me["id"])
+            except ValueError as e:
+                return self.reply(400, {"error": str(e)})
+            except psycopg.errors.CheckViolation:
+                return self.reply(400, {"error": "an announcement needs a title"})
+            except psycopg.errors.InvalidTextRepresentation:
+                return self.reply(404, {"error": "no such announcement"})
+            except Exception as e:
+                return self.reply(500, {"error": f"{type(e).__name__}: {e}"})
+            log(f"{self.me['name']} posted or changed announcement {aid}", "admin")
+            return self.reply(200, {"id": aid, "announcements": board})
+
+        def do_read(self):
+            """"I have seen these." Every approved member, about themselves.
+
+            Deliberately not in ROLE_REQUIRED: what you have read is not a
+            privilege, and the insert policy pins the row to the person asking
+            whatever the request says.
+            """
+            if not self.me:
+                return self.reply(404, {"error": "this server is running with --no-auth"})
+            try:
+                req = self.body(4000)
+                if req is None:
+                    return
+                ids = req.get("ids")
+                if not isinstance(ids, list):
+                    return self.reply(400, {"error": "expected a list of ids"})
+                with db(self.me["id"]) as conn:
+                    db_mark_read(conn, self.me["id"], ids)
+            except psycopg.errors.InvalidTextRepresentation:
+                return self.reply(400, {"error": "that is not an announcement id"})
+            except Exception as e:
+                return self.reply(500, {"error": f"{type(e).__name__}: {e}"})
+            return self.reply(200, {"ok": True})
 
         def do_revise(self):
             import json as _json

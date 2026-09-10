@@ -937,6 +937,116 @@ assert.ok(says('nothing from this yet'),
 assert.ok(says('New here') && says('Contributor at 1 point'),
           'and the first rung is one point away, not hidden');
 
+
+// ---- THE NOTICE BOARD. -------------------------------------------------
+// A body is markdown typed by a person and rendered as markup on a hundred and
+// ten phones, so it is the one thing on this page that could carry a tag onto
+// somebody else's screen. mdSafe is what stops it, and this is the whole of
+// what it promises.
+assert.ok(!mdSafe('<script>alert(1)</script>').includes('<script'),
+          'a script tag in a body must never survive into the page');
+assert.ok(!mdSafe('<img src=x onerror=alert(1)>').includes('<img'),
+          'nor any other tag: every < is escaped before marked sees it');
+assert.ok(!mdSafe('<div onclick="x">hi</div>').includes('<div'),
+          'and with no tag there is nowhere to hang a handler');
+assert.ok(mdSafe('<b>hi</b>').includes('&lt;b&gt;') ||
+          mdSafe('<b>hi</b>').includes('&lt;b>'),
+          'the tag comes out as the text somebody typed, not as markup');
+assert.ok(mdSafe('**bold** and a list').includes('**bold**'),
+          'the markdown itself still goes through');
+// The links marked builds out of safe-looking markdown are the other half:
+// [tap](javascript:...) never reaches marked as a '<'.
+const realParse = marked.parse;
+marked.parse = () => '<a href="javascript:alert(1)">tap</a><img src="data:text/html,x">';
+assert.ok(!mdSafe('x').includes('javascript:'), 'a javascript: link is disarmed');
+assert.ok(!mdSafe('x').includes('data:'), 'and so is a data: source');
+assert.ok(mdSafe('x').includes('<a'), 'the link is left in place, just dead');
+marked.parse = () => '<a href="https://notes.example/x">ok</a>';
+assert.ok(mdSafe('x').includes('https://notes.example/x'), 'a real link survives');
+marked.parse = realParse;
+
+const notice = (id, title, extra) => Object.assign(
+  {id, title, body: 'the body', pinned: false, by: 'Asha', at: 100,
+   edited: null, mine: false, unread: false, deleted: false}, extra || {});
+const emptyBoard = {all: {top: [], you: null}, week: {top: [], you: null}};
+
+// Campus: every live notice, newest first as the server sent them, with the
+// flags that say why one is above the others.
+ANN = [notice('a1', 'Lab moved to Friday', {pinned: true, unread: true}),
+       notice('a2', 'Old news')];
+NOW = 100; ROLE = 'student'; BOARD = emptyBoard; live = true;
+location.hash = '#campus'; route();
+writes = []; fetches = [];
+await renderCampus();
+assert.ok(says('Announcements'), 'Campus leads with the notice board');
+assert.ok(says('Lab moved to Friday') && says('Old news'), 'both notices are on it');
+assert.ok(says('Pinned · New'), 'an unread pinned notice says both, in one line');
+assert.ok(!says('Post an announcement'), 'a student is offered no way to post');
+assert.ok(!says('Clubs, events and announcements will live here'),
+          'the placeholder copy cannot still promise what is now above it');
+
+// Home: pinned or unread only, and never more than three. A wall of old
+// notices at the top of Home is how people learn to scroll past the top of Home.
+location.hash = '#home'; route();
+writes = [];
+renderHome();
+assert.ok(says('Notices') && says('Lab moved to Friday'), 'Home surfaces what is new');
+assert.ok(!says('Old news'), 'a notice you have read and nobody pinned is not Home');
+
+ANN = ['b1', 'b2', 'b3', 'b4', 'b5'].map(i => notice(i, 'Notice ' + i, {unread: true}));
+writes = [];
+renderHome();
+assert.ok(says('Notice b1') && says('Notice b3'), 'the first three are shown');
+assert.ok(!says('Notice b4'), 'and the fourth is not');
+assert.ok(says('and 2 more, under Campus.'), 'the rest are counted, not listed');
+
+// Opening the board marks what is on it read, on the server, for this person.
+// Not localStorage: the same person opens this on a phone and on a laptop.
+BOARD = emptyBoard;
+location.hash = '#campus'; route();
+// After the route, not before it: painting the tab is itself an opening of the
+// board, and the point here is what the paint under test asks for.
+ANN = [notice('c1', 'Unread one', {unread: true}), notice('c2', 'Read already')];
+READ_SENT.clear();
+fetches = []; reply = answer(true, {ok: true});
+await renderCampus();
+const marks = fetches.filter(f => f[0] === '/read');
+assert.equal(marks.length, 1, 'one request, for what is actually on screen');
+assert.deepStrictEqual(JSON.parse(marks[0][1].body).ids, ['c1'],
+                       'only the unread ones, and never one already read');
+await new Promise(setImmediate);
+assert.equal(ANN[0].unread, false, 'and Home stops calling it new straight after');
+fetches = [];
+await renderCampus();
+assert.equal(fetches.filter(f => f[0] === '/read').length, 0,
+             'a second paint of the same board is not a second request');
+
+// Nothing up yet is a real state on day one, and it has to say what the space
+// is for rather than showing an empty strip.
+ANN = []; ROLE = 'student'; BOARD = emptyBoard;
+writes = [];
+await renderCampus();
+assert.ok(says('Nothing on the notice board yet'), 'an empty board says so');
+assert.ok(says('Your class admin puts them up'),
+          'and says who fills it and where new ones show');
+ROLE = 'admin';
+writes = [];
+await renderCampus();
+assert.ok(says('Anything the whole section needs to know goes here'),
+          'the admin reading the same empty screen is told what to do with it');
+assert.ok(says('Post an announcement'), 'and is given the way in');
+assert.ok(wrote(['className', 'row adm']),
+          'inked, like every other control only an admin may press');
+
+// Writing one takes the tab over, and costs no request until it is posted.
+composing = {};
+writes = []; fetches = [];
+await renderCampus();
+assert.ok(wrote(['className', 'compose']), 'the composer replaces the board');
+assert.ok(!says('Who has contributed'), 'one thing at a time on a phone');
+assert.equal(fetches.length, 0, 'and nothing is asked for until it is posted');
+composing = null; ROLE = null; ANN = [];
+
 })().catch(e => { console.error(e); process.exit(1); });
 """
 
@@ -1298,3 +1408,44 @@ def test_the_board_never_becomes_a_lock():
     assert "Points are a thank-you, not a key" in notes.PAGE
     assert "Points are recognition only" in notes.PAGE
     assert "/standings" not in notes.ROLE_REQUIRED, "seeing who contributed is not a privilege"
+
+
+def test_the_notice_board_rides_on_the_data_the_page_already_fetches():
+    """Home and Campus are both opened between classes on mobile data. The
+    board arrives on /data with the timetable and the queue, so neither tab
+    spends a round trip drawing one -- and only the two writes talk to the
+    server at all."""
+    assert "ANN = d.announcements || [];" in notes.PAGE
+    assert "NOW = d.now || NOW;" in notes.PAGE
+    assert notes.PAGE.count("fetch('/announce'") == 1, "one write path, in saveAnn"
+    assert notes.PAGE.count("fetch('/read'") == 1, "one read mark, in markRead"
+    assert "fetch('/announcements'" not in notes.PAGE, "the board is not its own request"
+    # Home must stay the screen that waits on nothing.
+    home = re.search(r"\nfunction noticeBlock\(\) \{.*?\n\}", notes.PAGE, re.S).group(0)
+    assert "await" not in home and "fetch" not in home
+    assert "show.slice(0, 3)" in home, "Home shows three notices, not a wall of them"
+
+
+def test_posting_is_admin_only_on_the_server_too():
+    """Hiding the composer is a courtesy. The lock is the gate, which refuses
+    curl exactly as it refuses a student's browser -- and under that, a policy
+    that refuses a stolen cookie too."""
+    assert notes.ROLE_REQUIRED["/announce"] == "admin"
+    assert "/read" not in notes.ROLE_REQUIRED, "what you have read is not a privilege"
+    campus = re.search(r"function renderAnnouncements\(\) \{.*?\n\}", notes.PAGE, re.S).group(0)
+    assert "if (ROLE === 'admin')" in campus, "the composer is offered on the role"
+    assert "a.mine && ROLE === 'admin'" in notes.PAGE, \
+        "and edit/delete only on your own, which is what the policy allows"
+
+
+def test_a_notice_body_is_never_written_into_the_page_as_it_was_typed():
+    """The one field on this page a person types and the page renders as
+    markup. Titles go in with textContent like every other name; bodies go
+    through mdSafe, which is the only caller of marked outside mdInto."""
+    assert "el.querySelector('h3').textContent = a.title;" in notes.PAGE
+    assert "el.querySelector('.md').innerHTML = mdSafe(a.body);" in notes.PAGE
+    assert notes.PAGE.count("marked.parse(") == 2, \
+        "marked has exactly two callers: mdInto for notes, mdSafe for bodies"
+    safe = re.search(r"function mdSafe\(src\) \{.*?\n\}", notes.PAGE, re.S).group(0)
+    assert r"replace(/</g, '&lt;')" in safe, "every < is escaped before marked sees it"
+

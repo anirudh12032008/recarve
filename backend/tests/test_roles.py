@@ -297,7 +297,8 @@ def server(tmp_path_factory):
 
     people = {}
     with psycopg.connect(DB_URL, autocommit=True) as conn:
-        for table in ("timetable", "votes", "materials", "lectures", "profiles", "invites"):
+        for table in ("announcement_reads", "announcements", "timetable", "votes",
+                      "materials", "lectures", "profiles", "invites"):
             conn.execute(f"delete from {table}")
         for role in ("student", "trusted", "admin"):
             uid = make_user(conn)
@@ -329,8 +330,8 @@ def server(tmp_path_factory):
     srv.shutdown()
     srv.server_close()
     with psycopg.connect(DB_URL, autocommit=True) as conn:
-        for table in ("timetable", "votes", "materials", "lectures", "profiles",
-                      "invites", "auth.users"):
+        for table in ("announcement_reads", "announcements", "timetable", "votes",
+                      "materials", "lectures", "profiles", "invites", "auth.users"):
             conn.execute(f"delete from {table}")
 
 
@@ -373,6 +374,12 @@ MATRIX = [
     # Your own name is not a privilege, so /profile is deliberately not in
     # ROLE_REQUIRED and every approved member reaches it.
     ("POST", "/profile", {"name": "Renamed"}, "student"),
+    # Telling a hundred and ten people something at once is the admin's, and
+    # deliberately not trusted's: trusted is what spends the API budget.
+    ("POST", "/announce", {"title": "Matrix"}, "admin"),
+    # What you have read is not a privilege, so /read is open to everyone
+    # approved -- and the insert policy pins the row to whoever is asking.
+    ("POST", "/read", {"ids": []}, "student"),
     ("POST", "/block", {"id": "nope"}, "admin"),
     ("POST", "/remove", {"id": "nope"}, "admin"),
 ]
