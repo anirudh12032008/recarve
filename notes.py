@@ -3097,6 +3097,7 @@ class Jobs:
 # which screen you see; they are not the only thing standing between a pending
 # joiner and the notes.
 
+import datetime
 import hashlib
 import hmac
 import html
@@ -3143,6 +3144,10 @@ ROLE_REQUIRED = {
     "/remove": "admin",
     "/reset": "admin",
     "/announce": "admin",     # posting to a hundred and ten people at once
+    # Calling a class off changes everybody's denominator, so it is the same
+    # bar as adding to the library. Marking your OWN attendance is not here:
+    # it is a private note to yourself and every approved member makes them.
+    "/cancelled": "trusted",
 }
 
 # Passwords are stored as typed. The one thing that goes with that decision is
@@ -4040,6 +4045,257 @@ def db_set_timetable(conn, user_id, slots):
     return len(clean)
 
 
+# ---- Attendance. ---------------------------------------------------------
+# MANIT wants 75% in EACH subject, not 75% overall, so every number here is
+# per subject. Overall attendance would be a comforting average that nobody is
+# ever refused an exam over.
+#
+# Three states and only two of them are rows: present and absent are written
+# down, and not-yet-marked is no row. Nothing here ever assumes present. An
+# unmarked period is in neither the numerator nor the denominator, which means
+# a student who has marked nothing sees "no classes marked yet" rather than a
+# confident 100%.
+
+ATT_STATES = ("present", "absent")
+# How far back the catch-up screen can reach in one payload. Four weeks is more
+# than anybody ever has to catch up on, and it keeps /data -- which the page
+# refetches after every vote -- to a couple of hundred small rows.
+ATT_WINDOW = 28
+# The threshold, as a fraction with integer parts. Every sum below is done in
+# whole numbers against these two, so nothing turns on a float comparing equal.
+NEED_NUM, NEED_DEN = 3, 4          # 3/4 = 75%
+
+
+def attendance_maths(attended, held):
+    """The whole of the arithmetic, in one place, in integers.
+
+    `pct` is floored to one decimal and never rounded. 74.96% is not 75%, and a
+    number that rounds up across the threshold is the one lie this screen must
+    not tell -- a student would read it as safe and be refused the exam.
+
+    `can_miss` is the largest k with attended / (held + k) >= 3/4, i.e. how many
+    of the next classes in a row may be missed. It deliberately assumes nothing
+    about how many classes the semester holds: nobody has told this app when
+    the semester ends, so "you can miss 7 more this term" would be fiction.
+    What IS knowable from the data is the run of consecutive misses, and that is
+    what is said.
+
+    `must_attend` is the mirror for somebody already below: the smallest n with
+    (attended + n) / (held + n) >= 3/4. Also free of any semester total.
+
+        4a >= 3(h + k)        ->  k = floor((4a - 3h) / 3)
+        4(a + n) >= 3(h + n)  ->  n = 3h - 4a
+    """
+    a, h = int(attended), int(held)
+    ok = NEED_DEN * a >= NEED_NUM * h          # at or above 75%, exactly
+    return {
+        "attended": a,
+        "held": h,
+        # Floor, not round: attended*1000//held is tenths of a percent, dropped
+        # rather than nudged. 0 held has no percentage at all, and None says so
+        # instead of a 0% that reads as a failing student.
+        "pct": None if not h else (a * 1000 // h) / 10,
+        "ok": ok,
+        "can_miss": max(0, (NEED_DEN * a - NEED_NUM * h) // NEED_NUM),
+        "must_attend": max(0, NEED_NUM * h - NEED_DEN * a),
+    }
+
+
+def attendance_note(m):
+    """The consequence, in words, from the numbers above and nothing else.
+
+    Said on the server so the phone, the tests and any future screen all read
+    the same sentence, and so no screen can invent a cheerier one.
+
+    Calm on purpose. Below 75% is a number and a next step, not an alarm: the
+    student already knows it is bad, and what they need from this line is the
+    count of classes that fixes it.
+    """
+    if not m["held"]:
+        return "No classes marked yet."
+    if not m["ok"]:
+        n = m["must_attend"]
+        return ("Attend the next class to get back to 75%." if n == 1 else
+                f"Attend the next {n} classes in a row to get back to 75%.")
+    k = m["can_miss"]
+    if not k:
+        return "Miss the next class and you drop below 75%."
+    return ("You can miss one more class and stay at 75%." if k == 1 else
+            f"You can miss the next {k} classes and stay at 75%.")
+
+
+def db_attendance(conn, user_id, window=ATT_WINDOW):
+    """Everything the phone needs about attendance, on one read.
+
+    The per-subject totals cover every mark ever made; the marks and the
+    cancellations cover the last four weeks, which is what the catch-up screen
+    can reach. `today` is this machine's date rather than the handset's, for
+    the same reason /data already sends `now`: a phone whose clock is a day out
+    would otherwise offer to mark tomorrow.
+    """
+    today = conn.execute("select current_date").fetchone()[0]
+    # A cancelled class counts for nobody, so it leaves both sums -- the
+    # anti-join, not a filter on state. Rows stay: a cancellation can be undone
+    # and the mark underneath it is still what the student said.
+    totals = {
+        code: (present, held)
+        for code, present, held in conn.execute(
+            "select a.subject_code, "
+            "       count(*) filter (where a.state = 'present')::int, "
+            "       count(*)::int "
+            "  from attendance a "
+            "  left join cancelled_classes c "
+            "    on c.on_date = a.on_date and c.period = a.period "
+            "   and c.subject_code = a.subject_code "
+            " where a.profile_id = %s and c.on_date is null "
+            " group by a.subject_code", (user_id,))
+    }
+    # Every subject the student actually has, not only the ones they have
+    # marked -- a subject at 0 held has to be able to say "no classes marked
+    # yet" rather than be missing from the screen entirely.
+    codes = {c for (c,) in conn.execute(
+        "select distinct subject_code from timetable where profile_id = %s",
+        (user_id,))} | set(totals)
+    order = list(SUBJECTS)
+    subjects = []
+    for code in sorted(codes, key=lambda c: order.index(c) if c in SUBJECTS else 99):
+        m = attendance_maths(*totals.get(code, (0, 0)))
+        m["code"] = code
+        m["note"] = attendance_note(m)
+        subjects.append(m)
+    return {
+        "today": today.isoformat(),
+        "window": window,
+        "subjects": subjects,
+        "marks": [
+            {"date": d.isoformat(), "period": p, "code": code, "state": state}
+            for d, p, code, state in conn.execute(
+                "select on_date, period, subject_code, state from attendance "
+                "where profile_id = %s and on_date > current_date - %s "
+                "order by on_date, period", (user_id, window))
+        ],
+        # Class-wide, so this is the same list for everybody and is read by
+        # every member: a denominator that changed has to be able to say why.
+        "off": [
+            {"date": d.isoformat(), "period": p, "code": code, "reason": reason}
+            for d, p, code, reason in conn.execute(
+                "select on_date, period, subject_code, reason from cancelled_classes "
+                "where on_date > current_date - %s order by on_date, period",
+                (window,))
+        ],
+    }
+
+
+def _att_date(raw, today, window):
+    """One date off the wire, or a reason it is not one."""
+    try:
+        day = datetime.date.fromisoformat(str(raw))
+    except (TypeError, ValueError):
+        raise ValueError(f"{raw!r} is not a date")
+    if day > today:
+        raise ValueError("that class has not happened yet")
+    if (today - day).days > window:
+        raise ValueError("that is further back than this app keeps")
+    return day
+
+
+def db_mark_attendance(conn, user_id, marks):
+    """Write one tap, or a whole week of them. Returns rows changed.
+
+    A list rather than a single mark because catching up on a missed week is
+    the case this has to be fast for: "everything on Tuesday, present" is one
+    request and one transaction, not seven.
+
+    Retroactive by design -- people forget, and a marking screen that only
+    worked today would be filled in by nobody. The past is bounded by the same
+    window the read uses; the future is refused outright.
+
+    The subject comes from the student's own timetable, never from the request.
+    That is what stops a mark being filed under a subject the student was not
+    sitting in, and it is why a date with no class scheduled is refused rather
+    than silently written down.
+    """
+    today = conn.execute("select current_date").fetchone()[0]
+    clean = {}
+    for m in marks:
+        try:
+            period = int(m["period"])
+        except (KeyError, TypeError, ValueError):
+            raise ValueError("a mark needs a date and a period")
+        if not 1 <= period <= PERIODS:
+            raise ValueError(f"period {period} is not 1 to {PERIODS}")
+        state = m.get("state")
+        if state not in ATT_STATES and state != "clear":
+            raise ValueError(f"{state!r} is not present, absent or clear")
+        clean[(_att_date(m.get("date"), today, ATT_WINDOW), period)] = state
+
+    with conn.transaction():
+        for (day, period), state in sorted(clean.items()):
+            if state == "clear":
+                # Back to not-yet-marked, which is a real state and the one a
+                # mistap has to be able to get back to.
+                conn.execute(
+                    "delete from attendance where profile_id = %s "
+                    "and on_date = %s and period = %s", (user_id, day, period))
+                continue
+            row = conn.execute(
+                "select subject_code from timetable where profile_id = %s "
+                "and day = extract(isodow from %s::date)::int and period = %s",
+                (user_id, day, period)).fetchone()
+            if not row:
+                raise ValueError(
+                    f"you have no class in period {period} on {day.isoformat()}")
+            conn.execute(
+                "insert into attendance (profile_id, on_date, period, "
+                "subject_code, state) values (%s, %s, %s, %s, %s) "
+                "on conflict (profile_id, on_date, period) do update set "
+                "state = excluded.state, subject_code = excluded.subject_code, "
+                "marked_at = now()",
+                (user_id, day, period, row[0], state))
+    return len(clean)
+
+
+def db_set_cancelled(conn, user_id, day, period, code, off, reason=""):
+    """Call one class off for everybody, or put it back. Trusted only.
+
+    Trusted is enforced by the policy, not here: this runs on the caller's own
+    connection, so a student who reaches this function at all is refused by the
+    database.
+    """
+    today = conn.execute("select current_date").fetchone()[0]
+    try:
+        day = datetime.date.fromisoformat(str(day))
+    except (TypeError, ValueError):
+        raise ValueError(f"{day!r} is not a date")
+    # Bounded the same way a mark is, except forwards too: calling off
+    # tomorrow's lecture is the useful case, and a week's notice is as much as
+    # anybody ever gives.
+    if (day - today).days > 7:
+        raise ValueError("that is further ahead than this app keeps")
+    if (today - day).days > ATT_WINDOW:
+        raise ValueError("that is further back than this app keeps")
+    try:
+        period = int(period)
+    except (TypeError, ValueError):
+        raise ValueError("a class needs a period")
+    if not 1 <= period <= PERIODS:
+        raise ValueError(f"period {period} is not 1 to {PERIODS}")
+    if code not in SUBJECTS:
+        raise ValueError(f"unknown subject {code!r}")
+    if off:
+        conn.execute(
+            "insert into cancelled_classes (on_date, period, subject_code, "
+            "reason, set_by) values (%s, %s, %s, %s, %s) "
+            "on conflict (on_date, period, subject_code) do nothing",
+            (day, period, code, (reason or "")[:120], user_id))
+    else:
+        conn.execute(
+            "delete from cancelled_classes where on_date = %s and period = %s "
+            "and subject_code = %s", (day, period, code))
+    return {"date": day.isoformat(), "period": period, "code": code,
+            "off": bool(off)}
+
+
 def db_backfill(conn, library):
     """Register whatever is already on disk, once, in the admin's name.
 
@@ -4850,6 +5106,15 @@ def build_server(args):
                             # Campus is painted from what is already held.
                             out["announcements"] = db_announcements(
                                 conn, self.me["id"])
+                            # And attendance, on the same request: Home marks
+                            # today's classes and the subject screen shows the
+                            # number, and neither may cost a round trip of its
+                            # own. It is read on the caller's connection, so
+                            # the policy hands back their marks and nobody
+                            # else's -- this payload is never anyone's but the
+                            # person who asked for it.
+                            out["attendance"] = db_attendance(
+                                conn, self.me["id"])
                             if self.me["admin"]:
                                 out["pending"] = len(db_pending(conn))
                         except psycopg.Error as e:
@@ -4967,6 +5232,10 @@ def build_server(args):
                 return self.do_vote()
             if self.path == "/timetable":
                 return self.do_timetable()
+            if self.path == "/attendance":
+                return self.do_attendance()
+            if self.path == "/cancelled":
+                return self.do_cancelled()
             if self.path == "/announce":
                 return self.do_announce()
             if self.path == "/read":
@@ -5591,6 +5860,69 @@ def build_server(args):
             except Exception as e:
                 return self.reply(500, {"error": f"{type(e).__name__}: {e}"})
             return self.reply(200, {"saved": saved})
+
+        def do_attendance(self):
+            """Mark one class, or a day of them. Your own, and only your own.
+
+            Deliberately not in ROLE_REQUIRED: a mark is a private note a
+            student makes about themselves, not a privilege. Whose it is comes
+            from the session and never from the request, and the policy pins it
+            there again -- so the two ways to get this wrong, a forged
+            profile_id and a forgotten check, are both already shut.
+
+            The answer carries the whole attendance payload back, not just
+            "ok". Marking changes the percentage, the consequence sentence and
+            possibly the subject's whole standing, and the phone repainting
+            those from its own arithmetic is a second place for the maths to
+            live and disagree.
+            """
+            if not self.me:
+                return self.reply(404, {"error": "this server is running with --no-auth"})
+            try:
+                req = self.body(20000)
+                if req is None:
+                    return
+                marks = req.get("marks")
+                if not isinstance(marks, list):
+                    return self.reply(400, {"error": "expected a list of marks"})
+                with db(self.me["id"]) as conn:
+                    db_mark_attendance(conn, self.me["id"], marks)
+                    return self.reply(200, db_attendance(conn, self.me["id"]))
+            except ValueError as e:
+                return self.reply(400, {"error": str(e)})
+            except psycopg.errors.InsufficientPrivilege:
+                # The policy refused it: not approved, or a row that is not
+                # theirs. Either way the app has no screen for it.
+                return self.reply(403, {"error": "you can only mark your own attendance"})
+            except Exception as e:
+                return self.reply(500, {"error": f"{type(e).__name__}: {e}"})
+
+        def do_cancelled(self):
+            """Call one class off for the whole section, or put it back.
+
+            Trusted, and gated twice: the gate refused everybody else before
+            this was reached, and the write runs on the caller's own connection
+            where the policy has to allow it too.
+            """
+            if not self.me:
+                return self.reply(404, {"error": "this server is running with --no-auth"})
+            try:
+                req = self.body(4000)
+                if req is None:
+                    return
+                with db(self.me["id"]) as conn:
+                    db_set_cancelled(conn, self.me["id"], req.get("date"),
+                                     req.get("period"), req.get("code"),
+                                     bool(req.get("off")), req.get("reason"))
+                    out = db_attendance(conn, self.me["id"])
+            except ValueError as e:
+                return self.reply(400, {"error": str(e)})
+            except psycopg.errors.InsufficientPrivilege:
+                return self.reply(403, {"error": "calling a class off is for "
+                                                 "trusted members", "required": "trusted"})
+            except Exception as e:
+                return self.reply(500, {"error": f"{type(e).__name__}: {e}"})
+            return self.reply(200, out)
 
         def do_announce(self):
             """Post, edit, hide or restore one notice. Admins only.
