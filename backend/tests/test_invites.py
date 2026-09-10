@@ -1,3 +1,5 @@
+import psycopg
+import pytest
 from conftest import as_user, as_admin_connection, make_user
 
 
@@ -72,3 +74,25 @@ def test_invite_table_is_not_readable_by_members(db):
     )
     as_user(db, uid)
     assert db.execute("select count(*) from invites").fetchone()[0] == 0
+
+
+def test_the_function_itself_refuses_an_account_with_no_password(db):
+    """The handler's check_password shadows this on the only path the app uses,
+    which is exactly why the database needs its own: the guard exists to catch
+    a caller that never went through the handler, and nothing else proves it
+    would. A blank password must also not cost a use of the invite."""
+    code = seed_invite(db, code="NOPW")
+    uid = make_user(db)
+    as_user(db, uid)
+    # A savepoint, not a rollback: as_user's settings are transaction-local, so
+    # throwing the whole transaction away between attempts would leave
+    # auth.uid() null and the next two calls would be refused by the wrong
+    # guard -- the test would pass with the password check deleted.
+    for blank in (None, "", "   "):
+        db.execute("savepoint attempt")
+        with pytest.raises(psycopg.errors.RaiseException):
+            db.execute("select join_with_invite(%s, 'X', '9', null, %s)", (code, blank))
+        db.execute("rollback to savepoint attempt")
+    as_admin_connection(db)
+    assert db.execute(
+        "select uses from invites where code = %s", (code,)).fetchone()[0] == 0

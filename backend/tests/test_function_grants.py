@@ -48,3 +48,17 @@ def test_signup_rpc_is_reachable_by_a_brand_new_user(db):
     assert db.execute(
         "select join_with_invite('GRANT-CHECK', 'New Student', 'ROLL-1', null, 'a-real-password')"
     ).fetchone()[0] is True
+
+
+def test_only_the_password_taking_join_function_exists(db):
+    """`create or replace` with a new argument leaves the old arity standing
+    beside the new one, and here the old arity is the one that inserts a
+    profile with no password at all -- the claimable account 0013 exists to
+    abolish -- still granted to every authenticated role. 0010 already had this
+    happen once, which is why 0013 carries an explicit drop. The next migration
+    that replaces this function will reintroduce it silently."""
+    rows = db.execute(
+        "select pg_get_function_identity_arguments(oid) from pg_proc "
+        "where proname = 'join_with_invite'").fetchall()
+    assert [r[0] for r in rows] == [
+        "p_code text, p_name text, p_roll_no text, p_phone text, p_password text"]

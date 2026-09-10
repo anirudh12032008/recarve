@@ -671,6 +671,22 @@ def test_only_a_row_marked_roll_login_may_sign_in_with_a_roll_number(server):
     assert row_of("J7") == ("granite-window-8", False)
     assert login(port, "J7", "J7", client="10.1.0.5")[0] == 403
 
+    # And the state the flag is the whole point of: a null password nobody
+    # marked. J7 above is refused by having a password at all, so it would read
+    # the same with the column deleted. This row is the only one that asks the
+    # flag anything. It is reachable: roll_login defaults false and 0013's
+    # backfill was one-shot, so any later `update profiles set password = null`
+    # -- by hand on the live database, or in a migration -- lands here.
+    with psycopg.connect(DB_URL, autocommit=True) as conn:
+        uid = make_user(conn)
+        conn.execute(
+            "insert into profiles (id, name, roll_no, status, role, password, "
+            "roll_login) values (%s, 'Unmarked', 'U9', 'approved', 'student', "
+            "null, false)", (uid,))
+    assert row_of("U9") == (None, False)
+    assert login(port, "U9", "U9", client="10.1.0.12")[0] == 403, \
+        "a null password is not on its own a licence to use the roll number"
+
 
 def test_setting_a_password_spends_the_roll_number_door_for_good(server):
     port, _ = server

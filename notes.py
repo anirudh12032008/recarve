@@ -3436,7 +3436,6 @@ input{width:100%;padding:.7rem .8rem;margin:0 0 .9rem;font:inherit;border:1px so
 input:focus{outline:2px solid var(--accent);outline-offset:-1px;border-color:transparent}
 button{min-height:44px;width:100%;font:inherit;font-weight:600;line-height:1;border:0;
   border-radius:10px;background:var(--accent);color:var(--accent-fg)}
-button[disabled]{opacity:.5}
 .err{color:var(--err);font-size:.88rem;min-height:1.2em;margin:.7rem 0 0}
 .row{display:flex;align-items:center;justify-content:space-between;gap:1rem;padding:.75rem 0;
   border-bottom:1px solid var(--line)}
@@ -3473,6 +3472,15 @@ button.adm{background:var(--admin);color:var(--admin-fg)}
    contrast that matters, and the ring is 14:1 on the ground either way. */
 button.ghost{background:transparent;color:var(--admin);
   box-shadow:inset 0 0 0 1px var(--admin)}
+/* Below .adm and .ghost so it wins over both -- same specificity, later rule.
+   Not opacity: the JS swaps the label for "Joining…"/"Logging in…"/"Saving…"
+   when it disables the button, so the one moment the word carries information
+   is the one moment a 50% fade made it 2.24:1 -- near-white on pale blue, in
+   daylight, on the phone this form is actually filled in on. Greying it says
+   "not pressable" just as plainly and keeps the word readable: --mut on --bg
+   is 5.23:1 light and 7.17:1 dark, the ratio .hint and the input borders
+   already carry. */
+button[disabled]{background:var(--mut);color:var(--bg);box-shadow:none}
 .counts{display:flex;gap:.5rem;margin:0 0 1.3rem}
 .counts div{flex:1;min-width:0;padding:.55rem .6rem;border:1px solid var(--line);
   border-radius:10px}

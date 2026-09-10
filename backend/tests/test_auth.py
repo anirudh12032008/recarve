@@ -617,6 +617,23 @@ def test_a_roll_number_can_only_be_registered_once(server):
             "select uses from invites where code = 'LETMEIN'").fetchone()[0] == before
 
 
+def test_the_same_roll_number_in_another_case_is_the_same_roll_number(server):
+    """The table's uniqueness and login's lookup have to mean the same thing.
+
+    `roll_no text unique` was case-sensitive; db_login matches on
+    upper(roll_no). While those two disagreed, 24u001 could be registered
+    beside Asha's 24U001, and which of the two rows answered for that roll
+    number was decided by physical row order -- so the second account's
+    password logged in as the first account's roll, and the real owner, typing
+    their own correct password, was refused. Do this to the admin's roll and
+    the class loses its admin.
+    """
+    status, body, cookie = join(server, "Not Asha", "24u001")
+    assert (status, cookie) == (409, None), \
+        "a roll number in another case is a second account on the same roll"
+    assert body == {"error": "that roll number is already registered"}
+
+
 def test_the_number_is_stored_in_one_form_however_it_was_typed(server):
     assert join(server, "Ishan", "24U012", phone="098765 43211")[0] == 200
     with psycopg.connect(DB_URL, autocommit=True) as conn:

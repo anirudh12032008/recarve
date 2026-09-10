@@ -87,6 +87,34 @@ def test_every_pair_on_the_gate_is_readable_in_both_themes(mode, fg, bg):
     assert ratio >= 4.5, f"{fg} on {bg} in {mode} is only {ratio:.2f}:1"
 
 
+def test_the_button_still_reads_while_it_says_what_it_is_doing():
+    """Every one of these screens swaps the label -- "Joining…", "Logging in…",
+    "Saving…" -- in the same statement that disables the button. That word is a
+    live status message, not the text of an inactive control, and WCAG's
+    exemption for disabled controls does not cover it. opacity:.5 composited it
+    to 2.24:1 in light and 2.53:1 in dark: the one moment the label carries
+    information was the one moment it was hardest to read.
+    """
+    css = rule("button[disabled]")
+    assert "opacity" not in css, "a fade takes the progress word down with it"
+    fg = re.search(r"color:var\((--[\w-]+)\)", css).group(1)
+    bg = re.search(r"background:var\((--[\w-]+)\)", css).group(1)
+    for mode, tokens in (("light", LIGHT), ("dark", DARK)):
+        ratio = contrast(tokens[fg], tokens[bg])
+        assert ratio >= 4.5, f"the progress label is {ratio:.2f}:1 in {mode}"
+
+
+def test_the_disabled_rule_outranks_the_two_that_paint_admin_buttons():
+    """button[disabled], button.adm and button.ghost all weigh 0,1,1, so the
+    only thing deciding which paints a disabled Approve is source order. Above
+    them, .adm keeps its ink slab and .ghost keeps its transparent background
+    and the disabled state is invisible on the one screen where every button
+    changes somebody's role."""
+    for painted in ("button.adm{", "button.ghost{"):
+        assert CSS.index(painted) < CSS.index("button[disabled]{"), \
+            f"{painted[:-1]} comes later and wins"
+
+
 # ------------------------------------------------------------------- type
 
 
@@ -150,13 +178,17 @@ def test_a_name_with_no_spaces_in_it_cannot_push_the_gate_sideways():
 # --------------------------------------------------------- the join form
 
 
-def test_the_form_asks_for_the_four_things_and_shows_the_fifth():
+def test_the_form_asks_for_the_five_things_and_shows_the_sixth():
     body = notes.join_body()
-    for field in ('id="nm"', 'id="roll"', 'id="ph"', 'id="code"'):
+    for field in ('id="nm"', 'id="roll"', 'id="ph"', 'id="code"', 'id="pw"'):
         assert field in body, f"{field} is not on the form"
     assert 'id="sec" value="Section I" readonly' in body, \
         "there is one section; a box you can type in invites the wrong one"
+    # A box that is rendered and never read is the same as no box: the handler
+    # sees a blank password and refuses every join in the class with a 400,
+    # while the form still looks right in the page source.
     assert "phone: $('ph').value" in body, "collected but never sent"
+    assert "password: $('pw').value" in body, "collected but never sent"
 
 
 def test_the_number_field_opens_a_keypad_and_does_not_zoom_the_page():
