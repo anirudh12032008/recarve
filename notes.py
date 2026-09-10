@@ -4662,7 +4662,7 @@ GATE_PAGE = r"""<!doctype html>
      ordinary blue action, grey stays neutral, and a solid slab of ink is what
      only an admin can press. The same pair marks the same thing inside the
      app, on the Me tab, so the treatment is one thing in two files. */
-  --admin:#232733;--admin-fg:#fcfcfd}
+  --admin:#232733;--admin-fg:#fcfcfd;--surface:#f2f3f7}
 @media (prefers-color-scheme:dark){
   /* The accent goes pale in the dark, so what sits on it has to go dark too --
      white on it is 2.8:1. Same pair PAGE carries. */
@@ -4670,7 +4670,7 @@ GATE_PAGE = r"""<!doctype html>
     --accent:#7a92ff;--accent-fg:#0f1115;--err:#e5484d;
     /* Ink inverts with the paper: a near-black slab on a near-black ground is
        not a slab. Same job, same contrast, opposite end of the ramp. */
-    --admin:#dfe4f0;--admin-fg:#0f1115}}
+    --admin:#dfe4f0;--admin-fg:#0f1115;--surface:#171a20}}
 *{box-sizing:border-box}
 body{margin:0;min-height:100dvh;display:grid;place-items:center;padding:24px;background:var(--bg);
   color:var(--fg);font:16px/1.5 -apple-system,BlinkMacSystemFont,"Segoe UI",system-ui,sans-serif;
@@ -4756,11 +4756,78 @@ button[disabled]{background:var(--mut);color:var(--bg);box-shadow:none}
    a rule you learn from an error message is a rule you learn twice. --mut is
    5.24:1 on the ground in both themes. */
 .hint{color:var(--mut);font-size:.8rem;margin:0 0 .8rem}
+/* ---- The landing, which only the join screen carries. A cold tap off a
+   WhatsApp link used to arrive at a bare form: five boxes, no answer to what
+   the class is being asked to join. The form did not change -- it is now the
+   bottom of a page that shows the thing first. Every other body in this file
+   is still the plain card, so none of these class names appears on them. */
+.mark{font-size:1.25rem;font-weight:700;letter-spacing:-.02em}
+.mark span{color:var(--mut);font-weight:400;margin-left:.5rem;font-size:.875rem}
+h1.big{font-size:1.6rem;line-height:1.25;margin:1.3rem 0 .4rem;max-width:20ch}
+.sub{color:var(--mut);margin:0 0 1.3rem;max-width:34ch}
+/* Showing the transformation beats describing it: it is the one thing this
+   app does that a classmate cannot picture from a sentence. */
+.demo{border:1px solid var(--line);border-radius:14px;overflow:hidden}
+.side{padding:.8rem .95rem}
+.side+.side{border-top:1px solid var(--line)}
+.cap{font-size:.75rem;color:var(--mut);margin:0 0 .45rem}
+.said,.became{font-size:.9rem;line-height:1.55}
+/* The English words inside the Hindi are the point of the example, not
+   emphasis -- em is the markup, grey is the reading. */
+.said em{font-style:normal;color:var(--mut)}
+.became b{display:block;font-size:.8rem;color:var(--mut);font-weight:500;margin:0 0 .25rem}
+.became ul{margin:0;padding-left:1.1rem}
+.became li{margin:.2rem 0}
+/* A formula is one token with no spaces in it, on a 360px screen. */
+.became code{font-size:.85rem;background:var(--surface);padding:1px 5px;border-radius:5px;
+  overflow-wrap:anywhere}
+.arrow{display:flex;align-items:center;gap:.55rem;padding:.55rem .95rem;
+  background:var(--surface);font-size:.78rem;color:var(--mut)}
+.arrow i{flex:none;width:6px;height:6px;border-radius:50%;background:var(--accent)}
+.pts{margin:1.4rem 0 0;padding:0;list-style:none}
+.pts li{display:flex;gap:.7rem;padding:.6rem 0;border-bottom:1px solid var(--line);
+  font-size:.95rem}
+.pts li:last-child{border-bottom:0}
+.pts b{flex:none;width:1.4em;color:var(--accent);font-weight:700}
+.join{border-top:1px solid var(--line);margin-top:1.6rem;padding-top:1.5rem}
+.join h2{font-size:1.25rem;margin:0 0 .25rem}
 </style>
 <main>__BODY__</main>
 """
 
-JOIN_BODY = r"""<h1>recarve</h1>
+JOIN_BODY = r"""<div class="mark">recarve<span>Section I</span></div>
+<h1 class="big">Every lecture, written down.</h1>
+<p class="sub">One person records the class. Everyone gets the notes.</p>
+
+<div class="demo">
+  <div class="side">
+    <p class="cap">What the professor said</p>
+    <div class="said">&ldquo;&#2340;&#2379; &#2360;&#2348;&#2360;&#2375; &#2346;&#2361;&#2354;&#2375;
+      &#2361;&#2350; <em>limit</em> &#2325;&#2366; <em>concept</em> &#2360;&#2350;&#2333;&#2375;&#2306;&#2327;&#2375;,
+      &#2347;&#2367;&#2352; <em>power rule</em> &#2342;&#2375;&#2326;&#2375;&#2306;&#2327;&#2375;&rdquo;</div>
+  </div>
+  <div class="arrow"><i></i> transcribed and written up, about ten minutes later</div>
+  <div class="side">
+    <p class="cap">What you get</p>
+    <div class="became">
+      <b>Key points</b>
+      <ul>
+        <li>The limit is the basis of the derivative</li>
+        <li>Power rule: <code>d/dx x&#8319; = n&#183;x&#8319;&#8315;&#185;</code></li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<ul class="pts">
+  <li><b>1</b><span>Hindi and English mixed, the way your professors actually talk.</span></li>
+  <li><b>2</b><span>Practice questions from every lecture, answers hidden until you want them.</span></li>
+  <li><b>3</b><span>Everyone&rsquo;s notes and slides in one place, per subject &mdash; not scattered
+  across chats.</span></li>
+</ul>
+
+<div class="join">
+<h2>Join your section</h2>
 __INVITED__
 <p>__INTRO__</p>
 <form id="f">
@@ -4779,6 +4846,8 @@ __INVITED__
   <button>Join</button>
   <p class="err" id="err"></p>
 </form>
+<p class="hint">An admin approves you before you can read the class&rsquo;s notes.</p>
+</div>
 <p><a href="/login">Already joined? Log in</a></p>
 <script>
 const $ = i => document.getElementById(i);

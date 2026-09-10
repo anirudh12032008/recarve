@@ -419,6 +419,30 @@ def test_a_stranger_gets_the_join_screen_and_nothing_else(server):
         assert code == 403, f"{method} {path} answered {code} to a stranger"
 
 
+def test_a_stranger_is_told_what_they_are_joining(server):
+    """The link arrives in WhatsApp with no context around it. Before this the
+    front door was five boxes and the word recarve: nothing on the page said
+    what the class does, so the framing is only real if it reaches somebody
+    with no session, on the same GET that carries the form."""
+    status, body, _ = call(server, "GET", "/")
+    assert status == 200
+    assert "Every lecture, written down." in body
+    assert "One person records the class. Everyone gets the notes." in body
+    # The demonstration, which is the one thing a sentence cannot do: what was
+    # said, and what came back out of it.
+    assert "What the professor said" in body and "What you get" in body
+    assert "power rule" in body and "the basis of the derivative" in body
+    for point in ("Hindi and English mixed", "Practice questions from every lecture",
+                  "one place, per subject"):
+        assert point in body, f"the landing lost: {point}"
+    # And it is a wrapper, not a replacement -- the form it wraps still works.
+    assert 'id="f"' in body and 'id="roll"' in body and 'id="pw"' in body
+
+    # Only the front door carries it. /login is for somebody already sold.
+    _, login, _ = call(server, "GET", "/login")
+    assert "Every lecture, written down." not in login
+
+
 def test_a_wrong_invite_code_does_not_get_in(server):
     status, body, cookie = join(server, "Mallory", "24U999", code="NOPE")
     assert status == 403 and cookie is None
