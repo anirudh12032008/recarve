@@ -39,13 +39,11 @@ AUDIO = b"ID3\x04\x00" + b"not really audio, but bytes are bytes" * 20
 
 def wipe():
     with psycopg.connect(DB_URL, autocommit=True) as conn:
-        for table in ("votes", "reports", "lectures", "materials", "timetable",
-                      "profiles", "invites"):
-            try:
-                conn.execute(f"delete from {table}")
-            except psycopg.Error:
-                pass
-        conn.execute("delete from auth.users")
+        # Cascade, rather than a list of tables to keep in step with the
+        # migrations: every new table hanging off a member used to break this
+        # wipe with a foreign key violation the first time it held a row.
+        conn.execute("truncate auth.users cascade")
+        conn.execute("delete from invites")
         conn.execute("insert into invites (code, expires_at) "
                      "values ('LETMEIN', now() + interval '1 day')")
 
