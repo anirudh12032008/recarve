@@ -1659,8 +1659,12 @@ function classRow(date, slot, mayCancel) {
   // The state in words as well as in the pressed button. Colour and shape
   // alone leave it unreadable to whoever cannot see one of them, and this row
   // is the only place the state is ever shown.
+  // The reason rides with it when there is one: a cancellation moves the
+  // denominator of everybody in the section, and whoever it moved has to be
+  // able to read why without asking somebody.
   el.querySelector('small').textContent = 'Period ' + slot.period + ' · '
-    + (gone ? 'Class off' : m ? STATE_WORD[m.state] : 'Not marked');
+    + (gone ? 'Class off' + (gone.reason ? ' · ' + gone.reason : '')
+            : m ? STATE_WORD[m.state] : 'Not marked');
   if (s) el.querySelector('.name').onclick = () => go('classes', s.code);
   el.appendChild(markCtl(date, slot, mayCancel));
   return el;

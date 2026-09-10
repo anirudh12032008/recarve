@@ -580,6 +580,26 @@ def test_calling_a_class_off_is_trusted_and_lands_on_everybody(server):
     assert mark(port, cookies["Asha"], day, 2, "clear")[0] == 200
 
 
+def test_the_reason_a_class_was_called_off_reaches_the_section(server):
+    """It is stored and made class-readable on purpose: the denominator it
+    moves is everybody's, so everybody has to be able to read why."""
+    port, cookies = server
+    day = monday(port, cookies["Cy"])
+    assert call(port, "POST", "/cancelled",
+                {"date": day, "period": 2, "code": "CY1107", "off": True,
+                 "reason": "lab shifted to Friday"},
+                cookie=cookies["Cy"])[0] == 200
+
+    for who in ("Asha", "Bilal", "Cy"):
+        assert att(port, cookies[who])["off"] == [
+            {"date": day, "period": 2, "code": "CY1107",
+             "reason": "lab shifted to Friday"}]
+
+    assert call(port, "POST", "/cancelled",
+                {"date": day, "period": 2, "code": "CY1107", "off": False},
+                cookie=cookies["Cy"])[0] == 200
+
+
 def test_a_stranger_has_no_attendance_to_mark(server):
     """Neither route is in PUBLIC_PATHS, so the gate refuses both before any
     handler sees them."""

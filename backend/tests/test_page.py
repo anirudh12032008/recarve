@@ -1115,6 +1115,15 @@ assert.ok(wrote(['textContent', 'Period 3 · Not marked']));
 assert.ok(wrote(['textContent', 'Period 2 · Class off']));
 assert.ok(wrote(['()', 'aria-pressed', 'true']), 'the marked state is on its button too');
 
+// And when there is a reason for the cancellation, it is on that row. It is
+// stored, it is class-readable on purpose and it rides in every payload; a row
+// that drops it makes the student ask somebody why their denominator moved.
+ATT.off[0].reason = 'lab shifted to Friday';
+writes = []; route();
+assert.ok(wrote(['textContent', 'Period 2 · Class off · lab shifted to Friday']),
+          'the reason a class was called off belongs on the row');
+ATT.off[0].reason = '';
+
 // attended / held and the true percentage, straight off the server -- the page
 // does none of this arithmetic itself.
 assert.ok(wrote(['textContent', '9 of 12 · 75.0%']));
@@ -1514,8 +1523,6 @@ def test_attendance_is_wired_to_the_server_and_never_guesses_a_state():
         # A whole day in one request: catching up on a week must not be one
         # round trip per period.
         "{marks: todo.map(sl => ({date, period: sl.period, state: 'present'}))}",
-        # The state in words on the row, so it is never carried by colour alone.
-        "(gone ? 'Class off' : m ? STATE_WORD[m.state] : 'Not marked')",
     ):
         assert wiring in notes.PAGE, f"attendance not wired: {wiring}"
 
