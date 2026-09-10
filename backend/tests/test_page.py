@@ -1505,7 +1505,7 @@ def test_the_composer_is_a_url_like_every_other_level():
     assert "edit.onclick = () => go('campus', a.id);" in notes.PAGE
     assert "const compose = tab === 'campus' ? parts[1] || null : null;" in notes.PAGE
     assert "composing" not in notes.PAGE, "no variable may outlive the URL"
-    assert "lback.hidden = !s && !view.edit && !view.compose;" in notes.PAGE
+    assert "lback.hidden = !s && !view.edit && !view.att && !view.compose;" in notes.PAGE
     compose = re.search(r"function renderCompose\(\) \{.*?\n\}", notes.PAGE, re.S).group(0)
     assert "history.back()" in compose, "Cancel is a step back, like every other one"
 

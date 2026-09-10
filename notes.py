@@ -503,6 +503,10 @@ PAGE = r"""<!doctype html>
      the handful of things only an admin may press. 14.5:1 either way round. */
   --admin:#232733; --admin-fg:#fcfcfd;
   --sat:62%; --lum:38%; --chip-lum:94%; --chip-text:28%;
+  /* Below 75% attendance. Not red: red is an error the app made, and this is
+     a fact about a term that is still going. Amber, and never carrying the
+     state on its own -- the words "Below 75%" sit in it. */
+  --warn:#7a4a00; --warn-bg:#fdf1dc;
   --tap:44px;
 }
 @media (prefers-color-scheme:dark){
@@ -513,6 +517,7 @@ PAGE = r"""<!doctype html>
     /* Ink inverts with the paper: near-black on near-black is not a slab. */
     --admin:#dfe4f0; --admin-fg:#0f1115;
     --sat:48%; --lum:70%; --chip-lum:22%; --chip-text:78%;
+    --warn:#f0bd6a; --warn-bg:#2b2114;
   }
 }
 *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
@@ -572,6 +577,10 @@ body.reading #read{display:block}
 .row .meta{font-size:13px;color:var(--mut);flex:none}
 .row .code{flex:none}
 .row a.name{text-decoration:none;color:inherit}
+/* A row that carries its own buttons cannot itself be one, so the name becomes
+   the tappable part. Stretched, so the whole height of the row still opens the
+   subject rather than a two-line strip in the middle of it. */
+.row button.name{padding:0;text-align:left;align-self:stretch}
 .blank{padding:64px 24px;text-align:center;color:var(--mut)}
 .blank p{margin:0 0 12px}
 .blank p:last-child{margin:0}
@@ -586,6 +595,39 @@ body.reading #read{display:block}
   background:color-mix(in srgb,var(--accent) 13%,transparent)}
 .vote:active{opacity:.7}
 .vote[disabled]{opacity:.45}
+
+/* ---- Attendance. Two buttons, and pressing neither is the third state.
+   Never a checkbox: an unticked box reads as "absent", and this app must not
+   say that on a student's behalf. The pressed one thickens its keyline as well
+   as filling, so the state survives a colourblind reader and a grey screen. */
+.mark{display:flex;gap:6px;flex:none}
+.mark button{width:var(--tap);height:var(--tap);border-radius:11px;
+  border:1px solid var(--line);background:var(--bg);color:var(--mut);
+  font-size:16px;line-height:1;display:flex;align-items:center;justify-content:center}
+.mark button[aria-pressed="true"]{border-width:2px;font-weight:700}
+.mark button.yes[aria-pressed="true"]{border-color:var(--accent);color:var(--accent);
+  background:color-mix(in srgb,var(--accent) 13%,transparent)}
+.mark button.no[aria-pressed="true"]{border-color:var(--fg);color:var(--fg);
+  background:var(--surface)}
+.mark button:active{opacity:.7}
+.mark button[disabled]{opacity:.45}
+/* A class that did not happen. Dashed, because it is a hole in the week and
+   not a thing anybody did. */
+.off{display:flex;align-items:center;flex:none;min-height:var(--tap);padding:0 12px;
+  border:1px dashed var(--line);border-radius:11px;font-size:13px;color:var(--mut)}
+/* Below 75%. One amber keyline and one word, in the calmest arrangement that
+   still cannot be missed -- the student already knows it is bad, and what they
+   need off this row is the number and the next step, not a siren. */
+.row.low .tick{background:var(--warn)}
+.flag{flex:none;padding:3px 9px;border-radius:7px;font-size:13px;font-weight:650;
+  background:var(--warn-bg);color:var(--warn)}
+/* The catch-up screen's one control. Native date input: the fastest picker on
+   a phone, nothing to download, and it already knows what a month looks like. */
+.dpick{display:flex;align-items:center;gap:12px;padding:10px 16px 0}
+.dpick label{font-size:13px;color:var(--mut)}
+.dpick input{flex:1;min-width:0;height:var(--tap);padding:0 12px;font:inherit;
+  font-size:16px;border:1px solid var(--line);border-radius:11px;
+  background:var(--surface);color:var(--fg)}
 .mine{margin:10px 16px 0;padding:16px;border-radius:12px;background:var(--surface)}
 .mine .score{font-size:26px;font-weight:700;letter-spacing:-.02em}
 .mine p{margin:5px 0 0;font-size:13px;color:var(--mut)}
@@ -1044,7 +1086,7 @@ const tabBtns = document.querySelectorAll('.tabs button');
 let current = null;                      // the note being read, or null
 // Which tab, and how deep inside it. Classes goes subject -> note; Home has
 // one level under it, the timetable editor.
-let view = {tab: 'home', code: null, title: null, edit: false};
+let view = {tab: 'home', code: null, title: null, edit: false, att: false};
 
 // What the server told us last, held so Home can draw itself without asking
 // for anything. All three arrive on the /data the page already fetches.
@@ -1282,19 +1324,43 @@ function todayBlock() {
     return block('Today', [start]);
   }
 
+  // Today's classes, markable where they already are. This is the screen a
+  // student opens between periods, so attendance is a tap on the row that is
+  // in front of them rather than a trip to a tab. What the row used to say --
+  // how many lectures the subject holds -- is the same string the Classes tab
+  // prints under every subject, one tap away; what it says instead is the one
+  // thing only this row can act on.
+  const date = attToday();
+  const slots = slotsOn(TT, day);
   const rows = [];
   for (const slot of slotsOn(TT, day)) {
-    const s = subjectOf(slot.code);
-    if (!s) continue;                          // a code the library dropped
-    const has = s.notes.length || s.uploads.length;
-    const b = line(s.name, 'Period ' + slot.period + ' · '
-                   + (has ? counts(s) : 'no notes yet'),
-                   document.createElement('button'), hue(slot.code));
-    b.appendChild(chip(slot.code));
-    b.onclick = () => go('classes', slot.code);
-    rows.push(b);
+    if (!subjectOf(slot.code)) continue;       // a code the library dropped
+    // No server, no marks: Home still has to draw today rather than offer a
+    // control that cannot save. Calling a class off is not offered here at all.
+    if (!ATT) {
+      const s = subjectOf(slot.code);
+      const has = s.notes.length || s.uploads.length;
+      const b = line(s.name, 'Period ' + slot.period + ' · '
+                     + (has ? counts(s) : 'no notes yet'),
+                     document.createElement('button'), hue(slot.code));
+      b.appendChild(chip(slot.code));
+      b.onclick = () => go('classes', slot.code);
+      rows.push(b);
+      continue;
+    }
+    rows.push(classRow(date, slot, false));
+  }
+  if (ATT) {
+    const all = allPresentRow(date, slots);
+    if (all) rows.push(all);
   }
   if (!rows.length) rows.push(quiet('No classes on ' + DAYS[day] + '.'));
+  if (ATT) {
+    const back = line('Catch up on another day', 'Mark a class you forgot',
+                      document.createElement('button'));
+    back.onclick = () => go('home', 'attendance');
+    rows.push(back);
+  }
   rows.push(edit);
   block('Today', rows);
 }
@@ -1458,6 +1524,208 @@ async function saveTimetable() {
   } catch (e) {
     busyDone('Could not save that: ' + e.message);
   }
+}
+
+// ---- ATTENDANCE ----------------------------------------------------------
+// 75% per subject is what MANIT actually checks before it lets you sit the
+// paper, so every number here is per subject and there is no overall figure at
+// all -- an average nobody is refused an exam over would only be comforting.
+//
+// THREE STATES, and the third one is the whole point: a period nobody has
+// marked is not present and not absent. It counts in neither half of the
+// fraction and the page never guesses one, because a silent "present" would
+// quietly hand a student a percentage that is wrong in the direction that
+// costs them the exam.
+//
+// WHERE IT LIVES, and why.
+//   Marking is on Home, on the classes Home already lists. That is the screen
+//   opened between periods with one hand, and a mark that costs a trip to
+//   another tab is a mark nobody makes.
+//   The NUMBER is with the subject, under Classes -- that is where you go when
+//   what you want to know is where you stand in Chemistry.
+//   Catching up on a week you forgot is its own level under Home, beside the
+//   timetable editor and reached the same way. It is a rarer job, it needs a
+//   date picker, and a date picker has no business on the ten-second screen.
+// Nothing here appears anywhere else: not on the board, not in the admin
+// panel, not in anybody else's /data. It is a private note to yourself.
+let ATT = null;                // the server's attendance payload; null until it answers
+let attDate = null;            // which day the catch-up screen is showing
+
+const attOf = code => (ATT && ATT.subjects.find(a => a.code === code)) || null;
+// 'YYYY-MM-DD' in the phone's own timezone. toISOString() is UTC and would
+// hand back yesterday for everybody east of Greenwich before half past five in
+// the morning -- which is every student this app has.
+const isoDay = d => d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0')
+                    + '-' + String(d.getDate()).padStart(2, '0');
+// The server's date, not the handset's: it is the date the marks are stamped
+// with, and a phone a day out would otherwise offer to mark tomorrow.
+const attToday = () => (ATT && ATT.today) || isoDay(new Date());
+// Midday, so no daylight-saving shift can move the date across a midnight.
+const dayOfISO = s => new Date(s + 'T12:00:00').getDay();
+const markAt = (date, period) =>
+  (ATT ? ATT.marks.find(m => m.date === date && m.period === period) : null);
+const offAt = (date, code, period) =>
+  (ATT ? ATT.off.find(o => o.date === date && o.period === period && o.code === code)
+       : null);
+const STATE_WORD = {present: 'Present', absent: 'Absent'};
+
+// Every write here answers with the whole attendance payload, so the page
+// never recomputes a percentage of its own. One place does that arithmetic and
+// it is the server; two would eventually disagree, and this is the number a
+// student plans a term around.
+async function attPost(url, payload, btns) {
+  btns.forEach(b => { b.disabled = true; });
+  try {
+    const r = await fetch(url, {
+      method: 'POST', headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify(payload),
+    });
+    const d = await r.json().catch(() => ({}));
+    if (!r.ok) throw new Error(d.error || 'could not save that');
+    ATT = d;
+    render();
+  } catch (e) {
+    btns.forEach(b => { b.disabled = false; });
+    busyDone(e.message);
+  }
+}
+
+// The control. Two buttons; pressing neither is the third state, and pressing
+// the one you are already in clears it -- which is the only way back to
+// not-yet-marked, and a mistap has to have one.
+function markCtl(date, slot, mayCancel) {
+  const gone = offAt(date, slot.code, slot.period);
+  if (gone) {
+    const el = document.createElement(mayCancel ? 'button' : 'span');
+    el.className = 'off';
+    el.textContent = 'Class off';
+    if (mayCancel) {
+      el.setAttribute('aria-label', 'Put period ' + slot.period + ' back');
+      el.onclick = () => attPost('/cancelled',
+        {date, period: slot.period, code: slot.code, off: false}, [el]);
+    }
+    return el;
+  }
+  const now = markAt(date, slot.period);
+  const box = document.createElement('div');
+  box.className = 'mark';
+  const btns = [];
+  for (const [state, glyph, label] of [['present', '✓', 'Present'],
+                                       ['absent', '✕', 'Absent']]) {
+    const b = document.createElement('button');
+    b.className = state === 'present' ? 'yes' : 'no';
+    b.textContent = glyph;
+    b.setAttribute('aria-pressed', now && now.state === state ? 'true' : 'false');
+    b.setAttribute('aria-label',
+                   label + ' — period ' + slot.period + ', ' + slot.code);
+    b.onclick = () => attPost('/attendance', {marks: [{date, period: slot.period,
+      state: now && now.state === state ? 'clear' : state}]}, btns);
+    btns.push(b);
+    box.appendChild(b);
+  }
+  // Calling a class off is trusted, and it is offered only on the catch-up
+  // screen: three controls is one too many for the row you tap on the way into
+  // a lecture, and this is the rarer act by far.
+  if (mayCancel) {
+    const off = document.createElement('button');
+    off.className = 'no';
+    off.textContent = '–';
+    off.setAttribute('aria-label',
+                     'Period ' + slot.period + ' did not happen, for everybody');
+    off.onclick = () => attPost('/cancelled',
+      {date, period: slot.period, code: slot.code, off: true}, btns.concat(off));
+    box.appendChild(off);
+  }
+  return box;
+}
+
+// One class on one day: what it is, what it is marked as in words, and the
+// buttons. A div rather than a button around the lot, because a button inside
+// a button is not a thing any browser will give you -- so the name is the
+// tappable part and it still opens the subject.
+function classRow(date, slot, mayCancel) {
+  const s = subjectOf(slot.code);
+  const gone = offAt(date, slot.code, slot.period);
+  const m = markAt(date, slot.period);
+  const el = document.createElement('div');
+  el.className = 'row';
+  el.style.setProperty('--h', hue(slot.code));
+  el.innerHTML = '<i class="tick"></i>'
+               + '<button class="name"><b></b><small></small></button>';
+  el.querySelector('b').textContent = s ? s.name : slot.code;
+  // The state in words as well as in the pressed button. Colour and shape
+  // alone leave it unreadable to whoever cannot see one of them, and this row
+  // is the only place the state is ever shown.
+  el.querySelector('small').textContent = 'Period ' + slot.period + ' · '
+    + (gone ? 'Class off' : m ? STATE_WORD[m.state] : 'Not marked');
+  if (s) el.querySelector('.name').onclick = () => go('classes', s.code);
+  el.appendChild(markCtl(date, slot, mayCancel));
+  return el;
+}
+
+// One tap for a whole day. Somebody catching up on a week they forgot has six
+// of these to do, and twelve taps a day is the difference between filling it
+// in and giving up on it. Offered only where it saves something: one unmarked
+// class is already one tap.
+function allPresentRow(date, slots) {
+  const todo = slots.filter(sl => !offAt(date, sl.code, sl.period)
+                                  && !markAt(date, sl.period));
+  if (todo.length < 2) return null;
+  const b = line('Mark all ' + todo.length + ' present',
+                 'Then change the ones you missed',
+                 document.createElement('button'));
+  b.onclick = () => attPost('/attendance',
+    {marks: todo.map(sl => ({date, period: sl.period, state: 'present'}))}, [b]);
+  return b;
+}
+
+// attended / held, the true percentage, and what it means -- every one of them
+// straight off the server, which is the only place that arithmetic happens.
+// The percentage is already floored to a tenth there: 74.96% arrives as 74.9
+// and is printed as 74.9, because a number that rounds up across the threshold
+// would read as safe to somebody who is not.
+function attRow(a, showCode) {
+  const el = line(a.held ? a.attended + ' of ' + a.held + ' · '
+                           + a.pct.toFixed(1) + '%'
+                         : 'Nothing marked yet',
+                  a.note, document.createElement('button'), hue(a.code));
+  el.onclick = () => go('classes', a.code);
+  if (a.held && !a.ok) {
+    el.classList.add('low');
+    const f = document.createElement('span');
+    f.className = 'flag';
+    f.textContent = 'Below 75%';
+    el.appendChild(f);
+  }
+  if (showCode) el.appendChild(chip(a.code));
+  return el;
+}
+
+// The level under Home: one day at a time, any day in the window, so a week
+// that was forgotten can be filled in after the fact. People forget, and a
+// screen that only marked today would be filled in by nobody.
+function renderAttendance() {
+  if (!ATT) return block('Attendance', [quiet('Checking your attendance…')]);
+  const date = attDate || attToday();
+  const box = document.createElement('div');
+  box.className = 'dpick';
+  box.innerHTML = '<label for="adate">Day</label><input type="date" id="adate">';
+  const input = box.querySelector('input');
+  input.value = date;
+  input.max = attToday();                 // tomorrow has not happened yet
+  input.min = isoDay(new Date(new Date(attToday() + 'T12:00:00').getTime()
+                              - ATT.window * 86400000));
+  input.onchange = () => { attDate = input.value || attToday(); render(); };
+  nav.appendChild(box);
+
+  const day = dayOfISO(date);
+  const slots = slotsOn(TT, day);
+  const rows = slots.map(sl => classRow(date, sl, mayAdd()));
+  const all = allPresentRow(date, slots);
+  if (all) rows.push(all);
+  if (!rows.length) rows.push(quiet('No classes on ' + DAYS[day] + '.'));
+  block(DAYS[day], rows);
+  block('Every subject', ATT.subjects.map(a => attRow(a, true)));
 }
 
 // ---- THE NOTICE BOARD. Read on Campus, surfaced on Home. ----------------
@@ -1797,6 +2065,17 @@ function renderSubjects() {
 
 // LEVEL 2: one subject, grouped.
 function renderSubject(s) {
+  // Where you stand in THIS subject, at the top, because 75% is per subject
+  // and this is the screen you open when the subject is what you are worried
+  // about. attended / held, the true percentage, and the one sentence that
+  // says what to do about it.
+  const a = attOf(s.code);
+  if (a) {
+    const mark = line('Mark your attendance', 'Today, or a day you forgot',
+                      document.createElement('button'));
+    mark.onclick = () => go('home', 'attendance');
+    block('Attendance', [attRow(a, false), mark]);
+  }
   // Revising a whole course, not one lecture: every note's questions in one run.
   const all = quizItems(s, null);
   if (all.length) {
@@ -2051,9 +2330,9 @@ function render() {
   // Home keeps the brand; every other tab names itself in the same header,
   // and #lback -- the only back button at this depth -- appears only where
   // there is a level above to climb to.
-  brand.hidden = view.tab !== 'home' || view.edit;
-  shead.hidden = view.tab === 'home' && !view.edit;
-  lback.hidden = !s && !view.edit && !view.compose;
+  brand.hidden = view.tab !== 'home' || view.edit || view.att;
+  shead.hidden = view.tab === 'home' && !view.edit && !view.att;
+  lback.hidden = !s && !view.edit && !view.att && !view.compose;
   scode.hidden = !s;
   q.hidden = view.tab !== 'classes';
   tools.hidden = view.tab !== 'me';
@@ -2062,8 +2341,9 @@ function render() {
   jobsBox.hidden = view.tab === 'home';
   // The one back button at this depth serves two levels now, so it has to say
   // which one it climbs to.
-  lback.textContent = view.edit ? '‹ Home' : (view.compose ? '‹ Campus' : '‹ Subjects');
-  lback.setAttribute('aria-label', view.edit ? 'Back to Home'
+  lback.textContent = (view.edit || view.att) ? '‹ Home'
+    : (view.compose ? '‹ Campus' : '‹ Subjects');
+  lback.setAttribute('aria-label', (view.edit || view.att) ? 'Back to Home'
     : (view.compose ? 'Back to the notice board' : 'Back to all subjects'));
   if (s) {
     scode.textContent = s.code;
@@ -2071,6 +2351,7 @@ function render() {
   }
   sname.textContent = s ? s.name
     : view.edit ? 'Your timetable'
+    : view.att ? 'Your attendance'
     : view.compose ? (view.compose === 'new' ? 'New notice' : 'Edit notice')
     : TAB_TITLE[view.tab];
   tabBtns.forEach(b => {
@@ -2079,6 +2360,7 @@ function render() {
   });
   if (needle) renderSearch(needle);
   else if (view.edit) renderTimetable();
+  else if (view.att) renderAttendance();
   else if (view.tab === 'home') renderHome();
   else if (view.tab === 'campus') renderCampus();
   else if (view.tab === 'me') renderMe();
@@ -2112,11 +2394,14 @@ function route() {
   // The timetable editor is a level inside Home and therefore a URL, so back
   // climbs out of it exactly like every other step.
   const edit = tab === 'home' && parts[1] === 'timetable';
+  // And so is catching up on attendance, for the same reason.
+  const att = tab === 'home' && parts[1] === 'attendance';
   // So is the composer, for the same reason: without a URL the back gesture
   // dropped what was typed and left the Campus tab stuck on an empty form.
   const compose = tab === 'campus' ? parts[1] || null : null;
-  view = {tab, code: s ? s.code : null, title: title || null, edit, compose};
+  view = {tab, code: s ? s.code : null, title: title || null, edit, att, compose};
   if (!edit) draft = null;      // walking away drops an unsaved week, not TT
+  if (!att) attDate = null;     // and re-opening it starts on today, not last week
   const n = s && title ? s.notes.find(x => x.title === title) : null;
   if (n) openNote(n, s); else closeRead();
   render();
@@ -2386,6 +2671,7 @@ async function refresh() {
     BOARD = null;
     // Everything Home needs rides on this one request.
     TT = d.timetable || [];
+    ATT = d.attendance || null;
     PENDING = d.pending || 0;
     ANN = d.announcements || [];
     NOW = d.now || NOW;
