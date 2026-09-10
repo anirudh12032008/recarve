@@ -5055,6 +5055,15 @@ def serve(args):
         print("stopped", file=sys.stderr)
 
 
+class Unreachable(Exception):
+    """The server could not be talked to. Says nothing about the lecture.
+
+    The distinction is the whole point: a lecture that failed has earned one of
+    its three attempts, and the third deletes the recording. A wifi blip has
+    earned nothing, so it must never be reported as a failure.
+    """
+
+
 def worker(args):
     """Take lectures off a recarve server, transcribe them here, send them back.
 
@@ -5085,28 +5094,67 @@ def worker(args):
             data=json.dumps(body).encode() if body is not None else None,
             headers={"X-Worker-Token": token,
                      **({"Content-Type": "application/json"} if body is not None else {})})
-        with urllib.request.urlopen(req, timeout=args.timeout) as r:
-            return json.loads(r.read() or b"{}")
+        try:
+            with urllib.request.urlopen(req, timeout=args.timeout) as r:
+                return json.loads(r.read() or b"{}")
+        except urllib.error.HTTPError:
+            raise                    # the server answered; that is not the uplink
+        except OSError as e:
+            raise Unreachable(f"{type(e).__name__}: {e}") from e
 
-    def download(job):
+    def sweep(job):
+        """Everything this lecture left behind. Named for the id, so one glob
+        catches the audio, the checkpoint, a half-download and the notes."""
+        for leftover in work.glob(f"{job['id']}-*"):
+            leftover.unlink(missing_ok=True)
+
+    def download(job, dest):
         """The audio, straight to disk. An hour of lecture does not go through
         memory on the way past."""
-        dest = work / job["name"]
         if dest.exists():
             log(f"{job['name']} is already here, reusing it", "worker", 1)
             return dest
         req = urllib.request.Request(f"{base}/worker/audio?id={job['id']}",
                                      headers={"X-Worker-Token": token})
-        part = dest.with_suffix(dest.suffix + ".part")
-        with urllib.request.urlopen(req, timeout=args.timeout) as r, part.open("wb") as fh:
-            shutil.copyfileobj(r, fh, 262144)
+        part = Path(f"{dest}.part")
+        try:
+            with urllib.request.urlopen(req, timeout=args.timeout) as r, part.open("wb") as fh:
+                shutil.copyfileobj(r, fh, 262144)
+        except urllib.error.HTTPError:
+            raise
+        except OSError as e:
+            part.unlink(missing_ok=True)
+            raise Unreachable(f"{type(e).__name__}: {e}") from e
         part.replace(dest)
         log(f"{job['name']}  {mb(dest.stat().st_size)}", "download", 1)
         return dest
 
+    def send_back(finished):
+        """The one post worth retrying by hand: an hour of Whisper and a notes
+        call already paid for must not die with the uplink."""
+        for delay in (0, args.poll, args.poll * 2, args.poll * 4):
+            time.sleep(delay)
+            try:
+                return call("/worker/done", json.loads(finished.read_text()))
+            except Unreachable as e:
+                last = e
+                log(f"could not send it back ({e}); trying again", "worker", 1)
+        raise last
+
     def run(job):
-        audio = download(job)
-        checkpoint = work / f"{audio.stem}.partial.json"
+        # Keyed on the lecture id, never on the filename: two phones both call
+        # it "New Recording 1.m4a", and a stale file from a lecture that failed
+        # weeks ago must not be mistaken for this one's audio.
+        audio = work / f"{job['id']}-{job['name']}"
+        checkpoint = Path(f"{audio}.partial.json")
+        finished = Path(f"{audio}.done.json")
+        if finished.exists():
+            log(f"{job['title']} was already transcribed here; sending it back",
+                "worker", 1)
+            send_back(finished)
+            sweep(job)
+            return
+        download(job, audio)
         t0 = time.time()
 
         def progress(done_sec, total_sec, lang):
@@ -5143,9 +5191,12 @@ def worker(args):
         log(f"{usage.input_tokens} in / {usage.output_tokens} out  ~${cost:.4f}  "
             f"{args.notes_model}", "notes", 1)
 
-        call("/worker/done", {"id": job["id"], "transcript": transcript, "notes": notes})
-        audio.unlink(missing_ok=True)
-        checkpoint.unlink(missing_ok=True)
+        # On disk before it is sent, so the uplink dying now costs a post and
+        # not the lecture.
+        finished.write_text(json.dumps(
+            {"id": job["id"], "transcript": transcript, "notes": notes}))
+        send_back(finished)
+        sweep(job)
         log(f"{job['title']} sent back", "worker", 1)
 
     log(f"worker on {base}, files in {work}", "ready")
@@ -5157,8 +5208,7 @@ def worker(args):
             # The server restarting, the wifi gone, the tunnel down. None of
             # these is worth a restart by hand, so it is a longer sleep and
             # another try -- the same path an empty queue takes.
-            log(f"{base} unreachable ({type(e).__name__}: {e}); "
-                f"trying again in {hhmm(wait)}", "worker")
+            log(f"{base} unreachable ({e}); trying again in {hhmm(wait)}", "worker")
             time.sleep(wait)
             wait = min(wait * 2, args.max_poll)
             continue
@@ -5172,11 +5222,21 @@ def worker(args):
             run(job)
         except KeyboardInterrupt:
             raise
+        except Unreachable as e:
+            # Not the lecture's fault, so it may not be charged an attempt --
+            # the third one deletes the recording. Say nothing and let the
+            # claim go stale; the transcript and notes wait in the workdir and
+            # the next claim of this lecture just posts them.
+            log(f"{job['title']}: {e}; leaving the claim to go stale", "worker")
+            time.sleep(wait)
+            wait = min(wait * 2, args.max_poll)
         except Exception as e:
             reason = f"{type(e).__name__}: {e}"
             log(f"{job['title']}: {reason}", "worker-fail")
             try:
-                call("/worker/failed", {"id": job["id"], "error": reason})
+                if not call("/worker/failed",
+                            {"id": job["id"], "error": reason}).get("retrying"):
+                    sweep(job)   # nothing will ever claim it again
             except Exception as e2:
                 # Unreported, so the claim simply goes stale and the queue
                 # hands it out again. Nothing is lost either way.
