@@ -507,7 +507,17 @@ PAGE = r"""<!doctype html>
      a fact about a term that is still going. Amber, and never carrying the
      state on its own -- the words "Below 75%" sit in it. */
   --warn:#7a4a00; --warn-bg:#fdf1dc;
+  /* One red, and the only red. #e5484d was 3.7:1 on the light ground and
+     failing the words it was carrying. This clears 4.5 on BOTH grounds an
+     error is ever set on here -- 5.4:1 on the paper and 4.95:1 on a surface,
+     which is where a failed transcription says so. It lightens in the dark
+     for the same reason every other ink does. */
+  --err:#c62b41;
   --tap:44px;
+  /* 4 (.rows) + 12 (.row) + 3 (.tick) + 12 (gap): where a row's words begin.
+     Anything standing in for a row lines up with them, and everything that is
+     not a row lines up with the section heading at 16. */
+  --hang:31px;
 }
 @media (prefers-color-scheme:dark){
   :root{
@@ -518,6 +528,7 @@ PAGE = r"""<!doctype html>
     --admin:#dfe4f0; --admin-fg:#0f1115;
     --sat:48%; --lum:70%; --chip-lum:22%; --chip-text:78%;
     --warn:#f0bd6a; --warn-bg:#2b2114;
+    --err:#ef5f63;
   }
 }
 *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
@@ -541,7 +552,7 @@ body.reading #read{display:block}
   border-bottom:1px solid var(--line);
   padding:max(10px,env(safe-area-inset-top)) 16px 10px;
 }
-.brand{display:flex;align-items:baseline;gap:8px;margin-bottom:10px}
+.brand{display:flex;align-items:baseline;gap:8px;min-height:var(--tap);margin-bottom:6px}
 .brand b{font-size:20px;letter-spacing:-.015em;font-weight:700}
 .brand span{font-size:13px;color:var(--mut)}
 #q{
@@ -559,11 +570,14 @@ body.reading #read{display:block}
 }
 .group h2{display:inline;margin:0 0 0 9px;font-size:13px;font-weight:500;color:var(--mut)}
 .shead{display:flex;align-items:center;gap:9px;min-height:var(--tap);margin-bottom:6px}
-.shead h2{margin:0;font-size:15px;font-weight:500;color:var(--mut);
-  white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+/* The screen's name, at the weight a screen's name is. It ellipsises rather
+   than wraps: at this depth the code chip beside it already says which
+   subject, so the tail of a long name is the cheapest thing on the row. */
+.shead h2{margin:0;font-size:20px;font-weight:700;letter-spacing:-.015em;
+  color:var(--fg);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .sect{margin:0;padding:20px 16px 2px;font-size:13px;font-weight:600;
   letter-spacing:.05em;text-transform:uppercase;color:var(--mut)}
-.rows{padding:6px 8px 0}
+.rows{padding:6px 4px 0}
 .row{
   display:flex;align-items:center;gap:12px;width:100%;
   min-height:var(--tap);padding:11px 12px;border-radius:11px;
@@ -571,19 +585,38 @@ body.reading #read{display:block}
 }
 .row:active{background:var(--surface)}
 .row .tick{width:3px;align-self:stretch;border-radius:2px;background:hsl(var(--h) var(--sat) var(--lum));flex:none}
+.row.plain .tick{background:var(--line)}
 .row .name{flex:1;min-width:0}
 .row .name b{display:block;font-weight:600}
 .row .name small{display:block;font-size:13px;color:var(--mut)}
 .row .meta{font-size:13px;color:var(--mut);flex:none}
 .row .code{flex:none}
 .row a.name{text-decoration:none;color:inherit}
+@media (hover:hover){
+  .row:hover{background:var(--surface)}
+  .rank:hover{background:color-mix(in srgb,var(--surface) 60%,transparent)}
+  .tabs button:hover{background:var(--surface)}
+  .days button:hover:not([aria-current]){background:color-mix(in srgb,var(--fg) 8%,var(--surface))}
+  .vote:hover,.mark button:hover,.dpick .step:hover:not([disabled]){border-color:var(--mut)}
+  .dock button:hover,.qdock button:hover{filter:brightness(.96)}
+}
 /* A row that carries its own buttons cannot itself be one, so the name becomes
    the tappable part. Stretched, so the whole height of the row still opens the
    subject rather than a two-line strip in the middle of it. */
 .row button.name{padding:0;text-align:left;align-self:stretch}
-.blank{padding:64px 24px;text-align:center;color:var(--mut)}
-.blank p{margin:0 0 12px}
+.blank{margin:16px;padding:22px 20px;border-radius:14px;background:var(--surface);
+  border:1px solid var(--line);color:var(--mut);font-size:14px;line-height:1.6}
+.blank p{margin:0 0 10px}
 .blank p:last-child{margin:0}
+/* The first line is the answer -- "Nothing on the notice board yet" -- and the
+   rest is why and what to do about it. Said in weight, so the answer is read
+   first whether or not the paragraph under it ever is. */
+.blank p:first-child{margin-bottom:7px;font-size:16px;line-height:1.45;
+  font-weight:650;color:var(--fg)}
+/* Reaching for something and not getting it is not the same state as not
+   having it yet, and it must not be dressed as one. */
+.blank.bad{border-color:var(--err);color:var(--fg)}
+.blank.bad p:first-child{color:var(--err)}
 
 /* One vote per person, so this is a two-state toggle and not a counter you can
    lean on. The count sits inside the control: what you are pressing and what
@@ -600,7 +633,7 @@ body.reading #read{display:block}
    Never a checkbox: an unticked box reads as "absent", and this app must not
    say that on a student's behalf. The pressed one thickens its keyline as well
    as filling, so the state survives a colourblind reader and a grey screen. */
-.mark{display:flex;gap:6px;flex:none}
+.mark{display:flex;gap:8px;flex:none}
 .mark button{width:var(--tap);height:var(--tap);border-radius:11px;
   border:1px solid var(--line);background:var(--bg);color:var(--mut);
   font-size:16px;line-height:1;display:flex;align-items:center;justify-content:center}
@@ -615,10 +648,18 @@ body.reading #read{display:block}
    not a thing anybody did. */
 .off{display:flex;align-items:center;flex:none;min-height:var(--tap);padding:0 12px;
   border:1px dashed var(--line);border-radius:11px;font-size:13px;color:var(--mut)}
-/* Below 75%. One amber keyline and one word, in the calmest arrangement that
-   still cannot be missed -- the student already knows it is bad, and what they
-   need off this row is the number and the next step, not a siren. */
-.row.low .tick{background:var(--warn)}
+/* attended / held / the percentage. The one figure on this screen somebody
+   opened this screen for, so it leads the row rather than sharing its weight
+   with "Edit your timetable". Tabular, so a column of them does not wobble. */
+.row.att .name b{font-size:20px;font-weight:650;letter-spacing:-.012em;
+  font-variant-numeric:tabular-nums;line-height:1.3}
+/* Below 75%. The number in amber and the word beside it, in the calmest
+   arrangement that still cannot be missed -- the student already knows it is
+   bad, and what they need off this row is the figure and the next step, not a
+   siren. It is on the NUMBER and never on the tick: the tick is the subject's
+   own colour and EE1108's is amber, so a healthy EE1108 and a failing CY1107
+   read identically the moment the state borrows that bar. */
+.row.low .name b{color:var(--warn)}
 .flag{flex:none;padding:3px 9px;border-radius:7px;font-size:13px;font-weight:650;
   background:var(--warn-bg);color:var(--warn)}
 /* The day picker, shared by the day view and the catch-up screen. Native date
@@ -664,15 +705,17 @@ body.reading #read{display:block}
 .rank .pos{flex:none;width:2.6em;font-size:13px;color:var(--mut);
   font-variant-numeric:tabular-nums}
 .rank .name{flex:1;min-width:0}
-.rank .name b{display:block;font-weight:600}
-.rank .name small{display:block;font-size:13px;color:var(--mut)}
+.rank .name b,.rank .name small{display:block;
+  white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.rank .name b{font-weight:600}
+.rank .name small{font-size:13px;color:var(--mut)}
 /* Earned, not decorative: only shown from Regular up, so a word here means
    somebody did the work. A keyline and the page's own ink, no medal. */
 .rank .lvl{flex:none;padding:3px 8px;border-radius:7px;font-size:13px;
   font-weight:650;border:1px solid var(--line);color:var(--mut)}
 .rank .pts{flex:none;min-width:2.4em;text-align:right;font-size:20px;
   font-weight:650;font-variant-numeric:tabular-nums}
-.rank.you{background:var(--surface)}
+.rank.you{background:var(--surface);box-shadow:inset 3px 0 0 var(--accent)}
 .rank.you .pos,.rank.you .pts{color:var(--accent)}
 
 /* ---- The notice board. Ruled entries, not another stack of rounded cards:
@@ -729,6 +772,7 @@ body.reading #read{display:block}
 /* Somebody's typing, drawn as typing: pre-wrap keeps their line breaks and
    textContent is what puts it there. Nothing in this block is ever parsed. */
 .said{margin:0;font-size:16px;white-space:pre-wrap;overflow-wrap:anywhere}
+.dbt>.said{font-weight:600;line-height:1.5}
 .dbt .meta{margin:5px 0 0;font-size:13px;color:var(--mut)}
 .ans{display:flex;gap:10px;align-items:flex-start;
   margin:14px 0 0 2px;padding:0 0 0 13px;border-left:2px solid var(--line)}
@@ -748,9 +792,10 @@ body.reading #read{display:block}
 .askbox textarea{width:100%;min-height:5.5em;font-size:16px;line-height:1.6;
   padding:11px 12px;border:1px solid var(--line);border-radius:11px;
   background:var(--surface);color:var(--fg);font-family:inherit;resize:vertical}
-.askbox .err{margin:8px 0 0;font-size:13px;color:#e5484d;min-height:1.2em}
-.askbox button{min-height:var(--tap);padding:0 18px;border-radius:11px;
-  background:var(--accent);color:var(--accent-fg);font-size:16px;font-weight:500}
+.askbox .err{margin:8px 0 0;font-size:13px;color:var(--err);min-height:1.2em}
+.askbox button{display:block;width:100%;min-height:var(--tap);padding:0 18px;
+  border-radius:11px;background:var(--accent);color:var(--accent-fg);
+  font-size:16px;font-weight:600}
 .askbox button:active{opacity:.75}
 
 /* The composer: a title, a body, and whether it sits at the top. */
@@ -764,7 +809,7 @@ body.reading #read{display:block}
 .compose .pinrow{display:flex;align-items:center;gap:11px;min-height:var(--tap);
   margin-top:14px;font-size:16px;color:var(--fg)}
 .compose .pinrow input{width:22px;height:22px;min-height:0;flex:none;accent-color:var(--accent)}
-.compose .err{margin:10px 0 0;font-size:13px;color:#e5484d;min-height:1.2em}
+.compose .err{margin:10px 0 0;font-size:13px;color:var(--err);min-height:1.2em}
 .compose .go{display:flex;gap:8px;margin-top:6px}
 .compose .go button{flex:1;min-height:var(--tap);border-radius:11px;background:var(--bg);
   border:1px solid var(--line);font-size:16px;font-weight:500}
@@ -774,7 +819,7 @@ body.reading #read{display:block}
 .pform label{display:block;font-size:13px;color:var(--mut);margin:14px 0 5px}
 .pform input{width:100%;min-height:var(--tap);font-size:16px;padding:0 12px;
   border:1px solid var(--line);border-radius:11px;background:var(--bg);color:var(--fg)}
-.pform .err{margin:10px 0 0;font-size:13px;color:#e5484d;min-height:1.2em}
+.pform .err{margin:10px 0 0;font-size:13px;color:var(--err);min-height:1.2em}
 .pform .go{display:flex;gap:8px;margin-top:14px}
 .pform .go button{flex:1;min-height:var(--tap);border-radius:11px;background:var(--bg);
   border:1px solid var(--line);font-size:16px;font-weight:500}
@@ -800,8 +845,8 @@ body.reading #read{display:block}
 #lock b{display:block;font-size:16px;font-weight:650;margin-bottom:5px}
 
 .rtop{display:flex;align-items:center;gap:6px}
-.back{display:flex;align-items:center;gap:5px;height:var(--tap);padding:0 10px 0 4px;
-  margin-left:-4px;font-size:16px;color:var(--accent);font-weight:500}
+.back{display:flex;align-items:center;gap:4px;height:var(--tap);padding:0 8px 0 4px;
+  margin-left:-4px;font-size:16px;color:var(--accent);font-weight:500;flex:none}
 .rtop .code{margin-left:auto}
 /* Four sizes only -- 26/20/16/13, roughly a 1.25 step. h3 separates itself by
    weight and colour rather than a fifth size that would read as body text. */
@@ -837,7 +882,11 @@ details>:not(summary){padding:0 14px}
   flex:1;min-height:var(--tap);border-radius:11px;background:var(--surface);
   font-size:16px;font-weight:500;display:flex;align-items:center;justify-content:center;
 }
-.dock button.primary{background:var(--accent);color:var(--accent-fg)}
+.dock button.primary{background:var(--accent);color:var(--accent-fg);font-weight:650}
+/* Share, Download and Print are things you might do to a note; Practice is the
+   thing you opened it to do. They stay full-size targets and step back a
+   little in weight so the primary is the one the eye lands on. */
+.dock button:not(.primary){color:var(--mut);font-size:15px}
 /* Below .top's 5: it is placed in document coordinates, so a scroll can
    carry it into the sticky header, where it used to paint over the back
    button and eat the tap meant for it. */
@@ -874,13 +923,14 @@ body:has(#ask.on) #fab{display:none}
 #sheet label{display:block;font-size:13px;color:var(--mut);margin:14px 0 6px}
 #sheet select,#sheet .opt{width:100%;min-height:var(--tap);font-size:16px;border-radius:11px;
   border:1px solid var(--line);background:var(--surface);color:var(--fg);padding:0 12px}
-#sheet .opt{display:flex;align-items:center;gap:11px;margin-top:9px;text-align:left}
+#sheet .opt{display:flex;flex-wrap:wrap;align-items:center;gap:0 11px;
+  padding:9px 12px;margin-top:9px;text-align:left;line-height:1.4}
 #sheet .opt b{font-weight:600}
-#sheet .opt span{color:var(--mut);font-size:13px}
+#sheet .opt span{flex:1 0 100%;color:var(--mut);font-size:13px}
 #rec{margin-top:14px;padding:16px;border-radius:12px;background:var(--surface);text-align:center;display:none}
 #rec.on{display:block}
 #rec .time{font-size:26px;font-weight:700;font-variant-numeric:tabular-nums}
-#rec .dot{display:inline-block;width:11px;height:11px;border-radius:50%;background:#e5484d;
+#rec .dot{display:inline-block;width:11px;height:11px;border-radius:50%;background:var(--err);
   margin-right:8px;animation:pulse 1.4s infinite}
 @keyframes pulse{50%{opacity:.25}}
 @media (prefers-reduced-motion:reduce){#rec .dot{animation:none}}
@@ -889,12 +939,13 @@ body:has(#ask.on) #fab{display:none}
 #prog .bar{height:10px;border-radius:5px;background:var(--surface);overflow:hidden}
 #prog .fill{height:100%;width:0;background:var(--accent);transition:width .18s linear}
 #prog .txt{margin-top:9px;font-size:13px;color:var(--mut);text-align:center}
-#prog.err .fill{background:#e5484d}
+#prog.err .fill{background:var(--err)}
 .job .bar{height:4px;border-radius:2px;background:var(--line);margin-top:6px;overflow:hidden}
 .job .bar i{display:block;height:100%;background:var(--accent);width:0;transition:width .3s}
 .job .col{flex:1;min-width:0}
-#logbtn{width:100%;margin-top:10px;min-height:var(--tap);border-radius:11px;
-  background:var(--surface);font-size:13px;color:var(--mut)}
+#logbtn{width:100%;min-height:var(--tap);border-radius:11px;
+  font-size:13px;font-weight:500;color:var(--mut);text-align:left}
+#logbtn:active{background:var(--surface)}
 #logbox{display:none;margin-top:8px;padding:12px;border-radius:11px;background:var(--surface);
   font:12px/1.5 ui-monospace,SFMono-Regular,Menlo,monospace;white-space:pre;
   overflow-x:auto;max-height:44vh;overflow-y:auto}
@@ -903,8 +954,8 @@ body:has(#ask.on) #fab{display:none}
 .job{display:flex;align-items:center;gap:11px;padding:11px 12px;margin-top:8px;
   border-radius:11px;background:var(--surface);font-size:16px}
 .job .st{font-size:13px;color:var(--mut);margin-left:auto;text-align:right}
-.job.failed{border:1px solid #e5484d}
-.job.failed .st{color:#e5484d}
+.job.failed{box-shadow:inset 3px 0 0 var(--err)}
+.job.failed .st{color:var(--err);font-weight:650}
 .spin{width:14px;height:14px;border:2px solid var(--line);border-top-color:var(--accent);
   border-radius:50%;animation:spin .8s linear infinite;flex:none}
 @keyframes spin{to{transform:rotate(360deg)}}
@@ -950,7 +1001,7 @@ body.reading .tabs{display:none}
 #nav{padding-bottom:calc(142px + env(safe-area-inset-bottom))}
 
 /* ---- Home: a plain line of prose where a row would lie. -------------- */
-.quiet{padding:10px 20px;margin:0;font-size:13px;color:var(--mut)}
+.quiet{padding:10px 16px 10px var(--hang);margin:0;font-size:13px;color:var(--mut)}
 
 /* ---- The timetable editor. One day at a time, eight native selects: the
    iOS wheel is the fastest subject picker on a phone and it costs nothing to
@@ -1277,14 +1328,8 @@ function inked(row) {
   return row;
 }
 
-function blank(text) {
-  const p = document.createElement('p');
-  p.className = 'blank';
-  p.textContent = text;
-  nav.appendChild(p);
-}
-
 // An honest empty screen: what will be here, and that it is not here yet.
+// The first line is the answer and is set as one; everything after it is why.
 function saying(...lines) {
   const el = document.createElement('div');
   el.className = 'blank';
@@ -1300,7 +1345,9 @@ function saying(...lines) {
 // contributions screen both wanted this and each had grown a copy.
 function line(main, sub, el, h) {
   el = el || document.createElement('div');
-  el.className = 'row';
+  // No subject behind it, no subject colour on it. inked() overwrites this
+  // wholesale, which is right: an admin row is marked as one instead.
+  el.className = h ? 'row' : 'row plain';
   el.style.setProperty('--h', h || 210);
   el.innerHTML = '<i class="tick"></i><span class="name"><b></b><small></small></span>';
   el.querySelector('b').textContent = main;
@@ -1418,7 +1465,7 @@ function todayBlock() {
     rows.push(back);
   }
   rows.push(edit);
-  block('Today', rows);
+  block('Today \u00b7 ' + DAYS[day], rows);
 }
 
 // 2. NEEDS YOU. Only what is actually waiting on a person: a transcription
@@ -1429,9 +1476,9 @@ function needsBlock() {
   if (PENDING) {
     const a = document.createElement('a');
     a.href = '/admin';
-    rows.push(line(PENDING === 1 ? 'One person is waiting to be let in'
-                                 : PENDING + ' people are waiting to be let in',
-                   'Tap to approve them', a));
+    rows.push(inked(line(PENDING === 1 ? 'One person is waiting to be let in'
+                                       : PENDING + ' people are waiting to be let in',
+                         'Tap to approve them', a)));
   }
   block('Needs you', rows);
 }
@@ -1806,6 +1853,7 @@ function attRow(a, showCode) {
                          : 'Nothing marked yet',
                   a.note, document.createElement('button'), hue(a.code));
   el.onclick = () => go('classes', a.code);
+  if (a.held) el.classList.add('att');
   if (a.held && !a.ok) {
     el.classList.add('low');
     const f = document.createElement('span');
@@ -1834,7 +1882,7 @@ function renderAttendance() {
   const all = allPresentRow(date, slots);
   if (all) rows.push(all);
   if (!rows.length) rows.push(quiet('No classes on ' + DAYS[day] + '.'));
-  block(DAYS[day], rows);
+  block(dayName(date), rows);
   block('Every subject', ATT.subjects.map(a => attRow(a, true)));
 }
 
@@ -2134,6 +2182,7 @@ async function renderCampus() {
   heading('Who has contributed');
   windowPicker();
   const box = document.createElement('div');
+  box.className = 'mine';
   nav.appendChild(box);
   nav.appendChild(quiet('Clubs and events will live here too, next to the '
     + 'notice board above. Nothing is made up: this fills with what your own '
@@ -2148,8 +2197,9 @@ async function renderCampus() {
       BOARD = d;
     } catch (e) {
       if (mine !== painted) return;
-      box.className = 'blank';
-      box.textContent = 'The class board needs the server. Run: notes.py serve';
+      failed(box, 'The class board needs the server.',
+             'Nothing answered. If this is the Mac that runs the class library, '
+             + 'start it with: notes.py serve');
       return;
     }
   }
@@ -2286,7 +2336,9 @@ function renderSubject(s) {
   const rev = revisionOf(s);
   block('Revision sheet', rev ? [noteRow(rev, s)] : []);
   if (!s.notes.length && !s.uploads.length) {
-    blank('Nothing in ' + s.code + ' yet. Tap + to record a class or add slides.');
+    saying('Nothing in ' + s.code + ' yet.',
+           'Tap + to record a class or to add slides you already have. It files '
+           + 'itself here, and the notes come back when the Mac has made them.');
   }
 }
 
@@ -2388,7 +2440,9 @@ async function renderMe() {
     if (!r.ok) throw new Error();
     d = await r.json();
   } catch (e) {
-    box.textContent = 'Your profile needs the server. Run: notes.py serve';
+    failed(box, 'Your profile needs the server.',
+           'Nothing answered. If this is the Mac that runs the class library, '
+           + 'start it with: notes.py serve');
     return;
   }
   // Not just "are we still on this tab": a second paint of this same tab
@@ -2472,9 +2526,12 @@ async function renderMe() {
   block('Classes you recorded', d.recordings.map(r => line(
     r.title, r.subject + ' · ' + (r.status === 'done' ? 'notes ready' : r.status))));
   if (!d.uploads.length && !d.recordings.length) {
-    blank('Nothing from you yet. '
-          + (d.role === 'student' ? 'Trusted members add the notes and the recordings.'
-                                  : 'Tap + to record a class or add your slides.'));
+    saying('Nothing from you yet.',
+           d.role === 'student'
+             ? 'Trusted members add the notes and the recordings. Everything '
+               + 'they add is yours to read, search, practise from and upvote.'
+             : 'Tap + to record a class or add your slides. Whatever you add '
+               + 'shows up here, with what the class made of it.');
   }
 }
 
@@ -2503,7 +2560,10 @@ function renderSearch(needle) {
     files.forEach(u => rows.appendChild(fileRow(u, s)));
     nav.append(g, rows);
   }
-  if (!shown) blank('Nothing matches that. Try a subject code like CY1107.');
+  if (!shown) saying('Nothing matches that. Try a subject code like CY1107.',
+                     'This reads every note and every transcript in the library, '
+                     + 'not only their titles \u2014 so a word you remember the '
+                     + 'professor saying will find the lecture it was said in.');
 }
 
 // Bumped by every paint. renderMe is the one screen that has to wait on a
@@ -2981,6 +3041,18 @@ let held = false;   // a deliberate slow call owns the strip; job news waits
 function waiting(el, msg) {
   el.innerHTML = '<div class="wait"><i></i></div><p class="waitmsg"></p>';
   el.querySelector('.waitmsg').textContent = msg;
+}
+
+// The same three lines every screen that fetches has to write when it cannot:
+// what did not happen, in the shape the empty states already use, and never a
+// bare grey sentence flush against the edge of the phone.
+function failed(box, what, how) {
+  box.className = 'blank bad';
+  box.innerHTML = '';
+  const a = document.createElement('p'), b = document.createElement('p');
+  a.textContent = what;
+  b.textContent = how;
+  box.append(a, b);
 }
 
 function busy(msg, hold) {
