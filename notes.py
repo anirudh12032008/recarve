@@ -1306,7 +1306,10 @@ function markSeen(now) {
 // and the institute PDF's columns are ambiguous enough that a guessed one
 // would quietly file lectures under the wrong subject.
 function todayBlock() {
-  const day = dayOf(new Date());
+  // The server's day when there is a server, because the marks written from
+  // this block are stamped with the server's date. A handset a few hours out
+  // would otherwise list Sunday's classes and file them under Monday.
+  const day = ATT ? dayOfISO(ATT.today) : dayOf(new Date());
   if (TT === null) return block('Today', [quiet('Checking your timetable…')]);
 
   const edit = line('Edit your timetable', 'Add or change a period',

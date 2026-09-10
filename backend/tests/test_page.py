@@ -1072,6 +1072,83 @@ assert.ok(!wrote(['className', 'compose']), 'the composer is admin-only here too
 location.hash = '#campus'; route();
 ROLE = null; ANN = [];
 
+// ---- ATTENDANCE. Three states, and the page never guesses one. ----
+assert.equal(ATT, null, 'there is no attendance until the server sends some');
+// An earlier check answered /data with an empty library, which emptied DATA.
+// Put the two subjects back: what is under test here is the marking, and
+// Home only lists a class whose subject the library knows about.
+DATA.length = 0;
+DATA.push({code: 'MC1101', name: 'Mathematics 1', notes: [], uploads: []},
+          {code: 'CY1107', name: 'Chemistry', notes: [], uploads: []});
+ATT = {today: '2026-09-07', window: 28,          // that date is a Monday
+  subjects: [
+    {code: 'MC1101', attended: 9, held: 12, pct: 75, ok: true, can_miss: 0,
+     must_attend: 0, note: 'Miss the next class and you drop below 75%.'},
+    {code: 'CY1107', attended: 7, held: 10, pct: 70, ok: false, can_miss: 0,
+     must_attend: 2,
+     note: 'Attend the next 2 classes in a row to get back to 75%.'}],
+  marks: [{date: '2026-09-07', period: 1, code: 'MC1101', state: 'present'}],
+  off: [{date: '2026-09-07', period: 2, code: 'CY1107', reason: ''}]};
+TT = [{day: 1, period: 1, code: 'MC1101'}, {day: 1, period: 2, code: 'CY1107'},
+      {day: 1, period: 3, code: 'MC1101'}];
+
+// The date is the server's, never the handset's: it is the one the marks are
+// stamped with. And it is never built with toISOString(), which is UTC and
+// hands back yesterday for everybody in India before half past five.
+assert.equal(attToday(), '2026-09-07');
+assert.equal(isoDay(new Date(2026, 8, 7, 0, 30)), '2026-09-07');
+assert.equal(dayOfISO('2026-09-07'), 1, 'the server said Monday');
+
+// A level inside Home, so it is a URL and back climbs out of it like any other.
+location.hash = '#home/attendance';
+writes = [];
+route();
+assert.equal(view.att, true, 'catching up is a level inside Home');
+assert.ok(wrote(['textContent', 'Your attendance']), 'and it names itself');
+assert.ok(wrote(['value', '2026-09-07']), 'it opens on the day the server calls today');
+assert.ok(wrote(['max', '2026-09-07']), 'and cannot reach a class that has not happened');
+
+// All three states said in WORDS on the row, not carried by colour or by which
+// button looks filled.
+assert.ok(wrote(['textContent', 'Period 1 · Present']));
+assert.ok(wrote(['textContent', 'Period 3 · Not marked']));
+assert.ok(wrote(['textContent', 'Period 2 · Class off']));
+assert.ok(wrote(['()', 'aria-pressed', 'true']), 'the marked state is on its button too');
+
+// attended / held and the true percentage, straight off the server -- the page
+// does none of this arithmetic itself.
+assert.ok(wrote(['textContent', '9 of 12 · 75.0%']));
+assert.ok(wrote(['textContent', '7 of 10 · 70.0%']));
+assert.ok(wrote(['textContent',
+                 'Attend the next 2 classes in a row to get back to 75%.']));
+// Below 75% carries a word. Never a colour on its own.
+assert.ok(wrote(['textContent', 'Below 75%']));
+
+// Marking is on Home, on the classes Home already lists: that is the screen a
+// student opens between periods, and a mark that costs a trip elsewhere is a
+// mark nobody makes.
+location.hash = '#home'; writes = []; route();
+assert.ok(wrote(['textContent', 'Period 1 · Present']),
+          "today's classes must be markable from Home");
+assert.ok(wrote(['textContent', 'Catch up on another day']));
+
+// The NUMBER is with the subject, because that is the screen you open when the
+// subject is what you are worried about.
+qvalue = '';                          // an earlier check left a search in the box
+location.hash = '#classes/MC1101'; writes = []; route();
+assert.ok(wrote(['textContent', '9 of 12 · 75.0%']),
+          'the per-subject number belongs with the subject');
+assert.ok(wrote(['textContent', 'Miss the next class and you drop below 75%.']));
+
+// No server, no marks: Home still draws today rather than offering a control
+// that cannot save anything.
+ATT = null;
+location.hash = '#home'; writes = []; route();
+assert.ok(!wrote(['textContent', 'Period 1 · Not marked']),
+          'a page with no server behind it offers no marking control');
+TT = [];
+
+
 })().catch(e => { console.error(e); process.exit(1); });
 """
 
@@ -1376,7 +1453,12 @@ def test_admin_only_controls_are_marked_the_same_way_in_both_files():
 @pytest.mark.parametrize("mode", ["light", "dark"])
 @pytest.mark.parametrize("fg,bg", [("--admin-fg", "--admin"), ("--admin", "--bg"),
                                    ("--mut", "--surface"), ("--accent", "--bg"),
-                                   ("--mut", "--bg")])
+                                   ("--mut", "--bg"),
+                                   # Below 75%. It is the one screen somebody
+                                   # reads while anxious, so the word in the
+                                   # amber has to be legible in both themes --
+                                   # on its own chip and on the page behind it.
+                                   ("--warn", "--warn-bg"), ("--warn", "--bg")])
 def test_the_ink_reads_in_both_themes(mode, fg, bg):
     """An inked slab, a muted lock label on the surface it sits on, and the
     accent it has to be told apart from. PAGE never had a contrast test at all;
@@ -1392,6 +1474,91 @@ def test_the_ink_reads_in_both_themes(mode, fg, bg):
     tokens = light if mode == "light" else {**light, **dark}
     ratio = contrast(tokens[fg], tokens[bg])
     assert ratio >= 4.5, f"{fg} on {bg} in {mode} is only {ratio:.2f}:1"
+
+
+def test_attendance_is_wired_to_the_server_and_never_guesses_a_state():
+    """The node stub swallows an onclick assigned to a proxy, so the checks
+    above build the controls and this is the other half: what pressing one
+    does, and what the page refuses to work out for itself."""
+    for wiring in (
+        # One route for a mark, one for a cancellation, and nothing else.
+        "attPost('/attendance', {marks: [{date, period: slot.period,",
+        "attPost('/cancelled',",
+        # Pressing the state you are already in clears it. Without this there
+        # is no way back to not-yet-marked and a mistap is permanent.
+        "state: now && now.state === state ? 'clear' : state}]}, btns)",
+        # A whole day in one request: catching up on a week must not be one
+        # round trip per period.
+        "{marks: todo.map(sl => ({date, period: sl.period, state: 'present'}))}",
+        # The state in words on the row, so it is never carried by colour alone.
+        "(gone ? 'Class off' : m ? STATE_WORD[m.state] : 'Not marked')",
+    ):
+        assert wiring in notes.PAGE, f"attendance not wired: {wiring}"
+
+    # Every write answers with the whole payload and the page adopts it whole.
+    # The alternative is the page doing this arithmetic too, and two places
+    # computing the number a student plans a term around will disagree.
+    post = re.search(r"async function attPost\(.*?\n\}", notes.PAGE, re.S).group(0)
+    assert "ATT = d;" in post and "render();" in post
+    # The row prints what the server sent and works nothing out. The
+    # percentage, the run of misses and the sentence all arrive made -- two
+    # places computing the number a student plans a term around will disagree,
+    # and only one of them is the one the database agrees with.
+    row = re.search(r"function attRow\(a, showCode\) \{.*?\n\}", notes.PAGE, re.S).group(0)
+    assert "a.pct.toFixed(1)" in row, "the server's floored figure, printed as it came"
+    for invented in ("/ a.held", "* 100", "0.75", "Math.round", "toFixed(0)"):
+        assert invented not in row, f"the row is recomputing attendance: {invented}"
+    assert "a.note" in row, "the consequence is the server's sentence, not one of ours"
+
+
+def test_attendance_rides_on_the_request_the_page_already_makes():
+    """Home marks today's classes and the subject screen prints the number.
+    Neither may add a round trip: this tab is opened between periods on mobile
+    data, and /data is already in flight."""
+    assert "ATT = d.attendance || null;" in notes.PAGE
+    # No GET of its own, ever. Only the two writes talk to a route at all.
+    assert notes.PAGE.count("fetch('/attendance'") == 0
+    assert notes.PAGE.count("attPost('/attendance'") == 2
+    home = re.search(r"\nfunction todayBlock\(\) \{.*?\n\}", notes.PAGE, re.S).group(0)
+    assert "await" not in home and "fetch" not in home
+
+
+def test_the_catch_up_screen_is_a_url_and_uses_the_platform_date_picker():
+    """A level inside Home, beside the timetable editor and reached the same
+    way, so back climbs out of it. The picker is the browser's own: it is the
+    fastest one on a phone and it costs nothing to ship."""
+    for wiring in ("const att = tab === 'home' && parts[1] === 'attendance';",
+                   "if (!att) attDate = null;",
+                   "back.onclick = () => go('home', 'attendance');",
+                   "mark.onclick = () => go('home', 'attendance');",
+                   '<label for="adate">Day</label><input type="date" id="adate">',
+                   # Bounded by what the server keeps, and by what has happened.
+                   "input.max = attToday();"):
+        assert wiring in notes.PAGE, f"the catch-up screen is not wired: {wiring}"
+    # The date is built by hand rather than with toISOString(), which is UTC
+    # and hands back yesterday for every student this app has.
+    day = re.search(r"const isoDay = .*?;", notes.PAGE, re.S).group(0)
+    assert "toISOString" not in day and "getFullYear()" in day
+
+
+def test_nobody_else_ever_sees_a_students_attendance():
+    """Private in the way a mark is private. The server is what enforces it,
+    but the page must not have a screen that would show one if it arrived."""
+    for screen in ("renderMe", "renderCampus", "boardRow", "renderAnnouncements"):
+        body = re.search(r"function " + screen + r"\(.*?\n\}", notes.PAGE, re.S)
+        assert body, screen
+        for word in ("ATT", "attendance", "attOf", "attRow"):
+            assert word not in body.group(0), (
+                f"{screen} reaches for {word}; attendance is nobody else's")
+
+
+def test_below_seventy_five_is_never_carried_by_colour_alone():
+    """It is a fact about a term still in progress, not an error the app made,
+    so it is not red -- and the state is in the word as well as the amber."""
+    assert "f.textContent = 'Below 75%';" in notes.PAGE
+    assert "el.classList.add('low');" in notes.PAGE
+    warn = re.search(r"--warn:\s*(#[0-9a-fA-F]{6})", notes.PAGE).group(1)
+    assert warn != "#e5484d", "warning red already means an error on this page"
 
 
 def test_the_profile_edits_two_fields_and_cannot_reach_for_a_third():
