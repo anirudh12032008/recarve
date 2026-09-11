@@ -1261,6 +1261,34 @@ assert.ok(says('No classes on Sunday.'), 'a plain empty day keeps the plain line
 ATT.closed = []; dayDate = null;
 location.hash = '#classes'; route();
 
+// ---- The countdown on Home. The institute's own next date, not a semester
+// total this app was never told -- and honest about a window already running.
+location.hash = '#home'; writes = []; route();
+ATT.next = {date: '2026-09-20', ends: '2026-09-20', title: 'Attendance displayed',
+            kind: 'milestone'};                          // 13 days from 2026-09-07
+writes = []; render();
+assert.ok(says('Coming up'), 'the calendar gets its own block on Home');
+assert.ok(says('Attendance displayed'));
+assert.ok(says('In 13 days · Sep 20'));
+
+ATT.next = {date: '2026-09-06', ends: '2026-09-10', title: 'Mid-terms',
+            kind: 'exam'};                    // started yesterday, still running
+writes = []; render();
+assert.ok(says('On now · ends Sep 10'), 'a window already running says so, not a stale date');
+
+ATT.next = {date: '2026-09-07', ends: '2026-09-07', title: 'Last day', kind: 'milestone'};
+writes = []; render();
+assert.ok(says('On now · ends today'), 'a one-day window ending today does not repeat the date');
+
+ATT.next = {date: '2026-09-08', ends: '2026-09-08', title: 'Tomorrow thing',
+            kind: 'milestone'};
+writes = []; render();
+assert.ok(says('Tomorrow'), 'one day out is named, not counted');
+
+ATT.next = null;
+writes = []; render();
+assert.ok(!says('Coming up'), 'nothing to count down to draws nothing');
+
 // No server, no marks: Home still draws today rather than offering a control
 // that cannot save anything.
 ATT = null;

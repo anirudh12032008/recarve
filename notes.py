@@ -1415,6 +1415,30 @@ function markSeen(now) {
   try { localStorage.setItem(SEEN_KEY, String(now)); } catch (e) {}
 }
 
+// 0. WHAT'S COMING. The institute's own calendar, reduced to the one thing a
+// student actually wants from it: how far away is the next thing that matters.
+// Nothing to show until ATT has answered -- there is no guessed countdown, the
+// same way there is no guessed timetable.
+function countdownBlock() {
+  if (!ATT || !ATT.next) return;
+  const n = ATT.next;
+  const today = attToday();
+  const days = Math.round(
+    (new Date(n.date + 'T00:00:00') - new Date(today + 'T00:00:00')) / 86400000);
+  const ends = Math.round(
+    (new Date(n.ends + 'T00:00:00') - new Date(today + 'T00:00:00')) / 86400000);
+  const short = d => MONTHS[+d.slice(5, 7) - 1].slice(0, 3) + ' ' + (+d.slice(8));
+  let sub;
+  if (days <= 0 && ends >= 0) {
+    sub = ends > 0 ? 'On now · ends ' + short(n.ends) : 'On now · ends today';
+  } else if (days === 1) {
+    sub = 'Tomorrow';
+  } else {
+    sub = 'In ' + days + ' days · ' + short(n.date);
+  }
+  block('Coming up', [line(n.title, sub, document.createElement('div'))]);
+}
+
 // 1. TODAY. Empty is the honest first state: nobody has typed a timetable in,
 // and the institute PDF's columns are ambiguous enough that a guessed one
 // would quietly file lectures under the wrong subject.
@@ -1553,6 +1577,7 @@ function adminBlock() {
 
 function renderHome() {
   noticeBlock();
+  countdownBlock();
   todayBlock();
   needsBlock();
   adminBlock();
