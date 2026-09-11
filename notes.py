@@ -204,6 +204,30 @@ def subject_dir(library, code, kind):
     return d
 
 
+def dedupe_path(dest):
+    """The next free name at this path, never the name itself if it is taken.
+
+    Two students naming a file "Unit 3 Notes" without knowing about each
+    other used to be a silent overwrite: do_upload wrote straight to `dest`
+    and replaced whatever was already there, no error, no trace. A rename
+    makes a sensible shared name far more likely than a camera's own filename
+    ever was, so this is the one place that has to hold: an upload only ever
+    adds to the shelf, it never destroys what was already on it.
+
+    A small window between this check and the file actually landing is not
+    closed here -- two uploads of the exact same name in the same instant are
+    rare enough in a 110-person section that a lock file would be more code
+    than the risk is worth.
+    """
+    if not dest.exists():
+        return dest
+    stem, suffix, parent = dest.stem, dest.suffix, dest.parent
+    n = 2
+    while (parent / f"{stem} ({n}){suffix}").exists():
+        n += 1
+    return parent / f"{stem} ({n}){suffix}"
+
+
 LOG_PATH = None  # set by serve(); None means console only
 
 
@@ -7278,15 +7302,24 @@ def build_server(args):
                     self.headers.get("X-Title", "")).strip()[:200] or None
 
                 raw = urllib.parse.unquote(self.headers.get("X-Filename", "upload"))
+                # The extension alone, off the raw name, so it survives
+                # whichever sanitiser runs next -- neither one touches it.
+                is_audio = Path(raw).suffix.lower() in AUDIO_EXTS
                 # Never trust a client-supplied filename with a path in it.
-                name = re.sub(r"[^A-Za-z0-9._-]", "_", Path(raw).name)[:120] or "upload"
+                # Documents and photos may keep a space: the whole point of
+                # renaming at upload time is a name a person actually typed,
+                # and "Unit_3_Notes.pdf" back is not that. Audio keeps the
+                # stricter rule -- its filename becomes a lecture's title
+                # (dest.stem below), which title_of sanitizes the same strict
+                # way again wherever a worker writes it back, so a space
+                # allowed only here would not survive there anyway.
+                allowed = r"[^A-Za-z0-9._ -]" if not is_audio else r"[^A-Za-z0-9._-]"
+                name = re.sub(allowed, "_", Path(raw).name)[:120] or "upload"
                 subject = self.headers.get("X-Subject", "").strip()
                 code = resolve_subject(subject) if subject else guess_subject(name)
                 if not code:
                     return self.reply(400, {"error": f"pick a subject for {name}"})
 
-                ext = Path(name).suffix.lower()
-                is_audio = ext in AUDIO_EXTS
                 # Refused on the declared length, before a byte of the body is
                 # read: the point of a limit is not spending ten minutes of
                 # somebody's mobile data before saying no. The name and the
@@ -7301,6 +7334,12 @@ def build_server(args):
                                  f"is {mb(cap)}", "limit": cap, "size": n})
                 dest = (inbox / f"{code}-{name}") if is_audio \
                     else (subject_dir(args.library, code, "uploads") / name)
+                if not is_audio:
+                    # Only documents and photos: a name typed by hand collides
+                    # far more easily than a camera's own filename ever did,
+                    # and the inbox is transient in a way the shelf is not.
+                    dest = dedupe_path(dest)
+                    name = dest.name
 
                 # Stream to a .part file rather than reading the whole body into
                 # memory. A phone on wifi sending a 100MB lecture would otherwise

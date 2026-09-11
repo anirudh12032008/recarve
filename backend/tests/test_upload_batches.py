@@ -128,3 +128,43 @@ def test_db_meta_folds_the_batch_and_title_onto_each_file(db):
     a, b = mats[("CY1107", "a.jpg")], mats[("CY1107", "b.jpg")]
     assert a["batch"] == b["batch"] == batch
     assert a["title"] == b["title"] == "Together"
+
+
+# --------------------------------------------------------- naming collisions
+
+def test_dedupe_path_leaves_a_free_name_alone(tmp_path):
+    f = tmp_path / "notes.pdf"
+    assert notes.dedupe_path(f) == f
+
+
+def test_dedupe_path_finds_the_next_free_number(tmp_path):
+    (tmp_path / "notes.pdf").write_text("first")
+    assert notes.dedupe_path(tmp_path / "notes.pdf") == tmp_path / "notes (2).pdf"
+    (tmp_path / "notes (2).pdf").write_text("second")
+    assert notes.dedupe_path(tmp_path / "notes.pdf") == tmp_path / "notes (3).pdf"
+
+
+def test_a_renamed_upload_cannot_silently_overwrite_an_existing_one(server):
+    """The bug a rename feature would otherwise make easy: two uploads asked
+    to share a name must both survive, not one erasing the other with no
+    error and no trace."""
+    srv, args, conn = server
+    uploader = with_password(conn, member(conn, role="trusted"))
+    port = srv.server_address[1]
+    cookie = cookie_for(uploader)
+
+    status, body = send_file(port, cookie, "Unit 3 Notes.pdf", "MC1101", body=b"first")
+    assert status == 200, body
+    status, body = send_file(port, cookie, "Unit 3 Notes.pdf", "MC1101", body=b"second")
+    assert status == 200, body
+
+    folder = notes.subject_dir(args.library, "MC1101", "uploads")
+    first = (folder / "Unit 3 Notes.pdf").read_bytes()
+    second = (folder / "Unit 3 Notes (2).pdf").read_bytes()
+    assert (first, second) == (b"first", b"second"), \
+        "both uploads survive with their own content, not one overwriting the other"
+
+    rows = {r[0]: r[0] for r in conn.execute(
+        "select filename from materials where subject_code = 'MC1101'")}
+    assert set(rows) == {"Unit 3 Notes.pdf", "Unit 3 Notes (2).pdf"}, \
+        "the database's filename must match what is actually on disk"
