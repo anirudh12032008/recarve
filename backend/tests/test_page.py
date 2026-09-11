@@ -2529,3 +2529,63 @@ assert.equal(refreshed, 1, 'the shelf is refetched with the new name');
     f.write_text(script)
     r = subprocess.run([NODE, str(f)], capture_output=True, text=True)
     assert r.returncode == 0, r.stdout + r.stderr
+
+
+@pytest.mark.skipif(not NODE, reason="needs node")
+def test_the_day_timeline_sizes_classes_merges_labs_and_shows_the_gaps(tmp_path):
+    """Section I's real Monday: Chem 9-10, Maths 10-11, then a BEEE lab from
+    11 to 12:55 and again 2:30-4:25 either side of lunch, then IKS 4:30. And a
+    Wednesday with a free first period."""
+    seg = notes.PAGE[notes.PAGE.index("const PERIOD_TIMES"):notes.PAGE.index("function blockWithTimeline")]
+    script = """
+const assert = require('node:assert');
+const made = [];
+function makeEl(tag) {
+  const el = { tag, className: '', textContent: '', style: { setProperty() {} }, _sub: {},
+    setAttribute(k, v) { el['@' + k] = v; }, appendChild(c) { made.push(c); },
+    querySelector(q) { return el._sub[q] || (el._sub[q] = makeEl(q)); } };
+  Object.defineProperty(el, 'innerHTML', { set() {}, get() { return ''; } });
+  return el;
+}
+const document = { createElement: makeEl };
+const NAMES = {CY1107: 'Engg. Chemistry', MC1101: 'Maths 1', EE1125: 'BEEE Lab', HS1112: 'IKS'};
+const subjectOf = c => NAMES[c] ? {name: NAMES[c]} : null;
+const hue = () => 0, go = () => {}, attToday = () => '2026-09-07';
+let SLOTS = [];
+const slotsFor = () => SLOTS;
+""" + seg + """
+SLOTS = [{period: 1, code: 'CY1107'}, {period: 2, code: 'MC1101'},
+         {period: 3, code: 'EE1125'}, {period: 4, code: 'EE1125'},
+         {period: 5, code: 'EE1125'}, {period: 6, code: 'EE1125'}, {period: 7, code: 'HS1112'}];
+const b = timelineBlocks('2026-09-07');
+assert.deepStrictEqual(b.map(x => [x.code, hhmm(x.start), hhmm(x.end)]), [
+  ['CY1107', '9:00', '9:55'], ['MC1101', '10:00', '10:55'],
+  ['EE1125', '11:00', '12:55'],          // periods 3+4 merged into one block
+  ['EE1125', '2:30', '4:25'],            // lunch splits the lab, it is not bridged
+  ['HS1112', '4:30', '5:25']]);
+assert.equal(long(115), '1 h 55 min');
+
+made.length = 0;
+dayTimeline('2026-09-07');
+const evs = made.filter(e => e.className.startsWith('ev'));
+assert.equal(evs.length, 5, 'one block per class, labs merged');
+assert.equal(evs[2]._sub.small.textContent, '11:00–12:55 · 1 h 55 min · EE1125',
+             'a block says its time, its length and its code');
+assert.ok(made.some(e => e.className === 'lunch'), 'lunch is on the day');
+assert.ok(!made.some(e => e.className === 'free'), 'a packed Monday has no free gap');
+
+// Wednesday: nothing at 9, IKS at 10 -- the timeline starts at the first class,
+// so there is no 'free' before it; but a hole in the middle is shown.
+SLOTS = [{period: 2, code: 'HS1112'}, {period: 4, code: 'MC1101'}];
+made.length = 0;
+dayTimeline('2026-09-09');
+const free = made.filter(e => e.className === 'free').map(e => e.textContent);
+assert.deepStrictEqual(free, ['Free · 1 h 5 min'], 'the empty 11 o\\'clock slot is visible');
+
+SLOTS = [];
+assert.equal(dayTimeline('2026-09-13'), null, 'a day with no classes draws no timeline');
+"""
+    f = tmp_path / "timeline.js"
+    f.write_text(script)
+    r = subprocess.run([NODE, str(f)], capture_output=True, text=True)
+    assert r.returncode == 0, r.stdout + r.stderr

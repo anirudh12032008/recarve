@@ -755,6 +755,29 @@ body.reading #read{display:block}
   text-transform:uppercase;color:#fff;background:var(--err);padding:2px 0}
 .tile b{display:block;font-size:17px;font-weight:700;padding:3px 0 4px;
   font-variant-numeric:tabular-nums}
+/* The day as a timeline, Google-Calendar style: a class is as tall as it is
+   long, free time is a dashed gap you can see at a glance, lunch is shaded,
+   and a red line says where you are in the day right now. */
+.tl{position:relative;margin:4px 16px 6px 12px;--px:1.05px}
+.tl .hr{position:absolute;left:0;right:0;height:0;border-top:1px solid var(--line)}
+.tl .hr span{position:absolute;left:0;top:-8px;width:40px;font-size:11px;color:var(--mut);
+  font-variant-numeric:tabular-nums;background:var(--bg);padding-right:4px}
+.tl .ev{position:absolute;left:48px;right:0;border-radius:10px;padding:6px 10px;overflow:hidden;
+  display:flex;flex-direction:column;justify-content:flex-start;border:0;font:inherit;
+  text-align:left;color:var(--fg);background:hsl(var(--h) var(--sat) var(--lum) / .2);
+  border-left:4px solid hsl(var(--h) var(--sat) var(--lum))}
+.tl .ev b{font-size:14px;font-weight:650;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.tl .ev small{font-size:12px;color:var(--mut);white-space:nowrap;overflow:hidden;
+  text-overflow:ellipsis}
+.tl .ev.done{opacity:.55}
+.tl .free{position:absolute;left:48px;right:0;border-radius:10px;border:1.5px dashed var(--line);
+  display:flex;align-items:center;justify-content:center;font-size:12px;color:var(--mut)}
+.tl .lunch{position:absolute;left:48px;right:0;border-radius:10px;display:flex;
+  align-items:center;justify-content:center;font-size:12px;color:var(--mut);
+  background:repeating-linear-gradient(135deg,var(--surface) 0 8px,transparent 8px 16px)}
+.tl .now{position:absolute;left:40px;right:0;height:2px;background:var(--err);z-index:2}
+.tl .now::before{content:"";position:absolute;left:-5px;top:-4px;width:10px;height:10px;
+  border-radius:50%;background:var(--err)}
 .rename{display:flex;gap:8px;align-items:center;width:100%}
 .rename input{flex:1;min-width:0;height:var(--tap);padding:0 12px;font:inherit;
   border:1px solid var(--mut);border-radius:10px;background:var(--bg);color:var(--fg)}
@@ -1848,6 +1871,108 @@ function calendarWeek() {
   nav.appendChild(box);
 }
 
+// Section I's bell. Seven periods and a lunch break, off the institute's
+// timetable notice (w.e.f. 24/8/2026). Period 8 exists in the timetable editor
+// but has no time here, so it never reaches the timeline.
+// ponytail: one section's bell hardcoded; a table when a second section joins.
+const PERIOD_TIMES = {1: ['09:00', '09:55'], 2: ['10:00', '10:55'], 3: ['11:00', '11:55'],
+  4: ['12:00', '12:55'], 5: ['14:30', '15:25'], 6: ['15:30', '16:25'], 7: ['16:30', '17:25']};
+const LUNCH = ['13:00', '14:30'];
+const mins = t => +t.slice(0, 2) * 60 + +t.slice(3);
+const hhmm = m => { const h = Math.floor(m / 60), mm = String(m % 60).padStart(2, '0');
+  return ((h + 11) % 12 + 1) + ':' + mm; };
+const long = m => (m >= 60 ? Math.floor(m / 60) + ' h' + (m % 60 ? ' ' + m % 60 + ' min' : '')
+                           : m + ' min');
+
+// The day's classes as blocks: back-to-back periods of the same subject (a
+// three-hour lab) become one block, never across lunch -- the break is real.
+function timelineBlocks(date) {
+  const blocks = [];
+  for (const sl of slotsFor(date)) {
+    const t = PERIOD_TIMES[sl.period];
+    if (!t || !subjectOf(sl.code)) continue;
+    const [a, b] = [mins(t[0]), mins(t[1])];
+    const last = blocks[blocks.length - 1];
+    if (last && last.code === sl.code && a - last.end <= 5) { last.end = b; last.periods.push(sl.period); }
+    else blocks.push({code: sl.code, start: a, end: b, periods: [sl.period]});
+  }
+  return blocks;
+}
+
+function dayTimeline(date) {
+  const blocks = timelineBlocks(date);
+  if (!blocks.length) return null;
+  const top = mins('09:00'), bottom = mins('17:30');
+  const box = document.createElement('div');
+  box.className = 'tl';
+  box.style.height = 'calc(' + (bottom - top) + ' * var(--px))';
+  const at = (el, a, b) => {
+    el.style.top = 'calc(' + (a - top) + ' * var(--px))';
+    if (b !== undefined) el.style.height = 'calc(' + (b - a) + ' * var(--px) - 3px)';
+    box.appendChild(el);
+  };
+  for (let h = 9; h <= 17; h++) {
+    const hr = document.createElement('div');
+    hr.className = 'hr';
+    hr.innerHTML = '<span></span>';
+    hr.querySelector('span').textContent = ((h + 11) % 12 + 1) + (h < 12 ? ' am' : ' pm');
+    at(hr, h * 60);
+  }
+  const lunch = document.createElement('div');
+  lunch.className = 'lunch';
+  lunch.textContent = 'Lunch';
+  at(lunch, mins(LUNCH[0]), mins(LUNCH[1]));
+  // What the timeline is for: seeing the holes. A gap of half an hour or more
+  // between two classes that lunch does not already explain says so.
+  const edges = blocks.map(b => [b.start, b.end]).concat([[mins(LUNCH[0]), mins(LUNCH[1])]])
+    .sort((x, y) => x[0] - y[0]);
+  for (let i = 1; i < edges.length; i++) {
+    const gap = edges[i][0] - edges[i - 1][1];
+    if (gap >= 30 && edges[i - 1][1] >= blocks[0].start && edges[i][0] <= blocks[blocks.length - 1].end) {
+      const f = document.createElement('div');
+      f.className = 'free';
+      f.textContent = 'Free · ' + long(gap);
+      at(f, edges[i - 1][1], edges[i][0]);
+    }
+  }
+  const nowD = new Date(), now = nowD.getHours() * 60 + nowD.getMinutes();
+  const isToday = date === attToday();
+  for (const b of blocks) {
+    const s = subjectOf(b.code);
+    const ev = document.createElement('button');
+    ev.className = 'ev' + (isToday && now >= b.end ? ' done' : '');
+    ev.style.setProperty('--h', hue(b.code));
+    ev.innerHTML = '<b></b><small></small>';
+    ev.querySelector('b').textContent = s.name;
+    ev.querySelector('small').textContent =
+      hhmm(b.start) + '–' + hhmm(b.end) + ' · ' + long(b.end - b.start) + ' · ' + b.code;
+    ev.setAttribute('aria-label', s.name + ', ' + hhmm(b.start) + ' to ' + hhmm(b.end));
+    ev.onclick = () => go('classes', b.code);
+    at(ev, b.start, b.end);
+  }
+  if (isToday && now >= top && now <= bottom) {
+    const n = document.createElement('div');
+    n.className = 'now';
+    n.setAttribute('aria-label', 'Now');
+    at(n, now);
+  }
+  return box;
+}
+
+// A section heading, the day drawn as a timeline, then the rows that act on
+// it (marking attendance) underneath -- the timeline is for seeing the day,
+// the rows are still where a mark is made.
+function blockWithTimeline(label, date, rows) {
+  heading(label);
+  const tl = TT && TT.length ? dayTimeline(date) : null;
+  if (tl) nav.appendChild(tl);
+  if (!rows.length) return;
+  const box = document.createElement('div');
+  box.className = 'rows';
+  rows.forEach(el => box.appendChild(el));
+  nav.appendChild(box);
+}
+
 // 1. TODAY. Empty is the honest first state: nobody has typed a timetable in,
 // and the institute PDF's columns are ambiguous enough that a guessed one
 // would quietly file lectures under the wrong subject.
@@ -1911,7 +2036,7 @@ function todayBlock() {
     rows.push(back);
   }
   rows.push(edit);
-  block('Today \u00b7 ' + DAYS[day], rows);
+  blockWithTimeline('Today \u00b7 ' + DAYS[day], date, rows);
 }
 
 // 2. NEEDS YOU. Only what is actually waiting on a person: a transcription
@@ -2779,7 +2904,7 @@ function renderDay() {
   // catch-up screen offers, over the same classes, posting the same request.
   const all = markable(date) ? allPresentRow(date, slots) : null;
   if (all) rows.push(all);
-  block(dayName(date), rows);
+  blockWithTimeline(dayName(date), date, rows);
 }
 
 // LEVEL 1: every subject, empty ones included. Nobody can add a chemistry
