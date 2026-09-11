@@ -1,0 +1,72 @@
+import psycopg
+import pytest
+
+import notes
+from conftest import as_admin_connection, as_user
+from test_content import member
+
+
+def test_saving_and_taking_back(db):
+    """On, then off. A bookmark is a toggle, never a row that changes."""
+    uid = member(db, role="student")
+    as_user(db, uid)
+    assert notes.db_bookmarks(db, uid) == []
+
+    notes.db_set_bookmark(db, uid, "MC1101", "Limits", True)
+    saved = notes.db_bookmarks(db, uid)
+    assert saved == [{"code": "MC1101", "title": "Limits"}]
+
+    # Saving twice is not two rows -- the primary key already refuses that,
+    # and the function is written to let it rather than to hide the conflict.
+    notes.db_set_bookmark(db, uid, "MC1101", "Limits", True)
+    assert notes.db_bookmarks(db, uid) == saved
+
+    notes.db_set_bookmark(db, uid, "MC1101", "Limits", False)
+    assert notes.db_bookmarks(db, uid) == []
+
+
+def test_one_student_never_sees_another(db):
+    """Private in the way a mark of attendance is private, not a fact about
+    the class -- so the policy is 'for all', not just select."""
+    a, b = member(db, role="student"), member(db, role="student")
+
+    as_user(db, a)
+    notes.db_set_bookmark(db, a, "MC1101", "Limits", True)
+
+    as_user(db, b)
+    assert notes.db_bookmarks(db, b) == [], "one student's saves are not another's"
+    # A `using` clause filters rather than raises: b's delete and update match
+    # zero of a's rows rather than being refused outright, which is the same
+    # shape attendance's privacy test found and is worth asserting here too --
+    # a policy that silently touches nothing is easy to mistake for one that
+    # is enforced when it is only ever exercised on rows it happens to own.
+    assert db.execute(
+        "delete from bookmarks where profile_id = %s", (a,)).rowcount == 0
+    assert db.execute(
+        "update bookmarks set title = 'taken' where profile_id = %s",
+        (a,)).rowcount == 0
+
+    as_admin_connection(db)
+    still = db.execute(
+        "select title from bookmarks where profile_id = %s", (a,)).fetchall()
+    assert still == [("Limits",)], "b's attempts changed nothing of a's"
+
+
+def test_a_bookmark_needs_a_real_subject_and_a_title(db):
+    """The subject foreign key is the backstop; the function's own checks are
+    what turn a bad request into a readable error instead of a 500."""
+    uid = member(db, role="student")
+    as_user(db, uid)
+    with pytest.raises(ValueError):
+        notes.db_set_bookmark(db, uid, "NOPE9999", "Anything", True)
+    with pytest.raises(ValueError):
+        notes.db_set_bookmark(db, uid, "MC1101", "  ", True)
+
+
+def test_only_approval_is_required_not_a_role(db):
+    """Any approved member may save a note for themselves -- this is not an
+    upload, not a recording, not the API budget. Even a plain student."""
+    uid = member(db, role="student")
+    as_user(db, uid)
+    notes.db_set_bookmark(db, uid, "MC1101", "Limits", True)
+    assert notes.db_bookmarks(db, uid) == [{"code": "MC1101", "title": "Limits"}]

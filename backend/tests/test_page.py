@@ -177,7 +177,13 @@ const fabEl = {hidden: null, className: null};
 // The banner in the add sheet that says who adding is for. Real, because
 // whether it is showing is the other half of what a locked + button means.
 const lockEl = {hidden: null};
-const els = {ask: askEl, panel: panelEl, fab: fabEl, lock: lockEl};
+// Real, the same reason fabEl is: paintSaveBtn writes to it directly (it lives
+// in the dock, outside #nav, so a redraw never touches it) and the test needs
+// to read those writes back, not just see them thrown into the discard proxy.
+const saveAttrs = {};
+const saveEl = {textContent: null, disabled: false,
+  setAttribute: (k, v) => { saveAttrs[k] = v; }};
+const els = {ask: askEl, panel: panelEl, fab: fabEl, lock: lockEl, save: saveEl};
 let selection = '';
 let onSelectionChange = () => {};
 const rect = {top: 100, left: 20, width: 80};
@@ -1296,6 +1302,55 @@ location.hash = '#home'; writes = []; route();
 assert.ok(!wrote(['textContent', 'Period 1 · Not marked']),
           'a page with no server behind it offers no marking control');
 TT = [];
+
+// ---- Saving a note. Private, and nothing to do with the vote or the score --
+// this is "I want to find this again", not "this is good".
+// The day view above emptied and re-popped DATA[0].notes, so put one back
+// rather than lean on whatever an earlier section happened to leave there.
+DATA[0].notes.push({title: 'week1', kind: 'lecture', md: '# limits', questions: []});
+ATT = {today: '2026-09-07', window: 28, subjects: [], marks: [], off: [], closed: []};
+BOOKMARKS = [];
+location.hash = '#classes/MC1101/week1'; route();
+assert.equal(saveEl.textContent, 'Save', 'not saved until the student says so');
+assert.equal(saveAttrs['aria-pressed'], 'false');
+
+reply = answer(true, {bookmarks: [{code: 'MC1101', title: 'week1'}]});
+fetches = [];
+await saveEl.onclick({currentTarget: saveEl});
+assert.ok(fetches.some(f => f[0] === '/bookmark'
+  && JSON.parse(f[1].body).subject === 'MC1101'
+  && JSON.parse(f[1].body).title === 'week1'
+  && JSON.parse(f[1].body).on === true), 'asks to save THIS note, by (subject, title)');
+assert.equal(saveEl.textContent, 'Saved', 'the server answered and the button follows it');
+assert.deepStrictEqual(BOOKMARKS, [{code: 'MC1101', title: 'week1'}]);
+
+// Reopening the same note later must read the saved state back, not just
+// remember it from the toggle that just ran.
+location.hash = '#classes/MC1101'; route();
+location.hash = '#classes/MC1101/week1'; route();
+assert.equal(saveEl.textContent, 'Saved', 'opening an already-saved note shows it as saved');
+
+reply = answer(true, {bookmarks: []});
+fetches = [];
+await saveEl.onclick({currentTarget: saveEl});
+assert.ok(fetches.some(f => JSON.parse(f[1].body).on === false), 'the second tap takes it back');
+assert.equal(saveEl.textContent, 'Save');
+assert.deepStrictEqual(BOOKMARKS, []);
+
+// Home draws a Saved block from whatever is still really there, and skips a
+// bookmark whose note is gone -- a renamed file, a replaced revision sheet --
+// rather than showing a row with nothing behind it.
+BOOKMARKS = [{code: 'MC1101', title: 'week1'}];
+location.hash = '#home'; writes = []; route();
+assert.ok(says('Saved'), 'a real save gets its own block on Home');
+assert.ok(says('week1'));
+
+BOOKMARKS = [{code: 'MC1101', title: 'a note that was deleted'}];
+writes = []; render();
+assert.ok(!says('Saved'), 'a stale bookmark for a gone note draws nothing, not a dead row');
+
+BOOKMARKS = [];
+reply = null;
 
 
 // ---- Doubts. What one student typed, put on the page as typing and never as

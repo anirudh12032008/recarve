@@ -1159,6 +1159,7 @@ body.reading .tabs{display:none}
 
 <div class="dock">
   <button id="practice" class="primary" hidden>Practice</button>
+  <button id="save" aria-pressed="false">Save</button>
   <button id="share">Share</button>
   <button id="dl">Download</button>
   <button id="print">Print</button>
@@ -1181,6 +1182,7 @@ const scode = document.getElementById('scode'), sname = document.getElementById(
 const lback = document.getElementById('lback'), tools = document.getElementById('tools');
 const tabBtns = document.querySelectorAll('.tabs button');
 let current = null;                      // the note being read, or null
+let currentCode = null;                  // its subject's code, alongside it
 // Which tab, and how deep inside it. Classes goes subject -> note; Home has
 // one level under it, the timetable editor.
 let view = {tab: 'home', code: null, title: null, edit: false, att: false};
@@ -1581,6 +1583,7 @@ function renderHome() {
   todayBlock();
   needsBlock();
   adminBlock();
+  savedBlock();
   // 4. An empty library is a real state on day one, and a blank screen reads
   // as a broken app. Say what the first thing to do is.
   if (!DATA.some(s => s.notes.length || s.uploads.length)) {
@@ -1590,6 +1593,25 @@ function renderHome() {
                   + 'come back here when the Mac has finished making them.');
   }
   newBlock();
+}
+
+// Notes a student asked to find again. Matched against DATA rather than
+// trusted on its own: a bookmark can outlive the note it points to (a
+// professor's file renamed, a revision sheet since replaced), and a row for a
+// note that is no longer there is silently skipped rather than shown as a
+// dead link with nothing behind it.
+function savedBlock() {
+  const rows = [];
+  for (const b of BOOKMARKS) {
+    const s = subjectOf(b.code);
+    const n = s && s.notes.find(x => x.title === b.title);
+    if (!n) continue;
+    const row = line(n.title, s.code, document.createElement('button'), hue(s.code));
+    row.appendChild(chip(s.code));
+    row.onclick = () => go('classes', s.code, n.title);
+    rows.push(row);
+  }
+  block('Saved', rows);
 }
 
 // The one level inside Home. Six days of native selects: the iOS wheel is the
@@ -1689,6 +1711,37 @@ async function saveTimetable() {
 //   date picker, and a date picker has no business on the ten-second screen.
 // Nothing here appears anywhere else: not on the board, not in the admin
 // panel, not in anybody else's /data. It is a private note to yourself.
+let BOOKMARKS = [];            // {code, title} pairs this student has saved
+const isSaved = (code, title) => BOOKMARKS.some(b => b.code === code && b.title === title);
+
+// The Save button lives in the dock, which sits outside #nav -- render() never
+// touches it, the same reason practice.hidden is set directly in openNote()
+// rather than through a redraw.
+function paintSaveBtn() {
+  const btn = document.getElementById('save');
+  if (!btn || !current) return;
+  const on = isSaved(currentCode, current.title);
+  btn.textContent = on ? 'Saved' : 'Save';
+  btn.setAttribute('aria-pressed', on ? 'true' : 'false');
+}
+
+async function toggleBookmark(code, title, on, btn) {
+  if (btn) btn.disabled = true;
+  try {
+    const r = await fetch('/bookmark', {method: 'POST',
+      headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify({subject: code, title, on})});
+    if (r.ok) BOOKMARKS = (await r.json()).bookmarks || [];
+  } catch (e) {}
+  if (btn) btn.disabled = false;
+  paintSaveBtn();
+  // #list sits alongside #read, not inside it, so a redraw here reaches the
+  // desktop two-pane list -- where a "Saved" row is exactly the kind of thing
+  // that ought to update the moment it changes -- and costs the mobile reading
+  // view nothing: #list is hidden there while reading.
+  render();
+}
+
 let ATT = null;                // the server's attendance payload; null until it answers
 let attDate = null;            // which day the catch-up screen is showing
 let dayDate = null;            // and which day the day view under Classes is on
@@ -2914,6 +2967,7 @@ async function loadDoubts(note, subject) {
 // right URL in the bar, so this never touches history.
 function openNote(n, s) {
   current = n;
+  currentCode = s.code;
   rcode.textContent = s.code;
   rcode.style.setProperty('--h', hue(s.code));
   backBtn.textContent = '‹ ' + s.code;   // back goes to the subject, not the top
@@ -2932,6 +2986,7 @@ function openNote(n, s) {
 
   document.body.classList.add('reading');
   window.scrollTo(0, 0);
+  paintSaveBtn();
   loadDoubts(n, s);
 }
 
@@ -3124,6 +3179,12 @@ lback.onclick = () => history.back();
 tabBtns.forEach(b => { b.onclick = () => go(b.dataset.tab); });
 window.onpopstate = route;
 
+document.getElementById('save').onclick = async (e) => {
+  if (!current) return;
+  await toggleBookmark(currentCode, current.title,
+                        !isSaved(currentCode, current.title), e.currentTarget);
+};
+
 document.getElementById('share').onclick = async (e) => {
   if (!current) return;
   const text = plain(current.md);
@@ -3172,6 +3233,7 @@ async function refresh() {
     // Everything Home needs rides on this one request.
     TT = d.timetable || [];
     ATT = d.attendance || null;
+    BOOKMARKS = d.bookmarks || [];
     PENDING = d.pending || 0;
     ANN = d.announcements || [];
     NOW = d.now || NOW;
@@ -4703,6 +4765,33 @@ def db_ask(conn, user_id, code, lecture_id, parent_id, body):
     ).fetchone()[0])
 
 
+def db_bookmarks(conn, user_id):
+    """Every note this student has saved, as (subject, title) pairs.
+
+    Keyed the same way the page already holds a note -- see db_lecture_id --
+    so the phone can ask "is this one saved" with the two things it already
+    has, rather than a lecture id that a revision sheet does not carry.
+    """
+    return [{"code": c, "title": t} for c, t in conn.execute(
+        "select subject_code, title from bookmarks where profile_id = %s "
+        "order by created_at desc", (user_id,))]
+
+
+def db_set_bookmark(conn, user_id, code, title, on):
+    """Save a note, or take it back. On or off, never a row that changes."""
+    title = (title or "").strip()[:200]
+    if code not in SUBJECTS or not title:
+        raise ValueError("which note?")
+    if on:
+        conn.execute(
+            "insert into bookmarks (profile_id, subject_code, title) "
+            "values (%s, %s, %s) on conflict do nothing", (user_id, code, title))
+    else:
+        conn.execute(
+            "delete from bookmarks where profile_id = %s and subject_code = %s "
+            "and title = %s", (user_id, code, title))
+
+
 def db_hide_doubt(conn, doubt_id):
     """Yours, or anybody's if you are an admin. The row itself stays.
 
@@ -6132,6 +6221,9 @@ def build_server(args):
                             # person who asked for it.
                             out["attendance"] = db_attendance(
                                 conn, self.me["id"])
+                            # Saved notes, on the same request: private to the
+                            # person who asked, same as attendance above.
+                            out["bookmarks"] = db_bookmarks(conn, self.me["id"])
                             if self.me["admin"]:
                                 out["pending"] = len(db_pending(conn))
                         except psycopg.Error as e:
@@ -6251,6 +6343,8 @@ def build_server(args):
                 return self.do_vote()
             if self.path == "/doubts":
                 return self.do_doubts()
+            if self.path == "/bookmark":
+                return self.do_bookmark()
             if self.path == "/timetable":
                 return self.do_timetable()
             if self.path == "/attendance":
@@ -6912,6 +7006,33 @@ def build_server(args):
             except Exception as e:
                 return self.reply(500, {"error": f"{type(e).__name__}: {e}"})
             return self.reply(200, {"doubts": thread})
+
+        def do_bookmark(self):
+            """Save a note, or take it back. Nobody else's business.
+
+            Not in ROLE_REQUIRED, same as attendance: a bookmark is a private
+            note about what YOU want to find again, not a privilege the class
+            grants. Whose it is comes from the session and never the request.
+            """
+            if not self.me:
+                return self.reply(404, {"error": "this server is running with --no-auth"})
+            try:
+                req = self.body(2000)
+                if req is None:
+                    return
+                code = (req.get("subject") or "").strip()[:32]
+                title = (req.get("title") or "").strip()[:200]
+                with db(self.me["id"]) as conn:
+                    db_set_bookmark(conn, self.me["id"], code, title,
+                                     bool(req.get("on")))
+                    saved = db_bookmarks(conn, self.me["id"])
+            except ValueError as e:
+                return self.reply(400, {"error": str(e)})
+            except psycopg.errors.InsufficientPrivilege:
+                return self.reply(403, {"error": "you can only save your own bookmarks"})
+            except Exception as e:
+                return self.reply(500, {"error": f"{type(e).__name__}: {e}"})
+            return self.reply(200, {"bookmarks": saved})
 
         def do_doubts(self):
             """Ask, answer, or take back something you wrote.
