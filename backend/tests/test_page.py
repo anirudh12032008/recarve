@@ -1335,7 +1335,9 @@ ATT.upcoming = [{date: '2026-09-20', ends: '2026-09-20', title: 'Attendance disp
 writes = []; render();
 assert.ok(says('Calendar') && says('September 2026') && says('This week'), 'a calendar, not a sentence');
 assert.ok(wrote(['className', 'today has']), 'today is marked, and has classes');
-assert.ok(wrote(['className', 'off']), 'a closed day is marked as one');
+assert.ok(wrote(['()', 'aria-label', 'Wednesday 9 September, Test holiday']),
+          'a closed day is marked as one, in words');
+assert.ok(wrote(['()', 'aria-label', 'Today, 3 classes']), 'today says how many classes');
 assert.ok(says('Wednesday: Test holiday — no classes'), 'and the strip says why');
 assert.ok(says('Mid-term examinations') && says('In 50 days · Oct 27'), 'several dates, not one');
 assert.ok(wrote(['textContent', 'Oct']) && wrote(['textContent', 27]), 'each on a tear-off date tile');
