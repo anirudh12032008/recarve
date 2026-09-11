@@ -1972,3 +1972,151 @@ def test_a_notice_body_is_never_written_into_the_page_as_it_was_typed():
     safe = re.search(r"function mdSafe\(src\) \{.*?\n\}", notes.PAGE, re.S).group(0)
     assert r"replace(/</g, '&lt;')" in safe, "every < is escaped before marked sees it"
 
+
+# --------------------------------------------------------- offline reading
+
+def test_sw_js_is_served_with_a_registrable_content_type(tmp_path):
+    """Not just that the string exists -- a real GET to /sw.js, over the wire,
+    with a content type a browser will actually register a worker from."""
+    import threading
+    import urllib.request
+
+    args = make_args(tmp_path)
+    was = notes.LOG_PATH
+    try:
+        srv = notes.build_server(args)
+        threading.Thread(target=srv.serve_forever, daemon=True).start()
+        try:
+            port = srv.server_address[1]
+            with urllib.request.urlopen(
+                    f"http://127.0.0.1:{port}/sw.js", timeout=5) as r:
+                assert r.status == 200
+                assert "javascript" in r.headers.get("Content-Type", "")
+                assert r.headers.get("Cache-Control") == "no-store", \
+                    "a stale service worker script is a phone that never " \
+                    "learns the caching strategy changed"
+                assert r.read().decode() == notes.SW_JS
+        finally:
+            srv.shutdown()
+    finally:
+        notes.LOG_PATH = was
+
+
+@pytest.mark.skipif(not NODE, reason="needs node")
+def test_the_service_worker_script_parses(tmp_path):
+    f = tmp_path / "sw.js"
+    f.write_text(notes.SW_JS)
+    r = subprocess.run([NODE, "--check", str(f)], capture_output=True, text=True)
+    assert r.returncode == 0, r.stderr
+
+
+# A worker global scope, not a window: self, caches and fetch are globals
+# there, never parameters, so the stub declares them the same way.
+SW_STUB = """
+const assert = require('node:assert');
+let currentCache = new Map();
+let deletedCaches = [];
+const caches = {
+  open: async () => ({
+    put: async (req, res) => { currentCache.set(req.url, res); },
+  }),
+  match: async (req) => currentCache.get(req.url),
+  keys: async () => ['recarve-v0', 'recarve-v1'],
+  delete: async (name) => { deletedCaches.push(name); return true; },
+};
+let handlers = {};
+let claimed = false, skipped = false;
+const self = {
+  location: { origin: 'https://x.test' },
+  addEventListener: (ev, fn) => { handlers[ev] = fn; },
+  skipWaiting: () => { skipped = true; },
+  clients: { claim: () => { claimed = true; } },
+};
+let mode = 'ok';           // 'ok' | 'fail'
+let fetched = [];
+function fetch(request) {
+  fetched.push(request.url);
+  if (mode === 'fail') return Promise.reject(new Error('offline'));
+  return Promise.resolve({ ok: true, clone() { return this; } });
+}
+function ev(url, method) {
+  let responded = null;
+  return {
+    request: { method: method || 'GET', url },
+    respondWith: (p) => { responded = p; },
+    result: () => responded,
+  };
+}
+"""
+
+SW_CHECKS = """
+(async () => {
+
+assert.ok(handlers.install && handlers.activate && handlers.fetch,
+          'install, activate and fetch are all wired');
+
+// install takes over immediately rather than waiting for every open tab to
+// close -- a small app where the alternative is a phone stuck on yesterday's
+// cache until it is force-quit.
+handlers.install();
+assert.equal(skipped, true);
+
+// activate clears anything that is not this exact cache name, so a version
+// bump is the whole migration and nothing lingers holding an old shape of
+// /data.
+let waited = null;
+handlers.activate({ waitUntil: (p) => { waited = p; } });
+await waited;
+assert.deepStrictEqual(deletedCaches, ['recarve-v0'], 'only the OLD cache is dropped');
+assert.equal(claimed, true);
+
+// The shell and /data are cached on a successful fetch.
+let e = ev('https://x.test/data');
+handlers.fetch(e);
+await e.result();
+assert.ok(fetched.includes('https://x.test/data'));
+assert.ok(currentCache.has('https://x.test/data'), 'a good answer is kept');
+
+// Offline, the same URL is answered from what was kept -- not a rejection,
+// not the browser's own error page.
+mode = 'fail';
+e = ev('https://x.test/data');
+handlers.fetch(e);
+const r = await e.result();
+assert.ok(r, 'the cached copy answers when the network cannot');
+
+// A path this was never asked to keep is left alone entirely: no cache read,
+// no cache write, and respondWith is never even called, so the browser's own
+// default handling runs.
+mode = 'ok'; fetched = [];
+e = ev('https://x.test/vote');
+handlers.fetch(e);
+assert.equal(e.result(), null, 'an endpoint outside KEEP is not intercepted');
+assert.deepStrictEqual(fetched, [], 'and never even reaches fetch()');
+
+// A POST is never cached, however familiar the path -- a vote or a mark only
+// means something if it reaches the server, and a cached POST answer would be
+// a write silently reported as done that was not.
+e = ev('https://x.test/data', 'POST');
+handlers.fetch(e);
+assert.equal(e.result(), null, 'POST is never intercepted, even to /data');
+
+// A different origin (a CDN, an API this app does not run) is never touched.
+e = ev('https://elsewhere.test/data');
+handlers.fetch(e);
+assert.equal(e.result(), null, 'only this origin is ever cached');
+
+})().catch(e => { console.error(e); process.exit(1); });
+"""
+
+
+@pytest.mark.skipif(not NODE, reason="needs node")
+def test_offline_reading_serves_the_shell_and_the_library_when_the_network_cannot(
+        tmp_path):
+    """Network-first, cache as the fallback, and nothing outside the two GET
+    routes that make an offline reload worth doing at all."""
+    f = tmp_path / "sw_test.js"
+    f.write_text(SW_STUB + notes.SW_JS + SW_CHECKS)
+    r = subprocess.run([NODE, str(f)], capture_output=True, text=True)
+    assert r.returncode == 0, r.stdout + r.stderr
+

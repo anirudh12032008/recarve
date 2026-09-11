@@ -481,6 +481,55 @@ def search(args):
     print(f"\n{hits} match{'es' if hits != 1 else ''}", file=sys.stderr)
 
 
+# Offline reading. Two things only: the shell itself, so a reload with no
+# signal still loads the app instead of the browser's own "no internet" page,
+# and /data, so the library a student already opened -- their notes, their
+# timetable, their attendance -- is still there in a corridor with no wifi.
+#
+# Network-first, cache as a fallback, never the other way round: a student
+# with a connection must always see what is actually on the server, and the
+# cache exists only for the moment there is nothing else to answer with.
+# Nothing else is touched -- every POST (a vote, a mark, a doubt) needs the
+# network to mean anything and is left to fail on its own, honestly, rather
+# than pretend to work and lose what was typed.
+#
+# ponytail: CACHE is a hardcoded version, not derived from a build step this
+# app does not have. Bump the suffix on a deploy that changes /data's shape or
+# the shell's markup, so a phone holding the old one is not stuck comparing
+# fields that no longer exist -- activate() below deletes anything that does
+# not match the current name, so a bump is the whole migration.
+SW_JS = r"""
+const CACHE = 'recarve-v1';
+const KEEP = ['/', '/index.html', '/data'];
+
+self.addEventListener('install', () => self.skipWaiting());
+
+self.addEventListener('activate', (e) => {
+  e.waitUntil(
+    caches.keys().then(keys =>
+      Promise.all(keys.filter(k => k !== CACHE).map(k => caches.delete(k))))
+      .then(() => self.clients.claim())
+  );
+});
+
+self.addEventListener('fetch', (e) => {
+  const { request } = e;
+  if (request.method !== 'GET') return;
+  const url = new URL(request.url);
+  if (url.origin !== self.location.origin || !KEEP.includes(url.pathname)) return;
+
+  e.respondWith(
+    fetch(request).then((res) => {
+      if (res.ok) {
+        const copy = res.clone();
+        caches.open(CACHE).then(c => c.put(request, copy));
+      }
+      return res;
+    }).catch(() => caches.match(request).then(hit => hit || Response.error()))
+  );
+});
+"""
+
 # Raw string: this is JavaScript, and its backslash escapes are not Python's.
 # Raw string: this is JavaScript, and its backslash escapes are not Python's.
 PAGE = r"""<!doctype html>
@@ -3510,6 +3559,12 @@ document.getElementById('opt-revise').onclick = async () => {
 };
 
 applyRole();   // hidden until /data says otherwise, not hidden once it says no
+// Best-effort and silent either way: a static export has no origin a service
+// worker can run on, and an older browser has no navigator.serviceWorker at
+// all. Neither is a failure this app has anything to say about.
+if (navigator.serviceWorker) {
+  navigator.serviceWorker.register('/sw.js').catch(() => {});
+}
 refresh();
 setInterval(pollJobs, 2000);
 setInterval(pullLog, 3000);
@@ -6176,6 +6231,8 @@ def build_server(args):
                 return db_principal(conn, profile_id)
 
         def do_GET(self):
+            if self.path == "/sw.js":
+                return self.send_js(SW_JS)
             if self.path.split("?")[0] == "/login":
                 return self.send_html(GATE_PAGE.replace("__BODY__", LOGIN_BODY))
             if self.path == "/data":
@@ -7260,6 +7317,22 @@ def build_server(args):
             try:
                 self.send_response(200)
                 self.send_header("Content-Type", "text/html; charset=utf-8")
+                self.send_header("Content-Length", str(len(body)))
+                self.send_header("Cache-Control", "no-store")
+                self.end_headers()
+                self.wfile.write(body)
+            except (BrokenPipeError, ConnectionResetError):
+                pass
+
+        def send_js(self, js):
+            # no-store, same as send_html: a service worker script the browser
+            # kept an old copy of is a phone that never learns the cache
+            # strategy changed, and the update check itself needs the request
+            # to actually reach the server.
+            body = js.encode()
+            try:
+                self.send_response(200)
+                self.send_header("Content-Type", "text/javascript; charset=utf-8")
                 self.send_header("Content-Length", str(len(body)))
                 self.send_header("Cache-Control", "no-store")
                 self.end_headers()
