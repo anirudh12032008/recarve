@@ -718,6 +718,33 @@ body.reading #read{display:block}
   background:color-mix(in srgb,var(--err) 12%,transparent)}
 .row-del:active{opacity:.7}
 /* Rename turns the row itself into the edit box -- no dialog, same as Remove. */
+/* Home's calendar: this week as seven tappable days, then the institute's next
+   dates as tear-off tiles. */
+.cal{margin:4px 16px 0;padding:14px;border-radius:16px;border:1px solid var(--line);
+  background:var(--surface)}
+.cal .mon{display:flex;justify-content:space-between;align-items:baseline;margin:0 2px 10px}
+.cal .mon b{font-size:17px;font-weight:700;letter-spacing:-.01em}
+.cal .mon small{font-size:13px;color:var(--mut)}
+.week{display:grid;grid-template-columns:repeat(7,1fr);gap:4px}
+.week button{display:flex;flex-direction:column;align-items:center;gap:2px;min-height:62px;
+  padding:6px 0;border:0;border-radius:12px;background:transparent;color:var(--fg);font:inherit}
+.week small{font-size:11px;font-weight:600;color:var(--mut);letter-spacing:.04em}
+.week b{font-size:17px;font-weight:650;font-variant-numeric:tabular-nums}
+.week i{display:flex;gap:3px;height:6px}
+.week i::before{content:"";width:6px;height:6px;border-radius:50%;background:transparent}
+.week .has i::before{background:var(--accent)}
+.week .off i::before{background:var(--err)}
+.week .past b{color:var(--mut)}
+.week .today{background:var(--accent);color:var(--accent-fg)}
+.week .today small,.week .today b{color:var(--accent-fg)}
+.week .today.has i::before{background:var(--accent-fg)}
+.cal .why{margin:10px 2px 0;font-size:13px;color:var(--mut)}
+.tile{flex:none;width:44px;border-radius:10px;overflow:hidden;text-align:center;
+  border:1px solid var(--line);background:var(--bg)}
+.tile small{display:block;font-size:10px;font-weight:700;letter-spacing:.06em;
+  text-transform:uppercase;color:#fff;background:var(--err);padding:2px 0}
+.tile b{display:block;font-size:17px;font-weight:700;padding:3px 0 4px;
+  font-variant-numeric:tabular-nums}
 .rename{display:flex;gap:8px;align-items:center;width:100%}
 .rename input{flex:1;min-width:0;height:var(--tap);padding:0 12px;font:inherit;
   border:1px solid var(--mut);border-radius:10px;background:var(--bg);color:var(--fg)}
@@ -1733,23 +1760,82 @@ function markSeen(now) {
 // Nothing to show until ATT has answered -- there is no guessed countdown, the
 // same way there is no guessed timetable.
 function countdownBlock() {
-  if (!ATT || !ATT.next) return;
-  const n = ATT.next;
+  if (!ATT) return;
+  calendarWeek();
+  const items = ATT.upcoming || (ATT.next ? [ATT.next] : []);
+  if (!items.length) return;
+  block('Coming up', items.map(n => {
+    const row = line(n.title, whenSays(n), document.createElement('div'));
+    // A tear-off date, so the list reads as a calendar and not as prose.
+    const tile = document.createElement('span');
+    tile.className = 'tile';
+    tile.innerHTML = '<small></small><b></b>';
+    tile.querySelector('small').textContent = MONTHS[+n.date.slice(5, 7) - 1].slice(0, 3);
+    tile.querySelector('b').textContent = +n.date.slice(8);
+    row.insertBefore(tile, row.firstChild);
+    return row;
+  }));
+}
+
+// How far away a calendar entry is, in the words a student would use -- and
+// honest about a window already running rather than naming the day it ends.
+function whenSays(n) {
   const today = attToday();
   const days = Math.round(
     (new Date(n.date + 'T00:00:00') - new Date(today + 'T00:00:00')) / 86400000);
   const ends = Math.round(
     (new Date(n.ends + 'T00:00:00') - new Date(today + 'T00:00:00')) / 86400000);
   const short = d => MONTHS[+d.slice(5, 7) - 1].slice(0, 3) + ' ' + (+d.slice(8));
-  let sub;
-  if (days <= 0 && ends >= 0) {
-    sub = ends > 0 ? 'On now · ends ' + short(n.ends) : 'On now · ends today';
-  } else if (days === 1) {
-    sub = 'Tomorrow';
-  } else {
-    sub = 'In ' + days + ' days · ' + short(n.date);
+  if (days <= 0 && ends >= 0) return ends > 0 ? 'On now · ends ' + short(n.ends) : 'On now · ends today';
+  if (days === 1) return 'Tomorrow';
+  return 'In ' + days + ' days · ' + short(n.date);
+}
+
+// This week, Monday to Sunday, as seven days you can tap straight into. A dot
+// is a day with classes on your own timetable; red is a day the institute
+// closed. Nothing here is fetched -- it is the timetable and calendar Home
+// already holds, drawn as a week instead of as a list.
+function calendarWeek() {
+  const today = attToday();
+  const back = (dayOfISO(today) + 6) % 7;          // days since Monday
+  const monday = shiftDay(today, -back);
+  const box = document.createElement('div');
+  box.className = 'cal';
+  const head = document.createElement('div');
+  head.className = 'mon';
+  head.innerHTML = '<b></b><small></small>';
+  head.querySelector('b').textContent =
+    MONTHS[+today.slice(5, 7) - 1] + ' ' + today.slice(0, 4);
+  head.querySelector('small').textContent = 'This week';
+  box.appendChild(head);
+  const week = document.createElement('div');
+  week.className = 'week';
+  let why = null;
+  for (let i = 0; i < 7; i++) {
+    const date = shiftDay(monday, i);
+    const shut = closedOn(date);
+    const n = TT ? slotsFor(date).length : 0;
+    const b = document.createElement('button');
+    b.className = [date === today ? 'today' : '', date < today ? 'past' : '',
+                   shut ? 'off' : n ? 'has' : ''].filter(Boolean).join(' ');
+    b.innerHTML = '<small></small><b></b><i></i>';
+    b.querySelector('small').textContent = DAYS[dayOfISO(date)].slice(0, 1);
+    b.querySelector('b').textContent = +date.slice(8);
+    b.setAttribute('aria-label', dayName(date) + (shut ? ', ' + shut.title
+      : n ? ', ' + n + (n === 1 ? ' class' : ' classes') : ', no classes'));
+    b.onclick = () => { dayDate = date; go('classes', 'day'); };
+    if (shut && !why) why = DAYS[dayOfISO(date)] + ': ' + shut.title + ' — no classes';
+    week.appendChild(b);
   }
-  block('Coming up', [line(n.title, sub, document.createElement('div'))]);
+  box.appendChild(week);
+  if (why) {
+    const p = document.createElement('p');
+    p.className = 'why';
+    p.textContent = why;
+    box.appendChild(p);
+  }
+  heading('Calendar');
+  nav.appendChild(box);
 }
 
 // 1. TODAY. Empty is the honest first state: nobody has typed a timetable in,
@@ -5758,6 +5844,14 @@ def db_attendance(conn, user_id, window=ATT_WINDOW):
                  " where notable and ends_on >= current_date "
                  " order by starts_on limit 1")),
             None),
+        # The next several, for Home's calendar: `next` stays for anything
+        # that only ever wanted the one.
+        "upcoming": [
+            {"date": s.isoformat(), "ends": e.isoformat(), "title": t, "kind": k}
+            for s, e, t, k in conn.execute(
+                "select starts_on, ends_on, title, kind from academic_calendar "
+                " where notable and ends_on >= current_date "
+                " order by starts_on limit 5")],
     }
 
 

@@ -1327,6 +1327,20 @@ ATT.next = {date: '2026-09-08', ends: '2026-09-08', title: 'Tomorrow thing',
 writes = []; render();
 assert.ok(says('Tomorrow'), 'one day out is named, not counted');
 
+// ---- The week strip. 2026-09-07 is a Monday with three classes on it, and
+// the Wednesday after is closed, so the strip has to tell the three apart.
+ATT.closed = [{date: '2026-09-09', title: 'Test holiday', kind: 'holiday'}];
+ATT.upcoming = [{date: '2026-09-20', ends: '2026-09-20', title: 'Attendance displayed', kind: 'milestone'},
+                {date: '2026-10-27', ends: '2026-11-03', title: 'Mid-term examinations', kind: 'exam'}];
+writes = []; render();
+assert.ok(says('Calendar') && says('September 2026') && says('This week'), 'a calendar, not a sentence');
+assert.ok(wrote(['className', 'today has']), 'today is marked, and has classes');
+assert.ok(wrote(['className', 'off']), 'a closed day is marked as one');
+assert.ok(says('Wednesday: Test holiday — no classes'), 'and the strip says why');
+assert.ok(says('Mid-term examinations') && says('In 50 days · Oct 27'), 'several dates, not one');
+assert.ok(wrote(['textContent', 'Oct']) && wrote(['textContent', 27]), 'each on a tear-off date tile');
+ATT.closed = []; delete ATT.upcoming;
+
 ATT.next = null;
 writes = []; render();
 assert.ok(!says('Coming up'), 'nothing to count down to draws nothing');
