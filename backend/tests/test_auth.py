@@ -426,21 +426,25 @@ def test_a_stranger_is_told_what_they_are_joining(server):
     with no session, on the same GET that carries the form."""
     status, body, _ = call(server, "GET", "/")
     assert status == 200
+    assert "Sleep through class." in body and "Wake up to notes." in body
     assert "Every lecture, written down." in body
-    assert "One person records the class. Everyone gets the notes." in body
+    assert "One person records the class." in body
     # The demonstration, which is the one thing a sentence cannot do: what was
     # said, and what came back out of it.
     assert "What the professor said" in body and "What you get" in body
     assert "power rule" in body and "the basis of the derivative" in body
     for point in ("Hindi and English mixed", "Practice questions from every lecture",
-                  "one place, per subject"):
+                  "Everything in one place, per subject", "Your 75%, per subject"):
         assert point in body, f"the landing lost: {point}"
+    # Every call to action lands on the form, which is on the same page.
+    assert 'href="#join"' in body and 'id="join"' in body
     # And it is a wrapper, not a replacement -- the form it wraps still works.
     assert 'id="f"' in body and 'id="roll"' in body and 'id="pw"' in body
 
     # Only the front door carries it. /login is for somebody already sold.
     _, login, _ = call(server, "GET", "/login")
     assert "Every lecture, written down." not in login
+    assert 'class="land"' not in login, "the landing's look is the front door's alone"
 
 
 def test_a_wrong_invite_code_does_not_get_in(server):

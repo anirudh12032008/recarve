@@ -5924,76 +5924,228 @@ button[disabled]{background:var(--mut);color:var(--bg);box-shadow:none}
    5.24:1 on the ground in both themes. */
 .hint{color:var(--mut);font-size:.8rem;margin:0 0 .8rem}
 /* ---- The landing, which only the join screen carries. A cold tap off a
-   WhatsApp link used to arrive at a bare form: five boxes, no answer to what
-   the class is being asked to join. The form did not change -- it is now the
-   bottom of a page that shows the thing first. Every other body in this file
-   is still the plain card, so none of these class names appears on them. */
-.mark{font-size:1.25rem;font-weight:700;letter-spacing:-.02em}
-.mark span{color:var(--mut);font-weight:400;margin-left:.5rem;font-size:.875rem}
-h1.big{font-size:1.6rem;line-height:1.25;margin:1.3rem 0 .4rem;max-width:20ch}
-.sub{color:var(--mut);margin:0 0 1.3rem;max-width:34ch}
-/* Showing the transformation beats describing it: it is the one thing this
-   app does that a classmate cannot picture from a sentence. */
-.demo{border:1px solid var(--line);border-radius:14px;overflow:hidden}
-.side{padding:.8rem .95rem}
-.side+.side{border-top:1px solid var(--line)}
-.cap{font-size:.75rem;color:var(--mut);margin:0 0 .45rem}
-.said,.became{font-size:.9rem;line-height:1.55}
-/* The English words inside the Hindi are the point of the example, not
-   emphasis -- em is the markup, grey is the reading. */
-.said em{font-style:normal;color:var(--mut)}
-.became b{display:block;font-size:.8rem;color:var(--mut);font-weight:500;margin:0 0 .25rem}
-.became ul{margin:0;padding-left:1.1rem}
-.became li{margin:.2rem 0}
-/* A formula is one token with no spaces in it, on a 360px screen. */
-.became code{font-size:.85rem;background:var(--surface);padding:1px 5px;border-radius:5px;
-  overflow-wrap:anywhere}
-.arrow{display:flex;align-items:center;gap:.55rem;padding:.55rem .95rem;
-  background:var(--surface);font-size:.78rem;color:var(--mut)}
-.arrow i{flex:none;width:6px;height:6px;border-radius:50%;background:var(--accent)}
-.pts{margin:1.4rem 0 0;padding:0;list-style:none}
-.pts li{display:flex;gap:.7rem;padding:.6rem 0;border-bottom:1px solid var(--line);
-  font-size:.95rem}
-.pts li:last-child{border-bottom:0}
-.pts b{flex:none;width:1.4em;color:var(--accent);font-weight:700}
-.join{border-top:1px solid var(--line);margin-top:1.6rem;padding-top:1.5rem}
-.join h2{font-size:1.25rem;margin:0 0 .25rem}
+   WhatsApp link is the one moment this app has to sell itself, so it drops
+   the plain card every other gate screen uses and commits to one look: dark,
+   whichever theme the phone is in. Everything is scoped under .land -- login,
+   waiting and the admin panel never see a line of it. The form inside is the
+   same form, the same ids and the same script; only the room around it moved.
+   No web font and no image: it has to paint fast on the class wifi. */
+body:has(.land){display:block;padding:0;background:#07080c}
+main:has(.land){max-width:none}
+.land{--bg:#07080c;--fg:#eef0f6;--mut:#9aa3b5;--line:rgba(255,255,255,.1);
+  --accent:#8b9cff;--accent-fg:#07080c;--surface:rgba(255,255,255,.045);--err:#ff6b7a;
+  color-scheme:dark;color:var(--fg);position:relative;overflow:hidden;
+  background:
+    radial-gradient(60rem 36rem at 85% -8%,rgba(122,92,255,.28),transparent 60%),
+    radial-gradient(44rem 30rem at -10% 18%,rgba(40,170,255,.18),transparent 60%),
+    radial-gradient(40rem 30rem at 50% 115%,rgba(255,90,160,.12),transparent 60%),#07080c}
+/* A faint grid behind the hero, faded out before it reaches the text below. */
+.land::before{content:"";position:absolute;inset:0 0 auto 0;height:44rem;pointer-events:none;
+  background-image:linear-gradient(rgba(255,255,255,.045) 1px,transparent 1px),
+    linear-gradient(90deg,rgba(255,255,255,.045) 1px,transparent 1px);
+  background-size:40px 40px;
+  -webkit-mask-image:radial-gradient(ellipse at 50% 0,#000 20%,transparent 70%);
+  mask-image:radial-gradient(ellipse at 50% 0,#000 20%,transparent 70%)}
+.land .wrap{position:relative;max-width:64rem;margin:0 auto;
+  padding:max(18px,env(safe-area-inset-top)) 20px 40px}
+.land p{color:var(--mut)}
+.land nav{display:flex;align-items:center;justify-content:space-between;min-height:48px}
+.logo{font-size:1.2rem;font-weight:800;letter-spacing:-.03em;color:var(--fg)}
+.logo i{display:inline-block;width:.55em;height:.55em;margin-left:.12em;border-radius:50%;
+  background:linear-gradient(135deg,#8b9cff,#ff7ab6);vertical-align:.08em}
+.land nav a{color:var(--fg);text-decoration:none;font-weight:600;font-size:.92rem;
+  display:inline-flex;align-items:center;min-height:44px;padding:0 14px;border-radius:999px;
+  border:1px solid var(--line);background:var(--surface)}
+
+.hero{display:grid;gap:34px;padding:38px 0 16px;align-items:center}
+@media (min-width:880px){.hero{grid-template-columns:1.05fr .95fr;padding:70px 0 30px}}
+.pill{display:inline-flex;align-items:center;gap:8px;font-size:.78rem;font-weight:600;
+  color:var(--fg);padding:6px 12px;border-radius:999px;border:1px solid var(--line);
+  background:var(--surface);letter-spacing:.01em}
+.pill b{width:7px;height:7px;border-radius:50%;background:#3ee089;
+  box-shadow:0 0 0 0 rgba(62,224,137,.6);animation:ping 2s infinite}
+.hero h1{font-size:clamp(2.5rem,9.5vw,4.4rem);line-height:1;letter-spacing:-.045em;
+  font-weight:850;margin:18px 0 18px;color:var(--fg);max-width:12ch}
+.hero h1 span{display:block;background:linear-gradient(92deg,#8b9cff 0%,#c58bff 45%,#ff7ab6 100%);
+  -webkit-background-clip:text;background-clip:text;color:transparent}
+.hero .lede{font-size:1.08rem;line-height:1.6;max-width:34ch;margin:0 0 26px}
+.ctas{display:flex;gap:10px;flex-wrap:wrap}
+.cta{display:inline-flex;align-items:center;justify-content:center;min-height:50px;
+  padding:0 22px;border-radius:14px;font-weight:700;text-decoration:none;font-size:1rem}
+.cta.go{background:linear-gradient(135deg,#8b9cff,#b48cff);color:#07080c;
+  box-shadow:0 10px 30px -8px rgba(139,156,255,.6)}
+.cta.soft{color:var(--fg);border:1px solid var(--line);background:var(--surface)}
+.stats{display:grid;grid-template-columns:repeat(3,auto);justify-content:start;
+  column-gap:22px;margin:28px 0 0}
+.stats div{font-size:.75rem;line-height:1.35;color:var(--mut);max-width:9rem}
+.stats b{display:block;font-size:1.3rem;color:var(--fg);letter-spacing:-.02em}
+
+/* The demonstration. A lecture recording on top, the notes it became below --
+   the one thing this app does that a classmate cannot picture from a
+   sentence, so it is shown happening rather than described. */
+.demo{border:1px solid var(--line);border-radius:22px;padding:14px;
+  background:linear-gradient(180deg,rgba(255,255,255,.07),rgba(255,255,255,.02));
+  box-shadow:0 30px 80px -30px rgba(0,0,0,.8),inset 0 1px 0 rgba(255,255,255,.08);
+  -webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px)}
+.rec{display:flex;align-items:center;gap:10px;padding:12px 14px;border-radius:14px;
+  background:rgba(0,0,0,.35);border:1px solid var(--line)}
+.rec .dot{width:9px;height:9px;border-radius:50%;background:#ff4d6d;animation:blink 1.2s infinite}
+.rec .t{font:600 .78rem ui-monospace,SFMono-Regular,Menlo,monospace;color:var(--fg)}
+.rec .sub{font-size:.75rem;color:var(--mut);margin-left:auto}
+.wave{display:flex;align-items:center;gap:3px;height:34px;padding:0 4px;margin:10px 2px 4px}
+.wave i{flex:1;border-radius:3px;background:linear-gradient(180deg,#8b9cff,#ff7ab6);
+  height:30%;animation:wave 1.1s ease-in-out infinite}
+.said{margin:10px 2px 0;padding:12px 14px;border-radius:14px;background:rgba(0,0,0,.25);
+  font-size:.92rem;line-height:1.6;color:var(--fg)}
+.said small{display:block;font-size:.72rem;color:var(--mut);margin:0 0 4px;letter-spacing:.02em}
+.said em{font-style:normal;color:#9fb0ff}
+.flow{display:flex;align-items:center;justify-content:center;gap:8px;margin:12px 0;
+  font-size:.75rem;color:var(--mut)}
+.flow b{padding:4px 10px;border-radius:999px;background:rgba(139,156,255,.14);color:#b9c3ff;
+  font-weight:600}
+.notes{padding:14px;border-radius:14px;background:#0d0f16;border:1px solid var(--line)}
+.notes h3{margin:0 0 8px;font-size:.95rem;color:var(--fg)}
+.notes ul{margin:0 0 12px;padding-left:1.1rem;font-size:.9rem;color:#d7dbe6}
+.notes li{margin:.25rem 0}
+.notes code{font-size:.84rem;padding:1px 6px;border-radius:6px;background:rgba(139,156,255,.14);
+  color:#c9d1ff;overflow-wrap:anywhere}
+.q{border-radius:12px;padding:10px 12px;background:rgba(255,255,255,.04);font-size:.86rem;
+  color:#d7dbe6}
+.q small{display:block;font-size:.7rem;color:#ff9ccb;font-weight:700;letter-spacing:.06em;
+  text-transform:uppercase;margin:0 0 3px}
+
+.sect{padding:44px 0 6px}
+.kicker{font-size:.75rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;
+  color:#b9c3ff;margin:0 0 8px}
+.sect h2{font-size:clamp(1.6rem,6vw,2.3rem);line-height:1.1;letter-spacing:-.03em;
+  margin:0 0 22px;color:var(--fg);max-width:18ch;font-weight:800}
+.grid{display:grid;gap:12px}
+@media (min-width:640px){.grid{grid-template-columns:1fr 1fr}}
+@media (min-width:960px){.grid{grid-template-columns:1fr 1fr 1fr}}
+.card{padding:18px;border-radius:18px;border:1px solid var(--line);background:var(--surface)}
+.card .ic{display:grid;place-items:center;width:38px;height:38px;border-radius:11px;
+  margin:0 0 12px;background:linear-gradient(135deg,rgba(139,156,255,.25),rgba(255,122,182,.2));
+  color:#e6e9ff}
+.card .ic svg{width:20px;height:20px}
+.card h3{margin:0 0 4px;font-size:1rem;color:var(--fg)}
+.card p{margin:0;font-size:.9rem;line-height:1.55}
+.steps{display:grid;gap:12px;counter-reset:s}
+@media (min-width:760px){.steps{grid-template-columns:repeat(3,1fr)}}
+.steps div{position:relative;padding:18px 18px 18px 60px;border-radius:18px;
+  border:1px solid var(--line);background:var(--surface)}
+.steps div::before{counter-increment:s;content:counter(s);position:absolute;left:18px;top:16px;
+  width:28px;height:28px;border-radius:50%;display:grid;place-items:center;font-weight:800;
+  font-size:.85rem;color:#07080c;background:linear-gradient(135deg,#8b9cff,#ff7ab6)}
+.steps b{display:block;color:var(--fg);margin:0 0 2px}
+.steps span{font-size:.9rem;color:var(--mut)}
+
+/* The form: the same fields and script as ever, in a card of its own. */
+.joincard{scroll-margin-top:16px;max-width:30rem;margin:50px auto 0;padding:24px 20px;
+  border-radius:24px;border:1px solid rgba(139,156,255,.35);
+  background:linear-gradient(180deg,rgba(139,156,255,.1),rgba(255,255,255,.02));
+  box-shadow:0 30px 80px -40px rgba(139,156,255,.55)}
+.joincard h2{font-size:1.5rem;letter-spacing:-.02em;margin:0 0 6px;color:var(--fg)}
+.joincard .by{display:inline-flex;gap:6px;align-items:center;font-size:.85rem;font-weight:600;
+  padding:5px 11px;border-radius:999px;background:rgba(62,224,137,.12);color:#8ff0bd;
+  margin:0 0 10px}
+.joincard input{background:rgba(0,0,0,.3);border-color:rgba(255,255,255,.22)}
+.joincard input[readonly]{background:transparent;border-style:dashed}
+.joincard button{min-height:52px;border-radius:14px;margin-top:6px;font-weight:750;
+  background:linear-gradient(135deg,#8b9cff,#b48cff);color:#07080c}
+.joincard button[disabled]{background:var(--mut);color:var(--bg)}
+.land .login{text-align:center;margin:18px 0 0}
+.land .login a{color:#b9c3ff;display:inline-flex;align-items:center;min-height:44px}
+.land footer{text-align:center;font-size:.8rem;color:var(--mut);padding:44px 0 8px}
+
+@keyframes wave{0%,100%{height:22%}50%{height:100%}}
+@keyframes blink{50%{opacity:.25}}
+@keyframes ping{0%{box-shadow:0 0 0 0 rgba(62,224,137,.55)}80%,100%{box-shadow:0 0 0 9px rgba(62,224,137,0)}}
+@keyframes rise{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}
+.rise{animation:rise .7s cubic-bezier(.2,.7,.2,1) both}
+.d1{animation-delay:.08s}.d2{animation-delay:.18s}.d3{animation-delay:.3s}.d4{animation-delay:.45s}
+@media (prefers-reduced-motion:reduce){
+  .land *,.land *::before{animation:none!important}}
 </style>
 <main>__BODY__</main>
 """
 
-JOIN_BODY = r"""<div class="mark">recarve<span>Section I</span></div>
-<h1 class="big">Every lecture, written down.</h1>
-<p class="sub">One person records the class. Everyone gets the notes.</p>
+JOIN_BODY = r"""<div class="land">
+<div class="wrap">
 
-<div class="demo">
-  <div class="side">
-    <p class="cap">What the professor said</p>
-    <div class="said">&ldquo;&#2340;&#2379; &#2360;&#2348;&#2360;&#2375; &#2346;&#2361;&#2354;&#2375;
-      &#2361;&#2350; <em>limit</em> &#2325;&#2366; <em>concept</em> &#2360;&#2350;&#2333;&#2375;&#2306;&#2327;&#2375;,
-      &#2347;&#2367;&#2352; <em>power rule</em> &#2342;&#2375;&#2326;&#2375;&#2306;&#2327;&#2375;&rdquo;</div>
+<nav><span class="logo">recarve<i></i></span><a href="/login">Log in</a></nav>
+
+<section class="hero">
+  <div>
+    <span class="pill rise"><b></b>Section I &middot; MANIT Bhopal &middot; 2026&ndash;27</span>
+    <h1 class="rise d1">Sleep through class. <span>Wake up to notes.</span></h1>
+    <p class="lede rise d2">Every lecture, written down. One person records the class. Everyone
+    gets the notes &mdash; Hindi, English, or both in the same sentence.</p>
+    <div class="ctas rise d3">
+      <a class="cta go" href="#join">Join Section I</a>
+      <a class="cta soft" href="#how">How it works</a>
+    </div>
+    <div class="stats rise d4">
+      <div><b>12</b>subjects, one shelf</div>
+      <div><b>~10 min</b>from class to notes</div>
+      <div><b>&#8377;0</b>to use, always</div>
+    </div>
   </div>
-  <div class="arrow"><i></i> transcribed and written up, about ten minutes later</div>
-  <div class="side">
-    <p class="cap">What you get</p>
-    <div class="became">
-      <b>Key points</b>
+
+  <div class="demo rise d2" aria-label="A recorded lecture becoming notes">
+    <div class="rec"><span class="dot"></span><span class="t">REC 42:17</span>
+      <span class="sub">MC1101 &middot; Maths</span></div>
+    <div class="wave" aria-hidden="true"><i style="animation-delay:-0.00s"></i><i style="animation-delay:-0.37s"></i><i style="animation-delay:-0.74s"></i><i style="animation-delay:-0.11s"></i><i style="animation-delay:-0.48s"></i><i style="animation-delay:-0.85s"></i><i style="animation-delay:-0.22s"></i><i style="animation-delay:-0.59s"></i><i style="animation-delay:-0.96s"></i><i style="animation-delay:-0.33s"></i><i style="animation-delay:-0.70s"></i><i style="animation-delay:-0.07s"></i><i style="animation-delay:-0.44s"></i><i style="animation-delay:-0.81s"></i><i style="animation-delay:-0.18s"></i><i style="animation-delay:-0.55s"></i><i style="animation-delay:-0.92s"></i><i style="animation-delay:-0.29s"></i><i style="animation-delay:-0.66s"></i><i style="animation-delay:-0.03s"></i><i style="animation-delay:-0.40s"></i><i style="animation-delay:-0.77s"></i><i style="animation-delay:-0.14s"></i><i style="animation-delay:-0.51s"></i><i style="animation-delay:-0.88s"></i><i style="animation-delay:-0.25s"></i><i style="animation-delay:-0.62s"></i><i style="animation-delay:-0.99s"></i><i style="animation-delay:-0.36s"></i><i style="animation-delay:-0.73s"></i><i style="animation-delay:-0.10s"></i><i style="animation-delay:-0.47s"></i><i style="animation-delay:-0.84s"></i><i style="animation-delay:-0.21s"></i></div>
+    <div class="said"><small>What the professor said</small>&ldquo;&#2340;&#2379; &#2360;&#2348;&#2360;&#2375;
+      &#2346;&#2361;&#2354;&#2375; &#2361;&#2350; <em>limit</em> &#2325;&#2366; <em>concept</em>
+      &#2360;&#2350;&#2333;&#2375;&#2306;&#2327;&#2375;, &#2347;&#2367;&#2352; <em>power rule</em>
+      &#2342;&#2375;&#2326;&#2375;&#2306;&#2327;&#2375;&rdquo;</div>
+    <div class="flow">&#8595; <b>transcribed &amp; written up</b> &#8595;</div>
+    <div class="notes">
+      <h3>What you get</h3>
       <ul>
         <li>The limit is the basis of the derivative</li>
         <li>Power rule: <code>d/dx x&#8319; = n&#183;x&#8319;&#8315;&#185;</code></li>
       </ul>
+      <div class="q"><small>Practice</small>What is d/dx of x&#8309;? <i>(answer hidden
+      until you tap)</i></div>
     </div>
   </div>
-</div>
+</section>
 
-<ul class="pts">
-  <li><b>1</b><span>Hindi and English mixed, the way your professors actually talk.</span></li>
-  <li><b>2</b><span>Practice questions from every lecture, answers hidden until you want them.</span></li>
-  <li><b>3</b><span>Everyone&rsquo;s notes and slides in one place, per subject &mdash; not scattered
-  across chats.</span></li>
-</ul>
+<section class="sect" id="how">
+  <p class="kicker">Why it exists</p>
+  <h2>The class material, finally in one place.</h2>
+  <div class="grid">
+    <div class="card"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="9" y="2" width="6" height="12" rx="3"/><path d="M5 10a7 7 0 0 0 14 0M12 19v3"/></svg></span><h3>Hindi and English mixed</h3><p>The way your professors
+      actually talk, switching mid-sentence &mdash; transcribed properly, not garbled.</p></div>
+    <div class="card"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><path d="M9.1 9a3 3 0 0 1 5.8 1c0 2-3 3-3 3M12 17h.01"/></svg></span><h3>Practice questions from every lecture</h3><p>Answers hidden until
+      you want them. Quiz one lecture, or the whole subject before the mid-sem.</p></div>
+    <div class="card"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20V3H6.5A2.5 2.5 0 0 0 4 5.5v14zM4 19.5A2.5 2.5 0 0 0 6.5 22H20v-5"/></svg></span><h3>Everything in one place, per subject</h3><p>Everyone&rsquo;s
+      notes, slides and photos of the board &mdash; not scattered across five WhatsApp
+      groups and Teams.</p></div>
+    <div class="card"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18M9 16l2 2 4-4"/></svg></span><h3>Your 75%, per subject</h3><p>Mark attendance in one tap. It
+      tells you exactly how many classes you can miss &mdash; and never rounds you up.</p></div>
+    <div class="card"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg></span><h3>Ask the section</h3><p>Stuck at 1&nbsp;am? Post a doubt under
+      the lecture. Classmates answer, the best answer rises.</p></div>
+    <div class="card"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12.55a11 11 0 0 1 14 0M8.5 16.4a6 6 0 0 1 7 0M12 20h.01"/></svg></span><h3>Works with no signal</h3><p>Anything you&rsquo;ve opened stays
+      readable in a dead corridor. Built for phones and bad wifi.</p></div>
+  </div>
+</section>
 
-<div class="join">
+<section class="sect">
+  <p class="kicker">How it works</p>
+  <h2>One phone in the room is enough.</h2>
+  <div class="steps">
+    <div><b>Someone records</b><span>Any trusted classmate hits record, or uploads the
+      audio after.</span></div>
+    <div><b>It gets written up</b><span>Transcribed, summarised, and turned into practice
+      questions &mdash; about ten minutes later.</span></div>
+    <div><b>Everyone reads</b><span>The whole section gets the notes, filed under the right
+      subject, on any phone.</span></div>
+  </div>
+</section>
+
+<div class="joincard" id="join">
 <h2>Join your section</h2>
 __INVITED__
 <p>__INTRO__</p>
@@ -6015,7 +6167,11 @@ __INVITED__
 </form>
 <p class="hint">An admin approves you before you can read the class&rsquo;s notes.</p>
 </div>
-<p><a href="/login">Already joined? Log in</a></p>
+<p class="login"><a href="/login">Already joined? Log in</a></p>
+
+<footer>Made by a Section I student who kept falling asleep in class.</footer>
+</div>
+</div>
 <script>
 const $ = i => document.getElementById(i);
 $('f').onsubmit = async e => {
