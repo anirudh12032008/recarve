@@ -2355,3 +2355,57 @@ assert.deepStrictEqual(fired.map(c => c[1]), [{{id: 'm1'}}, {{id: 'm2'}}],
     r = subprocess.run([NODE, str(f)], capture_output=True, text=True)
     assert r.returncode == 0, r.stdout + r.stderr
 
+
+
+@pytest.mark.skipif(not NODE, reason="needs node")
+def test_a_picked_file_is_renamed_before_it_uploads(tmp_path):
+    """The picker's own handlers, driven with real objects: one document is
+    offered for renaming (pre-filled, extension kept), several get one shared
+    title, and a recording still goes straight up under its own name."""
+    block = re.search(r"\nfileInput\.onchange = .*?\n(?=document\.getElementById\('opt-rec'\))",
+                      notes.PAGE, re.S)
+    assert block, "the picker block must exist for this test to mean anything"
+    script = """
+const assert = require('node:assert');
+const el = () => ({ textContent: '', value: '', classList: { add() {}, remove() {} },
+                    focus() {}, select() {} });
+const fileInput = { multiple: true, files: [], value: '' };
+const blabel = el(), btitle = el(), batchName = el();
+const btns = { bcancel: el(), bgo: el() };
+const document = { getElementById: id => btns[id] };
+let pendingFiles = null, uploads = [], batches = [];
+const upload = (f, name) => uploads.push(name);
+const uploadBatch = (files, title) => batches.push([files.length, title]);
+""" + block.group(0) + """
+// One photo from the doc picker: a rename box, pre-filled from the camera's name.
+fileInput.multiple = true; fileInput.files = [{ name: 'IMG_4821.jpg' }];
+fileInput.onchange();
+assert.equal(uploads.length, 0, 'nothing goes up before it is named');
+assert.equal(blabel.textContent, 'Name this file');
+assert.equal(btitle.value, 'IMG 4821', 'pre-filled, so keeping it is one tap');
+btitle.value = 'Unit 3 Notes';
+btns.bgo.onclick();
+assert.deepStrictEqual(uploads, ['Unit 3 Notes.jpg'], 'typed name, original extension');
+
+// A blank name is not an upload.
+fileInput.files = [{ name: 'scan.pdf' }]; fileInput.onchange();
+btitle.value = '   '; btns.bgo.onclick();
+assert.equal(uploads.length, 1, 'an empty name uploads nothing');
+btns.bcancel.onclick();
+assert.equal(pendingFiles, null, 'cancel drops what was picked');
+
+// Several: one shared title, handed to the batch uploader.
+fileInput.files = [{ name: 'a.jpg' }, { name: 'b.jpg' }]; fileInput.onchange();
+assert.equal(blabel.textContent, 'One title for all 2 files');
+btitle.value = 'Handout'; btns.bgo.onclick();
+assert.deepStrictEqual(batches, [[2, 'Handout']]);
+
+// A recording skips the step entirely.
+fileInput.multiple = false; fileInput.files = [{ name: 'lecture.m4a' }];
+fileInput.onchange();
+assert.equal(uploads[uploads.length - 1], 'lecture.m4a', 'audio goes straight up');
+"""
+    f = tmp_path / "rename.js"
+    f.write_text(script)
+    r = subprocess.run([NODE, str(f)], capture_output=True, text=True)
+    assert r.returncode == 0, r.stdout + r.stderr

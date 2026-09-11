@@ -3768,16 +3768,27 @@ fileInput.onchange = () => {
   const files = Array.from(fileInput.files);
   fileInput.value = '';
   if (!files.length) return;
-  // One file is exactly the flow this always was: it uploads on its own name,
-  // no extra tap. More than one is the new thing, and needs a name of its own
-  // before any of them go anywhere.
-  if (files.length === 1) return upload(files[0], files[0].name);
+  // A recording goes straight up, as it always has: its name becomes the
+  // lecture's, and the audio picker is the only one that leaves multiple off.
+  if (!fileInput.multiple) return upload(files[0], files[0].name);
   pendingFiles = files;
-  blabel.textContent = `One title for all ${files.length} files`;
-  btitle.value = '';
+  if (files.length === 1) {
+    // Renamed the moment it is picked, not after: "IMG_4821" on the shelf is
+    // a file nobody will ever find again. Pre-filled, so keeping the camera's
+    // name is still one tap.
+    blabel.textContent = 'Name this file';
+    btitle.value = stemOf(files[0].name).replace(/[_]+/g, ' ').trim();
+  } else {
+    blabel.textContent = `One title for all ${files.length} files`;
+    btitle.value = '';
+  }
   batchName.classList.add('on');
   btitle.focus();
+  btitle.select();
 };
+const stemOf = n => (n.lastIndexOf('.') > 0 ? n.slice(0, n.lastIndexOf('.')) : n);
+const extOf = n => (n.lastIndexOf('.') > 0 ? n.slice(n.lastIndexOf('.')) : '');
+btitle.onkeydown = e => { if (e.key === 'Enter') document.getElementById('bgo').click(); };
 document.getElementById('bcancel').onclick = () => {
   batchName.classList.remove('on');
   pendingFiles = null;
@@ -3788,6 +3799,10 @@ document.getElementById('bgo').onclick = () => {
   const files = pendingFiles;
   pendingFiles = null;
   batchName.classList.remove('on');
+  // One file: the typed name IS its filename, with the original extension
+  // kept -- the extension is what the server files it by. Several: one shared
+  // title, each file keeping its own name inside the group.
+  if (files.length === 1) return upload(files[0], title + extOf(files[0].name));
   uploadBatch(files, title);
 };
 
