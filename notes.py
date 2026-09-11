@@ -638,6 +638,10 @@ body.reading #read{display:block}
 .row .name{flex:1;min-width:0}
 .row .name b{display:block;font-weight:600}
 .row .name small{display:block;font-size:13px;color:var(--mut)}
+/* Each file inside a grouped upload, listed by its own name under the shared
+   title -- a shared title does not merge the files, only how the list finds
+   them, so every one of them stays its own tap. */
+.batch-link{color:inherit;text-decoration:underline dotted;text-underline-offset:2px}
 .row .meta{font-size:13px;color:var(--mut);flex:none}
 .row .code{flex:none}
 .row a.name{text-decoration:none;color:inherit}
@@ -996,6 +1000,17 @@ body:has(#ask.on) #fab{display:none}
 @media (prefers-reduced-motion:reduce){#rec .dot{animation:none}}
 #prog{margin-top:16px;display:none}
 #prog.on{display:block}
+/* Only appears when more than one file was picked at once -- a single file
+   auto-uploads exactly as it always has, named after itself. */
+#batchName{margin-top:14px;padding:16px;border-radius:12px;background:var(--surface);display:none}
+#batchName.on{display:block}
+#batchName label{display:block;font-size:13px;color:var(--mut);margin-bottom:8px}
+#batchName input{width:100%;height:var(--tap);padding:0 13px;font:inherit;
+  border:1px solid var(--mut);border-radius:10px;background:var(--bg);color:var(--fg)}
+#batchName .go{display:flex;gap:10px;margin-top:12px}
+#batchName .go button{flex:1;min-height:var(--tap);border-radius:11px;font:inherit;
+  font-weight:650;border:1px solid var(--line);background:transparent;color:var(--fg)}
+#batchName .go button.primary{background:var(--accent);color:var(--accent-fg);border:0}
 #prog .bar{height:10px;border-radius:5px;background:var(--surface);overflow:hidden}
 #prog .fill{height:100%;width:0;background:var(--accent);transition:width .18s linear}
 #prog .txt{margin-top:9px;font-size:13px;color:var(--mut);text-align:center}
@@ -1173,8 +1188,14 @@ body.reading .tabs{display:none}
     </div>
     <button class="opt" id="opt-rec"><b>Record this class</b><span>keep the screen on</span></button>
     <button class="opt" id="opt-audio"><b>Upload a recording</b><span>m4a, mp3, mp4 &middot; up to __AUDIO_MB__ MB</span></button>
-    <button class="opt" id="opt-doc"><b>Upload notes or slides</b><span>pdf, txt, md &middot; up to __DOC_MB__ MB</span></button>
+    <button class="opt" id="opt-doc"><b>Upload notes, slides or photos</b><span>pdf, txt, md, photos of pages &middot; up to __DOC_MB__ MB each &middot; pick more than one to name them together</span></button>
     <button class="opt" id="opt-revise"><b>Make a revision sheet</b><span>from every lecture in this subject</span></button>
+    <div id="batchName">
+      <label for="btitle" id="blabel">One title for all these files</label>
+      <input id="btitle" placeholder="Unit 3 handout" maxlength="200" autocomplete="off">
+      <div class="go"><button id="bcancel">Cancel</button>
+        <button id="bgo" class="primary">Upload</button></div>
+    </div>
     <div id="prog">
       <div class="bar"><div class="fill" id="fill"></div></div>
       <p class="txt" id="ptxt">Uploading…</p>
@@ -1416,6 +1437,69 @@ function fileRow(u, s) {
           body: JSON.stringify({id: u.id})});
         if (!r.ok) throw new Error(
           (await r.json().catch(() => ({}))).error || 'could not remove that');
+        await refresh();
+      } catch (e) {
+        btn.disabled = false; btn.classList.remove('armed'); btn.textContent = 'Remove';
+        busyDone(e.message);
+      }
+    }));
+  }
+  return el;
+}
+
+// Several files sharing one batch id read as the one thing they are, rather
+// than as several rows named after whatever the camera or the phone called
+// each of them. A file with no batch is unaffected -- it renders through
+// fileRow exactly as every upload always has, and that is the common case:
+// grouping only ever happens where an upload actually asked for it.
+function groupedFileRows(s) {
+  const seen = new Set();
+  const rows = [];
+  for (const u of s.uploads) {
+    if (!u.batch) { rows.push(fileRow(u, s)); continue; }
+    if (seen.has(u.batch)) continue;
+    seen.add(u.batch);
+    rows.push(fileGroupRow(s.uploads.filter(x => x.batch === u.batch), s));
+  }
+  return rows;
+}
+
+// The vote and the remove control both anchor on the first file rather than
+// needing a row of their own: a vote says the whole set was useful, which is
+// exactly what "one title" already claimed about them, and there is no
+// material_groups table for either one to point at instead. Removing loops
+// every file in the batch -- the two-tap confirm still guards the whole
+// group behind one press, not one per file.
+function fileGroupRow(files, s) {
+  const el = document.createElement('div');
+  el.className = 'row';
+  el.style.setProperty('--h', hue(s.code));
+  el.innerHTML = '<i class="tick"></i><span class="name"><b></b><small></small></span>';
+  const anchor = files[0];
+  el.querySelector('b').textContent = anchor.title || (files.length + ' files');
+  const small = el.querySelector('small');
+  small.textContent = '';
+  if (anchor.by) small.append(anchor.by + ' · ');
+  files.forEach((u, i) => {
+    if (i) small.append(', ');
+    const a = document.createElement('a');
+    a.href = u.path; a.target = '_blank'; a.rel = 'noopener';
+    a.className = 'batch-link';
+    a.textContent = u.name;
+    small.appendChild(a);
+  });
+  if (anchor.id) el.appendChild(voteBtn(anchor));
+  if (anchor.id && ROLE === 'admin') {
+    el.appendChild(removeBtn(async (btn) => {
+      try {
+        for (const u of files) {
+          if (!u.id) continue;
+          const r = await fetch('/remove', {method: 'POST',
+            headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify({id: u.id})});
+          if (!r.ok) throw new Error(
+            (await r.json().catch(() => ({}))).error || 'could not remove that');
+        }
         await refresh();
       } catch (e) {
         btn.disabled = false; btn.classList.remove('armed'); btn.textContent = 'Remove';
@@ -2558,7 +2642,7 @@ function renderSubject(s) {
     block('Practice', [b]);
   }
   block('Lectures', lecturesOf(s).map(n => noteRow(n, s)));
-  block('Notes & slides', s.uploads.map(u => fileRow(u, s)));
+  block('Notes & slides', groupedFileRows(s));
   const rev = revisionOf(s);
   block('Revision sheet', rev ? [noteRow(rev, s)] : []);
   if (!s.notes.length && !s.uploads.length) {
@@ -3334,6 +3418,9 @@ document.getElementById('print').onclick = () => {
 // ---- Adding things: record, upload, revise. All work happens on the Mac. ----
 const sheet = document.getElementById('sheet'), subj = document.getElementById('subj');
 const fileInput = document.getElementById('file'), rec = document.getElementById('rec');
+const batchName = document.getElementById('batchName'),
+      btitle = document.getElementById('btitle'), blabel = document.getElementById('blabel');
+let pendingFiles = null;   // files waiting on a shared title, or null
 const clock = document.getElementById('clock'), jobsBox = document.getElementById('jobs');
 let recorder = null, chunks = [], ticker = null, started = 0, live = false;
 
@@ -3491,6 +3578,7 @@ const openSheet = () => {
 };
 const closeSheet = () => {
   sheet.classList.remove('on'); rec.classList.remove('on'); prog.classList.remove('on');
+  batchName.classList.remove('on'); pendingFiles = null;
 };
 document.getElementById('fab').onclick = openSheet;
 document.getElementById('opt-close').onclick = closeSheet;
@@ -3562,21 +3650,121 @@ function upload(blob, name) {
   xhr.send(blob);
 }
 
+// Several files, one after another rather than in parallel: a phone on the
+// class wifi with 109 other phones on it is not fighting itself for
+// bandwidth, and the progress bar can say something true -- which file, out
+// of how many -- instead of an average of five uploads nobody can act on.
+//
+// A deliberate near-copy of upload() rather than a shared core the two call
+// into. upload() is the path every recording and every single-file add has
+// gone through for as long as this app has existed, and refactoring it to
+// serve a second caller risked the one flow that must never break for the
+// sake of the one that is new today.
+async function uploadBatch(files, title) {
+  const batch = crypto.randomUUID();
+  prog.classList.remove('err');
+  prog.classList.add('on');
+  for (let i = 0; i < files.length; i++) {
+    const f = files[i];
+    // The picker that reaches this only ever offers documents and photos --
+    // opt-audio never sets fileInput.multiple -- so LIMIT_DOC is the only cap
+    // that applies here.
+    if (f.size > LIMIT_DOC) {
+      prog.classList.add('err');
+      fill.style.width = '100%';
+      ptxt.textContent = `${f.name} is ${mb(f.size)} — the limit is ${mb(LIMIT_DOC)}`;
+      return;
+    }
+    const label = `File ${i + 1} of ${files.length}`;
+    const ok = await new Promise((resolve) => {
+      fill.style.width = '0%';
+      ptxt.textContent = `${label}: Starting…`;
+      const xhr = new XMLHttpRequest();
+      xhr.open('POST', '/upload');
+      xhr.setRequestHeader('X-Filename', encodeURIComponent(f.name));
+      xhr.setRequestHeader('X-Subject', subj.value);
+      xhr.setRequestHeader('X-Batch', batch);
+      xhr.setRequestHeader('X-Title', encodeURIComponent(title));
+      xhr.setRequestHeader('Content-Type', 'application/octet-stream');
+      xhr.timeout = 30 * 60 * 1000;
+      xhr.upload.onprogress = (e) => {
+        if (!e.lengthComputable) return;
+        const pct = Math.round(e.loaded / e.total * 100);
+        fill.style.width = pct + '%';
+        ptxt.textContent = `${label}: ${pct}%  ·  ${mb(e.loaded)} of ${mb(e.total)}`;
+      };
+      const fail = (msg) => {
+        prog.classList.add('err');
+        fill.style.width = '100%';
+        ptxt.textContent = `${f.name}: ${msg}`;
+        resolve(false);
+      };
+      xhr.onload = () => {
+        let d = {};
+        try { d = JSON.parse(xhr.responseText); } catch {}
+        if (xhr.status === 403) return fail(LOCK_ADD);
+        if (xhr.status !== 200) return fail(d.error || `Upload failed (${xhr.status})`);
+        resolve(true);
+      };
+      xhr.onerror = () => fail('Lost connection');
+      xhr.ontimeout = () => fail('Upload timed out');
+      xhr.onabort = () => fail('Upload cancelled');
+      xhr.send(f);
+    });
+    // Stop rather than skip: uploading the rest out of order would leave a
+    // batch with a hole in it and nothing on screen saying which file that
+    // hole is, on a title the class will keep reading as one complete thing.
+    if (!ok) return;
+  }
+  fill.style.width = '100%';
+  ptxt.textContent = `Uploaded ${files.length} files. Making notes…`;
+  pollJobs();
+  setTimeout(() => { closeSheet(); prog.classList.remove('on'); }, 900);
+}
+
 // Each option refuses to start rather than opening a file picker, filling a
 // progress bar and coming back 403. The reason is already on screen above
 // them, in #lock, so there is nothing left for the tap to say.
 document.getElementById('opt-audio').onclick = () => {
   if (!mayAdd()) return;
+  // A recording is one file with one title -- its own -- so this picker never
+  // offers more than one, whatever the last picker left the input set to.
+  fileInput.multiple = false;
   fileInput.accept = 'audio/*,video/*'; fileInput.click();
 };
 document.getElementById('opt-doc').onclick = () => {
   if (!mayAdd()) return;
-  fileInput.accept = '.pdf,.txt,.md'; fileInput.click();
+  // image/* was missing entirely until now: a phone photographing a page of
+  // handwritten notes -- the single most obvious way a student adds anything
+  // -- had no option that would even open the camera roll for it.
+  fileInput.multiple = true;
+  fileInput.accept = '.pdf,.txt,.md,image/*'; fileInput.click();
 };
 fileInput.onchange = () => {
-  const f = fileInput.files[0];
-  if (f) upload(f, f.name);
+  const files = Array.from(fileInput.files);
   fileInput.value = '';
+  if (!files.length) return;
+  // One file is exactly the flow this always was: it uploads on its own name,
+  // no extra tap. More than one is the new thing, and needs a name of its own
+  // before any of them go anywhere.
+  if (files.length === 1) return upload(files[0], files[0].name);
+  pendingFiles = files;
+  blabel.textContent = `One title for all ${files.length} files`;
+  btitle.value = '';
+  batchName.classList.add('on');
+  btitle.focus();
+};
+document.getElementById('bcancel').onclick = () => {
+  batchName.classList.remove('on');
+  pendingFiles = null;
+};
+document.getElementById('bgo').onclick = () => {
+  const title = btitle.value.trim();
+  if (!title) return btitle.focus();
+  const files = pendingFiles;
+  pendingFiles = null;
+  batchName.classList.remove('on');
+  uploadBatch(files, title);
 };
 
 document.getElementById('opt-rec').onclick = async () => {
@@ -4736,8 +4924,16 @@ def db_approve(conn, profile_id):
     return conn.execute("select approve_uploader(%s)", (profile_id,)).fetchone()[0]
 
 
-def db_record_upload(conn, user_id, code, filename, dest, is_audio):
-    """Remember who sent a file, so the library can say so later."""
+def db_record_upload(conn, user_id, code, filename, dest, is_audio,
+                      batch=None, title=None):
+    """Remember who sent a file, so the library can say so later.
+
+    batch and title are a materials-only idea: several pages of one handout,
+    photographed as several files, sharing one opaque id and one name so the
+    phone can draw them as the single thing they actually are. A recording is
+    already one file with one title -- its own -- so audio never carries
+    either.
+    """
     if is_audio:
         # dest.stem, not filename: process() writes its notes to
         # lectures/<dest.stem>.md, and that name is the only handle the
@@ -4750,8 +4946,8 @@ def db_record_upload(conn, user_id, code, filename, dest, is_audio):
     else:
         conn.execute(
             "insert into materials (subject_code, uploader_id, filename, file_key, "
-            "size_bytes) values (%s, %s, %s, %s, %s)",
-            (code, user_id, filename, str(dest), dest.stat().st_size),
+            "size_bytes, batch_id, title) values (%s, %s, %s, %s, %s, %s, %s)",
+            (code, user_id, filename, str(dest), dest.stat().st_size, batch, title),
         )
 
 
@@ -4772,16 +4968,19 @@ def db_meta(conn, user_id):
     no attribution rather than leaking one.
     """
     mats, lecs = {}, {}
-    for mid, code, filename, who, votes, mine in conn.execute(
+    for mid, code, filename, who, votes, mine, batch, title in conn.execute(
         "select m.id, m.subject_code, m.filename, p.name, "
         "  (select count(*) from votes v where v.material_id = m.id), "
         "  exists (select 1 from votes v "
-        "           where v.material_id = m.id and v.voter_id = %s) "
+        "           where v.material_id = m.id and v.voter_id = %s), "
+        "  m.batch_id, m.title "
         "from materials m join profiles p on p.id = m.uploader_id",
         (user_id,),
     ):
         mats[(code, filename)] = {"id": str(mid), "by": who,
-                                  "votes": votes, "voted": mine}
+                                  "votes": votes, "voted": mine,
+                                  "batch": str(batch) if batch else None,
+                                  "title": title}
     for code, title, who in conn.execute(
         "select l.subject_code, l.title, p.name from lectures l "
         "join profiles p on p.id = l.uploader_id"
@@ -7054,11 +7253,29 @@ def build_server(args):
             """
             import re
             import urllib.parse
+            import uuid as uuidlib
 
             try:
                 n = int(self.headers.get("Content-Length", 0))
                 if n <= 0:
                     return self.reply(400, {"error": "empty upload"})
+
+                # Several files, one title: the phone mints one id and sends
+                # it on every file in the batch, so this is the one place that
+                # id is ever trusted. Anything that does not parse as a uuid
+                # is refused outright rather than stored -- a batch_id is
+                # never shown to anyone, so a malformed one is not a typo to
+                # be forgiving about, it is a client that is not this page.
+                batch_raw = self.headers.get("X-Batch", "").strip()
+                if batch_raw:
+                    try:
+                        batch = str(uuidlib.UUID(batch_raw))
+                    except ValueError:
+                        return self.reply(400, {"error": "bad batch id"})
+                else:
+                    batch = None
+                title = urllib.parse.unquote(
+                    self.headers.get("X-Title", "")).strip()[:200] or None
 
                 raw = urllib.parse.unquote(self.headers.get("X-Filename", "upload"))
                 # Never trust a client-supplied filename with a path in it.
@@ -7109,7 +7326,8 @@ def build_server(args):
                 # nobody to credit, which is the whole point of --no-auth.
                 if self.me:
                     with db(self.me["id"]) as conn:
-                        db_record_upload(conn, self.me["id"], code, name, dest, is_audio)
+                        db_record_upload(conn, self.me["id"], code, name, dest,
+                                          is_audio, batch=batch, title=title)
                 job = jobs.add(dest, code, "audio" if is_audio else "document")
                 return self.reply(200, {"job": job})
             except SystemExit as e:

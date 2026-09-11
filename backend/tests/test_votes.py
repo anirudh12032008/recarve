@@ -151,7 +151,8 @@ def test_meta_says_who_added_a_file_and_how_it_scored(db):
 
     mats, lecs = notes.db_meta(db, voter)
     assert mats[("CY1107", "unit1.pdf")] == {
-        "id": str(mid), "by": "M", "votes": 1, "voted": True}
+        "id": str(mid), "by": "M", "votes": 1, "voted": True,
+        "batch": None, "title": None}
     assert lecs[("CY1107", "CY1107-week1")] == "M"
 
     # The same rows read by someone who did not vote: same count, not voted.

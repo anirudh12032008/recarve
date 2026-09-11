@@ -2256,3 +2256,102 @@ document.createElement = (tag) => {{
     r = subprocess.run([NODE, str(f)], capture_output=True, text=True)
     assert r.returncode == 0, r.stdout + r.stderr
 
+
+# --------------------------------------------------------- grouped uploads
+
+@pytest.mark.skipif(not NODE, reason="needs node")
+def test_files_sharing_a_batch_render_as_one_row(tmp_path):
+    """The whole point: eight photos of one handout are one row with one
+    title, not eight rows named after whatever the camera called each one --
+    and a file with no batch is completely unaffected."""
+    grouped_fn = re.search(r"function groupedFileRows\(s\) \{.*?\n\}", notes.PAGE, re.S)
+    group_fn = re.search(r"function fileGroupRow\(files, s\) \{.*?\n\}", notes.PAGE, re.S)
+    file_fn = re.search(r"function fileRow\(u, s\) \{.*?\n\}", notes.PAGE, re.S)
+    vote_fn = re.search(r"function voteBtn\(u, answer\) \{.*?\n\}", notes.PAGE, re.S)
+    rem_fn = re.search(r"function removeBtn\(onConfirmed\) \{.*?\n\}", notes.PAGE, re.S)
+    assert grouped_fn and group_fn and file_fn and vote_fn and rem_fn
+    script = f"""
+const assert = require('node:assert');
+const document = {{}};
+let ROLE = 'admin';
+let calls = [];
+global.fetch = (url, init) => {{
+  calls.push([url, JSON.parse(init.body)]);
+  return Promise.resolve({{ ok: true, json: async () => ({{}}) }});
+}};
+async function refresh() {{}}
+function busyDone() {{}}
+function hue() {{ return 0; }}
+const buttons = [];
+function makeEl(tag) {{
+  const el = {{
+    tag, className: '', textContent: '', innerHTML: '', href: '', disabled: false,
+    style: {{ setProperty() {{}} }}, setAttribute() {{}},
+    classList: {{ add() {{}}, remove() {{}} }}, kids: [],
+    appendChild(c) {{ el.kids.push(c); }},
+    append(...a) {{ el.appended = (el.appended || []).concat(a); }},
+    _sub: {{}},
+    querySelector(sel) {{
+      if (!el._sub[sel]) el._sub[sel] = makeEl(sel);
+      return el._sub[sel];
+    }},
+  }};
+  return el;
+}}
+document.createElement = (tag) => {{
+  const el = makeEl(tag);
+  if (tag === 'button') buttons.push(el);
+  return el;
+}};
+{vote_fn.group(0)}
+{rem_fn.group(0)}
+{file_fn.group(0)}
+{group_fn.group(0)}
+{grouped_fn.group(0)}
+
+(async () => {{
+
+const s = {{
+  code: 'MC1101',
+  uploads: [
+    {{name: 'page1.jpg', path: 'p1', id: 'm1', votes: 2, voted: false,
+      by: 'Asha', batch: 'b1', title: 'Unit 3 handout'}},
+    {{name: 'page2.jpg', path: 'p2', id: 'm2', votes: 0, voted: false,
+      by: 'Asha', batch: 'b1', title: 'Unit 3 handout'}},
+    {{name: 'solo.pdf', path: 'p3', id: 'm3', votes: 1, voted: false, by: 'Dia'}},
+  ],
+}};
+
+const rows = groupedFileRows(s);
+assert.equal(rows.length, 2, 'the batch collapses to one row; the solo file is a second');
+
+const group = rows[0];
+assert.equal(group.querySelector('b').textContent, 'Unit 3 handout',
+             'the row is titled by the shared title, not either filename');
+const smallKids = group.querySelector('small').kids || [];
+const linkNames = smallKids.filter(k => k.tag === 'a').map(k => k.textContent);
+assert.deepStrictEqual(linkNames, ['page1.jpg', 'page2.jpg'],
+             'both files are individually named and individually linked');
+assert.equal(smallKids.filter(k => k.tag === 'a')[0].href, 'p1');
+assert.equal(smallKids.filter(k => k.tag === 'a')[1].href, 'p2');
+
+// The vote anchors on the first file in the batch -- one control for the
+// group, not one per file.
+buttons.length = 0;
+fileGroupRow(s.uploads.slice(0, 2), s);
+// removeBtn is the LAST button (fileGroupRow appends vote, then remove);
+// vote is whichever came before it.
+const groupRemove = buttons[buttons.length - 1];
+await groupRemove.onclick({{ stopPropagation() {{}} }});   // arm
+await groupRemove.onclick({{ stopPropagation() {{}} }});   // fire
+const fired = calls.filter(c => c[0] === '/remove');
+assert.deepStrictEqual(fired.map(c => c[1]), [{{id: 'm1'}}, {{id: 'm2'}}],
+             'removing a group removes every file it contains');
+
+}})().catch(e => {{ console.error(e); process.exit(1); }});
+"""
+    f = tmp_path / "grouped.js"
+    f.write_text(script)
+    r = subprocess.run([NODE, str(f)], capture_output=True, text=True)
+    assert r.returncode == 0, r.stdout + r.stderr
+
