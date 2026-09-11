@@ -234,3 +234,86 @@ def test_a_trusted_member_who_is_not_admin_cannot_remove_either(server):
     status, _ = call(port, "POST", "/remove-lecture",
                       {"subject": "CY1107", "title": "x"}, cookie=cookie)
     assert status == 403
+
+
+# ------------------------------------------------------------------ rename
+
+def test_renaming_a_file_moves_it_keeps_its_extension_and_never_overwrites(server):
+    srv, args, conn = server
+    admin = with_password(conn, member(conn, admin=True))
+    port = srv.server_address[1]
+    folder = notes.subject_dir(args.library, "MC1101", "uploads")
+    (folder / "IMG_4821.jpg").write_text("board photo")
+    (folder / "Unit 3.jpg").write_text("somebody else's")
+    mid = upload_as_owner(conn, admin, "IMG_4821.jpg", str(folder / "IMG_4821.jpg"))
+
+    status, body = call(port, "POST", "/rename",
+                         {"kind": "material", "id": str(mid), "name": "Unit 3"},
+                         cookie=cookie_for(admin))
+    assert status == 200, body
+    assert not (folder / "IMG_4821.jpg").exists(), "the old name is gone"
+    assert (folder / "Unit 3 (2).jpg").read_text() == "board photo", \
+        "a taken name gets a number, and the extension is the file's own"
+    assert (folder / "Unit 3.jpg").read_text() == "somebody else's", "never overwritten"
+    assert conn.execute("select filename, file_key from materials where id = %s",
+                        (mid,)).fetchone() == ("Unit 3 (2).jpg", str(folder / "Unit 3 (2).jpg"))
+
+
+def test_renaming_a_group_changes_its_one_shared_title(server):
+    srv, args, conn = server
+    admin = with_password(conn, member(conn, admin=True))
+    port = srv.server_address[1]
+    batch = "11111111-1111-1111-1111-111111111111"
+    for name in ("a.jpg", "b.jpg"):
+        conn.execute("insert into materials (subject_code, uploader_id, filename, file_key, "
+                     "size_bytes, batch_id, title) values ('MC1101', %s, %s, %s, 1, %s, 'Old')",
+                     (admin, name, name, batch))
+    status, body = call(port, "POST", "/rename",
+                         {"kind": "batch", "batch": batch, "name": "Unit 3 handout"},
+                         cookie=cookie_for(admin))
+    assert status == 200, body
+    assert conn.execute("select distinct title from materials where batch_id = %s",
+                        (batch,)).fetchall() == [("Unit 3 handout",)]
+
+
+def test_renaming_a_lecture_moves_its_note_and_the_bookmarks_follow(server):
+    """A lecture's title is its note's filename, and bookmarks are keyed by it,
+    so a rename that moved only one of the three would lose something."""
+    srv, args, conn = server
+    admin = with_password(conn, member(conn, admin=True))
+    student = member(conn, role="student")
+    port = srv.server_address[1]
+    lectures = notes.subject_dir(args.library, "CY1107", "lectures")
+    (lectures / "CY1107-2026-09-08.md").write_text("# notes")
+    conn.execute("insert into lectures (subject_code, uploader_id, title, audio_key, status) "
+                 "values ('CY1107', %s, 'CY1107-2026-09-08', 'a', 'done')", (admin,))
+    conn.execute("insert into bookmarks (profile_id, subject_code, title) "
+                 "values (%s, 'CY1107', 'CY1107-2026-09-08')", (student,))
+
+    status, body = call(port, "POST", "/rename",
+                         {"kind": "lecture", "subject": "CY1107",
+                          "title": "CY1107-2026-09-08", "name": "Electrochemistry intro"},
+                         cookie=cookie_for(admin))
+    assert status == 200, body
+    assert (lectures / "Electrochemistry intro.md").read_text() == "# notes"
+    assert not (lectures / "CY1107-2026-09-08.md").exists()
+    assert conn.execute("select title from lectures where subject_code = 'CY1107'"
+                        ).fetchone() == ("Electrochemistry intro",)
+    assert conn.execute("select title from bookmarks where profile_id = %s",
+                        (student,)).fetchone() == ("Electrochemistry intro",), \
+        "a student's saved note must not silently vanish from their Home"
+
+
+def test_only_an_admin_may_rename_and_never_to_nothing(server):
+    srv, args, conn = server
+    port = srv.server_address[1]
+    for role in ("student", "trusted"):
+        who = with_password(conn, member(conn, role=role))
+        status, _ = call(port, "POST", "/rename", {"kind": "batch", "batch": "x", "name": "y"},
+                         cookie=cookie_for(who))
+        assert status == 403, role
+    admin = with_password(conn, member(conn, admin=True))
+    status, body = call(port, "POST", "/rename",
+                         {"kind": "material", "id": "00000000-0000-0000-0000-000000000000",
+                          "name": "  "}, cookie=cookie_for(admin))
+    assert status == 400 and b"blank" in body, body

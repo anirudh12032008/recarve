@@ -717,6 +717,13 @@ body.reading #read{display:block}
 .row-del.armed{border-color:var(--err);color:var(--err);
   background:color-mix(in srgb,var(--err) 12%,transparent)}
 .row-del:active{opacity:.7}
+/* Rename turns the row itself into the edit box -- no dialog, same as Remove. */
+.rename{display:flex;gap:8px;align-items:center;width:100%}
+.rename input{flex:1;min-width:0;height:var(--tap);padding:0 12px;font:inherit;
+  border:1px solid var(--mut);border-radius:10px;background:var(--bg);color:var(--fg)}
+.rename button{flex:none;min-height:var(--tap);padding:0 14px;border-radius:11px;font:inherit;
+  font-size:14px;font-weight:650;border:1px solid var(--line);background:transparent;color:var(--fg)}
+.rename button.primary{background:var(--accent);color:var(--accent-fg);border:0}
 .row-del[disabled]{opacity:.45}
 
 /* ---- Attendance. Two buttons, and pressing neither is the third state.
@@ -1348,6 +1355,57 @@ function go(...parts) {
 // red the error text uses; the SAME tap fired again is the confirmation.
 // Armed resets on its own the moment the row it belongs to is redrawn, which
 // is the normal case: nothing here holds a timer to un-arm it.
+// Admin-only, next to Remove. Tapping it turns the whole row into an edit
+// box holding the current name; Save sends it, Cancel (or saving the same
+// name) just redraws. The server keeps a file's extension whatever is typed.
+function renameBtn(current, save) {
+  const b = document.createElement('button');
+  b.className = 'row-del';
+  b.textContent = 'Rename';
+  b.onclick = (e) => {
+    e.stopPropagation();
+    const row = b.parentNode;
+    const form = document.createElement('form');
+    form.className = 'rename';
+    const input = document.createElement('input');
+    input.value = current;
+    input.maxLength = 120;
+    input.setAttribute('aria-label', 'New name');
+    const ok = document.createElement('button');
+    ok.className = 'primary'; ok.textContent = 'Save';
+    const no = document.createElement('button');
+    no.type = 'button'; no.textContent = 'Cancel';
+    no.onclick = () => render();
+    form.onsubmit = async (ev) => {
+      ev.preventDefault();
+      const v = input.value.trim();
+      if (!v || v === current) return render();
+      ok.disabled = true;
+      await save(v, ok);
+    };
+    form.append(input, ok, no);
+    row.innerHTML = '';
+    row.appendChild(form);
+    input.focus();
+    input.select();
+  };
+  return b;
+}
+
+// One POST for all three shapes, then a fresh /data so the shelf, the ranking
+// and any open search all see the new name at once.
+async function renameItem(payload, btn) {
+  try {
+    const r = await fetch('/rename', {method: 'POST',
+      headers: {'Content-Type': 'application/json'}, body: JSON.stringify(payload)});
+    if (!r.ok) throw new Error((await r.json().catch(() => ({}))).error || 'could not rename that');
+    await refresh();
+  } catch (e) {
+    btn.disabled = false;
+    busyDone(e.message);
+  }
+}
+
 function removeBtn(onConfirmed) {
   const b = document.createElement('button');
   b.className = 'row-del';
@@ -1387,6 +1445,8 @@ function noteRow(n, s) {
   // Revision sheets have no row in `lectures` at all -- Revise regenerates one
   // on the next tap, so there is nothing here an irreversible delete is for.
   if (admin && n.kind === 'lecture') {
+    el.appendChild(renameBtn(n.title, (v, btn) =>
+      renameItem({kind: 'lecture', subject: s.code, title: n.title, name: v}, btn)));
     el.appendChild(removeBtn(async (btn) => {
       try {
         const r = await fetch('/remove-lecture', {method: 'POST',
@@ -1462,6 +1522,9 @@ function fileRow(u, s) {
   // and the same is true of a remove button with nothing to remove.
   if (u.id) el.appendChild(voteBtn(u));
   if (u.id && ROLE === 'admin') {
+    const dot = u.name.lastIndexOf('.');
+    el.appendChild(renameBtn(dot > 0 ? u.name.slice(0, dot) : u.name, (v, btn) =>
+      renameItem({kind: 'material', id: u.id, name: v}, btn)));
     el.appendChild(removeBtn(async (btn) => {
       try {
         const r = await fetch('/remove', {method: 'POST',
@@ -1527,6 +1590,8 @@ function fileGroupRow(files, s) {
   });
   if (anchor.id) el.appendChild(voteBtn(anchor));
   if (anchor.id && ROLE === 'admin') {
+    el.appendChild(renameBtn(anchor.title || '', (v, btn) =>
+      renameItem({kind: 'batch', batch: anchor.batch, name: v}, btn)));
     el.appendChild(removeBtn(async (btn) => {
       try {
         for (const u of files) {
@@ -4366,6 +4431,7 @@ ROLE_REQUIRED = {
     "/block": "admin",
     "/remove": "admin",
     "/remove-lecture": "admin",
+    "/rename": "admin",
     "/reset": "admin",
     "/announce": "admin",     # posting to a hundred and ten people at once
     # Calling a class off changes everybody's denominator, so it is the same
@@ -4897,6 +4963,55 @@ def db_remove_material(conn, material_id):
         log(f"removed {material_id} from the library but could not delete "
             f"{row[0]}: {e}", "admin", 1)
     return True
+
+
+def clean_name(raw):
+    """A name somebody typed, made safe to be a filename: a path can't ride
+    in, and a space may stay -- the whole point of renaming is a name a
+    person would actually recognise."""
+    return re.sub(r"[^A-Za-z0-9._ -]", "_", Path(str(raw or "")).name).strip(" .")[:120]
+
+
+def db_rename_material(conn, material_id, new_name):
+    """Rename one uploaded file, on disk and in its row, keeping its extension.
+
+    Disk first, then the row, and the disk move undone if the row refuses --
+    a row pointing at a file that is no longer there is the one outcome this
+    must not leave behind. dedupe_path means a rename can no more overwrite a
+    neighbour than an upload can.
+    """
+    stem = clean_name(new_name)
+    if not stem:
+        raise ValueError("a name cannot be blank")
+    row = conn.execute("select file_key from materials where id = %s and "
+                       "status <> 'removed'", (material_id,)).fetchone()
+    if not row:
+        raise ValueError("no such file")
+    old = Path(row[0])
+    new = old if (stem + old.suffix) == old.name else \
+        dedupe_path(old.with_name(stem + old.suffix))
+    if new != old:
+        old.rename(new)
+    try:
+        conn.execute("update materials set filename = %s, file_key = %s where id = %s",
+                     (new.name, str(new), material_id))
+    except Exception:
+        if new != old:
+            new.rename(old)
+        raise
+    return new.name
+
+
+def db_rename_batch(conn, batch_id, title):
+    """Rename a group of uploads: one shared title, every file keeps its own."""
+    title = (title or "").strip()[:200]
+    if not title:
+        raise ValueError("a name cannot be blank")
+    n = conn.execute("update materials set title = %s where batch_id = %s",
+                     (title, batch_id)).rowcount
+    if not n:
+        raise ValueError("no such group")
+    return title
 
 
 def db_remove_lecture(conn, code, title):
@@ -6908,6 +7023,8 @@ def build_server(args):
                 return self.do_block()
             if self.path == "/remove":
                 return self.do_remove()
+            if self.path == "/rename":
+                return self.do_rename()
             if self.path == "/remove-lecture":
                 return self.do_remove_lecture()
             if self.path == "/profile":
@@ -7232,6 +7349,75 @@ def build_server(args):
                 return self.reply(500, {"error": f"{type(e).__name__}: {e}"})
             log(f"{self.me['name']} removed material {target}", "admin")
             return self.reply(200, {"ok": True})
+
+        def do_rename(self):
+            """Rename a file, a group of files, or a recorded lecture.
+
+            Admin, the same bar as Remove, and for the same reason: it changes
+            what everybody in the section sees on the shelf. Three shapes of
+            payload on one route, because they are the three things a Rename
+            button sits next to.
+            """
+            if not self.is_admin():
+                return self.reply(403, {"error": "admins only", "required": "admin"})
+            try:
+                req = self.body(2000)
+                if req is None:
+                    return
+                kind, name = req.get("kind"), (req.get("name") or "").strip()
+                with db(self.me["id"]) as conn:
+                    if kind == "material":
+                        out = db_rename_material(conn, (req.get("id") or "").strip(), name)
+                    elif kind == "batch":
+                        out = db_rename_batch(conn, (req.get("batch") or "").strip(), name)
+                    elif kind == "lecture":
+                        out = self.rename_lecture(conn, (req.get("subject") or "").strip(),
+                                                  (req.get("title") or "").strip(), name)
+                    else:
+                        raise ValueError("rename what?")
+            except ValueError as e:
+                return self.reply(400, {"error": str(e)})
+            except psycopg.errors.InvalidTextRepresentation:
+                return self.reply(404, {"error": "no such item"})
+            except Exception as e:
+                return self.reply(500, {"error": f"{type(e).__name__}: {e}"})
+            log(f"{self.me['name']} renamed a {kind} to {out}", "admin")
+            return self.reply(200, {"ok": True, "name": out})
+
+        def rename_lecture(self, conn, code, title, name):
+            """A lecture's title IS its note's filename (build_data reads
+            md.stem), so the .md moves and the row follows. Saved bookmarks
+            are keyed by that same title and would silently vanish, so they
+            move too -- on the owner's connection, since each one is private
+            to whoever saved it and an admin's own session cannot reach them."""
+            if code not in SUBJECTS:
+                raise ValueError("no such subject")
+            new = clean_name(name)
+            if not new:
+                raise ValueError("a name cannot be blank")
+            folder = subject_dir(args.library, code, "lectures")
+            old_md = folder / f"{title}.md"
+            if not old_md.is_file():
+                raise ValueError("no such lecture")
+            new_md = old_md if new == title else dedupe_path(folder / f"{new}.md")
+            if new_md == old_md:
+                return title
+            if not conn.execute("select 1 from lectures where subject_code = %s "
+                                "and title = %s", (code, title)).fetchone():
+                raise ValueError("no such lecture")
+            # Disk first, row second, disk undone if the row refuses: never a
+            # row naming a note that is not there.
+            old_md.rename(new_md)
+            try:
+                conn.execute("update lectures set title = %s where subject_code = %s "
+                             "and title = %s", (new_md.stem, code, title))
+            except Exception:
+                new_md.rename(old_md)
+                raise
+            with db() as owner:
+                owner.execute("update bookmarks set title = %s where subject_code = %s "
+                              "and title = %s", (new_md.stem, code, title))
+            return new_md.stem
 
         def do_remove_lecture(self):
             """Take a recorded lecture's note off the shelves.

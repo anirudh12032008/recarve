@@ -2209,6 +2209,9 @@ def test_removing_a_file_posts_the_right_shape_to_the_right_route(tmp_path):
     vote_fn = re.search(r"function voteBtn\(u, answer\) \{.*?\n\}", notes.PAGE, re.S)
     assert file_fn and note_fn and rem_fn and vote_fn
     IS_IMAGE = re.search(r"const IS_IMAGE = [^\n]*", notes.PAGE).group(0)
+    RENAME = "\n".join(re.search(p_, notes.PAGE, re.S).group(0) for p_ in (
+        r"function renameBtn\(current, save\) \{.*?\n\}",
+        r"async function renameItem\(payload, btn\) \{.*?\n\}"))
     script = f"""
 const assert = require('node:assert');
 const document = {{}};
@@ -2230,6 +2233,7 @@ document.createElement = (tag) => {{
   if (tag === 'button') buttons.push(el);
   return el;
 }};
+{RENAME}
 {IS_IMAGE}
 {vote_fn.group(0)}
 {rem_fn.group(0)}
@@ -2273,6 +2277,9 @@ def test_files_sharing_a_batch_render_as_one_row(tmp_path):
     rem_fn = re.search(r"function removeBtn\(onConfirmed\) \{.*?\n\}", notes.PAGE, re.S)
     assert grouped_fn and group_fn and file_fn and vote_fn and rem_fn
     IS_IMAGE = re.search(r"const IS_IMAGE = [^\n]*", notes.PAGE).group(0)
+    RENAME = "\n".join(re.search(p_, notes.PAGE, re.S).group(0) for p_ in (
+        r"function renameBtn\(current, save\) \{.*?\n\}",
+        r"async function renameItem\(payload, btn\) \{.*?\n\}"))
     script = f"""
 const assert = require('node:assert');
 const document = {{}};
@@ -2306,6 +2313,7 @@ document.createElement = (tag) => {{
   if (tag === 'button') buttons.push(el);
   return el;
 }};
+{RENAME}
 {IS_IMAGE}
 {vote_fn.group(0)}
 {rem_fn.group(0)}
@@ -2453,6 +2461,55 @@ const group = fileGroupRow([{name: 'cover.pdf', path: 'c'}, {name: 'p2.png', pat
 assert.equal(group.querySelector('img').src, 'lib/p2.png', 'the group shows its first photo');
 """
     f = tmp_path / "thumbs.js"
+    f.write_text(script)
+    r = subprocess.run([NODE, str(f)], capture_output=True, text=True)
+    assert r.returncode == 0, r.stdout + r.stderr
+
+
+@pytest.mark.skipif(not NODE, reason="needs node")
+def test_rename_turns_the_row_into_an_edit_box_and_posts_the_new_name(tmp_path):
+    fns = "\n".join(re.search(p_, notes.PAGE, re.S).group(0) for p_ in (
+        r"function renameBtn\(current, save\) \{.*?\n\}",
+        r"async function renameItem\(payload, btn\) \{.*?\n\}"))
+    script = """
+const assert = require('node:assert');
+let rendered = 0, refreshed = 0, calls = [];
+function render() { rendered++; }
+async function refresh() { refreshed++; }
+function busyDone() {}
+global.fetch = (url, init) => { calls.push([url, JSON.parse(init.body)]);
+  return Promise.resolve({ ok: true, json: async () => ({}) }); };
+function makeEl(tag) {
+  const el = { tag, kids: [], className: '', textContent: '', value: '', disabled: false,
+    setAttribute() {}, focus() {}, select() {},
+    appendChild(c) { el.kids.push(c); c.parentNode = el; },
+    append(...cs) { cs.forEach(c => el.appendChild(c)); } };
+  Object.defineProperty(el, 'innerHTML', { set() { el.kids = []; }, get() { return ''; } });
+  return el;
+}
+const document = { createElement: makeEl };
+""" + fns + """
+(async () => {
+const row = makeEl('div');
+const b = renameBtn('IMG_4821', (v, btn) => renameItem({kind: 'material', id: 'm1', name: v}, btn));
+row.appendChild(b);
+b.onclick({ stopPropagation() {} });
+const form = row.kids[0];
+assert.equal(form.className, 'rename', 'the row becomes the edit box');
+const [input, save, cancel] = form.kids;
+assert.equal(input.value, 'IMG_4821', 'it starts from the current name');
+
+input.value = 'IMG_4821';
+await form.onsubmit({ preventDefault() {} });
+assert.equal(calls.length, 0, 'the same name sends nothing');
+
+input.value = '  Unit 3 notes ';
+await form.onsubmit({ preventDefault() {} });
+assert.deepStrictEqual(calls, [['/rename', {kind: 'material', id: 'm1', name: 'Unit 3 notes'}]]);
+assert.equal(refreshed, 1, 'the shelf is refetched with the new name');
+})().catch(e => { console.error(e); process.exit(1); });
+"""
+    f = tmp_path / "renamebtn.js"
     f.write_text(script)
     r = subprocess.run([NODE, str(f)], capture_output=True, text=True)
     assert r.returncode == 0, r.stdout + r.stderr
