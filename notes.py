@@ -665,6 +665,8 @@ body.reading #read{display:block}
 /* Each file inside a grouped upload, listed by its own name under the shared
    title -- a shared title does not merge the files, only how the list finds
    them, so every one of them stays its own tap. */
+.row .thumb{width:44px;height:44px;border-radius:8px;object-fit:cover;flex:none;
+  background:var(--surface)}
 .batch-link{color:inherit;text-decoration:underline dotted;text-underline-offset:2px}
 .row .meta{font-size:13px;color:var(--mut);flex:none}
 .row .code{flex:none}
@@ -1443,8 +1445,14 @@ function fileRow(u, s) {
   const el = document.createElement('div');
   el.className = 'row';
   el.style.setProperty('--h', hue(s.code));
+  // A photo shows itself. The file already on the shelf is the thumbnail:
+  // nothing is resized or stored twice, and loading="lazy" means only the
+  // photos actually scrolled to are ever fetched.
+  const pic = IS_IMAGE.test(u.name);
   el.innerHTML = '<i class="tick"></i>'
+               + (pic ? '<img class="thumb" loading="lazy" alt="">' : '')
                + '<a class="name" target="_blank" rel="noopener"><b></b><small></small></a>';
+  if (pic) el.querySelector('img').src = u.path;
   const a = el.querySelector('a');
   a.href = u.path;
   a.querySelector('b').textContent = u.name;
@@ -1498,7 +1506,12 @@ function fileGroupRow(files, s) {
   const el = document.createElement('div');
   el.className = 'row';
   el.style.setProperty('--h', hue(s.code));
-  el.innerHTML = '<i class="tick"></i><span class="name"><b></b><small></small></span>';
+  // One thumbnail for the group -- its first photo -- not one per page.
+  const cover = files.find(u => IS_IMAGE.test(u.name));
+  el.innerHTML = '<i class="tick"></i>'
+    + (cover ? '<img class="thumb" loading="lazy" alt="">' : '')
+    + '<span class="name"><b></b><small></small></span>';
+  if (cover) el.querySelector('img').src = cover.path;
   const anchor = files[0];
   el.querySelector('b').textContent = anchor.title || (files.length + ' files');
   const small = el.querySelector('small');
@@ -3615,6 +3628,9 @@ const mb = b => (b / 1048576).toFixed(1) + ' MB';
 // XMLHttpRequest, not fetch: fetch cannot report upload progress at all, so a
 // big lecture over wifi looks frozen and people give up mid-transfer.
 const LIMIT_AUDIO = __AUDIO_MB__ * 1048576, LIMIT_DOC = __DOC_MB__ * 1048576;
+// Photos a browser can draw. HEIC is left out on purpose: most browsers
+// cannot show it, and a broken-image icon is worse than the plain link.
+const IS_IMAGE = /\.(jpe?g|png|gif|webp)$/i;
 const IS_AUDIO = /\.(m4a|mp3|wav|mp4|mov|aac|ogg|opus|flac|mkv|webm)$/i;
 
 function upload(blob, name) {

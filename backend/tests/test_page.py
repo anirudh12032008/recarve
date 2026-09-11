@@ -2208,6 +2208,7 @@ def test_removing_a_file_posts_the_right_shape_to_the_right_route(tmp_path):
     rem_fn = re.search(r"function removeBtn\(onConfirmed\) \{.*?\n\}", notes.PAGE, re.S)
     vote_fn = re.search(r"function voteBtn\(u, answer\) \{.*?\n\}", notes.PAGE, re.S)
     assert file_fn and note_fn and rem_fn and vote_fn
+    IS_IMAGE = re.search(r"const IS_IMAGE = [^\n]*", notes.PAGE).group(0)
     script = f"""
 const assert = require('node:assert');
 const document = {{}};
@@ -2229,6 +2230,7 @@ document.createElement = (tag) => {{
   if (tag === 'button') buttons.push(el);
   return el;
 }};
+{IS_IMAGE}
 {vote_fn.group(0)}
 {rem_fn.group(0)}
 {file_fn.group(0)}
@@ -2270,6 +2272,7 @@ def test_files_sharing_a_batch_render_as_one_row(tmp_path):
     vote_fn = re.search(r"function voteBtn\(u, answer\) \{.*?\n\}", notes.PAGE, re.S)
     rem_fn = re.search(r"function removeBtn\(onConfirmed\) \{.*?\n\}", notes.PAGE, re.S)
     assert grouped_fn and group_fn and file_fn and vote_fn and rem_fn
+    IS_IMAGE = re.search(r"const IS_IMAGE = [^\n]*", notes.PAGE).group(0)
     script = f"""
 const assert = require('node:assert');
 const document = {{}};
@@ -2303,6 +2306,7 @@ document.createElement = (tag) => {{
   if (tag === 'button') buttons.push(el);
   return el;
 }};
+{IS_IMAGE}
 {vote_fn.group(0)}
 {rem_fn.group(0)}
 {file_fn.group(0)}
@@ -2406,6 +2410,49 @@ fileInput.onchange();
 assert.equal(uploads[uploads.length - 1], 'lecture.m4a', 'audio goes straight up');
 """
     f = tmp_path / "rename.js"
+    f.write_text(script)
+    r = subprocess.run([NODE, str(f)], capture_output=True, text=True)
+    assert r.returncode == 0, r.stdout + r.stderr
+
+
+@pytest.mark.skipif(not NODE, reason="needs node")
+def test_a_photo_shows_a_thumbnail_and_a_document_does_not(tmp_path):
+    """Previews cost nothing extra: the photo already on the shelf is its own
+    thumbnail, loaded lazily. A PDF, or a HEIC most browsers cannot draw,
+    keeps the plain row."""
+    fns = [re.search(p, notes.PAGE, re.S).group(0) for p in (
+        r"const IS_IMAGE = [^\n]*", r"function voteBtn\(u, answer\) \{.*?\n\}",
+        r"function removeBtn\(onConfirmed\) \{.*?\n\}", r"function fileRow\(u, s\) \{.*?\n\}",
+        r"function fileGroupRow\(files, s\) \{.*?\n\}")]
+    script = """
+const assert = require('node:assert');
+let ROLE = null;
+function hue() { return 0; }
+function makeEl(tag) {
+  const el = { tag, innerHTML: '', className: '', textContent: '', kids: [], _sub: {},
+    style: { setProperty() {} }, setAttribute() {}, classList: { add() {}, remove() {} },
+    appendChild(c) { el.kids.push(c); }, append() {},
+    querySelector(sel) { return el._sub[sel] || (el._sub[sel] = makeEl(sel)); } };
+  return el;
+}
+const document = { createElement: makeEl };
+""" + "\n".join(fns) + """
+const s = {code: 'MC1101'};
+const photo = fileRow({name: 'board.jpg', path: 'lib/board.jpg'}, s);
+assert.ok(photo.innerHTML.includes('class="thumb"'), 'a photo gets a thumbnail');
+assert.ok(photo.innerHTML.includes('loading="lazy"'), 'fetched only when scrolled to');
+assert.equal(photo.querySelector('img').src, 'lib/board.jpg', 'the file is its own thumbnail');
+
+for (const name of ['notes.pdf', 'IMG_1.HEIC']) {
+  const row = fileRow({name, path: 'p'}, s);
+  assert.ok(!row.innerHTML.includes('thumb'), name + ' keeps the plain row');
+}
+
+const group = fileGroupRow([{name: 'cover.pdf', path: 'c'}, {name: 'p2.png', path: 'lib/p2.png',
+                             title: 'Handout'}], s);
+assert.equal(group.querySelector('img').src, 'lib/p2.png', 'the group shows its first photo');
+"""
+    f = tmp_path / "thumbs.js"
     f.write_text(script)
     r = subprocess.run([NODE, str(f)], capture_output=True, text=True)
     assert r.returncode == 0, r.stdout + r.stderr
