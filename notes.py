@@ -717,6 +717,16 @@ body.reading #read{display:block}
 .row-del.armed{border-color:var(--err);color:var(--err);
   background:color-mix(in srgb,var(--err) 12%,transparent)}
 .row-del:active{opacity:.7}
+/* A row carrying admin controls -- vote, Rename, Remove, maybe a thumbnail --
+   has more buttons than a 375px phone has room for beside a name. Without
+   this the name, the only flex item allowed to shrink, collapsed to one
+   letter per line. So such a row wraps: the name keeps the whole first line,
+   and the controls sit together on the line under it, lined up with it. */
+.row:has(.row-del){flex-wrap:wrap;row-gap:8px}
+.row:has(.row-del) .name{flex:1 1 calc(100% - 90px)}
+.row:has(.row-del) .vote{margin-left:15px}
+.row:has(.row-del) > .vote ~ .row-del,.row:has(.row-del) > .row-del ~ .row-del{margin-left:0}
+.row:has(.row-del):not(:has(.vote)) > .row-del:first-of-type{margin-left:15px}
 /* Rename turns the row itself into the edit box -- no dialog, same as Remove. */
 /* Home's calendar: this week as seven tappable days, then the institute's next
    dates as tear-off tiles. */
