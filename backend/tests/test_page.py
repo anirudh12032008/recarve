@@ -429,6 +429,42 @@ writes = [];
 noteRow({title: 'week2', kind: 'lecture', md: ''}, mc);
 assert.ok(wrote(['textContent', '']), 'an unattributed note says nothing, not "by nobody"');
 
+// ---- Removing a file, admin only, and never through a control that cannot
+// work: a static export's file has no id, and a revision sheet has no row.
+ROLE = null;
+writes = [];
+fileRow({name: 'slides.pdf', path: 'p', id: 'm1', votes: 3, voted: false}, mc);
+assert.ok(!wrote(['className', 'row-del']), 'nobody but admin sees Remove');
+writes = [];
+noteRow({title: 'week1', kind: 'lecture', md: ''}, mc);
+assert.ok(!wrote(['className', 'row-del']));
+
+ROLE = 'trusted';
+writes = [];
+fileRow({name: 'slides.pdf', path: 'p', id: 'm1', votes: 3, voted: false}, mc);
+assert.ok(!wrote(['className', 'row-del']), 'trusted may add; only admin may remove');
+
+ROLE = 'admin';
+writes = [];
+fileRow({name: 'slides.pdf', path: 'p', id: 'm1', votes: 3, voted: false}, mc);
+assert.ok(wrote(['className', 'row-del']), 'admin sees Remove on a real file');
+
+writes = [];
+fileRow({name: 'orphan.pdf', path: 'p'}, mc);
+assert.ok(!wrote(['className', 'row-del']),
+          'no id, no row behind it, no remove control that could not work');
+
+writes = [];
+noteRow({title: 'week1', kind: 'lecture', md: ''}, mc);
+assert.ok(wrote(['className', 'row-del']), 'admin sees Remove on a recorded lecture');
+
+writes = [];
+noteRow({title: 'Revision sheet', kind: 'revision', md: ''}, mc);
+assert.ok(!wrote(['className', 'row-del']),
+          'a revision sheet has no lectures row -- Revise remakes it instead');
+
+ROLE = null;
+
 // Contributions is the Me tab, so back climbs out of it rather than leaving
 // the app.
 location.hash = '#me';
@@ -2117,6 +2153,106 @@ def test_offline_reading_serves_the_shell_and_the_library_when_the_network_canno
     routes that make an offline reload worth doing at all."""
     f = tmp_path / "sw_test.js"
     f.write_text(SW_STUB + notes.SW_JS + SW_CHECKS)
+    r = subprocess.run([NODE, str(f)], capture_output=True, text=True)
+    assert r.returncode == 0, r.stdout + r.stderr
+
+
+# ----------------------------------------------------------- removing a file
+
+@pytest.mark.skipif(not NODE, reason="needs node")
+def test_remove_needs_a_second_tap_and_only_then_fires(tmp_path):
+    """removeBtn's own logic, driven with real objects rather than the shared
+    discard proxy the rest of this harness uses -- document.createElement()
+    there always hands back the SAME singleton, so a click handler assigned to
+    it can never be read back and actually invoked. This is the one control in
+    the app for which that distinction matters: everything else here only
+    needs to prove a write happened, and this one needs to prove a tap did
+    NOT fire a request."""
+    fn = re.search(r"function removeBtn\(onConfirmed\) \{.*?\n\}", notes.PAGE, re.S)
+    assert fn, "removeBtn must exist for this test to mean anything"
+    script = f"""
+const assert = require('node:assert');
+let confirmed = 0;
+const b = {{ className: '', textContent: '', disabled: false,
+  classList: {{ add() {{}}, remove() {{}} }} }};
+document.createElement = () => b;
+{fn.group(0)}
+
+(async () => {{
+  const btn = removeBtn(async () => {{ confirmed++; }});
+  assert.equal(btn.textContent, 'Remove');
+
+  await btn.onclick({{ stopPropagation() {{}} }});
+  assert.equal(confirmed, 0, 'the first tap must not fire the request');
+  assert.equal(btn.textContent, 'Tap again to remove');
+  assert.equal(btn.disabled, false, 'still tappable -- it is only armed');
+
+  await btn.onclick({{ stopPropagation() {{}} }});
+  assert.equal(confirmed, 1, 'the second tap is the one that fires it');
+  assert.equal(btn.disabled, true);
+}})().catch(e => {{ console.error(e); process.exit(1); }});
+"""
+    f = tmp_path / "removebtn.js"
+    f.write_text("const document = {};\n" + script)
+    r = subprocess.run([NODE, str(f)], capture_output=True, text=True)
+    assert r.returncode == 0, r.stdout + r.stderr
+
+
+@pytest.mark.skipif(not NODE, reason="needs node")
+def test_removing_a_file_posts_the_right_shape_to_the_right_route(tmp_path):
+    """Not just that a request goes out -- /remove takes an id, /remove-lecture
+    takes (subject, title), and a bug that swapped the two would 404 or hit
+    the wrong item silently."""
+    file_fn = re.search(r"function fileRow\(u, s\) \{.*?\n\}", notes.PAGE, re.S)
+    note_fn = re.search(r"function noteRow\(n, s\) \{.*?\n\}", notes.PAGE, re.S)
+    rem_fn = re.search(r"function removeBtn\(onConfirmed\) \{.*?\n\}", notes.PAGE, re.S)
+    vote_fn = re.search(r"function voteBtn\(u, answer\) \{.*?\n\}", notes.PAGE, re.S)
+    assert file_fn and note_fn and rem_fn and vote_fn
+    script = f"""
+const assert = require('node:assert');
+const document = {{}};
+let ROLE = 'admin';
+let calls = [];
+global.fetch = (url, init) => {{
+  calls.push([url, JSON.parse(init.body)]);
+  return Promise.resolve({{ ok: true, json: async () => ({{}}) }});
+}};
+async function refresh() {{}}
+function busyDone() {{}}
+function hue() {{ return 0; }}
+const buttons = [];
+document.createElement = (tag) => {{
+  const el = {{ tag, className: '', textContent: '', disabled: false, innerHTML: '',
+    style: {{ setProperty() {{}} }}, appendChild(c) {{ el._child = c; }},
+    setAttribute() {{}}, classList: {{ add() {{}}, remove() {{}} }},
+    querySelector: () => el, _child: null }};
+  if (tag === 'button') buttons.push(el);
+  return el;
+}};
+{vote_fn.group(0)}
+{rem_fn.group(0)}
+{file_fn.group(0)}
+{note_fn.group(0)}
+
+(async () => {{
+  buttons.length = 0;
+  fileRow({{name: 'x.pdf', path: 'p', id: 'mat-1', votes: 0, voted: false}}, {{code: 'MC1101'}});
+  const fileRemove = buttons[buttons.length - 1];
+  await fileRemove.onclick({{ stopPropagation() {{}} }});   // arm
+  await fileRemove.onclick({{ stopPropagation() {{}} }});   // fire
+  assert.deepStrictEqual(calls.pop(), ['/remove', {{id: 'mat-1'}}]);
+
+  buttons.length = 0;
+  noteRow({{title: 'a lecture', kind: 'lecture', md: ''}}, {{code: 'CY1107'}});
+  const noteRemove = buttons[buttons.length - 1];
+  await noteRemove.onclick({{ stopPropagation() {{}} }});
+  await noteRemove.onclick({{ stopPropagation() {{}} }});
+  assert.deepStrictEqual(calls.pop(),
+    ['/remove-lecture', {{subject: 'CY1107', title: 'a lecture'}}]);
+}})().catch(e => {{ console.error(e); process.exit(1); }});
+"""
+    f = tmp_path / "removepayload.js"
+    f.write_text(script)
     r = subprocess.run([NODE, str(f)], capture_output=True, text=True)
     assert r.returncode == 0, r.stdout + r.stderr
 

@@ -677,6 +677,17 @@ body.reading #read{display:block}
   background:color-mix(in srgb,var(--accent) 13%,transparent)}
 .vote:active{opacity:.7}
 .vote[disabled]{opacity:.45}
+/* Admin-only, and destructive -- so it reads as neither a vote nor an
+   ordinary action. No native confirm() anywhere in this app; the second tap
+   IS the confirmation, and turning red on the first tap is what makes a
+   second, unintended tap unlikely rather than a dialog box. */
+.row-del{flex:none;min-height:var(--tap);padding:0 12px;border-radius:11px;
+  border:1px solid var(--line);background:transparent;font-size:13px;
+  font-weight:650;color:var(--mut)}
+.row-del.armed{border-color:var(--err);color:var(--err);
+  background:color-mix(in srgb,var(--err) 12%,transparent)}
+.row-del:active{opacity:.7}
+.row-del[disabled]{opacity:.45}
 
 /* ---- Attendance. Two buttons, and pressing neither is the third state.
    Never a checkbox: an unticked box reads as "absent", and this app must not
@@ -1284,17 +1295,66 @@ function go(...parts) {
   route();
 }
 
-function noteRow(n, s) {
+// A destructive action, and this app has no native confirm() dialog anywhere
+// -- one drawn by the OS would be the one thing on this screen that does not
+// match the room around it. The first tap arms it and says so in the same
+// red the error text uses; the SAME tap fired again is the confirmation.
+// Armed resets on its own the moment the row it belongs to is redrawn, which
+// is the normal case: nothing here holds a timer to un-arm it.
+function removeBtn(onConfirmed) {
   const b = document.createElement('button');
-  b.className = 'row';
-  b.style.setProperty('--h', hue(s.code));
-  b.innerHTML = '<i class="tick"></i><span class="name"><b></b><small></small></span>';
-  b.querySelector('b').textContent = n.title;
+  b.className = 'row-del';
+  b.textContent = 'Remove';
+  let armed = false;
+  b.onclick = async (e) => {
+    e.stopPropagation();
+    if (!armed) {
+      armed = true;
+      b.classList.add('armed');
+      b.textContent = 'Tap again to remove';
+      return;
+    }
+    b.disabled = true;
+    await onConfirmed(b);
+  };
+  return b;
+}
+
+function noteRow(n, s) {
+  // A row that carries its own button cannot itself be one -- same reason
+  // fileRow's root has always been a div. Only admin ever adds a second
+  // control, so only admin pays for the extra element.
+  const admin = ROLE === 'admin';
+  const el = document.createElement(admin ? 'div' : 'button');
+  el.className = 'row';
+  el.style.setProperty('--h', hue(s.code));
+  el.innerHTML = '<i class="tick"></i>'
+    + (admin ? '<button class="name">' : '<span class="name">')
+    + '<b></b><small></small>' + (admin ? '</button>' : '</span>');
+  el.querySelector('b').textContent = n.title;
   // Blank until the server says who: the static export has no database behind
   // it, and "recorded by nobody" would be a worse answer than silence.
-  b.querySelector('small').textContent = n.by ? 'recorded by ' + n.by : '';
-  b.onclick = () => go('classes', s.code, n.title);
-  return b;
+  el.querySelector('small').textContent = n.by ? 'recorded by ' + n.by : '';
+  const open = () => go('classes', s.code, n.title);
+  if (admin) el.querySelector('button.name').onclick = open; else el.onclick = open;
+  // Revision sheets have no row in `lectures` at all -- Revise regenerates one
+  // on the next tap, so there is nothing here an irreversible delete is for.
+  if (admin && n.kind === 'lecture') {
+    el.appendChild(removeBtn(async (btn) => {
+      try {
+        const r = await fetch('/remove-lecture', {method: 'POST',
+          headers: {'Content-Type': 'application/json'},
+          body: JSON.stringify({subject: s.code, title: n.title})});
+        if (!r.ok) throw new Error(
+          (await r.json().catch(() => ({}))).error || 'could not remove that');
+        await refresh();
+      } catch (e) {
+        btn.disabled = false; btn.classList.remove('armed'); btn.textContent = 'Remove';
+        busyDone(e.message);
+      }
+    }));
+  }
+  return el;
 }
 
 // One vote per person per item -- the votes primary key says so, and this is
@@ -1345,8 +1405,24 @@ function fileRow(u, s) {
   a.querySelector('b').textContent = u.name;
   a.querySelector('small').textContent = u.by ? 'added by ' + u.by : 'file';
   // No id means no row behind it: a static export, or a file the database has
-  // not adopted. Showing a vote button that cannot work is worse than none.
+  // not adopted. Showing a vote button that cannot work is worse than none,
+  // and the same is true of a remove button with nothing to remove.
   if (u.id) el.appendChild(voteBtn(u));
+  if (u.id && ROLE === 'admin') {
+    el.appendChild(removeBtn(async (btn) => {
+      try {
+        const r = await fetch('/remove', {method: 'POST',
+          headers: {'Content-Type': 'application/json'},
+          body: JSON.stringify({id: u.id})});
+        if (!r.ok) throw new Error(
+          (await r.json().catch(() => ({}))).error || 'could not remove that');
+        await refresh();
+      } catch (e) {
+        btn.disabled = false; btn.classList.remove('armed'); btn.textContent = 'Remove';
+        busyDone(e.message);
+      }
+    }));
+  }
   return el;
 }
 
@@ -4046,6 +4122,7 @@ ROLE_REQUIRED = {
     "/role": "admin",
     "/block": "admin",
     "/remove": "admin",
+    "/remove-lecture": "admin",
     "/reset": "admin",
     "/announce": "admin",     # posting to a hundred and ten people at once
     # Calling a class off changes everybody's denominator, so it is the same
@@ -4554,11 +4631,48 @@ def db_remove_material(conn, material_id):
     'removed', not a delete: the row is what the reports point at, and a
     deleted material takes its report with it by cascade -- so the record of
     the complaint would vanish along with the thing complained about.
+
+    The status flip used to be the whole of this, and it did nothing: the
+    library is built straight off disk every time (build_data globs the
+    uploads folder), and nothing anywhere checked `status` before listing a
+    file. A file marked removed stayed exactly as visible and downloadable as
+    it was before an admin pressed the button. file_key is the file's real
+    path, saved at upload time, so the disk copy is what actually has to go.
     """
-    n = conn.execute("update materials set status = 'removed' where id = %s",
-                     (material_id,)).rowcount
-    if not n:
+    row = conn.execute(
+        "update materials set status = 'removed' where id = %s "
+        "returning file_key", (material_id,)).fetchone()
+    if not row:
         raise ValueError("no such item")
+    try:
+        Path(row[0]).unlink(missing_ok=True)
+    except OSError as e:
+        # The row still says removed either way -- that is the fact the class
+        # sees. A file a filesystem permission would not let go of is worth a
+        # line in the log, not a 500 handed back to an admin who did the right
+        # thing.
+        log(f"removed {material_id} from the library but could not delete "
+            f"{row[0]}: {e}", "admin", 1)
+    return True
+
+
+def db_remove_lecture(conn, code, title):
+    """Take a recorded lecture's note off the shelves. The row only -- the
+    caller deletes the .md file, because the path is subject_dir's business
+    and this function only ever holds a connection, not a library root.
+
+    Revision sheets are not reachable here on purpose: they have no row in
+    `lectures` at all (db_backfill only ever adopts lectures/*.md, never the
+    subject's own revision.md), and unlike a bad recording, a bad revision
+    sheet is not stuck -- Revise regenerates it on the next tap.
+    """
+    if code not in SUBJECTS:
+        raise ValueError("no such subject")
+    n = conn.execute(
+        "delete from lectures where subject_code = %s and title = %s",
+        (code, title)).rowcount
+    if not n:
+        raise ValueError("no such lecture")
     return True
 
 
@@ -6384,6 +6498,8 @@ def build_server(args):
                 return self.do_block()
             if self.path == "/remove":
                 return self.do_remove()
+            if self.path == "/remove-lecture":
+                return self.do_remove_lecture()
             if self.path == "/profile":
                 return self.do_profile()
             if self.path == "/upload":
@@ -6705,6 +6821,36 @@ def build_server(args):
             except Exception as e:
                 return self.reply(500, {"error": f"{type(e).__name__}: {e}"})
             log(f"{self.me['name']} removed material {target}", "admin")
+            return self.reply(200, {"ok": True})
+
+        def do_remove_lecture(self):
+            """Take a recorded lecture's note off the shelves.
+
+            The one route reachable straight from the subject page rather than
+            waiting on a report: a student cannot report a lecture (reports
+            point at materials only), and there was otherwise no way at all to
+            take back a bad recording once it was made.
+            """
+            if not self.is_admin():
+                return self.reply(403, {"error": "admins only", "required": "admin"})
+            try:
+                req = self.body(1000)
+                if req is None:
+                    return
+                code = (req.get("subject") or "").strip()[:32]
+                title = (req.get("title") or "").strip()[:200]
+                with db(self.me["id"]) as conn:
+                    db_remove_lecture(conn, code, title)
+                # The row is gone; the file on disk is what build_data actually
+                # reads, and it would otherwise reappear on the next request as
+                # though nothing had happened.
+                md = subject_dir(args.library, code, "lectures") / f"{title}.md"
+                md.unlink(missing_ok=True)
+            except ValueError as e:
+                return self.reply(404, {"error": str(e)})
+            except Exception as e:
+                return self.reply(500, {"error": f"{type(e).__name__}: {e}"})
+            log(f"{self.me['name']} removed lecture {code}/{title}", "admin")
             return self.reply(200, {"ok": True})
 
         def do_profile(self):
