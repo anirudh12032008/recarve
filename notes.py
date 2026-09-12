@@ -1229,6 +1229,38 @@ body.reading .tabs{display:none}
   .tabs{right:auto;width:320px}
   body.reading .tabs{display:flex}
 }
+/* ---- Campus: societies, what they are running, and where anything is. ----
+   Cards rather than rows, because each of these carries more than two lines
+   and a row that wraps to four is a row pretending to be a card. */
+.card{border:1px solid var(--line);border-radius:13px;background:var(--surface);
+  padding:12px 14px;margin:0 16px 8px}
+.card h3{margin:0;font-size:16px;font-weight:600;color:var(--fg)}
+.card .meta{display:block;font-size:13px;color:var(--mut);margin-top:3px}
+.card p{margin:8px 0 0;font-size:14px;line-height:1.55;color:var(--fg)}
+.card .tags{display:flex;flex-wrap:wrap;gap:6px;margin-top:9px}
+.card .tags span{font-size:12px;color:var(--mut);border:1px solid var(--line);
+  border-radius:999px;padding:3px 9px;background:var(--bg)}
+.card .acts{display:flex;flex-wrap:wrap;gap:8px;margin-top:10px}
+.card .acts a,.card .acts button{min-height:var(--tap);display:inline-flex;
+  align-items:center;padding:0 14px;border-radius:11px;border:1px solid var(--line);
+  background:var(--bg);color:var(--fg);font-size:14px;font-weight:500;
+  text-decoration:none}
+.card.gone{opacity:.6}
+/* The date, torn off, so an event reads as a date first and a name second --
+   the same tile Home's Coming up list already uses. */
+.card .when{font-size:13px;color:var(--mut);font-weight:600}
+/* A club opens in place. <details> is the platform's own disclosure: it works
+   with no JavaScript, it is keyboard and screen-reader correct already, and it
+   needs no URL of its own for something that is two sentences long. */
+.card summary{list-style:none;cursor:pointer}
+.card summary::-webkit-details-marker{display:none}
+.card summary::after{content:'›';float:right;color:var(--mut);font-size:18px;
+  line-height:1;transform:rotate(90deg);transition:transform .15s}
+.card[open] summary::after{transform:rotate(270deg)}
+/* The map, when there is a key. Square-ish and bounded; with no key this
+   element is never created at all and the places list stands on its own. */
+#campusmap{height:260px;margin:0 16px 8px;border-radius:13px;overflow:hidden;
+  border:1px solid var(--line);background:var(--surface)}
 @media print{
   .top,.dock,.tabs,#list,.rtop,#fab,#busy,#ask,#quiz{display:none!important}
   #read{display:block!important}
@@ -1798,7 +1830,12 @@ function countdownBlock() {
   const items = ATT.upcoming || (ATT.next ? [ATT.next] : []);
   if (!items.length) return;
   block('Coming up', items.map(n => {
-    const row = line(n.title, whenSays(n), document.createElement('div'));
+    // One list, two kinds of thing. Every row says which it is -- the
+    // institute's calendar and a society's fest are both "what is coming",
+    // and a student keeps one calendar, not two.
+    const what = n.what === 'campus' ? 'Campus event' : 'Academic calendar';
+    const row = line(n.title, [whenSays(n), what, n.where].filter(Boolean).join(' · '),
+                     document.createElement('div'));
     // A tear-off date, so the list reads as a calendar and not as prose.
     const tile = document.createElement('span');
     tile.className = 'tile';
@@ -2802,20 +2839,489 @@ function drawBoard(box) {
   }
 }
 
+// ---- CLUBS, EVENTS AND THE MAP. -----------------------------------------
+// The rest of Campus. Fetched once, on the tab that shows it: this is three
+// lists and none of them is wanted by Home, which already gets the one thing
+// it needs -- the events, folded into Coming up by the server.
+let CAMPUS = null;              // the last /campus answer, or {failed:true}
+let campusAsked = false;
+
+function needCampus() {
+  if (CAMPUS || campusAsked || !live) return;
+  campusAsked = true;
+  fetch('/campus')
+    .then(r => r.ok ? r.json() : Promise.reject(new Error(r.status)))
+    .then(d => { CAMPUS = d; campusAsked = false; redrawCampus(); })
+    .catch(() => { CAMPUS = {failed: true}; campusAsked = false; redrawCampus(); });
+}
+
+const redrawCampus = () => { if (view.tab === 'campus') render(); };
+const campusList = key => (CAMPUS && CAMPUS[key]) || [];
+
+// Who may change what, in one place. Events are the same bar as adding to the
+// library -- a date a hundred and ten people rearrange an afternoon around.
+// The directory and the map are the institute's own facts and stay with an
+// admin. Nothing here is hidden from anybody: a student sees every screen,
+// without the buttons that would 403.
+const mayEditEvent = e => ROLE === 'admin' || (mayAdd() && e && e.mine !== false);
+const mayCurate = () => ROLE === 'admin';
+
+function dateSpan(e) {
+  const short = d => MONTHS[+d.slice(5, 7) - 1].slice(0, 3) + ' ' + (+d.slice(8));
+  return e.multi ? short(e.date) + ' to ' + short(e.ends) : short(e.date);
+}
+
+// A card, not a row: an event carries a date, a society, a venue and a line of
+// description, and a row that wraps to four lines is a row pretending to be a
+// card.
+function eventCard(e) {
+  const el = document.createElement('div');
+  el.className = 'card' + (e.deleted ? ' gone' : '');
+  const h = document.createElement('h3');
+  h.textContent = e.title;
+  const meta = document.createElement('span');
+  meta.className = 'meta';
+  meta.textContent = [dateSpan(e), e.society, e.venue].filter(Boolean).join(' · ');
+  el.append(h, meta);
+  if (e.blurb) {
+    const p = document.createElement('p');
+    p.textContent = e.blurb;
+    el.appendChild(p);
+  }
+  if (e.deleted) el.appendChild(quiet('Taken down — only you and the admins see this.'));
+  if (mayEditEvent(e)) {
+    const acts = document.createElement('div');
+    acts.className = 'acts';
+    const edit = document.createElement('button');
+    edit.textContent = 'Edit';
+    edit.onclick = () => go('campus', 'event', e.id);
+    const drop = document.createElement('button');
+    drop.textContent = e.deleted ? 'Put it back' : 'Take it down';
+    drop.onclick = () => saveCampus('/event', {id: e.id, deleted: !e.deleted});
+    acts.append(edit, drop);
+    el.appendChild(acts);
+  }
+  return el;
+}
+
+function eventsSection() {
+  heading('Coming up on campus');
+  if (mayAdd()) {
+    const add = line('Add an event', 'Everyone approved sees it, and it joins '
+                     + 'Home’s Coming up list', document.createElement('button'));
+    add.onclick = () => go('campus', 'event');
+    const rows = document.createElement('div');
+    rows.className = 'rows';
+    rows.appendChild(add);
+    nav.appendChild(rows);
+  }
+  if (!CAMPUS) return void nav.appendChild(quiet('Reading what is on…'));
+  if (CAMPUS.failed) {
+    return void nav.appendChild(quiet('Events need the server. Run: notes.py serve'));
+  }
+  const list = campusList('events');
+  if (!list.length) {
+    return saying('Nothing on the calendar right now.',
+      'A fest, a workshop, a competition — anything with a date on it goes '
+      + 'here and shows on Home until the day it ends. Nothing is invented: '
+      + 'an event is here because somebody in the section put it here.');
+  }
+  list.forEach(e => nav.appendChild(eventCard(e)));
+}
+
+// A club opens where it stands. <details> is the platform's own disclosure --
+// no URL, no router, correct for a keyboard and a screen reader before a line
+// of this app runs.
+function clubCard(c) {
+  const el = document.createElement('details');
+  el.className = 'card' + (c.hidden ? ' gone' : '');
+  const sum = document.createElement('summary');
+  const h = document.createElement('h3');
+  h.textContent = c.name;
+  const meta = document.createElement('span');
+  meta.className = 'meta';
+  meta.textContent = [c.category, c.hidden ? 'Hidden' : ''].filter(Boolean).join(' · ');
+  sum.append(h, meta);
+  el.appendChild(sum);
+  if (c.blurb) {
+    const p = document.createElement('p');
+    p.textContent = c.blurb;
+    el.appendChild(p);
+  }
+  if (c.tags && c.tags.length) {
+    const tags = document.createElement('div');
+    tags.className = 'tags';
+    c.tags.forEach(t => {
+      const s = document.createElement('span');
+      s.textContent = t;
+      tags.appendChild(s);
+    });
+    el.appendChild(tags);
+  }
+  const acts = document.createElement('div');
+  acts.className = 'acts';
+  if (c.link) {
+    const a = document.createElement('a');
+    a.href = c.link;
+    a.target = '_blank';
+    a.rel = 'noopener noreferrer';
+    a.textContent = 'Their page';
+    acts.appendChild(a);
+  }
+  if (c.contact) acts.appendChild(quiet('Contact: ' + c.contact));
+  if (mayCurate()) {
+    const edit = document.createElement('button');
+    edit.textContent = 'Edit';
+    edit.onclick = () => go('campus', 'club', c.slug);
+    const hide = document.createElement('button');
+    hide.textContent = c.hidden ? 'Show it again' : 'Hide it';
+    hide.onclick = () => saveCampus('/club', {slug: c.slug, hidden: !c.hidden});
+    acts.append(edit, hide);
+  }
+  if (acts.childNodes.length) el.appendChild(acts);
+  return el;
+}
+
+function clubsSection() {
+  heading('Clubs and societies');
+  if (mayCurate()) {
+    const add = line('Add a club', 'Name, what it does, and where to find them',
+                     document.createElement('button'));
+    add.onclick = () => go('campus', 'club');
+    const rows = document.createElement('div');
+    rows.className = 'rows';
+    rows.appendChild(inked(add));
+    nav.appendChild(rows);
+  }
+  if (!CAMPUS) return void nav.appendChild(quiet('Reading the directory…'));
+  if (CAMPUS.failed) {
+    return void nav.appendChild(quiet('The directory needs the server. Run: notes.py serve'));
+  }
+  const list = campusList('clubs');
+  if (!list.length) {
+    return saying('No societies listed yet.',
+      'This is the directory of what runs on campus — what each society does '
+      + 'and how to reach them. Your class admin fills it in.');
+  }
+  list.forEach(c => nav.appendChild(clubCard(c)));
+}
+
+// ---- THE MAP. ------------------------------------------------------------
+// One adapter per provider, and the page knows nothing else about either. The
+// key comes from the server at runtime, never from this file: a static export
+// has no server and therefore no key, which is exactly right.
+//
+// NO key is a state this screen is designed for, not a failure it survives.
+// The places list underneath is the useful half and it needs no provider at
+// all -- names, what each thing is, and a Directions link that hands off to
+// the phone's own maps app.
+const MAP_PROVIDERS = {
+  google: {
+    label: 'Google Maps',
+    src: k => 'https://maps.googleapis.com/maps/api/js?key=' + encodeURIComponent(k),
+    ready: () => !!(window.google && window.google.maps),
+    draw(el, cfg, places) {
+      const b = cfg.bounds;
+      const box = new google.maps.LatLngBounds(
+        {lat: b.south, lng: b.west}, {lat: b.north, lng: b.east});
+      const map = new google.maps.Map(el, {
+        center: cfg.centre, zoom: 16, mapTypeControl: false,
+        streetViewControl: false, fullscreenControl: false,
+        // Bounded to the campus, so a dragged finger cannot wander off across
+        // Bhopal and strand a first-year looking at a lake.
+        restriction: {latLngBounds: box, strictBounds: true},
+      });
+      map.fitBounds(box);
+      places.filter(p => p.lat != null && p.lng != null).forEach(p => {
+        new google.maps.Marker({
+          map, position: {lat: p.lat, lng: p.lng},
+          title: p.name + (p.approx ? ' (approximate)' : ''),
+        });
+      });
+    },
+  },
+  // Named because it was asked for and because the seam is the point: when a
+  // Jio key exists, its SDK's own map-and-marker calls go in draw() below and
+  // nothing outside this object changes. Left unwritten rather than guessed --
+  // an invented SDK call would look finished and fail on the first real key.
+  jio: {
+    label: 'Jio Maps',
+    src: null,
+    ready: () => false,
+    draw: null,
+  },
+};
+
+function mapSection() {
+  heading('Finding your way');
+  const cfg = (CAMPUS && CAMPUS.maps) || {};
+  const prov = MAP_PROVIDERS[cfg.provider];
+  if (!CAMPUS || CAMPUS.failed) {
+    nav.appendChild(quiet(CAMPUS ? 'The map needs the server. Run: notes.py serve'
+                                 : 'Reading the campus…'));
+  } else if (!cfg.key) {
+    // First-class, and said in words somebody can act on.
+    saying('The map needs a key, and this server has none.',
+      'Set RECARVE_MAPS_KEY in the environment the server starts in and the '
+      + 'map draws here. Everything below works without it.');
+  } else if (!prov || !prov.src || !prov.draw) {
+    saying('This server names a map provider the app cannot draw yet.',
+      'RECARVE_MAPS_PROVIDER is "' + (cfg.provider || '') + '". The adapter for '
+      + 'it is in MAP_PROVIDERS and needs its SDK call filled in.');
+  } else {
+    const box = document.createElement('div');
+    box.id = 'campusmap';
+    nav.appendChild(box);
+    drawMap(prov, cfg, box);
+  }
+  placesSection();
+}
+
+// The provider script is loaded here and only here, and only when a key
+// exists: with no key nothing is fetched at all, which is what keeps the app
+// working offline and keeps a static export free of anything that phones home.
+function drawMap(prov, cfg, box) {
+  const places = campusList('places');
+  const paint = () => { try { prov.draw(box, cfg, places); } catch (e) {
+    box.remove();
+    saying('The map did not load.', String(e.message || e));
+  } };
+  if (prov.ready()) return paint();
+  const tag = document.createElement('script');
+  tag.src = prov.src(cfg.key);
+  tag.async = true;
+  tag.onload = paint;
+  tag.onerror = () => { box.remove(); saying('The map did not load.',
+    'The provider script could not be fetched. The list below still works.'); };
+  document.head.appendChild(tag);
+}
+
+const PLACE_KINDS = [['academic', 'Where you have class'], ['food', 'Food'],
+                     ['hostel', 'Hostels'], ['sport', 'Sport'],
+                     ['admin', 'Offices'], ['health', 'Health'],
+                     ['gate', 'Gates'], ['other', 'Everything else']];
+
+// Directions with no key and no SDK: the phone's own maps app already knows
+// how to get there, and handing it a destination is one link.
+function directionsFor(p) {
+  const a = document.createElement('a');
+  a.href = 'https://www.google.com/maps/dir/?api=1&destination='
+         + p.lat + ',' + p.lng;
+  a.target = '_blank';
+  a.rel = 'noopener noreferrer';
+  a.textContent = 'Directions';
+  return a;
+}
+
+function placeCard(p) {
+  const el = document.createElement('div');
+  el.className = 'card' + (p.hidden ? ' gone' : '');
+  const h = document.createElement('h3');
+  h.textContent = p.name;
+  const meta = document.createElement('span');
+  meta.className = 'meta';
+  // Said out loud on every pin that is one. An approximate pin honestly
+  // labelled beats a confident wrong one, and this is where it is labelled.
+  meta.textContent = [p.note, p.lat == null ? 'No pin yet'
+                      : p.approx ? 'Approximate pin' : ''].filter(Boolean).join(' · ');
+  el.append(h, meta);
+  const acts = document.createElement('div');
+  acts.className = 'acts';
+  if (p.lat != null && p.lng != null) acts.appendChild(directionsFor(p));
+  if (mayCurate()) {
+    const edit = document.createElement('button');
+    edit.textContent = 'Edit';
+    edit.onclick = () => go('campus', 'place', p.slug);
+    const drop = document.createElement('button');
+    drop.className = 'row-del';
+    drop.textContent = 'Remove';
+    drop.onclick = () => saveCampus('/place', {slug: p.slug, remove: true});
+    acts.append(edit, drop);
+  }
+  if (acts.childNodes.length) el.appendChild(acts);
+  return el;
+}
+
+function placesSection() {
+  if (mayCurate()) {
+    const add = line('Add a place', 'A name, what it is, and where',
+                     document.createElement('button'));
+    add.onclick = () => go('campus', 'place');
+    const rows = document.createElement('div');
+    rows.className = 'rows';
+    rows.appendChild(inked(add));
+    nav.appendChild(rows);
+  }
+  if (!CAMPUS || CAMPUS.failed) return;
+  const list = campusList('places');
+  if (!list.length) {
+    return saying('No places listed yet.',
+      'Lecture halls, hostels, the canteens, the gates — everywhere a '
+      + 'first-year has to find in week one.');
+  }
+  PLACE_KINDS.forEach(([kind, label]) => {
+    const some = list.filter(p => p.kind === kind);
+    if (!some.length) return;
+    heading(label);
+    some.forEach(p => nav.appendChild(placeCard(p)));
+  });
+}
+
+// ---- The three little forms. --------------------------------------------
+// One saver, because it is one shape of request: POST a row, get the whole tab
+// back, redraw from what was stored rather than from what was typed.
+async function saveCampus(path, payload, err, btn) {
+  if (btn) btn.disabled = true;
+  busy('Saving…', true);
+  try {
+    const r = await fetch(path, {
+      method: 'POST', headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify(payload),
+    });
+    const d = await r.json().catch(() => ({}));
+    if (!r.ok) throw new Error(d.error || 'could not save that');
+    CAMPUS = d;
+    busyDone('Saved');
+    if (view.compose) history.back(); else render();
+  } catch (e) {
+    if (btn) btn.disabled = false;
+    busyDone('');
+    if (err) err.textContent = e.message;
+    else busyDone('Could not save that: ' + e.message);
+  }
+}
+
+// The shared skeleton of all three: labelled fields, an error line, cancel and
+// save. Each form below says what its fields are and what to do with them.
+function formBox(fields, saveLabel, onSave) {
+  const box = document.createElement('div');
+  box.className = 'compose';
+  const got = {};
+  fields.forEach(f => {
+    const id = 'f-' + f.name;
+    const label = document.createElement('label');
+    label.htmlFor = id;
+    label.textContent = f.label;
+    const el = document.createElement(f.tag || 'input');
+    el.id = id;
+    if (f.type) el.type = f.type;
+    if (f.max) el.maxLength = f.max;
+    if (f.placeholder) el.placeholder = f.placeholder;
+    if (f.step) el.step = f.step;
+    el.value = f.value == null ? '' : String(f.value);
+    box.append(label, el);
+    got[f.name] = el;
+  });
+  const err = document.createElement('p');
+  err.className = 'err';
+  const acts = document.createElement('div');
+  acts.className = 'go';
+  const cancel = document.createElement('button');
+  cancel.textContent = 'Cancel';
+  cancel.onclick = () => history.back();
+  const save = document.createElement('button');
+  save.className = 'primary';
+  save.textContent = saveLabel;
+  save.onclick = () => onSave(got, err, save);
+  acts.append(cancel, save);
+  box.append(err, acts);
+  nav.appendChild(box);
+}
+
+function eventForm() {
+  const e = campusList('events').find(x => x.id === view.composeId) || {};
+  formBox([
+    {name: 'title', label: 'What is it', max: 120, placeholder: 'Vidyut'},
+    {name: 'society', label: 'Who is running it', max: 80, placeholder: 'Evolve'},
+    // The platform's own date picker, the same one the catch-up screen uses:
+    // a typed date is a date typed wrong.
+    {name: 'date', label: 'Starts', type: 'date', value: e.date},
+    {name: 'ends', label: 'Ends (leave blank if it is one day)', type: 'date',
+     value: e.multi ? e.ends : ''},
+    {name: 'venue', label: 'Where', max: 120, placeholder: 'MME Auditorium'},
+    {name: 'blurb', label: 'What happens', tag: 'textarea', max: 600},
+  ].map(f => Object.assign(f, {value: f.value != null ? f.value : e[f.name]})),
+  e.id ? 'Save changes' : 'Add it', (got, err, btn) => {
+    if (!got.title.value.trim()) return void (err.textContent = 'An event needs a name.');
+    if (!got.date.value) return void (err.textContent = 'An event needs a date — that is the whole point of one.');
+    saveCampus('/event', {
+      id: e.id, title: got.title.value, society: got.society.value,
+      date: got.date.value, ends: got.ends.value, venue: got.venue.value,
+      blurb: got.blurb.value}, err, btn);
+  });
+}
+
+function clubForm() {
+  const c = campusList('clubs').find(x => x.slug === view.composeId) || {};
+  formBox([
+    {name: 'name', label: 'Name', max: 80, value: c.name},
+    {name: 'category', label: 'Category', max: 40, value: c.category,
+     placeholder: 'Technical'},
+    {name: 'blurb', label: 'What they do', tag: 'textarea', max: 600, value: c.blurb},
+    {name: 'tags', label: 'Tags, separated by commas', max: 200,
+     value: (c.tags || []).join(', ')},
+    {name: 'link', label: 'Instagram or a page', max: 300, value: c.link,
+     placeholder: 'https://instagram.com/…'},
+    {name: 'contact', label: 'Who to ask', max: 120, value: c.contact},
+  ], c.slug ? 'Save changes' : 'Add it', (got, err, btn) => {
+    if (!got.name.value.trim()) return void (err.textContent = 'A club needs a name.');
+    saveCampus('/club', {
+      slug: c.slug, name: got.name.value, category: got.category.value,
+      blurb: got.blurb.value, link: got.link.value, contact: got.contact.value,
+      tags: got.tags.value.split(',').map(t => t.trim()).filter(Boolean),
+      hidden: !!c.hidden}, err, btn);
+  });
+}
+
+function placeForm() {
+  const p = campusList('places').find(x => x.slug === view.composeId) || {};
+  formBox([
+    {name: 'name', label: 'Name', max: 80, value: p.name},
+    {name: 'kind', label: 'What it is (' + PLACE_KINDS.map(k => k[0]).join(', ') + ')',
+     max: 20, value: p.kind || 'academic'},
+    {name: 'lat', label: 'Latitude', type: 'number', step: 'any', value: p.lat},
+    {name: 'lng', label: 'Longitude', type: 'number', step: 'any', value: p.lng},
+    {name: 'note', label: 'Anything worth knowing', max: 200, value: p.note},
+  ], p.slug ? 'Save changes' : 'Add it', (got, err, btn) => {
+    if (!got.name.value.trim()) return void (err.textContent = 'A place needs a name.');
+    saveCampus('/place', {
+      slug: p.slug, name: got.name.value, kind: got.kind.value.trim(),
+      lat: got.lat.value, lng: got.lng.value, note: got.note.value,
+      // Every pin added from a phone is approximate until somebody stands
+      // there with it. Nothing on this form claims otherwise.
+      approx: true}, err, btn);
+  });
+}
+
+// Which composer a URL means. Announcements keep 'new' and their own id, which
+// is a uuid and can never collide with one of these three words.
+// Wrapped rather than named directly: mayAdd is declared further down and a
+// bare reference here is read while this object is built, not when a form is
+// opened -- which is a temporal dead zone error that blanks the whole app.
+const COMPOSERS = {event: [eventForm, () => mayAdd()],
+                   club: [clubForm, () => mayCurate()],
+                   place: [placeForm, () => mayCurate()]};
+
 async function renderCampus() {
   const mine = painted;
-  // Writing a notice takes the tab over: it is one thing at a time on a phone,
-  // and the board underneath is not what you are doing.
+  needCampus();
+  const composer = COMPOSERS[view.compose];
+  // Writing takes the tab over: it is one thing at a time on a phone, and the
+  // lists underneath are not what you are doing.
+  if (composer) {
+    if (!composer[1]()) return void go('campus');
+    return composer[0]();
+  }
   if (view.compose && ROLE === 'admin') return renderCompose();
   renderAnnouncements();
+  eventsSection();
+  clubsSection();
+  mapSection();
   heading('Who has contributed');
   windowPicker();
   const box = document.createElement('div');
   box.className = 'mine';
   nav.appendChild(box);
-  nav.appendChild(quiet('Clubs and events will live here too, next to the '
-    + 'notice board above. Nothing is made up: this fills with what your own '
-    + 'clubs put here.'));
   if (!BOARD) {
     waiting(box, 'Reading the class board…');
     try {
@@ -3290,8 +3796,12 @@ function route() {
   // So is the composer, for the same reason: without a URL the back gesture
   // dropped what was typed and left the Campus tab stuck on an empty form.
   const compose = tab === 'campus' ? parts[1] || null : null;
+  // And the row being edited, when there is one: '#campus/club/robotics'. The
+  // announcement composer carries its id in `compose` itself, which is a uuid
+  // and can never be mistaken for one of the three words above.
+  const composeId = compose ? parts[2] || null : null;
   view = {tab, code: s ? s.code : null, title: title || null, edit, att, compose,
-          day: dayv};
+          composeId, day: dayv};
   if (!edit) draft = null;      // walking away drops an unsaved week, not TT
   if (!att) attDate = null;     // and re-opening it starts on today, not last week
   if (!dayv) dayDate = null;    // today by default, every time it is opened
@@ -4659,6 +5169,13 @@ ROLE_REQUIRED = {
     # bar as adding to the library. Marking your OWN attendance is not here:
     # it is a private note to yourself and every approved member makes them.
     "/cancelled": "trusted",
+    # Campus. The directory and the map are the institute's own facts, so an
+    # admin keeps them; an event is a date somebody in the section knows about,
+    # which is the same bar as adding to the library. Reading all three is
+    # nobody's privilege -- /campus is deliberately not here.
+    "/club": "admin",
+    "/place": "admin",
+    "/event": "trusted",
 }
 
 # Passwords are stored as typed. The one thing that goes with that decision is
@@ -5748,6 +6265,255 @@ def db_mark_read(conn, user_id, ids):
         "on conflict do nothing", (user_id, ids))
 
 
+# ---------------------------------------------------------------------------
+# CAMPUS: the societies, what they are running, and where anything is.
+#
+# Three tables and one read. Campus is one screen and it is opened once, on
+# mobile data, between classes -- three round trips for three lists is three
+# things that can be slow, so /campus answers all of it at once, exactly the
+# way /data already carries Home's extras.
+
+CLUB_NAME = 80
+EVENT_TITLE = 120
+BLURB = 600
+TAG_LIMIT = 8
+
+
+def slugify(name, existing=()):
+    """A stable, readable key from a name, or a reason it is not one.
+
+    The seed file writes slugs by hand; this is for the ones an admin types on
+    a phone. Suffixed until it is free, so adding a second "Robotics Club"
+    renames rather than overwrites the first one's row.
+    """
+    base = re.sub(r"[^a-z0-9]+", "-", (name or "").lower()).strip("-")[:48]
+    if len(base) < 2:
+        raise ValueError("that name has no letters or digits in it")
+    slug, n = base, 1
+    while slug in existing:
+        n += 1
+        slug = f"{base[:44]}-{n}"
+    return slug
+
+
+def db_clubs(conn):
+    """The directory, as the tab shows it: A to Z, hidden ones only for the
+    admin whose policy lets them through."""
+    return [
+        {"slug": s, "name": n, "blurb": b, "category": c, "tags": list(t or []),
+         "link": link, "contact": contact, "hidden": hidden}
+        for s, n, b, c, t, link, contact, hidden in conn.execute(
+            "select slug, name, blurb, category, tags, link, contact, hidden "
+            "  from clubs order by name")
+    ]
+
+
+def db_write_club(conn, slug, name, blurb, category, tags, link, contact, hidden):
+    """Add one, edit one, or hide one. Admins only -- and that is the policy's
+    ruling, not this function's: it runs on the caller's own connection."""
+    name = (name or "").strip()[:CLUB_NAME]
+    if slug and hidden is not None and not name:
+        # Hiding and unhiding is the one edit that does not resend the rest.
+        done = conn.execute("update clubs set hidden = %s where slug = %s "
+                            "returning slug", (bool(hidden), slug))
+        if not done.fetchone():
+            raise ValueError("no such club")
+        return slug
+    if not name:
+        raise ValueError("a club needs a name")
+    fields = (name, (blurb or "").strip()[:BLURB], (category or "").strip()[:40],
+              [str(t).strip()[:40] for t in (tags or []) if str(t).strip()][:TAG_LIMIT],
+              (link or "").strip()[:300] or None, (contact or "").strip()[:120] or None,
+              bool(hidden))
+    if slug:
+        done = conn.execute(
+            "update clubs set name = %s, blurb = %s, category = %s, tags = %s, "
+            "link = %s, contact = %s, hidden = %s where slug = %s returning slug",
+            fields + (slug,))
+        if not done.fetchone():
+            raise ValueError("no such club")
+        return slug
+    taken = {s for (s,) in conn.execute("select slug from clubs")}
+    slug = slugify(name, taken)
+    conn.execute(
+        "insert into clubs (slug, name, blurb, category, tags, link, contact, hidden) "
+        "values (%s, %s, %s, %s, %s, %s, %s, %s)", (slug,) + fields)
+    return slug
+
+
+def _event_date(raw, what):
+    """One date off the wire, or a reason it is not one."""
+    if raw in (None, ""):
+        return None
+    try:
+        return datetime.date.fromisoformat(str(raw)[:10])
+    except (TypeError, ValueError):
+        raise ValueError(f"{what} is not a date")
+
+
+def db_events(conn, user_id=None, ahead=None):
+    """What is still coming, soonest first.
+
+    Past events fall off here rather than by anybody tidying up: the filter is
+    on the day it ends, so a three-day fest stays on the list through its last
+    day and is gone the morning after. Nothing is deleted for it.
+    """
+    rows = conn.execute(
+        "select id, title, society, starts_on, ends_on, venue, blurb, "
+        "       deleted_at is not null, added_by "
+        "  from events "
+        " where coalesce(ends_on, starts_on) >= current_date "
+        " order by starts_on, title")
+    out = []
+    for eid, title, society, starts, ends, venue, blurb, gone, by in rows:
+        out.append({"id": str(eid), "title": title, "society": society,
+                    "mine": str(by) == str(user_id),
+                    "date": starts.isoformat(),
+                    "ends": (ends or starts).isoformat(),
+                    "multi": bool(ends and ends != starts),
+                    "venue": venue, "blurb": blurb, "deleted": gone})
+    return out[:ahead] if ahead else out
+
+
+def db_write_event(conn, user_id, eid, title, society, starts, ends, venue,
+                   blurb, deleted):
+    """Add one, edit one, or take one down.
+
+    Trusted adds; the policy decides that, and an admin's reach over somebody
+    else's event is the same policy's business. Taking one down sets deleted_at
+    and leaves the row, like every other thing on this tab that people may have
+    already read.
+    """
+    if eid and deleted is not None:
+        done = conn.execute(
+            "update events set deleted_at = case when %s then now() end "
+            "where id = %s returning id", (bool(deleted), eid))
+        if not done.fetchone():
+            raise ValueError("no such event, or it is not yours")
+        return eid
+    title = (title or "").strip()[:EVENT_TITLE]
+    if not title:
+        raise ValueError("an event needs a title")
+    start = _event_date(starts, "the start date")
+    if not start:
+        raise ValueError("an event needs a date -- that is the whole point of one")
+    end = _event_date(ends, "the end date")
+    if end and end < start:
+        raise ValueError("that event ends before it starts")
+    fields = (title, (society or "").strip()[:CLUB_NAME], start, end,
+              (venue or "").strip()[:120], (blurb or "").strip()[:BLURB])
+    if eid:
+        done = conn.execute(
+            "update events set title = %s, society = %s, starts_on = %s, "
+            "ends_on = %s, venue = %s, blurb = %s where id = %s returning id",
+            fields + (eid,))
+        if not done.fetchone():
+            raise ValueError("no such event, or it is not yours")
+        return eid
+    return str(conn.execute(
+        "insert into events (title, society, starts_on, ends_on, venue, blurb, "
+        "added_by) values (%s, %s, %s, %s, %s, %s, %s) returning id",
+        fields + (user_id,)).fetchone()[0])
+
+
+PLACE_KINDS = ("academic", "hostel", "food", "sport", "admin", "gate",
+               "health", "other")
+
+
+def db_places(conn):
+    """Every landmark, grouped by the screen rather than here -- one order, by
+    kind and then by name, so the list reads the same whether or not a map
+    ever draws above it."""
+    return [
+        {"slug": s, "name": n, "kind": k, "lat": lat, "lng": lng,
+         "approx": approx, "note": note, "hidden": hidden}
+        for s, n, k, lat, lng, approx, note, hidden in conn.execute(
+            "select slug, name, kind, lat, lng, approx, note, hidden "
+            "  from places order by kind, name")
+    ]
+
+
+def db_write_place(conn, slug, name, kind, lat, lng, approx, note):
+    """Add or edit one pin. Admins only, by policy."""
+    name = (name or "").strip()[:CLUB_NAME]
+    if not name:
+        raise ValueError("a place needs a name")
+    kind = (kind or "other").strip()
+    if kind not in PLACE_KINDS:
+        raise ValueError(f"{kind!r} is not one of {', '.join(PLACE_KINDS)}")
+
+    def coord(raw, what, limit):
+        if raw in (None, ""):
+            return None
+        try:
+            v = float(raw)
+        except (TypeError, ValueError):
+            raise ValueError(f"{what} is not a number")
+        if not -limit <= v <= limit:
+            raise ValueError(f"{what} is not on Earth")
+        return v
+
+    fields = (name, kind, coord(lat, "the latitude", 90),
+              coord(lng, "the longitude", 180),
+              True if approx is None else bool(approx),
+              (note or "").strip()[:200])
+    if slug:
+        done = conn.execute(
+            "update places set name = %s, kind = %s, lat = %s, lng = %s, "
+            "approx = %s, note = %s where slug = %s returning slug",
+            fields + (slug,))
+        if not done.fetchone():
+            raise ValueError("no such place")
+        return slug
+    taken = {s for (s,) in conn.execute("select slug from places")}
+    slug = slugify(name, taken)
+    conn.execute(
+        "insert into places (slug, name, kind, lat, lng, approx, note) "
+        "values (%s, %s, %s, %s, %s, %s, %s)", (slug,) + fields)
+    return slug
+
+
+def db_remove_place(conn, slug):
+    """Actually gone, unlike everything else on this tab. A pin is nobody's
+    words -- removing one destroys nothing anybody wrote."""
+    if not conn.execute("delete from places where slug = %s returning slug",
+                        (slug,)).fetchone():
+        raise ValueError("no such place")
+
+
+# The campus, boxed. The map is bounded to these corners so a dragged finger
+# cannot wander off to the other side of Bhopal and leave a first-year looking
+# at a lake. Approximate on purpose and generous by about a hundred metres --
+# a box that is slightly too big shows a road you can walk in on; one that is
+# slightly too small clips a hostel.
+CAMPUS_BOUNDS = {"south": 23.2115, "west": 77.4020,
+                 "north": 23.2225, "east": 77.4125}
+CAMPUS_CENTRE = {"lat": 23.2170, "lng": 77.4075}
+
+
+def maps_config(env=os.environ):
+    """What the phone needs to draw a map, or an honest nothing.
+
+    The key is read from the environment the same way session_secret() and
+    worker_token() read theirs, and unlike those two it is NEVER minted: there
+    is no such thing as a provider key this process can invent. It is also
+    never baked into a static export -- `notes.py export` writes PAGE with no
+    server behind it, and a key in that file is a key in the repository.
+
+    No key is a first-class state, not a failure. The places list is the useful
+    half of this screen and it needs no provider at all, so the page draws it
+    either way and says plainly why the map above it is missing.
+    """
+    key = (env.get("RECARVE_MAPS_KEY") or "").strip()
+    # One small adapter, named here and implemented in the page. Both were
+    # asked for and neither key exists yet, so the provider is a string in the
+    # environment rather than a decision baked into the JavaScript.
+    provider = (env.get("RECARVE_MAPS_PROVIDER") or "google").strip().lower()
+    return {"provider": provider if key else None,
+            "key": key or None,
+            "bounds": CAMPUS_BOUNDS, "centre": CAMPUS_CENTRE}
+
+
 DAYS = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"]
 PERIODS = 8
 
@@ -5981,12 +6747,32 @@ def db_attendance(conn, user_id, window=ATT_WINDOW):
             None),
         # The next several, for Home's calendar: `next` stays for anything
         # that only ever wanted the one.
+        #
+        # One list, two sources. A student does not keep two calendars -- the
+        # mid-term window and Tooryanaad are both "what is coming", and asking
+        # them to check Home for one and Campus for the other is how the second
+        # one gets missed. `what` is what keeps it honest: every row says which
+        # kind of thing it is, so a fest is never mistaken for an exam.
+        #
+        # A past event falls off here by itself: the filter is the day it ends,
+        # so a three-day fest survives its own last day and is gone the morning
+        # after without anybody tidying anything.
         "upcoming": [
-            {"date": s.isoformat(), "ends": e.isoformat(), "title": t, "kind": k}
-            for s, e, t, k in conn.execute(
-                "select starts_on, ends_on, title, kind from academic_calendar "
+            {"date": s.isoformat(), "ends": e.isoformat(), "title": t,
+             "kind": k, "what": what, "where": where}
+            for s, e, t, k, what, where in conn.execute(
+                "select starts_on, ends_on, title, kind, 'academic', '' "
+                "  from academic_calendar "
                 " where notable and ends_on >= current_date "
-                " order by starts_on limit 5")],
+                "union all "
+                "select starts_on, coalesce(ends_on, starts_on), title, "
+                "       'event', 'campus', "
+                "       nullif(concat_ws(' \u00b7 ', nullif(society, ''), "
+                "                        nullif(venue, '')), '') "
+                "  from events "
+                " where deleted_at is null "
+                "   and coalesce(ends_on, starts_on) >= current_date "
+                " order by 1 limit 6")],
     }
 
 
@@ -7189,6 +7975,23 @@ def build_server(args):
                 # can still see who did.
                 with db(self.me["id"]) as conn:
                     return self.reply(200, db_standings(conn, self.me["id"]))
+            if self.path == "/campus":
+                if not self.me:
+                    return self.reply(404, {"error": "this server is running "
+                                                     "with --no-auth"})
+                # One request for the whole tab. Read as themselves, so a
+                # hidden club is only in the payload of somebody who can
+                # unhide it -- the policies decide that, not this handler.
+                with db(self.me["id"]) as conn:
+                    return self.reply(200, {
+                        "clubs": db_clubs(conn),
+                        "events": db_events(conn, self.me["id"]),
+                        "places": db_places(conn),
+                        # Null key and null provider is the honest state, not
+                        # an error: the places list below the map is useful
+                        # with no provider at all.
+                        "maps": maps_config(),
+                        "role": self.me["role"]})
             if self.path.split("?")[0] == "/doubts":
                 return self.do_doubts_get()
             if self.path == "/jobs":
@@ -7282,6 +8085,8 @@ def build_server(args):
                 return self.do_cancelled()
             if self.path == "/announce":
                 return self.do_announce()
+            if self.path in ("/club", "/event", "/place"):
+                return self.do_campus(self.path[1:])
             if self.path == "/read":
                 return self.do_read()
             if self.path == "/revise":
@@ -8262,6 +9067,64 @@ def build_server(args):
                 return self.reply(500, {"error": f"{type(e).__name__}: {e}"})
             log(f"{self.me['name']} posted or changed announcement {aid}", "admin")
             return self.reply(200, {"id": aid, "announcements": board})
+
+        def do_campus(self, kind):
+            """Write one club, one event or one place, and hand the tab back.
+
+            One handler for three tables because it is one shape of request:
+            an admin or a trusted member changes a row, and the screen redraws
+            from what was stored rather than from what was typed. Three
+            handlers would be three copies of the same six error branches.
+
+            What separates them is not here. ROLE_REQUIRED refused the wrong
+            role before this ran, and the policies refuse again on the caller's
+            own connection -- so "admins only" is true of clubs and places even
+            for somebody holding a stolen cookie and curl.
+            """
+            if not self.me:
+                return self.reply(404, {"error": "this server is running with --no-auth"})
+            try:
+                req = self.body(8000)
+                if req is None:
+                    return
+                with db(self.me["id"]) as conn:
+                    if kind == "club":
+                        db_write_club(conn, (req.get("slug") or "").strip() or None,
+                                      req.get("name"), req.get("blurb"),
+                                      req.get("category"), req.get("tags"),
+                                      req.get("link"), req.get("contact"),
+                                      req.get("hidden"))
+                    elif kind == "event":
+                        db_write_event(conn, self.me["id"],
+                                       (req.get("id") or "").strip() or None,
+                                       req.get("title"), req.get("society"),
+                                       req.get("date"), req.get("ends"),
+                                       req.get("venue"), req.get("blurb"),
+                                       req.get("deleted"))
+                    elif req.get("remove"):
+                        db_remove_place(conn, (req.get("slug") or "").strip())
+                    else:
+                        db_write_place(conn, (req.get("slug") or "").strip() or None,
+                                       req.get("name"), req.get("kind"),
+                                       req.get("lat"), req.get("lng"),
+                                       req.get("approx"), req.get("note"))
+                    out = {"clubs": db_clubs(conn), "events": db_events(conn, self.me["id"]),
+                           "places": db_places(conn), "maps": maps_config()}
+            except ValueError as e:
+                return self.reply(400, {"error": str(e)})
+            except psycopg.errors.InsufficientPrivilege:
+                needed = "trusted" if kind == "event" else "admin"
+                return self.reply(403, {"error": f"changing a {kind} is for "
+                                                 f"{needed} members",
+                                        "required": needed})
+            except psycopg.errors.CheckViolation:
+                return self.reply(400, {"error": f"that is not a usable {kind}"})
+            except (psycopg.errors.InvalidTextRepresentation,
+                    psycopg.errors.ForeignKeyViolation):
+                return self.reply(404, {"error": f"no such {kind}"})
+            except Exception as e:
+                return self.reply(500, {"error": f"{type(e).__name__}: {e}"})
+            return self.reply(200, out)
 
         def do_read(self):
             """"I have seen these." Every approved member, about themselves.
