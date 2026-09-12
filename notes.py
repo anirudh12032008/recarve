@@ -1310,6 +1310,10 @@ body.reading .tabs{display:none}
   details{background:none;border:1px solid #999}
 }
 </style>
+<!-- Tailwind's compiled sheet, inlined. It comes AFTER the token block above
+     because these utilities are written in terms of those variables, and
+     because the token block has to stay the page's first <style>. -->
+<style>__CSS__</style>
 
 <section id="list">
   <div class="top">
@@ -5316,7 +5320,8 @@ function seedHistory() {
 seedHistory();
 route();
 </script>
-""".replace("__AUDIO_MB__", str(MAX_AUDIO_BYTES // 1048576)).replace("__DOC_MB__", str(MAX_DOC_BYTES // 1048576))
+""".replace("__CSS__", (Path(__file__).parent / "web/app.css").read_text())\
+     .replace("__AUDIO_MB__", str(MAX_AUDIO_BYTES // 1048576)).replace("__DOC_MB__", str(MAX_DOC_BYTES // 1048576))
 
 
 # A note's questions live in <details><summary>Answer</summary> blocks. The

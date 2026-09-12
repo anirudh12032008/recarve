@@ -2671,3 +2671,18 @@ assert.equal(dayTimeline('2026-09-13'), null, 'a day with no classes draws no ti
     f.write_text(script)
     r = subprocess.run([NODE, str(f)], capture_output=True, text=True)
     assert r.returncode == 0, r.stdout + r.stderr
+
+
+def test_the_stylesheet_is_inlined_not_fetched():
+    """Tailwind is compiled and inlined, so the app paints with no network.
+
+    A CDN script would be ~300KB before first paint and a blank app offline;
+    a <link> to a built sheet would be a second round trip. Neither is here.
+    """
+    styles = re.findall(r"<style>(.*?)</style>", notes.PAGE, re.S)
+    assert len(styles) == 2, "the token block, then Tailwind's sheet"
+    assert "--accent:" in styles[0], "tokens stay in the FIRST style block"
+    assert len(styles[1].strip()) > 500, "the compiled sheet is inlined and real"
+    assert "__CSS__" not in notes.PAGE
+    assert "cdn.tailwindcss.com" not in notes.PAGE
+    assert '<link rel="stylesheet" href="/' not in notes.PAGE
