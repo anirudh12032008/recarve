@@ -628,11 +628,6 @@ body.reading #read{display:block}
 .brand{display:flex;align-items:baseline;gap:8px;min-height:var(--tap);margin-bottom:6px}
 .brand b{font-size:20px;letter-spacing:-.015em;font-weight:700}
 .brand span{font-size:13px;color:var(--mut)}
-#q{
-  width:100%;height:var(--tap);padding:0 14px;font-size:16px;
-  border:1px solid var(--line);border-radius:11px;background:var(--surface);color:var(--fg);
-}
-#q::placeholder{color:var(--mut)}
 
 .group{padding:18px 16px 2px}
 .group h2{display:inline;margin:0 0 0 9px;font-size:13px;font-weight:500;color:var(--mut)}
@@ -653,36 +648,19 @@ body.reading #read{display:block}
   .rank:hover{background:color-mix(in srgb,var(--surface) 60%,transparent)}
   .tabs button:hover{background:var(--surface)}
   .days button:hover:not([aria-current]){background:color-mix(in srgb,var(--fg) 8%,var(--surface))}
-  .vote:hover,.mark button:hover,.dpick .step:hover:not([disabled]){border-color:var(--mut)}
+  .vote:hover{background:color-mix(in srgb,var(--fg) 6%,var(--surface))}
+  .mark button:hover,.dpick .step:hover:not([disabled]){border-color:var(--mut)}
   .dock button:hover,.qdock button:hover{filter:brightness(.96)}
 }
 
-/* One vote per person, so this is a two-state toggle and not a counter you can
-   lean on. The count sits inside the control: what you are pressing and what
-   it did are the same object. */
-.vote{display:flex;align-items:center;gap:6px;flex:none;min-height:var(--tap);
-  padding:0 12px;border-radius:11px;border:1px solid var(--line);background:var(--surface);
-  font-size:13px;font-weight:650;color:var(--mut);font-variant-numeric:tabular-nums}
-.vote.on{border-color:var(--accent);color:var(--accent);
+/* The pressed states keep their own rules: color-mix() is not a utility, and
+   a borderless pill states itself with an inset ring rather than an edge it
+   does not otherwise have. The count inside it is still the words. */
+.vote.on{box-shadow:inset 0 0 0 1px var(--accent);color:var(--accent);
   background:color-mix(in srgb,var(--accent) 13%,transparent)}
-.vote:active{opacity:.7}
-/* Same pill, no count: a file's comment thread is a place, not a tally. */
-.cmt{flex:none;min-height:var(--tap);padding:0 12px;border-radius:11px;
-  border:1px solid var(--line);background:var(--surface);font-size:13px;
-  font-weight:650;color:var(--mut)}
-.cmt.open{border-color:var(--accent);color:var(--accent)}
-.cmt:active{opacity:.7}
 .vote[disabled]{opacity:.45}
-/* Admin-only, and destructive -- so it reads as neither a vote nor an
-   ordinary action. No native confirm() anywhere in this app; the second tap
-   IS the confirmation, and turning red on the first tap is what makes a
-   second, unintended tap unlikely rather than a dialog box. */
-.row-del{flex:none;min-height:var(--tap);padding:0 12px;border-radius:11px;
-  border:1px solid var(--line);background:transparent;font-size:13px;
-  font-weight:650;color:var(--mut)}
 .row-del.armed{border-color:var(--err);color:var(--err);
   background:color-mix(in srgb,var(--err) 12%,transparent)}
-.row-del:active{opacity:.7}
 /* A row carrying admin controls -- vote, Rename, Remove, maybe a thumbnail --
    has more buttons than a 375px phone has room for beside a name. Without
    this the name, the only flex item allowed to shrink, collapsed to one
@@ -742,28 +720,14 @@ body.reading #read{display:block}
 .tl .now{position:absolute;left:40px;right:0;height:2px;background:var(--err);z-index:2}
 .tl .now::before{content:"";position:absolute;left:-5px;top:-4px;width:10px;height:10px;
   border-radius:50%;background:var(--err)}
-.rename{display:flex;gap:8px;align-items:center;width:100%}
-.rename input{flex:1;min-width:0;height:var(--tap);padding:0 12px;font:inherit;
-  border:1px solid var(--mut);border-radius:10px;background:var(--bg);color:var(--fg)}
-.rename button{flex:none;min-height:var(--tap);padding:0 14px;border-radius:11px;font:inherit;
-  font-size:14px;font-weight:650;border:1px solid var(--line);background:transparent;color:var(--fg)}
 .rename button.primary{background:var(--accent);color:var(--accent-fg);border:0}
 .row-del[disabled]{opacity:.45}
 
-/* ---- Attendance. Two buttons, and pressing neither is the third state.
-   Never a checkbox: an unticked box reads as "absent", and this app must not
-   say that on a student's behalf. The pressed one thickens its keyline as well
-   as filling, so the state survives a colourblind reader and a grey screen. */
-.mark{display:flex;gap:8px;flex:none}
-.mark button{width:var(--tap);height:var(--tap);border-radius:11px;
-  border:1px solid var(--line);background:var(--bg);color:var(--mut);
-  font-size:16px;line-height:1;display:flex;align-items:center;justify-content:center}
 .mark button[aria-pressed="true"]{border-width:2px;font-weight:700}
 .mark button.yes[aria-pressed="true"]{border-color:var(--accent);color:var(--accent);
   background:color-mix(in srgb,var(--accent) 13%,transparent)}
 .mark button.no[aria-pressed="true"]{border-color:var(--fg);color:var(--fg);
   background:var(--surface)}
-.mark button:active{opacity:.7}
 .mark button[disabled]{opacity:.45}
 /* A class that did not happen. Dashed, because it is a hole in the week and
    not a thing anybody did. */
@@ -1155,18 +1119,6 @@ body.reading .tabs{display:none}
    iOS wheel is the fastest subject picker on a phone and it costs nothing to
    download. Six days of tapping is under two minutes, which is the whole
    design brief for this screen. */
-.days{display:flex;gap:6px;padding:14px 16px 6px;overflow-x:auto;-webkit-overflow-scrolling:touch}
-.days button{flex:none;min-height:var(--tap);padding:0 15px;border-radius:11px;
-  background:var(--surface);font-size:16px;color:var(--mut)}
-.days button[aria-current]{background:var(--accent);color:var(--accent-fg);font-weight:650}
-.slot{display:flex;align-items:center;gap:12px;padding:5px 16px}
-.slot span{flex:none;width:5.2em;font-size:13px;color:var(--mut)}
-.slot select{flex:1;min-width:0;min-height:var(--tap);font-size:16px;padding:0 10px;
-  border:1px solid var(--line);border-radius:11px;background:var(--surface);color:var(--fg)}
-.save{display:block;width:calc(100% - 32px);margin:18px 16px 0;min-height:var(--tap);
-  border-radius:11px;background:var(--accent);color:var(--accent-fg);
-  font-size:16px;font-weight:600}
-.save:active{opacity:.75}
 
 /* ---- Practice: one question at a time, over everything else. ---------- */
 #quiz{position:fixed;inset:0;z-index:12;background:var(--bg);display:flex;flex-direction:column}
@@ -1188,10 +1140,6 @@ body.reading .tabs{display:none}
 #qa>:first-child{margin-top:0}
 .qdock{flex:none;display:flex;gap:8px;padding:9px 14px calc(9px + env(safe-area-inset-bottom));
   border-top:1px solid var(--line)}
-.qdock button{flex:1;min-height:var(--tap);border-radius:11px;background:var(--surface);
-  font-size:16px;font-weight:500;display:flex;align-items:center;justify-content:center}
-.qdock button.primary{background:var(--accent);color:var(--accent-fg)}
-.qdock button:active{opacity:.75}
 /* Practice makes the reading dock four buttons wide on a phone. */
 .dock button{white-space:nowrap}
 
