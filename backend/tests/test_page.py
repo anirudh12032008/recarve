@@ -402,6 +402,77 @@ const subjectKey = qz.key;
 qz = null; qOpen(mc, mc.notes[0]);
 assert.ok(qz.key !== subjectKey, 'a note quiz and its subject quiz keep separate runs');
 
+// ---- Spaced repetition. The store above is still installed. ----
+// A question you got wrong must come back sooner and more often than one you
+// got right, so the order a run is dealt in is the whole feature.
+localStorage.removeItem = k => store.delete(k);
+store.clear();
+qz = null;
+qOpen(mc, null);
+assert.deepStrictEqual(qz.order, [0, 1, 2], 'nothing seen yet: the notes\u2019 own order');
+qReveal(); qMark(false);                        // q1 wrong -- due now
+qReveal(); qMark(true);                         // q2 right -- waits a day
+assert.ok(store.get('recarve.sr'), 'the schedule is kept on the phone, not the server');
+
+qz = null;
+store.delete('recarve.quiz.MC1101');            // a fresh run, not a resume
+qOpen(mc, null);
+assert.equal(qz.order[0], 0, 'the one you missed comes back first');
+assert.equal(qz.order[2], 1, 'the one you got right sinks below the unseen');
+
+// Wrong twice beats wrong once. Both are due, so only how often they have gone
+// wrong can separate them -- and it must beat the order they are listed in.
+const mcq = quizItems(mc, null);
+store.clear();
+srMark(mcq[2], false); srMark(mcq[2], false);   // the last question, missed twice
+srMark(mcq[0], false);                          // the first, missed once
+qz = null; store.delete('recarve.quiz.MC1101');
+qOpen(mc, null);
+assert.deepStrictEqual(qz.order.slice(0, 2), [2, 0],
+  'the question missed most often leads, ahead of one missed once');
+
+// Honest counts: what is here, what has been answered, what keeps going wrong.
+// No mastery percentage anywhere -- self-marked recall cannot measure one.
+store.clear();
+srMark(mcq[0], false); srMark(mcq[1], true);
+const st = srStats(mcq);
+assert.deepStrictEqual([st.total, st.seen, st.due, st.shaky], [3, 2, 1, 1],
+  'seen means answered, due means owed today, shaky means still going wrong');
+assert.equal(srSays(st), '3 questions \u00b7 2 seen \u00b7 1 due \u00b7 1 still shaky');
+assert.ok(!/%/.test(srSays(st)), 'no invented mastery percentage');
+
+// One run over the whole library, for the week before an exam.
+assert.equal(allItems().length, 3, 'everything means every subject');
+qz = null;
+qOpenAll();
+assert.equal(qz.items.length, 3, 'the whole-library run opens');
+assert.equal(qz.key, 'recarve.quiz.*', 'and keeps its own saved place');
+
+// The exam on the institute's calendar is what that row says it is for.
+ATT = {today: '2026-01-01', upcoming: [
+  {date: '2026-01-08', kind: 'exam', title: 'Mid-terms'}]};
+assert.equal(examSoon(), 'Mid-terms in 7 days');
+ATT.upcoming[0].date = '2026-04-01';
+assert.equal(examSoon(), '', 'an exam months away is not a countdown');
+ATT.upcoming = [{date: '2026-01-03', kind: 'holiday', title: 'Pongal'}];
+assert.equal(examSoon(), '', 'a holiday is not an exam');
+ATT = null;
+
+// With no storage at all -- the static export in private mode -- practice must
+// still deal a run rather than throw.
+delete globalThis.localStorage;
+qz = null;
+qOpen(mc, null);
+assert.deepStrictEqual(qz.order, [0, 1, 2], 'no storage: practice degrades to plain order');
+qReveal(); qMark(false);
+assert.equal(qz.i, 1, 'and marking still moves on');
+assert.equal(srStats(mcq).seen, 0, 'with nothing remembered, nothing is claimed');
+globalThis.localStorage = {
+  getItem: k => (store.has(k) ? store.get(k) : null),
+  setItem: (k, v) => store.set(k, String(v)),
+  removeItem: k => store.delete(k),
+};
+
 // ---- Attribution and votes. ----
 // Only a file the database actually holds a row for can be voted on: an id is
 // the page's evidence that there is something to vote against.
@@ -1473,7 +1544,9 @@ def test_practice_is_wired_up():
                    "practice.hidden = !questionsOf(n).length",
                    "practice.hidden = true",
                    # The dock's one accent follows the primary action.
-                   "classList.toggle('primary', practice.hidden)"):
+                   "classList.toggle('primary', practice.hidden)",
+                   "b.onclick = qOpenAll",
+                   "srMark(qz.items[qz.order[qz.i]], ok)"):
         assert wiring in notes.PAGE, f"practice button not wired: {wiring}"
 
 

@@ -3700,6 +3700,19 @@ function renderSubjects() {
   today.onclick = () => go('classes', 'day');
   block('Your day', [today]);
 
+  // One run over the whole library, because the week before an exam is not
+  // spent one subject at a time. What is due comes first, so tapping this
+  // repeatedly is a revision plan and not a re-read.
+  const every = allItems();
+  if (every.length) {
+    const exam = examSoon();
+    const b = line('Practice everything',
+                   exam ? exam + ' \u00b7 ' + srSays(srStats(every)) : srSays(srStats(every)),
+                   document.createElement('button'));
+    b.onclick = qOpenAll;
+    block('Practice', [b]);
+  }
+
   block('Subjects', DATA.map(s => {
     const b = document.createElement('button');
     b.className = 'row';
@@ -3735,8 +3748,7 @@ function renderSubject(s) {
     b.style.setProperty('--h', hue(s.code));
     b.innerHTML = '<i class="tick"></i><span class="name"><b></b><small></small></span>';
     b.querySelector('b').textContent = 'Practice the whole course';
-    b.querySelector('small').textContent =
-      plural(all.length, 'question') + ' from every note in ' + s.code;
+    b.querySelector('small').textContent = srSays(srStats(all));
     b.onclick = () => qOpen(s, null);
     block('Practice', [b]);
   }
@@ -4518,7 +4530,84 @@ const questionsOf = n => (n && n.questions) || [];
 // lecture it came from, so a subject quiz can say where to go back and read.
 function quizItems(s, note) {
   return (note ? [note] : s.notes)
-    .flatMap(n => questionsOf(n).map(x => ({q: x.q, a: x.a, from: n.title})));
+    .flatMap(n => questionsOf(n).map(
+      x => ({q: x.q, a: x.a, from: n.title, code: s.code})));
+}
+
+// Every question in the library, for the week before an exam when the subject
+// you are weakest in is not the one you would have picked.
+const allItems = () => DATA.flatMap(s => quizItems(s, null));
+
+// ---- Spaced repetition, on this phone. -----------------------------------
+// In localStorage, per device, not in the database, and deliberately: the
+// static export has no database to write to, a schedule is worth nothing to
+// anybody but the person who earned it, and this way practice costs the
+// server nothing at all. Losing it costs you an ordering, never a note.
+//
+// A wrong answer is due again immediately, so it comes back inside this run's
+// next round and at the front of the next run. A right one waits longer each
+// time it stays right. Questions are keyed by their own text, so notes can be
+// regenerated without resetting what you know.
+const SR_KEY = 'recarve.sr';
+const SR_DAYS = [0, 1, 3, 7, 21];
+const srId = it => it.code + '|' + it.from + '|' + it.q;
+const srAll = () => {
+  try { return JSON.parse(localStorage.getItem(SR_KEY)) || {}; } catch (e) { return {}; }
+};
+
+function srMark(it, ok) {
+  const all = srAll(), was = all[srId(it)] || {b: 0, w: 0};
+  const box = ok ? Math.min(was.b + 1, SR_DAYS.length - 1) : 0;
+  all[srId(it)] = {b: box, d: Date.now() + SR_DAYS[box] * 86400000,
+                   w: was.w + (ok ? 0 : 1)};
+  try { localStorage.setItem(SR_KEY, JSON.stringify(all)); } catch (e) {}
+}
+
+// Due first -- and the ones you have got wrong most often ahead of the rest of
+// the due -- then questions never seen, then what is not due yet. Sorting is
+// stable, so within a rank the notes stay in the order they were recorded.
+function srOrder(items) {
+  const all = srAll(), now = Date.now();
+  const rank = it => {
+    const s = all[srId(it)];
+    if (!s) return 0;                          // never seen
+    return s.d <= now ? -1 - Math.min(s.w, 9) : s.b;
+  };
+  return items.map((_, k) => k).sort((x, y) => rank(items[x]) - rank(items[y]));
+}
+
+// What is true and countable: how many questions there are, how many you have
+// answered at all, how many are due, how many you keep getting wrong. No
+// mastery percentage -- self-marked recall cannot measure one.
+function srStats(items) {
+  const all = srAll(), now = Date.now();
+  let seen = 0, due = 0, shaky = 0;
+  for (const it of items) {
+    const s = all[srId(it)];
+    if (!s) continue;
+    seen++;
+    if (s.d <= now) due++;
+    if (s.w && s.b < 2) shaky++;
+  }
+  return {total: items.length, seen, due, shaky};
+}
+
+const srSays = st => plural(st.total, 'question') + ' \u00b7 ' + st.seen + ' seen'
+  + (st.due ? ' \u00b7 ' + st.due + ' due' : '')
+  + (st.shaky ? ' \u00b7 ' + st.shaky + ' still shaky' : '');
+
+// An exam on the institute's own calendar changes what a practice run is for,
+// so the row says so. Nothing is fetched for this -- Home already holds it.
+function examSoon() {
+  const today = attToday();
+  for (const n of (ATT && ATT.upcoming) || []) {
+    if (n.kind !== 'exam') continue;
+    const days = Math.round(
+      (new Date(n.date + 'T00:00:00') - new Date(today + 'T00:00:00')) / 86400000);
+    if (days > 21) break;
+    return days <= 0 ? n.title + ', on now' : n.title + ' in ' + days + ' days';
+  }
+  return '';
 }
 
 let qz = null;   // {key, items, order, i, marks}; order holds indexes into items
@@ -4543,17 +4632,25 @@ function qSave() {
   } catch (e) {}
 }
 
-function qOpen(s, note) {
-  const items = quizItems(s, note);
+// One note, one subject, or the whole library: same run, different list. A
+// half-finished run is resumed exactly as it was left, schedule and all --
+// re-sorting under somebody mid-run would move the question they are on.
+function qRun(key, title, items, oneNote) {
   if (!items.length) return;
-  const key = 'recarve.quiz.' + s.code + (note ? '/' + note.title : '');
   const was = qLoad(key, items.length);
-  qz = {key, items, oneNote: !!note, order: was ? was.order : items.map((_, k) => k),
+  qz = {key, items, oneNote, order: was ? was.order : srOrder(items),
         i: was ? was.i : 0, marks: was ? was.marks : []};
-  qtitle.textContent = note ? note.title : 'Practice ' + s.name;
+  qtitle.textContent = title;
   quiz.hidden = false;
   qStep();
 }
+
+function qOpen(s, note) {
+  qRun('recarve.quiz.' + s.code + (note ? '/' + note.title : ''),
+       note ? note.title : 'Practice ' + s.name, quizItems(s, note), !!note);
+}
+
+const qOpenAll = () => qRun('recarve.quiz.*', 'Practice everything', allItems(), false);
 
 function qStep() {
   const done = qz.i >= qz.order.length;
@@ -4573,7 +4670,7 @@ function qScore() {
   const right = qz.marks.filter(m => m === 1).length;
   const missed = qz.order.filter((_, k) => qz.marks[k] !== 1);
   qcount.textContent = 'Finished';
-  qsrc.textContent = '';
+  qsrc.textContent = srSays(srStats(qz.items));
   qq.innerHTML = '<p id="qscore"></p><p id="qsub"></p>';
   qq.querySelector('#qscore').textContent = right + ' of ' + qz.order.length + ' right';
   qq.querySelector('#qsub').textContent = missed.length
@@ -4596,7 +4693,10 @@ function qReveal() {
   qa.hidden = false;
   qshow.hidden = true; qright.hidden = false; qwrong.hidden = false;
 }
-function qMark(ok) { qz.marks[qz.i] = ok ? 1 : 0; qz.i++; qSave(); qStep(); }
+function qMark(ok) {
+  srMark(qz.items[qz.order[qz.i]], ok);
+  qz.marks[qz.i] = ok ? 1 : 0; qz.i++; qSave(); qStep();
+}
 function qRetry() { qRound(qz.order.filter((_, k) => qz.marks[k] !== 1)); }
 function qAgain() { qRound(qz.items.map((_, k) => k)); }
 
