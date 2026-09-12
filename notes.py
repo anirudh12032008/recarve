@@ -675,13 +675,13 @@ body.reading #read{display:block}
 /* Home's calendar: this week as seven tappable days, then the institute's next
    dates as tear-off tiles. */
 .cal .mon{display:flex;justify-content:space-between;align-items:baseline;margin:0 2px 10px}
-.cal .mon b{font-size:17px;font-weight:700;letter-spacing:-.01em}
+.cal .mon b{font-size:20px;font-weight:700;letter-spacing:-.01em}
 .cal .mon small{font-size:13px;color:var(--mut)}
 .week{display:grid;grid-template-columns:repeat(7,1fr);gap:4px}
 .week button{display:flex;flex-direction:column;align-items:center;gap:2px;min-height:62px;
   padding:6px 0;border:0;border-radius:12px;background:transparent;color:var(--fg);font:inherit}
 .week small{font-size:11px;font-weight:600;color:var(--mut);letter-spacing:.04em}
-.week b{font-size:17px;font-weight:650;font-variant-numeric:tabular-nums}
+.week b{font-size:20px;font-weight:600;font-variant-numeric:tabular-nums}
 .week i{display:flex;gap:3px;height:6px}
 .week i::before{content:"";width:6px;height:6px;border-radius:50%;background:transparent}
 .week .has i::before{background:var(--accent)}
@@ -693,9 +693,9 @@ body.reading #read{display:block}
 .cal .why{margin:10px 2px 0;font-size:13px;color:var(--mut)}
 .tile{flex:none;width:44px;border-radius:10px;overflow:hidden;text-align:center;
   border:1px solid var(--line);background:var(--bg)}
-.tile small{display:block;font-size:10px;font-weight:700;letter-spacing:.06em;
+.tile small{display:block;font-size:11px;font-weight:700;letter-spacing:.06em;
   text-transform:uppercase;color:#fff;background:var(--err);padding:2px 0}
-.tile b{display:block;font-size:17px;font-weight:700;padding:3px 0 4px;
+.tile b{display:block;font-size:20px;font-weight:700;padding:3px 0 4px;
   font-variant-numeric:tabular-nums}
 /* The day as a timeline, Google-Calendar style: a class is as tall as it is
    long, free time is a dashed gap you can see at a glance, lunch is shaded,
@@ -708,14 +708,14 @@ body.reading #read{display:block}
   display:flex;flex-direction:column;justify-content:flex-start;border:0;font:inherit;
   text-align:left;color:var(--fg);background:hsl(var(--h) var(--sat) var(--lum) / .2);
   border-left:4px solid hsl(var(--h) var(--sat) var(--lum))}
-.tl .ev b{font-size:14px;font-weight:650;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.tl .ev small{font-size:12px;color:var(--mut);white-space:nowrap;overflow:hidden;
+.tl .ev b{font-size:13px;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.tl .ev small{font-size:11px;color:var(--mut);white-space:nowrap;overflow:hidden;
   text-overflow:ellipsis}
 .tl .ev.done{opacity:.55}
 .tl .free{position:absolute;left:48px;right:0;border-radius:10px;border:1.5px dashed var(--line);
-  display:flex;align-items:center;justify-content:center;font-size:12px;color:var(--mut)}
+  display:flex;align-items:center;justify-content:center;font-size:11px;color:var(--mut)}
 .tl .lunch{position:absolute;left:48px;right:0;border-radius:10px;display:flex;
-  align-items:center;justify-content:center;font-size:12px;color:var(--mut);
+  align-items:center;justify-content:center;font-size:11px;color:var(--mut);
   background:repeating-linear-gradient(135deg,var(--surface) 0 8px,transparent 8px 16px)}
 .tl .now{position:absolute;left:40px;right:0;height:2px;background:var(--err);z-index:2}
 .tl .now::before{content:"";position:absolute;left:-5px;top:-4px;width:10px;height:10px;
@@ -736,7 +736,7 @@ body.reading #read{display:block}
 /* attended / held / the percentage. The one figure on this screen somebody
    opened this screen for, so it leads the row rather than sharing its weight
    with "Edit your timetable". Tabular, so a column of them does not wobble. */
-.row.att .name b{font-size:20px;font-weight:650;letter-spacing:-.012em;
+.row.att .name b{font-size:20px;font-weight:600;letter-spacing:-.012em;
   font-variant-numeric:tabular-nums;line-height:1.3}
 /* Below 75%. The number in amber and the word beside it, in the calmest
    arrangement that still cannot be missed -- the student already knows it is
@@ -764,7 +764,7 @@ body.reading #read{display:block}
 .mine p{margin:5px 0 0;font-size:13px;color:var(--mut)}
 .tally{display:flex;gap:22px;margin-top:14px}
 .tally div{font-size:13px;color:var(--mut)}
-.tally b{display:block;font-size:20px;font-weight:650;color:var(--fg);
+.tally b{display:block;font-size:20px;font-weight:600;color:var(--fg);
   font-variant-numeric:tabular-nums}
 .mine .sub{margin:6px 0 0;font-size:16px;color:var(--mut)}
 .mine .edit{margin-top:14px;min-height:var(--tap);padding:0 14px;border-radius:11px;
@@ -788,9 +788,9 @@ body.reading #read{display:block}
 /* Earned, not decorative: only shown from Regular up, so a word here means
    somebody did the work. A keyline and the page's own ink, no medal. */
 .rank .lvl{flex:none;padding:3px 8px;border-radius:7px;font-size:13px;
-  font-weight:650;border:1px solid var(--line);color:var(--mut)}
+  font-weight:600;border:1px solid var(--line);color:var(--mut)}
 .rank .pts{flex:none;min-width:2.4em;text-align:right;font-size:20px;
-  font-weight:650;font-variant-numeric:tabular-nums}
+  font-weight:600;font-variant-numeric:tabular-nums}
 .rank.you{background:var(--surface);box-shadow:inset 3px 0 0 var(--accent)}
 .rank.you .pos,.rank.you .pts{color:var(--accent)}
 
@@ -805,9 +805,9 @@ body.reading #read{display:block}
    the one word that explains the state. The rule down the edge goes grey,
    the flag takes the page's muted ink, and every string still reads. */
 .ann.gone{border-left:3px solid var(--line);padding-left:13px}
-.ann h3{margin:0;font-size:20px;line-height:1.3;font-weight:650;letter-spacing:-.012em}
+.ann h3{margin:0;font-size:20px;line-height:1.3;font-weight:600;letter-spacing:-.012em}
 .ann .meta{margin:5px 0 0;font-size:13px;color:var(--mut)}
-.ann .flag{font-weight:650;color:var(--accent)}
+.ann .flag{font-weight:600;color:var(--accent)}
 .ann.gone .flag{color:var(--mut)}
 .ann .md{margin-top:11px;font-size:16px}
 .ann .md>:first-child{margin-top:0}
@@ -832,7 +832,7 @@ body.reading #read{display:block}
    round. */
 .ann .acts button{min-height:var(--tap);padding:0 15px;border-radius:11px;
   background:var(--bg);border:1px solid var(--admin);color:var(--admin);
-  font-size:13px;font-weight:650}
+  font-size:13px;font-weight:600}
 .ann .acts button:active{opacity:.75}
 
 /* ---- Doubts: the thread under a note. Ruled entries, not cards -- a question
@@ -848,7 +848,7 @@ body.reading #read{display:block}
 .thread{max-width:70ch}
 .filethread{padding:0 0 10px}
 .thread h2{margin:38px 0 0;font-size:20px;line-height:1.3;letter-spacing:-.012em;
-  font-weight:650;padding-bottom:7px;border-bottom:1px solid var(--line)}
+  font-weight:600;padding-bottom:7px;border-bottom:1px solid var(--line)}
 .thread .quiet{padding:14px 0 0}
 .dbt{padding:16px 0;border-bottom:1px solid var(--line)}
 /* Somebody's typing, drawn as typing: pre-wrap keeps their line breaks and
@@ -865,7 +865,7 @@ body.reading #read{display:block}
 .thread .acts{display:flex;flex-wrap:wrap;gap:8px;margin-top:11px}
 .thread .acts button{min-height:var(--tap);padding:0 15px;border-radius:11px;
   background:var(--bg);border:1px solid var(--line);color:var(--accent);
-  font-size:13px;font-weight:650}
+  font-size:13px;font-weight:600}
 /* Taking down somebody else's is an admin act, marked as one: the page's own
    ink on a keyline, the same treatment as every other admin control. */
 .thread .acts button.adm{border-color:var(--admin);color:var(--admin)}
@@ -961,7 +961,7 @@ body.reading #read{display:block}
    reading screen now: 142px is #nav's, and the FAB reaches 76 + 58 = 134. */
 article{padding:22px 18px 8px;max-width:70ch;margin:0 auto}
 article h1{font-size:26px;line-height:1.2;letter-spacing:-.022em;font-weight:700;margin:0 0 24px}
-article h2{font-size:20px;line-height:1.3;letter-spacing:-.012em;font-weight:650;
+article h2{font-size:20px;line-height:1.3;letter-spacing:-.012em;font-weight:600;
   margin:38px 0 12px;padding-bottom:7px;border-bottom:1px solid var(--line)}
 article h3{font-size:16px;font-weight:700;color:var(--accent);margin:26px 0 6px}
 article ul,article ol{padding-left:22px}
@@ -989,11 +989,11 @@ details>:not(summary){padding:0 14px}
   flex:1;min-height:var(--tap);border-radius:11px;background:var(--surface);
   font-size:16px;font-weight:500;display:flex;align-items:center;justify-content:center;
 }
-.dock button.primary{background:var(--accent);color:var(--accent-fg);font-weight:650}
+.dock button.primary{background:var(--accent);color:var(--accent-fg);font-weight:600}
 /* Share, Download and Print are things you might do to a note; Practice is the
    thing you opened it to do. They stay full-size targets and step back a
    little in weight so the primary is the one the eye lands on. */
-.dock button:not(.primary){color:var(--mut);font-size:15px}
+.dock button:not(.primary){color:var(--mut);font-size:16px}
 /* Below .top's 5: it is placed in document coordinates, so a scroll can
    carry it into the sticky header, where it used to paint over the back
    button and eat the tap meant for it. */
@@ -1048,7 +1048,7 @@ body:has(#ask.on) #fab{display:none}
   border:1px solid var(--mut);border-radius:10px;background:var(--bg);color:var(--fg)}
 #batchName .go{display:flex;gap:10px;margin-top:12px}
 #batchName .go button{flex:1;min-height:var(--tap);border-radius:11px;font:inherit;
-  font-weight:650;border:1px solid var(--line);background:transparent;color:var(--fg)}
+  font-weight:600;border:1px solid var(--line);background:transparent;color:var(--fg)}
 #batchName .go button.primary{background:var(--accent);color:var(--accent-fg);border:0}
 #prog .bar{height:10px;border-radius:5px;background:var(--surface);overflow:hidden}
 #prog .fill{height:100%;width:0;background:var(--accent);transition:width .18s linear}
@@ -1067,7 +1067,7 @@ body:has(#ask.on) #fab{display:none}
 #jobs{padding:0 16px}
 .job .st{font-size:13px;color:var(--mut);margin-left:auto;text-align:right}
 .job.failed{box-shadow:inset 3px 0 0 var(--err)}
-.job.failed .st{color:var(--err);font-weight:650}
+.job.failed .st{color:var(--err);font-weight:600}
 .spin{width:14px;height:14px;border:2px solid var(--line);border-top-color:var(--accent);
   border-radius:50%;animation:spin .8s linear infinite;flex:none}
 @keyframes spin{to{transform:rotate(360deg)}}
@@ -1104,7 +1104,7 @@ body:not(.reading) .dock{display:none}
   flex:1;min-height:var(--tap);border-radius:11px;font-size:13px;font-weight:500;
   color:var(--mut);display:flex;align-items:center;justify-content:center;
 }
-.tabs button[aria-current]{color:var(--accent);font-weight:650}
+.tabs button[aria-current]{color:var(--accent);font-weight:600}
 .tabs button:active{background:var(--surface)}
 body.reading .tabs{display:none}
 /* Clear of the bar AND of the FAB above it (76 + 58), so the last row is never
@@ -1164,14 +1164,14 @@ body.reading .tabs{display:none}
   padding:12px 14px;margin:0 16px 8px}
 .card h3{margin:0;font-size:16px;font-weight:600;color:var(--fg)}
 .card .meta{display:block;font-size:13px;color:var(--mut);margin-top:3px}
-.card p{margin:8px 0 0;font-size:14px;line-height:1.55;color:var(--fg)}
+.card p{margin:8px 0 0;font-size:13px;line-height:1.55;color:var(--fg)}
 .card .tags{display:flex;flex-wrap:wrap;gap:6px;margin-top:9px}
-.card .tags span{font-size:12px;color:var(--mut);border:1px solid var(--line);
+.card .tags span{font-size:11px;color:var(--mut);border:1px solid var(--line);
   border-radius:999px;padding:3px 9px;background:var(--bg)}
 .card .acts{display:flex;flex-wrap:wrap;gap:8px;margin-top:10px}
 .card .acts a,.card .acts button{min-height:var(--tap);display:inline-flex;
   align-items:center;padding:0 14px;border-radius:11px;border:1px solid var(--line);
-  background:var(--bg);color:var(--fg);font-size:14px;font-weight:500;
+  background:var(--bg);color:var(--fg);font-size:13px;font-weight:500;
   text-decoration:none}
 .card.gone{opacity:.6}
 /* The date, torn off, so an event reads as a date first and a name second --
@@ -1182,7 +1182,7 @@ body.reading .tabs{display:none}
    needs no URL of its own for something that is two sentences long. */
 .card summary{list-style:none;cursor:pointer}
 .card summary::-webkit-details-marker{display:none}
-.card summary::after{content:'›';float:right;color:var(--mut);font-size:18px;
+.card summary::after{content:'›';float:right;color:var(--mut);font-size:20px;
   line-height:1;transform:rotate(90deg);transition:transform .15s}
 .card[open] summary::after{transform:rotate(270deg)}
 /* The map, when there is a key. Square-ish and bounded; with no key this
