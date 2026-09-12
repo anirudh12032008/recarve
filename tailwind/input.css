@@ -117,3 +117,25 @@
   .qdock button { @apply flex-1 min-h-tap rounded bg-surface text-base font-medium
                          flex items-center justify-center active:opacity-75; }
   .qdock button.primary { @apply bg-accent text-accent-fg; }
+
+  /* Home's calendar: this week as seven tappable days, then the institute's
+     next dates as tear-off tiles. Everything that is a heading here -- the
+     month, a date, a tile's number -- is the one heading size. */
+  .cal .mon { @apply flex justify-between items-baseline mx-0.5 mb-3; }
+  .cal .mon b { @apply text-head font-bold; }
+  .cal .mon small { @apply text-small text-mut; }
+  .cal .why { @apply mt-3 mx-0.5 text-small text-mut; }
+  .week { @apply grid grid-cols-7 gap-1; }
+  .week button { @apply flex flex-col items-center gap-0.5 min-h-tap py-2 px-0
+                        rounded bg-transparent text-fg; }
+  .week small { @apply text-micro font-semibold text-mut; }
+  .week b { @apply text-head font-semibold tabular-nums; }
+  .tile { @apply flex-none w-tap rounded overflow-hidden text-center border border-line bg-bg; }
+  .tile small { @apply block text-micro font-bold uppercase text-white bg-err py-0.5; }
+  .tile b { @apply block text-head font-bold pt-1 pb-1.5 tabular-nums; }
+
+  /* A class on the timeline is a row lying on its side: a bold title over the
+     small muted line that says when it is and how long it runs. */
+  .tl .ev b { @apply text-base font-semibold whitespace-nowrap overflow-hidden text-ellipsis; }
+  .tl .ev small { @apply text-small text-mut whitespace-nowrap overflow-hidden text-ellipsis; }
+  .tl .free, .tl .lunch { @apply text-small text-mut; }

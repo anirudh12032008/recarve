@@ -672,16 +672,6 @@ body.reading #read{display:block}
 .row:has(.row-del) > .vote ~ .row-del,.row:has(.row-del) > .row-del ~ .row-del{margin-left:0}
 .row:has(.row-del):not(:has(.vote)) > .row-del:first-of-type{margin-left:15px}
 /* Rename turns the row itself into the edit box -- no dialog, same as Remove. */
-/* Home's calendar: this week as seven tappable days, then the institute's next
-   dates as tear-off tiles. */
-.cal .mon{display:flex;justify-content:space-between;align-items:baseline;margin:0 2px 10px}
-.cal .mon b{font-size:20px;font-weight:700;letter-spacing:-.01em}
-.cal .mon small{font-size:13px;color:var(--mut)}
-.week{display:grid;grid-template-columns:repeat(7,1fr);gap:4px}
-.week button{display:flex;flex-direction:column;align-items:center;gap:2px;min-height:62px;
-  padding:6px 0;border:0;border-radius:12px;background:transparent;color:var(--fg);font:inherit}
-.week small{font-size:11px;font-weight:600;color:var(--mut);letter-spacing:.04em}
-.week b{font-size:20px;font-weight:600;font-variant-numeric:tabular-nums}
 .week i{display:flex;gap:3px;height:6px}
 .week i::before{content:"";width:6px;height:6px;border-radius:50%;background:transparent}
 .week .has i::before{background:var(--accent)}
@@ -690,13 +680,6 @@ body.reading #read{display:block}
 .week .today{background:var(--accent);color:var(--accent-fg)}
 .week .today small,.week .today b{color:var(--accent-fg)}
 .week .today.has i::before{background:var(--accent-fg)}
-.cal .why{margin:10px 2px 0;font-size:13px;color:var(--mut)}
-.tile{flex:none;width:44px;border-radius:10px;overflow:hidden;text-align:center;
-  border:1px solid var(--line);background:var(--bg)}
-.tile small{display:block;font-size:11px;font-weight:700;letter-spacing:.06em;
-  text-transform:uppercase;color:#fff;background:var(--err);padding:2px 0}
-.tile b{display:block;font-size:20px;font-weight:700;padding:3px 0 4px;
-  font-variant-numeric:tabular-nums}
 /* The day as a timeline, Google-Calendar style: a class is as tall as it is
    long, free time is a dashed gap you can see at a glance, lunch is shaded,
    and a red line says where you are in the day right now. */
@@ -704,18 +687,17 @@ body.reading #read{display:block}
 .tl .hr{position:absolute;left:0;right:0;height:0;border-top:1px solid var(--line)}
 .tl .hr span{position:absolute;left:0;top:-8px;width:40px;font-size:11px;color:var(--mut);
   font-variant-numeric:tabular-nums;background:var(--bg);padding-right:4px}
-.tl .ev{position:absolute;left:48px;right:0;border-radius:10px;padding:6px 10px;overflow:hidden;
+.tl .ev{position:absolute;left:48px;right:0;border-radius:11px;padding:6px 10px;overflow:hidden;
   display:flex;flex-direction:column;justify-content:flex-start;border:0;font:inherit;
   text-align:left;color:var(--fg);background:hsl(var(--h) var(--sat) var(--lum) / .2);
   border-left:4px solid hsl(var(--h) var(--sat) var(--lum))}
-.tl .ev b{font-size:13px;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.tl .ev small{font-size:11px;color:var(--mut);white-space:nowrap;overflow:hidden;
-  text-overflow:ellipsis}
-.tl .ev.done{opacity:.55}
-.tl .free{position:absolute;left:48px;right:0;border-radius:10px;border:1.5px dashed var(--line);
-  display:flex;align-items:center;justify-content:center;font-size:11px;color:var(--mut)}
-.tl .lunch{position:absolute;left:48px;right:0;border-radius:10px;display:flex;
-  align-items:center;justify-content:center;font-size:11px;color:var(--mut);
+/* Already happened. Said in the ink, not in the block's opacity: dimming the
+   container dims the words that name the class. */
+.tl .ev.done b,.tl .ev.done small{color:var(--mut)}
+.tl .free{position:absolute;left:48px;right:0;border-radius:11px;border:1.5px dashed var(--line);
+  display:flex;align-items:center;justify-content:center}
+.tl .lunch{position:absolute;left:48px;right:0;border-radius:11px;display:flex;
+  align-items:center;justify-content:center;
   background:repeating-linear-gradient(135deg,var(--surface) 0 8px,transparent 8px 16px)}
 .tl .now{position:absolute;left:40px;right:0;height:2px;background:var(--err);z-index:2}
 .tl .now::before{content:"";position:absolute;left:-5px;top:-4px;width:10px;height:10px;
