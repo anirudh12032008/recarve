@@ -1415,7 +1415,7 @@ reply = answer(true, {doubts: [{
              at: 2, mine: false, votes: 2, voted: false}],
 }]});
 writes = [];
-await loadDoubts({title: 'week1'}, {code: 'MC1101'});
+await loadDoubts({subject: 'MC1101', title: 'week1'}, doubtsBox, 'Doubts');
 assert.ok(fetches.some(f => f[0] === '/doubts?subject=MC1101&title=week1'),
           'the thread is asked for by the two things the library names a note by');
 assert.ok(wrote(['textContent', '<img src=x onerror=alert(1)>']),
@@ -1432,8 +1432,8 @@ assert.ok(wrote(['textContent', 2]), 'with the count the class gave it');
 // cannot post -- the static export has no /doubts to ask.
 reply = 'gone';
 writes = [];
-await loadDoubts({title: 'week1'}, {code: 'MC1101'});
-assert.ok(wrote(['textContent', 'Questions need the server. Run: notes.py serve']),
+await loadDoubts({subject: 'MC1101', title: 'week1'}, doubtsBox, 'Doubts');
+assert.ok(wrote(['textContent', 'This needs the server. Run: notes.py serve']),
           'no server, no form');
 reply = null;
 
@@ -1481,10 +1481,11 @@ def test_the_vote_control_is_wired_to_the_server_and_nothing_else():
     """The stub cannot see an onclick assigned to a proxy, so the checks above
     build the control and this is the other half: what pressing it does."""
     for wiring in (
-        # One request, carrying which item and which direction. Two shapes of
-        # it, because one control votes for both an upload and an answer to a
-        # doubt -- they are one table and one endpoint.
-        "body: JSON.stringify(answer ? {answer: u.id, on: !u.voted}",
+        # One request, carrying which item and which direction. Three shapes
+        # of it, because one control votes for an upload, an answer to a doubt
+        # and something said on the wall -- they are one table and one endpoint.
+        "body: JSON.stringify(u.post ? {post: u.id, on: !u.voted}",
+        ": answer ? {answer: u.id, on: !u.voted}",
         ": {id: u.id, on: !u.voted}",
         "if (u.id) el.appendChild(voteBtn(u));",
     ):
@@ -1495,8 +1496,10 @@ def test_the_vote_control_is_wired_to_the_server_and_nothing_else():
     # passed with the vote's own refresh deleted.
     handler = re.search(r"function voteBtn\(u, answer\) \{.*?\n\}",
                         notes.PAGE, re.S).group(0)
-    assert "await (answer ? loadDoubts() : refresh());" in handler, \
+    assert "else await (answer ? loadDoubts() : refresh());" in handler, \
         "a vote must re-read the list, or the thread, it re-ranks"
+    assert "if (u.post) { WALLS[wallOn] = null; render(); }" in handler, \
+        "and the wall it re-ranks, when the vote was for a post"
 
 
 def test_the_tab_bar_is_wired_and_gives_way_to_the_reading_dock():
@@ -2225,6 +2228,8 @@ def test_removing_a_file_posts_the_right_shape_to_the_right_route(tmp_path):
     vote_fn = re.search(r"function voteBtn\(u, answer\) \{.*?\n\}", notes.PAGE, re.S)
     assert file_fn and note_fn and rem_fn and vote_fn
     IS_IMAGE = re.search(r"const IS_IMAGE = [^\n]*", notes.PAGE).group(0)
+    CMT = re.search(r"function commentsBtn\(id, name\) \{.*?\n\}",
+                    notes.PAGE, re.S).group(0)
     RENAME = "\n".join(re.search(p_, notes.PAGE, re.S).group(0) for p_ in (
         r"function renameBtn\(current, save\) \{.*?\n\}",
         r"async function renameItem\(payload, btn\) \{.*?\n\}"))
@@ -2251,6 +2256,7 @@ document.createElement = (tag) => {{
 }};
 {RENAME}
 {IS_IMAGE}
+{CMT}
 {vote_fn.group(0)}
 {rem_fn.group(0)}
 {file_fn.group(0)}
@@ -2293,6 +2299,8 @@ def test_files_sharing_a_batch_render_as_one_row(tmp_path):
     rem_fn = re.search(r"function removeBtn\(onConfirmed\) \{.*?\n\}", notes.PAGE, re.S)
     assert grouped_fn and group_fn and file_fn and vote_fn and rem_fn
     IS_IMAGE = re.search(r"const IS_IMAGE = [^\n]*", notes.PAGE).group(0)
+    CMT = re.search(r"function commentsBtn\(id, name\) \{.*?\n\}",
+                    notes.PAGE, re.S).group(0)
     RENAME = "\n".join(re.search(p_, notes.PAGE, re.S).group(0) for p_ in (
         r"function renameBtn\(current, save\) \{.*?\n\}",
         r"async function renameItem\(payload, btn\) \{.*?\n\}"))
@@ -2331,6 +2339,7 @@ document.createElement = (tag) => {{
 }};
 {RENAME}
 {IS_IMAGE}
+{CMT}
 {vote_fn.group(0)}
 {rem_fn.group(0)}
 {file_fn.group(0)}

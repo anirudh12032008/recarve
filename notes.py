@@ -706,6 +706,12 @@ body.reading #read{display:block}
 .vote.on{border-color:var(--accent);color:var(--accent);
   background:color-mix(in srgb,var(--accent) 13%,transparent)}
 .vote:active{opacity:.7}
+/* Same pill, no count: a file's comment thread is a place, not a tally. */
+.cmt{flex:none;min-height:var(--tap);padding:0 12px;border-radius:11px;
+  border:1px solid var(--line);background:var(--surface);font-size:13px;
+  font-weight:650;color:var(--mut)}
+.cmt.open{border-color:var(--accent);color:var(--accent)}
+.cmt:active{opacity:.7}
 .vote[disabled]{opacity:.45}
 /* Admin-only, and destructive -- so it reads as neither a vote nor an
    ordinary action. No native confirm() anywhere in this app; the second tap
@@ -922,9 +928,15 @@ body.reading #read{display:block}
    answers are set in from the question by a rule, which is the only nesting
    this page has and the only nesting the table allows. */
 #doubts{max-width:70ch;margin:0 auto;padding:0 18px 142px}
-#doubts h2{margin:38px 0 0;font-size:20px;line-height:1.3;letter-spacing:-.012em;
+/* The same thread, drawn in three places now: under a lecture note, under an
+   uploaded file, and nowhere else that is not one of those two. The rules
+   below key off the class rather than the id, because a comment section is
+   the same piece of writing between people wherever it hangs. */
+.thread{max-width:70ch}
+.filethread{padding:0 0 10px}
+.thread h2{margin:38px 0 0;font-size:20px;line-height:1.3;letter-spacing:-.012em;
   font-weight:650;padding-bottom:7px;border-bottom:1px solid var(--line)}
-#doubts .quiet{padding:14px 0 0}
+.thread .quiet{padding:14px 0 0}
 .dbt{padding:16px 0;border-bottom:1px solid var(--line)}
 /* Somebody's typing, drawn as typing: pre-wrap keeps their line breaks and
    textContent is what puts it there. Nothing in this block is ever parsed. */
@@ -937,14 +949,14 @@ body.reading #read{display:block}
 /* The one the class voted up. Said in the rule, never by dimming the others,
    which are still answers worth reading. */
 .ans.top{border-left-color:var(--accent)}
-#doubts .acts{display:flex;flex-wrap:wrap;gap:8px;margin-top:11px}
-#doubts .acts button{min-height:var(--tap);padding:0 15px;border-radius:11px;
+.thread .acts{display:flex;flex-wrap:wrap;gap:8px;margin-top:11px}
+.thread .acts button{min-height:var(--tap);padding:0 15px;border-radius:11px;
   background:var(--bg);border:1px solid var(--line);color:var(--accent);
   font-size:13px;font-weight:650}
 /* Taking down somebody else's is an admin act, marked as one: the page's own
    ink on a keyline, the same treatment as every other admin control. */
-#doubts .acts button.adm{border-color:var(--admin);color:var(--admin)}
-#doubts .acts button:active{opacity:.75}
+.thread .acts button.adm{border-color:var(--admin);color:var(--admin)}
+.thread .acts button:active{opacity:.75}
 .askbox{padding:14px 0 2px}
 .askbox textarea{width:100%;min-height:5.5em;font-size:16px;line-height:1.6;
   padding:11px 12px;border:1px solid var(--line);border-radius:11px;
@@ -954,6 +966,36 @@ body.reading #read{display:block}
   border-radius:11px;background:var(--accent);color:var(--accent-fg);
   font-size:16px;font-weight:600}
 .askbox button:active{opacity:.75}
+
+/* ---- The wall, and the room. Both are somebody's typing, so both borrow
+   .said and .askbox above rather than growing type of their own. A post is a
+   ruled entry like a doubt; a message is a line in a conversation and is set
+   tighter, because thirty of them are read at once. */
+.wall{max-width:70ch;margin:0 auto;padding:0 16px}
+.post{display:flex;gap:10px;align-items:flex-start;
+  padding:15px 0;border-bottom:1px solid var(--line)}
+.post .what{flex:1;min-width:0}
+.post .meta{margin:6px 0 0;font-size:13px;color:var(--mut)}
+.shots{display:flex;flex-wrap:wrap;gap:7px;margin-top:10px}
+.shots img{width:96px;height:96px;object-fit:cover;border-radius:10px;
+  border:1px solid var(--line)}
+.room{max-width:70ch;margin:0 auto;padding:0 16px}
+.room .log{max-height:52vh;overflow-y:auto;overscroll-behavior:contain;
+  padding:4px 0 2px}
+.msg{padding:8px 0;border-bottom:1px solid var(--line)}
+.msg .meta{margin:3px 0 0;font-size:13px;color:var(--mut)}
+.msg.me .said{color:var(--accent)}
+.msg .acts button{min-height:0;padding:2px 0;background:none;border:0;
+  font-size:13px;color:var(--mut)}
+/* One line and a Send, not the five-line box a question gets: a message is a
+   sentence and the keyboard already takes half the screen. */
+.saybox{display:flex;gap:8px;padding:10px 0 4px}
+.saybox input{flex:1;min-width:0;min-height:var(--tap);font-size:16px;
+  padding:0 12px;border:1px solid var(--line);border-radius:11px;
+  background:var(--surface);color:var(--fg)}
+.saybox button{flex:none;min-height:var(--tap);padding:0 18px;border-radius:11px;
+  background:var(--accent);color:var(--accent-fg);font-size:16px;font-weight:600}
+.saybox button:active{opacity:.75}
 
 /* The composer: a title, a body, and whether it sits at the top. */
 .compose{padding:8px 16px 16px}
@@ -1293,7 +1335,7 @@ body.reading .tabs{display:none}
     <span class="code" id="rcode"></span>
   </div>
   <article id="body"><p class="blank">Pick a lecture to start reading.</p></article>
-  <section id="doubts" aria-label="Doubts"></section>
+  <section id="doubts" class="thread" aria-label="Doubts"></section>
 </section>
 
 <button id="fab" aria-label="Add a lecture or notes">+</button>
@@ -1577,18 +1619,54 @@ function voteBtn(u, answer) {
     try {
       const r = await fetch('/vote', {
         method: 'POST', headers: {'Content-Type': 'application/json'},
-        body: JSON.stringify(answer ? {answer: u.id, on: !u.voted}
-                                    : {id: u.id, on: !u.voted}),
+        body: JSON.stringify(u.post ? {post: u.id, on: !u.voted}
+                             : answer ? {answer: u.id, on: !u.voted}
+                                      : {id: u.id, on: !u.voted}),
       });
       const d = await r.json().catch(() => ({}));
       if (!r.ok) throw new Error(d.error || 'could not register that vote');
       // Refetch rather than patch: the vote changes the ranking too, and one
       // source of order beats two that can disagree.
-      await (answer ? loadDoubts() : refresh());
+      // Refetch rather than patch, whichever of the three it was: the vote
+      // changes the ranking too, and one source of order beats two.
+      if (u.post) { WALLS[wallOn] = null; render(); }
+      else await (answer ? loadDoubts() : refresh());
     } catch (e) {
       b.disabled = false;
       busyDone(e.message);
     }
+  };
+  return b;
+}
+
+// A thread on an uploaded file. Doubts (0025) already gave a lecture note its
+// comment section; a PDF of last year's paper had nowhere at all to say "page
+// 3 is the wrong year", which is the thing people most want to say. So: the
+// same thread, the same table, the same two levels -- opened in place under
+// the row rather than on a screen of its own, because the file is what you
+// are looking at and a comment on it is not somewhere else.
+function commentsBtn(id, name) {
+  const b = document.createElement('button');
+  b.className = 'cmt';
+  b.textContent = 'Comments';
+  b.setAttribute('aria-label', 'Comments on ' + name);
+  b.onclick = () => {
+    const row = b.closest('.row');
+    const open = row.nextElementSibling
+                 && row.nextElementSibling.classList.contains('filethread');
+    if (open) {
+      row.nextElementSibling.remove();
+      b.classList.remove('open');
+      b.setAttribute('aria-expanded', 'false');
+      threadOn = null;      // nothing is open, so a stray refetch draws nothing
+      return;
+    }
+    const box = document.createElement('div');
+    box.className = 'thread filethread';
+    row.parentNode.insertBefore(box, row.nextSibling);
+    b.classList.add('open');
+    b.setAttribute('aria-expanded', 'true');
+    loadDoubts({material: id}, box, 'Comments');
   };
   return b;
 }
@@ -1613,6 +1691,7 @@ function fileRow(u, s) {
   // not adopted. Showing a vote button that cannot work is worse than none,
   // and the same is true of a remove button with nothing to remove.
   if (u.id) el.appendChild(voteBtn(u));
+  if (u.id) el.appendChild(commentsBtn(u.id, u.name));
   if (u.id && ROLE === 'admin') {
     const dot = u.name.lastIndexOf('.');
     el.appendChild(renameBtn(dot > 0 ? u.name.slice(0, dot) : u.name, (v, btn) =>
@@ -1681,6 +1760,9 @@ function fileGroupRow(files, s) {
     small.appendChild(a);
   });
   if (anchor.id) el.appendChild(voteBtn(anchor));
+  // The thread anchors on the first file, the same way the vote does: one
+  // batch was one thing somebody added, and a comment is about that thing.
+  if (anchor.id) el.appendChild(commentsBtn(anchor.id, anchor.title || anchor.name));
   if (anchor.id && ROLE === 'admin') {
     el.appendChild(renameBtn(anchor.title || '', (v, btn) =>
       renameItem({kind: 'batch', batch: anchor.batch, name: v}, btn)));
@@ -2840,6 +2922,193 @@ function drawBoard(box) {
 }
 
 // ---- CLUBS, EVENTS AND THE MAP. -----------------------------------------
+// ---- THE WALL: what the section says to itself. -------------------------
+//
+// Two lists off one table (0035). The feed carries a name; a confession does
+// not, and the reason it does not is a privilege in Postgres rather than a
+// decision on this page -- `authenticated` has no select on posts.author_id at
+// all, so the author is not something this file could print by accident. What
+// arrives here for a confession is `by: null`, every time, for everybody,
+// including the admin who can take it down.
+//
+// Every body on both lists goes on the page with textContent. This is the one
+// screen where somebody deliberately tries a tag, and a post is a sentence,
+// not a document: there is nothing to gain from parsing it.
+const WALLS = {feed: null, confession: null};
+const wallAsked = {feed: false, confession: false};
+let wallOn = 'feed';        // which of the two Campus is showing
+
+function needWall(kind) {
+  if (WALLS[kind] || wallAsked[kind]) return;
+  wallAsked[kind] = true;
+  fetch('/posts?kind=' + kind)
+    .then(r => r.ok ? r.json() : Promise.reject())
+    .then(d => { WALLS[kind] = d.posts || []; wallAsked[kind] = false;
+                 redrawCampus(); })
+    .catch(() => { WALLS[kind] = 'failed'; wallAsked[kind] = false;
+                   redrawCampus(); });
+}
+
+function postCard(x, kind) {
+  const el = document.createElement('div');
+  el.className = 'post';
+  const what = document.createElement('div');
+  what.className = 'what';
+  const said = document.createElement('p');
+  said.className = 'said';
+  said.textContent = x.body;
+  const meta = document.createElement('p');
+  meta.className = 'meta';
+  // "Anonymous" is the honest word and it is written here, not sent: there is
+  // no name in the payload to fall back to, and nothing to print if there is.
+  meta.textContent = (x.by || 'Anonymous') + ' \u00b7 ' + ago(x.at, NOW);
+  what.append(said, meta);
+  if (x.photos && x.photos.length) {
+    const shots = document.createElement('div');
+    shots.className = 'shots';
+    x.photos.forEach(ph => {
+      const a = document.createElement('a');
+      a.href = ph.path; a.target = '_blank'; a.rel = 'noopener';
+      const img = document.createElement('img');
+      img.loading = 'lazy';
+      img.src = ph.path;
+      img.alt = ph.name;
+      a.appendChild(img);
+      shots.appendChild(a);
+    });
+    what.appendChild(shots);
+  }
+  // A confession offers its own author nothing, because the page is never
+  // told who that is -- `mine` is false on every one of them. An admin takes
+  // one down in one tap, which is the whole of moderation here.
+  const drop = (x.mine || ROLE === 'admin') ? document.createElement('button') : null;
+  if (drop) {
+    drop.textContent = x.mine ? 'Delete' : 'Take down';
+    if (!x.mine) drop.className = 'adm';
+    drop.onclick = () => writePost({kind: kind, id: x.id, delete: true}, drop);
+    what.appendChild(acts(drop));
+  }
+  el.append(voteBtn({id: x.id, votes: x.votes, voted: x.voted,
+                     name: 'this post', post: true}), what);
+  return el;
+}
+
+async function writePost(payload, btn, err) {
+  if (btn) btn.disabled = true;
+  busy('Saving…', true);
+  try {
+    const r = await fetch('/posts', {
+      method: 'POST', headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify(payload),
+    });
+    const d = await r.json().catch(() => ({}));
+    if (!r.ok) throw new Error(d.error || 'could not save that');
+    busyDone(payload.delete ? 'Taken down' : 'Posted');
+    WALLS[payload.kind] = d.posts || [];
+    render();
+  } catch (e) {
+    if (btn) btn.disabled = false;
+    if (err) { err.textContent = e.message; busyDone(''); }
+    else busyDone(e.message);
+  }
+}
+
+// The composer. A box and one button for a confession; the same plus photos
+// for the feed, and the photos go through the upload path that already
+// exists -- /upload with a batch id -- rather than a second one written for
+// this screen. Which means they are subject to the same role as every other
+// upload, so a student posts words and is told why in one sentence instead of
+// being refused after typing.
+function wallComposer(kind) {
+  const box = document.createElement('div');
+  box.className = 'askbox';
+  const ta = document.createElement('textarea');
+  ta.maxLength = 2000;
+  ta.placeholder = kind === 'feed'
+    ? 'Say something to the section — lost something, found something, or ask.'
+    : 'Say it without your name on it. Three a day, and an admin can take one '
+      + 'down, but nobody is ever told who wrote it.';
+  ta.setAttribute('aria-label', kind === 'feed' ? 'Your post' : 'Your confession');
+  const err = document.createElement('p');
+  err.className = 'err';
+  let picker = null, subj = null;
+  if (kind === 'feed' && mayAdd()) {
+    subj = document.createElement('select');
+    subj.setAttribute('aria-label', 'Which subject the photos file under');
+    DATA.forEach(x => {
+      const o = document.createElement('option');
+      o.value = x.code;
+      o.textContent = x.code + ' \u00b7 ' + x.name;
+      subj.appendChild(o);
+    });
+    picker = document.createElement('input');
+    picker.type = 'file';
+    picker.accept = 'image/*';
+    picker.multiple = true;
+    picker.setAttribute('aria-label', 'Photos for this post');
+  }
+  const go = document.createElement('button');
+  go.textContent = kind === 'feed' ? 'Post this' : 'Post it anonymously';
+  go.onclick = async () => {
+    if (!ta.value.trim()) return void (err.textContent = 'Type something first.');
+    let batch = null;
+    if (picker && picker.files.length) {
+      go.disabled = true;
+      err.textContent = '';
+      batch = crypto.randomUUID();
+      const sent = await uploadBatch(picker.files, ta.value.trim().slice(0, 60));
+      go.disabled = false;
+      if (sent === false) return void (err.textContent = 'Those photos did not go up.');
+    }
+    writePost({kind: kind, body: ta.value, batch: batch}, go, err);
+  };
+  box.append(ta);
+  if (subj) {
+    // Said rather than hidden: a photo posted here is a file in the library,
+    // and pretending otherwise would be a surprise the first time somebody
+    // found it on a subject's shelf.
+    const note = quiet('Photos also file under the subject you pick, on that '
+                       + 'subject\u2019s shelf.');
+    box.append(subj, picker, note);
+  } else if (kind === 'feed') {
+    box.append(quiet('Photos are for trusted members. Words are for everybody.'));
+  }
+  box.append(err, go);
+  return box;
+}
+
+function wallSection() {
+  heading('The section');
+  const tabs = document.createElement('div');
+  tabs.className = 'acts';
+  [['feed', 'Feed'], ['confession', 'Confessions']].forEach(([k, label]) => {
+    const b = document.createElement('button');
+    b.className = 'cmt' + (wallOn === k ? ' open' : '');
+    b.textContent = label;
+    b.setAttribute('aria-pressed', wallOn === k ? 'true' : 'false');
+    b.onclick = () => { wallOn = k; render(); };
+    tabs.appendChild(b);
+  });
+  const box = document.createElement('div');
+  box.className = 'wall';
+  box.appendChild(tabs);
+  nav.appendChild(box);
+  needWall(wallOn);
+  const list = WALLS[wallOn];
+  if (!list) return void box.appendChild(quiet('Reading\u2026'));
+  if (list === 'failed') {
+    return void box.appendChild(quiet('The section needs the server. '
+                                      + 'Run: notes.py serve'));
+  }
+  box.appendChild(wallComposer(wallOn));
+  if (!list.length) {
+    return void box.appendChild(quiet(wallOn === 'feed'
+      ? 'Nothing here yet. Lost something? Found something? Say so.'
+      : 'Nothing yet. Whatever you put here, nobody is ever told it was you.'));
+  }
+  list.forEach(x => box.appendChild(postCard(x, wallOn)));
+}
+
 // The rest of Campus. Fetched once, on the tab that shows it: this is three
 // lists and none of them is wanted by Home, which already gets the one thing
 // it needs -- the events, folded into Coming up by the server.
@@ -3314,6 +3583,7 @@ async function renderCampus() {
   }
   if (view.compose && ROLE === 'admin') return renderCompose();
   renderAnnouncements();
+  wallSection();
   eventsSection();
   clubsSection();
   mapSection();
@@ -3474,11 +3744,178 @@ function renderSubject(s) {
   block('Notes & slides', groupedFileRows(s));
   const rev = revisionOf(s);
   block('Revision sheet', rev ? [noteRow(rev, s)] : []);
+  roomSection(s);
   if (!s.notes.length && !s.uploads.length) {
     saying('Nothing in ' + s.code + ' yet.',
            'Tap + to record a class or to add slides you already have. It files '
            + 'itself here, and the notes come back when the Mac has made them.');
   }
+}
+
+// ---- THE CLASS ROOM: one per subject, and only while you are looking. ----
+//
+// Short messages, oldest at the top, newest at the bottom, which is how a
+// conversation is read. Any approved member reads and writes it; the author
+// or an admin takes a message down and it is hidden, never destroyed, like
+// everything else somebody said out loud in this app.
+//
+// The polling is the whole design and it is deliberately small. No socket, no
+// broker, no dependency: the page already polls /jobs, and this is one more
+// interval that runs ONLY while the room is on the screen. It never asks for
+// the history -- `roomLast` is the last id this phone holds and the request
+// is for what came after it, so the usual answer is an empty list. A hidden
+// tab stops asking entirely, because a phone in a pocket is not reading.
+const ROOM_POLL = 5000;
+let roomOpen = null;    // the subject code whose room is expanded, or null
+let roomMsgs = [];
+let roomLast = 0;
+let roomTimer = null;
+let roomDead = false;   // a static export has no server to talk to
+
+// Somebody's typing, put on the page as typing. textContent, never innerHTML:
+// this is the other screen where a tag is four words that look like a tag.
+function chatLine(m) {
+  const el = document.createElement('div');
+  el.className = 'msg' + (m.mine ? ' me' : '');
+  const said = document.createElement('p');
+  said.className = 'said';
+  said.textContent = m.body;
+  const meta = document.createElement('p');
+  meta.className = 'meta';
+  meta.textContent = m.by + ' · ' + ago(m.at, NOW);
+  el.append(said, meta);
+  if (m.mine || ROLE === 'admin') {
+    const drop = document.createElement('button');
+    drop.textContent = m.mine ? 'Delete' : 'Remove';
+    if (!m.mine) drop.className = 'adm';
+    drop.onclick = () => sayInRoom({id: m.id, delete: true}, drop);
+    el.appendChild(acts(drop));
+  }
+  return el;
+}
+
+function drawRoom(log) {
+  log.innerHTML = '';
+  if (roomDead) {
+    return log.appendChild(quiet('The room needs the server. Run: notes.py serve'));
+  }
+  if (!roomMsgs.length) {
+    return log.appendChild(quiet('Nothing said in here yet. Ask about the '
+      + 'homework, or say where the lab moved to.'));
+  }
+  roomMsgs.forEach(m => log.appendChild(chatLine(m)));
+  log.scrollTop = log.scrollHeight;     // newest at the bottom, in view
+}
+
+// One place merges what came back, whether it came from a poll or from
+// sending: the server always answers with what is after `since`, so this is
+// an append and never a replace -- and `removed` is the one message that has
+// to go the other way.
+function roomTook(d) {
+  if (d.removed) roomMsgs = roomMsgs.filter(m => m.id !== d.removed);
+  for (const m of (d.messages || [])) {
+    roomMsgs.push(m);
+    if (m.id > roomLast) roomLast = m.id;
+  }
+}
+
+async function pollRoom(code, log) {
+  // The element is gone the moment render() repaints the tab, and that is the
+  // signal to stop: no listener to remove, nothing to leak, and a room that
+  // cannot keep polling after you have walked away from it.
+  if (!document.body.contains(log) || roomOpen !== code) {
+    clearInterval(roomTimer);
+    roomTimer = null;
+    return;
+  }
+  if (document.visibilityState === 'hidden') return;   // a pocket is not reading
+  try {
+    const r = await fetch('/chat?subject=' + encodeURIComponent(code)
+                        + '&since=' + roomLast);
+    if (!r.ok) return;
+    const d = await r.json();
+    if (roomOpen !== code || !d.messages || !d.messages.length) return;
+    roomTook(d);
+    drawRoom(log);
+  } catch {
+    // One missed poll is not worth a sentence; never having reached the
+    // server at all is, because the box below it cannot work either.
+    if (!roomLast) { roomDead = true; drawRoom(log); }
+  }
+}
+
+async function sayInRoom(payload, btn) {
+  const code = roomOpen;
+  if (btn) btn.disabled = true;
+  try {
+    const r = await fetch('/chat', {
+      method: 'POST', headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify(Object.assign({subject: code, since: roomLast}, payload)),
+    });
+    const d = await r.json().catch(() => ({}));
+    if (!r.ok) throw new Error(d.error || 'could not send that');
+    if (roomOpen !== code) return;
+    roomTook(d);
+    render();
+  } catch (e) {
+    if (btn) btn.disabled = false;
+    busyDone(e.message);
+  }
+}
+
+function roomSection(s) {
+  heading('Class room');
+  if (roomOpen !== s.code) {
+    const open = line('Open the ' + s.code + ' room',
+                      'Ask the class something, right now',
+                      document.createElement('button'));
+    open.onclick = () => {
+      roomOpen = s.code;
+      roomMsgs = [];
+      roomLast = 0;
+      roomDead = false;
+      render();
+    };
+    nav.appendChild(open);
+    return;
+  }
+  const box = document.createElement('div');
+  box.className = 'room';
+  const log = document.createElement('div');
+  log.className = 'log';
+  box.appendChild(log);
+  drawRoom(log);
+
+  const say = document.createElement('div');
+  say.className = 'saybox';
+  const input = document.createElement('input');
+  input.maxLength = 500;
+  input.placeholder = 'Say something to ' + s.code;
+  input.setAttribute('aria-label', 'Your message');
+  const send = document.createElement('button');
+  send.textContent = 'Send';
+  const fire = () => {
+    const body = input.value.trim();
+    if (!body) return;
+    input.value = '';
+    sayInRoom({body: body}, send);
+  };
+  send.onclick = fire;
+  input.onkeydown = e => { if (e.key === 'Enter') fire(); };
+  say.append(input, send);
+  box.appendChild(say);
+
+  const shut = document.createElement('button');
+  shut.className = 'cmt';
+  shut.textContent = 'Close the room';
+  shut.onclick = () => { roomOpen = null; render(); };
+  box.appendChild(acts(shut));
+  nav.appendChild(box);
+
+  if (!roomTimer) roomTimer = setInterval(() => pollRoom(s.code, log), ROOM_POLL);
+  // The first look at a room asks with no `since`, which is the only request
+  // that ever brings the tail back.
+  if (!roomMsgs.length && !roomLast) pollRoom(s.code, log);
 }
 
 // THE ME TAB: who you are, what your role lets you do, and what you have put
@@ -3842,8 +4279,14 @@ function mdInto(el, md) {
 // on the page with textContent. Not markdown, not innerHTML, not mdSafe: a
 // doubt is a sentence and not a document, so there is nothing to gain from
 // parsing it and a tag inside one is simply four words that look like a tag.
-let THREAD = [];        // the open note's questions, newest first
-let threadOn = null;    // {subject, title} the thread belongs to, or null
+let THREAD = [];        // the open thread's questions, newest first
+// What the thread hangs off: {subject, title} for a lecture note, or
+// {material: id} for an uploaded file. It is sent as the query string and as
+// the body of every write, so the server is told which thread this is in the
+// same words both ways and this page never has to know which kind it is.
+let threadOn = null;
+let threadBox = null;   // where it is drawn -- #doubts, or a row on a shelf
+let threadWord = 'Doubts';
 const doubtsBox = document.getElementById('doubts');
 
 // Typing, drawn as typing. The single most important line in this section.
@@ -3938,20 +4381,29 @@ function doubtCard(q) {
 // no server behind this copy of the page at all. The heading stays either way,
 // so the section does not appear and disappear under the note as it loads.
 function drawDoubts(instead) {
-  doubtsBox.innerHTML = '';
+  const box = threadBox || doubtsBox;
+  box.innerHTML = '';
+  // The heading is the only thing that differs between a note's thread and a
+  // file's, and it differs because the words are what tell somebody that
+  // typing in it is allowed: "Doubts" under a lecture, "Comments" under a
+  // scan of last year's paper. Underneath they are the same rows.
   const h = document.createElement('h2');
-  h.textContent = 'Doubts';
-  doubtsBox.appendChild(h);
-  if (instead) return doubtsBox.appendChild(quiet(instead));
-  doubtsBox.appendChild(askBox(
-    'Ask the section about this. Somebody who was there will know.',
-    'Ask the section', null));
+  h.textContent = threadWord;
+  box.appendChild(h);
+  if (instead) return box.appendChild(quiet(instead));
+  box.appendChild(askBox(
+    threadWord === 'Doubts'
+      ? 'Ask the section about this. Somebody who was there will know.'
+      : 'Say something about this file — a page that is wrong, or what it is.',
+    threadWord === 'Doubts' ? 'Ask the section' : 'Post this comment', null));
   if (!THREAD.length) {
-    return doubtsBox.appendChild(quiet(
-      'No questions on this one yet. Asking is worth as much as answering — '
-      + 'if you are stuck, somebody else is too.'));
+    return box.appendChild(quiet(
+      threadWord === 'Doubts'
+        ? 'No questions on this one yet. Asking is worth as much as answering — '
+          + 'if you are stuck, somebody else is too.'
+        : 'Nothing said about this one yet.'));
   }
-  THREAD.forEach(q => doubtsBox.appendChild(doubtCard(q)));
+  THREAD.forEach(q => box.appendChild(doubtCard(q)));
 }
 
 async function writeDoubt(payload, btn, err) {
@@ -3984,14 +4436,17 @@ async function writeDoubt(payload, btn, err) {
 // title -- and the server turns that into the lecture it belongs to. A note
 // with no row behind it, a static export or a file the database never adopted,
 // falls back to the subject's own thread rather than to no thread at all.
-async function loadDoubts(note, subject) {
-  if (note) threadOn = {subject: subject.code, title: note.title};
+async function loadDoubts(on, box, word) {
+  if (on) {
+    threadOn = on;
+    threadBox = box || doubtsBox;
+    threadWord = word || 'Doubts';
+  }
   if (!threadOn) return;
   const asked = threadOn;
-  if (note) { THREAD = []; drawDoubts('Looking for questions…'); }
+  if (on) { THREAD = []; drawDoubts('Looking…'); }
   try {
-    const r = await fetch('/doubts?subject=' + encodeURIComponent(asked.subject)
-                        + '&title=' + encodeURIComponent(asked.title));
+    const r = await fetch('/doubts?' + new URLSearchParams(asked));
     if (!r.ok) throw new Error(r.status);
     const d = await r.json();
     if (threadOn !== asked) return;   // they tapped through while this flew
@@ -4001,7 +4456,7 @@ async function loadDoubts(note, subject) {
     // A static export has no server to ask, and a form that cannot post is
     // worse than a sentence saying why.
     THREAD = [];
-    drawDoubts('Questions need the server. Run: notes.py serve');
+    drawDoubts('This needs the server. Run: notes.py serve');
   }
 }
 
@@ -4029,7 +4484,7 @@ function openNote(n, s) {
   document.body.classList.add('reading');
   window.scrollTo(0, 0);
   paintSaveBtn();
-  loadDoubts(n, s);
+  loadDoubts({subject: s.code, title: n.title}, doubtsBox, 'Doubts');
 }
 
 function closeRead() {
@@ -5165,6 +5620,11 @@ ROLE_REQUIRED = {
     "/rename": "admin",
     "/reset": "admin",
     "/announce": "admin",     # posting to a hundred and ten people at once
+    # The one road to who wrote a confession. An admin has to be able to deal
+    # with the person and not only the row -- and nobody else may ask, which
+    # is stated here AND inside confession_author() in Postgres, because a
+    # route table is not a security boundary and the function is.
+    "/confession-author": "admin",
     # Calling a class off changes everybody's denominator, so it is the same
     # bar as adding to the library. Marking your OWN attendance is not here:
     # it is a private note to yourself and every approved member makes them.
@@ -5922,13 +6382,14 @@ def db_vote(conn, item_id, user_id, on, col="material_id"):
     the point -- one place decides, and it is the same place in production as
     in the tests.
 
-    `col` says which kind of thing is being voted for -- an upload, or an
-    answer to somebody's doubt. It is one of exactly two identifiers, both
-    written down right here and neither of them ever taken off a request: the
-    handler maps its own shape of payload onto one of these two words, so
-    there is nothing a caller can put in the middle of that f-string.
+    `col` says which kind of thing is being voted for -- an upload, an answer
+    to somebody's doubt, or something said on the wall. It is one of exactly
+    three identifiers, all written down right here and none of them ever taken
+    off a request: the handler maps its own shape of payload onto one of these
+    three words, so there is nothing a caller can put in the middle of that
+    f-string.
     """
-    if col not in ("material_id", "doubt_id"):
+    if col not in ("material_id", "doubt_id", "post_id"):
         raise ValueError("nothing votable is called that")
     if on:
         conn.execute(f"insert into votes ({col}, voter_id) values (%s, %s)",
@@ -5971,7 +6432,7 @@ def db_lecture_id(conn, code, title):
     return str(row[0]) if row else None
 
 
-def db_doubts(conn, user_id, code, lecture_id=None):
+def db_doubts(conn, user_id, code, lecture_id=None, material_id=None):
     """One thread: questions newest first, answers under each, best first.
 
     One query for both depths, grouped here. Two would be two round trips and
@@ -5999,13 +6460,17 @@ def db_doubts(conn, user_id, code, lecture_id=None):
         # so, and it is why an answer carries neither column of its own.
         "where coalesce(q.subject_code, d.subject_code) = %(code)s "
         "  and coalesce(q.lecture_id, d.lecture_id) is not distinct from %(lec)s "
+        # And the third thread key (0036): a question on an uploaded file. A
+        # note's thread and a file's thread are both "null" in the other
+        # column, so both halves have to be asked or the two would be one.
+        "  and coalesce(q.material_id, d.material_id) is not distinct from %(mat)s "
         # Live only. The select policy leaves an author their own hidden row --
         # it has to, or hiding one would be refused for having hidden it -- so
         # what the class reads is asked for here. q.deleted_at is null is true
         # for a question, which has no parent to have been hidden.
         "  and d.deleted_at is null and q.deleted_at is null "
         "order by d.created_at",
-        {"me": user_id, "code": code, "lec": lecture_id},
+        {"me": user_id, "code": code, "lec": lecture_id, "mat": material_id},
     ):
         row = {"id": str(did), "body": body, "by": who, "at": at,
                "mine": mine, "votes": votes, "voted": voted}
@@ -6018,7 +6483,7 @@ def db_doubts(conn, user_id, code, lecture_id=None):
     return questions
 
 
-def db_ask(conn, user_id, code, lecture_id, parent_id, body):
+def db_ask(conn, user_id, code, lecture_id, parent_id, body, material_id=None):
     """Ask the section something, or answer somebody who did.
 
     Which of the two it is, is parent_id and nothing else -- and whether that
@@ -6033,11 +6498,11 @@ def db_ask(conn, user_id, code, lecture_id, parent_id, body):
     if not body:
         raise ValueError("a question needs something in it")
     if parent_id:
-        code, lecture_id = None, None
+        code, lecture_id, material_id = None, None, None
     return str(conn.execute(
-        "insert into doubts (subject_code, lecture_id, parent_id, author_id, body) "
-        "values (%s, %s, %s, %s, %s) returning id",
-        (code, lecture_id, parent_id, user_id, body),
+        "insert into doubts (subject_code, lecture_id, material_id, parent_id, "
+        "author_id, body) values (%s, %s, %s, %s, %s, %s) returning id",
+        (code, lecture_id, material_id, parent_id, user_id, body),
     ).fetchone()[0])
 
 
@@ -6085,6 +6550,188 @@ def db_hide_doubt(conn, doubt_id):
         (doubt_id,),
     ).rowcount:
         raise ValueError("no such question, or it is not yours to delete")
+
+
+# ---- The wall: what the section says to itself, named and unnamed. ------
+#
+# One table behind both (0035). The difference between them is one column and
+# it is the database's to keep, not this file's: byline_id is null for every
+# confession, and author_id -- which is not null, ever -- is a column the
+# `authenticated` role has no privilege to select. So the anonymity of this
+# feature does not rest on any query below being written correctly. A query
+# here that asked for author_id would not leak a name; it would raise
+# "permission denied for column author_id" and fail loudly on the first
+# request, which is the only kind of mistake worth designing for.
+POST_BODY = 2000
+POST_LIMIT = 60
+
+# Short, because a room is not an essay, and the same number is in the check
+# constraint. Trimmed here so a long paste is shortened rather than refused
+# with "value too long for type character varying".
+CHAT_BODY = 500
+CHAT_PAGE = 50
+
+
+def db_posts(conn, user_id, kind, relative_to=None, limit=POST_LIMIT):
+    """One wall, newest first, with its photos and its votes.
+
+    The join is on byline_id and never on author_id. For the feed those are
+    the same uuid and the row says who wrote it; for a confession byline_id is
+    null, the left join finds nobody, and `by` comes back null -- not a blank
+    name, not an id, not a hash of one. Nothing in this payload orders by
+    anything but time, either: a stable per-author ordering is a fingerprint.
+    """
+    rows = [
+        {"id": str(pid), "body": body, "by": who, "at": at, "mine": bool(mine),
+         "votes": votes, "voted": voted, "photos": [],
+         "batch": str(batch) if batch else None}
+        for pid, body, who, at, mine, votes, voted, batch in conn.execute(
+            "select po.id, po.body, p.name, "
+            "  extract(epoch from po.created_at)::bigint, "
+            "  po.byline_id = %(me)s, "
+            "  (select count(*) from votes v where v.post_id = po.id), "
+            "  exists (select 1 from votes v "
+            "           where v.post_id = po.id and v.voter_id = %(me)s), "
+            "  po.batch_id "
+            "from posts po left join profiles p on p.id = po.byline_id "
+            # Live only. The select policy leaves an author their own hidden
+            # row -- it has to, or hiding one would be refused for having
+            # hidden it -- so what the wall shows is asked for here.
+            "where po.kind = %(kind)s and po.deleted_at is null "
+            "order by po.created_at desc limit %(lim)s",
+            {"me": user_id, "kind": kind, "lim": limit},
+        )
+    ]
+    batches = [r["batch"] for r in rows if r["batch"]]
+    if batches:
+        # The photos are materials rows, written by the upload path that
+        # already existed. This is the only place they are read back as a
+        # group, and it is one query for the whole page rather than one per
+        # post.
+        by_batch = {}
+        for batch, name, key in conn.execute(
+            "select batch_id, filename, file_key from materials "
+            "where batch_id = any(%s::uuid[]) and status = 'visible' "
+            "order by created_at", (batches,),
+        ):
+            by_batch.setdefault(str(batch), []).append(
+                {"name": name,
+                 "path": os.path.relpath(key, relative_to) if relative_to else key})
+        for r in rows:
+            r["photos"] = by_batch.get(r["batch"], [])
+    return rows
+
+
+def db_post(conn, user_id, kind, body, batch=None):
+    """Say something to the section, with your name on it or without.
+
+    Whether the class is told who wrote this is `kind` and nothing else, and
+    what that does is the database's: it decides byline_id, it refuses a photo
+    on a confession, and it counts the day's confessions in a trigger. None of
+    those three is repeated here, because a rule written twice is a rule that
+    can be true in one place and false in the other.
+    """
+    body = (body or "").strip()[:POST_BODY]
+    if not body:
+        raise ValueError("a post needs something in it")
+    if kind not in ("feed", "confession"):
+        raise ValueError("which wall?")
+    if kind == "confession":
+        batch = None
+    return str(conn.execute(
+        "insert into posts (kind, author_id, body, batch_id) "
+        "values (%s, %s, %s, %s) returning id",
+        (kind, user_id, body, batch or None),
+    ).fetchone()[0])
+
+
+def db_hide_post(conn, post_id):
+    """Yours, or anybody's if you are an admin. The row itself stays.
+
+    Nothing here asks whose it is -- the update policy is the referee, and an
+    update that matches nothing is the refusal. That is what makes an admin's
+    one tap work on a confession without this function ever being told, or
+    ever being able to ask, who wrote it.
+    """
+    if not conn.execute(
+        "update posts set deleted_at = now() where id = %s and deleted_at is null",
+        (post_id,),
+    ).rowcount:
+        raise ValueError("no such post, or it is not yours to take down")
+
+
+def db_confession_author(conn, post_id):
+    """Who wrote one confession. Admins only, and the database decides that.
+
+    The is_admin() check is inside confession_author() in 0035, not in front
+    of it: a member who reaches this gets null rather than a name, whatever
+    this handler believed about them.
+    """
+    row = conn.execute("select confession_author(%s)", (post_id,)).fetchone()
+    if not row or not row[0]:
+        raise ValueError("no such confession")
+    return row[0]
+
+
+# ---- The subject room. Short messages, in order, newest at the bottom. ---
+
+
+def db_chat(conn, user_id, code, since=None, limit=CHAT_PAGE):
+    """A room's messages: the tail on the way in, then only what is new.
+
+    `since` is the whole polling story. The phone holds the last id it has and
+    asks for what came after it, so an open room costs a query over an index
+    and a reply that is usually empty -- never the history again. Without an
+    id the room is opened for the first time and gets its last `limit`
+    messages, oldest first, which is the order they are read in.
+    """
+    if since:
+        rows = conn.execute(
+            "select m.id, m.body, p.name, "
+            "  extract(epoch from m.created_at)::bigint, m.author_id = %s "
+            "from messages m join profiles p on p.id = m.author_id "
+            "where m.subject_code = %s and m.id > %s and m.deleted_at is null "
+            "order by m.id limit %s", (user_id, code, since, limit)).fetchall()
+    else:
+        # Newest `limit` by id, then turned around: "last fifty" cannot be
+        # asked for in ascending order without reading the whole room.
+        rows = conn.execute(
+            "select * from (select m.id, m.body, p.name, "
+            "  extract(epoch from m.created_at)::bigint, m.author_id = %s "
+            "from messages m join profiles p on p.id = m.author_id "
+            "where m.subject_code = %s and m.deleted_at is null "
+            "order by m.id desc limit %s) t order by 1", (user_id, code, limit)).fetchall()
+    return [{"id": mid, "body": body, "by": who, "at": at, "mine": mine}
+            for mid, body, who, at, mine in rows]
+
+
+def db_say(conn, user_id, code, body):
+    """One message into one room. Who it is from is the session, never the
+    request -- the insert policy pins author_id to the caller and refuses
+    anything else, so a stolen cookie can still only talk as itself."""
+    body = (body or "").strip()[:CHAT_BODY]
+    if not body:
+        raise ValueError("type something first")
+    if code not in SUBJECTS:
+        raise ValueError("which subject?")
+    return conn.execute(
+        "insert into messages (subject_code, author_id, body) "
+        "values (%s, %s, %s) returning id", (code, user_id, body),
+    ).fetchone()[0]
+
+
+def db_hide_message(conn, message_id):
+    """Take back what you said, or -- as an admin -- what anybody said.
+
+    Hidden, never deleted, for the reason every other table here gives: a room
+    is read by a hundred people and a row that is gone is a row nobody can be
+    shown again when somebody asks what was said.
+    """
+    if not conn.execute(
+        "update messages set deleted_at = now() where id = %s and deleted_at is null",
+        (message_id,),
+    ).rowcount:
+        raise ValueError("no such message, or it is not yours to remove")
 
 
 def db_contributions(conn, user_id):
@@ -7994,6 +8641,12 @@ def build_server(args):
                         "role": self.me["role"]})
             if self.path.split("?")[0] == "/doubts":
                 return self.do_doubts_get()
+            if self.path.split("?")[0] == "/posts":
+                return self.do_posts_get()
+            if self.path.split("?")[0] == "/chat":
+                return self.do_chat_get()
+            if self.path.split("?")[0] == "/confession-author":
+                return self.do_confession_author()
             if self.path == "/jobs":
                 return self.reply(200, {"jobs": jobs.snapshot()})
             if self.path.split("?")[0] == "/worker/audio":
@@ -8075,6 +8728,10 @@ def build_server(args):
                 return self.do_vote()
             if self.path == "/doubts":
                 return self.do_doubts()
+            if self.path == "/posts":
+                return self.do_posts()
+            if self.path == "/chat":
+                return self.do_chat()
             if self.path == "/bookmark":
                 return self.do_bookmark()
             if self.path == "/timetable":
@@ -8784,8 +9441,9 @@ def build_server(args):
         def do_vote(self):
             """One vote per person per item, and never for your own.
 
-            Two shapes of payload, one route: {"id": ...} is an upload and
-            {"answer": ...} is somebody's answer to a doubt. They share this
+            Three shapes of payload, one route: {"id": ...} is an upload,
+            {"answer": ...} is somebody's answer to a doubt and {"post": ...}
+            is something said on the wall. They share this
             handler because they share the table, the one-per-person rule and
             the "not your own" rule -- a second endpoint would be a second copy
             of all three, kept in step by hand.
@@ -8811,6 +9469,9 @@ def build_server(args):
                 target = (req.get("answer") or "").strip()
                 col = "doubt_id"
                 if not target:
+                    target, col, mine = (req.get("post") or "").strip(), \
+                        "post_id", "your own post"
+                if not target:
                     target, col, mine = (req.get("id") or "").strip(), \
                         "material_id", "your own upload"
                 if not target:
@@ -8834,7 +9495,7 @@ def build_server(args):
             return self.reply(200, state)
 
         def thread_asked_for(self, conn, req):
-            """(subject code, lecture id) for the thread a request names.
+            """(subject code, lecture id, material id) for the thread named.
 
             One place, because the GET reads it and the POST reads it and a
             question has to land on the thread the reader is looking at.
@@ -8844,11 +9505,30 @@ def build_server(args):
             behind it is not an error: the thread is then the subject's, which
             is the one every note in it can fall back to.
             """
+            import uuid as uuidlib
+
+            # A file is the third kind of thread (0036), and it is the one
+            # that names itself: a material row already says which subject it
+            # belongs to, so the phone sends an id and nothing else. Asking
+            # the phone for the subject as well would be a second fact that
+            # can disagree with the first.
+            material = (req.get("material") or "").strip()
+            if material:
+                try:
+                    material = str(uuidlib.UUID(material))
+                except ValueError:
+                    raise ValueError("no such file")
+                row = conn.execute(
+                    "select subject_code from materials where id = %s", (material,),
+                ).fetchone()
+                if not row:
+                    raise ValueError("no such file")
+                return row[0], None, material
             code = (req.get("subject") or "").strip()[:32]
             if code not in SUBJECTS:
                 raise ValueError("which subject?")
             return code, db_lecture_id(conn, code,
-                                       (req.get("title") or "").strip()[:200])
+                                       (req.get("title") or "").strip()[:200]), None
 
         def do_doubts_get(self):
             """One thread, fetched when the note is opened.
@@ -8865,9 +9545,9 @@ def build_server(args):
             try:
                 q = urllib.parse.parse_qs(self.path.partition("?")[2])
                 with db(self.me["id"]) as conn:
-                    code, lecture = self.thread_asked_for(
+                    code, lecture, material = self.thread_asked_for(
                         conn, {k: v[0] for k, v in q.items()})
-                    thread = db_doubts(conn, self.me["id"], code, lecture)
+                    thread = db_doubts(conn, self.me["id"], code, lecture, material)
             except ValueError as e:
                 return self.reply(400, {"error": str(e)})
             except Exception as e:
@@ -8925,14 +9605,14 @@ def build_server(args):
                 if req is None:
                     return
                 with db(self.me["id"]) as conn:
-                    code, lecture = self.thread_asked_for(conn, req)
+                    code, lecture, material = self.thread_asked_for(conn, req)
                     if req.get("delete"):
                         db_hide_doubt(conn, (req.get("id") or "").strip())
                     else:
                         db_ask(conn, self.me["id"], code, lecture,
                                (req.get("parent") or "").strip() or None,
-                               req.get("body"))
-                    thread = db_doubts(conn, self.me["id"], code, lecture)
+                               req.get("body"), material)
+                    thread = db_doubts(conn, self.me["id"], code, lecture, material)
             except ValueError as e:
                 return self.reply(400, {"error": str(e)})
             except psycopg.errors.InsufficientPrivilege:
@@ -8947,6 +9627,169 @@ def build_server(args):
             except Exception as e:
                 return self.reply(500, {"error": f"{type(e).__name__}: {e}"})
             return self.reply(200, {"doubts": thread})
+
+        def do_posts_get(self):
+            """One wall, fetched when Campus opens it.
+
+            Its own request rather than a passenger on /data: /data is what
+            Home waits for, and sixty posts with their photos is not what a
+            student opening the app in a corridor is waiting to read.
+            """
+            if not self.me:
+                return self.reply(404, {"error": "this server is running with --no-auth"})
+            import urllib.parse
+
+            try:
+                q = urllib.parse.parse_qs(self.path.partition("?")[2])
+                kind = (q.get("kind", ["feed"])[0] or "feed").strip()
+                if kind not in ("feed", "confession"):
+                    return self.reply(400, {"error": "which wall?"})
+                with db(self.me["id"]) as conn:
+                    wall = db_posts(conn, self.me["id"], kind, args.out.parent)
+            except Exception as e:
+                return self.reply(500, {"error": f"{type(e).__name__}: {e}"})
+            return self.reply(200, {"kind": kind, "posts": wall})
+
+        def do_posts(self):
+            """Post to the section, or take one down. Either way the wall
+            comes back, so the screen redraws from what was stored.
+
+            Deliberately not in ROLE_REQUIRED: any approved member posts. What
+            IS gated, and gated in Postgres, is how many confessions one
+            person gets in a day and whether anybody may learn who wrote one.
+            """
+            if not self.me:
+                return self.reply(404, {"error": "this server is running with --no-auth"})
+            try:
+                req = self.body(8000)
+                if req is None:
+                    return
+                kind = (req.get("kind") or "feed").strip()
+                if kind not in ("feed", "confession"):
+                    return self.reply(400, {"error": "which wall?"})
+                with db(self.me["id"]) as conn:
+                    if req.get("delete"):
+                        db_hide_post(conn, (req.get("id") or "").strip())
+                    else:
+                        db_post(conn, self.me["id"], kind, req.get("body"),
+                                (req.get("batch") or "").strip() or None)
+                    wall = db_posts(conn, self.me["id"], kind, args.out.parent)
+            except ValueError as e:
+                return self.reply(400, {"error": str(e)})
+            except psycopg.errors.RaiseException as e:
+                # The daily limit, raised by the trigger in 0035. 429 rather
+                # than 400: nothing about the post was wrong, it was the
+                # fourth one today.
+                return self.reply(429, {"error": e.diag.message_primary
+                                               or "that is enough for today"})
+            except psycopg.errors.InsufficientPrivilege:
+                return self.reply(403, {"error": "you cannot post as somebody else"})
+            except psycopg.errors.CheckViolation:
+                return self.reply(400, {"error": "a post needs something in it"})
+            except (psycopg.errors.InvalidTextRepresentation,
+                    psycopg.errors.ForeignKeyViolation):
+                return self.reply(404, {"error": "no such post"})
+            except Exception as e:
+                return self.reply(500, {"error": f"{type(e).__name__}: {e}"})
+            return self.reply(200, {"kind": kind, "posts": wall})
+
+        def do_confession_author(self):
+            """Who wrote one confession. An admin, deliberately, off the wall.
+
+            /confession-author is in ROLE_REQUIRED and confession_author() in
+            Postgres asks is_admin() again on the caller's own connection, so
+            a member who gets past the first -- a route added wrong, a session
+            promoted and demoted, curl -- is answered "no such confession" by
+            the database rather than by this file's opinion.
+            """
+            if not self.me:
+                return self.reply(404, {"error": "this server is running with --no-auth"})
+            import urllib.parse
+
+            try:
+                q = urllib.parse.parse_qs(self.path.partition("?")[2])
+                with db(self.me["id"]) as conn:
+                    who = db_confession_author(conn, (q.get("id", [""])[0]).strip())
+            except ValueError as e:
+                return self.reply(404, {"error": str(e)})
+            except psycopg.errors.InvalidTextRepresentation:
+                return self.reply(404, {"error": "no such confession"})
+            except Exception as e:
+                return self.reply(500, {"error": f"{type(e).__name__}: {e}"})
+            return self.reply(200, {"by": who})
+
+        def do_chat_get(self):
+            """A room, or only what is new in it.
+
+            `since` is what keeps an open room cheap: the phone sends the last
+            id it holds and gets what came after it, which is usually nothing.
+            Without it this is the first look at the room and the tail comes
+            back. Either way the whole history is never sent twice.
+            """
+            if not self.me:
+                return self.reply(404, {"error": "this server is running with --no-auth"})
+            import urllib.parse
+
+            try:
+                q = urllib.parse.parse_qs(self.path.partition("?")[2])
+                code = (q.get("subject", [""])[0]).strip()[:32]
+                if code not in SUBJECTS:
+                    return self.reply(400, {"error": "which subject?"})
+                try:
+                    since = int(q.get("since", ["0"])[0] or 0)
+                except ValueError:
+                    since = 0
+                with db(self.me["id"]) as conn:
+                    said = db_chat(conn, self.me["id"], code, since)
+            except Exception as e:
+                return self.reply(500, {"error": f"{type(e).__name__}: {e}"})
+            return self.reply(200, {"subject": code, "messages": said,
+                                    "since": since})
+
+        def do_chat(self):
+            """Say something in a room, or take a message down.
+
+            The reply is only what is new to the caller -- the same `since`
+            the poll uses -- so posting costs the room's tail once and never
+            again. Deliberately not in ROLE_REQUIRED: a room the class cannot
+            talk in is a room.
+            """
+            if not self.me:
+                return self.reply(404, {"error": "this server is running with --no-auth"})
+            try:
+                req = self.body(4000)
+                if req is None:
+                    return
+                code = (req.get("subject") or "").strip()[:32]
+                if code not in SUBJECTS:
+                    return self.reply(400, {"error": "which subject?"})
+                try:
+                    since = int(req.get("since") or 0)
+                except (TypeError, ValueError):
+                    since = 0
+                with db(self.me["id"]) as conn:
+                    if req.get("delete"):
+                        db_hide_message(conn, int(req.get("id") or 0))
+                        # A removed message is not "after" anything, so the
+                        # phone is told which id to drop rather than being
+                        # made to refetch the room to discover it is gone.
+                        said = db_chat(conn, self.me["id"], code, since)
+                        return self.reply(200, {"subject": code, "messages": said,
+                                                "removed": int(req.get("id") or 0)})
+                    db_say(conn, self.me["id"], code, req.get("body"))
+                    said = db_chat(conn, self.me["id"], code, since)
+            except ValueError as e:
+                return self.reply(400, {"error": str(e)})
+            except psycopg.errors.RaiseException as e:
+                return self.reply(429, {"error": e.diag.message_primary
+                                               or "slow down a moment"})
+            except psycopg.errors.InsufficientPrivilege:
+                return self.reply(403, {"error": "you cannot talk as somebody else"})
+            except psycopg.errors.CheckViolation:
+                return self.reply(400, {"error": "type something first"})
+            except Exception as e:
+                return self.reply(500, {"error": f"{type(e).__name__}: {e}"})
+            return self.reply(200, {"subject": code, "messages": said})
 
         def do_timetable(self):
             """Save the whole week. It comes back down inside /data.
