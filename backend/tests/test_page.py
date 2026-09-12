@@ -2686,3 +2686,23 @@ def test_the_stylesheet_is_inlined_not_fetched():
     assert "__CSS__" not in notes.PAGE
     assert "cdn.tailwindcss.com" not in notes.PAGE
     assert '<link rel="stylesheet" href="/' not in notes.PAGE
+
+
+def test_the_page_is_written_on_one_scale():
+    """Five type sizes, four weights, four radii -- and the reasons for each.
+
+    Drift is what eleven sizes and eleven radii looked like before, and it
+    arrives one declaration at a time. 30px is the FAB's single glyph and 50%
+    is a circle, neither of which is a step on any scale.
+    """
+    tokens = re.search(r"<style>\n(.*?)\n</style>", notes.PAGE, re.S).group(1)
+    sizes = set(re.findall(r"font-size:(\d+px)", tokens))
+    assert sizes <= {"11px", "13px", "16px", "20px", "26px", "30px"}, \
+        f"off the type scale: {sorted(sizes - {'11px', '13px', '16px', '20px', '26px', '30px'})}"
+    weights = set(re.findall(r"font-weight:(\d+)", tokens))
+    assert weights <= {"400", "500", "600", "700"}, f"off the weight scale: {weights}"
+    radii = set(re.findall(r"border-radius:(\d+px)(?![\d ])", tokens))
+    # 2px is a progress bar's cap, 4px the focus ring, 5px half of a 10px bar
+    # and 999px a pill -- shapes, not corners.
+    assert radii <= {"2px", "4px", "5px", "7px", "11px", "14px", "18px", "999px"}, \
+        f"a fifth corner: {sorted(radii)}"

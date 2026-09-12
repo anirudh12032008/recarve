@@ -787,7 +787,7 @@ body.reading #read{display:block}
    the one word that explains the state. The rule down the edge goes grey,
    the flag takes the page's muted ink, and every string still reads. */
 .ann.gone{border-left:3px solid var(--line);padding-left:13px}
-.ann h3{margin:0;font-size:20px;line-height:1.3;font-weight:600;letter-spacing:-.012em}
+.ann h3{margin:0;font-size:20px;line-height:1.3;font-weight:700;letter-spacing:-.015em}
 .ann .meta{margin:5px 0 0;font-size:13px;color:var(--mut)}
 .ann .flag{font-weight:600;color:var(--accent)}
 .ann.gone .flag{color:var(--mut)}
@@ -799,7 +799,7 @@ body.reading #read{display:block}
 .ann .md li{margin:4px 0}
 .ann .md h1,.ann .md h2,.ann .md h3{font-size:16px;font-weight:700;margin:15px 0 4px}
 .ann .md a{color:var(--accent)}
-.ann .md code{background:var(--surface);padding:2px 5px;border-radius:5px;font-size:.92em}
+.ann .md code{background:var(--surface);padding:2px 5px;border-radius:7px;font-size:.92em}
 .ann .md pre{background:var(--surface);padding:12px;border-radius:11px;overflow-x:auto;font-size:13px}
 .ann .md img{max-width:100%;height:auto}
 /* A pasted table is the one thing in a body that can be wider than a phone.
@@ -872,7 +872,7 @@ body.reading #read{display:block}
 .post .what{flex:1;min-width:0}
 .post .meta{margin:6px 0 0;font-size:13px;color:var(--mut)}
 .shots{display:flex;flex-wrap:wrap;gap:7px;margin-top:10px}
-.shots img{width:96px;height:96px;object-fit:cover;border-radius:10px;
+.shots img{width:96px;height:96px;object-fit:cover;border-radius:11px;
   border:1px solid var(--line)}
 .room{max-width:70ch;margin:0 auto;padding:0 16px}
 .room .log{max-height:52vh;overflow-y:auto;overscroll-behavior:contain;
@@ -948,7 +948,7 @@ article h2{font-size:20px;line-height:1.3;letter-spacing:-.012em;font-weight:600
 article h3{font-size:16px;font-weight:700;color:var(--accent);margin:26px 0 6px}
 article ul,article ol{padding-left:22px}
 article li{margin:5px 0}
-article code{background:var(--surface);padding:2px 5px;border-radius:5px;font-size:.92em}
+article code{background:var(--surface);padding:2px 5px;border-radius:7px;font-size:.92em}
 article pre{background:var(--surface);padding:13px;border-radius:11px;overflow-x:auto;font-size:13px}
 article img{max-width:100%;height:auto}
 .katex-display{overflow-x:auto;overflow-y:hidden;padding:4px 0}
@@ -979,13 +979,13 @@ details>:not(summary){padding:0 14px}
 /* Below .top's 5: it is placed in document coordinates, so a scroll can
    carry it into the sticky header, where it used to paint over the back
    button and eat the tap meant for it. */
-#ask{position:absolute;z-index:4;display:none;padding:9px 15px;border-radius:10px;
+#ask{position:absolute;z-index:4;display:none;padding:9px 15px;border-radius:11px;
   background:var(--accent);color:var(--accent-fg);font-size:16px;font-weight:600;
   box-shadow:0 6px 20px rgba(0,0,0,.28)}
 #ask.on{display:block}
 #panel{position:fixed;left:0;right:0;bottom:0;z-index:10;transform:translateY(101%);
   transition:transform .22s ease;background:var(--bg);border-top:1px solid var(--line);
-  border-radius:16px 16px 0 0;max-height:76dvh;display:flex;flex-direction:column;
+  border-radius:18px 18px 0 0;max-height:76dvh;display:flex;flex-direction:column;
   box-shadow:0 -8px 34px rgba(0,0,0,.22)}
 #panel.on{transform:none}
 @media (prefers-reduced-motion:reduce){#panel{transition:none}}
@@ -1006,7 +1006,7 @@ body:has(#ask.on) #fab{display:none}
 #sheet{position:fixed;inset:0;z-index:11;display:none;background:rgba(0,0,0,.45)}
 #sheet.on{display:block}
 #sheet .card{position:absolute;left:0;right:0;bottom:0;background:var(--bg);
-  border-radius:16px 16px 0 0;padding:18px 16px calc(18px + env(safe-area-inset-bottom));
+  border-radius:18px 18px 0 0;padding:18px 16px calc(18px + env(safe-area-inset-bottom));
   max-height:88dvh;overflow-y:auto}
 #sheet h3{margin:0 0 14px;font-size:20px}
 #sheet label{display:block;font-size:13px;color:var(--mut);margin:14px 0 6px}
@@ -1027,7 +1027,7 @@ body:has(#ask.on) #fab{display:none}
    auto-uploads exactly as it always has, named after itself. */
 #batchName label{display:block;font-size:13px;color:var(--mut);margin-bottom:8px}
 #batchName input{width:100%;height:var(--tap);padding:0 13px;font:inherit;
-  border:1px solid var(--mut);border-radius:10px;background:var(--bg);color:var(--fg)}
+  border:1px solid var(--mut);border-radius:11px;background:var(--bg);color:var(--fg)}
 #batchName .go{display:flex;gap:10px;margin-top:12px}
 #batchName .go button{flex:1;min-height:var(--tap);border-radius:11px;font:inherit;
   font-weight:600;border:1px solid var(--line);background:transparent;color:var(--fg)}
@@ -1066,7 +1066,7 @@ body:has(#ask.on) #fab{display:none}
    button and the search box and ate the taps meant for them. */
 #busy{position:fixed;z-index:6;display:none;pointer-events:none;left:12px;right:12px;
   bottom:calc(144px + env(safe-area-inset-bottom));max-width:34rem;margin:0 auto;
-  padding:13px 15px;border-radius:12px;background:var(--surface);
+  padding:13px 15px;border-radius:11px;background:var(--surface);
   border:1px solid var(--line);box-shadow:0 8px 26px rgba(0,0,0,.22)}
 #busy.on{display:block}
 .dock button:active{opacity:.75}
@@ -1142,8 +1142,8 @@ body.reading .tabs{display:none}
 /* ---- Campus: societies, what they are running, and where anything is. ----
    Cards rather than rows, because each of these carries more than two lines
    and a row that wraps to four is a row pretending to be a card. */
-.card{border:1px solid var(--line);border-radius:13px;background:var(--surface);
-  padding:12px 14px;margin:0 16px 8px}
+.card{border-radius:14px;background:var(--surface);
+  padding:16px;margin:0 16px 8px}
 .card h3{margin:0;font-size:16px;font-weight:600;color:var(--fg)}
 .card .meta{display:block;font-size:13px;color:var(--mut);margin-top:3px}
 .card p{margin:8px 0 0;font-size:13px;line-height:1.55;color:var(--fg)}
@@ -1169,7 +1169,7 @@ body.reading .tabs{display:none}
 .card[open] summary::after{transform:rotate(270deg)}
 /* The map, when there is a key. Square-ish and bounded; with no key this
    element is never created at all and the places list stands on its own. */
-#campusmap{height:260px;margin:0 16px 8px;border-radius:13px;overflow:hidden;
+#campusmap{height:260px;margin:0 16px 8px;border-radius:14px;overflow:hidden;
   border:1px solid var(--line);background:var(--surface)}
 @media print{
   .top,.dock,.tabs,#list,.rtop,#fab,#busy,#ask,#quiz{display:none!important}
