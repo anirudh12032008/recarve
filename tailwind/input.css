@@ -35,3 +35,42 @@
      opens the subject rather than a two-line strip in the middle of it. */
   .row button.name { @apply p-0 text-left self-stretch; }
 }
+
+  /* Chips. Four of them, one shape: small, semibold, 7px corners. Only the
+     colours differ, because only the colours mean anything. */
+  .code { @apply inline-block px-2 py-[3px] rounded-chip text-small font-semibold
+                 bg-hue-chip text-hue-chip-ink; }
+  .tag  { @apply flex-none px-2 py-[3px] rounded-chip text-small font-semibold
+                 bg-admin text-admin-fg; }
+  /* On the card, which is itself --surface: a surface chip on a surface card is
+     not a chip. The paper behind it plus a keyline is what makes it one. */
+  .badge { @apply inline-block mt-3 px-2 py-[3px] rounded-chip text-small font-semibold
+                  bg-bg border border-line text-mut; }
+  .badge.admin { @apply bg-admin border-admin text-admin-fg; }
+  .flag { @apply flex-none px-2 py-[3px] rounded-chip text-small font-semibold
+                 bg-warn-bg text-warn; }
+
+  /* Cards. One radius, one fill, no border on top of the fill -- a fill already
+     separates a card from the page and an edge as well only muddies it. The
+     exception is .blank.bad, where the border IS the signal. */
+  .blank { @apply m-4 p-5 rounded-card bg-surface text-mut text-small; }
+  .blank p { @apply m-0 mb-3; }
+  .blank p:last-child { @apply mb-0; }
+  /* The first line is the answer -- "Nothing on the notice board yet" -- and
+     the rest is why and what to do about it. Said in weight, so the answer is
+     read first whether or not the paragraph under it ever is. */
+  .blank p:first-child { @apply mb-2 text-base font-semibold text-fg; }
+  /* Reaching for something and not getting it is not the same state as not
+     having it yet, and it must not be dressed as one. */
+  .blank.bad { @apply border border-err text-fg; }
+  .blank.bad p:first-child { @apply text-err; }
+
+  .cal  { @apply mt-1 mx-4 p-4 rounded-card bg-surface; }
+  .mine { @apply mt-3 mx-4 p-5 rounded-card bg-surface; }
+  #lock { @apply mt-4 p-4 rounded-card bg-surface text-small text-fg; }
+  #lock b { @apply block text-base font-semibold mb-1; }
+  #rec  { @apply mt-4 p-4 rounded-card bg-surface text-center hidden; }
+  #rec.on { @apply block; }
+  #batchName { @apply mt-4 p-4 rounded-card bg-surface hidden; }
+  #batchName.on { @apply block; }
+  .job  { @apply flex items-center gap-3 px-3 py-2 mt-2 rounded-card bg-surface text-base; }

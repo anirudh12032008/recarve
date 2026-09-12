@@ -635,12 +635,6 @@ body.reading #read{display:block}
 #q::placeholder{color:var(--mut)}
 
 .group{padding:18px 16px 2px}
-.code{
-  display:inline-block;padding:3px 9px;border-radius:7px;
-  font-size:13px;font-weight:650;
-  background:hsl(var(--h) var(--sat) var(--chip-lum));
-  color:hsl(var(--h) var(--sat) var(--chip-text));
-}
 .group h2{display:inline;margin:0 0 0 9px;font-size:13px;font-weight:500;color:var(--mut)}
 .shead{display:flex;align-items:center;gap:9px;min-height:var(--tap);margin-bottom:6px}
 /* The screen's name, at the weight a screen's name is. It ellipsises rather
@@ -662,19 +656,6 @@ body.reading #read{display:block}
   .vote:hover,.mark button:hover,.dpick .step:hover:not([disabled]){border-color:var(--mut)}
   .dock button:hover,.qdock button:hover{filter:brightness(.96)}
 }
-.blank{margin:16px;padding:22px 20px;border-radius:14px;background:var(--surface);
-  border:1px solid var(--line);color:var(--mut);font-size:14px;line-height:1.6}
-.blank p{margin:0 0 10px}
-.blank p:last-child{margin:0}
-/* The first line is the answer -- "Nothing on the notice board yet" -- and the
-   rest is why and what to do about it. Said in weight, so the answer is read
-   first whether or not the paragraph under it ever is. */
-.blank p:first-child{margin-bottom:7px;font-size:16px;line-height:1.45;
-  font-weight:650;color:var(--fg)}
-/* Reaching for something and not getting it is not the same state as not
-   having it yet, and it must not be dressed as one. */
-.blank.bad{border-color:var(--err);color:var(--fg)}
-.blank.bad p:first-child{color:var(--err)}
 
 /* One vote per person, so this is a two-state toggle and not a counter you can
    lean on. The count sits inside the control: what you are pressing and what
@@ -715,8 +696,6 @@ body.reading #read{display:block}
 /* Rename turns the row itself into the edit box -- no dialog, same as Remove. */
 /* Home's calendar: this week as seven tappable days, then the institute's next
    dates as tear-off tiles. */
-.cal{margin:4px 16px 0;padding:14px;border-radius:16px;border:1px solid var(--line);
-  background:var(--surface)}
 .cal .mon{display:flex;justify-content:space-between;align-items:baseline;margin:0 2px 10px}
 .cal .mon b{font-size:17px;font-weight:700;letter-spacing:-.01em}
 .cal .mon small{font-size:13px;color:var(--mut)}
@@ -802,8 +781,6 @@ body.reading #read{display:block}
    own colour and EE1108's is amber, so a healthy EE1108 and a failing CY1107
    read identically the moment the state borrows that bar. */
 .row.low .name b{color:var(--warn)}
-.flag{flex:none;padding:3px 9px;border-radius:7px;font-size:13px;font-weight:650;
-  background:var(--warn-bg);color:var(--warn)}
 /* The day picker, shared by the day view and the catch-up screen. Native date
    input: the fastest picker on a phone, nothing to download, and it already
    knows what a month looks like. */
@@ -819,7 +796,6 @@ body.reading #read{display:block}
   font-size:20px;line-height:1}
 .dpick .step:active{opacity:.7}
 .dpick .step[disabled]{opacity:.35}
-.mine{margin:10px 16px 0;padding:16px;border-radius:12px;background:var(--surface)}
 .mine .score{font-size:26px;font-weight:700;letter-spacing:-.02em}
 .mine p{margin:5px 0 0;font-size:13px;color:var(--mut)}
 .tally{display:flex;gap:22px;margin-top:14px}
@@ -829,14 +805,8 @@ body.reading #read{display:block}
 .mine .sub{margin:6px 0 0;font-size:16px;color:var(--mut)}
 .mine .edit{margin-top:14px;min-height:var(--tap);padding:0 14px;border-radius:11px;
   background:var(--bg);border:1px solid var(--line);font-size:16px;color:var(--accent)}
-/* On the card, which is itself --surface: a surface chip on a surface card is
-   not a chip. The paper behind it plus a keyline is what makes it one. */
-.badge{display:inline-block;margin-top:12px;padding:4px 10px;border-radius:7px;
-  font-size:13px;font-weight:650;background:var(--bg);border:1px solid var(--line);
-  color:var(--mut)}
 .badge.trusted{background:color-mix(in srgb,var(--accent) 16%,transparent);
   border-color:var(--accent);color:var(--accent)}
-.badge.admin{background:var(--admin);border-color:var(--admin);color:var(--admin-fg)}
 
 /* ---- The class board. A number, a name, a score -- ruled lines rather than
    another stack of identical rounded cards, because twenty cards is a wall and
@@ -1006,8 +976,6 @@ body.reading #read{display:block}
 /* ---- Admin ink, the same treatment as the admin screen so the two read as
    one thing: an inked tick down the row, and the word on the end of it. */
 .row.adm .tick{background:var(--admin)}
-.tag{flex:none;padding:3px 8px;border-radius:6px;background:var(--admin);
-  color:var(--admin-fg);font-size:13px;font-weight:650}
 
 /* ---- Locked. A student sees the control, is told who it is for and what
    opens it, and never spends a request to find out. Muted on surface is
@@ -1018,9 +986,6 @@ body.reading #read{display:block}
   box-shadow:0 6px 20px rgba(0,0,0,.18)}
 #sheet .opt.locked{background:transparent;border-style:dashed;color:var(--mut)}
 #sheet .opt.locked b{color:var(--mut)}
-#lock{margin-top:14px;padding:14px;border-radius:12px;background:var(--surface);
-  border:1px solid var(--line);font-size:13px;color:var(--fg)}
-#lock b{display:block;font-size:16px;font-weight:650;margin-bottom:5px}
 
 .rtop{display:flex;align-items:center;gap:6px}
 .back{display:flex;align-items:center;gap:4px;height:var(--tap);padding:0 8px 0 4px;
@@ -1105,8 +1070,6 @@ body:has(#ask.on) #fab{display:none}
   padding:9px 12px;margin-top:9px;text-align:left;line-height:1.4}
 #sheet .opt b{font-weight:600}
 #sheet .opt span{flex:1 0 100%;color:var(--mut);font-size:13px}
-#rec{margin-top:14px;padding:16px;border-radius:12px;background:var(--surface);text-align:center;display:none}
-#rec.on{display:block}
 #rec .time{font-size:26px;font-weight:700;font-variant-numeric:tabular-nums}
 #rec .dot{display:inline-block;width:11px;height:11px;border-radius:50%;background:var(--err);
   margin-right:8px;animation:pulse 1.4s infinite}
@@ -1116,8 +1079,6 @@ body:has(#ask.on) #fab{display:none}
 #prog.on{display:block}
 /* Only appears when more than one file was picked at once -- a single file
    auto-uploads exactly as it always has, named after itself. */
-#batchName{margin-top:14px;padding:16px;border-radius:12px;background:var(--surface);display:none}
-#batchName.on{display:block}
 #batchName label{display:block;font-size:13px;color:var(--mut);margin-bottom:8px}
 #batchName input{width:100%;height:var(--tap);padding:0 13px;font:inherit;
   border:1px solid var(--mut);border-radius:10px;background:var(--bg);color:var(--fg)}
@@ -1140,8 +1101,6 @@ body:has(#ask.on) #fab{display:none}
   overflow-x:auto;max-height:44vh;overflow-y:auto}
 #logbox.on{display:block}
 #jobs{padding:0 16px}
-.job{display:flex;align-items:center;gap:11px;padding:11px 12px;margin-top:8px;
-  border-radius:11px;background:var(--surface);font-size:16px}
 .job .st{font-size:13px;color:var(--mut);margin-left:auto;text-align:right}
 .job.failed{box-shadow:inset 3px 0 0 var(--err)}
 .job.failed .st{color:var(--err);font-weight:650}
