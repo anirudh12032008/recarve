@@ -900,6 +900,17 @@ body.reading #read{display:block}
   color:var(--fg);font-family:inherit}
 .compose input{min-height:var(--tap);padding:0 12px}
 .compose textarea{min-height:9.5em;line-height:1.6;padding:11px 12px;resize:vertical}
+/* The two controls a browser draws itself if you let it: a subject picker and
+   a file button. Left alone they arrive as a white system select and a grey
+   "Choose files" slab in the middle of a dark composer. Same surface, same
+   border, same 44px as every other control here. */
+.compose select{width:100%;min-height:var(--tap);margin-top:14px;padding:0 12px;
+  font-size:16px;font-family:inherit;color:var(--fg);background:var(--surface);
+  border:1px solid var(--line);border-radius:11px}
+.compose input[type=file]{padding:9px 12px;line-height:1.4;margin-top:10px}
+.compose input[type=file]::file-selector-button{margin-right:11px;min-height:32px;
+  padding:0 12px;font:inherit;font-size:13px;font-weight:600;color:var(--fg);
+  background:var(--bg);border:1px solid var(--line);border-radius:9px}
 .compose .pinrow{display:flex;align-items:center;gap:11px;min-height:var(--tap);
   margin-top:14px;font-size:16px;color:var(--fg)}
 .compose .pinrow input{width:22px;height:22px;min-height:0;flex:none;accent-color:var(--accent)}
