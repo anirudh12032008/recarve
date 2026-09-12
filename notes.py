@@ -651,26 +651,9 @@ body.reading #read{display:block}
 .sect{margin:0;padding:20px 16px 2px;font-size:13px;font-weight:600;
   letter-spacing:.05em;text-transform:uppercase;color:var(--mut)}
 .rows{padding:6px 4px 0}
-.row{
-  display:flex;align-items:center;gap:12px;width:100%;
-  min-height:var(--tap);padding:11px 12px;border-radius:11px;
-  text-align:left;text-decoration:none;color:inherit;font-size:16px;
-}
-.row:active{background:var(--surface)}
-.row .tick{width:3px;align-self:stretch;border-radius:2px;background:hsl(var(--h) var(--sat) var(--lum));flex:none}
-.row.plain .tick{background:var(--line)}
-.row .name{flex:1;min-width:0}
-.row .name b{display:block;font-weight:600}
-.row .name small{display:block;font-size:13px;color:var(--mut)}
-/* Each file inside a grouped upload, listed by its own name under the shared
-   title -- a shared title does not merge the files, only how the list finds
-   them, so every one of them stays its own tap. */
-.row .thumb{width:44px;height:44px;border-radius:8px;object-fit:cover;flex:none;
-  background:var(--surface)}
-.batch-link{color:inherit;text-decoration:underline dotted;text-underline-offset:2px}
-.row .meta{font-size:13px;color:var(--mut);flex:none}
-.row .code{flex:none}
-.row a.name{text-decoration:none;color:inherit}
+/* Hover is the one thing left in the token block for these: Tailwind would
+   emit it happily, but the neighbours below share the media query and reading
+   them in one place is worth more than the utilities. */
 @media (hover:hover){
   .row:hover{background:var(--surface)}
   .rank:hover{background:color-mix(in srgb,var(--surface) 60%,transparent)}
@@ -679,10 +662,6 @@ body.reading #read{display:block}
   .vote:hover,.mark button:hover,.dpick .step:hover:not([disabled]){border-color:var(--mut)}
   .dock button:hover,.qdock button:hover{filter:brightness(.96)}
 }
-/* A row that carries its own buttons cannot itself be one, so the name becomes
-   the tappable part. Stretched, so the whole height of the row still opens the
-   subject rather than a two-line strip in the middle of it. */
-.row button.name{padding:0;text-align:left;align-self:stretch}
 .blank{margin:16px;padding:22px 20px;border-radius:14px;background:var(--surface);
   border:1px solid var(--line);color:var(--mut);font-size:14px;line-height:1.6}
 .blank p{margin:0 0 10px}

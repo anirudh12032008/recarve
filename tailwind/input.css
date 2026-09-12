@@ -1,3 +1,37 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+/* The app's own components, written in the scale from tailwind.config.js.
+   They live here rather than in a class= attribute because the JS assigns
+   className wholesale in a dozen places (row.className = 'row adm') and a
+   string comparison in the suite would break the moment a utility joined it.
+   One semantic name in the markup, the utilities behind it. */
+@layer components {
+
+  /* The row: Classes, a subject, Home, attendance, the day view. The thing you
+     see most in this app, so it is the one that has to be right. Hierarchy is
+     weight then grey -- a bold name over small muted detail -- never a third
+     size. */
+  .row {
+    @apply flex items-center gap-3 w-full min-h-tap px-3 py-2 rounded
+           text-base text-left no-underline text-inherit active:bg-surface;
+  }
+  .row .tick { @apply w-[3px] self-stretch rounded-[2px] bg-hue flex-none; }
+  .row.plain .tick { @apply bg-line; }
+  .row .name { @apply flex-1 min-w-0; }
+  .row .name b { @apply block font-semibold; }
+  .row .name small { @apply block text-small text-mut; }
+  /* Each file inside a grouped upload, listed by its own name under the shared
+     title -- a shared title does not merge the files, only how the list finds
+     them, so every one of them stays its own tap. */
+  .row .thumb { @apply w-tap h-tap rounded-chip object-cover flex-none bg-surface; }
+  .batch-link { @apply text-inherit underline decoration-dotted underline-offset-2; }
+  .row .meta { @apply text-small text-mut flex-none; }
+  .row .code { @apply flex-none; }
+  .row a.name { @apply no-underline text-inherit; }
+  /* A row that carries its own buttons cannot itself be one, so the name
+     becomes the tappable part. Stretched, so the whole height of the row still
+     opens the subject rather than a two-line strip in the middle of it. */
+  .row button.name { @apply p-0 text-left self-stretch; }
+}
