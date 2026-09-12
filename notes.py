@@ -3214,7 +3214,7 @@ function mapSection() {
   } else if (!cfg.key) {
     // First-class, and said in words somebody can act on.
     saying('The map needs a key, and this server has none.',
-      'Set RECARVE_MAPS_KEY in the environment the server starts in and the '
+      'Set NEXT_PUBLIC_GOOGLE_MAPS_API_KEY in the environment the server starts in and the '
       + 'map draws here. Everything below works without it.');
   } else if (!prov || !prov.src || !prov.draw) {
     saying('This server names a map provider the app cannot draw yet.',
@@ -7135,7 +7135,7 @@ def maps_config(env=os.environ):
     half of this screen and it needs no provider at all, so the page draws it
     either way and says plainly why the map above it is missing.
     """
-    key = (env.get("RECARVE_MAPS_KEY") or "").strip()
+    key = (env.get("NEXT_PUBLIC_GOOGLE_MAPS_API_KEY") or "").strip()
     # One small adapter, named here and implemented in the page. Both were
     # asked for and neither key exists yet, so the provider is a string in the
     # environment rather than a decision baked into the JavaScript.

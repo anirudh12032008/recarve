@@ -268,17 +268,17 @@ def test_no_key_is_a_state_and_not_a_crash():
 
 
 def test_the_key_comes_from_the_environment_and_names_its_provider():
-    cfg = notes.maps_config({"RECARVE_MAPS_KEY": "k-123",
+    cfg = notes.maps_config({"NEXT_PUBLIC_GOOGLE_MAPS_API_KEY": "k-123",
                              "RECARVE_MAPS_PROVIDER": "Jio"})
     assert cfg["key"] == "k-123" and cfg["provider"] == "jio"
-    assert notes.maps_config({"RECARVE_MAPS_KEY": "k"})["provider"] == "google"
+    assert notes.maps_config({"NEXT_PUBLIC_GOOGLE_MAPS_API_KEY": "k"})["provider"] == "google"
 
 
 def test_no_key_is_ever_baked_into_a_static_export(tmp_path, monkeypatch):
     """`notes.py export` writes PAGE with no server behind it. A key in that
     file is a key in the repository, so the page can only ever be handed one at
     runtime -- it never reads the environment itself."""
-    monkeypatch.setenv("RECARVE_MAPS_KEY", "sk-do-not-ship-me")
+    monkeypatch.setenv("NEXT_PUBLIC_GOOGLE_MAPS_API_KEY", "sk-do-not-ship-me")
     assert notes.maps_config()["key"] == "sk-do-not-ship-me", "it is set"
     lib = tmp_path / "library"
     lib.mkdir()
@@ -325,7 +325,7 @@ def test_the_seed_is_data_and_the_schema_is_the_migration():
 def server(tmp_path_factory):
     """notes.py's own server on a real socket, with one person in each role."""
     os.environ["RECARVE_SECRET"] = SECRET.decode()
-    os.environ.pop("RECARVE_MAPS_KEY", None)
+    os.environ.pop("NEXT_PUBLIC_GOOGLE_MAPS_API_KEY", None)
     lib = tmp_path_factory.mktemp("library")
 
     people = {}
@@ -441,7 +441,7 @@ def test_the_missing_key_is_a_screen_and_not_a_broken_map():
     under it."""
     section = re.search(r"function mapSection\(\) \{.*?\n\}", notes.PAGE, re.S).group(0)
     assert "} else if (!cfg.key) {" in section
-    assert "RECARVE_MAPS_KEY" in section, "it has to say what would fix it"
+    assert "NEXT_PUBLIC_GOOGLE_MAPS_API_KEY" in section, "it has to say what would fix it"
     assert section.index("!cfg.key") < section.index("placesSection()"), \
         "the places list is drawn whether or not there is a key"
 
