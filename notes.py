@@ -865,8 +865,10 @@ button.off:active{background:var(--surface)}
 .ann.gone{border-left:3px solid var(--line);padding-left:13px}
 .ann h3{margin:0;font-size:20px;line-height:1.3;font-weight:700;letter-spacing:-.015em}
 .ann .meta{margin:4px 0 0;font-size:13px;color:var(--mut)}
-.ann .flag{font-weight:600;color:var(--accent)}
+.ann .flag{font-weight:600;color:var(--accent);
+  background:color-mix(in srgb,var(--accent) 14%,transparent)}
 .ann.gone .flag{color:var(--mut)}
+.ann.gone .flag{background:var(--surface)}
 .ann .md{margin-top:12px;font-size:16px}
 .ann .md>:first-child{margin-top:0}
 .ann .md>:last-child{margin-bottom:0}
@@ -1068,13 +1070,16 @@ article img{max-width:100%;height:auto}
 table{border-collapse:collapse;font-size:16px;min-width:100%}
 td,th{border:1px solid var(--line);padding:8px 12px;text-align:left}
 th{background:var(--surface)}
-details{margin:12px 0;background:var(--surface);border-radius:11px;overflow:hidden}
-summary{min-height:var(--tap);display:flex;align-items:center;padding:0 16px;
-  color:var(--accent);font-size:16px;font-weight:600}
-summary:active{background:color-mix(in srgb,var(--fg) 7%,var(--surface))}
-details[open] summary{border-bottom:1px solid var(--line)}
-details>:not(summary){padding:0 16px}
-details>:not(summary):last-child{padding-bottom:4px}
+/* Scoped away from .card, which is Campus's own <details> and lays its
+   summary out as a name over a category. Left unscoped these five rules were
+   centring every club in the directory and ruling a line under the open one. */
+details:not(.card){margin:12px 0;background:var(--surface);border-radius:11px;overflow:hidden}
+details:not(.card)>summary{min-height:var(--tap);display:flex;align-items:center;
+  padding:0 16px;color:var(--accent);font-size:16px;font-weight:600}
+details:not(.card)>summary:active{background:color-mix(in srgb,var(--fg) 7%,var(--surface))}
+details:not(.card)[open]>summary{border-bottom:1px solid var(--line)}
+details:not(.card)>:not(summary){padding:0 16px}
+details:not(.card)>:not(summary):last-child{padding-bottom:4px}
 
 .dock{
   position:fixed;left:0;right:0;bottom:0;z-index:6;display:flex;gap:8px;
@@ -1287,7 +1292,8 @@ body.reading .tabs{display:none}
    Cards rather than rows, because each of these carries more than two lines
    and a row that wraps to four is a row pretending to be a card. */
 .card{border-radius:14px;background:var(--surface);
-  padding:16px;margin:0 16px 8px}
+  padding:12px 16px;margin:0 16px 8px}
+.card+.card{margin-top:0}
 .card h3{margin:0;font-size:16px;font-weight:600;color:var(--fg)}
 .card .meta{display:block;font-size:13px;color:var(--mut);margin-top:3px}
 .card p{margin:8px 0 0;font-size:13px;line-height:1.55;color:var(--fg)}
@@ -1307,11 +1313,15 @@ body.reading .tabs{display:none}
 /* A club opens in place. <details> is the platform's own disclosure: it works
    with no JavaScript, it is keyboard and screen-reader correct already, and it
    needs no URL of its own for something that is two sentences long. */
-.card summary{list-style:none;cursor:pointer}
+.card summary{list-style:none;cursor:pointer;position:relative;
+  display:flex;flex-direction:column;justify-content:center;
+  min-height:var(--tap);padding-right:24px}
 .card summary::-webkit-details-marker{display:none}
-.card summary::after{content:'›';float:right;color:var(--mut);font-size:20px;
-  line-height:1;transform:rotate(90deg);transition:transform .15s}
+.card summary::after{content:'›';position:absolute;right:0;top:50%;
+  margin-top:-10px;width:20px;text-align:center;color:var(--mut);font-size:20px;
+  line-height:1;transform:rotate(90deg);transition:transform 140ms ease-out}
 .card[open] summary::after{transform:rotate(270deg)}
+.card summary:active{opacity:.7}
 /* The map, when there is a key. Square-ish and bounded; with no key this
    element is never created at all and the places list stands on its own. */
 #campusmap{height:260px;margin:0 16px 8px;border-radius:14px;overflow:hidden;
@@ -1939,8 +1949,17 @@ const slotsFor = date => closedOn(date) ? [] : slotsOn(TT, dayOfISO(date));
 // on a day the timetable plainly has classes for.
 const emptyDay = (date, day) => {
   const shut = closedOn(date);
-  return quiet(shut ? shut.title + ' — no classes.'
-                    : 'No classes on ' + DAYS[day] + '.');
+  const el = document.createElement('div');
+  el.className = 'blank';
+  const what = document.createElement('p'), why = document.createElement('p');
+  what.textContent = shut ? shut.title + ' — no classes.'
+                          : 'No classes on ' + DAYS[day] + '.';
+  why.textContent = shut
+    ? 'The institute is closed. Step to another day with the arrows above.'
+    : 'Nothing is timetabled. If that is wrong, your timetable is under '
+      + 'Classes and you can change any period in it.';
+  el.append(what, why);
+  return el;
 };
 
 // "Since you last looked" needs a last look. localStorage throws outright in
