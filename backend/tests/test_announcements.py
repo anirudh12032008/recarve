@@ -3,7 +3,7 @@
 Two halves, the same shape as test_votes.py. The first drives the policies on a
 transaction that rolls back: who may post, who may edit, and what "delete"
 actually does to the row. The second starts notes.py's own server and posts
-over HTTP as each role, because "admins only" is worth exactly what the running
+over HTTP as each role, because "class reps only" is worth exactly what the running
 server enforces -- and here that is a policy, not a check in a handler.
 """
 
@@ -301,7 +301,7 @@ def board(port, cookie):
     return json.loads(body).get("announcements")
 
 
-def test_only_an_admin_can_post_and_everyone_approved_reads(server):
+def test_only_a_class_rep_can_post_and_everyone_approved_reads(server):
     port, cookies = server
     status, body, _ = call(port, "POST", "/announce",
                            {"title": "Lab moved to Friday",
@@ -321,7 +321,7 @@ def test_only_an_admin_can_post_and_everyone_approved_reads(server):
         status, body, _ = call(port, "POST", "/announce", {"title": "Class off"},
                                cookie=cookies[who])
         assert status == 403, f"{who} posted an announcement"
-        assert json.loads(body)["required"] == "admin"
+        assert json.loads(body)["required"] == "cr"
     assert len(board(port, cookies["Asha"])) == 1, "and nothing of theirs landed"
 
 
