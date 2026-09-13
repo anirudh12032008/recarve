@@ -597,8 +597,9 @@ PAGE = r"""<!doctype html>
      drawing that hairline, so Rename, Remove, the two attendance marks and
      Cancel all read as grey text rather than as buttons. Not a new colour --
      it is --mut, the ink those same buttons write in, thinned until it is an
-     edge and not a word: 3.6:1 on the paper and 4.2:1 in the dark. */
-  --edge:color-mix(in srgb,var(--mut) 70%,transparent);
+     edge and not a word: 3.5:1 on the paper and 5.0:1 in the dark, clearing
+     1.4.11's 3:1 with the room 70% did not have. */
+  --edge:color-mix(in srgb,var(--mut) 80%,transparent);
   --tap:44px;
   /* 4 (.rows) + 12 (.row) + 3 (.tick) + 12 (gap): where a row's words begin.
      Anything standing in for a row lines up with them, and everything that is

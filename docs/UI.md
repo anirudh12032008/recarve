@@ -140,10 +140,39 @@ exceptions that keep an odd number are the safe-area paddings
 bottom clearances, which are load-bearing arithmetic and fenced by tests
 (see §5).
 
+**The four steps, in the order a screen uses them.** Every gap in the app is
+one of these, and a screen that needs a fifth is a screen doing something it
+should not:
+
+| step | where |
+|------|-------|
+| 24px | above a section's name (`.sect`, `.group`), and between two sections |
+| 16px | the screen's edge; a card's own padding; a label to its field |
+| 12px | between two things inside one component (a row's gap, a card's meta) |
+| 8px  | a section's name to its first row; between two buttons |
+
+**Motion.** 140ms for a control answering, 180ms for a screen arriving,
+`ease-out`, nothing overshoots and nothing moves on its own. A press lands at
+`transition-duration:0s` and only fades on the way out, because a highlight
+that takes 140ms to arrive under a thumb reads as a slow phone. The screen
+animation (`#nav.swap`) has exactly one caller, `route()` — `render()` runs
+again on every vote, every mark and every poll, and a screen that re-animates
+when you tick one box is a screen that flickers.
+`test_every_screen_motion_is_short_and_answers_something` asserts the ceiling,
+the single caller, and that `prefers-reduced-motion` turns all of it off.
+
 ---
 
 ## 3. What "minimal" means here
 
+0. **`--edge`, not `--line`, on anything you press.** `--line` is the hairline
+   between two rows and is 1.24:1 on the ground; WCAG 1.4.11 wants 3:1 for the
+   boundary of a control. `--edge` is `color-mix(in srgb,var(--mut) 80%,
+   transparent)` — no new hue, just the ink those buttons already write in,
+   thinned until it is an edge and not a word. 3.5:1 light, 5.0:1 dark, both
+   asserted (`test_a_control_that_draws_no_fill_has_an_edge_you_can_see`), and
+   `test_no_control_is_bounded_by_the_line_between_two_rows` stops it drifting
+   back.
 1. **A fill or a border, never both.** A thing that sits *on* the page and can
    be pressed gets `bg-surface` and no border (`#q`, `.vote`, `.slot select`,
    `.days button`, `.qdock button`). A thing that sits *in* a row and must not
@@ -224,6 +253,16 @@ bottom clearances, which are load-bearing arithmetic and fenced by tests
 ---
 
 ## 5. Fences — do not move these
+
+**Overridden, deliberately, on 2026-09-14: the gate's `--accent`.** The rule
+below said the gate is never touched, and it was written to protect a
+deliberate dark design — not to freeze a colour. When `PAGE` moved to
+`#6534c9`/`#ac93ff`, `GATE_PAGE` kept `#3355e8`/`#7a92ff` and `.land` kept its
+blue-violet gradient family, so a member watched the brand change colour
+between the Log in button and the first screen behind it. Only colour
+literals moved: every selector, declaration and ordering the gate's tests read
+by string is untouched, and `test_gate_page.py` is green. Nothing else under
+this heading has been overridden and nothing else should be.
 
 **The gate's landing keeps its own hand-written CSS.** `GATE_PAGE`'s style
 block (6168–6412) and everything scoped under `.land` (6277–6405) is a separate,

@@ -1989,6 +1989,92 @@ def test_the_ink_reads_in_both_themes(mode, fg, bg):
     assert ratio >= 4.5, f"{fg} on {bg} in {mode} is only {ratio:.2f}:1"
 
 
+def test_a_control_that_draws_no_fill_has_an_edge_you_can_see():
+    """WCAG 1.4.11 wants 3:1 for the boundary of something you press.
+
+    --line is the hairline between two rows and is 1.24:1 on the ground, and
+    every outlined control in the app was drawing it: Rename, Remove, the two
+    attendance marks, Cancel, the day stepper, a post's Take down. At that
+    ratio they are grey text, not buttons. --edge is --mut thinned to 70% --
+    the same ink those buttons write in, composited onto whichever ground
+    they sit on -- so this checks the arithmetic rather than the literal.
+    """
+    from test_gate_page import contrast
+
+    css = re.search(r"<style>\n(.*?)\n</style>", notes.PAGE, re.S).group(1)
+    mix = re.search(r"--edge:color-mix\(in srgb,var\((--[\w-]+)\) (\d+)%", css)
+    assert mix, "--edge is no longer a mix of a token with transparent"
+    over, pct = mix.group(1), int(mix.group(2)) / 100
+
+    roots = re.findall(r":root\{([^}]*)\}", css)
+    light, dark = ({k: v for k, v in
+                    re.findall(r"(--[\w-]+)\s*:\s*(#[0-9a-fA-F]{3,6})", r)}
+                   for r in roots)
+    for mode, tokens in (("light", light), ("dark", {**light, **dark})):
+        ink = tokens[over].lstrip("#")
+        ground = tokens["--bg"].lstrip("#")
+        # alpha over the paper: what the eye is actually given to see.
+        edge = "#" + "".join(
+            "%02x" % round(int(ink[i:i + 2], 16) * pct
+                           + int(ground[i:i + 2], 16) * (1 - pct))
+            for i in (0, 2, 4))
+        ratio = contrast(edge, tokens["--bg"])
+        assert ratio >= 3, f"a control's only edge is {ratio:.2f}:1 in {mode}"
+
+
+def test_no_control_is_bounded_by_the_line_between_two_rows():
+    """The rule above is only worth having if nothing quietly goes back.
+
+    --line is for a divider. Anything a thumb lands on that draws a border and
+    no fill takes --edge, --admin or --accent, all of which clear 3:1.
+    """
+    css = re.search(r"<style>\n(.*?)\n</style>", notes.PAGE, re.S).group(1)
+    pressable = (".row-del", ".mark button", ".card .acts", ".compose .go button",
+                 ".pform .go button", ".dpick .step", ".dpick input", ".mine .edit",
+                 "#batchName", ".thread .acts button", ".askbox textarea",
+                 ".saybox input", "#sheet select")
+    for block in re.findall(r"([^{}]+)\{([^}]*)\}", css):
+        selector, body = block[0].strip(), block[1]
+        if not re.search(r"border(-[a-z]+)?:1px solid var\(--line\)", body):
+            continue
+        assert not any(sel in selector for sel in pressable), \
+            f"{selector} is bounded by --line, which is 1.24:1"
+
+
+def test_every_screen_motion_is_short_and_answers_something():
+    """Fast, one direction, no overshoot -- and off entirely for anybody who
+    has asked for that. A page that animates on its own is a page that has to
+    be waited for, and this app is used walking out of a lecture."""
+    css = re.search(r"<style>\n(.*?)\n</style>", notes.PAGE, re.S).group(1)
+    for ms in re.findall(r"transition:[^;}]*?(\d+)ms", css):
+        assert int(ms) <= 200, f"a {ms}ms transition is a wait, not an answer"
+    for ms in re.findall(r"animation:\w+ (\d+)ms", css):
+        assert int(ms) <= 200, f"a {ms}ms animation is a wait, not an answer"
+    assert "@media (prefers-reduced-motion:reduce){*{animation:none!important;" \
+           "transition:none!important}}" in css, "reduced motion is not honoured"
+    # The screen animation is route()'s alone. render() runs again on every
+    # vote, every mark and every poll, and a screen that re-animates when you
+    # tick one box is a screen that flickers.
+    assert notes.PAGE.count("arrive(") == 2, \
+        "the screen animation has more than one caller and one definition"
+    assert "if (moving) arrive(" in notes.PAGE
+
+
+def test_waiting_on_the_server_never_looks_like_having_nothing():
+    """"Checking your attendance" and "You have marked nothing" used to be the
+    same shape: one line of grey text. Every section that fetches draws the
+    indeterminate bar the rest of the app already uses."""
+    for waited in ("waitline('Checking your timetable\u2026')",
+                   "waitline('Checking your attendance\u2026')",
+                   "waitline('Reading what is on\u2026')",
+                   "waitline('Reading the directory\u2026')",
+                   "waitline('Opening the room\u2026')"):
+        assert waited in notes.PAGE, f"a screen still waits silently: {waited}"
+    # An unasked room is not an empty one and must not be drawn as one.
+    assert "if (!roomRead) return log.appendChild(waitline(" in notes.PAGE
+    assert "roomRead = true;" in notes.PAGE
+
+
 def test_attendance_is_wired_to_the_server_and_never_guesses_a_state():
     """The node stub swallows an onclick assigned to a proxy, so the checks
     above build the controls and this is the other half: what pressing one
