@@ -7,17 +7,22 @@ where it is held to its bargain: forgiving about what a paste mangles, and
 unforgiving about anything that would change which room a hundred and ten
 people walk into.
 
-A table of inputs against `(rows, errors)`, with no database in sight -- that
-is the whole point of the parser being pure.
+Two halves. The parser first, a table of inputs against `(rows, errors)`, no
+database in sight -- that is the whole point of it being pure. Then the CLI,
+against the real database, because "all or nothing" is worth exactly what the
+transaction enforces.
 """
 
 import pathlib
 import sys
 
+import psycopg
 import pytest
 
 sys.path.insert(0, str(pathlib.Path(__file__).resolve().parents[2]))
 import notes  # noqa: E402
+
+from conftest import DB_URL  # noqa: E402
 
 KNOWN = ["MC1101", "CY1107", "EE1125"]
 
@@ -114,3 +119,71 @@ def test_the_parser_touches_nothing_outside_itself():
     on a paste nobody has agreed to save yet."""
     assert notes.parse_timetable("Monday,1,MC1101", KNOWN)[0] == [(1, 1, "MC1101")]
     assert "conn" not in notes.parse_timetable.__code__.co_varnames
+
+
+# ---------------------------------------------------------------- the CLI
+
+
+@pytest.fixture
+def template():
+    """The section template, emptied before and after.
+
+    notes.py's CLI opens its own autocommit connection -- that is what the
+    owner runs -- so this cannot ride on the rolling-back `db` fixture.
+    """
+    def clear():
+        with psycopg.connect(DB_URL, autocommit=True) as conn:
+            conn.execute("delete from section_timetable")
+
+    def written():
+        with psycopg.connect(DB_URL, autocommit=True) as conn:
+            return sorted(conn.execute(
+                "select day, period, subject_code from section_timetable"))
+
+    clear()
+    yield written
+    clear()
+
+
+def run(tmp_path, text, **kw):
+    csv_path = tmp_path / "week.csv"
+    csv_path.write_text(text)
+    fields = {"csv": csv_path, "section": None, "grad_year": None, "dry_run": False}
+    return notes.import_timetable(notes.argparse.Namespace(**{**fields, **kw}))
+
+
+def test_the_cli_writes_the_week_and_then_replaces_it(template, tmp_path, capsys):
+    run(tmp_path, "day,period,subject_code\nMonday,1,MC1101\nMonday,2,CY1107\n")
+    assert template() == [(1, 1, "MC1101"), (1, 2, "CY1107")]
+
+    # Replaced whole, like db_set_timetable: clearing a period is the same
+    # operation as setting one, and there is no half-applied grid to reason about.
+    run(tmp_path, "Tuesday,1,EE1125\n")
+    assert template() == [(2, 1, "EE1125")]
+
+    out = capsys.readouterr().out
+    assert "Monday" in out and "Tuesday" in out, "it has to say what it changed"
+
+
+def test_one_bad_line_writes_nothing_at_all(template, tmp_path, capsys):
+    run(tmp_path, "Monday,1,MC1101\n")
+    with pytest.raises(SystemExit):
+        run(tmp_path, "Tuesday,1,EE1125\nTuesday,2,ZZ9999\n")
+    assert template() == [(1, 1, "MC1101")], "a refused import must not touch the week"
+    assert "ZZ9999" in capsys.readouterr().err, "and it must say which line was wrong"
+
+
+def test_a_dry_run_says_what_would_change_and_changes_nothing(template, tmp_path, capsys):
+    run(tmp_path, "Monday,1,MC1101\n")
+    run(tmp_path, "Tuesday,1,EE1125\n", dry_run=True)
+    assert template() == [(1, 1, "MC1101")]
+    out = capsys.readouterr().out
+    assert "Tuesday" in out and "nothing was written" in out
+
+
+def test_a_section_this_database_has_no_column_for_is_refused(template, tmp_path):
+    """Sections land in 0040-0044. Until they do, --section can only be a
+    misunderstanding, and writing the rows anyway would look like it worked."""
+    with pytest.raises(SystemExit):
+        run(tmp_path, "Monday,1,MC1101\n", section="I")
+    assert template() == []

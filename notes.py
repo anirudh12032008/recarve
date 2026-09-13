@@ -10366,6 +10366,75 @@ def list_subjects(args):
         print(f"  {code}  {name:<34} {lectures:>3} lectures  {uploads:>3} uploads")
 
 
+def import_timetable(args):
+    """Replace a section's weekly template from a CSV. All of it, or none of it.
+
+    The template is a hundred and ten people's Monday, so this prints what
+    would change before it changes anything, and refuses to write a single row
+    while any line is wrong -- a half-applied grid is the one state nobody can
+    look at and tell is wrong.
+
+    It touches the template and nothing else. A student's own timetable is
+    theirs to edit, and the trigger on profiles seeds new members from here.
+    """
+    text = sys.stdin.read() if str(args.csv) == "-" else args.csv.read_text(encoding="utf-8")
+    conn = db()
+    known = [code for (code,) in conn.execute("select code from subjects")]
+    rows, errors = parse_timetable(text, known)
+    for e in errors:
+        print(f"  {e}", file=sys.stderr)
+    if errors:
+        raise SystemExit(f"{len(errors)} problem{'' if len(errors) == 1 else 's'}, "
+                         "so nothing was written")
+
+    # Sections arrive in migrations 0040-0044 and this command is older than
+    # they are. Ask the database which world it is in rather than guessing:
+    # writing every section's Monday because a column was missing is exactly
+    # the silent damage the parser above refuses to do.
+    scoped = conn.execute(
+        "select 1 from information_schema.columns where table_name = 'section_timetable' "
+        "and column_name = 'section_id'").fetchone() is not None
+    if scoped:
+        if not args.section:
+            raise SystemExit("this database has sections: name one, e.g. --section I")
+        found = conn.execute(
+            "select id from sections where name = %s and (%s::int is null or grad_year = %s)",
+            (args.section, args.grad_year, args.grad_year)).fetchall()
+        if len(found) != 1:
+            raise SystemExit(f"{len(found)} sections named {args.section!r}"
+                             f"{'' if args.grad_year is None else f' of {args.grad_year}'}"
+                             " -- name one exactly, with --grad-year if you must")
+        params, where = (found[0][0],), " where section_id = %s"
+    elif args.section:
+        raise SystemExit("this database has no sections yet, so --section means nothing")
+    else:
+        params, where = (), ""
+
+    before = {(day, period): code for day, period, code in conn.execute(
+        "select day, period, subject_code from section_timetable" + where, params)}
+    after = {(day, period): code for day, period, code in rows}
+    changed = 0
+    for slot in sorted(set(before) | set(after)):
+        was, now = before.get(slot), after.get(slot)
+        if was != now:
+            changed += 1
+            print(f"  {DAYS[slot[0]]:<9} period {slot[1]}  {was or '--':<7} -> {now or '--'}")
+    print(f"{len(rows)} periods over {len({day for day, _, _ in rows})} days, "
+          f"{changed} slot{'' if changed == 1 else 's'} changed")
+    if args.dry_run:
+        print("--dry-run, so nothing was written")
+        return
+
+    cols = "day, period, subject_code" + (", section_id" if scoped else "")
+    marks = "%s, %s, %s" + (", %s" if scoped else "")
+    with conn.transaction():
+        conn.execute("delete from section_timetable" + where, params)
+        for day, period, code in rows:
+            conn.execute(f"insert into section_timetable ({cols}) values ({marks})",
+                         (day, period, code) + params)
+    print(f"written: {len(rows)} periods")
+
+
 def process(path, args):
     log(path.name, "file")
     outdir, code = destination(path, args, "lectures")
@@ -10657,6 +10726,15 @@ def main():
     e = sub.add_parser("export", help="build a browsable HTML page of the whole library")
     e.add_argument("--out", type=Path, default=Path(__file__).parent / "site" / "index.html")
     e.set_defaults(func=export)
+
+    tt = sub.add_parser("timetable", help="import a section's week from a CSV")
+    tt.add_argument("csv", type=Path, help="day,period,subject_code rows; '-' reads stdin")
+    tt.add_argument("--section", help="which section, e.g. --section I")
+    tt.add_argument("--grad-year", type=int,
+                    help="settles two sections that share a name, e.g. --grad-year 2030")
+    tt.add_argument("--dry-run", action="store_true",
+                    help="say what would change and write nothing")
+    tt.set_defaults(func=import_timetable)
 
     sub.add_parser("selftest").set_defaults(func=lambda _: selftest())
 
