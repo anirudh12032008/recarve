@@ -751,7 +751,9 @@ body.reading #read{display:block}
 .mine .sub{margin:6px 0 0;font-size:16px;color:var(--mut)}
 .mine .edit{margin-top:14px;min-height:var(--tap);padding:0 14px;border-radius:11px;
   background:var(--bg);border:1px solid var(--line);font-size:16px;color:var(--accent)}
-.badge.trusted{background:color-mix(in srgb,var(--accent) 16%,transparent);
+/* A CR wears the trusted badge, because that is what a CR is plus one thing.
+   Admin below is the one that looks different, and it should stay the one. */
+.badge.trusted,.badge.cr{background:color-mix(in srgb,var(--accent) 16%,transparent);
   border-color:var(--accent);color:var(--accent)}
 
 /* ---- The class board. A number, a name, a score -- ruled lines rather than
@@ -1330,6 +1332,17 @@ let PENDING = 0;    // classmates waiting for an admin; 0 for everyone else
 let ROLE = null;    // null until /data answers; see refresh() for no server at all
 let JOBS = [];      // the last /jobs answer
 
+// The ladder, in the same order as ROLES in notes.py -- change it there and
+// change it here, and the test that reads both is what says so. Every question
+// this page asks about a role goes through atLeast(), never through `===`: a
+// screen that names the roles which may do a thing is a screen somebody has to
+// remember to edit the day a role is added, and nobody does.
+//
+// Unknown is not a role. ROLE is null until /data answers and indexOf says -1
+// to that, so every control waits rather than appearing and then locking.
+const ROLES = ['student', 'trusted', 'cr', 'admin'];
+const atLeast = r => ROLES.indexOf(ROLE) >= ROLES.indexOf(r);
+
 // Hue per department prefix. Colour says which subject you are in, so the code
 // chip reads at a glance without parsing the number.
 const HUES = {MC:245, CY:150, EE:38, ME:210, BS:175, HS:345, SA:275, NC:80};
@@ -1446,7 +1459,7 @@ function noteRow(n, s) {
   // A row that carries its own button cannot itself be one -- same reason
   // fileRow's root has always been a div. Only admin ever adds a second
   // control, so only admin pays for the extra element.
-  const admin = ROLE === 'admin';
+  const admin = atLeast('admin');
   const el = document.createElement(admin ? 'div' : 'button');
   el.className = 'row';
   el.style.setProperty('--h', hue(s.code));
@@ -1575,7 +1588,7 @@ function fileRow(u, s) {
   // and the same is true of a remove button with nothing to remove.
   if (u.id) el.appendChild(voteBtn(u));
   if (u.id) el.appendChild(commentsBtn(u.id, u.name));
-  if (u.id && ROLE === 'admin') {
+  if (u.id && atLeast('admin')) {
     const dot = u.name.lastIndexOf('.');
     el.appendChild(renameBtn(dot > 0 ? u.name.slice(0, dot) : u.name, (v, btn) =>
       renameItem({kind: 'material', id: u.id, name: v}, btn)));
@@ -1646,7 +1659,7 @@ function fileGroupRow(files, s) {
   // The thread anchors on the first file, the same way the vote does: one
   // batch was one thing somebody added, and a comment is about that thing.
   if (anchor.id) el.appendChild(commentsBtn(anchor.id, anchor.title || anchor.name));
-  if (anchor.id && ROLE === 'admin') {
+  if (anchor.id && atLeast('admin')) {
     el.appendChild(renameBtn(anchor.title || '', (v, btn) =>
       renameItem({kind: 'batch', batch: anchor.batch, name: v}, btn)));
     el.appendChild(removeBtn(async (btn) => {
@@ -2104,7 +2117,7 @@ function newBlock() {
 // a courtesy either way: /admin is in ROLE_REQUIRED, so curl gets the same 403
 // a student's browser would.
 function adminBlock() {
-  if (ROLE !== 'admin') return;
+  if (!atLeast('admin')) return;
   const a = document.createElement('a');
   a.href = '/admin';
   block('Admin', [inked(line('Class admin',
@@ -2566,10 +2579,10 @@ function annCard(a) {
   meta.appendChild(document.createTextNode(
     a.by + ' · ' + ago(a.at, NOW) + (a.edited ? ' · edited' : '')));
   el.querySelector('.md').innerHTML = mdSafe(a.body);
-  // Their own, because that is what the database allows: "admins edit their
-  // own announcements" refuses anybody else's, and offering a button that
-  // would be refused is worse than not offering it.
-  if (a.mine && ROLE === 'admin') {
+  // Their own, because that is what the database allows: "class reps edit
+  // their own announcements" refuses anybody else's, and offering a button
+  // that would be refused is worse than not offering it.
+  if (a.mine && atLeast('cr')) {
     const acts = document.createElement('div');
     acts.className = 'acts';
     const edit = document.createElement('button');
@@ -2669,7 +2682,7 @@ function renderCompose() {
 
 function renderAnnouncements() {
   heading('Announcements');
-  if (ROLE === 'admin') {
+  if (atLeast('cr')) {
     const post = line('Post an announcement', 'Every approved classmate sees it',
                       document.createElement('button'));
     post.onclick = () => go('campus', 'new');
@@ -2683,12 +2696,12 @@ function renderAnnouncements() {
   const list = ANN.filter(a => !a.deleted || a.mine);
   if (!list.length) {
     return saying('Nothing on the notice board yet.',
-      ROLE === 'admin'
+      atLeast('cr')
         ? 'Anything the whole section needs to know goes here — a moved '
           + 'lab, a deadline, where the lecture is. Everyone approved sees it, '
           + 'and pinned ones stay at the top.'
         : 'This is where the section is told things — a moved lab, a '
-          + 'deadline, where a lecture is. Your class admin puts them up, and '
+          + 'deadline, where a lecture is. Your CR or your admin puts them up, and '
           + 'new ones show on Home until you have read them.');
   }
   list.forEach(a => nav.appendChild(annCard(a)));
@@ -2864,7 +2877,7 @@ function postCard(x, kind) {
   // A confession offers its own author nothing, because the page is never
   // told who that is -- `mine` is false on every one of them. An admin takes
   // one down in one tap, which is the whole of moderation here.
-  const drop = (x.mine || ROLE === 'admin') ? document.createElement('button') : null;
+  const drop = (x.mine || atLeast('admin')) ? document.createElement('button') : null;
   if (drop) {
     drop.textContent = x.mine ? 'Delete' : 'Take down';
     if (!x.mine) drop.className = 'adm';
@@ -3015,8 +3028,8 @@ const campusList = key => (CAMPUS && CAMPUS[key]) || [];
 // The directory and the map are the institute's own facts and stay with an
 // admin. Nothing here is hidden from anybody: a student sees every screen,
 // without the buttons that would 403.
-const mayEditEvent = e => ROLE === 'admin' || (mayAdd() && e && e.mine !== false);
-const mayCurate = () => ROLE === 'admin';
+const mayEditEvent = e => atLeast('admin') || (mayAdd() && e && e.mine !== false);
+const mayCurate = () => atLeast('admin');
 
 function dateSpan(e) {
   const short = d => MONTHS[+d.slice(5, 7) - 1].slice(0, 3) + ' ' + (+d.slice(8));
@@ -3464,7 +3477,7 @@ async function renderCampus() {
     if (!composer[1]()) return void go('campus');
     return composer[0]();
   }
-  if (view.compose && ROLE === 'admin') return renderCompose();
+  if (view.compose && atLeast('cr')) return renderCompose();
   renderAnnouncements();
   wallSection();
   eventsSection();
@@ -3679,7 +3692,7 @@ function chatLine(m) {
   meta.className = 'meta';
   meta.textContent = m.by + ' · ' + ago(m.at, NOW);
   el.append(said, meta);
-  if (m.mine || ROLE === 'admin') {
+  if (m.mine || atLeast('admin')) {
     const drop = document.createElement('button');
     drop.textContent = m.mine ? 'Delete' : 'Remove';
     if (!m.mine) drop.className = 'adm';
@@ -3819,14 +3832,17 @@ function roomSection(s) {
 // Points are status and nothing else. Nothing in this app asks for a score
 // before it shows you something, and no lock on this page is opened by one:
 // the locks are roles, and the only thing that moves a role is an admin.
-const ROLE_TITLE = {student: 'Student', trusted: 'Trusted member', admin: 'Admin'};
+const ROLE_TITLE = {student: 'Student', trusted: 'Trusted member',
+                    cr: 'Class representative', admin: 'Admin'};
 const ROLE_SAYS = {
   student: 'Read everything the class has, search it, practise from it, and '
          + 'upvote the notes that helped.',
   trusted: 'Everything a student can, and add notes and slides, record a class, '
          + 'build a revision sheet, and use Explain.',
-  admin: 'Everything a trusted member can, and let people in, set what each of '
-       + 'them may do, and hold the invite code.',
+  cr: 'Everything a trusted member can, and put a notice on the board that '
+    + 'every approved classmate sees.',
+  admin: 'Everything a class representative can, and let people in, set what '
+       + 'each of them may do, and hold the invite code.',
 };
 // Said in exactly one place, and read by the sheet, the Explain panel and this
 // screen. A lock that gives three different reasons is three locks.
@@ -3926,7 +3942,11 @@ async function renderMe() {
   // told off for being one: they are told what they have and what opens more.
   const can = [line(ROLE_TITLE[d.role] || 'Student',
                     ROLE_SAYS[d.role] || ROLE_SAYS.student)];
-  if (d.role === 'student') can.push(line('What trusted adds', LOCK_ADD));
+  // Asked of the row the server sent, not of ROLE, because this card is drawn
+  // from /me -- but asked as a rung either way, so a role added above student
+  // is not quietly told it cannot add.
+  if (ROLES.indexOf(d.role) < ROLES.indexOf('trusted'))
+    can.push(line('What trusted adds', LOCK_ADD));
   block('Your access', can);
 
   const p = d.points;
@@ -4202,7 +4222,7 @@ function saidBy(x) {
 // Taking your own words back, or -- inked as the power it is -- somebody
 // else's. Offered to nobody else, because the policy would only refuse them.
 function dropBtn(x) {
-  if (!x.mine && ROLE !== 'admin') return null;
+  if (!x.mine && !atLeast('admin')) return null;
   const b = document.createElement('button');
   b.textContent = 'Delete';
   if (!x.mine) b.className = 'adm';
@@ -4821,7 +4841,7 @@ async function pollJobs() {
 // simply absent reads as an app that does not do that, so the student never
 // learns the thing exists, never learns what a trusted member is, and never
 // asks the one person who could make them one.
-const mayAdd = () => ROLE === 'trusted' || ROLE === 'admin';
+const mayAdd = () => atLeast('trusted');
 function applyRole() {
   const fab = document.getElementById('fab');
   // Unknown is not a role. Until /data answers there is nothing honest to say
@@ -5575,13 +5595,20 @@ ENV_PATH = Path(__file__).resolve().parent / ".env"
 # only paths that opt out, and adding to this set is the deliberate act.
 PUBLIC_PATHS = {"/join", "/login"}
 
-# Three roles, in order. A student reads everything the class has; trusted adds
-# the things that write content or spend money on the API; admin adds the class
-# itself. status is the other axis and is checked separately -- a pending admin
-# is still pending.
+# Four roles, in order, and the order is the whole of it. A student reads
+# everything the class has; trusted adds the things that write content or spend
+# money on the API; cr adds the notice board; admin adds the class itself.
+# status is the other axis and is checked separately -- a pending admin is
+# still pending.
+#
+# Nothing anywhere asks "is this role one of these strings". Every question is
+# "does this role stand at or above that one", asked through RANK -- at the
+# gate below, in the handler's at_least(), and in role_rank() in 0045 on the
+# Postgres side. A fifth role is a word in this tuple and a rung in that
+# function, not an edit to every call site that ever cared.
 SECTION = "Section I"
 
-ROLES = ("student", "trusted", "admin")
+ROLES = ("student", "trusted", "cr", "admin")
 RANK = {r: i for i, r in enumerate(ROLES)}
 
 # What each endpoint costs, in the same place as PUBLIC_PATHS and for the same
@@ -5603,7 +5630,11 @@ ROLE_REQUIRED = {
     "/remove-lecture": "admin",
     "/rename": "admin",
     "/reset": "admin",
-    "/announce": "admin",     # posting to a hundred and ten people at once
+    # Posting to a hundred and ten people at once. The class representative is
+    # the person the professors actually tell things to, so this is the rung
+    # that exists for it -- and everything else on this list stayed where it
+    # was, because a notice board is not the invite code or the pending queue.
+    "/announce": "cr",
     # The one road to who wrote a confession. An admin has to be able to deal
     # with the person and not only the row -- and nobody else may ask, which
     # is stated here AND inside confession_author() in Postgres, because a
@@ -6052,13 +6083,13 @@ def db_members(conn):
 
 
 def db_set_role(conn, actor_id, profile_id, role):
-    """Move somebody between the three roles.
+    """Move somebody up or down the ladder of roles.
 
     Admin-gated in the database by the "admins manage profiles" policy, so a
     member's connection changes nobody -- this function only decides the two
-    things the policy cannot see: that the role is one of the three, and that
-    an admin is not demoting themselves. The second is not paranoia about
-    privilege, it is about the class: the admin is the only account that can
+    things the policy cannot see: that the role is one on the ladder at all,
+    and that an admin is not demoting themselves. The second is not paranoia
+    about privilege, it is about the class: the admin is the only account that can
     approve joiners, and one mis-tap would leave nobody who can.
     """
     if role not in ROLES:
@@ -6843,7 +6874,7 @@ def db_announcements(conn, user_id, limit=ANN_LIMIT):
 def db_write_announcement(conn, user_id, aid, title, body, pinned, deleted):
     """Post one, edit one, hide one, or put a hidden one back.
 
-    One function because it is one row and one policy: "admins edit their own"
+    One function because it is one row and one policy: "class reps edit their own"
     is what refuses somebody else's notice, and it refuses it here whether the
     request came from this app or from curl holding a stolen cookie. A hidden
     notice is never destroyed -- deleted_at is the only thing that moves, and
@@ -8111,6 +8142,11 @@ approve anyone into.</p>
 <script>
 const $ = id => document.getElementById(id);
 
+// The ladder, handed down from ROLES in notes.py rather than typed again here.
+// This is the one screen that offers every role at once, and a dropdown that
+// has quietly stopped offering the newest one is a role nobody can be given.
+const ROLES = __ROLES__;
+
 // Both timestamps are seconds on the server's clock -- the same clock the rows
 // were stamped by -- so a handset a few minutes out cannot report a joiner who
 // has not asked yet.
@@ -8160,7 +8196,7 @@ function btn(label, cls, fn) {
 function roleSelect(p) {
   const sel = document.createElement('select');
   sel.setAttribute('aria-label', 'Role for ' + p.name);
-  for (const r of ['student', 'trusted', 'admin']) {
+  for (const r of ROLES) {
     const o = document.createElement('option');
     o.value = r; o.textContent = r;
     if (r === p.role) o.selected = true;
@@ -8319,7 +8355,7 @@ async function load() {
 }
 load();
 </script>
-"""
+""".replace("__ROLES__", json.dumps(list(ROLES)))
 
 
 EXPLAIN_PROMPT = """A student is reading their lecture notes and highlighted a passage they do not
@@ -8677,8 +8713,20 @@ def build_server(args):
                         "now": int(time.time())})
             return super().do_GET()
 
+        def at_least(self, role):
+            """Does whoever is asking stand at or above that rung?
+
+            The same question the gate asks before dispatch, in the same terms,
+            for the handful of handlers that ask it a second time inside
+            themselves. Spelled once here so that adding a role is a word in
+            ROLES rather than a hunt through every `== 'admin'` in the file --
+            and so an unknown role, or nobody at all, is refused rather than
+            being compared against and accidentally passing.
+            """
+            return bool(self.me) and RANK.get(self.me["role"], -1) >= RANK[role]
+
         def is_admin(self):
-            return bool(self.me and self.me["admin"])
+            return self.at_least("admin")
 
         def do_POST(self):
             if self.path == "/join":
@@ -8948,7 +8996,7 @@ def build_server(args):
             return self.reply(200, {"ok": True, "published": published})
 
         def do_role(self):
-            """Move somebody between student, trusted and admin.
+            """Move somebody between student, trusted, cr and admin.
 
             Admin-only twice over: the gate refused everyone else before this
             was reached, and the update inside runs on the caller's own
@@ -9869,16 +9917,21 @@ def build_server(args):
             return self.reply(200, out)
 
         def do_announce(self):
-            """Post, edit, hide or restore one notice. Admins only.
+            """Post, edit, hide or restore one notice. Class reps and above.
 
-            Admin-gated twice over, like every other admin route: the gate
-            refused everybody else before this was reached, and the write runs
-            on the caller's own connection where "admins edit their own
-            announcements" has to allow it too -- which is what makes "their
-            own" true rather than intended.
+            Gated twice over, like every other route that writes: the gate
+            refused everybody below cr before this was reached, and the write
+            runs on the caller's own connection where "class reps edit their
+            own announcements" has to allow it too -- which is what makes
+            "their own" true rather than intended.
+
+            The rung is asked for by name rather than by role equality, so the
+            day an admin is not the only person above a cr this still means
+            what it says.
             """
-            if not self.is_admin():
-                return self.reply(403, {"error": "admins only", "required": "admin"})
+            if not self.at_least("cr"):
+                return self.reply(403, {"error": "the notice board is for class "
+                                                 "representatives", "required": "cr"})
             try:
                 req = self.body(20000)
                 if req is None:

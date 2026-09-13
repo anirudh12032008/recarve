@@ -118,6 +118,15 @@ DATA_FIXTURE = [
     {"code": "CY1107", "name": "Chemistry", "notes": [], "uploads": []},
 ]
 
+# The role ladder and the one question the page ever asks of it, lifted out of
+# PAGE rather than written again here. Every harness below that pulls a single
+# function out of the page needs these two lines beside it, because almost
+# every control on the page decides whether to exist by calling atLeast() --
+# and a stand-in written here would agree with whatever the test expected
+# instead of with what ships.
+LADDER = "\n".join(re.search(p, notes.PAGE).group(0) for p in (
+    r"const ROLES = \[[^\]]*\];", r"const atLeast = [^\n]*"))
+
 # Enough of a browser to let the script load and the router run. Every DOM
 # write lands in `any` and is thrown away; hash, history and DATA are real,
 # which is all the deciding code reads.
@@ -1142,7 +1151,7 @@ ANN = []; ROLE = 'student'; BOARD = emptyBoard;
 writes = [];
 await renderCampus();
 assert.ok(says('Nothing on the notice board yet'), 'an empty board says so');
-assert.ok(says('Your class admin puts them up'),
+assert.ok(says('Your CR or your admin puts them up'),
           'and says who fills it and where new ones show');
 ROLE = 'admin';
 writes = [];
@@ -1999,7 +2008,7 @@ def test_the_admin_way_in_is_wired_and_gated_on_the_server_too():
     """Hiding a button is a courtesy. /admin is in ROLE_REQUIRED, so the gate
     refuses a student's curl exactly as it refuses a student's browser."""
     assert notes.ROLE_REQUIRED["/admin"] == "admin"
-    assert "if (ROLE !== 'admin') return;" in notes.PAGE, "the Home row is role-gated"
+    assert "if (!atLeast('admin')) return;" in notes.PAGE, "the Home row is role-gated"
     assert "adminBlock();" in notes.PAGE, "and Home actually draws it"
     # Ink, not a fourth colour: the same helper the Me tab's admin rows use.
     home = re.search(r"function adminBlock\(\) \{.*?\n\}", notes.PAGE, re.S).group(0)
@@ -2030,15 +2039,15 @@ def test_the_notice_board_rides_on_the_data_the_page_already_fetches():
     assert "show.slice(0, 3)" in home, "Home shows three notices, not a wall of them"
 
 
-def test_posting_is_admin_only_on_the_server_too():
+def test_posting_is_for_the_class_rep_on_the_server_too():
     """Hiding the composer is a courtesy. The lock is the gate, which refuses
     curl exactly as it refuses a student's browser -- and under that, a policy
     that refuses a stolen cookie too."""
-    assert notes.ROLE_REQUIRED["/announce"] == "admin"
+    assert notes.ROLE_REQUIRED["/announce"] == "cr"
     assert "/read" not in notes.ROLE_REQUIRED, "what you have read is not a privilege"
     campus = re.search(r"function renderAnnouncements\(\) \{.*?\n\}", notes.PAGE, re.S).group(0)
-    assert "if (ROLE === 'admin')" in campus, "the composer is offered on the role"
-    assert "a.mine && ROLE === 'admin'" in notes.PAGE, \
+    assert "if (atLeast('cr'))" in campus, "the composer is offered on the rung"
+    assert "a.mine && atLeast('cr')" in notes.PAGE, \
         "and edit/delete only on your own, which is what the policy allows"
 
 
@@ -2310,6 +2319,7 @@ def test_removing_a_file_posts_the_right_shape_to_the_right_route(tmp_path):
 const assert = require('node:assert');
 const document = {{}};
 let ROLE = 'admin';
+{LADDER}
 let calls = [];
 global.fetch = (url, init) => {{
   calls.push([url, JSON.parse(init.body)]);
@@ -2381,6 +2391,7 @@ def test_files_sharing_a_batch_render_as_one_row(tmp_path):
 const assert = require('node:assert');
 const document = {{}};
 let ROLE = 'admin';
+{LADDER}
 let calls = [];
 global.fetch = (url, init) => {{
   calls.push([url, JSON.parse(init.body)]);
@@ -2533,6 +2544,7 @@ def test_a_photo_shows_a_thumbnail_and_a_document_does_not(tmp_path):
     script = """
 const assert = require('node:assert');
 let ROLE = null;
+""" + LADDER + """
 function hue() { return 0; }
 function makeEl(tag) {
   const el = { tag, innerHTML: '', className: '', textContent: '', kids: [], _sub: {},

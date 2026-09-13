@@ -1,4 +1,4 @@
-"""Three roles, and what each one may actually do.
+"""Four roles, and what each one may actually do.
 
 Two halves, for the two places the rule is enforced. The first drives the
 database directly: a session holding a psycopg connection is what a leaked
@@ -30,7 +30,7 @@ SECRET = b"test-secret-not-the-real-one"
 # ------------------------------------------------ the column and its backfill
 
 
-def test_role_is_constrained_to_the_three(db):
+def test_role_is_constrained_to_the_ladder(db):
     uid = make_user(db)
     with pytest.raises(psycopg.errors.CheckViolation), db.transaction():
         db.execute("insert into profiles (id, name, role) values (%s, 'X', 'root')", (uid,))
@@ -45,7 +45,8 @@ def test_a_new_profile_is_a_student(db):
 
 
 @pytest.mark.parametrize("role,trusted,admin", [
-    ("student", False, False), ("trusted", True, False), ("admin", True, True)])
+    ("student", False, False), ("trusted", True, False),
+    ("cr", True, False), ("admin", True, True)])
 def test_the_old_booleans_are_role_spelled_the_old_way(db, role, trusted, admin):
     """They are generated columns, so they cannot disagree with role -- and the
     two policies and the trigger that still read them are still right."""
@@ -107,9 +108,9 @@ def test_a_student_writes_no_content(db, write):
         write(db, me, "student-write")
 
 
-@pytest.mark.parametrize("role", ["trusted", "admin"])
+@pytest.mark.parametrize("role", ["trusted", "cr", "admin"])
 @pytest.mark.parametrize("write", [insert_material, insert_lecture])
-def test_trusted_and_admin_write_content(db, role, write):
+def test_every_rung_above_student_writes_content(db, role, write):
     me = member(db, role=role)
     as_user(db, me)
     write(db, me, f"{role}-write")
@@ -138,11 +139,11 @@ def test_a_student_still_reads_everything_and_votes(db):
                "values (%s, 1, 1, 'CY1107')", (student,))
 
 
-@pytest.mark.parametrize("role", ["student", "trusted"])
+@pytest.mark.parametrize("role", ["student", "trusted", "cr"])
 def test_nobody_below_admin_promotes_themselves(db, role):
     me = member(db, role=role)
     as_user(db, me)
-    for want in ("admin", "trusted", "student"):
+    for want in ("admin", "cr", "trusted", "student"):
         if want == role:
             continue
         with pytest.raises(psycopg.errors.InsufficientPrivilege), db.transaction():
@@ -151,7 +152,7 @@ def test_nobody_below_admin_promotes_themselves(db, role):
     assert db.execute("select role from profiles where id = %s", (me,)).fetchone()[0] == role
 
 
-@pytest.mark.parametrize("role", ["student", "trusted"])
+@pytest.mark.parametrize("role", ["student", "trusted", "cr"])
 def test_nobody_below_admin_touches_anybody_else_s_role(db, role):
     """Somebody else's row is not refused so much as invisible: the update
     policy's using-clause never matches it, so nothing is found to change.
@@ -327,7 +328,7 @@ def server(tmp_path_factory):
         for table in ("announcement_reads", "announcements", "timetable", "votes",
                       "materials", "lectures", "profiles", "invites"):
             conn.execute(f"delete from {table}")
-        for role in ("student", "trusted", "admin"):
+        for role in ("student", "trusted", "cr", "admin"):
             uid = make_user(conn)
             conn.execute(
                 "insert into profiles (id, name, roll_no, status, role, password) "
@@ -401,9 +402,11 @@ MATRIX = [
     # Your own name is not a privilege, so /profile is deliberately not in
     # ROLE_REQUIRED and every approved member reaches it.
     ("POST", "/profile", {"name": "Renamed"}, "student"),
-    # Telling a hundred and ten people something at once is the admin's, and
-    # deliberately not trusted's: trusted is what spends the API budget.
-    ("POST", "/announce", {"title": "Matrix"}, "admin"),
+    # Telling a hundred and ten people something at once is the class
+    # representative's, and deliberately not trusted's: trusted is what spends
+    # the API budget. It is the one rung between the two, which is the whole
+    # reason that rung exists.
+    ("POST", "/announce", {"title": "Matrix"}, "cr"),
     # What you have read is not a privilege, so /read is open to everyone
     # approved -- and the insert policy pins the row to whoever is asking.
     ("POST", "/read", {"ids": []}, "student"),
@@ -414,7 +417,7 @@ MATRIX = [
 RANK = notes.RANK
 
 
-@pytest.mark.parametrize("role", ["student", "trusted", "admin"])
+@pytest.mark.parametrize("role", ["student", "trusted", "cr", "admin"])
 @pytest.mark.parametrize("method,path,body,need", MATRIX)
 def test_the_matrix(server, role, method, path, body, need):
     """For each role, every endpoint: refused with the required role named, or
@@ -498,7 +501,7 @@ def test_a_junk_role_is_refused(server):
 
 def test_every_session_is_told_its_own_role_and_nobody_else_s(server):
     port, cookies, _ = server
-    for role in ("student", "trusted", "admin"):
+    for role in ("student", "trusted", "cr", "admin"):
         assert json.loads(call(port, "GET", "/data", cookie=cookies[role])[1])["role"] == role
         me = json.loads(call(port, "GET", "/me", cookie=cookies[role])[1])
         assert me["role"] == role and me["admin"] == (role == "admin")
