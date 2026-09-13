@@ -575,7 +575,7 @@ PAGE = r"""<!doctype html>
      red, a term below 75% is amber. Deep enough to carry white at 7.3:1 and to
      read on the paper at 7.1:1, which is what lets it be used this sparingly
      and still be the thing your eye goes to. */
-  --accent:#3355e8; --accent-fg:#fff;
+  --accent:#6534c9; --accent-fg:#fff;
   /* Admin ink. Red already means error, so power is not red: it is the page's
      own ink, filled. Accent is every member's action, grey is neutral, ink is
      the handful of things only an admin may press. 14.5:1 either way round. */
@@ -604,7 +604,7 @@ PAGE = r"""<!doctype html>
     /* The same purple, lifted off a near-black ground rather than pressed
        onto paper -- and what sits ON it goes dark, because the light version
        of this colour cannot carry white. */
-    --accent:#7c93ff; --accent-fg:#0f1115;
+    --accent:#ac93ff; --accent-fg:#0f1115;
     /* Ink inverts with the paper: near-black on near-black is not a slab. */
     --admin:#dfe4f0; --admin-fg:#0f1115;
     --sat:48%; --lum:70%; --chip-lum:22%; --chip-text:78%;
