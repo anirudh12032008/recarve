@@ -1189,6 +1189,11 @@ body.reading .tabs{display:none}
      dock starts where the note does, so reading no longer costs the tabs. */
   .tabs{right:auto;width:320px}
   body.reading .tabs{display:flex}
+  /* The screen's name is the biggest type in the app on a phone, where it has
+     the whole width. Here it has a 320px column with a code chip and the
+     avatar already in it, and 26px left "Mathematics 1" showing four letters
+     and an ellipsis. The note beside it is the headline on this layout. */
+  .shead h2,.brand b{font-size:20px;letter-spacing:-.015em}
 }
 /* ---- Campus: societies, what they are running, and where anything is. ----
    Cards rather than rows, because each of these carries more than two lines
