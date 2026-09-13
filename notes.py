@@ -8392,6 +8392,18 @@ def build_server(args):
     servable = (Path(args.out).resolve().parent, Path(args.library).resolve())
 
     class Handler(SimpleHTTPRequestHandler):
+        # HTTP/1.0 -- the default -- is a new TCP connection and a new thread
+        # for every request, and the page polls /jobs every two seconds on top
+        # of its own assets. A hundred phones is fifty connections a second
+        # that way, and the reel lands on Tuesday. Keeping the connection means
+        # every response must say how long it is, which is what end_headers
+        # below is for.
+        protocol_version = "HTTP/1.1"
+        # And a kept connection must not be kept forever: a phone that goes
+        # into a pocket mid-poll would otherwise hold its thread until the
+        # process restarts.
+        timeout = 30
+
         def log_message(self, fmt, *a):
             if args.verbose:
                 super().log_message(fmt, *a)
@@ -8400,6 +8412,31 @@ def build_server(args):
             if path.split("?")[0] in ("/", "/index.html"):
                 return str(args.out)
             return super().translate_path(path)
+
+        def end_headers(self):
+            """The last word on whether this connection is kept, for every
+            response the server makes -- ours, the stdlib's and its errors'.
+
+            Only a GET is kept. A POST refused before its body was read -- and
+            half of them are, by --no-auth, by admins-only, by the size caps --
+            leaves those bytes on the socket, where the next request line
+            should be, and the request after it would be parsed out of
+            somebody's JSON. A HEAD is the same shape of trouble from the other
+            end: the senders below write a body it will not read. Neither is
+            worth proving thirty handlers right for, and neither is what the
+            reuse is for: the page, its assets and the job poll are all GETs.
+            """
+            if self.command != "GET":
+                self.close_connection = True
+            # Say so, rather than hanging up on a client that has been told
+            # nothing and is entitled to assume the connection stays. The
+            # stdlib's send_error says it too, so its 404s carry the header
+            # twice -- two headers that agree, which every client reads as the
+            # one thing they both say, and cheaper than reaching into the
+            # header buffer to find out whether it has been said already.
+            if self.close_connection:
+                self.send_header("Connection", "close")
+            super().end_headers()
 
         def send_head(self):
             """Every static file, GET and HEAD alike, comes through here."""
@@ -10048,7 +10085,15 @@ def build_server(args):
             except (BrokenPipeError, ConnectionResetError):
                 pass  # phone hung up; nothing useful left to do
 
-    return ThreadingHTTPServer((args.host, args.port), partial(Handler, directory=str(root)))
+    class Server(ThreadingHTTPServer):
+        # The stdlib listens five deep. A reel puts a hundred phones on the
+        # door inside a minute, and the sixth one through does not get a slow
+        # answer -- its SYN is dropped, and the phone shows a page that failed
+        # to load. This is the kernel's waiting room, not a thread pool: it
+        # costs nothing to make it big enough for the whole class.
+        request_queue_size = 128
+
+    return Server((args.host, args.port), partial(Handler, directory=str(root)))
 
 
 def serve(args):
