@@ -1,6 +1,13 @@
 -- MANIT Section I, B.Tech I Sem 2026-27 (Group-ST timetable, w.e.f. 24/8/2026).
 -- Data, not schema: applied to the live database only, never to the test one.
-delete from section_timetable;
+--
+-- Every statement here now says which section it means. Before 0041 there was
+-- one grid and one word for it; running this file unqualified today would wipe
+-- every section's template and hand every student in the institute Section I's
+-- week. Both statements are pinned to Section I, which is what the filename
+-- has always claimed.
+delete from section_timetable
+ where section_id = (select id from sections where name = 'I' and grad_year = 2030);
 insert into section_timetable (day, period, subject_code) values
   -- Monday
   (1,1,'CY1107'), (1,2,'MC1101'), (1,3,'EE1125'), (1,4,'EE1125'),
@@ -16,6 +23,7 @@ insert into section_timetable (day, period, subject_code) values
   -- Friday
   (5,1,'MC1101'), (5,3,'ME1127'), (5,4,'ME1127'), (5,6,'SA1143'), (5,7,'SA1143');
 
-insert into timetable (profile_id, day, period, subject_code)
-select p.id, s.day, s.period, s.subject_code from profiles p cross join section_timetable s
+insert into timetable (profile_id, section_id, day, period, subject_code)
+select p.id, p.section_id, s.day, s.period, s.subject_code
+  from profiles p join section_timetable s on s.section_id = p.section_id
 on conflict (profile_id, day, period) do nothing;

@@ -7507,7 +7507,12 @@ def db_set_cancelled(conn, user_id, day, period, code, off, reason=""):
         conn.execute(
             "insert into cancelled_classes (on_date, period, subject_code, "
             "reason, set_by) values (%s, %s, %s, %s, %s) "
-            "on conflict (on_date, period, subject_code) do nothing",
+            # The section is in the key as of 0041 -- two sections both call
+            # off their own 9am and neither may be refused because the other
+            # did it first -- and ON CONFLICT has to name the whole key. The
+            # insert still does not mention section_id: it defaults to the
+            # caller's own, which is the only one the policy would accept.
+            "on conflict (section_id, on_date, period, subject_code) do nothing",
             (day, period, code, (reason or "")[:120], user_id))
     else:
         conn.execute(
