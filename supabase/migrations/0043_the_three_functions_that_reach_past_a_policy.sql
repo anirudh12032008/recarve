@@ -30,8 +30,10 @@
 -- there was only one section to be an admin of. It takes a bare uuid, so the
 -- only thing between it and any profile in the database is this sentence.
 --
--- `and role = 'student'` stays for 0009's reason: approving somebody's backlog
--- must not demote an admin on the way past.
+-- It no longer promotes anybody. 0039 took that out -- approving someone says
+-- "you are in", not "you may upload", and trusted is a thing an admin grants
+-- on purpose afterwards. This file was written against 0009 and would have put
+-- the promotion back, so the line is gone rather than merely section-scoped.
 create or replace function approve_uploader(p_user uuid) returns int
 language plpgsql security definer set search_path = public as $$
 declare
@@ -40,9 +42,6 @@ begin
   if not is_admin() then
     raise exception 'admin only';
   end if;
-
-  update profiles set role = 'trusted'
-   where id = p_user and role = 'student' and section_id = my_section();
 
   update materials set status = 'visible'
    where uploader_id = p_user and status = 'pending'
