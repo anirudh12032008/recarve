@@ -697,15 +697,27 @@ body.reading #read{display:block}
 #menu .tag{margin-left:auto}
 
 .group{padding:24px 16px 4px}
-.group h2{display:inline;margin:0 0 0 9px;font-size:13px;font-weight:500;color:var(--mut)}
+.group h2{display:inline;margin:0 0 0 8px;font-size:13px;font-weight:500;color:var(--mut)}
 .shead{display:flex;align-items:center;gap:9px;flex:1;min-width:0}
 /* The screen's name, at the weight a screen's name is. It ellipsises rather
    than wraps: at this depth the code chip beside it already says which
    subject, so the tail of a long name is the cheapest thing on the row. */
 .shead h2{margin:0;font-size:26px;font-weight:700;letter-spacing:-.022em;
   color:var(--fg);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.sect{margin:0;padding:24px 16px 4px;font-size:13px;font-weight:600;
-  letter-spacing:.05em;text-transform:uppercase;color:var(--mut)}
+/* A section's name is the smallest thing on the screen, not the same size as
+   the secondary line inside its own rows. At 13px it competed with the rows
+   it was labelling, and five of them down Home read as five equal headings;
+   at 11px -- the scale's floor, the size the week strip's day letters already
+   take -- it recedes to what it is, which is a label on a group. --mut on the
+   ground is 5.2:1 light and 7.2:1 dark: quiet, not faint. */
+.sect{margin:0;padding:24px 16px 8px;font-size:11px;font-weight:700;
+  letter-spacing:.07em;text-transform:uppercase;color:var(--mut)}
+/* An inset block carries its own bottom margin, so the 24px above the next
+   section's name is already part paid. Without these three the gap after a
+   card is 32-40px and the gap after a row is 24px, which is the kind of
+   difference you cannot name and can always see. */
+.blank+.sect{padding-top:8px}
+.card+.sect,.cal+.sect,.mine+.sect{padding-top:16px}
 .rows{padding:4px 4px 0}
 /* Hover is the one thing left in the token block for these: Tailwind would
    emit it happily, but the neighbours below share the media query and reading
@@ -1097,8 +1109,11 @@ details:not(.card)>:not(summary):last-child{padding-bottom:4px}
    thing you opened it to do. They keep the full 44px target and give up the
    fill and the big size, so the dock reads as one action with four options
    beside it instead of five equal slabs -- and "Download" stops being clipped
-   by its own pill at 375px. */
-.dock button:not(.primary){background:none;color:var(--mut);font-size:13px}
+   by its own pill at 375px. Only when Practice is actually there, though: on
+   the two-pane layout the dock is drawn with no note open and no primary in
+   it, and four bare words in a bar read as a bar that stopped working. */
+.dock:has(button.primary:not([hidden])) button:not(.primary){
+  background:none;color:var(--mut);font-size:13px}
 /* Below .top's 5: it is placed in document coordinates, so a scroll can
    carry it into the sticky header, where it used to paint over the back
    button and eat the tap meant for it. */
@@ -1171,8 +1186,16 @@ body:has(#ask.on) #fab{display:none}
 .job .bar{height:4px;border-radius:2px;background:var(--line);margin-top:6px;overflow:hidden}
 .job .bar i{display:block;height:100%;background:var(--accent);width:0;transition:width .3s}
 .job .col{flex:1;min-width:0}
-#logbtn{width:100%;min-height:var(--tap);border-radius:11px;
-  font-size:13px;font-weight:500;color:var(--mut);text-align:left}
+/* A disclosure, drawn as one. It is the first thing on the You screen and as
+   a bare left-aligned sentence it read as something left behind rather than
+   something to press. */
+#tools{margin-top:8px}
+#logbtn{display:flex;align-items:center;width:100%;min-height:var(--tap);
+  padding:0 12px;border-radius:11px;font-size:13px;font-weight:600;
+  color:var(--mut);text-align:left}
+#logbtn::after{content:'\203a';margin-left:auto;padding-left:8px;font-size:16px;
+  line-height:1;transform:rotate(90deg);transition:transform 140ms ease-out}
+#logbtn[aria-expanded="true"]::after{transform:rotate(270deg)}
 #logbtn:active{background:var(--surface)}
 #logbox{display:none;margin-top:8px;padding:12px;border-radius:11px;background:var(--surface);
   font:12px/1.5 ui-monospace,SFMono-Regular,Menlo,monospace;white-space:pre;
@@ -1250,7 +1273,12 @@ body.reading .tabs{display:none}
 #qbar{flex:none;height:4px;background:var(--line)}
 #qbar i{display:block;height:100%;width:0;background:var(--accent);transition:width .2s}
 #qmain{flex:1;overflow-y:auto;width:100%;max-width:70ch;margin:0 auto;
-  padding:24px 18px 28px;display:flex;flex-direction:column;justify-content:center}
+  padding:24px 18px 28px;display:flex;flex-direction:column;
+  /* "safe" so a question taller than the screen still starts at the top:
+     centred overflow puts the first line above the scroll origin, where it
+     cannot be reached. A browser that does not know the keyword drops the
+     declaration and lands on flex-start, which is the same outcome. */
+  justify-content:safe center}
 #qmain:has(#qa>*){justify-content:flex-start}
 #qsrc{margin:0 0 12px;font-size:13px;color:var(--mut);flex:none}
 #qq{font-size:20px;line-height:1.4;font-weight:600}
@@ -1278,6 +1306,11 @@ body.reading .tabs{display:none}
      rather than stretching five buttons across 960px of empty pane. */
   .dock{left:320px;justify-content:center;padding-left:40px;padding-right:40px}
   .dock button{flex:0 1 9rem}
+  /* Nothing open yet. The invitation sits in the middle of the pane it is
+     about rather than in the top-left corner of it, where a 60px grey box
+     under 800px of nothing reads as a screen that failed to load. */
+  body:not(.reading) #body{display:flex;align-items:center;justify-content:center;
+    min-height:70dvh}
   body:not(.reading) .dock{display:flex}
   /* Two panes, two bars: the tabs stay under the list they navigate, and the
      dock starts where the note does, so reading no longer costs the tabs. */
@@ -1358,7 +1391,7 @@ body.reading .tabs{display:none}
   </div>
   <div id="jobs"></div>
   <div id="tools" style="padding:0 16px" hidden>
-    <button id="logbtn">Show activity log</button>
+    <button id="logbtn" aria-expanded="false" aria-controls="logbox">Show activity log</button>
     <pre id="logbox"></pre>
   </div>
   <nav id="nav"></nav>
@@ -5183,6 +5216,7 @@ logbtn.onclick = async () => {
   logOpen = !logOpen;
   logbox.classList.toggle('on', logOpen);
   logbtn.textContent = logOpen ? 'Hide activity log' : 'Show activity log';
+  logbtn.setAttribute('aria-expanded', logOpen ? 'true' : 'false');
   if (logOpen) await pullLog();
 };
 async function pullLog() {
