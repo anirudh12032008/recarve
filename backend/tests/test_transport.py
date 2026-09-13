@@ -20,6 +20,7 @@ import os
 import pathlib
 import sys
 import threading
+import time
 import urllib.error
 import urllib.request
 
@@ -167,3 +168,77 @@ def test_a_post_refused_before_its_body_was_read_ends_the_connection(env):
     assert r.getheader("Content-Length") == str(len(body))
     assert r.will_close, "a refusal kept a connection with an unread body on it"
     conn.close()
+
+
+# --------------------------------------------- who you are, and for how long
+
+
+def test_the_job_poll_stops_costing_a_postgres_connection(env, monkeypatch):
+    """Five polls, one principal, no database.
+
+    Every one of these used to open a connection of its own -- fifty a second
+    at a hundred phones, against a server that allows a hundred at a time.
+    """
+    cookie = member(env, "Meera", "24U102")
+    assert call(env["port"], "GET", "/jobs", cookie=cookie)[0] == 200
+
+    connects = []
+    real = notes.db
+    monkeypatch.setattr(notes, "db", lambda *a, **k: connects.append(1) or real(*a, **k))
+    for _ in range(5):
+        assert call(env["port"], "GET", "/jobs", cookie=cookie)[0] == 200
+    assert connects == [], f"{len(connects)} connections for five polls"
+
+
+def test_an_approval_is_felt_on_the_very_next_tap(env):
+    """The admin taps approve; the phone that was waiting is in.
+
+    Not in ten seconds, when the memory would have let go of them by itself --
+    now, because db_approve forgets them.
+    """
+    cookie = join(env["port"], "Dev", "24U103")
+    assert call(env["port"], "GET", "/jobs", cookie=cookie)[0] == 403
+    assert call(env["port"], "POST", "/approve", {"id": id_of("24U103")},
+                cookie=env["admin"])[0] == 200
+    assert call(env["port"], "GET", "/jobs", cookie=cookie)[0] == 200
+
+
+def test_a_block_is_felt_on_the_very_next_tap(env):
+    cookie = member(env, "Kiran", "24U104")
+    assert call(env["port"], "GET", "/jobs", cookie=cookie)[0] == 200
+    assert call(env["port"], "POST", "/block", {"id": id_of("24U104"), "blocked": True},
+                cookie=env["admin"])[0] == 200
+    assert call(env["port"], "GET", "/jobs", cookie=cookie)[0] == 403
+
+
+def test_a_new_role_is_felt_on_the_very_next_tap(env):
+    """Made an admin, and the queue opens without waiting for the memory."""
+    cookie = member(env, "Sana", "24U105")
+    assert call(env["port"], "GET", "/pending", cookie=cookie)[0] == 403
+    assert call(env["port"], "POST", "/role", {"id": id_of("24U105"), "role": "admin"},
+                cookie=env["admin"])[0] == 200
+    after, body = call(env["port"], "GET", "/pending", cookie=cookie)
+    assert after == 200, f"still refused after the promotion: {body}"
+
+
+def test_the_memory_lets_go_on_its_own(env, monkeypatch):
+    """A change nothing told the server about still lands, within the TTL.
+
+    This is the property the docstring is about: the principal is re-read, not
+    carried in the cookie, so somebody blocked goes on being blocked even if
+    the block was made behind this process's back -- another admin on another
+    machine, or psql. It costs at most PRINCIPAL_TTL seconds, and this proves
+    both halves: still in a moment later, out once the memory expires.
+    """
+    monkeypatch.setattr(notes, "PRINCIPAL_TTL", 2)
+    cookie = member(env, "Ira", "24U106")
+    assert call(env["port"], "GET", "/jobs", cookie=cookie)[0] == 200
+
+    with psycopg.connect(DB_URL, autocommit=True) as conn:
+        conn.execute("update profiles set status = 'blocked' where roll_no = '24U106'")
+    assert call(env["port"], "GET", "/jobs", cookie=cookie)[0] == 200, \
+        "the principal was not remembered at all"
+
+    time.sleep(2.5)
+    assert call(env["port"], "GET", "/jobs", cookie=cookie)[0] == 403, \
+        "the principal was remembered past its TTL"
