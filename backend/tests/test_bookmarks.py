@@ -35,16 +35,20 @@ def test_one_student_never_sees_another(db):
 
     as_user(db, b)
     assert notes.db_bookmarks(db, b) == [], "one student's saves are not another's"
-    # A `using` clause filters rather than raises: b's delete and update match
-    # zero of a's rows rather than being refused outright, which is the same
-    # shape attendance's privacy test found and is worth asserting here too --
-    # a policy that silently touches nothing is easy to mistake for one that
-    # is enforced when it is only ever exercised on rows it happens to own.
+    # Two different refusals, and the difference is the point. DELETE is
+    # granted, so the `using` clause filters: b's delete matches zero of a's
+    # rows rather than being refused outright -- worth asserting, because a
+    # policy that silently touches nothing looks the same as one that is only
+    # ever exercised on rows it happens to own.
     assert db.execute(
         "delete from bookmarks where profile_id = %s", (a,)).rowcount == 0
-    assert db.execute(
-        "update bookmarks set title = 'taken' where profile_id = %s",
-        (a,)).rowcount == 0
+    # UPDATE is not granted at all (0032 grants select, insert, delete), so it
+    # never reaches a policy. That is the stronger guarantee of the two: a
+    # title cannot be rewritten by anybody, including its owner.
+    with pytest.raises(psycopg.errors.InsufficientPrivilege):
+        with db.transaction():
+            db.execute("update bookmarks set title = 'taken' where profile_id = %s",
+                       (a,))
 
     as_admin_connection(db)
     still = db.execute(

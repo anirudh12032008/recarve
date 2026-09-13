@@ -177,12 +177,20 @@ def test_deleting_hides_the_row_rather_than_destroying_it(db):
 
 
 def test_nobody_may_destroy_a_doubt_even_their_own(db):
-    """No delete policy at all, on purpose: a session cannot reach the row."""
+    """No delete policy at all, on purpose: a session cannot reach the row.
+
+    And no delete GRANT either (0025 grants select, insert, update), so the
+    refusal arrives a layer earlier than the policy -- the statement is thrown
+    out before any row is considered. Asserting the raise rather than a
+    zero rowcount is what says which of the two is doing the work.
+    """
     asker = member(db, admin=True)
     lid = lecture(db, asker)
     as_user(db, asker)
     qid = notes.db_ask(db, asker, "CY1107", lid, None, "Mine.")
-    db.execute("delete from doubts where id = %s", (qid,))
+    with pytest.raises(psycopg.errors.InsufficientPrivilege):
+        with db.transaction():
+            db.execute("delete from doubts where id = %s", (qid,))
     as_admin_connection(db)
     assert db.execute("select count(*) from doubts where id = %s",
                       (qid,)).fetchone()[0] == 1

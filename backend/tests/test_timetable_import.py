@@ -148,7 +148,10 @@ def template():
 def run(tmp_path, text, **kw):
     csv_path = tmp_path / "week.csv"
     csv_path.write_text(text)
-    fields = {"csv": csv_path, "section": None, "grad_year": None, "dry_run": False}
+    # Sections arrived in 0040-0044, so a database under test always has them
+    # and the command always wants to be told which week it is replacing.
+    # Section I is the one 0040 backfills the existing rows into.
+    fields = {"csv": csv_path, "section": "I", "grad_year": None, "dry_run": False}
     return notes.import_timetable(notes.argparse.Namespace(**{**fields, **kw}))
 
 
@@ -181,9 +184,19 @@ def test_a_dry_run_says_what_would_change_and_changes_nothing(template, tmp_path
     assert "Tuesday" in out and "nothing was written" in out
 
 
-def test_a_section_this_database_has_no_column_for_is_refused(template, tmp_path):
-    """Sections land in 0040-0044. Until they do, --section can only be a
-    misunderstanding, and writing the rows anyway would look like it worked."""
+def test_a_database_with_sections_insists_on_being_told_which(template, tmp_path):
+    """Sections landed in 0040-0044, so section_timetable is one week per
+    section now. Writing without naming one would replace every section's
+    Monday at once -- exactly the silent damage the parser refuses to do, so
+    the command refuses too rather than guessing."""
     with pytest.raises(SystemExit):
-        run(tmp_path, "Monday,1,MC1101\n", section="I")
+        run(tmp_path, "Monday,1,MC1101\n", section=None)
+    assert template() == [], "a refused import must not touch anybody's week"
+
+
+def test_a_section_that_is_not_there_is_refused(template, tmp_path):
+    """A typo in --section must not quietly match nothing and write nothing
+    while saying it worked."""
+    with pytest.raises(SystemExit):
+        run(tmp_path, "Monday,1,MC1101\n", section="Nope")
     assert template() == []
