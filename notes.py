@@ -591,6 +591,14 @@ PAGE = r"""<!doctype html>
      which is where a failed transcription says so. It lightens in the dark
      for the same reason every other ink does. */
   --err:#c62b41;
+  /* The boundary of a control that draws no fill. --line is the hairline
+     between two rows: 1.24:1 on the ground, where WCAG 1.4.11 wants 3:1 for
+     the edge of something you can press. Every outlined button in the app was
+     drawing that hairline, so Rename, Remove, the two attendance marks and
+     Cancel all read as grey text rather than as buttons. Not a new colour --
+     it is --mut, the ink those same buttons write in, thinned until it is an
+     edge and not a word: 3.6:1 on the paper and 4.2:1 in the dark. */
+  --edge:color-mix(in srgb,var(--mut) 70%,transparent);
   --tap:44px;
   /* 4 (.rows) + 12 (.row) + 3 (.tick) + 12 (gap): where a row's words begin.
      Anything standing in for a row lines up with them, and everything that is
@@ -621,6 +629,27 @@ body{
 }
 button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
 :focus-visible{outline:2px solid var(--accent);outline-offset:2px;border-radius:4px}
+/* ---- Motion, all of it, in one place. Every one of these answers something
+   somebody did: a press, a state changing, a screen arriving. Nothing moves
+   on its own and nothing overshoots. 140ms for a control answering, 180ms for
+   a screen -- long enough to be seen, too short to be waited on -- and
+   ease-out, so the thing is already most of the way there by the time the eye
+   finds it. A press is the exception: it lands at 0s and only fades on the
+   way back out, because a highlight that takes 140ms to arrive under a thumb
+   feels like a slow phone. The query below turns off every line of it. */
+button,a,summary,select,input,textarea,.row,.rank,.card,.ann,.job,.tabs button{
+  transition:background-color 140ms ease-out,color 140ms ease-out,
+             border-color 140ms ease-out,box-shadow 140ms ease-out,
+             opacity 140ms ease-out,transform 140ms ease-out}
+button:active,a:active,.row:active,summary:active{transition-duration:0s}
+@keyframes arrive{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+@keyframes fadein{from{opacity:0}to{opacity:1}}
+@keyframes riseup{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:none}}
+@keyframes pop{from{opacity:0;transform:translateY(-5px)}to{opacity:1;transform:none}}
+/* A tab you switched to. Set by route(), and only when the tab actually
+   changed -- render() runs on every vote and every mark, and a screen that
+   re-animates when you tick one box is a screen that flickers. */
+#nav.swap,#read.swap{animation:arrive 180ms ease-out}
 @media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
 [hidden]{display:none!important}   /* beats the display: on .brand and .shead */
 
@@ -640,7 +669,7 @@ body.reading #read{display:block}
    The back button takes the line above rather than sharing this one: at 375px
    a 26px name, a code chip, "< Subjects" and the avatar on one row left the
    name four letters wide. */
-.tophead{display:flex;align-items:center;gap:12px;min-height:var(--tap);margin-bottom:6px}
+.tophead{display:flex;align-items:center;gap:12px;min-height:var(--tap);margin-bottom:4px}
 .brand{display:flex;align-items:baseline;gap:8px;flex:1;min-width:0}
 .brand b{font-size:26px;letter-spacing:-.022em;font-weight:700}
 .brand span{font-size:13px;color:var(--mut)}
@@ -659,13 +688,14 @@ body.reading #read{display:block}
    containing block, so this hangs off the header wherever the header is. */
 #menu{position:absolute;z-index:7;right:12px;top:calc(100% - 4px);min-width:15rem;
   max-width:calc(100vw - 24px);padding:6px;border-radius:14px;background:var(--bg);
-  border:1px solid var(--line);box-shadow:0 12px 34px rgba(0,0,0,.18)}
+  border:1px solid var(--line);box-shadow:0 12px 34px rgba(0,0,0,.18);
+  animation:pop 140ms ease-out;transform-origin:top right}
 #menu button,#menu a{display:flex;align-items:center;gap:8px;width:100%;min-height:var(--tap);
   padding:0 12px;border-radius:11px;font-size:16px;color:var(--fg);text-decoration:none}
 #menu button:active,#menu a:active{background:var(--surface)}
 #menu .tag{margin-left:auto}
 
-.group{padding:18px 16px 2px}
+.group{padding:24px 16px 4px}
 .group h2{display:inline;margin:0 0 0 9px;font-size:13px;font-weight:500;color:var(--mut)}
 .shead{display:flex;align-items:center;gap:9px;flex:1;min-width:0}
 /* The screen's name, at the weight a screen's name is. It ellipsises rather
@@ -673,9 +703,9 @@ body.reading #read{display:block}
    subject, so the tail of a long name is the cheapest thing on the row. */
 .shead h2{margin:0;font-size:26px;font-weight:700;letter-spacing:-.022em;
   color:var(--fg);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.sect{margin:0;padding:20px 16px 2px;font-size:13px;font-weight:600;
+.sect{margin:0;padding:24px 16px 4px;font-size:13px;font-weight:600;
   letter-spacing:.05em;text-transform:uppercase;color:var(--mut)}
-.rows{padding:6px 4px 0}
+.rows{padding:4px 4px 0}
 /* Hover is the one thing left in the token block for these: Tailwind would
    emit it happily, but the neighbours below share the media query and reading
    them in one place is worth more than the utilities. */
@@ -749,8 +779,9 @@ body.reading #read{display:block}
 .mark button[disabled]{opacity:.45}
 /* A class that did not happen. Dashed, because it is a hole in the week and
    not a thing anybody did. */
-.off{display:flex;align-items:center;flex:none;min-height:var(--tap);padding:0 12px;
-  border:1px dashed var(--line);border-radius:11px;font-size:13px;color:var(--mut)}
+.row .off{display:flex;align-items:center;flex:none;min-height:var(--tap);padding:0 12px;
+  border:1px dashed var(--edge);border-radius:11px;font-size:13px;color:var(--mut)}
+button.off:active{background:var(--surface)}
 /* attended / held / the percentage. The one figure on this screen somebody
    opened this screen for, so it leads the row rather than sharing its weight
    with "Edit your timetable". Tabular, so a column of them does not wobble. */
@@ -766,27 +797,33 @@ body.reading #read{display:block}
 /* The day picker, shared by the day view and the catch-up screen. Native date
    input: the fastest picker on a phone, nothing to download, and it already
    knows what a month looks like. */
-.dpick{display:flex;align-items:center;gap:8px;padding:10px 16px 0}
+.dpick{display:flex;align-items:center;gap:8px;padding:12px 16px 0}
 .dpick input{flex:1;min-width:0;height:var(--tap);padding:0 12px;font:inherit;
-  font-size:16px;border:1px solid var(--line);border-radius:11px;
-  background:var(--surface);color:var(--fg)}
+  font-size:16px;border:1px solid var(--edge);border-radius:11px;
+  background:var(--bg);color:var(--fg)}
 /* Yesterday and tomorrow, at thumb size. The picker is for jumping a month;
    stepping one day is the move somebody makes walking out of a lecture, and it
    must not cost a modal wheel. */
 .dpick .step{flex:none;width:var(--tap);height:var(--tap);border-radius:11px;
-  border:1px solid var(--line);background:var(--surface);color:var(--fg);
+  border:1px solid var(--edge);background:var(--bg);color:var(--fg);
   font-size:20px;line-height:1}
-.dpick .step:active{opacity:.7}
+.dpick .step:active{background:var(--surface)}
+/* Swiped, not dragged: the bar a desktop browser draws under this strip is
+   furniture for a gesture nobody makes on the phone this is used on. */
+.days{scrollbar-width:none}
+.days::-webkit-scrollbar{display:none}
 .dpick .step[disabled]{opacity:.35}
 .mine .score{font-size:26px;font-weight:700;letter-spacing:-.02em}
-.mine p{margin:5px 0 0;font-size:13px;color:var(--mut)}
-.tally{display:flex;gap:22px;margin-top:14px}
+.mine p{margin:4px 0 0;font-size:13px;color:var(--mut)}
+.tally{display:flex;gap:24px;margin-top:16px}
 .tally div{font-size:13px;color:var(--mut)}
 .tally b{display:block;font-size:20px;font-weight:600;color:var(--fg);
   font-variant-numeric:tabular-nums}
-.mine .sub{margin:6px 0 0;font-size:16px;color:var(--mut)}
-.mine .edit{margin-top:14px;min-height:var(--tap);padding:0 14px;border-radius:11px;
-  background:var(--bg);border:1px solid var(--line);font-size:16px;color:var(--accent)}
+.mine .sub{margin:4px 0 0;font-size:16px;color:var(--mut)}
+.mine .edit{margin-top:16px;min-height:var(--tap);padding:0 16px;border-radius:11px;
+  background:var(--bg);border:1px solid var(--edge);font-size:16px;font-weight:600;
+  color:var(--accent)}
+.mine .edit:active{background:var(--surface)}
 /* A CR wears the trusted badge, because that is what a CR is plus one thing.
    Admin below is the one that looks different, and it should stay the one. */
 .badge.trusted,.badge.cr{background:color-mix(in srgb,var(--accent) 16%,transparent);
@@ -797,7 +834,7 @@ body.reading #read{display:block}
    not a ranking. Your own row is the one filled one, so finding yourself in it
    costs no reading. */
 .rank{display:flex;align-items:center;gap:12px;min-height:var(--tap);
-  padding:9px 16px;border-bottom:1px solid var(--line)}
+  padding:8px 16px;border-bottom:1px solid var(--line)}
 .rank .pos{flex:none;width:2.6em;font-size:13px;color:var(--mut);
   font-variant-numeric:tabular-nums}
 .rank .name{flex:1;min-width:0}
@@ -821,21 +858,22 @@ body.reading #read{display:block}
    two screens read as one app. */
 .ann{padding:16px;border-bottom:1px solid var(--line)}
 .ann.pin{border-left:3px solid var(--accent);padding-left:13px}
+.ann+.ann{padding-top:20px}
 /* Set back by its furniture, not by its ink: an alpha on the card dimmed
    the one word that explains the state. The rule down the edge goes grey,
    the flag takes the page's muted ink, and every string still reads. */
 .ann.gone{border-left:3px solid var(--line);padding-left:13px}
 .ann h3{margin:0;font-size:20px;line-height:1.3;font-weight:700;letter-spacing:-.015em}
-.ann .meta{margin:5px 0 0;font-size:13px;color:var(--mut)}
+.ann .meta{margin:4px 0 0;font-size:13px;color:var(--mut)}
 .ann .flag{font-weight:600;color:var(--accent)}
 .ann.gone .flag{color:var(--mut)}
-.ann .md{margin-top:11px;font-size:16px}
+.ann .md{margin-top:12px;font-size:16px}
 .ann .md>:first-child{margin-top:0}
 .ann .md>:last-child{margin-bottom:0}
-.ann .md p{margin:11px 0}
-.ann .md ul,.ann .md ol{padding-left:22px;margin:11px 0}
+.ann .md p{margin:12px 0}
+.ann .md ul,.ann .md ol{padding-left:24px;margin:12px 0}
 .ann .md li{margin:4px 0}
-.ann .md h1,.ann .md h2,.ann .md h3{font-size:16px;font-weight:700;margin:15px 0 4px}
+.ann .md h1,.ann .md h2,.ann .md h3{font-size:16px;font-weight:700;margin:16px 0 4px}
 .ann .md a{color:var(--accent)}
 .ann .md code{background:var(--surface);padding:2px 5px;border-radius:7px;font-size:.92em}
 .ann .md pre{background:var(--surface);padding:12px;border-radius:11px;overflow-x:auto;font-size:13px}
@@ -845,15 +883,15 @@ body.reading #read{display:block}
 .ann .md table{display:block;overflow-x:auto;min-width:0}
 /* Editing and hiding are admin ink, the same ink as every other control only
    an admin may press. */
-.ann .acts{display:flex;gap:8px;margin-top:13px}
+.ann .acts{display:flex;gap:8px;margin-top:16px}
 /* Outlined rather than a filled slab: two inked slabs under every notice an
    admin owns outweigh the notice itself. Ink on the page's own paper, keyed
    by a keyline -- distinct from every member's control, and 14.5:1 either way
    round. */
-.ann .acts button{min-height:var(--tap);padding:0 15px;border-radius:11px;
+.ann .acts button{min-height:var(--tap);padding:0 16px;border-radius:11px;
   background:var(--bg);border:1px solid var(--admin);color:var(--admin);
   font-size:13px;font-weight:600}
-.ann .acts button:active{opacity:.75}
+.ann .acts button:active{background:var(--surface)}
 
 /* ---- Doubts: the thread under a note. Ruled entries, not cards -- a question
    and the answers to it are one piece of writing between people, and a box
@@ -879,25 +917,31 @@ body.reading #read{display:block}
    textContent is what puts it there. Nothing in this block is ever parsed. */
 .said{margin:0;font-size:16px;white-space:pre-wrap;overflow-wrap:anywhere}
 .dbt>.said{font-weight:600;line-height:1.5}
-.dbt .meta{margin:5px 0 0;font-size:13px;color:var(--mut)}
-.ans{display:flex;gap:10px;align-items:flex-start;
-  margin:14px 0 0 2px;padding:0 0 0 13px;border-left:2px solid var(--line)}
+.dbt .meta{margin:4px 0 0;font-size:13px;color:var(--mut)}
+.ans{display:flex;gap:12px;align-items:flex-start;
+  margin:16px 0 0 2px;padding:0 0 0 12px;border-left:2px solid var(--line)}
 .ans .what{flex:1;min-width:0}
 /* The one the class voted up. Said in the rule, never by dimming the others,
    which are still answers worth reading. */
 .ans.top{border-left-color:var(--accent)}
-.thread .acts{display:flex;flex-wrap:wrap;gap:8px;margin-top:11px}
-.thread .acts button{min-height:var(--tap);padding:0 15px;border-radius:11px;
-  background:var(--bg);border:1px solid var(--line);color:var(--accent);
+.thread .acts{display:flex;flex-wrap:wrap;gap:8px;margin-top:12px}
+.thread .acts button,.post .acts button,.msg .acts button{
+  min-height:var(--tap);padding:0 16px;border-radius:11px;
+  background:var(--bg);border:1px solid var(--edge);color:var(--accent);
   font-size:13px;font-weight:600}
 /* Taking down somebody else's is an admin act, marked as one: the page's own
    ink on a keyline, the same treatment as every other admin control. */
-.thread .acts button.adm{border-color:var(--admin);color:var(--admin)}
-.thread .acts button:active{opacity:.75}
+.thread .acts button.adm,.post .acts button.adm,.msg .acts button.adm{
+  border-color:var(--admin);color:var(--admin)}
+.thread .acts button:active,.post .acts button:active,.msg .acts button:active{
+  background:var(--surface)}
+/* A post's own buttons sit under the words, not beside them. */
+.post .acts,.msg .acts{display:flex;flex-wrap:wrap;gap:8px;margin-top:12px}
 .askbox{padding:14px 0 2px}
 .askbox textarea{width:100%;min-height:5.5em;font-size:16px;line-height:1.6;
-  padding:11px 12px;border:1px solid var(--line);border-radius:11px;
-  background:var(--surface);color:var(--fg);font-family:inherit;resize:vertical}
+  padding:12px;border:1px solid var(--edge);border-radius:11px;
+  background:var(--bg);color:var(--fg);font-family:inherit;resize:vertical}
+.askbox textarea::placeholder{color:var(--mut)}
 .askbox .err{margin:8px 0 0;font-size:13px;color:var(--err);min-height:1.2em}
 .askbox button{display:block;width:100%;min-height:var(--tap);padding:0 18px;
   border-radius:11px;background:var(--accent);color:var(--accent-fg);
@@ -909,67 +953,73 @@ body.reading #read{display:block}
    ruled entry like a doubt; a message is a line in a conversation and is set
    tighter, because thirty of them are read at once. */
 .wall{max-width:70ch;margin:0 auto;padding:0 16px}
-.post{display:flex;gap:10px;align-items:flex-start;
-  padding:15px 0;border-bottom:1px solid var(--line)}
+.post{display:flex;gap:12px;align-items:flex-start;
+  padding:16px 0;border-bottom:1px solid var(--line)}
 .post .what{flex:1;min-width:0}
-.post .meta{margin:6px 0 0;font-size:13px;color:var(--mut)}
-.shots{display:flex;flex-wrap:wrap;gap:7px;margin-top:10px}
+.post .meta{margin:4px 0 0;font-size:13px;color:var(--mut)}
+.shots{display:flex;flex-wrap:wrap;gap:8px;margin-top:12px}
 .shots img{width:96px;height:96px;object-fit:cover;border-radius:11px;
   border:1px solid var(--line)}
 .room{max-width:70ch;margin:0 auto;padding:0 16px}
 .room .log{max-height:52vh;overflow-y:auto;overscroll-behavior:contain;
   padding:4px 0 2px}
 .msg{padding:8px 0;border-bottom:1px solid var(--line)}
-.msg .meta{margin:3px 0 0;font-size:13px;color:var(--mut)}
+.msg .meta{margin:4px 0 0;font-size:13px;color:var(--mut)}
 .msg.me .said{color:var(--accent)}
 .msg .acts button{min-height:0;padding:2px 0;background:none;border:0;
   font-size:13px;color:var(--mut)}
 /* One line and a Send, not the five-line box a question gets: a message is a
    sentence and the keyboard already takes half the screen. */
-.saybox{display:flex;gap:8px;padding:10px 0 4px}
+.saybox{display:flex;gap:8px;padding:12px 0 4px}
 .saybox input{flex:1;min-width:0;min-height:var(--tap);font-size:16px;
-  padding:0 12px;border:1px solid var(--line);border-radius:11px;
-  background:var(--surface);color:var(--fg)}
+  padding:0 12px;border:1px solid var(--edge);border-radius:11px;
+  background:var(--bg);color:var(--fg)}
 .saybox button{flex:none;min-height:var(--tap);padding:0 18px;border-radius:11px;
   background:var(--accent);color:var(--accent-fg);font-size:16px;font-weight:600}
 .saybox button:active{opacity:.75}
 
 /* The composer: a title, a body, and whether it sits at the top. */
 .compose{padding:8px 16px 16px}
-.compose label{display:block;font-size:13px;color:var(--mut);margin:14px 0 5px}
+.compose label{display:block;font-size:13px;color:var(--mut);margin:16px 0 4px}
 .compose input,.compose textarea{width:100%;font-size:16px;
-  border:1px solid var(--line);border-radius:11px;background:var(--surface);
+  border:1px solid var(--edge);border-radius:11px;background:var(--bg);
   color:var(--fg);font-family:inherit}
 .compose input{min-height:var(--tap);padding:0 12px}
-.compose textarea{min-height:9.5em;line-height:1.6;padding:11px 12px;resize:vertical}
+.compose textarea{min-height:9.5em;line-height:1.6;padding:12px;resize:vertical}
 /* The two controls a browser draws itself if you let it: a subject picker and
    a file button. Left alone they arrive as a white system select and a grey
    "Choose files" slab in the middle of a dark composer. Same surface, same
    border, same 44px as every other control here. */
-.compose select{width:100%;min-height:var(--tap);margin-top:14px;padding:0 12px;
-  font-size:16px;font-family:inherit;color:var(--fg);background:var(--surface);
-  border:1px solid var(--line);border-radius:11px}
-.compose input[type=file]{padding:9px 12px;line-height:1.4;margin-top:10px}
-.compose input[type=file]::file-selector-button{margin-right:11px;min-height:32px;
+.compose select,.askbox select{width:100%;min-height:var(--tap);margin-top:16px;
+  padding:0 12px;font-size:16px;font-family:inherit;color:var(--fg);
+  background:var(--bg);border:1px solid var(--edge);border-radius:11px}
+.compose input[type=file],.askbox input[type=file]{display:block;width:100%;
+  margin-top:8px;padding:8px 12px;line-height:1.4;font-size:13px;color:var(--mut);
+  background:var(--bg);border:1px dashed var(--edge);border-radius:11px}
+.compose input[type=file]::file-selector-button,
+.askbox input[type=file]::file-selector-button{margin-right:12px;min-height:32px;
   padding:0 12px;font:inherit;font-size:13px;font-weight:600;color:var(--fg);
-  background:var(--bg);border:1px solid var(--line);border-radius:7px}
+  background:var(--surface);border:1px solid var(--edge);border-radius:7px}
 .compose .pinrow{display:flex;align-items:center;gap:11px;min-height:var(--tap);
   margin-top:14px;font-size:16px;color:var(--fg)}
 .compose .pinrow input{width:22px;height:22px;min-height:0;flex:none;accent-color:var(--accent)}
+.compose .pinrow label{margin:0;font-size:16px;color:var(--fg)}
 .compose .err{margin:10px 0 0;font-size:13px;color:var(--err);min-height:1.2em}
 .compose .go{display:flex;gap:8px;margin-top:6px}
 .compose .go button{flex:1;min-height:var(--tap);border-radius:11px;background:var(--bg);
-  border:1px solid var(--line);font-size:16px;font-weight:500}
+  border:1px solid var(--edge);font-size:16px;font-weight:600}
+.compose .go button:active{background:var(--surface)}
 .compose .go button.primary{background:var(--admin);color:var(--admin-fg);border-color:transparent}
 
 /* Your own two fields, in the card they replace. */
-.pform label{display:block;font-size:13px;color:var(--mut);margin:14px 0 5px}
+.pform label{display:block;font-size:13px;color:var(--mut);margin:16px 0 4px}
 .pform input{width:100%;min-height:var(--tap);font-size:16px;padding:0 12px;
-  border:1px solid var(--line);border-radius:11px;background:var(--bg);color:var(--fg)}
+  border:1px solid var(--edge);border-radius:11px;background:var(--bg);color:var(--fg)}
 .pform .err{margin:10px 0 0;font-size:13px;color:var(--err);min-height:1.2em}
 .pform .go{display:flex;gap:8px;margin-top:14px}
 .pform .go button{flex:1;min-height:var(--tap);border-radius:11px;background:var(--bg);
-  border:1px solid var(--line);font-size:16px;font-weight:500}
+  border:1px solid var(--edge);font-size:16px;font-weight:600}
+.pform .go button:active{background:var(--surface)}
 .pform .go button.primary{background:var(--accent);color:var(--accent-fg);border-color:transparent}
 
 /* ---- Admin ink, the same treatment as the admin screen so the two read as
@@ -994,13 +1044,22 @@ body.reading #read{display:block}
    weight and colour rather than a fifth size that would read as body text. */
 /* The dock's clearance moved to #doubts, which is the last thing on the
    reading screen now: 142px is #nav's, and the FAB reaches 76 + 58 = 134. */
-article{padding:22px 18px 8px;max-width:70ch;margin:0 auto}
-article h1{font-size:26px;line-height:1.2;letter-spacing:-.022em;font-weight:700;margin:0 0 24px}
-article h2{font-size:20px;line-height:1.3;letter-spacing:-.012em;font-weight:600;
-  margin:38px 0 12px;padding-bottom:7px;border-bottom:1px solid var(--line)}
-article h3{font-size:16px;font-weight:700;color:var(--accent);margin:26px 0 6px}
-article ul,article ol{padding-left:22px}
-article li{margin:5px 0}
+article{padding:24px 18px 8px;max-width:70ch;margin:0 auto}
+article h1{font-size:26px;line-height:1.2;letter-spacing:-.022em;font-weight:700;margin:0 0 28px}
+article h2{font-size:20px;line-height:1.3;letter-spacing:-.015em;font-weight:700;
+  margin:36px 0 12px}
+/* The first thing under the title has no 36px of nothing above it. */
+article h1+h2{margin-top:0}
+article h3{font-size:16px;font-weight:700;color:var(--accent);margin:24px 0 4px}
+article p{margin:0 0 16px}
+/* The notes are written with "---" between sections, so the rule is theirs
+   and not the page's. It is a hairline with air either side rather than the
+   grooved 3D bar a browser draws by default; h2's own margin collapses into
+   the one below it, so a section break is one gap and not two. */
+article hr{border:0;border-top:1px solid var(--line);margin:32px 0}
+article ul,article ol{padding-left:24px;margin:0 0 16px}
+article li{margin:4px 0}
+article>:last-child{margin-bottom:0}
 article code{background:var(--surface);padding:2px 5px;border-radius:7px;font-size:.92em}
 article pre{background:var(--surface);padding:13px;border-radius:11px;overflow-x:auto;font-size:13px}
 article img{max-width:100%;height:auto}
@@ -1009,10 +1068,13 @@ article img{max-width:100%;height:auto}
 table{border-collapse:collapse;font-size:16px;min-width:100%}
 td,th{border:1px solid var(--line);padding:8px 12px;text-align:left}
 th{background:var(--surface)}
-details{margin:9px 0;background:var(--surface);border-radius:11px;overflow:hidden}
-summary{min-height:var(--tap);display:flex;align-items:center;padding:0 14px;color:var(--accent);font-size:16px;font-weight:500}
+details{margin:12px 0;background:var(--surface);border-radius:11px;overflow:hidden}
+summary{min-height:var(--tap);display:flex;align-items:center;padding:0 16px;
+  color:var(--accent);font-size:16px;font-weight:600}
+summary:active{background:color-mix(in srgb,var(--fg) 7%,var(--surface))}
 details[open] summary{border-bottom:1px solid var(--line)}
-details>:not(summary){padding:0 14px}
+details>:not(summary){padding:0 16px}
+details>:not(summary):last-child{padding-bottom:4px}
 
 .dock{
   position:fixed;left:0;right:0;bottom:0;z-index:6;display:flex;gap:8px;
@@ -1021,14 +1083,16 @@ details>:not(summary){padding:0 14px}
   backdrop-filter:blur(12px);border-top:1px solid var(--line);
 }
 .dock button{
-  flex:1;min-height:var(--tap);border-radius:11px;background:var(--surface);
-  font-size:16px;font-weight:500;display:flex;align-items:center;justify-content:center;
+  flex:1;min-width:0;min-height:var(--tap);border-radius:11px;background:var(--surface);
+  font-size:16px;font-weight:600;display:flex;align-items:center;justify-content:center;
 }
-.dock button.primary{background:var(--accent);color:var(--accent-fg);font-weight:600}
+.dock button.primary{background:var(--accent);color:var(--accent-fg)}
 /* Share, Download and Print are things you might do to a note; Practice is the
-   thing you opened it to do. They stay full-size targets and step back a
-   little in weight so the primary is the one the eye lands on. */
-.dock button:not(.primary){color:var(--mut);font-size:16px}
+   thing you opened it to do. They keep the full 44px target and give up the
+   fill and the big size, so the dock reads as one action with four options
+   beside it instead of five equal slabs -- and "Download" stops being clipped
+   by its own pill at 375px. */
+.dock button:not(.primary){background:none;color:var(--mut);font-size:13px}
 /* Below .top's 5: it is placed in document coordinates, so a scroll can
    carry it into the sticky header, where it used to paint over the back
    button and eat the tap meant for it. */
@@ -1042,8 +1106,9 @@ details>:not(summary){padding:0 14px}
   box-shadow:0 -8px 34px rgba(0,0,0,.22)}
 #panel.on{transform:none}
 @media (prefers-reduced-motion:reduce){#panel{transition:none}}
-#panel header{display:flex;align-items:center;gap:10px;padding:12px 16px;border-bottom:1px solid var(--line)}
-#panel header b{font-size:16px;flex:1}
+#panel header{display:flex;align-items:center;gap:12px;padding:12px 16px;
+  border-bottom:1px solid var(--line)}
+#panel header b{font-size:16px;font-weight:600;flex:1}
 #panel .quote{font-size:13px;color:var(--mut);padding:10px 16px 0;
   overflow:hidden;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical}
 #panel .out{padding:12px 16px calc(20px + env(safe-area-inset-bottom));overflow-y:auto;font-size:16px}
@@ -1052,21 +1117,28 @@ details>:not(summary){padding:0 14px}
 #fab{position:fixed;right:16px;bottom:calc(76px + env(safe-area-inset-bottom));z-index:7;
   width:58px;height:58px;border-radius:50%;background:var(--accent);color:var(--accent-fg);
   font-size:30px;line-height:1;box-shadow:0 6px 22px rgba(0,0,0,.3)}
+#fab:active{transform:scale(.94)}
+#ask:active{opacity:.8}
 /* #ask is clamped to innerWidth-130, which on a 390px screen puts its right
    edge inside the FAB's band -- and the FAB is z-index 7 above #ask's 4, so a
    tap there opened the Add sheet instead. They are never both wanted. */
 body:has(#ask.on) #fab{display:none}
 #sheet{position:fixed;inset:0;z-index:11;display:none;background:rgba(0,0,0,.45)}
-#sheet.on{display:block}
+/* The sheet comes up from the edge it is anchored to rather than appearing on
+   top of the screen, which is the one motion that says where a thing came
+   from and therefore where Cancel puts it back. */
+#sheet.on{display:block;animation:fadein 140ms ease-out}
+#sheet.on .card{animation:riseup 180ms ease-out}
 #sheet .card{position:absolute;left:0;right:0;bottom:0;background:var(--bg);
   border-radius:18px 18px 0 0;padding:18px 16px calc(18px + env(safe-area-inset-bottom));
   max-height:88dvh;overflow-y:auto}
-#sheet h3{margin:0 0 14px;font-size:20px}
-#sheet label{display:block;font-size:13px;color:var(--mut);margin:14px 0 6px}
+#sheet h3{margin:0 0 16px;font-size:20px;font-weight:700;letter-spacing:-.015em}
+#sheet label{display:block;font-size:13px;color:var(--mut);margin:16px 0 8px}
 #sheet select,#sheet .opt{width:100%;min-height:var(--tap);font-size:16px;border-radius:11px;
-  border:1px solid var(--line);background:var(--surface);color:var(--fg);padding:0 12px}
-#sheet .opt{display:flex;flex-wrap:wrap;align-items:center;gap:0 11px;
-  padding:9px 12px;margin-top:9px;text-align:left;line-height:1.4}
+  border:1px solid var(--edge);background:var(--bg);color:var(--fg);padding:0 12px}
+#sheet .opt{display:flex;flex-wrap:wrap;align-items:center;gap:0 12px;
+  padding:8px 12px;margin-top:8px;text-align:left;line-height:1.4}
+#sheet .opt:active{background:var(--surface)}
 #sheet .opt b{font-weight:600}
 #sheet .opt span{flex:1 0 100%;color:var(--mut);font-size:13px}
 #rec .time{font-size:26px;font-weight:700;font-variant-numeric:tabular-nums}
@@ -1079,11 +1151,12 @@ body:has(#ask.on) #fab{display:none}
 /* Only appears when more than one file was picked at once -- a single file
    auto-uploads exactly as it always has, named after itself. */
 #batchName label{display:block;font-size:13px;color:var(--mut);margin-bottom:8px}
-#batchName input{width:100%;height:var(--tap);padding:0 13px;font:inherit;
-  border:1px solid var(--mut);border-radius:11px;background:var(--bg);color:var(--fg)}
+#batchName input{width:100%;height:var(--tap);padding:0 12px;font:inherit;
+  border:1px solid var(--edge);border-radius:11px;background:var(--bg);color:var(--fg)}
 #batchName .go{display:flex;gap:10px;margin-top:12px}
 #batchName .go button{flex:1;min-height:var(--tap);border-radius:11px;font:inherit;
-  font-weight:600;border:1px solid var(--line);background:transparent;color:var(--fg)}
+  font-weight:600;border:1px solid var(--edge);background:transparent;color:var(--fg)}
+#batchName .go button:active{background:var(--surface)}
 #batchName .go button.primary{background:var(--accent);color:var(--accent-fg);border:0}
 #prog .bar{height:10px;border-radius:5px;background:var(--surface);overflow:hidden}
 #prog .fill{height:100%;width:0;background:var(--accent);transition:width .18s linear}
@@ -1113,7 +1186,12 @@ body:has(#ask.on) #fab{display:none}
 .wait i{display:block;height:100%;width:38%;border-radius:2px;background:var(--accent);
   animation:slide 1.15s ease-in-out infinite}
 @keyframes slide{0%{transform:translateX(-105%)}100%{transform:translateX(275%)}}
-.waitmsg{margin:9px 0 0;font-size:13px;color:var(--mut)}
+.waitmsg{margin:8px 0 0;font-size:13px;color:var(--mut)}
+/* A whole section that has not come back yet. Same bar as every other slow
+   thing, set where that section's rows will be, so the screen says "still
+   coming" in the place the answer will appear. A line of grey text alone
+   cannot say that: it is the same shape as a section with nothing in it. */
+.waitline{padding:12px 16px 8px var(--hang)}
 /* Anchored at the bottom, clear of the FAB (76 + 58) and the dock, and never
    takes a tap. It used to float over the header, where it covered the back
    button and the search box and ate the taps meant for them. */
@@ -1122,7 +1200,7 @@ body:has(#ask.on) #fab{display:none}
   padding:13px 15px;border-radius:11px;background:var(--surface);
   border:1px solid var(--line);box-shadow:0 8px 26px rgba(0,0,0,.22)}
 #busy.on{display:block}
-.dock button:active{opacity:.75}
+.dock button:active{opacity:.7;transform:scale(.98)}
 body:not(.reading) .dock{display:none}
 
 /* ---- The shell: four tabs, thumb-reachable, always there except while
@@ -1140,7 +1218,7 @@ body:not(.reading) .dock{display:none}
   color:var(--mut);display:flex;align-items:center;justify-content:center;
 }
 .tabs button[aria-current]{color:var(--accent);font-weight:600}
-.tabs button:active{background:var(--surface)}
+.tabs button:active{background:var(--surface);transform:scale(.97)}
 body.reading .tabs{display:none}
 /* Clear of the bar AND of the FAB above it (76 + 58), so the last row is never
    half under either. 80px cleared only the bar, and the FAB then sat on top of
@@ -1148,7 +1226,7 @@ body.reading .tabs{display:none}
 #nav{padding-bottom:calc(142px + env(safe-area-inset-bottom))}
 
 /* ---- Home: a plain line of prose where a row would lie. -------------- */
-.quiet{padding:10px 16px 10px var(--hang);margin:0;font-size:13px;color:var(--mut)}
+.quiet{padding:8px 16px 8px var(--hang);margin:0;font-size:13px;color:var(--mut)}
 
 /* ---- The timetable editor. One day at a time, eight native selects: the
    iOS wheel is the fastest subject picker on a phone and it costs nothing to
@@ -1162,16 +1240,21 @@ body.reading .tabs{display:none}
 .qtop b{flex:1;font-size:16px;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 #qcount{font-size:13px;color:var(--mut);font-variant-numeric:tabular-nums;flex:none}
 #qexit{min-width:var(--tap);min-height:var(--tap);font-size:16px;color:var(--mut);flex:none}
-#qbar{flex:none;height:3px;background:var(--line)}
+#qexit:active{background:var(--surface);border-radius:11px}
+#qbar{flex:none;height:4px;background:var(--line)}
 #qbar i{display:block;height:100%;width:0;background:var(--accent);transition:width .2s}
-#qmain{flex:1;overflow-y:auto;width:100%;max-width:70ch;margin:0 auto;padding:24px 18px 28px}
-#qsrc{margin:0 0 12px;font-size:13px;color:var(--mut)}
+#qmain{flex:1;overflow-y:auto;width:100%;max-width:70ch;margin:0 auto;
+  padding:24px 18px 28px;display:flex;flex-direction:column;justify-content:center}
+#qmain:has(#qa>*){justify-content:flex-start}
+#qsrc{margin:0 0 12px;font-size:13px;color:var(--mut);flex:none}
 #qq{font-size:20px;line-height:1.4;font-weight:600}
 #qq p{margin:0 0 10px}
 #qq .katex-display{font-weight:400}
 #qscore{font-size:26px;font-weight:700;margin:0 0 6px}
 #qsub{margin:0;color:var(--mut)}
-#qa{margin-top:24px;padding-top:20px;border-top:1px solid var(--line);font-size:16px}
+#qa{margin-top:24px;padding-top:20px;font-size:16px}
+#qa:has(>*){border-top:1px solid var(--line)}
+#qa>*{animation:arrive 180ms ease-out}
 #qa>:first-child{margin-top:0}
 .qdock{flex:none;display:flex;gap:8px;padding:9px 14px calc(9px + env(safe-area-inset-bottom));
   border-top:1px solid var(--line)}
@@ -1184,8 +1267,11 @@ body.reading .tabs{display:none}
   #read{flex:1;display:block;min-width:0}
   body.reading #list{display:block}
   .rtop .back{display:none}   /* the list is already on screen next to it */
-  article{padding:30px 40px 110px}
-  .dock{left:320px}
+  article{padding:32px 40px 110px}
+  /* The dock belongs to the note, so it stops where the note's column stops
+     rather than stretching five buttons across 960px of empty pane. */
+  .dock{left:320px;justify-content:center;padding-left:40px;padding-right:40px}
+  .dock button{flex:0 1 9rem}
   body:not(.reading) .dock{display:flex}
   /* Two panes, two bars: the tabs stay under the list they navigate, and the
      dock starts where the note does, so reading no longer costs the tabs. */
@@ -1210,9 +1296,10 @@ body.reading .tabs{display:none}
   border-radius:999px;padding:3px 9px;background:var(--bg)}
 .card .acts{display:flex;flex-wrap:wrap;gap:8px;margin-top:10px}
 .card .acts a,.card .acts button{min-height:var(--tap);display:inline-flex;
-  align-items:center;padding:0 14px;border-radius:11px;border:1px solid var(--line);
-  background:var(--bg);color:var(--fg);font-size:13px;font-weight:500;
+  align-items:center;padding:0 16px;border-radius:11px;border:1px solid var(--edge);
+  background:var(--bg);color:var(--fg);font-size:13px;font-weight:600;
   text-decoration:none}
+.card .acts a:active,.card .acts button:active{background:var(--surface)}
 .card.gone{opacity:.6}
 /* The date, torn off, so an event reads as a date first and a name second --
    the same tile Home's Coming up list already uses. */
@@ -2070,7 +2157,7 @@ function todayBlock() {
   // this block are stamped with the server's date. A handset a few hours out
   // would otherwise list Sunday's classes and file them under Monday.
   const day = ATT ? dayOfISO(ATT.today) : dayOf(new Date());
-  if (TT === null) return block('Today', [quiet('Checking your timetable…')]);
+  if (TT === null) return block('Today', [waitline('Checking your timetable…')]);
 
   if (!TT.length) {
     if (!live) {
@@ -2595,7 +2682,7 @@ function attRow(a, showCode) {
 // that was forgotten can be filled in after the fact. People forget, and a
 // screen that only marked today would be filled in by nobody.
 function renderAttendance() {
-  if (!ATT) return block('Attendance', [quiet('Checking your attendance…')]);
+  if (!ATT) return block('Attendance', [waitline('Checking your attendance…')]);
   const date = attDate || attToday();
   // Tomorrow has not happened yet, and further back than the window is further
   // back than the server will take a mark for.
@@ -3056,7 +3143,7 @@ function wallSection() {
   nav.appendChild(box);
   needWall(wallOn);
   const list = WALLS[wallOn];
-  if (!list) return void box.appendChild(quiet('Reading\u2026'));
+  if (!list) return void box.appendChild(waitline('Reading what the section has said…'));
   if (list === 'failed') {
     return void box.appendChild(quiet('The section needs the server. '
                                       + 'Run: notes.py serve'));
@@ -3191,7 +3278,7 @@ function eventsSection() {
     rows.appendChild(add);
     nav.appendChild(rows);
   }
-  if (!CAMPUS) return void nav.appendChild(quiet('Reading what is on…'));
+  if (!CAMPUS) return void nav.appendChild(waitline('Reading what is on…'));
   if (CAMPUS.failed) {
     return void nav.appendChild(quiet('Events need the server. Run: notes.py serve'));
   }
@@ -3269,7 +3356,7 @@ function clubsSection() {
     rows.appendChild(inked(add));
     nav.appendChild(rows);
   }
-  if (!CAMPUS) return void nav.appendChild(quiet('Reading the directory…'));
+  if (!CAMPUS) return void nav.appendChild(waitline('Reading the directory…'));
   if (CAMPUS.failed) {
     return void nav.appendChild(quiet('The directory needs the server. Run: notes.py serve'));
   }
@@ -3652,7 +3739,7 @@ function renderDay() {
   // Tuesday it is, and a day too old or too far ahead to mark simply loses its
   // buttons -- classRow decides that, in the one place that decides it.
   dayPicker(date, d => { dayDate = d; render(); });
-  if (TT === null) return block(dayName(date), [quiet('Checking your timetable…')]);
+  if (TT === null) return block(dayName(date), [waitline('Checking your timetable…')]);
   if (!TT.length) {
     if (!live) {
       return block(dayName(date),
@@ -3814,6 +3901,8 @@ function renderSubject(s) {
 const ROOM_POLL = 5000;
 let roomOpen = null;    // the subject code whose room is expanded, or null
 let roomMsgs = [];
+let roomRead = false;   // has the first poll come back? an unasked room is
+                        // not an empty one, and must not be drawn as one
 let roomLast = 0;
 let roomTimer = null;
 let roomDead = false;   // a static export has no server to talk to
@@ -3845,6 +3934,7 @@ function drawRoom(log) {
   if (roomDead) {
     return log.appendChild(quiet('The room needs the server. Run: notes.py serve'));
   }
+  if (!roomRead) return log.appendChild(waitline('Opening the room…'));
   if (!roomMsgs.length) {
     return log.appendChild(quiet('Nothing said in here yet. Ask about the '
       + 'homework, or say where the lab moved to.'));
@@ -3858,6 +3948,7 @@ function drawRoom(log) {
 // an append and never a replace -- and `removed` is the one message that has
 // to go the other way.
 function roomTook(d) {
+  roomRead = true;
   if (d.removed) roomMsgs = roomMsgs.filter(m => m.id !== d.removed);
   for (const m of (d.messages || [])) {
     roomMsgs.push(m);
@@ -3919,6 +4010,7 @@ function roomSection(s) {
       roomOpen = s.code;
       roomMsgs = [];
       roomLast = 0;
+      roomRead = false;
       roomDead = false;
       render();
     };
@@ -4330,14 +4422,35 @@ function route() {
   // Which of your own screens: the profile, what you saved, or what you have
   // put in. One level under '#me', so '#me' on its own still lands somewhere.
   const me = tab === 'me' ? parts[1] || null : null;
+  const was = view;
   view = {tab, code: s ? s.code : null, title: title || null, edit, att, compose,
           composeId, day: dayv, me};
+  // Not every render, and not every keystroke inside one: only a step to a
+  // different tab, a different subject or a different level of one.
+  const moving = !was || was.tab !== view.tab || was.code !== view.code
+    || was.title !== view.title || was.edit !== view.edit || was.att !== view.att
+    || was.day !== view.day || was.me !== view.me || was.compose !== view.compose;
   if (!edit) draft = null;      // walking away drops an unsaved week, not TT
   if (!att) attDate = null;     // and re-opening it starts on today, not last week
   if (!dayv) dayDate = null;    // today by default, every time it is opened
   const n = s && title ? s.notes.find(x => x.title === title) : null;
   if (n) openNote(n, s); else closeRead();
   render();
+  if (moving) arrive(n ? document.getElementById('read') : nav);
+}
+
+// 180ms of the new screen coming up six pixels, so a tab change is something
+// you watched happen rather than something that had already happened. The
+// class comes straight back off: it is re-added by the next route(), and a
+// class left on would make the animation fire again the next time the
+// element is shown.
+function arrive(el) {
+  if (!el) return;
+  el.classList.remove('swap');
+  void el.offsetWidth;            // restart it even on a repeat of the same step
+  el.classList.add('swap');
+  el.addEventListener('animationend', () => el.classList.remove('swap'),
+                      {once: true});
 }
 
 // Markdown in, typeset HTML out. The note, the Explain panel and a practice
@@ -4826,6 +4939,18 @@ let held = false;   // a deliberate slow call owns the strip; job news waits
 function waiting(el, msg) {
   el.innerHTML = '<div class="wait"><i></i></div><p class="waitmsg"></p>';
   el.querySelector('.waitmsg').textContent = msg;
+}
+
+// A section that is still fetching, drawn where its rows will be. Every
+// screen that waited used to put a line of grey text there instead, which is
+// the same shape as a screen with nothing on it -- so "Checking your
+// attendance" and "You have marked nothing" read identically for the two
+// seconds they are hardest to tell apart.
+function waitline(msg) {
+  const el = document.createElement('div');
+  el.className = 'waitline';
+  waiting(el, msg);
+  return el;
 }
 
 // The same three lines every screen that fetches has to write when it cannot:

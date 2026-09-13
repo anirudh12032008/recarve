@@ -53,7 +53,7 @@
   /* Cards. One radius, one fill, no border on top of the fill -- a fill already
      separates a card from the page and an edge as well only muddies it. The
      exception is .blank.bad, where the border IS the signal. */
-  .blank { @apply m-4 p-5 rounded-card bg-surface text-mut text-small; }
+  .blank { @apply m-4 p-5 rounded-card bg-surface text-mut text-small leading-relaxed; }
   .blank p { @apply m-0 mb-3; }
   .blank p:last-child { @apply mb-0; }
   /* The first line is the answer -- "Nothing on the notice board yet" -- and
@@ -93,28 +93,31 @@
      ordinary action. No native confirm() anywhere in this app; the second tap
      IS the confirmation, and turning red on the first tap is what makes a
      second, unintended tap unlikely rather than a dialog box. */
-  .row-del { @apply flex-none min-h-tap px-3 rounded border border-line bg-transparent
-                    text-small font-semibold text-mut active:opacity-70; }
+  .row-del { @apply flex-none min-h-tap px-3 rounded border border-edge bg-transparent
+                    text-small font-semibold text-mut active:bg-surface; }
   .rename { @apply flex gap-2 items-center w-full; }
-  .rename input { @apply flex-1 min-w-0 h-tap px-3 rounded border border-mut bg-bg text-fg; }
-  .rename button { @apply flex-none min-h-tap px-4 rounded border border-line
-                          bg-transparent text-small font-semibold text-fg; }
+  .rename input { @apply flex-1 min-w-0 h-tap px-3 rounded border border-edge bg-bg text-fg; }
+  .rename button { @apply flex-none min-h-tap px-4 rounded border border-edge
+                          bg-transparent text-small font-semibold text-fg
+                          active:bg-surface; }
   /* Attendance. Two buttons, and pressing neither is the third state. Never a
      checkbox: an unticked box reads as "absent", and this app must not say
      that on a student's behalf. The pressed one thickens its keyline as well
      as filling, so the state survives a colourblind reader and a grey screen. */
   .mark { @apply flex gap-2 flex-none; }
-  .mark button { @apply w-tap h-tap rounded border border-line bg-bg text-mut
-                        text-base leading-none flex items-center justify-center active:opacity-70; }
+  .mark button { @apply w-tap h-tap rounded border border-edge bg-bg text-mut
+                        text-base leading-none flex items-center justify-center
+                        active:bg-surface; }
   .days { @apply flex gap-2 px-4 pt-4 pb-2 overflow-x-auto; }
-  .days button { @apply flex-none min-h-tap px-4 rounded bg-surface text-base text-mut; }
+  .days button { @apply flex-none min-h-tap px-4 rounded bg-surface text-base text-mut
+                        active:opacity-70; }
   .days button[aria-current] { @apply bg-accent text-accent-fg font-semibold; }
   .slot { @apply flex items-center gap-3 px-4 py-1; }
   .slot span { @apply flex-none w-[5.2em] text-small text-mut; }
   .slot select { @apply flex-1 min-w-0 min-h-tap px-3 rounded bg-surface text-base text-fg; }
-  .save { @apply block w-[calc(100%-32px)] mx-4 mt-5 min-h-tap rounded
+  .save { @apply block w-[calc(100%-32px)] mx-4 mt-6 min-h-tap rounded
                  bg-accent text-accent-fg text-base font-semibold active:opacity-75; }
-  .qdock button { @apply flex-1 min-h-tap rounded bg-surface text-base font-medium
+  .qdock button { @apply flex-1 min-h-tap rounded bg-surface text-base font-semibold
                          flex items-center justify-center active:opacity-75; }
   .qdock button.primary { @apply bg-accent text-accent-fg; }
 
@@ -127,11 +130,12 @@
   .cal .why { @apply mt-3 mx-0.5 text-small text-mut; }
   .week { @apply grid grid-cols-7 gap-1; }
   .week button { @apply flex flex-col items-center gap-0.5 min-h-tap py-2 px-0
-                        rounded bg-transparent text-fg; }
+                        rounded bg-transparent text-fg active:opacity-70; }
   .week small { @apply text-micro font-semibold text-mut; }
   .week b { @apply text-head font-semibold tabular-nums; }
   .tile { @apply flex-none w-tap rounded overflow-hidden text-center border border-line bg-bg; }
-  .tile small { @apply block text-micro font-bold uppercase text-white bg-err py-0.5; }
+  .tile b { @apply text-fg; }
+  .tile small { @apply block text-micro font-bold uppercase text-accent-fg bg-accent py-0.5; }
   .tile b { @apply block text-head font-bold pt-1 pb-1.5 tabular-nums; }
 
   /* A class on the timeline is a row lying on its side: a bold title over the

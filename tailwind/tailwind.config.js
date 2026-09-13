@@ -14,6 +14,9 @@ module.exports = {
         fg:      'var(--fg)',
         mut:     'var(--mut)',
         line:    'var(--line)',
+        /* The boundary of a control that draws no fill -- --mut thinned to an
+           edge. --line is the hairline between rows and is 1.24:1. */
+        edge:    'var(--edge)',
         accent:  { DEFAULT: 'var(--accent)', fg: 'var(--accent-fg)' },
         admin:   { DEFAULT: 'var(--admin)', fg: 'var(--admin-fg)' },
         warn:    { DEFAULT: 'var(--warn)', bg: 'var(--warn-bg)' },
