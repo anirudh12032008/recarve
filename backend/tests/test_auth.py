@@ -561,7 +561,18 @@ def test_an_approved_member_is_still_not_an_admin(server):
         assert code == 403, f"{method} {path} answered {code} to an ordinary member"
 
 
-def test_blocking_shuts_the_door_on_the_next_request(server):
+def test_blocking_shuts_the_door_on_the_next_request(server, monkeypatch):
+    """Blocked in the database, refused at the gate.
+
+    The block is made straight in the database here rather than through
+    /block, which is the one case the server is not told about: it remembers a
+    principal for PRINCIPAL_TTL seconds, so a change nobody announced lands
+    within that window rather than on the very next tap. The window is turned
+    off for this test so it stays about the door -- how long the memory holds
+    is test_transport's business, and an admin's own /block forgets the person
+    outright.
+    """
+    monkeypatch.setattr(notes, "PRINCIPAL_TTL", 0)
     with psycopg.connect(DB_URL, autocommit=True) as conn:
         conn.execute("update profiles set status = 'blocked' where roll_no = '24U002'")
     assert call(server, "GET", "/data", cookie=pytest.pending_cookie)[0] == 403

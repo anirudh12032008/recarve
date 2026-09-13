@@ -5918,6 +5918,28 @@ def db_inviter(conn, code):
     return row[0] if row else None
 
 
+# Who each signed-in phone is, remembered for a moment. The gate reads a
+# principal on every single request -- every static file, every photo, every
+# two-second job poll -- and every read was a brand-new Postgres connection,
+# because there is no pool and cannot be one while act_as sets the identity on
+# the session. A hundred phones that way is more connects a second than
+# Postgres will hold; this way it is one per person per PRINCIPAL_TTL.
+PRINCIPAL_TTL = 10
+_principals = {}
+_principals_lock = threading.Lock()
+
+
+def forget_principal(profile_id):
+    """Drop somebody's remembered principal, so a change to them lands now.
+
+    Called by every function below that writes a profile's status, role or
+    password -- there rather than in the handlers, so an admin's tap is instant
+    however the change is made, and so the next caller cannot forget.
+    """
+    with _principals_lock:
+        _principals.pop(str(profile_id).lower(), None)
+
+
 def db_principal(conn, profile_id):
     """Who a session belongs to, or None. Read as themselves, so a deleted or
     never-created profile comes back empty rather than trusted."""
@@ -6021,6 +6043,7 @@ def db_set_password(conn, user_id, new):
     conn.execute(
         "update profiles set password = %s, roll_login = false where id = %s",
         (new, user_id))
+    forget_principal(user_id)   # must_set is what the gate reads; it just changed
     return True
 
 
@@ -6043,6 +6066,7 @@ def db_reset_password(conn, profile_id):
         (profile_id,)).rowcount
     if not n:
         raise ValueError("no such member")
+    forget_principal(profile_id)
     return True
 
 
@@ -6101,6 +6125,7 @@ def db_set_role(conn, actor_id, profile_id, role):
                      (role, profile_id)).rowcount
     if not n:
         raise ValueError("no such member")
+    forget_principal(profile_id)
     return role
 
 
@@ -6123,6 +6148,7 @@ def db_set_status(conn, actor_id, profile_id, blocked):
                      (status, profile_id)).rowcount
     if not n:
         raise ValueError("no such member")
+    forget_principal(profile_id)
     return status
 
 
@@ -6305,6 +6331,7 @@ def db_approve(conn, profile_id):
     it through.
     """
     conn.execute("update profiles set status = 'approved' where id = %s", (profile_id,))
+    forget_principal(profile_id)
     return conn.execute("select approve_uploader(%s)", (profile_id,)).fetchone()[0]
 
 
@@ -8512,6 +8539,18 @@ def build_server(args):
     servable = (Path(args.out).resolve().parent, Path(args.library).resolve())
 
     class Handler(SimpleHTTPRequestHandler):
+        # HTTP/1.0 -- the default -- is a new TCP connection and a new thread
+        # for every request, and the page polls /jobs every two seconds on top
+        # of its own assets. A hundred phones is fifty connections a second
+        # that way, and the reel lands on Tuesday. Keeping the connection means
+        # every response must say how long it is, which is what end_headers
+        # below is for.
+        protocol_version = "HTTP/1.1"
+        # And a kept connection must not be kept forever: a phone that goes
+        # into a pocket mid-poll would otherwise hold its thread until the
+        # process restarts.
+        timeout = 30
+
         def log_message(self, fmt, *a):
             if args.verbose:
                 super().log_message(fmt, *a)
@@ -8520,6 +8559,31 @@ def build_server(args):
             if path.split("?")[0] in ("/", "/index.html"):
                 return str(args.out)
             return super().translate_path(path)
+
+        def end_headers(self):
+            """The last word on whether this connection is kept, for every
+            response the server makes -- ours, the stdlib's and its errors'.
+
+            Only a GET is kept. A POST refused before its body was read -- and
+            half of them are, by --no-auth, by admins-only, by the size caps --
+            leaves those bytes on the socket, where the next request line
+            should be, and the request after it would be parsed out of
+            somebody's JSON. A HEAD is the same shape of trouble from the other
+            end: the senders below write a body it will not read. Neither is
+            worth proving thirty handlers right for, and neither is what the
+            reuse is for: the page, its assets and the job poll are all GETs.
+            """
+            if self.command != "GET":
+                self.close_connection = True
+            # Say so, rather than hanging up on a client that has been told
+            # nothing and is entitled to assume the connection stays. The
+            # stdlib's send_error says it too, so its 404s carry the header
+            # twice -- two headers that agree, which every client reads as the
+            # one thing they both say, and cheaper than reaching into the
+            # header buffer to find out whether it has been said already.
+            if self.close_connection:
+                self.send_header("Connection", "close")
+            super().end_headers()
 
         def send_head(self):
             """Every static file, GET and HEAD alike, comes through here."""
@@ -8622,18 +8686,41 @@ def build_server(args):
             return join_body(code, inviter)
 
         def principal(self):
-            """Whose session this is, re-read from the database every request.
+            """Whose session this is, re-read from the database at least every
+            PRINCIPAL_TTL seconds.
 
-            Not cached in the cookie: blocking someone has to take effect on
-            their next tap, not whenever their cookie happens to expire.
+            Never cached in the cookie: blocking someone has to take effect on
+            their next tap, not whenever their cookie happens to expire. Ten
+            seconds keeps that promise -- a block still lands while the phone is
+            still in the same hand -- and buys the thing the cookie could not:
+            one Postgres connection per person per ten seconds instead of one
+            per request, on a server that opens a fresh connection every time
+            because a pooled one would carry the last student's identity into
+            the next student's queries.
+
+            An admin's own actions do not wait even that long. Everything that
+            writes a status, a role or a password calls forget_principal, so
+            approving, blocking and promoting are felt on the next tap.
             """
             jar = http.cookies.SimpleCookie(self.headers.get("Cookie", ""))
             morsel = jar.get(SESSION_COOKIE)
             profile_id = unsign_session(morsel.value, secret) if morsel else None
             if not profile_id:
                 return None
+            key = profile_id.lower()
+            now = time.monotonic()
+            with _principals_lock:
+                seen = _principals.get(key)
+            if seen and now - seen[0] < PRINCIPAL_TTL:
+                return seen[1]
             with db(profile_id) as conn:
-                return db_principal(conn, profile_id)
+                me = db_principal(conn, profile_id)
+            with _principals_lock:
+                # One entry per phone that has ever signed in to this process,
+                # which is the class. Nobody unsigned reaches here: the cookie
+                # was checked against the secret two lines up.
+                _principals[key] = (now, me)
+            return me
 
         def do_GET(self):
             if self.path == "/sw.js":
@@ -10185,7 +10272,15 @@ def build_server(args):
             except (BrokenPipeError, ConnectionResetError):
                 pass  # phone hung up; nothing useful left to do
 
-    return ThreadingHTTPServer((args.host, args.port), partial(Handler, directory=str(root)))
+    class Server(ThreadingHTTPServer):
+        # The stdlib listens five deep. A reel puts a hundred phones on the
+        # door inside a minute, and the sixth one through does not get a slow
+        # answer -- its SYN is dropped, and the phone shows a page that failed
+        # to load. This is the kernel's waiting room, not a thread pool: it
+        # costs nothing to make it big enough for the whole class.
+        request_queue_size = 128
+
+    return Server((args.host, args.port), partial(Handler, directory=str(root)))
 
 
 def serve(args):
