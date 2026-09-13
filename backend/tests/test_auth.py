@@ -213,7 +213,9 @@ def test_approving_lets_someone_in_and_publishes_what_they_uploaded(db):
     row = db.execute(
         "select p.status, p.trusted, m.status from profiles p join materials m "
         "on m.uploader_id = p.id where p.id = %s", (joiner_id,)).fetchone()
-    assert row == ("approved", True, "visible")
+    # trusted False: 0039 stopped approval from doubling as a promotion. Their
+    # waiting file still goes up; the next one they try to send does not.
+    assert row == ("approved", False, "visible")
 
 
 def test_a_member_cannot_approve_anybody(db):

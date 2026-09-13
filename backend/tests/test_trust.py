@@ -39,9 +39,11 @@ def test_approving_publishes_every_pending_upload(db):
     assert db.execute(
         "select status from materials where uploader_id = %s", (bystander,)
     ).fetchone()[0] == "pending"
+    # Publishing their backlog is not a promotion (0039). Approving somebody
+    # says their files are fine, not that the next one may skip review.
     assert db.execute(
         "select trusted from profiles where id = %s", (newbie,)
-    ).fetchone()[0] is True
+    ).fetchone()[0] is False
     assert db.execute(
         "select trusted from profiles where id = %s", (bystander,)
     ).fetchone()[0] is False
