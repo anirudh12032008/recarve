@@ -140,6 +140,7 @@ const any = new Proxy(function () {}, {
   construct: () => any,
 });
 const wrote = pair => writes.some(w => JSON.stringify(w) === JSON.stringify(pair));
+const says = word => writes.some(w => w[0] === 'textContent' && String(w[1]).includes(word));
 // #ask is the one element whose class a check has to tell apart from every
 // other 'on', so it is a real object rather than the proxy.
 const askCls = [];
@@ -192,7 +193,25 @@ const lockEl = {hidden: null};
 const saveAttrs = {};
 const saveEl = {textContent: null, disabled: false,
   setAttribute: (k, v) => { saveAttrs[k] = v; }};
-const els = {ask: askEl, panel: panelEl, fab: fabEl, lock: lockEl, save: saveEl};
+// The avatar and its menu are real for the same reason #fab is: whether the
+// menu is open, what is in it and what it says about itself are the whole of
+// what a menu has to get right, and the discard proxy answers 'yes' to every
+// question about all three.
+const avatarAttrs = {};
+let avatarFocused = 0;
+// Named apart from the script's own consts, and handed to it through els --
+// the page reaches for them by id, so these ARE its avatarEl and menuEl.
+const avatarNode = {onclick: null, focus: () => { avatarFocused++; },
+                    contains: () => false,
+                    setAttribute: (k, v) => { avatarAttrs[k] = v; }};
+const menuNode = {hidden: true, children: [], onkeydown: null,
+                  contains: () => false,
+                  appendChild: c => { menuNode.children.push(c); return c; }};
+Object.defineProperty(menuNode, 'innerHTML',
+  {get: () => '', set: () => { menuNode.children.length = 0; }});
+Object.defineProperty(menuNode, 'firstChild', {get: () => menuNode.children[0]});
+const els = {ask: askEl, panel: panelEl, fab: fabEl, lock: lockEl, save: saveEl,
+             avatar: avatarNode, menu: menuNode};
 let selection = '';
 let onSelectionChange = () => {};
 const rect = {top: 100, left: 20, width: 80};
@@ -250,10 +269,12 @@ location.hash = '#classes';
 route();
 assert.deepStrictEqual([view.tab, view.code], ['classes', null]);
 
-// The other three tabs are levels of their own, none of them is a subject, and
+// The other tabs are levels of their own, none of them is a subject, and
 // tapping one while reading has to put the note away -- with the class that
 // hid the tab bar, and with the Explain button that was floating over the note.
-for (const t of ['home', 'campus', 'me']) {
+// 'me' is in this list although it is not in the bar: it is still a tab to the
+// router, which is what keeps every '#me' link anybody has ever sent working.
+for (const t of ['home', 'campus', 'community', 'me']) {
   location.hash = '#classes/MC1101/week1';
   route();
   assert.ok(current, 'a note is open before the tab is tapped');
@@ -545,15 +566,15 @@ assert.ok(!wrote(['className', 'row-del']),
 
 ROLE = null;
 
-// Contributions is the Me tab, so back climbs out of it rather than leaving
-// the app.
+// You are still a tab to the router even though the bar no longer carries one,
+// so back climbs out of it rather than leaving the app.
 location.hash = '#me';
 route();
 assert.equal(view.tab, 'me');
-assert.equal(current, null, 'the contributions screen is not a note');
+assert.equal(current, null, 'your own screens are not a note');
 writes = [];
 render();
-assert.ok(wrote(['textContent', 'Your profile']), 'and that header must name it');
+assert.ok(wrote(['textContent', 'You']), 'and that header must name it');
 
 // Which chrome each tab carries. The brand is Home's and the subject header is
 // everyone else's, because #lback -- the only back button at this depth --
@@ -575,13 +596,80 @@ assert.deepStrictEqual(chrome('#classes/MC1101'), [true, false, false, false, fa
                        'a subject is the one level with a way back up');
 assert.deepStrictEqual(chrome('#campus'), [true, false, true, true, true, true, false],
                        'Campus has no search box and no log');
-assert.deepStrictEqual(chrome('#campus/new'), [true, false, false, true, true, true, false],
-                       'the composer is a level inside Campus, so it has a way back up');
+assert.deepStrictEqual(chrome('#community'), [true, false, true, true, true, true, false],
+                       'Community is a tab of its own and carries the same chrome');
+assert.deepStrictEqual(chrome('#home/new'), [true, false, false, true, true, true, true],
+                       'the notice composer is a level inside Home, with a way back up');
 assert.deepStrictEqual(chrome('#me'), [true, false, true, true, true, false, false],
-                       'the activity log is the Me tab\\'s');
+                       'the activity log is your profile\\'s');
+assert.deepStrictEqual(chrome('#me/saved'), [true, false, false, true, true, true, false],
+                       'what you saved is a level under it, and has no log of its own');
+
+// ---- Links that were sent before anything moved. Every one of them still
+// opens the screen it named, and says so in the bar by upgrading itself.
+const moved = (from, to) => {
+  location.hash = from; route();
+  assert.equal(location.hash, to, from + ' must still land on ' + to);
+};
+moved('#home/timetable', '#classes/timetable');
+moved('#home/attendance', '#classes/attendance');
+moved('#campus/new', '#home/new');
+moved('#campus/feed', '#community');
+moved('#campus/confession', '#community');
+// An announcement's id is a uuid, so a campus level that is not one of the
+// three composer words is one of those and belongs to Home now.
+moved('#campus/7a3f1e02-0000-0000-0000-000000000000',
+      '#home/7a3f1e02-0000-0000-0000-000000000000');
+// Campus's own three composers are not moved by that rule.
+ROLE = 'admin';
+location.hash = '#campus/club'; route();
+assert.equal(location.hash, '#campus/club', 'Campus keeps the forms still its own');
+assert.deepStrictEqual([view.tab, view.compose], ['campus', 'club']);
+ROLE = null;
+location.hash = '#classes'; route();
+
+// ---- The avatar's menu. Your own screens are behind it rather than in the
+// bar, so it is the only way to reach three of them with a thumb.
+ROLE = 'student';
+writes = []; menuEl.children.length = 0;
+avatarEl.onclick();
+assert.equal(menuEl.hidden, false, 'the avatar opens the menu');
+assert.equal(avatarAttrs['aria-expanded'], 'true', 'and says so to a screen reader');
+assert.ok(says('Your profile') && says('Saved') && says('Points and what you added'),
+          'every one of your own screens is in it');
+assert.ok(!says('Class admin'), 'and nothing a student may not press');
+assert.equal(menuEl.children.length, 3);
+
+// Escape is one of the two ways out, and it hands the focus back to the button
+// that opened it rather than dropping it on the page behind.
+avatarFocused = 0;
+menuEl.contains = () => true;          // the focus is inside it, as it is on open
+menuEl.onkeydown({key: 'Escape', preventDefault: () => {}});
+assert.equal(menuEl.hidden, true, 'Escape closes it');
+assert.equal(avatarFocused, 1, 'and the focus goes back to the avatar');
+assert.equal(avatarAttrs['aria-expanded'], 'false');
+
+// Walking to one of them closes it: render() is what every navigation ends in.
+avatarEl.onclick();
+assert.equal(menuEl.hidden, false);
+render();
+assert.equal(menuEl.hidden, true, 'going anywhere at all puts the menu away');
+menuEl.contains = () => false;
+
+// The one row only an admin may press is in it, inked like every other.
+ROLE = 'admin';
+writes = [];
+avatarEl.onclick();
+assert.ok(says('Class admin'), 'an admin is offered the way into the panel');
+assert.ok(wrote(['className', 'tag']), 'marked with the ink every admin row carries');
+assert.equal(menuEl.children.length, 4);
+avatarEl.onclick();
+assert.equal(menuEl.hidden, true, 'the avatar closes it again');
+ROLE = null;
 
 // + from here must leave the dropdown alone: 'me' matches no option, so the
 // select blanks, and a recording uploaded with no subject is refused and lost.
+location.hash = '#me'; route();
 writes = [];
 openSheet();
 assert.ok(!writes.some(w => w[0] === 'value'), 'nothing may be filed under #me');
@@ -592,7 +680,6 @@ assert.equal(view.code, null);
 // Campus has nothing in it yet and says what is coming rather than showing an
 // empty screen that reads as a bug -- and the router is what has to reach it,
 // so this goes through the hash rather than calling it by name.
-const says = word => writes.some(w => w[0] === 'textContent' && String(w[1]).includes(word));
 writes = []; location.hash = '#campus'; route();
 assert.ok(says('Clubs'), 'Campus must name what will live there');
 
@@ -714,13 +801,14 @@ assert.ok(!says('Nothing new since you last looked'), 'nothing can be new in an 
 DATA.length = 0; DATA.push(...keep);
 SEEN = null;
 
-// The editor is a level inside Home: its own URL, with a way back up.
+// The editor is a level inside Classes: its own URL, with a way back up. It
+// used to hang off Home, which made the week something you left Home to do.
 TT = [{day: 3, period: 1, code: 'MC1101'}];
-writes = []; location.hash = '#home/timetable'; route();
-assert.deepStrictEqual([view.tab, view.edit], ['home', true], 'the editor is a level');
+writes = []; location.hash = '#classes/timetable'; route();
+assert.deepStrictEqual([view.tab, view.edit], ['classes', true], 'the editor is a level');
 assert.ok(says('Period 1') && says('Period 8'), 'every period of the day is editable');
 assert.ok(says('Save timetable'), 'and there is a way to save it');
-assert.deepStrictEqual(chrome('#home/timetable'), [true, false, false, true, true, true, true],
+assert.deepStrictEqual(chrome('#classes/timetable'), [true, false, false, true, true, true, false],
                        'the editor names itself and keeps a way back up');
 assert.equal(draft['3-1'], 'MC1101', 'the editor opens on what is already saved');
 draft['3-2'] = 'CY1107';
@@ -774,7 +862,7 @@ assert.equal(backs, 0, 'and leaves the student in the editor to fix it');
 
 // Every pick has to land in the draft: those selects are the only input the
 // save has, and an onchange that does nothing re-posts the old week in silence.
-location.hash = '#home/timetable'; route();
+location.hash = '#classes/timetable'; route();
 writes = [];
 renderTimetable();
 const picks = writes.filter(w => w[0] === 'onchange');
@@ -902,7 +990,19 @@ assert.ok(says('24U001') && says('Section I') && says('+919876543210'),
 assert.ok(says('Student'), 'and what they are');
 assert.ok(says('What trusted adds'), 'a student is told what trusted would add');
 assert.ok(/admin/.test(LOCK_ADD), 'and that an admin is what makes one');
-assert.ok(says('Points are a thank-you'), 'the contributions are still here');
+// The score is a level down, not a fifth thing on this screen: the profile is
+// who you are, and what you have put in is its own list.
+assert.ok(!says('Points are a thank-you'), 'the score is not on the profile screen');
+reply = mine('student');
+// Draining after each route: the paint the router starts is itself waiting on
+// /me, and it lands in `writes` under whatever check comes next otherwise.
+location.hash = '#me/points'; route();
+await new Promise(setImmediate); await new Promise(setImmediate);
+writes = [];
+await renderMe();
+assert.ok(says('Points are a thank-you'), 'it is on the screen the avatar names');
+location.hash = '#me'; route();
+await new Promise(setImmediate); await new Promise(setImmediate);
 
 reply = mine('trusted');
 writes = [];
@@ -952,7 +1052,7 @@ const rows = writes.filter(w => JSON.stringify(w) === '["className","row adm"]')
 assert.equal(rows, 2, 'two inked rows from the paint that survived, not four from both');
 
 
-// ---- THE CLASS BOARD, on Campus. The server ranks; this draws what it sent.
+// ---- THE CLASS BOARD, on Community. The server ranks; this draws what it sent.
 const person = (name, rank, score, extra) => Object.assign(
   {id: name, name, role: 'trusted', rank, score,
    uploads: 0, recordings: 0, votes_received: 0, you: false}, extra || {});
@@ -965,9 +1065,9 @@ const board = (all, week, you) => answer(true, {
 // answer already waiting, so nothing from the screen before it settles behind.
 BOARD = null; boardWindow = 'all';
 reply = board([], [], person('You', 4, 0, {you: true}));
-location.hash = '#campus'; route();
+location.hash = '#community'; route();
 writes = [];
-await renderCampus();
+await renderCommunity();
 assert.ok(says('Nobody has added anything yet'), 'an empty board says so');
 assert.ok(says('Points are recognition only'),
           'and says, where it would be assumed otherwise, that nothing is locked');
@@ -981,7 +1081,7 @@ reply = board(
   [person('Asha', 1, 10, {recordings: 1})],
   person('You', 41, 1, {you: true, votes_received: 1}));
 writes = [];
-await renderCampus();
+await renderCommunity();
 assert.ok(says('Asha') && says('Bilal') && says('Chetan'), 'the board is the class');
 assert.ok(says('#1') && says('#3'), 'a tie shares a place and the next one is third');
 assert.ok(says('Trusted member') && says('Student'), 'each row says what they are');
@@ -995,17 +1095,17 @@ assert.ok(says('Regular'), 'a level is a word somebody earned, on the row that e
 BOARD = null;
 reply = board([person('Asha', 1, 30, {you: true})], [], person('Asha', 1, 30, {you: true}));
 writes = [];
-await renderCampus();
+await renderCommunity();
 assert.ok(!says('Your place'), 'a viewer in the top twenty is not also pinned below it');
 
 // This week is its own board, off the same answer: the toggle costs no request.
 BOARD = null;
 reply = board([person('Asha', 1, 300)], [person('Dev', 1, 10)]);
 writes = [];
-await renderCampus();
+await renderCommunity();
 boardWindow = 'week';
 fetches = []; writes = [];
-await renderCampus();
+await renderCommunity();
 assert.ok(says('Dev'), 'this week is a different ranking');
 assert.ok(!says('Asha'), 'and does not carry the all-time leader into it');
 assert.equal(fetches.length, 0, 'both windows ride on one request');
@@ -1014,7 +1114,7 @@ assert.equal(fetches.length, 0, 'both windows ride on one request');
 BOARD = null;
 reply = board([person('Asha', 1, 300)], []);
 writes = [];
-await renderCampus();
+await renderCommunity();
 assert.ok(says('Nobody has added anything this week'), 'an empty week says which window');
 boardWindow = 'all';
 
@@ -1034,14 +1134,14 @@ assert.equal(nextLevel(100), undefined, 'the top of the ladder has nothing above
 BOARD = null;
 reply = 'gone';
 writes = [];
-await renderCampus();
+await renderCommunity();
 assert.ok(says('The class board needs the server'), 'a static export says why it is empty');
 BOARD = null; reply = null;
 
 // ---- The rules, on Me. Nobody should have to guess why they have the number
 // they have, so every weight and what it earned this person is printed.
 reply = mine('trusted', {points: {score: 26, uploads: 1, recordings: 2, votes_received: 1}});
-location.hash = '#me'; route();
+location.hash = '#me/points'; route();
 writes = [];
 await renderMe();
 assert.ok(says('26 points'), 'the score is the headline');
@@ -1094,54 +1194,48 @@ const notice = (id, title, extra) => Object.assign(
    edited: null, mine: false, unread: false, deleted: false}, extra || {});
 const emptyBoard = {all: {top: [], you: null}, week: {top: [], you: null}};
 
-// Campus: every live notice, newest first as the server sent them, with the
-// flags that say why one is above the others.
+// Home, in full and in one place: every live notice, newest first as the
+// server sent them, with the flags that say why one is above the others. It
+// used to be here in three-row summary AND on Campus in full, so a notice was
+// on the screen twice and said two different things about itself.
 ANN = [notice('a1', 'Lab moved to Friday', {pinned: true, unread: true}),
        notice('a2', 'Old news')];
 NOW = 100; ROLE = 'student'; BOARD = emptyBoard; live = true;
-location.hash = '#campus'; route();
+location.hash = '#home'; route();
 writes = []; fetches = [];
-await renderCampus();
-assert.ok(says('Announcements'), 'Campus leads with the notice board');
-assert.ok(says('Lab moved to Friday') && says('Old news'), 'both notices are on it');
+renderHome();
+assert.ok(says('Announcements'), 'Home carries the notice board');
+assert.ok(says('Lab moved to Friday') && says('Old news'),
+          'both notices are on it, not only the unread ones');
 assert.ok(says('Pinned · New'), 'an unread pinned notice says both, in one line');
 assert.ok(!says('Post an announcement'), 'a student is offered no way to post');
-assert.ok(!says('Clubs, events and announcements will live here'),
-          'the placeholder copy cannot still promise what is now above it');
 
-// Home: pinned or unread only, and never more than three. A wall of old
-// notices at the top of Home is how people learn to scroll past the top of Home.
+// And Campus does not carry it as well.
+location.hash = '#campus'; route();
+writes = [];
+renderCampus();
+assert.ok(!says('Lab moved to Friday'), 'the board is not printed on Campus too');
+assert.ok(says('Clubs'), 'what Campus has is the place itself');
 location.hash = '#home'; route();
-writes = [];
-renderHome();
-assert.ok(says('Notices') && says('Lab moved to Friday'), 'Home surfaces what is new');
-assert.ok(!says('Old news'), 'a notice you have read and nobody pinned is not Home');
-
-ANN = ['b1', 'b2', 'b3', 'b4', 'b5'].map(i => notice(i, 'Notice ' + i, {unread: true}));
-writes = [];
-renderHome();
-assert.ok(says('Notice b1') && says('Notice b3'), 'the first three are shown');
-assert.ok(!says('Notice b4'), 'and the fourth is not');
-assert.ok(says('and 2 more, under Campus.'), 'the rest are counted, not listed');
 
 // Opening the board marks what is on it read, on the server, for this person.
 // Not localStorage: the same person opens this on a phone and on a laptop.
 BOARD = emptyBoard;
-location.hash = '#campus'; route();
+location.hash = '#home'; route();
 // After the route, not before it: painting the tab is itself an opening of the
 // board, and the point here is what the paint under test asks for.
 ANN = [notice('c1', 'Unread one', {unread: true}), notice('c2', 'Read already')];
 READ_SENT.clear();
 fetches = []; reply = answer(true, {ok: true});
-await renderCampus();
+renderHome();
 const marks = fetches.filter(f => f[0] === '/read');
 assert.equal(marks.length, 1, 'one request, for what is actually on screen');
 assert.deepStrictEqual(JSON.parse(marks[0][1].body).ids, ['c1'],
                        'only the unread ones, and never one already read');
 await new Promise(setImmediate);
-assert.equal(ANN[0].unread, false, 'and Home stops calling it new straight after');
+assert.equal(ANN[0].unread, false, 'and it stops being called new straight after');
 fetches = [];
-await renderCampus();
+renderHome();
 assert.equal(fetches.filter(f => f[0] === '/read').length, 0,
              'a second paint of the same board is not a second request');
 
@@ -1149,49 +1243,49 @@ assert.equal(fetches.filter(f => f[0] === '/read').length, 0,
 // is for rather than showing an empty strip.
 ANN = []; ROLE = 'student'; BOARD = emptyBoard;
 writes = [];
-await renderCampus();
+renderHome();
 assert.ok(says('Nothing on the notice board yet'), 'an empty board says so');
 assert.ok(says('Your CR or your admin puts them up'),
           'and says who fills it and where new ones show');
 ROLE = 'admin';
 writes = [];
-await renderCampus();
+renderHome();
 assert.ok(says('Anything the whole section needs to know goes here'),
           'the admin reading the same empty screen is told what to do with it');
 assert.ok(says('Post an announcement'), 'and is given the way in');
 assert.ok(wrote(['className', 'row adm']),
           'inked, like every other control only an admin may press');
 
-// Writing one takes the tab over, and costs no request until it is posted --
-// and it is a URL, so the back gesture climbs out of it instead of leaving the
-// app with what was typed, and the Campus tab button lands on the board again.
+// Writing one takes the screen over, and costs no request until it is posted
+// -- and it is a URL, so the back gesture climbs out of it instead of leaving
+// the app with what was typed, and the Home tab button lands on the board.
 ROLE = 'admin'; ANN = [];
 writes = []; fetches = [];
-location.hash = '#campus/new'; route();
+location.hash = '#home/new'; route();
 assert.equal(view.compose, 'new', 'the composer is a level, not a variable');
 assert.ok(wrote(['className', 'compose']), 'the composer replaces the board');
-assert.ok(!says('Who has contributed'), 'one thing at a time on a phone');
+assert.ok(!says('Today'), 'one thing at a time on a phone');
 assert.equal(fetches.length, 0, 'and nothing is asked for until it is posted');
 assert.ok(says('New notice'), 'the header says which level you are on');
-assert.ok(says('\u2039 Campus'), 'and the back button says where it climbs to');
+assert.ok(says('\u2039 Home'), 'and the back button says where it climbs to');
 
 writes = [];
-location.hash = '#campus'; route();
+location.hash = '#home'; route();
 assert.ok(!wrote(['className', 'compose']),
           'walking back out of it lands on the board, not on the form again');
 
 ANN = [notice('e1', 'Mine', {mine: true, body: 'the body'})];
 writes = [];
-location.hash = '#campus/e1'; route();
+location.hash = '#home/e1'; route();
 assert.ok(says('Edit notice'), 'editing one is a URL too');
 assert.ok(wrote(['value', 'Mine']), 'and it opens on the notice that URL names');
 
 // A student who types the URL gets the board, the same answer /announce gives.
 ROLE = 'student';
 writes = [];
-location.hash = '#campus/e1'; route();
+location.hash = '#home/e1'; route();
 assert.ok(!wrote(['className', 'compose']), 'the composer is admin-only here too');
-location.hash = '#campus'; route();
+location.hash = '#home'; route();
 ROLE = null; ANN = [];
 
 // ---- ATTENDANCE. Three states, and the page never guesses one. ----
@@ -1221,11 +1315,11 @@ assert.equal(attToday(), '2026-09-07');
 assert.equal(isoDay(new Date(2026, 8, 7, 0, 30)), '2026-09-07');
 assert.equal(dayOfISO('2026-09-07'), 1, 'the server said Monday');
 
-// A level inside Home, so it is a URL and back climbs out of it like any other.
-location.hash = '#home/attendance';
+// A level inside Classes, so it is a URL and back climbs out like any other.
+location.hash = '#classes/attendance';
 writes = [];
 route();
-assert.equal(view.att, true, 'catching up is a level inside Home');
+assert.equal(view.att, true, 'catching up is a level inside Classes');
 assert.ok(wrote(['textContent', 'Your attendance']), 'and it names itself');
 assert.ok(wrote(['value', '2026-09-07']), 'it opens on the day the server calls today');
 assert.ok(wrote(['max', '2026-09-07']), 'and cannot reach a class that has not happened');
@@ -1261,7 +1355,18 @@ assert.ok(wrote(['textContent', 'Below 75%']));
 location.hash = '#home'; writes = []; route();
 assert.ok(wrote(['textContent', 'Period 1 · Present']),
           "today's classes must be markable from Home");
-assert.ok(wrote(['textContent', 'Catch up on another day']));
+// And nothing else about the week: catching up and editing are Classes's, one
+// tap away, and printing them here as well was the same row in two places.
+assert.ok(!says('Catch up on another day'), 'Home is today, not the week around it');
+assert.ok(!says('Edit your timetable'));
+
+// They are on Classes, where the timetable they are about lives.
+qvalue = '';                          // an earlier check left a search in the box
+location.hash = '#classes'; writes = []; route();
+assert.ok(says('Your week'), 'the week is a block on the subject list');
+assert.ok(says('Your attendance') && says('Your timetable'),
+          'and both screens are reached from it');
+location.hash = '#home'; route();
 
 // The NUMBER is with the subject, because that is the screen you open when the
 // subject is what you are worried about.
@@ -1383,13 +1488,15 @@ assert.ok(says('No classes on Sunday.'), 'a plain empty day keeps the plain line
 ATT.closed = []; dayDate = null;
 location.hash = '#classes'; route();
 
-// ---- The countdown on Home. The institute's own next date, not a semester
-// total this app was never told -- and honest about a window already running.
-location.hash = '#home'; writes = []; route();
+// ---- The countdown, on the tab that owns the calendar. The institute's own
+// next date, not a semester total this app was never told -- and honest about
+// a window already running. It is on Classes rather than Home because Home is
+// today and this is the term around it.
+location.hash = '#classes'; writes = []; route();
 ATT.next = {date: '2026-09-20', ends: '2026-09-20', title: 'Attendance displayed',
             kind: 'milestone'};                          // 13 days from 2026-09-07
 writes = []; render();
-assert.ok(says('Coming up'), 'the calendar gets its own block on Home');
+assert.ok(says('Coming up'), 'the calendar gets its own block on Classes');
 assert.ok(says('Attendance displayed'));
 assert.ok(says('In 13 days · Sep 20'));
 
@@ -1426,6 +1533,23 @@ ATT.closed = []; delete ATT.upcoming;
 ATT.next = null;
 writes = []; render();
 assert.ok(!says('Coming up'), 'nothing to count down to draws nothing');
+
+// A society's fest arrives in the same array and belongs to Campus, which has
+// its own list of them. Printing it here as well was two calendars pretending
+// to be one, and a student keeping both of them in their head.
+ATT.upcoming = [{date: '2026-09-20', ends: '2026-09-20', title: 'Attendance displayed',
+                 kind: 'milestone'},
+                {date: '2026-09-21', ends: '2026-09-21', title: 'Robotics fest',
+                 what: 'campus', kind: 'event'}];
+writes = []; render();
+assert.ok(says('Attendance displayed'), 'the institute calendar is here');
+assert.ok(!says('Robotics fest'), 'and a campus event is not, because Campus has it');
+delete ATT.upcoming;
+
+// Home is today, and holds neither of them.
+location.hash = '#home'; writes = []; route();
+assert.ok(!says('Coming up') && !says('This week'),
+          'Home no longer carries the calendar it shared with Campus');
 
 // No server, no marks: Home still draws today rather than offering a control
 // that cannot save anything.
@@ -1469,19 +1593,26 @@ assert.ok(fetches.some(f => JSON.parse(f[1].body).on === false), 'the second tap
 assert.equal(saveEl.textContent, 'Save');
 assert.deepStrictEqual(BOOKMARKS, []);
 
-// Home draws a Saved block from whatever is still really there, and skips a
-// bookmark whose note is gone -- a renamed file, a replaced revision sheet --
-// rather than showing a row with nothing behind it.
+// What you saved is its own screen behind the avatar, not a block near the
+// bottom of Home: what you saved is yours, and Home is today. It is drawn from
+// whatever is still really there, and skips a bookmark whose note is gone -- a
+// renamed file, a replaced revision sheet -- rather than showing a row with
+// nothing behind it.
 BOOKMARKS = [{code: 'MC1101', title: 'week1'}];
 location.hash = '#home'; writes = []; route();
-assert.ok(says('Saved'), 'a real save gets its own block on Home');
-assert.ok(says('week1'));
+assert.ok(!says('week1'), 'Home no longer carries what you saved');
+location.hash = '#me/saved'; writes = []; route();
+assert.equal(view.me, 'saved', 'it is a level under you, and therefore a URL');
+assert.ok(says('week1'), 'and a real save is on it');
 
 BOOKMARKS = [{code: 'MC1101', title: 'a note that was deleted'}];
 writes = []; render();
-assert.ok(!says('Saved'), 'a stale bookmark for a gone note draws nothing, not a dead row');
+assert.ok(!says('a note that was deleted'),
+          'a stale bookmark for a gone note draws nothing, not a dead row');
+assert.ok(says('Nothing saved yet'), 'and the screen says so rather than going blank');
 
 BOOKMARKS = [];
+location.hash = '#home'; route();
 reply = null;
 
 
@@ -1591,7 +1722,9 @@ def test_the_tab_bar_is_wired_and_gives_way_to_the_reading_dock():
     """
     for wiring in ("tabBtns.forEach(b => { b.onclick = () => go(b.dataset.tab); });",
                    'data-tab="home"', 'data-tab="classes"',
-                   'data-tab="campus"', 'data-tab="me"',
+                   'data-tab="campus"', 'data-tab="community"',
+                   # And Me is no longer one of them: it is behind the avatar.
+                   'id="avatar"',
                    # Reading takes the strip; back gives it straight back,
                    # because closeRead() drops the class that hid it.
                    "body.reading .tabs{display:none}",
@@ -1639,12 +1772,12 @@ def test_home_learns_the_server_is_there_before_it_draws():
 
 
 def test_the_timetable_editor_is_reachable_and_leads_back():
-    """A level inside Home, so it is a URL: back climbs out of it like every
-    other step, and the tab bar is never the only way home."""
-    for wiring in ("const edit = tab === 'home' && parts[1] === 'timetable';",
+    """A level inside Classes, so it is a URL: back climbs out of it like
+    every other step, and the tab bar is never the only way home."""
+    for wiring in ("const edit = tab === 'classes' && parts[1] === 'timetable';",
                    "if (!edit) draft = null;",
-                   "start.onclick = () => go('home', 'timetable');",
-                   "edit.onclick = () => go('home', 'timetable');",
+                   "start.onclick = () => go('classes', 'timetable');",
+                   "tt.onclick = () => go('classes', 'timetable');",
                    "save.onclick = saveTimetable;"):
         assert wiring in notes.PAGE, f"the timetable editor is not wired: {wiring}"
 
@@ -1905,10 +2038,9 @@ def test_the_catch_up_screen_is_a_url_and_uses_the_platform_date_picker():
     """A level inside Home, beside the timetable editor and reached the same
     way, so back climbs out of it. The picker is the browser's own: it is the
     fastest one on a phone and it costs nothing to ship."""
-    for wiring in ("const att = tab === 'home' && parts[1] === 'attendance';",
+    for wiring in ("const att = tab === 'classes' && parts[1] === 'attendance';",
                    "if (!att) attDate = null;",
-                   "back.onclick = () => go('home', 'attendance');",
-                   "mark.onclick = () => go('home', 'attendance');",
+                   "mark.onclick = () => go('classes', 'attendance');",
                    "input.type = 'date';",
                    # Bounded by what the server keeps, and by what has happened:
                    # the day view has the same picker and no bounds at all, so
@@ -1964,7 +2096,8 @@ def test_the_day_view_is_a_url_and_steps_a_day_without_the_picker():
 def test_nobody_else_ever_sees_a_students_attendance():
     """Private in the way a mark is private. The server is what enforces it,
     but the page must not have a screen that would show one if it arrived."""
-    for screen in ("renderMe", "renderCampus", "boardRow", "renderAnnouncements"):
+    for screen in ("renderMe", "renderCampus", "renderCommunity", "boardRow",
+                   "renderAnnouncements"):
         body = re.search(r"function " + screen + r"\(.*?\n\}", notes.PAGE, re.S)
         assert body, screen
         for word in ("ATT", "attendance", "attOf", "attRow"):
@@ -1998,7 +2131,7 @@ def test_the_board_is_wired_to_the_server_and_to_the_shell():
     serves it, and that a vote -- which re-ranks it -- drops the cached copy."""
     for wiring in ("await fetch('/standings')",
                    "b.onclick = () => { boardWindow = key; render(); };",
-                   "else if (view.tab === 'campus') renderCampus();"):
+                   "else if (view.tab === 'community') renderCommunity();"):
         assert wiring in notes.PAGE, f"the board is not wired: {wiring}"
     refresh = re.search(r"async function refresh\(\) \{.*?\n\}", notes.PAGE, re.S).group(0)
     assert "BOARD = null;" in refresh, "a vote re-ranks the board, so it must be re-read"
@@ -2033,10 +2166,13 @@ def test_the_notice_board_rides_on_the_data_the_page_already_fetches():
     assert notes.PAGE.count("fetch('/announce'") == 1, "one write path, in saveAnn"
     assert notes.PAGE.count("fetch('/read'") == 1, "one read mark, in markRead"
     assert "fetch('/announcements'" not in notes.PAGE, "the board is not its own request"
-    # Home must stay the screen that waits on nothing.
-    home = re.search(r"\nfunction noticeBlock\(\) \{.*?\n\}", notes.PAGE, re.S).group(0)
+    # Home must stay the screen that waits on nothing. The board is drawn there
+    # in full now -- there is no second, three-row copy of it to keep in step.
+    assert "function noticeBlock(" not in notes.PAGE, \
+        "a summary of the board on the same tab as the board is two boards"
+    home = re.search(r"\nfunction renderAnnouncements\(\) \{.*?\n\}", notes.PAGE, re.S).group(0)
     assert "await" not in home and "fetch" not in home
-    assert "show.slice(0, 3)" in home, "Home shows three notices, not a wall of them"
+    assert "markRead(list);" in home, "opening the board is what marks it read"
 
 
 def test_posting_is_for_the_class_rep_on_the_server_too():
@@ -2088,12 +2224,13 @@ def test_the_composer_is_a_url_like_every_other_level():
     Campus tab button kept landing back on the form. The timetable editor is
     the pattern; this is the same shape, so back, the header button and Cancel
     are all the one mechanism."""
-    assert "post.onclick = () => go('campus', 'new');" in notes.PAGE
-    assert "edit.onclick = () => go('campus', a.id);" in notes.PAGE
-    assert "const compose = tab === 'campus' ? parts[1] || null : null;" in notes.PAGE
-    assert "composing" not in notes.PAGE, "no variable may outlive the URL"
-    assert ("lback.hidden = !s && !view.edit && !view.att && !view.compose && !view.day;"
+    assert "post.onclick = () => go('home', 'new');" in notes.PAGE
+    assert "edit.onclick = () => go('home', a.id);" in notes.PAGE
+    assert ("const compose = (tab === 'campus' || tab === 'home') ? parts[1] || null : null;"
             in notes.PAGE)
+    assert "composing" not in notes.PAGE, "no variable may outlive the URL"
+    assert ("lback.hidden = !s && !view.edit && !view.att && !view.compose && !view.day\n"
+            "                 && !view.me;" in notes.PAGE)
     compose = re.search(r"function renderCompose\(\) \{.*?\n\}", notes.PAGE, re.S).group(0)
     assert "history.back()" in compose, "Cancel is a step back, like every other one"
 

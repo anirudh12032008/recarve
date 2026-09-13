@@ -487,15 +487,25 @@ def test_the_screen_never_invents_a_number_nobody_is_behind():
     """No RSVP here, so no "N going". A count with nothing behind it on a
     screen a hundred and ten people read is worse than a blank space."""
     campus_js = notes.PAGE[notes.PAGE.index("function eventCard(e)"):
-                           notes.PAGE.index("async function renderCampus()")]
+                           notes.PAGE.index("function renderCampus()")]
     for invented in ("going", "interested", "attending", "members"):
         assert invented not in campus_js.lower(), \
             f"the campus screen counts {invented}, and nothing is behind it"
 
 
-def test_home_s_coming_up_says_which_kind_of_thing_each_row_is():
-    block = re.search(r"function countdownBlock\(\) \{.*?\n\}", notes.PAGE, re.S).group(0)
-    assert "'Campus event'" in block and "'Academic calendar'" in block
+def test_coming_up_is_the_institute_s_calendar_and_campus_keeps_its_own():
+    """Two lists, and each of them has exactly one screen. The server folds a
+    society's fest into the same upcoming array the academic dates arrive in,
+    which is what put the same event under Home's "Coming up" AND under
+    Campus's "Coming up on campus" -- one thing, two calendars, both of which a
+    student then had to keep in their head. The filter here is the whole fix."""
+    block = re.search(r"function comingUpBlock\(\) \{.*?\n\}", notes.PAGE, re.S).group(0)
+    assert ".filter(n => n.what !== 'campus')" in block, \
+        "a campus event belongs to Campus, which prints it under its own heading"
+    assert "'Campus event'" not in block, \
+        "and with none of them left in this list there is no kind to label"
+    events = re.search(r"function eventsSection\(\) \{.*?\n\}", notes.PAGE, re.S).group(0)
+    assert "Coming up on campus" in events, "that is the one list they are on"
 
 
 def test_a_club_and_an_event_are_never_interpolated_into_html():
