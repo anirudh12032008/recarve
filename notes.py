@@ -5554,6 +5554,7 @@ class Jobs:
 # which screen you see; they are not the only thing standing between a pending
 # joiner and the notes.
 
+import csv
 import datetime
 import hashlib
 import hmac
@@ -7147,6 +7148,84 @@ def maps_config(env=os.environ):
 
 DAYS = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"]
 PERIODS = 8
+
+# Monday is 1 and Saturday is 6 -- the numbering section_timetable already
+# checks for. Sunday is in DAYS because a week has one, and is not taught.
+TEACHING_DAYS = {day.lower(): n for n, day in enumerate(DAYS) if 1 <= n <= 6}
+
+
+def parse_timetable(text, known_codes):
+    """A photographed timetable, retyped as CSV, read into rows and complaints.
+
+    Pure on purpose: text in, ``(rows, errors)`` out, no database and no
+    printing, so the CLI and the /super page can both call it and the tests
+    need neither. `known_codes` is a parameter for the same reason -- today the
+    caller passes every subject there is, and once a section points at a
+    subject set it passes that set's, without this function ever learning what
+    a section is.
+
+    rows are ``(day, period, code)``, sorted, day 1=Monday..6=Saturday. errors
+    are sentences naming the line they are about, and there is one for every
+    bad line: somebody pasting forty rows should learn all forty mistakes in
+    one go rather than one per attempt.
+
+    Forgiving about what a paste mangles -- the header row or its absence,
+    blank lines, CRLF, stray whitespace, trailing commas, and the curly quotes
+    Excel and chat windows substitute. Unforgiving about what changes the
+    meaning -- an unknown code, a period off the grid, a day it cannot read,
+    and the same (day, period) filled twice. A silently wrong timetable sends a
+    hundred and ten people to the wrong room; a rejected one sends nobody
+    anywhere.
+    """
+    codes = {code.upper(): code for code in known_codes}
+    rows, line_of, errors = {}, {}, []
+    text = (text.lstrip("﻿")
+                .replace("“", '"').replace("”", '"')
+                .replace("‘", "'").replace("’", "'"))
+    for n, line in enumerate(text.splitlines(), 1):
+        try:
+            # csv unwraps "quoted" cells; the second strip is for the quotes it
+            # does not treat as quotes -- an apostrophe, or a lone unbalanced one.
+            cells = [c.strip().strip("'\"").strip() for c in next(csv.reader([line]), [])]
+        except csv.Error as e:
+            errors.append(f"line {n}: cannot read this line ({e})")
+            continue
+        while cells and not cells[-1]:              # trailing commas
+            cells.pop()
+        if not cells:                               # blank, or a row of commas
+            continue
+        if cells[0].lower() == "day":               # the header, if there is one
+            continue
+        if len(cells) != 3:
+            errors.append(
+                f"line {n}: expected day,period,subject_code -- got {line.strip()!r}")
+            continue
+        day_name, period_text, code = cells
+        day = TEACHING_DAYS.get(day_name.lower())
+        if day is None:
+            errors.append(f"line {n}: {day_name!r} is not a day from Monday to Saturday")
+        try:
+            period = int(period_text)
+        except ValueError:
+            errors.append(f"line {n}: period {period_text!r} is not a number")
+            period = None
+        if period is not None and not 1 <= period <= PERIODS:
+            errors.append(f"line {n}: period {period} is not 1 to {PERIODS}")
+            period = None
+        if code.upper() not in codes:
+            errors.append(f"line {n}: unknown subject code {code!r}")
+            continue
+        if day is None or period is None:
+            continue
+        if (day, period) in rows:
+            errors.append(f"line {n}: {DAYS[day]} period {period} is already "
+                          f"{rows[(day, period)]}, set on line {line_of[(day, period)]}")
+            continue
+        rows[(day, period)] = codes[code.upper()]
+        line_of[(day, period)] = n
+    if not rows and not errors:
+        errors.append("no timetable rows found")
+    return [(day, period, code) for (day, period), code in sorted(rows.items())], errors
 
 
 def db_timetable(conn, user_id):
