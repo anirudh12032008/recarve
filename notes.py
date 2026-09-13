@@ -7975,7 +7975,12 @@ GATE_PAGE = r"""<!doctype html>
 <title>recarve — Section I</title>
 <style>
 :root{color-scheme:light dark;--bg:#fcfcfd;--fg:#14161b;--mut:#656b76;--line:#e1e4ea;
-  --accent:#3355e8;--accent-fg:#fff;--err:#d1344b;
+  /* The same purple the app is built on, to the digit. These screens are the
+     first thing anybody sees and the app is the second: a brand that changes
+     colour between the login button and the first screen behind it reads as
+     two products. Deep enough to carry white at 7.3:1 and to read on the
+     paper at 7.1:1, which is what PAGE's own comment says about it. */
+  --accent:#6534c9;--accent-fg:#fff;--err:#d1344b;
   /* Admin ink. Not a bolted-on red -- red is the error colour and already
      means something. This is the page's own ink, filled: the accent stays the
      ordinary blue action, grey stays neutral, and a solid slab of ink is what
@@ -7986,7 +7991,7 @@ GATE_PAGE = r"""<!doctype html>
   /* The accent goes pale in the dark, so what sits on it has to go dark too --
      white on it is 2.8:1. Same pair PAGE carries. */
   :root{--bg:#0f1115;--fg:#e7e9ee;--mut:#98a0ad;--line:#262a32;
-    --accent:#7a92ff;--accent-fg:#0f1115;--err:#e5484d;
+    --accent:#ac93ff;--accent-fg:#0f1115;--err:#e5484d;
     /* Ink inverts with the paper: a near-black slab on a near-black ground is
        not a slab. Same job, same contrast, opposite end of the ramp. */
     --admin:#dfe4f0;--admin-fg:#0f1115;--surface:#171a20}}
@@ -8085,7 +8090,7 @@ button[disabled]{background:var(--mut);color:var(--bg);box-shadow:none}
 body:has(.land){display:block;padding:0;background:#07080c}
 main:has(.land){max-width:none}
 .land{--bg:#07080c;--fg:#eef0f6;--mut:#9aa3b5;--line:rgba(255,255,255,.1);
-  --accent:#8b9cff;--accent-fg:#07080c;--surface:rgba(255,255,255,.045);--err:#ff6b7a;
+  --accent:#ac93ff;--accent-fg:#07080c;--surface:rgba(255,255,255,.045);--err:#ff6b7a;
   color-scheme:dark;color:var(--fg);position:relative;overflow:hidden;
   background:
     radial-gradient(60rem 36rem at 85% -8%,rgba(122,92,255,.28),transparent 60%),
@@ -8104,7 +8109,7 @@ main:has(.land){max-width:none}
 .land nav{display:flex;align-items:center;justify-content:space-between;min-height:48px}
 .logo{font-size:1.2rem;font-weight:800;letter-spacing:-.03em;color:var(--fg)}
 .logo i{display:inline-block;width:.55em;height:.55em;margin-left:.12em;border-radius:50%;
-  background:linear-gradient(135deg,#8b9cff,#ff7ab6);vertical-align:.08em}
+  background:linear-gradient(135deg,#ac93ff,#ff7ab6);vertical-align:.08em}
 .land nav a{color:var(--fg);text-decoration:none;font-weight:600;font-size:.92rem;
   display:inline-flex;align-items:center;min-height:44px;padding:0 14px;border-radius:999px;
   border:1px solid var(--line);background:var(--surface)}
@@ -8118,14 +8123,14 @@ main:has(.land){max-width:none}
   box-shadow:0 0 0 0 rgba(62,224,137,.6);animation:ping 2s infinite}
 .hero h1{font-size:clamp(2.5rem,9.5vw,4.4rem);line-height:1;letter-spacing:-.045em;
   font-weight:850;margin:18px 0 18px;color:var(--fg);max-width:12ch}
-.hero h1 span{display:block;background:linear-gradient(92deg,#8b9cff 0%,#c58bff 45%,#ff7ab6 100%);
+.hero h1 span{display:block;background:linear-gradient(92deg,#ac93ff 0%,#c58bff 45%,#ff7ab6 100%);
   -webkit-background-clip:text;background-clip:text;color:transparent}
 .hero .lede{font-size:1.08rem;line-height:1.6;max-width:34ch;margin:0 0 26px}
 .ctas{display:flex;gap:10px;flex-wrap:wrap}
 .cta{display:inline-flex;align-items:center;justify-content:center;min-height:50px;
   padding:0 22px;border-radius:14px;font-weight:700;text-decoration:none;font-size:1rem}
-.cta.go{background:linear-gradient(135deg,#8b9cff,#b48cff);color:#07080c;
-  box-shadow:0 10px 30px -8px rgba(139,156,255,.6)}
+.cta.go{background:linear-gradient(135deg,#ac93ff,#c58bff);color:#07080c;
+  box-shadow:0 10px 30px -8px rgba(172,147,255,.6)}
 .cta.soft{color:var(--fg);border:1px solid var(--line);background:var(--surface)}
 .stats{display:grid;grid-template-columns:repeat(3,auto);justify-content:start;
   column-gap:22px;margin:28px 0 0}
@@ -8145,22 +8150,22 @@ main:has(.land){max-width:none}
 .rec .t{font:600 .78rem ui-monospace,SFMono-Regular,Menlo,monospace;color:var(--fg)}
 .rec .sub{font-size:.75rem;color:var(--mut);margin-left:auto}
 .wave{display:flex;align-items:center;gap:3px;height:34px;padding:0 4px;margin:10px 2px 4px}
-.wave i{flex:1;border-radius:3px;background:linear-gradient(180deg,#8b9cff,#ff7ab6);
+.wave i{flex:1;border-radius:3px;background:linear-gradient(180deg,#ac93ff,#ff7ab6);
   height:30%;animation:wave 1.1s ease-in-out infinite}
 .said{margin:10px 2px 0;padding:12px 14px;border-radius:14px;background:rgba(0,0,0,.25);
   font-size:.92rem;line-height:1.6;color:var(--fg)}
 .said small{display:block;font-size:.72rem;color:var(--mut);margin:0 0 4px;letter-spacing:.02em}
-.said em{font-style:normal;color:#9fb0ff}
+.said em{font-style:normal;color:#c0a9ff}
 .flow{display:flex;align-items:center;justify-content:center;gap:8px;margin:12px 0;
   font-size:.75rem;color:var(--mut)}
-.flow b{padding:4px 10px;border-radius:999px;background:rgba(139,156,255,.14);color:#b9c3ff;
+.flow b{padding:4px 10px;border-radius:999px;background:rgba(172,147,255,.14);color:#cbb8ff;
   font-weight:600}
 .notes{padding:14px;border-radius:14px;background:#0d0f16;border:1px solid var(--line)}
 .notes h3{margin:0 0 8px;font-size:.95rem;color:var(--fg)}
 .notes ul{margin:0 0 12px;padding-left:1.1rem;font-size:.9rem;color:#d7dbe6}
 .notes li{margin:.25rem 0}
-.notes code{font-size:.84rem;padding:1px 6px;border-radius:6px;background:rgba(139,156,255,.14);
-  color:#c9d1ff;overflow-wrap:anywhere}
+.notes code{font-size:.84rem;padding:1px 6px;border-radius:6px;background:rgba(172,147,255,.14);
+  color:#dccbff;overflow-wrap:anywhere}
 .q{border-radius:12px;padding:10px 12px;background:rgba(255,255,255,.04);font-size:.86rem;
   color:#d7dbe6}
 .q small{display:block;font-size:.7rem;color:#ff9ccb;font-weight:700;letter-spacing:.06em;
@@ -8168,7 +8173,7 @@ main:has(.land){max-width:none}
 
 .sect{padding:44px 0 6px}
 .kicker{font-size:.75rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;
-  color:#b9c3ff;margin:0 0 8px}
+  color:#cbb8ff;margin:0 0 8px}
 .sect h2{font-size:clamp(1.6rem,6vw,2.3rem);line-height:1.1;letter-spacing:-.03em;
   margin:0 0 22px;color:var(--fg);max-width:18ch;font-weight:800}
 .grid{display:grid;gap:12px}
@@ -8176,8 +8181,8 @@ main:has(.land){max-width:none}
 @media (min-width:960px){.grid{grid-template-columns:1fr 1fr 1fr}}
 .card{padding:18px;border-radius:18px;border:1px solid var(--line);background:var(--surface)}
 .card .ic{display:grid;place-items:center;width:38px;height:38px;border-radius:11px;
-  margin:0 0 12px;background:linear-gradient(135deg,rgba(139,156,255,.25),rgba(255,122,182,.2));
-  color:#e6e9ff}
+  margin:0 0 12px;background:linear-gradient(135deg,rgba(172,147,255,.25),rgba(255,122,182,.2));
+  color:#efe9ff}
 .card .ic svg{width:20px;height:20px}
 .card h3{margin:0 0 4px;font-size:1rem;color:var(--fg)}
 .card p{margin:0;font-size:.9rem;line-height:1.55}
@@ -8187,15 +8192,15 @@ main:has(.land){max-width:none}
   border:1px solid var(--line);background:var(--surface)}
 .steps div::before{counter-increment:s;content:counter(s);position:absolute;left:18px;top:16px;
   width:28px;height:28px;border-radius:50%;display:grid;place-items:center;font-weight:800;
-  font-size:.85rem;color:#07080c;background:linear-gradient(135deg,#8b9cff,#ff7ab6)}
+  font-size:.85rem;color:#07080c;background:linear-gradient(135deg,#ac93ff,#ff7ab6)}
 .steps b{display:block;color:var(--fg);margin:0 0 2px}
 .steps span{font-size:.9rem;color:var(--mut)}
 
 /* The form: the same fields and script as ever, in a card of its own. */
 .joincard{scroll-margin-top:16px;max-width:30rem;margin:50px auto 0;padding:24px 20px;
-  border-radius:24px;border:1px solid rgba(139,156,255,.35);
-  background:linear-gradient(180deg,rgba(139,156,255,.1),rgba(255,255,255,.02));
-  box-shadow:0 30px 80px -40px rgba(139,156,255,.55)}
+  border-radius:24px;border:1px solid rgba(172,147,255,.35);
+  background:linear-gradient(180deg,rgba(172,147,255,.1),rgba(255,255,255,.02));
+  box-shadow:0 30px 80px -40px rgba(172,147,255,.55)}
 .joincard h2{font-size:1.5rem;letter-spacing:-.02em;margin:0 0 6px;color:var(--fg)}
 .joincard .by{display:inline-flex;gap:6px;align-items:center;font-size:.85rem;font-weight:600;
   padding:5px 11px;border-radius:999px;background:rgba(62,224,137,.12);color:#8ff0bd;
@@ -8203,10 +8208,10 @@ main:has(.land){max-width:none}
 .joincard input{background:rgba(0,0,0,.3);border-color:rgba(255,255,255,.22)}
 .joincard input[readonly]{background:transparent;border-style:dashed}
 .joincard button{min-height:52px;border-radius:14px;margin-top:6px;font-weight:750;
-  background:linear-gradient(135deg,#8b9cff,#b48cff);color:#07080c}
+  background:linear-gradient(135deg,#ac93ff,#c58bff);color:#07080c}
 .joincard button[disabled]{background:var(--mut);color:var(--bg)}
 .land .login{text-align:center;margin:18px 0 0}
-.land .login a{color:#b9c3ff;display:inline-flex;align-items:center;min-height:44px}
+.land .login a{color:#cbb8ff;display:inline-flex;align-items:center;min-height:44px}
 .land footer{text-align:center;font-size:.8rem;color:var(--mut);padding:44px 0 8px}
 
 @keyframes wave{0%,100%{height:22%}50%{height:100%}}
