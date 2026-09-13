@@ -647,6 +647,12 @@ def test_a_closed_day_is_named_in_the_payload(db):
     the server expands the calendar to one row per date it actually covers."""
     uid = student_with_a_monday(db)
     as_admin_connection(db)
+    # The migrations seed the institute's real calendar, so "today" is a
+    # holiday on the days it is really a holiday -- and these two assert what
+    # an ORDINARY day does. Clear it first, the way the countdown test below
+    # already does, so the test reads the same on Ganesh Chaturthi as on a
+    # Tuesday in November.
+    db.execute("delete from academic_calendar")
     today = db.execute("select current_date").fetchone()[0]
     shut = today + datetime.timedelta(days=3)
     db.execute(
@@ -669,6 +675,12 @@ def test_a_teaching_day_is_not_closed_however_special_it_is(db):
     from the denominator."""
     uid = student_with_a_monday(db)
     as_admin_connection(db)
+    # The migrations seed the institute's real calendar, so "today" is a
+    # holiday on the days it is really a holiday -- and these two assert what
+    # an ORDINARY day does. Clear it first, the way the countdown test below
+    # already does, so the test reads the same on Ganesh Chaturthi as on a
+    # Tuesday in November.
+    db.execute("delete from academic_calendar")
     today = db.execute("select current_date").fetchone()[0]
     db.execute(
         "insert into academic_calendar "
