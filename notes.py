@@ -570,6 +570,11 @@ PAGE = r"""<!doctype html>
 :root{
   --bg:#fcfcfd; --surface:#f2f3f7;
   --fg:#14161b; --mut:#656b76; --line:#e1e4ea;
+  /* One accent, and it is a purple. Every member's action is this colour and
+     nothing else in the app is: an admin's power is ink, an error is the one
+     red, a term below 75% is amber. Deep enough to carry white at 7.3:1 and to
+     read on the paper at 7.1:1, which is what lets it be used this sparingly
+     and still be the thing your eye goes to. */
   --accent:#3355e8; --accent-fg:#fff;
   /* Admin ink. Red already means error, so power is not red: it is the page's
      own ink, filled. Accent is every member's action, grey is neutral, ink is
@@ -596,6 +601,9 @@ PAGE = r"""<!doctype html>
   :root{
     --bg:#0f1115; --surface:#171a20;
     --fg:#e7e9ee; --mut:#98a0ad; --line:#262a32;
+    /* The same purple, lifted off a near-black ground rather than pressed
+       onto paper -- and what sits ON it goes dark, because the light version
+       of this colour cannot carry white. */
     --accent:#7c93ff; --accent-fg:#0f1115;
     /* Ink inverts with the paper: near-black on near-black is not a slab. */
     --admin:#dfe4f0; --admin-fg:#0f1115;
@@ -625,17 +633,45 @@ body.reading #read{display:block}
   border-bottom:1px solid var(--line);
   padding:max(10px,env(safe-area-inset-top)) 16px 10px;
 }
-.brand{display:flex;align-items:baseline;gap:8px;min-height:var(--tap);margin-bottom:6px}
-.brand b{font-size:20px;letter-spacing:-.015em;font-weight:700}
+/* One line at the top of every screen: what you are looking at, and you. The
+   screen's own name is the largest type in the app, because with four tabs and
+   three levels inside two of them, the cheapest way to say where somebody is
+   standing is to say it. Everything else up here is quiet around it.
+   The back button takes the line above rather than sharing this one: at 375px
+   a 26px name, a code chip, "< Subjects" and the avatar on one row left the
+   name four letters wide. */
+.tophead{display:flex;align-items:center;gap:12px;min-height:var(--tap);margin-bottom:6px}
+.brand{display:flex;align-items:baseline;gap:8px;flex:1;min-width:0}
+.brand b{font-size:26px;letter-spacing:-.022em;font-weight:700}
 .brand span{font-size:13px;color:var(--mut)}
+/* You, and the handful of things that are only yours. Out of the tab bar --
+   four tabs are the class, the campus and the library, and none of them is a
+   place you visit between classes the way those three are. A glyph drawn in
+   the page rather than an image or a webfont: nothing to download, nothing to
+   go missing offline, and it inherits the ink around it. */
+#avatar{flex:none;width:var(--tap);height:var(--tap);margin-right:-8px;border-radius:50%;
+  display:flex;align-items:center;justify-content:center;color:var(--mut)}
+#avatar svg{width:24px;height:24px}
+#avatar[aria-expanded="true"]{color:var(--accent);background:var(--surface)}
+#avatar:active{background:var(--surface)}
+/* Anchored under the avatar rather than filling the screen: it is four rows,
+   and a sheet for four rows is furniture. .top is sticky and therefore the
+   containing block, so this hangs off the header wherever the header is. */
+#menu{position:absolute;z-index:7;right:12px;top:calc(100% - 4px);min-width:15rem;
+  max-width:calc(100vw - 24px);padding:6px;border-radius:14px;background:var(--bg);
+  border:1px solid var(--line);box-shadow:0 12px 34px rgba(0,0,0,.18)}
+#menu button,#menu a{display:flex;align-items:center;gap:8px;width:100%;min-height:var(--tap);
+  padding:0 12px;border-radius:11px;font-size:16px;color:var(--fg);text-decoration:none}
+#menu button:active,#menu a:active{background:var(--surface)}
+#menu .tag{margin-left:auto}
 
 .group{padding:18px 16px 2px}
 .group h2{display:inline;margin:0 0 0 9px;font-size:13px;font-weight:500;color:var(--mut)}
-.shead{display:flex;align-items:center;gap:9px;min-height:var(--tap);margin-bottom:6px}
+.shead{display:flex;align-items:center;gap:9px;flex:1;min-width:0}
 /* The screen's name, at the weight a screen's name is. It ellipsises rather
    than wraps: at this depth the code chip beside it already says which
    subject, so the tail of a long name is the cheapest thing on the row. */
-.shead h2{margin:0;font-size:20px;font-weight:700;letter-spacing:-.015em;
+.shead h2{margin:0;font-size:26px;font-weight:700;letter-spacing:-.022em;
   color:var(--fg);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .sect{margin:0;padding:20px 16px 2px;font-size:13px;font-weight:600;
   letter-spacing:.05em;text-transform:uppercase;color:var(--mut)}
@@ -828,6 +864,10 @@ body.reading #read{display:block}
    below key off the class rather than the id, because a comment section is
    the same piece of writing between people wherever it hangs. */
 .thread{max-width:70ch}
+/* The same thread, standing in a tab rather than under a note: it needs the
+   screen's own margins, which #doubts gets from its own rule. */
+.thread.inset{margin:0 auto;padding:0 16px}
+.thread.inset h2{margin-top:20px}
 .filethread{padding:0 0 10px}
 .thread h2{margin:38px 0 0;font-size:20px;line-height:1.3;letter-spacing:-.012em;
   font-weight:600;padding-bottom:7px;border-bottom:1px solid var(--line)}
@@ -910,7 +950,7 @@ body.reading #read{display:block}
 .compose input[type=file]{padding:9px 12px;line-height:1.4;margin-top:10px}
 .compose input[type=file]::file-selector-button{margin-right:11px;min-height:32px;
   padding:0 12px;font:inherit;font-size:13px;font-weight:600;color:var(--fg);
-  background:var(--bg);border:1px solid var(--line);border-radius:9px}
+  background:var(--bg);border:1px solid var(--line);border-radius:7px}
 .compose .pinrow{display:flex;align-items:center;gap:11px;min-height:var(--tap);
   margin-top:14px;font-size:16px;color:var(--fg)}
 .compose .pinrow input{width:22px;height:22px;min-height:0;flex:none;accent-color:var(--accent)}
@@ -1196,12 +1236,19 @@ body.reading .tabs{display:none}
 
 <section id="list">
   <div class="top">
-    <div class="brand" id="brand"><b>recarve</b><span>Section I</span></div>
-    <div class="shead" id="shead" hidden>
-      <button class="back" id="lback" aria-label="Back to all subjects">&lsaquo; Subjects</button>
-      <span class="code" id="scode"></span>
-      <h2 id="sname"></h2>
+    <button class="back" id="lback" aria-label="Back to all subjects">&lsaquo; Subjects</button>
+    <div class="tophead">
+      <div class="brand" id="brand"><b>recarve</b><span>Section I</span></div>
+      <div class="shead" id="shead" hidden>
+        <span class="code" id="scode"></span>
+        <h2 id="sname"></h2>
+      </div>
+      <button id="avatar" aria-haspopup="true" aria-expanded="false" aria-controls="menu"
+              aria-label="You and your things"><svg viewBox="0 0 24 24" aria-hidden="true"
+        fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"
+        ><circle cx="12" cy="8.6" r="3.7"/><path d="M4.9 20c.8-3.7 3.7-5.8 7.1-5.8s6.3 2.1 7.1 5.8"/></svg></button>
     </div>
+    <div id="menu" role="menu" aria-label="You and your things" hidden></div>
     <input id="q" placeholder="Search notes and transcripts" autocomplete="off" enterkeyhint="search">
   </div>
   <div id="jobs"></div>
@@ -1300,7 +1347,7 @@ body.reading .tabs{display:none}
   <button data-tab="home">Home</button>
   <button data-tab="classes">Classes</button>
   <button data-tab="campus">Campus</button>
-  <button data-tab="me">Me</button>
+  <button data-tab="community">Community</button>
 </nav>
 
 <script>
@@ -1312,6 +1359,8 @@ const brand = document.getElementById('brand'), shead = document.getElementById(
 const scode = document.getElementById('scode'), sname = document.getElementById('sname');
 const lback = document.getElementById('lback'), tools = document.getElementById('tools');
 const tabBtns = document.querySelectorAll('.tabs button');
+const avatarEl = document.getElementById('avatar');
+const menuEl = document.getElementById('menu');
 let current = null;                      // the note being read, or null
 let currentCode = null;                  // its subject's code, alongside it
 // Which tab, and how deep inside it. Classes goes subject -> note; Home has
@@ -1341,8 +1390,28 @@ const hue = code => HUES[code.slice(0, 2)] ?? 220;
 // Android back gesture and the browser back button both climb one step rather
 // than leaving the page. Nothing keeps its own back stack: route() reads the
 // hash, and the hash is the only thing that decides what is on screen.
-const TABS = ['home', 'classes', 'campus', 'me'];
-const TAB_TITLE = {classes: 'Subjects', campus: 'Campus', me: 'Your profile'};
+// Four of them are in the bar. The fifth -- you -- is reached from the avatar
+// in the header instead, because your own profile is not somewhere you go
+// between classes the way the other four are. It stays a tab as far as the
+// router is concerned, which is what keeps every '#me' link ever sent working.
+const TABS = ['home', 'classes', 'campus', 'community', 'me'];
+const TAB_TITLE = {classes: 'Subjects', campus: 'Campus', community: 'Community',
+                   me: 'You'};
+// Levels that changed tabs when each thing was given exactly one home. A link
+// sent before the move still opens the screen it named: route() rewrites the
+// hash in place and runs again, which is what the pre-tabs note links below
+// already did.
+const MOVED = {
+  // The timetable and the catch-up screen are Classes now -- they are about
+  // the week, and the week is where the subjects are.
+  'home/timetable': 'classes/timetable',
+  'home/attendance': 'classes/attendance',
+  // The wall and the class board are Community: they are people, not place.
+  'campus/feed': 'community', 'campus/confession': 'community',
+  'campus/board': 'community',
+  // And the notice board is Home, so writing one starts from Home.
+  'campus/new': 'home/new',
+};
 const subjectOf = code => DATA.find(s => s.code === code);
 const lecturesOf = s => s.notes.filter(n => n.kind !== 'revision');
 const revisionOf = s => s.notes.find(n => n.kind === 'revision');
@@ -1785,21 +1854,21 @@ function markSeen(now) {
   try { localStorage.setItem(SEEN_KEY, String(now)); } catch (e) {}
 }
 
-// 0. WHAT'S COMING. The institute's own calendar, reduced to the one thing a
-// student actually wants from it: how far away is the next thing that matters.
-// Nothing to show until ATT has answered -- there is no guessed countdown, the
-// same way there is no guessed timetable.
-function countdownBlock() {
+// WHAT'S COMING, on the tab that owns the calendar. The institute's own dates,
+// reduced to the one thing a student actually wants from them: how far away is
+// the next thing that matters. Nothing to show until ATT has answered -- there
+// is no guessed countdown, the same way there is no guessed timetable.
+//
+// A society's fest is NOT in this list, although the server sends it in the
+// same array. It has its own list, on Campus, under "Coming up on campus" --
+// and printing it in both places was two calendars pretending to be one.
+function comingUpBlock() {
   if (!ATT) return;
-  calendarWeek();
-  const items = ATT.upcoming || (ATT.next ? [ATT.next] : []);
+  const items = (ATT.upcoming || (ATT.next ? [ATT.next] : []))
+    .filter(n => n.what !== 'campus');
   if (!items.length) return;
   block('Coming up', items.map(n => {
-    // One list, two kinds of thing. Every row says which it is -- the
-    // institute's calendar and a society's fest are both "what is coming",
-    // and a student keeps one calendar, not two.
-    const what = n.what === 'campus' ? 'Campus event' : 'Academic calendar';
-    const row = line(n.title, [whenSays(n), what, n.where].filter(Boolean).join(' · '),
+    const row = line(n.title, [whenSays(n), n.where].filter(Boolean).join(' · '),
                      document.createElement('div'));
     // A tear-off date, so the list reads as a calendar and not as prose.
     const tile = document.createElement('span');
@@ -1985,10 +2054,6 @@ function todayBlock() {
   const day = ATT ? dayOfISO(ATT.today) : dayOf(new Date());
   if (TT === null) return block('Today', [quiet('Checking your timetable…')]);
 
-  const edit = line('Edit your timetable', 'Add or change a period',
-                    document.createElement('button'));
-  edit.onclick = () => go('home', 'timetable');
-
   if (!TT.length) {
     if (!live) {
       return block('Today', [quiet('Your timetable needs the server. Run: notes.py serve')]);
@@ -1996,7 +2061,7 @@ function todayBlock() {
     const start = line('Set up your timetable',
                        'Six days, one tap per class · about a minute',
                        document.createElement('button'));
-    start.onclick = () => go('home', 'timetable');
+    start.onclick = () => go('classes', 'timetable');
     return block('Today', [start]);
   }
 
@@ -2031,13 +2096,6 @@ function todayBlock() {
     if (all) rows.push(all);
   }
   if (!rows.length) rows.push(emptyDay(date, day));
-  if (ATT) {
-    const back = line('Catch up on another day', 'Mark a class you forgot',
-                      document.createElement('button'));
-    back.onclick = () => go('home', 'attendance');
-    rows.push(back);
-  }
-  rows.push(edit);
   blockWithTimeline('Today \u00b7 ' + DAYS[day], date, rows);
 }
 
@@ -2111,13 +2169,21 @@ function adminBlock() {
     'Members, roles, the invite link, and anything reported', a))]);
 }
 
+// Home is today, and only today: what you have on, what is waiting on you,
+// what the section has been told, and what has landed since you last looked.
+// Everything here that has a life of its own elsewhere is a way INTO that
+// place rather than a second copy of it -- the timetable, the catch-up screen
+// and every note on this screen open on the tab that owns them.
 function renderHome() {
-  noticeBlock();
-  countdownBlock();
+  // Writing a notice takes the screen over, the same way Campus's three forms
+  // take theirs: it is one thing at a time on a phone. A student who types the
+  // URL falls through to the board, which is the same answer /announce gives
+  // them -- hiding the composer is a courtesy, the gate is the lock.
+  if (view.compose && ROLE === 'admin') return renderCompose();
   todayBlock();
   needsBlock();
+  renderAnnouncements();
   adminBlock();
-  savedBlock();
   // 4. An empty library is a real state on day one, and a blank screen reads
   // as a broken app. Say what the first thing to do is.
   if (!DATA.some(s => s.notes.length || s.uploads.length)) {
@@ -2134,7 +2200,10 @@ function renderHome() {
 // professor's file renamed, a revision sheet since replaced), and a row for a
 // note that is no longer there is silently skipped rather than shown as a
 // dead link with nothing behind it.
-function savedBlock() {
+//
+// Its own screen, under the avatar, rather than a block near the bottom of
+// Home: what you saved is yours, and Home is today.
+function savedScreen() {
   const rows = [];
   for (const b of BOOKMARKS) {
     const s = subjectOf(b.code);
@@ -2145,7 +2214,15 @@ function savedBlock() {
     row.onclick = () => go('classes', s.code, n.title);
     rows.push(row);
   }
-  block('Saved', rows);
+  if (!rows.length) {
+    return saying('Nothing saved yet.',
+      'Tap Save while you are reading a lecture and it lands here, so the one '
+      + 'you want the night before an exam is two taps from anywhere.');
+  }
+  const box = document.createElement('div');
+  box.className = 'rows';
+  rows.forEach(el => box.appendChild(el));
+  nav.appendChild(box);
 }
 
 // The one level inside Home. Six days of native selects: the iOS wheel is the
@@ -2574,7 +2651,7 @@ function annCard(a) {
     acts.className = 'acts';
     const edit = document.createElement('button');
     edit.textContent = 'Edit';
-    edit.onclick = () => go('campus', a.id);
+    edit.onclick = () => go('home', a.id);
     const del = document.createElement('button');
     del.textContent = a.deleted ? 'Put it back' : 'Delete';
     del.onclick = () => saveAnn({id: a.id, deleted: !a.deleted}, null, del);
@@ -2667,12 +2744,15 @@ function renderCompose() {
   };
 }
 
+// The notice board, in full and in one place. It used to be here AND three
+// rows deep at the top of Home; a notice you had read then showed up twice and
+// a notice you had not showed up twice differently. Home is where it lives.
 function renderAnnouncements() {
   heading('Announcements');
   if (ROLE === 'admin') {
     const post = line('Post an announcement', 'Every approved classmate sees it',
                       document.createElement('button'));
-    post.onclick = () => go('campus', 'new');
+    post.onclick = () => go('home', 'new');
     const rows = document.createElement('div');
     rows.className = 'rows';
     rows.appendChild(inked(post));
@@ -2689,38 +2769,18 @@ function renderAnnouncements() {
           + 'and pinned ones stay at the top.'
         : 'This is where the section is told things — a moved lab, a '
           + 'deadline, where a lecture is. Your class admin puts them up, and '
-          + 'new ones show on Home until you have read them.');
+          + 'they are the first thing on this screen until you have read them.');
   }
   list.forEach(a => nav.appendChild(annCard(a)));
   markRead(list);
 }
 
-// On HOME: pinned, or not yet read. A notice you have read and nobody pinned
-// is not what you need right now, and three at most either way -- a wall of
-// old notices at the top of Home is how people learn to scroll past the top
-// of Home.
-function noticeBlock() {
-  const show = liveAnn().filter(a => a.pinned || a.unread);
-  if (!show.length) return;
-  const rows = show.slice(0, 3).map(a => {
-    const b = line(a.title, [a.unread ? 'New' : '', a.pinned ? 'Pinned' : '',
-                             ago(a.at, NOW)].filter(Boolean).join(' · '),
-                   document.createElement('button'));
-    b.onclick = () => go('campus');
-    return b;
-  });
-  if (show.length > rows.length) {
-    rows.push(quiet('and ' + (show.length - rows.length) + ' more, under Campus.'));
-  }
-  block('Notices', rows);
-}
-
-// ---- CAMPUS: the class, not your own shelf. -----------------------------
-// The board lives here rather than on Me because it is a list of other people.
-// Me is where your own score and the rules behind it are, next to your name and
-// your role; a ranking of a hundred and ten classmates is not a fact about you.
-// Campus is also the tab that had nothing in it, and a leaderboard is the first
-// thing the class as a whole actually owns.
+// ---- COMMUNITY: the people. ---------------------------------------------
+// The board lives here rather than on your own screens because it is a list of
+// other people. Under the avatar is where your own score and the rules behind
+// it are, next to your name and your role; a ranking of a hundred and ten
+// classmates is not a fact about you. It used to be printed in both places,
+// which made the same number mean two things on two screens.
 //
 // Points are status and nothing else. Nothing on this screen is a key, and the
 // empty state says so out loud, because a leaderboard is exactly the place
@@ -2827,9 +2887,9 @@ function needWall(kind) {
   fetch('/posts?kind=' + kind)
     .then(r => r.ok ? r.json() : Promise.reject())
     .then(d => { WALLS[kind] = d.posts || []; wallAsked[kind] = false;
-                 redrawCampus(); })
+                 redrawCommunity(); })
     .catch(() => { WALLS[kind] = 'failed'; wallAsked[kind] = false;
-                   redrawCampus(); });
+                   redrawCommunity(); });
 }
 
 function postCard(x, kind) {
@@ -2992,9 +3052,54 @@ function wallSection() {
   list.forEach(x => box.appendChild(postCard(x, wallOn)));
 }
 
-// The rest of Campus. Fetched once, on the tab that shows it: this is three
-// lists and none of them is wanted by Home, which already gets the one thing
-// it needs -- the events, folded into Coming up by the server.
+// ---- DOUBTS, the ones that are not about one lecture. --------------------
+// A question about a lecture belongs under that lecture and stays there: the
+// note it is about is the context, and moving it here would be a thread with
+// its subject cut off. What had nowhere to go at all is the other kind -- a
+// question about the subject itself. The server has always kept that thread
+// (a doubt hangs off a subject code with no lecture on it, which is what a
+// static export and a never-adopted file already fall back to) and nothing on
+// this page ever opened it. This is that screen.
+let doubtsOn = null;            // whose thread is open, by subject code
+
+function doubtsSection() {
+  heading('Doubts');
+  const pick = document.createElement('div');
+  pick.className = 'days';
+  for (const s of DATA) {
+    const b = document.createElement('button');
+    b.textContent = s.code;
+    b.setAttribute('aria-label', s.name);
+    if (s.code === doubtsOn) b.setAttribute('aria-current', 'true');
+    b.onclick = () => { doubtsOn = doubtsOn === s.code ? null : s.code; render(); };
+    pick.appendChild(b);
+  }
+  nav.appendChild(pick);
+  if (!doubtsOn) {
+    return void nav.appendChild(quiet('Pick a subject to read what the section '
+      + 'has asked about it. A question about one lecture is asked under that '
+      + 'lecture, in the library, and stays there.'));
+  }
+  const box = document.createElement('section');
+  box.className = 'thread inset';
+  box.setAttribute('aria-label', 'Doubts');
+  nav.appendChild(box);
+  // Only fetch when it is a different thread from the one already in hand. The
+  // wall answering, or a vote landing, repaints this tab -- and re-asking the
+  // server on every repaint would be one request per keystroke elsewhere.
+  if (threadOn && threadOn.subject === doubtsOn && !threadOn.title
+      && !threadOn.material) {
+    threadBox = box;
+    drawDoubts();
+  } else {
+    loadDoubts({subject: doubtsOn}, box, subjectOf(doubtsOn).name);
+  }
+}
+
+// The rest of Campus. Fetched once, on the tab that shows it: three lists,
+// none of them wanted by any other tab. The server folds the events into the
+// same upcoming array the academic calendar arrives in; Classes filters them
+// back out, because a fest belongs to Campus and is printed here.
 let CAMPUS = null;              // the last /campus answer, or {failed:true}
 let campusAsked = false;
 
@@ -3008,6 +3113,7 @@ function needCampus() {
 }
 
 const redrawCampus = () => { if (view.tab === 'campus') render(); };
+const redrawCommunity = () => { if (view.tab === 'community') render(); };
 const campusList = key => (CAMPUS && CAMPUS[key]) || [];
 
 // Who may change what, in one place. Events are the same bar as adding to the
@@ -3059,8 +3165,8 @@ function eventCard(e) {
 function eventsSection() {
   heading('Coming up on campus');
   if (mayAdd()) {
-    const add = line('Add an event', 'Everyone approved sees it, and it joins '
-                     + 'Home’s Coming up list', document.createElement('button'));
+    const add = line('Add an event', 'Everyone approved sees it, here, until '
+                     + 'the day it ends', document.createElement('button'));
     add.onclick = () => go('campus', 'event');
     const rows = document.createElement('div');
     rows.className = 'rows';
@@ -3075,8 +3181,8 @@ function eventsSection() {
   if (!list.length) {
     return saying('Nothing on the calendar right now.',
       'A fest, a workshop, a competition — anything with a date on it goes '
-      + 'here and shows on Home until the day it ends. Nothing is invented: '
-      + 'an event is here because somebody in the section put it here.');
+      + 'here and stays until the day it ends. Nothing is invented: an event '
+      + 'is here because somebody in the section put it here.');
   }
   list.forEach(e => nav.appendChild(eventCard(e)));
 }
@@ -3454,8 +3560,10 @@ const COMPOSERS = {event: [eventForm, () => mayAdd()],
                    club: [clubForm, () => mayCurate()],
                    place: [placeForm, () => mayCurate()]};
 
-async function renderCampus() {
-  const mine = painted;
+// Campus is the physical place and nothing else: what is on, who runs it, and
+// where any of it is. The wall, the class board and the notice board used to
+// be filed here too, which is how one tab came to hold six unrelated things.
+function renderCampus() {
   needCampus();
   const composer = COMPOSERS[view.compose];
   // Writing takes the tab over: it is one thing at a time on a phone, and the
@@ -3464,12 +3572,18 @@ async function renderCampus() {
     if (!composer[1]()) return void go('campus');
     return composer[0]();
   }
-  if (view.compose && ROLE === 'admin') return renderCompose();
-  renderAnnouncements();
-  wallSection();
   eventsSection();
   clubsSection();
   mapSection();
+}
+
+// Community is the people: what the section is saying, what it is asking, and
+// what it has put in. Three lists of other students, and none of them is
+// printed anywhere else.
+async function renderCommunity() {
+  const mine = painted;
+  wallSection();
+  doubtsSection();
   heading('Who has contributed');
   windowPicker();
   const box = document.createElement('div');
@@ -3529,7 +3643,7 @@ function renderDay() {
     const start = line('Set up your timetable',
                        'Six days, one tap per class · about a minute',
                        document.createElement('button'));
-    start.onclick = () => go('home', 'timetable');
+    start.onclick = () => go('classes', 'timetable');
     return block(dayName(date), [start]);
   }
   const slots = slotsFor(date);
@@ -3581,7 +3695,26 @@ function renderSubjects() {
       : 'Nothing on ' + DAYS[dayOfISO(attToday())] + ' · step back to any day',
     document.createElement('button'));
   today.onclick = () => go('classes', 'day');
-  block('Your day', [today]);
+  // The three screens that are about your week rather than about a subject.
+  // They were reached from Home, which made the week a thing you left Home to
+  // do and then could not find again; they live on the tab that holds the
+  // subjects they are a timetable OF.
+  const week = [today];
+  if (ATT) {
+    const mark = line('Your attendance', 'Per subject, and a day you forgot to mark',
+                      document.createElement('button'));
+    mark.onclick = () => go('classes', 'attendance');
+    week.push(mark);
+  }
+  const tt = line('Your timetable', 'Add or change a period',
+                  document.createElement('button'));
+  tt.onclick = () => go('classes', 'timetable');
+  week.push(tt);
+  block('Your week', week);
+  // The institute's calendar, and what is next on it. Home shows today; this
+  // is the tab that holds the week around it.
+  if (ATT) calendarWeek();
+  comingUpBlock();
 
   // One run over the whole library, because the week before an exam is not
   // spent one subject at a time. What is due comes first, so tapping this
@@ -3620,7 +3753,7 @@ function renderSubject(s) {
   if (a) {
     const mark = line('Mark your attendance', 'Today, or a day you forgot',
                       document.createElement('button'));
-    mark.onclick = () => go('home', 'attendance');
+    mark.onclick = () => go('classes', 'attendance');
     block('Attendance', [attRow(a, false), mark]);
   }
   // Revising a whole course, not one lecture: every note's questions in one run.
@@ -3899,7 +4032,15 @@ function editProfile(box, d) {
   };
 }
 
+// ---- YOU. Three screens, reached from the avatar in the header rather than
+// from the tab bar: who you are, what you saved, and what you have put in.
+// Three rather than one because the one was a scroll -- a profile, a role, a
+// score, the rules behind the score, and two lists of your own files, all on
+// a screen somebody opens to copy an invite code.
 async function renderMe() {
+  // What you saved needs nothing from the server: the bookmarks rode in on the
+  // /data the page already fetched.
+  if (view.me === 'saved') return savedScreen();
   const mine = painted;
   const box = document.createElement('div');
   box.className = 'mine';
@@ -3919,6 +4060,7 @@ async function renderMe() {
   // Not just "are we still on this tab": a second paint of this same tab
   // replaced everything below, and appending to it now would double it.
   if (mine !== painted) return;
+  if (view.me === 'points') return pointsScreen(box, d);
   profileCard(box, d);
 
   // What the role actually permits, said once, on the screen somebody comes to
@@ -3928,41 +4070,6 @@ async function renderMe() {
                     ROLE_SAYS[d.role] || ROLE_SAYS.student)];
   if (d.role === 'student') can.push(line('What trusted adds', LOCK_ADD));
   block('Your access', can);
-
-  const p = d.points;
-  heading('Contributions');
-  const tally = document.createElement('div');
-  tally.className = 'mine';
-  tally.innerHTML = '<div class="score"></div><p></p>'
-    + '<div class="tally"><div><b class="u"></b>uploads</div>'
-    + '<div><b class="r"></b>recordings</div><div><b class="v"></b>votes received</div></div>'
-    + '<div><span class="badge lvl"></span></div>';
-  tally.querySelector('.score').textContent = p.score + (p.score === 1 ? ' point' : ' points');
-  // The level, and the next one, on the card that carries the number they are
-  // both made of. Nothing here is awarded: change the score and the word
-  // follows it the same second.
-  const up = nextLevel(p.score);
-  tally.querySelector('p').textContent =
-    'Points are a thank-you, not a key. Everything in the library is open to everyone.'
-    + (up ? ' ' + up[1] + ' at ' + plural(up[0], 'point') + '.' : '');
-  tally.querySelector('.u').textContent = p.uploads;
-  tally.querySelector('.r').textContent = p.recordings;
-  tally.querySelector('.v').textContent = p.votes_received;
-  tally.querySelector('.lvl').textContent = levelOf(p.score)[1];
-  nav.appendChild(tally);
-
-  // The rules, in full, on the screen that shows the score they produced.
-  // Nobody should have to guess why they have the number they have -- so each
-  // row is the action, what it is worth, and what this person has earned from
-  // it. The weights are the database's (0021_standings.sql); these three lines
-  // are what they mean.
-  block('How points work', POINT_RULES.map(([key, weight, what]) => line(
-    what,
-    plural(weight, 'point') + ' each · '
-      + (p[key] ? p[key] + ' × ' + weight + ' = ' + plural(p[key] * weight, 'point')
-                : 'nothing from this yet'))));
-  nav.appendChild(quiet('A recording counts once its notes are made, and a file '
-    + 'once it is visible to the class. Ties share a place on the board.'));
 
   // The things only an admin can do, on the only screen that is theirs, marked
   // as theirs. The server decides: a member's /me carries no invite code at
@@ -3990,6 +4097,42 @@ async function renderMe() {
     }
     block('Admin', rows);
   }
+}
+
+// The score, the rules that made it, and the two lists of what you put in. The
+// class board -- everybody else's score -- is on Community, because that is a
+// list of other people and this is a fact about you.
+function pointsScreen(tally, d) {
+  const p = d.points;
+  tally.innerHTML = '<div class="score"></div><p></p>'
+    + '<div class="tally"><div><b class="u"></b>uploads</div>'
+    + '<div><b class="r"></b>recordings</div><div><b class="v"></b>votes received</div></div>'
+    + '<div><span class="badge lvl"></span></div>';
+  tally.querySelector('.score').textContent = p.score + (p.score === 1 ? ' point' : ' points');
+  // The level, and the next one, on the card that carries the number they are
+  // both made of. Nothing here is awarded: change the score and the word
+  // follows it the same second.
+  const up = nextLevel(p.score);
+  tally.querySelector('p').textContent =
+    'Points are a thank-you, not a key. Everything in the library is open to everyone.'
+    + (up ? ' ' + up[1] + ' at ' + plural(up[0], 'point') + '.' : '');
+  tally.querySelector('.u').textContent = p.uploads;
+  tally.querySelector('.r').textContent = p.recordings;
+  tally.querySelector('.v').textContent = p.votes_received;
+  tally.querySelector('.lvl').textContent = levelOf(p.score)[1];
+
+  // The rules, in full, on the screen that shows the score they produced.
+  // Nobody should have to guess why they have the number they have -- so each
+  // row is the action, what it is worth, and what this person has earned from
+  // it. The weights are the database's (0021_standings.sql); these three lines
+  // are what they mean.
+  block('How points work', POINT_RULES.map(([key, weight, what]) => line(
+    what,
+    plural(weight, 'point') + ' each · '
+      + (p[key] ? p[key] + ' × ' + weight + ' = ' + plural(p[key] * weight, 'point')
+                : 'nothing from this yet'))));
+  nav.appendChild(quiet('A recording counts once its notes are made, and a file '
+    + 'once it is visible to the class. Ties share a place on the board.'));
 
   block('Notes & slides you added', d.uploads.map(u => line(
     u.name, u.subject + ' · ' + plural(u.votes, 'vote')
@@ -4046,28 +4189,35 @@ let painted = 0;
 
 function render() {
   painted++;
-  // Search is the Classes tab's own tool; it must not answer over Campus.
-  const needle = view.tab === 'classes' ? q.value.trim().toLowerCase() : '';
+  closeMenu();
   const s = view.code ? subjectOf(view.code) : null;
+  const searchable = view.tab === 'classes' && !view.edit && !view.att && !view.day;
   nav.innerHTML = '';
-  // Home keeps the brand; every other tab names itself in the same header,
+  // Home keeps the brand; every other screen names itself in the same header,
   // and #lback -- the only back button at this depth -- appears only where
   // there is a level above to climb to.
-  brand.hidden = view.tab !== 'home' || view.edit || view.att;
-  shead.hidden = view.tab === 'home' && !view.edit && !view.att;
-  lback.hidden = !s && !view.edit && !view.att && !view.compose && !view.day;
+  brand.hidden = view.tab !== 'home' || !!view.compose;
+  shead.hidden = view.tab === 'home' && !view.compose;
+  lback.hidden = !s && !view.edit && !view.att && !view.compose && !view.day
+                 && !view.me;
   scode.hidden = !s;
-  q.hidden = view.tab !== 'classes';
-  tools.hidden = view.tab !== 'me';
+  // Search is the subject list's own tool. It must not answer over Community,
+  // and it must not answer over the three screens inside Classes that are not
+  // lists of notes -- where a word left in the box hijacked the whole screen.
+  q.hidden = !searchable;
+  const needle = searchable ? q.value.trim().toLowerCase() : '';
+  tools.hidden = view.tab !== 'me' || !!view.me;
   // Home shows the same jobs under "Needs you"; two copies of a running
   // transcription on one screen is one copy too many.
   jobsBox.hidden = view.tab === 'home';
-  // The one back button at this depth serves two levels now, so it has to say
-  // which one it climbs to.
-  lback.textContent = (view.edit || view.att) ? '‹ Home'
-    : (view.compose ? '‹ Campus' : '‹ Subjects');
-  lback.setAttribute('aria-label', (view.edit || view.att) ? 'Back to Home'
-    : (view.compose ? 'Back to the notice board' : 'Back to all subjects'));
+  // The one back button at this depth serves several levels now, so it has to
+  // say which one it climbs to.
+  const up = view.compose && !COMPOSERS[view.compose] ? ['‹ Home', 'Back to the notice board']
+    : view.compose ? ['‹ Campus', 'Back to Campus']
+    : view.me ? ['‹ You', 'Back to your profile']
+    : ['‹ Subjects', 'Back to all subjects'];
+  lback.textContent = up[0];
+  lback.setAttribute('aria-label', up[1]);
   if (s) {
     scode.textContent = s.code;
     scode.style.setProperty('--h', hue(s.code));
@@ -4076,7 +4226,12 @@ function render() {
     : view.day ? 'Your day'
     : view.edit ? 'Your timetable'
     : view.att ? 'Your attendance'
+    // Campus has three composers of its own, and they used to borrow the
+    // notice board's words: adding a club said "Edit notice" over it.
+    : COMPOSERS[view.compose] ? (view.composeId ? 'Edit ' : 'Add ') + view.compose
     : view.compose ? (view.compose === 'new' ? 'New notice' : 'Edit notice')
+    : view.me === 'saved' ? 'Saved'
+    : view.me === 'points' ? 'Your contributions'
     : TAB_TITLE[view.tab];
   tabBtns.forEach(b => {
     if (b.dataset.tab === view.tab) b.setAttribute('aria-current', 'page');
@@ -4088,6 +4243,7 @@ function render() {
   else if (view.day) renderDay();
   else if (view.tab === 'home') renderHome();
   else if (view.tab === 'campus') renderCampus();
+  else if (view.tab === 'community') renderCommunity();
   else if (view.tab === 'me') renderMe();
   else if (s) renderSubject(s);
   else renderSubjects();
@@ -4113,27 +4269,44 @@ function route() {
       return route();
     }
   }
+  // A level that changed tabs. Rewritten in place and re-routed, so the screen
+  // it named still opens and the bar shows where it lives now. An
+  // announcement's own id is a uuid and cannot collide with a composer's word,
+  // which is what lets '#campus/<uuid>' be recognised as one of these.
+  const moved = MOVED[parts.slice(0, 2).join('/')]
+    || (parts[0] === 'campus' && parts[1] && !COMPOSERS[parts[1]]
+        ? 'home/' + parts[1] : null);
+  if (moved) {
+    history.replaceState(null, '',
+                         hashOf(...moved.split('/'), ...parts.slice(2)));
+    return route();
+  }
   const tab = TABS.includes(parts[0]) ? parts[0] : 'home';
   const s = tab === 'classes' ? subjectOf(parts[1]) : null;
   const title = s ? parts[2] : null;
-  // The timetable editor is a level inside Home and therefore a URL, so back
-  // climbs out of it exactly like every other step.
-  const edit = tab === 'home' && parts[1] === 'timetable';
+  // The timetable editor is a level inside Classes and therefore a URL, so
+  // back climbs out of it exactly like every other step.
+  const edit = tab === 'classes' && parts[1] === 'timetable';
   // And so is catching up on attendance, for the same reason.
-  const att = tab === 'home' && parts[1] === 'attendance';
+  const att = tab === 'classes' && parts[1] === 'attendance';
   // The day view is the same shape one tab over: a level inside Classes, so
   // back climbs to the subject list rather than out of the app. 'day' can
   // never collide with a subject -- every code is letters and digits.
   const dayv = tab === 'classes' && parts[1] === 'day';
   // So is the composer, for the same reason: without a URL the back gesture
-  // dropped what was typed and left the Campus tab stuck on an empty form.
-  const compose = tab === 'campus' ? parts[1] || null : null;
+  // dropped what was typed and left the tab stuck on an empty form. Two tabs
+  // have one now -- an event, a club or a place on Campus, and a notice on
+  // Home, which is where the notice board lives.
+  const compose = (tab === 'campus' || tab === 'home') ? parts[1] || null : null;
   // And the row being edited, when there is one: '#campus/club/robotics'. The
   // announcement composer carries its id in `compose` itself, which is a uuid
   // and can never be mistaken for one of the three words above.
   const composeId = compose ? parts[2] || null : null;
+  // Which of your own screens: the profile, what you saved, or what you have
+  // put in. One level under '#me', so '#me' on its own still lands somewhere.
+  const me = tab === 'me' ? parts[1] || null : null;
   view = {tab, code: s ? s.code : null, title: title || null, edit, att, compose,
-          composeId, day: dayv};
+          composeId, day: dayv, me};
   if (!edit) draft = null;      // walking away drops an unsaved week, not TT
   if (!att) attDate = null;     // and re-opening it starts on today, not last week
   if (!dayv) dayDate = null;    // today by default, every time it is opened
@@ -4286,17 +4459,21 @@ function drawDoubts(instead) {
   h.textContent = threadWord;
   box.appendChild(h);
   if (instead) return box.appendChild(quiet(instead));
+  // Which words, read off what the thread is ON rather than off its heading:
+  // a subject's thread on Community is headed with the subject's name, and it
+  // is still a place to ask a question rather than to comment on a file.
+  const onFile = !!(threadOn && threadOn.material);
   box.appendChild(askBox(
-    threadWord === 'Doubts'
-      ? 'Ask the section about this. Somebody who was there will know.'
-      : 'Say something about this file — a page that is wrong, or what it is.',
-    threadWord === 'Doubts' ? 'Ask the section' : 'Post this comment', null));
+    onFile
+      ? 'Say something about this file — a page that is wrong, or what it is.'
+      : 'Ask the section about this. Somebody who was there will know.',
+    onFile ? 'Post this comment' : 'Ask the section', null));
   if (!THREAD.length) {
     return box.appendChild(quiet(
-      threadWord === 'Doubts'
-        ? 'No questions on this one yet. Asking is worth as much as answering — '
-          + 'if you are stuck, somebody else is too.'
-        : 'Nothing said about this one yet.'));
+      onFile
+        ? 'Nothing said about this one yet.'
+        : 'No questions on this one yet. Asking is worth as much as answering — '
+          + 'if you are stuck, somebody else is too.'));
   }
   THREAD.forEach(q => box.appendChild(doubtCard(q)));
 }
@@ -4658,6 +4835,73 @@ backBtn.onclick = () => history.back();
 lback.onclick = () => history.back();
 tabBtns.forEach(b => { b.onclick = () => go(b.dataset.tab); });
 window.onpopstate = route;
+
+// ---- You, behind the avatar. ---------------------------------------------
+// Three of your own screens and, for the one person who runs the class, the
+// way into the admin page -- marked with the same ink every other admin-only
+// control carries. It is a menu and not a fifth tab because none of it is
+// somewhere you go between classes, and not a sheet because four rows do not
+// need the whole screen.
+const MENU_ITEMS = [['Your profile', () => go('me')],
+                    ['Saved', () => go('me', 'saved')],
+                    ['Points and what you added', () => go('me', 'points')]];
+
+// Focus goes back to the avatar whenever it was inside the menu when it shut,
+// and stays where it is when it was not -- a tap on the page behind it must
+// not yank the caret back up to the header.
+function closeMenu() {
+  if (menuEl.hidden) return;
+  const inside = menuEl.contains(document.activeElement);
+  menuEl.hidden = true;
+  avatarEl.setAttribute('aria-expanded', 'false');
+  if (inside) avatarEl.focus();
+}
+
+function openMenu() {
+  menuEl.innerHTML = '';
+  for (const [label, act] of MENU_ITEMS) {
+    const b = document.createElement('button');
+    b.type = 'button';
+    b.setAttribute('role', 'menuitem');
+    b.textContent = label;
+    b.onclick = act;
+    menuEl.appendChild(b);
+  }
+  if (ROLE === 'admin') {
+    const a = document.createElement('a');
+    a.href = '/admin';
+    a.setAttribute('role', 'menuitem');
+    a.textContent = 'Class admin';
+    const tag = document.createElement('span');
+    tag.className = 'tag';
+    tag.textContent = 'Admin';
+    a.appendChild(tag);
+    menuEl.appendChild(a);
+  }
+  menuEl.hidden = false;
+  avatarEl.setAttribute('aria-expanded', 'true');
+  menuEl.firstChild.focus();
+}
+
+avatarEl.onclick = () => { if (menuEl.hidden) openMenu(); else closeMenu(); };
+// Escape leaves it, the arrows walk it, and Tab wraps inside it rather than
+// stepping out onto a page that is still behind an open menu.
+menuEl.onkeydown = (e) => {
+  if (e.key === 'Escape') { e.preventDefault(); return closeMenu(); }
+  const step = e.key === 'ArrowDown' || (e.key === 'Tab' && !e.shiftKey) ? 1
+             : e.key === 'ArrowUp' || (e.key === 'Tab' && e.shiftKey) ? -1 : 0;
+  if (!step) return;
+  e.preventDefault();
+  const items = Array.from(menuEl.children);
+  const at = items.indexOf(document.activeElement);
+  items[(at + step + items.length) % items.length].focus();
+};
+// The other way out, for a thumb: anywhere that is not the menu or the button
+// that opened it.
+document.addEventListener('pointerdown', (e) => {
+  if (!menuEl.hidden && !menuEl.contains(e.target)
+      && !avatarEl.contains(e.target)) closeMenu();
+});
 
 document.getElementById('save').onclick = async (e) => {
   if (!current) return;
