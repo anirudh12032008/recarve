@@ -22,7 +22,7 @@ sys.path.insert(0, str(pathlib.Path(__file__).resolve().parents[2]))
 import notes  # noqa: E402
 
 from conftest import DB_URL, as_admin_connection, as_user, make_user  # noqa: E402
-from test_content import member  # noqa: E402
+from test_content import member, upload_as_owner  # noqa: E402
 
 SECRET = b"test-secret-not-the-real-one"
 
@@ -186,7 +186,8 @@ def test_a_student_may_still_fix_their_own_name(db):
     assert db.execute("select name from profiles where id = %s", (me,)).fetchone()[0] == "Renamed"
 
 
-def test_approving_an_uploader_promotes_a_student_and_leaves_an_admin_alone(db):
+def test_approving_an_uploader_changes_nobody_s_role(db):
+    """0039: approve_uploader publishes files and touches nobody's role."""
     newbie = member(db, role="student")
     other_admin = member(db, role="admin")
     boss = member(db, role="admin")
@@ -195,9 +196,35 @@ def test_approving_an_uploader_promotes_a_student_and_leaves_an_admin_alone(db):
     db.execute("select approve_uploader(%s)", (other_admin,))
     as_admin_connection(db)
     assert db.execute("select role from profiles where id = %s", (newbie,)).fetchone()[0] \
-        == "trusted"
+        == "student", "approval is not a promotion; trusted is granted by hand"
     assert db.execute("select role from profiles where id = %s", (other_admin,)).fetchone()[0] \
         == "admin", "approving somebody's backlog must not demote them"
+
+
+def test_an_approved_joiner_is_a_student_whose_backlog_is_published(db):
+    """The whole path the admin panel's Approve button takes.
+
+    db_approve is what the handler calls, so this is the assertion that would
+    have caught 0009 handing trusted -- upload, record, Explain -- to everybody
+    who got through the door. Their waiting files still go up: publishing a
+    backlog and granting a role were one statement and are now one of them.
+    """
+    boss = member(db, role="admin")
+    joiner = make_user(db)
+    db.execute("insert into profiles (id, name, status) values (%s, 'J', 'pending')",
+               (joiner,))
+    upload_as_owner(db, joiner, "handout.pdf", "joiner-key")
+
+    as_user(db, boss)
+    assert notes.db_approve(db, joiner) == 1
+
+    as_admin_connection(db)
+    assert db.execute(
+        "select status, role, trusted from profiles where id = %s", (joiner,)
+    ).fetchone() == ("approved", "student", False)
+    assert db.execute(
+        "select status from materials where uploader_id = %s", (joiner,)
+    ).fetchone()[0] == "visible"
 
 
 def test_db_set_role_refuses_junk_and_self_demotion(db):
