@@ -139,14 +139,19 @@ alter table profiles
 -- somebody else's. And "their own, and only their own" for the edit, for the
 -- same reason it was true of two admins -- a cr editing the admin's notice
 -- would leave the wrong name on the changed words.
+-- The section predicate is 0042's and it has to survive this file. 0045 was
+-- written against a tree that had no sections in it, and it runs AFTER 0042,
+-- so a policy restated without `section_id = my_section()` would quietly widen
+-- the board back to the whole institute -- and a with-check that does not name
+-- the section lets a rep in one section post INTO another by naming its id.
 drop policy "admins post announcements" on announcements;
 create policy "class reps post announcements" on announcements for insert
-  with check (is_cr() and author_id = auth.uid());
+  with check (is_cr() and author_id = auth.uid() and section_id = my_section());
 
 drop policy "admins edit their own announcements" on announcements;
 create policy "class reps edit their own announcements" on announcements for update
-  using (is_cr() and author_id = auth.uid())
-  with check (is_cr() and author_id = auth.uid());
+  using (is_cr() and author_id = auth.uid() and section_id = my_section())
+  with check (is_cr() and author_id = auth.uid() and section_id = my_section());
 
 -- No delete policy, still. 0023's reasoning has not changed: the app hides
 -- with deleted_at, and nothing reachable from a session may destroy the row
