@@ -5574,6 +5574,7 @@ class Jobs:
 # which screen you see; they are not the only thing standing between a pending
 # joiner and the notes.
 
+import csv
 import datetime
 import hashlib
 import hmac
@@ -7178,6 +7179,84 @@ def maps_config(env=os.environ):
 
 DAYS = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"]
 PERIODS = 8
+
+# Monday is 1 and Saturday is 6 -- the numbering section_timetable already
+# checks for. Sunday is in DAYS because a week has one, and is not taught.
+TEACHING_DAYS = {day.lower(): n for n, day in enumerate(DAYS) if 1 <= n <= 6}
+
+
+def parse_timetable(text, known_codes):
+    """A photographed timetable, retyped as CSV, read into rows and complaints.
+
+    Pure on purpose: text in, ``(rows, errors)`` out, no database and no
+    printing, so the CLI and the /super page can both call it and the tests
+    need neither. `known_codes` is a parameter for the same reason -- today the
+    caller passes every subject there is, and once a section points at a
+    subject set it passes that set's, without this function ever learning what
+    a section is.
+
+    rows are ``(day, period, code)``, sorted, day 1=Monday..6=Saturday. errors
+    are sentences naming the line they are about, and there is one for every
+    bad line: somebody pasting forty rows should learn all forty mistakes in
+    one go rather than one per attempt.
+
+    Forgiving about what a paste mangles -- the header row or its absence,
+    blank lines, CRLF, stray whitespace, trailing commas, and the curly quotes
+    Excel and chat windows substitute. Unforgiving about what changes the
+    meaning -- an unknown code, a period off the grid, a day it cannot read,
+    and the same (day, period) filled twice. A silently wrong timetable sends a
+    hundred and ten people to the wrong room; a rejected one sends nobody
+    anywhere.
+    """
+    codes = {code.upper(): code for code in known_codes}
+    rows, line_of, errors = {}, {}, []
+    text = (text.lstrip("﻿")
+                .replace("“", '"').replace("”", '"')
+                .replace("‘", "'").replace("’", "'"))
+    for n, line in enumerate(text.splitlines(), 1):
+        try:
+            # csv unwraps "quoted" cells; the second strip is for the quotes it
+            # does not treat as quotes -- an apostrophe, or a lone unbalanced one.
+            cells = [c.strip().strip("'\"").strip() for c in next(csv.reader([line]), [])]
+        except csv.Error as e:
+            errors.append(f"line {n}: cannot read this line ({e})")
+            continue
+        while cells and not cells[-1]:              # trailing commas
+            cells.pop()
+        if not cells:                               # blank, or a row of commas
+            continue
+        if cells[0].lower() == "day":               # the header, if there is one
+            continue
+        if len(cells) != 3:
+            errors.append(
+                f"line {n}: expected day,period,subject_code -- got {line.strip()!r}")
+            continue
+        day_name, period_text, code = cells
+        day = TEACHING_DAYS.get(day_name.lower())
+        if day is None:
+            errors.append(f"line {n}: {day_name!r} is not a day from Monday to Saturday")
+        try:
+            period = int(period_text)
+        except ValueError:
+            errors.append(f"line {n}: period {period_text!r} is not a number")
+            period = None
+        if period is not None and not 1 <= period <= PERIODS:
+            errors.append(f"line {n}: period {period} is not 1 to {PERIODS}")
+            period = None
+        if code.upper() not in codes:
+            errors.append(f"line {n}: unknown subject code {code!r}")
+            continue
+        if day is None or period is None:
+            continue
+        if (day, period) in rows:
+            errors.append(f"line {n}: {DAYS[day]} period {period} is already "
+                          f"{rows[(day, period)]}, set on line {line_of[(day, period)]}")
+            continue
+        rows[(day, period)] = codes[code.upper()]
+        line_of[(day, period)] = n
+    if not rows and not errors:
+        errors.append("no timetable rows found")
+    return [(day, period, code) for (day, period), code in sorted(rows.items())], errors
 
 
 def db_timetable(conn, user_id):
@@ -10345,6 +10424,75 @@ def list_subjects(args):
         print(f"  {code}  {name:<34} {lectures:>3} lectures  {uploads:>3} uploads")
 
 
+def import_timetable(args):
+    """Replace a section's weekly template from a CSV. All of it, or none of it.
+
+    The template is a hundred and ten people's Monday, so this prints what
+    would change before it changes anything, and refuses to write a single row
+    while any line is wrong -- a half-applied grid is the one state nobody can
+    look at and tell is wrong.
+
+    It touches the template and nothing else. A student's own timetable is
+    theirs to edit, and the trigger on profiles seeds new members from here.
+    """
+    text = sys.stdin.read() if str(args.csv) == "-" else args.csv.read_text(encoding="utf-8")
+    conn = db()
+    known = [code for (code,) in conn.execute("select code from subjects")]
+    rows, errors = parse_timetable(text, known)
+    for e in errors:
+        print(f"  {e}", file=sys.stderr)
+    if errors:
+        raise SystemExit(f"{len(errors)} problem{'' if len(errors) == 1 else 's'}, "
+                         "so nothing was written")
+
+    # Sections arrive in migrations 0040-0044 and this command is older than
+    # they are. Ask the database which world it is in rather than guessing:
+    # writing every section's Monday because a column was missing is exactly
+    # the silent damage the parser above refuses to do.
+    scoped = conn.execute(
+        "select 1 from information_schema.columns where table_name = 'section_timetable' "
+        "and column_name = 'section_id'").fetchone() is not None
+    if scoped:
+        if not args.section:
+            raise SystemExit("this database has sections: name one, e.g. --section I")
+        found = conn.execute(
+            "select id from sections where name = %s and (%s::int is null or grad_year = %s)",
+            (args.section, args.grad_year, args.grad_year)).fetchall()
+        if len(found) != 1:
+            raise SystemExit(f"{len(found)} sections named {args.section!r}"
+                             f"{'' if args.grad_year is None else f' of {args.grad_year}'}"
+                             " -- name one exactly, with --grad-year if you must")
+        params, where = (found[0][0],), " where section_id = %s"
+    elif args.section:
+        raise SystemExit("this database has no sections yet, so --section means nothing")
+    else:
+        params, where = (), ""
+
+    before = {(day, period): code for day, period, code in conn.execute(
+        "select day, period, subject_code from section_timetable" + where, params)}
+    after = {(day, period): code for day, period, code in rows}
+    changed = 0
+    for slot in sorted(set(before) | set(after)):
+        was, now = before.get(slot), after.get(slot)
+        if was != now:
+            changed += 1
+            print(f"  {DAYS[slot[0]]:<9} period {slot[1]}  {was or '--':<7} -> {now or '--'}")
+    print(f"{len(rows)} periods over {len({day for day, _, _ in rows})} days, "
+          f"{changed} slot{'' if changed == 1 else 's'} changed")
+    if args.dry_run:
+        print("--dry-run, so nothing was written")
+        return
+
+    cols = "day, period, subject_code" + (", section_id" if scoped else "")
+    marks = "%s, %s, %s" + (", %s" if scoped else "")
+    with conn.transaction():
+        conn.execute("delete from section_timetable" + where, params)
+        for day, period, code in rows:
+            conn.execute(f"insert into section_timetable ({cols}) values ({marks})",
+                         (day, period, code) + params)
+    print(f"written: {len(rows)} periods")
+
+
 def process(path, args):
     log(path.name, "file")
     outdir, code = destination(path, args, "lectures")
@@ -10636,6 +10784,15 @@ def main():
     e = sub.add_parser("export", help="build a browsable HTML page of the whole library")
     e.add_argument("--out", type=Path, default=Path(__file__).parent / "site" / "index.html")
     e.set_defaults(func=export)
+
+    tt = sub.add_parser("timetable", help="import a section's week from a CSV")
+    tt.add_argument("csv", type=Path, help="day,period,subject_code rows; '-' reads stdin")
+    tt.add_argument("--section", help="which section, e.g. --section I")
+    tt.add_argument("--grad-year", type=int,
+                    help="settles two sections that share a name, e.g. --grad-year 2030")
+    tt.add_argument("--dry-run", action="store_true",
+                    help="say what would change and write nothing")
+    tt.set_defaults(func=import_timetable)
 
     sub.add_parser("selftest").set_defaults(func=lambda _: selftest())
 
