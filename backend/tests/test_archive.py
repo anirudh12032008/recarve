@@ -225,3 +225,97 @@ def test_every_end_term_for_a_subject_is_one_query(db):
         "order by year desc"
     ).fetchall()
     assert [r[0] for r in got] == ["End Term 2025-26", "End Term 2023"]
+
+
+# ---------------------------------------------------------------------------
+# Turning 31 folder names into four columns
+#
+# Every pair below is real -- folder and filename copied off the seniors'
+# portal, not invented. That is the point: the classifier is a pile of
+# heuristics over names nobody designed, and the only thing that makes it
+# trustworthy is that its test cases are the actual mess.
+
+sys.path.insert(0, str(pathlib.Path(__file__).resolve().parents[1] / "dev"))
+from import_archive import classify  # noqa: E402
+
+
+@pytest.mark.parametrize("folder,filename,want", [
+    # The folder knows it is a paper; only the filename knows which sitting.
+    ("2024-2025 PYQs", "End Term 2024-25.pdf", ("paper", "end", 2024, None)),
+    ("2024-2025 PYQs", "Mini Test 2024-25 Section B.pdf",
+     ("paper", "mini", 2024, "B")),
+
+    # Nine mini tests for one subject and one year, told apart only by section.
+    ("2025-2026 Papers", "Mini Test 2025-26 Sem 1 Sec J Set 1.pdf",
+     ("paper", "mini", 2025, "J")),
+    ("2025-2026 Papers", "Mini Test 2025-26 Sem 1 Sec J Set 2.pdf",
+     ("paper", "mini", 2025, "J")),
+
+    # Chemistry writes the section with no space at all.
+    ("Notes and Slides", "MaterialsNotes SecB 2024.pdf",
+     ("notes", None, 2024, "B")),
+
+    # Four folder names, one meaning.
+    ("End Term Previous Year Questions", "End Term 2023 Sem 1.pdf",
+     ("paper", "end", 2023, None)),
+    ("Previous Year End Term  Papers", "End Term 2023 Sem 1.pdf",
+     ("paper", "end", 2023, None)),
+    ("Previous Year Papers", "End Online March 2022.pdf",
+     ("paper", "end", 2022, None)),
+    ("Mid Term Previous Year Questions", "Mid 2023 Sem 1.pdf",
+     ("paper", "mid", 2023, None)),
+
+    # Not papers.
+    ("Notes", "Vector Calculus.pdf", ("notes", None, None, None)),
+    ("Class Notes", "Special Curves.pdf", ("notes", None, None, None)),
+    ("Faculty Shared PPTs", "Unit 3.pdf", ("slides", None, None, None)),
+    ("Detailed Slides", "Corrosion Slides.pdf", ("slides", None, None, None)),
+    ("Assignments (Questions Only)", "Assignment-1.pdf",
+     ("assignment", None, None, None)),
+    ("Physics Lab Records", "Experiment 4.pdf", ("lab", None, None, None)),
+    ("Chemistry Laboratory", "Titration.pdf", ("lab", None, None, None)),
+    ("Updated Syllabus 2024", "Syllabus.pdf", ("syllabus", None, 2024, None)),
+    ("Books", "BS Grewal Mathematics.url", ("book", None, None, None)),
+    ("Books and PPTs", "HK Dass.url", ("book", None, None, None)),
+])
+def test_a_folder_name_and_a_filename_become_four_columns(folder, filename, want):
+    assert classify(folder, filename) == want
+
+
+def test_mini_is_not_read_as_mid(folder="2025-2026 Papers"):
+    """"Mini" and "Mid" share two letters and a folder. A prefix match on
+    "mi" finds both, and every mini test in the archive would be filed as a
+    mid-term without the word boundaries."""
+    assert classify(folder, "Mini Test 2025-26 Sec A.pdf")[1] == "mini"
+    assert classify(folder, "Mid Term 2025-26 Sem 1 ST.pdf")[1] == "mid"
+
+
+def test_a_section_letter_is_not_found_inside_a_word():
+    """"BEEE" starts with B and "Sem 1" is not section... anything. A regex
+    without boundaries files half the archive under the wrong section."""
+    assert classify("Notes", "BEEE Unit 2.pdf")[3] is None
+    assert classify("2025-2026 Papers", "End Term 2025-26 Sem 1 2025.pdf")[3] is None
+
+
+def test_an_academic_year_is_stored_as_the_year_it_opens_in():
+    """2025-26 is 2025. The test exists because "2025-2026" and "2024-25"
+    are both in the archive and a naive grab of the last number in the string
+    reads the first as 2026 and the second as 25."""
+    assert classify("2025-2026 Papers", "End Term 2025-2026.pdf")[2] == 2025
+    assert classify("2024-2025 PYQs", "End Term 2024-25.pdf")[2] == 2024
+    assert classify("Notes", "Unit 4.pdf")[2] is None
+
+
+def test_every_classification_is_a_row_the_database_accepts(db):
+    """The classifier and the constraints are written from the same six
+    ideas, so this is the test that catches them drifting apart."""
+    for folder, filename in [
+        ("2025-2026 Papers", "Mini Test 2025-26 Sem 1 Sec B.pdf"),
+        ("Notes and Slides", "MaterialsNotes SecB 2024.pdf"),
+        ("Books", "BS Grewal Mathematics.url"),
+        ("Physics Lab Records", "Experiment 4.pdf"),
+    ]:
+        kind, exam, year, section = classify(folder, filename)
+        shelve(db, kind=kind, exam=exam, year=year, set_for_section=section,
+               title=filename, file_key=f"MC1101/{folder}/{filename}",
+               size_bytes=1000)
