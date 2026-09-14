@@ -1752,7 +1752,8 @@ body.reading .tabs{display:none}
 /* A society's mark beside its two lines. Only the summary that has one turns
    into a row: an event leads with a torn-off date and a place with its name,
    and neither of those is somebody to draw. */
-.card summary:has(.face){flex-direction:row;align-items:center;gap:12px}
+.card summary:has(.face){flex-direction:row;align-items:center;gap:12px;
+  justify-content:flex-start}
 .card summary .nm{display:flex;flex-direction:column;justify-content:center;
   min-width:0}
 .card summary::-webkit-details-marker{display:none}
