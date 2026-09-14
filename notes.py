@@ -611,6 +611,13 @@ PAGE = r"""<!doctype html>
      4.5:1 that any of these three ever has to carry. */
   --g1:#6534c9; --g2:#9629cc; --g3:#c21362;
   --tap:44px;
+  /* What the + button covers, reserved at the bottom of everything that
+     scrolls. It is 58px across with its bottom edge 76px up, so it reaches
+     134; 142 puts a row's own 8px under it as well. Written once here
+     because it was written twice in the sheet and missed everywhere else,
+     which is how a confession, a note's body and a card's buttons all ended
+     up half under a purple circle. */
+  --fabclear:calc(142px + env(safe-area-inset-bottom));
   /* 4 (.rows) + 12 (.row) + 3 (.tick) + 12 (gap): where a row's words begin.
      Anything standing in for a row lines up with them, and everything that is
      not a row lines up with the section heading at 16. */
@@ -799,13 +806,23 @@ body.reading #read{display:block}
 .tl .hr{position:absolute;left:0;right:0;height:0;border-top:1px solid var(--line)}
 .tl .hr span{position:absolute;left:0;top:-8px;width:40px;font-size:11px;color:var(--mut);
   font-variant-numeric:tabular-nums;background:var(--bg);padding-right:4px}
+/* Opaque rather than an alpha over the page, because the words inside it have
+   to be able to knock the now line out from behind them -- see .now below --
+   and a knockout can only be drawn in a colour that is known. */
 .tl .ev{position:absolute;left:48px;right:0;border-radius:11px;padding:6px 10px;overflow:hidden;
   display:flex;flex-direction:column;justify-content:flex-start;border:0;font:inherit;
-  text-align:left;color:var(--fg);background:hsl(var(--h) var(--sat) var(--lum) / .2);
+  text-align:left;color:var(--fg);
+  --fill:color-mix(in srgb,hsl(var(--h) var(--sat) var(--lum)) 20%,var(--bg));
+  background:var(--fill);
   border-left:4px solid hsl(var(--h) var(--sat) var(--lum))}
-/* Already happened. Said in the ink, not in the block's opacity: dimming the
-   container dims the words that name the class. */
-.tl .ev.done b,.tl .ev.done small{color:var(--mut)}
+/* Already happened. Said in the furniture and never in the ink: greying the
+   title made the first two blocks of a day a different colour from the third
+   for a reason nobody can see on a screen -- three classes, three-quarters of
+   an hour apart, and the two that are over read as a different KIND of thing
+   rather than as the same thing earlier. The block goes pale, the rule down
+   its edge goes with it, and every class on the day is named in one ink. */
+.tl .ev.done{--fill:color-mix(in srgb,hsl(var(--h) var(--sat) var(--lum)) 8%,var(--bg));
+  border-left-color:color-mix(in srgb,hsl(var(--h) var(--sat) var(--lum)) 40%,var(--bg))}
 .tl .free{position:absolute;left:48px;right:0;border-radius:11px;border:1.5px dashed var(--line);
   display:flex;align-items:center;justify-content:center}
 .tl .lunch{position:absolute;left:48px;right:0;border-radius:11px;display:flex;
@@ -814,6 +831,23 @@ body.reading #read{display:block}
 .tl .now{position:absolute;left:40px;right:0;height:2px;background:var(--err);z-index:2}
 .tl .now::before{content:"";position:absolute;left:-5px;top:-4px;width:10px;height:10px;
   border-radius:50%;background:var(--err)}
+/* The one place the now line lands is the class that is running, and that is
+   the one class whose name is under it: at 11:41 the rule went straight
+   through "11:00-12:55 - 1 h 55 min - EE1125" and neither the time nor the
+   code could be read. The words knock it out and it carries on either side
+   of them -- the same thing the hour labels above already do to the hour
+   rules, so a rule passing behind type is a device this screen already has.
+   fit-content is what keeps the knockout the width of the words rather than
+   the width of the block. */
+.tl .ev b,.tl .ev small{position:relative;z-index:3;width:fit-content;max-width:100%;
+  background:var(--fill);padding-right:6px;border-radius:2px}
+/* --mut is 5.2:1 on the bare page, and a coloured block eats into that: on the
+   block that is running right now it fell to 3.6:1, and that is the line that
+   says when the class ends. The quiet ink inside a block is the block's own
+   ink thinned rather than the page's grey, so it stays quieter than the title
+   and still clears 4.5:1 on all eight subject colours in both themes -- 5.5:1
+   at the worst of them. */
+.tl .ev small{color:color-mix(in srgb,var(--fg) 70%,var(--fill))}
 .rename button.primary{background:var(--accent);color:var(--accent-fg);border:0}
 .row-del[disabled]{opacity:.45}
 
@@ -958,7 +992,7 @@ button.off:active{background:var(--surface)}
    around each one turns a conversation into a list of unrelated things. The
    answers are set in from the question by a rule, which is the only nesting
    this page has and the only nesting the table allows. */
-#doubts{max-width:70ch;margin:0 auto;padding:0 18px 142px}
+#doubts{max-width:70ch;margin:0 auto;padding:0 18px var(--fabclear)}
 /* The same thread, drawn in three places now: under a lecture note, under an
    uploaded file, and nowhere else that is not one of those two. The rules
    below key off the class rather than the id, because a comment section is
@@ -1054,19 +1088,42 @@ button.off:active{background:var(--surface)}
 .compose input{min-height:var(--tap);padding:0 12px}
 .compose textarea{min-height:9.5em;line-height:1.6;padding:12px;resize:vertical}
 /* The two controls a browser draws itself if you let it: a subject picker and
-   a file button. Left alone they arrive as a white system select and a grey
-   "Choose files" slab in the middle of a dark composer. Same surface, same
-   border, same 44px as every other control here. */
+   a file button. Left alone they arrive as a white system select with the OS
+   chevron on it and a grey "Choose files / No file chosen" slab in a dashed
+   box -- the two most dated pixels in the app, and the only two an eighteen
+   year old has never seen in anything else they use.
+   The select keeps its native wheel, which is still the fastest picker on a
+   phone and costs nothing to download; what goes is the chrome around it.
+   appearance:none drops the OS arrow, and the chevron below is the same '>'
+   rotated a quarter turn that the club cards and the activity log already
+   draw, so one glyph says "this opens" everywhere in the app. */
 .compose select,.askbox select{width:100%;min-height:var(--tap);margin-top:16px;
-  padding:0 12px;font-size:16px;font-family:inherit;color:var(--fg);
-  background:var(--bg);border:1px solid var(--edge);border-radius:11px}
-.compose input[type=file],.askbox input[type=file]{display:block;width:100%;
-  margin-top:8px;padding:8px 12px;line-height:1.4;font-size:13px;color:var(--mut);
-  background:var(--bg);border:1px dashed var(--edge);border-radius:11px}
-.compose input[type=file]::file-selector-button,
-.askbox input[type=file]::file-selector-button{margin-right:12px;min-height:32px;
-  padding:0 12px;font:inherit;font-size:13px;font-weight:600;color:var(--fg);
-  background:var(--surface);border:1px solid var(--edge);border-radius:7px}
+  padding:0 40px 0 12px;font-size:16px;font-family:inherit;color:var(--fg);
+  background:var(--bg);border:1px solid var(--edge);border-radius:11px;
+  appearance:none;-webkit-appearance:none}
+.pick{position:relative;margin-top:16px}
+.pick select{margin-top:0}
+.pick::after{content:'\203a';position:absolute;right:15px;top:50%;margin-top:-11px;
+  font-size:20px;line-height:1;color:var(--mut);transform:rotate(90deg);
+  pointer-events:none}
+/* The file button. appearance:none does nothing to an <input type=file> -- the
+   slab is shadow DOM -- so the input is hidden and driven from a control that
+   is built out of the same parts as every other control here. It stays in the
+   DOM because it is what opens the picker and what holds the files; the same
+   trick the Add sheet's own hidden input has always used. The line beside the
+   button is what the browser's grey text was for: how many are picked. */
+.shotpick{display:flex;align-items:center;gap:12px;margin-top:8px}
+/* Scoped through .askbox, which sets every button in it to the full-width
+   accent slab the Post button is. This one is not that button. */
+.askbox .shotpick button{display:inline-flex;align-items:center;width:auto;flex:none;
+  min-height:var(--tap);padding:0 16px;border-radius:11px;
+  border:1px solid var(--edge);background:var(--bg);color:var(--accent);
+  font-size:13px;font-weight:600}
+.askbox .shotpick button:active{background:var(--surface);opacity:1}
+.shotpick span{flex:1;min-width:0;font-size:13px;color:var(--mut)}
+/* .quiet hangs off --hang, which is where a ROW's words begin. Inside a form
+   the words begin at the edge of the controls. */
+.askbox .quiet{padding:8px 0 0}
 .compose .pinrow{display:flex;align-items:center;gap:11px;min-height:var(--tap);
   margin-top:14px;font-size:16px;color:var(--fg)}
 .compose .pinrow input{width:22px;height:22px;min-height:0;flex:none;accent-color:var(--accent)}
@@ -1106,26 +1163,69 @@ button.off:active{background:var(--surface)}
 .rtop{display:flex;align-items:center;gap:6px}
 .back{display:flex;align-items:center;gap:4px;height:var(--tap);padding:0 8px 0 4px;
   margin-left:-4px;font-size:16px;color:var(--accent);font-weight:500;flex:none}
+/* Back says the subject by NAME. It used to say the code, next to a chip
+   saying the same code -- the whole header spent on one string, twice, while
+   the lecture's own title appeared nowhere on the screen at all. */
+.rtop .back{display:block;min-width:0;max-width:calc(100% - 88px);
+  line-height:var(--tap);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .rtop .code{margin-left:auto}
+/* The lecture's title, which is what this screen is. It lived in the row you
+   tapped to get here and nowhere afterwards, so the top fifth of the reading
+   screen was a back button, a chip, and 150px of nothing above the markdown's
+   own first heading. */
+/* The reading pane with nothing in it. Only ever seen on the wide layout,
+   where it is 1120px of the window, so it is written as a screen of its own
+   rather than as a message: what this half of the window is for, what happens
+   when you pick something, and what is on the shelf. */
+.empty{min-height:72dvh;display:flex;flex-direction:column;align-items:center;
+  justify-content:center;text-align:center;padding:40px 24px}
+.empty .lead{margin:0;font-size:20px;line-height:1.3;letter-spacing:-.015em;
+  font-weight:600;color:var(--fg)}
+.empty p{margin:12px 0 0;max-width:44ch;font-size:16px;color:var(--mut)}
+.empty .count{margin-top:24px;padding-top:16px;font-size:13px;
+  border-top:1px solid var(--line);font-variant-numeric:tabular-nums}
+/* Not a second list of subjects -- the column beside it is that. Lectures,
+   newest first, which is the one thing a pane this size can say that the
+   list cannot. */
+.empty .recent{width:100%;max-width:34rem;margin-top:32px;text-align:left}
+.empty .recent .sect{padding:0 4px 8px}
+.empty .recent .row{background:var(--surface)}
+.empty .recent .row+.row{margin-top:6px}
+.mast{max-width:70ch;margin:0 auto;padding:20px 18px 0}
+.mast h1{margin:0;font-size:26px;line-height:1.2;letter-spacing:-.022em;font-weight:700}
+.mast .meta{margin:6px 0 0;font-size:13px;color:var(--mut)}
 /* Four sizes only -- 26/20/16/13, roughly a 1.25 step. h3 separates itself by
-   weight and colour rather than a fifth size that would read as body text. */
+   weight rather than a fifth size that would read as body text. */
 /* The dock's clearance moved to #doubts, which is the last thing on the
    reading screen now: 142px is #nav's, and the FAB reaches 76 + 58 = 134. */
 article{padding:24px 18px 8px;max-width:70ch;margin:0 auto}
+/* Under the masthead the note starts where the masthead left off. */
+.mast+article{padding-top:20px}
+.mast+article>:first-child{margin-top:0}
 article h1{font-size:26px;line-height:1.2;letter-spacing:-.022em;font-weight:700;margin:0 0 28px}
 article h2{font-size:20px;line-height:1.3;letter-spacing:-.015em;font-weight:700;
   margin:36px 0 12px}
 /* The first thing under the title has no 36px of nothing above it. */
 article h1+h2{margin-top:0}
-article h3{font-size:16px;font-weight:700;color:var(--accent);margin:24px 0 4px}
+/* Not the accent. The accent is what a link is, and every '###' in every note
+   was set in it -- so a heading read as something to tap, and tapping it did
+   nothing. Weight and the space above it are what make it a heading. */
+article h3{font-size:16px;font-weight:700;color:var(--fg);margin:24px 0 4px}
 article p{margin:0 0 16px}
 /* The notes are written with "---" between sections, so the rule is theirs
    and not the page's. It is a hairline with air either side rather than the
    grooved 3D bar a browser draws by default; h2's own margin collapses into
    the one below it, so a section break is one gap and not two. */
 article hr{border:0;border-top:1px solid var(--line);margin:32px 0}
+/* Tailwind's preflight sets list-style:none on every ul and ol, which took
+   the bullets off every list in every lecture note and left the indent behind
+   -- so a key-points list read as four stranded paragraphs. Notes are the one
+   place in this app where a list is prose and needs its markers back. */
 article ul,article ol{padding-left:24px;margin:0 0 16px}
+article ul,.ann .md ul{list-style:disc}
+article ol,.ann .md ol{list-style:decimal}
 article li{margin:4px 0}
+article li::marker,.ann .md li::marker{color:var(--mut)}
 article>:last-child{margin-bottom:0}
 article code{background:var(--surface);padding:2px 5px;border-radius:7px;font-size:.92em}
 article pre{background:var(--surface);padding:13px;border-radius:11px;overflow-x:auto;font-size:13px}
@@ -1191,6 +1291,22 @@ details:not(.card)>:not(summary):last-child{padding-bottom:4px}
   width:58px;height:58px;border-radius:50%;background:var(--accent);color:var(--accent-fg);
   font-size:30px;line-height:1;box-shadow:0 6px 22px rgba(0,0,0,.3)}
 #fab:active{transform:scale(.94)}
+/* And it steps out of the way while you are reading down a screen. Reserving
+   the bottom of a list keeps the + off the LAST row; this is what keeps it
+   off the forty rows above it, which is where it actually sat -- on a
+   confession's third line, on a club card's buttons, on the middle of a
+   paragraph. It goes on the way down and comes back the moment you stop or
+   turn round, so it answers what somebody is doing rather than moving on its
+   own, and it is never absent from a screen at rest. */
+body.fabaway #fab{transform:translateY(96px);opacity:0;pointer-events:none}
+/* A screen that already has a bar of its own does not get a second control
+   floating over its words. Reading has the dock -- Practice, Save, Share,
+   Download, Print -- and the + sat 76px above it, in the middle of the
+   paragraph you were reading. It comes straight back with the tab bar the
+   moment the note is closed, and on the wide layout it never goes at all:
+   there the note is one column and the list is still the other, so the +
+   belongs to the list and is nowhere near the words. */
+body.reading #fab{display:none}
 #ask:active{opacity:.8}
 /* #ask is clamped to innerWidth-130, which on a 390px screen puts its right
    edge inside the FAB's band -- and the FAB is z-index 7 above #ask's 4, so a
@@ -1304,7 +1420,7 @@ body.reading .tabs{display:none}
 /* Clear of the bar AND of the FAB above it (76 + 58), so the last row is never
    half under either. 80px cleared only the bar, and the FAB then sat on top of
    the last row's vote button with no scroll left to escape it. */
-#nav{padding-bottom:calc(142px + env(safe-area-inset-bottom))}
+#nav{padding-bottom:var(--fabclear)}
 
 /* ---- Home: a plain line of prose where a row would lie. -------------- */
 .quiet{padding:8px 16px 8px var(--hang);margin:0;font-size:13px;color:var(--mut)}
@@ -1355,18 +1471,35 @@ body.reading .tabs{display:none}
   #list{width:320px;flex:none;border-right:1px solid var(--line);height:100dvh;overflow-y:auto;position:sticky;top:0}
   #read{flex:1;display:block;min-width:0}
   body.reading #list{display:block}
-  .rtop .back{display:none}   /* the list is already on screen next to it */
   article{padding:32px 40px 110px}
   /* The dock belongs to the note, so it stops where the note's column stops
      rather than stretching five buttons across 960px of empty pane. */
   .dock{left:320px;justify-content:center;padding-left:40px;padding-right:40px}
   .dock button{flex:0 1 9rem}
-  /* Nothing open yet. The invitation sits in the middle of the pane it is
-     about rather than in the top-left corner of it, where a 60px grey box
-     under 800px of nothing reads as a screen that failed to load. */
-  body:not(.reading) #body{display:flex;align-items:center;justify-content:center;
-    min-height:70dvh}
-  body:not(.reading) .dock{display:flex}
+  /* Nothing open yet. A 60px grey box reading "Pick a lecture to start
+     reading" under 800px of near-black is a screen that failed to load, and
+     centring the box did not change what it was: furniture. The invitation
+     is the pane now -- see .empty -- and it says what this half of the
+     window is for and what is in it.
+     The flex centring that used to live here was on #body itself, which is
+     the ARTICLE: with a note's markup still in it after a tab change, every
+     heading and paragraph became a flex item and the note laid itself out in
+     eleven vertical columns. closeRead() empties it now, and nothing on this
+     screen flexes a note's own children again. */
+  /* The list column's own header already carries the code chip and the
+     subject's name, and there is no back on a two-pane layout -- so this
+     strip was one chip pushed to the far right of a 1120px ruled bar, and
+     with nothing open it was a ruled bar holding nothing at all. The note's
+     masthead is the top of this pane now. */
+  .rtop{display:none}
+  .mast{padding:32px 40px 0}
+  .mast+article{padding-top:16px}
+  #fab{right:auto;left:calc(320px - 74px)}   /* the + belongs to the list */
+  body.reading #fab{display:block}
+  /* Five buttons that act on nothing are worse than no bar: Save, Share,
+     Download and Print with no note open were four live-looking controls
+     over an empty pane. The dock belongs to the note and arrives with it. */
+  body:not(.reading) .dock{display:none}
   /* Two panes, two bars: the tabs stay under the list they navigate, and the
      dock starts where the note does, so reading no longer costs the tabs. */
   .tabs{right:auto;width:320px}
@@ -1464,6 +1597,10 @@ body.reading .tabs{display:none}
     <button class="back" id="back" aria-label="Back to the subject">&lsaquo; Back</button>
     <span class="code" id="rcode"></span>
   </div>
+  <header class="mast" id="mast" hidden>
+    <h1 id="rtitle"></h1>
+    <p class="meta" id="rmeta"></p>
+  </header>
   <article id="body"><p class="blank">Pick a lecture to start reading.</p></article>
   <section id="doubts" class="thread" aria-label="Doubts"></section>
 </section>
@@ -1555,6 +1692,8 @@ const DATA = __DATA__;
 const nav = document.getElementById('nav'), body = document.getElementById('body');
 const backBtn = document.getElementById('back');
 const q = document.getElementById('q'), rcode = document.getElementById('rcode');
+const mast = document.getElementById('mast');
+const rtitle = document.getElementById('rtitle'), rmeta = document.getElementById('rmeta');
 const brand = document.getElementById('brand'), shead = document.getElementById('shead');
 const scode = document.getElementById('scode'), sname = document.getElementById('sname');
 const lback = document.getElementById('lback'), tools = document.getElementById('tools');
@@ -3177,6 +3316,10 @@ function drawBoard(box) {
 // not a document: there is nothing to gain from parsing it.
 const WALLS = {feed: null, confession: null};
 const wallAsked = {feed: false, confession: false};
+// The two composers Community has, as URLs: '#community/say' and
+// '#community/confess'. Words rather than the list names, because a URL is
+// read by a person and "confess" says what the screen is for.
+const WALL_COMPOSE = {say: 'feed', confess: 'confession'};
 let wallOn = 'feed';        // which of the two Campus is showing
 
 function needWall(kind) {
@@ -3246,7 +3389,10 @@ async function writePost(payload, btn, err) {
     if (!r.ok) throw new Error(d.error || 'could not save that');
     busyDone(payload.delete ? 'Taken down' : 'Posted');
     WALLS[payload.kind] = d.posts || [];
-    render();
+    // Out of the composer the way you came in, exactly like Campus's and the
+    // notice board's: what you just wrote is the first thing on the feed
+    // behind it, so landing back on the form would hide the result.
+    if (view.compose) history.back(); else render();
   } catch (e) {
     if (btn) btn.disabled = false;
     if (err) { err.textContent = e.message; busyDone(''); }
@@ -3272,9 +3418,11 @@ function wallComposer(kind) {
   ta.setAttribute('aria-label', kind === 'feed' ? 'Your post' : 'Your confession');
   const err = document.createElement('p');
   err.className = 'err';
-  let picker = null, subj = null;
+  let picker = null, pick = null, shots = null;
   if (kind === 'feed' && mayAdd()) {
-    subj = document.createElement('select');
+    // The subject wheel, without the OS chevron: the wrapper draws the app's
+    // own chevron and the select keeps the native wheel behind it.
+    const subj = document.createElement('select');
     subj.setAttribute('aria-label', 'Which subject the photos file under');
     DATA.forEach(x => {
       const o = document.createElement('option');
@@ -3282,11 +3430,31 @@ function wallComposer(kind) {
       o.textContent = x.code + ' \u00b7 ' + x.name;
       subj.appendChild(o);
     });
+    pick = document.createElement('div');
+    pick.className = 'pick';
+    pick.appendChild(subj);
+    // Hidden, and opened by the button beside it. .click() on a display:none
+    // file input is what the Add sheet has always done; what changes here is
+    // that nothing on the screen says "No file chosen" any more.
     picker = document.createElement('input');
     picker.type = 'file';
     picker.accept = 'image/*';
     picker.multiple = true;
-    picker.setAttribute('aria-label', 'Photos for this post');
+    picker.hidden = true;
+    const open = document.createElement('button');
+    open.type = 'button';
+    open.textContent = 'Add photos';
+    const said = document.createElement('span');
+    said.textContent = 'None picked yet';
+    open.onclick = () => picker.click();
+    picker.onchange = () => {
+      const n = picker.files.length;
+      open.textContent = n ? 'Change photos' : 'Add photos';
+      said.textContent = n ? plural(n, 'photo') + ' ready to go' : 'None picked yet';
+    };
+    shots = document.createElement('div');
+    shots.className = 'shotpick';
+    shots.append(open, said, picker);
   }
   const go = document.createElement('button');
   go.textContent = kind === 'feed' ? 'Post this' : 'Post it anonymously';
@@ -3304,13 +3472,13 @@ function wallComposer(kind) {
     writePost({kind: kind, body: ta.value, batch: batch}, go, err);
   };
   box.append(ta);
-  if (subj) {
+  if (pick) {
     // Said rather than hidden: a photo posted here is a file in the library,
     // and pretending otherwise would be a surprise the first time somebody
     // found it on a subject's shelf.
     const note = quiet('Photos also file under the subject you pick, on that '
                        + 'subject\u2019s shelf.');
-    box.append(subj, picker, note);
+    box.append(pick, shots, note);
   } else if (kind === 'feed') {
     box.append(quiet('Photos are for trusted members. Words are for everybody.'));
   }
@@ -3341,11 +3509,10 @@ function wallSection() {
     return void box.appendChild(quiet('The section needs the server. '
                                       + 'Run: notes.py serve'));
   }
-  box.appendChild(wallComposer(wallOn));
   if (!list.length) {
     return void box.appendChild(quiet(wallOn === 'feed'
-      ? 'Nothing here yet. Lost something? Found something? Say so.'
-      : 'Nothing yet. Whatever you put here, nobody is ever told it was you.'));
+      ? 'Nothing here yet. Lost something? Found something? Tap + and say so.'
+      : 'Nothing yet. Tap + to write one — nobody is ever told it was you.'));
   }
   list.forEach(x => box.appendChild(postCard(x, wallOn)));
 }
@@ -3887,6 +4054,19 @@ function renderCampus() {
 // printed anywhere else.
 async function renderCommunity() {
   const mine = painted;
+  // Writing takes the tab over, the way it already does on Campus: the screen
+  // opens on what the section has said, and the + is how you say something.
+  // A composer sitting on top of the feed meant this tab opened on an empty
+  // form -- work -- rather than on the thing anybody came here to read.
+  if (view.compose) {
+    if (!WALL_COMPOSE[view.compose]) return void go('community');
+    wallOn = WALL_COMPOSE[view.compose];
+    const box = document.createElement('div');
+    box.className = 'wall';
+    box.appendChild(wallComposer(wallOn));
+    nav.appendChild(box);
+    return;
+  }
   wallSection();
   doubtsSection();
   heading('Who has contributed');
@@ -4540,7 +4720,9 @@ function render() {
   jobsBox.hidden = view.tab === 'home';
   // The one back button at this depth serves several levels now, so it has to
   // say which one it climbs to.
-  const up = view.compose && !COMPOSERS[view.compose] ? ['‹ Home', 'Back to the notice board']
+  const up = view.compose && view.tab === 'community'
+      ? ['‹ Community', 'Back to the section']
+    : view.compose && !COMPOSERS[view.compose] ? ['‹ Home', 'Back to the notice board']
     : view.compose ? ['‹ Campus', 'Back to Campus']
     : view.me ? ['‹ You', 'Back to your profile']
     : ['‹ Subjects', 'Back to all subjects'];
@@ -4554,6 +4736,8 @@ function render() {
     : view.day ? 'Your day'
     : view.edit ? 'Your timetable'
     : view.att ? 'Your attendance'
+    : view.tab === 'community' && view.compose
+      ? (view.compose === 'confess' ? 'Anonymous' : 'New post')
     // Campus has three composers of its own, and they used to borrow the
     // notice board's words: adding a club said "Edit notice" over it.
     : COMPOSERS[view.compose] ? (view.composeId ? 'Edit ' : 'Add ') + view.compose
@@ -4565,6 +4749,7 @@ function render() {
     if (b.dataset.tab === view.tab) b.setAttribute('aria-current', 'page');
     else b.removeAttribute('aria-current');
   });
+  paintFab();   // the + means the composer on Community and the sheet elsewhere
   if (needle) renderSearch(needle);
   else if (view.edit) renderTimetable();
   else if (view.att) renderAttendance();
@@ -4625,7 +4810,11 @@ function route() {
   // dropped what was typed and left the tab stuck on an empty form. Two tabs
   // have one now -- an event, a club or a place on Campus, and a notice on
   // Home, which is where the notice board lives.
-  const compose = (tab === 'campus' || tab === 'home') ? parts[1] || null : null;
+  // Community has two of its own -- 'say' and 'confess' -- for the same
+  // reason: the + opens a form, and a form with no URL loses what was typed
+  // to the back gesture.
+  const compose = (tab === 'campus' || tab === 'home' || tab === 'community')
+    ? parts[1] || null : null;
   // And the row being edited, when there is one: '#campus/club/robotics'. The
   // announcement composer carries its id in `compose` itself, which is a uuid
   // and can never be mistaken for one of the three words above.
@@ -4656,6 +4845,8 @@ function route() {
 // class left on would make the animation fire again the next time the
 // element is shown.
 function arrive(el) {
+  // A new screen starts at the top, so the + starts back on it.
+  document.body.classList.remove('fabaway');
   if (!el) return;
   el.classList.remove('swap');
   void el.offsetWidth;            // restart it even on a repeat of the same step
@@ -4668,17 +4859,31 @@ function arrive(el) {
 // question all wanted this and each had grown its own copy of the delimiters.
 function mdInto(el, md) {
   el.innerHTML = marked.parse(md || '');
-  if (window.renderMathInElement) {
-    renderMathInElement(el, {
-      delimiters: [
-        {left:'$$', right:'$$', display:true},
-        {left:'$', right:'$', display:false},
-        {left:'\\(', right:'\\)', display:false},
-        {left:'\\[', right:'\\]', display:true},
-      ],
-      throwOnError: false,
-    });
+  typeset(el);
+}
+
+// KaTeX is two deferred scripts, and a deferred script runs AFTER the inline
+// one this page is -- so opening a note by reloading on it, or by following a
+// link straight into it, typeset nothing and printed the LaTeX: "$\det(A -
+// \lambda I) = 0$" in the middle of a maths lecture. Walking in from the
+// subject list hid it, because by then the scripts had landed. So the one
+// case that arrives too early waits for the document and does it again.
+function typeset(el) {
+  if (!window.renderMathInElement) {
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', () => typeset(el), {once: true});
+    }
+    return;     // anything later than that means KaTeX is not coming at all
   }
+  renderMathInElement(el, {
+    delimiters: [
+      {left:'$$', right:'$$', display:true},
+      {left:'$', right:'$', display:false},
+      {left:'\\(', right:'\\)', display:false},
+      {left:'\\[', right:'\\]', display:true},
+    ],
+    throwOnError: false,
+  });
 }
 
 // ---- DOUBTS: the question one student asks, and the answer the section
@@ -4889,8 +5094,25 @@ function openNote(n, s) {
   currentCode = s.code;
   rcode.textContent = s.code;
   rcode.style.setProperty('--h', hue(s.code));
-  backBtn.textContent = '‹ ' + s.code;   // back goes to the subject, not the top
+  // The chip beside it already says MC1101. Back says which subject that is.
+  backBtn.textContent = '‹ ' + s.name;   // back goes to the subject, not the top
+  backBtn.setAttribute('aria-label', 'Back to ' + s.name);
+  // The masthead: what you are reading. The title was in the row you tapped
+  // and in the page's <title>, and on this screen it was nowhere at all.
+  mast.hidden = false;
+  rtitle.textContent = n.title;
+  const day = noteDay(n);
+  rmeta.textContent = [n.kind === 'revision' ? 'Revision sheet' : 'Lecture',
+                       day ? (+day.slice(8)) + ' ' + MONTHS[+day.slice(5, 7) - 1] : null,
+                       questionsOf(n).length
+                         ? plural(questionsOf(n).length, 'question') + ' to practise' : null,
+                      ].filter(Boolean).join(' · ');
   mdInto(body, n.md);
+  // A note whose markdown opens with its own '# title' would now say the same
+  // thing twice, once in each size. The masthead is the title; this is the
+  // copy of it that came out of the transcriber.
+  const own = body.firstElementChild;
+  if (own && own.tagName === 'H1') own.remove();
   practice.hidden = !questionsOf(n).length;   // no questions, no practice
   // The dock carries exactly one accent: Practice when there is something to
   // practise, Share when there is not. Otherwise it has none at all.
@@ -4909,8 +5131,69 @@ function openNote(n, s) {
   loadDoubts({subject: s.code, title: n.title}, doubtsBox, 'Doubts');
 }
 
+// The reading pane with nothing in it. On a phone it is never seen -- #read
+// is hidden until a note is open -- but on a wide screen it is most of the
+// window, so it says what that half of the window is for rather than leaving
+// a note's leftover markup lying in it under a grey box.
+function emptyRead() {
+  const box = document.createElement('div');
+  box.className = 'empty';
+  const lead = document.createElement('p');
+  lead.className = 'lead';
+  lead.textContent = 'Your shelf is on the left.';
+  const p = document.createElement('p');
+  p.textContent = 'Pick a lecture and it opens here — the maths typeset, the '
+    + 'questions it ends with, and whatever your section has already asked '
+    + 'about it underneath.';
+  const count = document.createElement('p');
+  count.className = 'count';
+  const lectures = DATA.reduce((k, s) => k + s.notes.length, 0);
+  const files = DATA.reduce((k, s) => k + s.uploads.length, 0);
+  count.textContent = [plural(DATA.length, 'subject'),
+                       plural(lectures, 'lecture'),
+                       files ? plural(files, 'file') : null]
+    .filter(Boolean).join(' · ');
+  box.append(lead, p, count);
+  // The one thing worth putting in a pane this size that the list beside it
+  // does not already say: what landed most recently. The list is subjects;
+  // this is lectures, newest first, and each one opens in the pane it is
+  // standing in.
+  const latest = DATA.flatMap(s => s.notes.map(n => ({n: n, s: s})))
+    .filter(x => x.n.at).sort((a, b) => b.n.at - a.n.at).slice(0, 4);
+  if (latest.length) {
+    const recent = document.createElement('div');
+    recent.className = 'recent';
+    const h = document.createElement('p');
+    h.className = 'sect';
+    h.textContent = 'Added most recently';
+    recent.appendChild(h);
+    const rows = document.createElement('div');
+    rows.className = 'rows';
+    latest.forEach(x => {
+      const day = noteDay(x.n);
+      const r = line(x.n.title,
+                     day ? (+day.slice(8)) + ' ' + MONTHS[+day.slice(5, 7) - 1] : x.s.name,
+                     document.createElement('button'), hue(x.s.code));
+      r.appendChild(chip(x.s.code));
+      r.onclick = () => go('classes', x.s.code, x.n.title);
+      rows.appendChild(r);
+    });
+    recent.appendChild(rows);
+    box.appendChild(recent);
+  }
+  body.innerHTML = '';
+  body.appendChild(box);
+}
+
 function closeRead() {
   document.body.classList.remove('reading');
+  mast.hidden = true;          // nothing open, nothing to head
+  emptyRead();                 // and the note's markup does not stay lying there
+  // The pane is only hidden on a phone. On a wide screen it is still on
+  // screen, so everything the last note left in it goes with the note: its
+  // code chip in the header, and its thread at the foot.
+  rcode.textContent = '';
+  doubtsBox.innerHTML = '';
   threadOn = null;
   practice.hidden = true;
   // The Explain button is positioned in document coordinates and lives above
@@ -5453,13 +5736,27 @@ async function pollJobs() {
 // learns the thing exists, never learns what a trusted member is, and never
 // asks the one person who could make them one.
 const mayAdd = () => atLeast('trusted');
-function applyRole() {
+// What the + does depends on where you are standing. On Community it is the
+// composer -- which everybody may use, students included, because words on
+// the wall are not an upload -- and everywhere else it is the Add sheet.
+const fabWrites = () => view.tab === 'community' && !view.compose;
+function paintFab() {
   const fab = document.getElementById('fab');
   // Unknown is not a role. Until /data answers there is nothing honest to say
   // about the + button, so it waits rather than appearing and then locking --
   // and a 503 or a 403 leaves ROLE null, which is not permission either.
-  fab.hidden = ROLE === null;
-  fab.className = mayAdd() ? '' : 'locked';
+  // And it is gone wherever the screen already has a primary action of its
+  // own: a composer has Post, the timetable editor has Save timetable, and
+  // reading has the dock (that one is CSS, on body.reading). A + floating on
+  // top of those is a second way to add something you are not doing, and on
+  // the timetable it sat squarely on the paragraph that explains the screen.
+  fab.hidden = ROLE === null || !!view.compose || view.edit;
+  fab.className = (fabWrites() || mayAdd()) ? '' : 'locked';
+  fab.setAttribute('aria-label', !fabWrites() ? 'Add a lecture or notes'
+    : wallOn === 'feed' ? 'Write a post' : 'Write a confession');
+}
+function applyRole() {
+  paintFab();
   document.getElementById('lock').hidden = mayAdd();
   for (const id of ['opt-rec', 'opt-audio', 'opt-doc', 'opt-revise']) {
     const el = document.getElementById(id);
@@ -5482,7 +5779,28 @@ const closeSheet = () => {
   sheet.classList.remove('on'); rec.classList.remove('on'); prog.classList.remove('on');
   batchName.classList.remove('on'); pendingFiles = null;
 };
-document.getElementById('fab').onclick = openSheet;
+document.getElementById('fab').onclick = () => fabWrites()
+  ? go('community', wallOn === 'feed' ? 'say' : 'confess')
+  : openSheet();
+
+// ---- The + gets out of the way of what is under it. -----------------------
+// Reserving --fabclear at the bottom of every list keeps it off the last row.
+// It was on all the other rows: 58px of accent fixed over the middle of the
+// screen, on a confession's third line, on a club card's buttons, on a
+// paragraph of somebody's notes. So it goes on the way down a screen and
+// comes back the moment the screen stops moving or turns round -- a control
+// answering a gesture, not a thing that hides on you. Two scrollers, because
+// the wide layout scrolls the list column rather than the window.
+const listEl = document.getElementById('list');
+let fabY = 0, fabRest = 0;
+function fabScroll(y) {
+  document.body.classList.toggle('fabaway', y > fabY + 6 && y > 80);
+  fabY = y;
+  clearTimeout(fabRest);
+  fabRest = setTimeout(() => document.body.classList.remove('fabaway'), 650);
+}
+addEventListener('scroll', () => fabScroll(window.scrollY), {passive: true});
+listEl.addEventListener('scroll', () => fabScroll(listEl.scrollTop), {passive: true});
 document.getElementById('opt-close').onclick = closeSheet;
 sheet.onclick = e => { if (e.target === sheet) closeSheet(); };
 

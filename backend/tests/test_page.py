@@ -183,7 +183,12 @@ const panelEl = {classList: {add: () => {}, remove: () => {}, contains: () => fa
 // #fab is real for the same reason: render() sets .hidden on seven other
 // elements every route, so `wrote(['hidden', true])` was true before applyRole
 // had done anything at all.
-const fabEl = {hidden: null, className: null};
+// It is also the one button whose job changes with the screen -- the composer
+// on Community, the Add sheet everywhere else -- so its handler and the label
+// it says about itself are read back rather than thrown away.
+const fabAttrs = {};
+const fabEl = {hidden: null, className: null, onclick: null,
+               setAttribute: (k, v) => { fabAttrs[k] = v; }};
 // The banner in the add sheet that says who adding is for. Real, because
 // whether it is showing is the other half of what a locked + button means.
 const lockEl = {hidden: null};
@@ -240,6 +245,9 @@ const fetch = (url, init) => {
 };
 const answer = (ok, body) => ({ok, status: ok ? 200 : 503, json: async () => body});
 const setInterval = () => 0, setTimeout = () => 0, clearInterval = () => {};
+const clearTimeout = () => {};
+// The page listens for 'scroll' on the window to take the + out of the way.
+const addEventListener = () => {};
 """
 
 CHECKS = """
@@ -1742,12 +1750,15 @@ def test_the_tab_bar_is_wired_and_gives_way_to_the_reading_dock():
     # it, not sit under either: the FAB reaches 76 + 58 = 134px up, and at 80px
     # it covered the bottom 54px of the list -- the last row's vote button with
     # it -- with no scroll left to escape.
-    assert "#nav{padding-bottom:calc(142px + env(safe-area-inset-bottom))}" in notes.PAGE
+    # Both columns take it from one token now -- it was two copies of the same
+    # number and it was missing everywhere else. See
+    # test_the_plus_button_has_room_reserved_for_it_everywhere.
+    assert "#nav{padding-bottom:var(--fabclear)}" in notes.PAGE
     # An open note is the same problem: every generated note ends in a
     # <details><summary>Full transcript</summary>, and at 118px the FAB sat on
     # the bottom 16px of it and took the taps meant for it. The clearance sits
     # on the Doubts thread now, which is what the note ends in.
-    assert "#doubts{max-width:70ch;margin:0 auto;padding:0 18px 142px}" in notes.PAGE
+    assert "#doubts{max-width:70ch;margin:0 auto;padding:0 18px var(--fabclear)}" in notes.PAGE
     fab = re.search(r"#fab\{(.*?)\}", notes.PAGE, re.S).group(1)
     assert "bottom:calc(76px + env(safe-area-inset-bottom))" in fab and "height:58px" in fab, \
         "if the FAB moves, #nav's and article's padding have to move with it"
@@ -1871,8 +1882,13 @@ def test_the_progress_strip_cannot_cover_the_header():
     rule = re.search(r"#busy\{(.*?)\}", notes.PAGE, re.S).group(1)
     assert "pointer-events:none" in rule, "the strip must never take a tap"
     assert "top:" not in rule, "the strip must not be anchored over the header"
-    # + works while you read, so it must not be hidden there.
-    assert "body.reading #fab" not in notes.PAGE
+    # The + used to stay while you read, on the grounds that adding works from
+    # anywhere. What that meant in practice was 58px of accent sitting on the
+    # paragraph, 76px above a dock that is already the reading screen's bar.
+    # It goes on the narrow layout and stays on the wide one, where it belongs
+    # to the list column and is nowhere near the note.
+    assert "body.reading #fab{display:none}" in notes.PAGE
+    assert "body.reading #fab{display:block}" in notes.PAGE
 
 
 # Same bug, the other floating thing: #busy was fixed with pointer-events, but
@@ -1916,9 +1932,13 @@ def test_every_way_in_is_locked_rather_than_missing():
     the old answer and it taught nobody anything: the app simply looked like an
     app that does not do that. Each one stays, marked, with the reason."""
     for wiring in (
-        # The + button is shown and marked, not removed.
-        "fab.hidden = ROLE === null;",
-        "fab.className = mayAdd() ? '' : 'locked';",
+        # The + button is shown and marked, not removed. It is away only where
+        # there is no role yet, or where the screen has a primary action of its
+        # own for it to be standing on.
+        "fab.hidden = ROLE === null || !!view.compose || view.edit;",
+        # And it is not locked on Community, where what it opens is a box to
+        # type in rather than an upload -- students write on the wall.
+        "fab.className = (fabWrites() || mayAdd()) ? '' : 'locked';",
         "document.getElementById('lock').hidden = mayAdd();",
         "el.className = mayAdd() ? 'opt' : 'opt locked';",
         # Each option refuses to start rather than 403ing halfway through.
@@ -2318,8 +2338,8 @@ def test_the_composer_is_a_url_like_every_other_level():
     are all the one mechanism."""
     assert "post.onclick = () => go('home', 'new');" in notes.PAGE
     assert "edit.onclick = () => go('home', a.id);" in notes.PAGE
-    assert ("const compose = (tab === 'campus' || tab === 'home') ? parts[1] || null : null;"
-            in notes.PAGE)
+    assert ("const compose = (tab === 'campus' || tab === 'home' || tab === 'community')\n"
+            "    ? parts[1] || null : null;" in notes.PAGE)
     assert "composing" not in notes.PAGE, "no variable may outlive the URL"
     assert ("lback.hidden = !s && !view.edit && !view.att && !view.compose && !view.day\n"
             "                 && !view.me;" in notes.PAGE)
@@ -3055,3 +3075,201 @@ def test_the_page_is_written_on_one_scale():
     # and 999px a pill -- shapes, not corners.
     assert radii <= {"2px", "4px", "5px", "7px", "11px", "14px", "18px", "999px"}, \
         f"a fifth corner: {sorted(radii)}"
+
+
+# --------------------------------------- the composer, and what draws it
+
+def test_no_screen_in_this_app_shows_a_raw_file_input():
+    """"Choose files / No file chosen" is the one control here that nobody
+    under twenty has ever seen in anything else they use, and a dashed grey
+    slab of it sat in the middle of the Community composer.
+
+    appearance:none does nothing to a file input -- the slab is shadow DOM --
+    so the input is hidden and a real control drives it. The select keeps its
+    native wheel, which is still the fastest picker on a phone, and loses the
+    OS chevron for the one this app draws everywhere else.
+    """
+    tokens = re.search(r"<style>\n(.*?)\n</style>", notes.PAGE, re.S).group(1)
+    assert "::file-selector-button" not in tokens, \
+        "a styled file button is still a file button: hide it and drive it"
+    assert "input[type=file]" not in tokens, "nothing styles a visible file input"
+    picker = re.search(r"function wallComposer\(kind\) \{.*?\n\}", notes.PAGE, re.S).group(0)
+    assert "picker.hidden = true" in picker, "the file input is hidden"
+    assert "picker.click()" in picker, "and opened by a control of our own"
+    assert re.search(r"\.compose select,\.askbox select\{[^}]*appearance:none", tokens), \
+        "the OS chevron goes; the wheel behind it stays"
+
+
+def test_community_opens_on_the_feed_and_its_composer_lives_behind_the_plus():
+    """The tab used to open on an empty form with the feed underneath it, so
+    the first thing a student saw on Community was work rather than content.
+
+    The composer is a level with a URL now, like Campus's three and the notice
+    board's -- which is what keeps the back gesture from dropping what was
+    typed.
+    """
+    wall = re.search(r"function wallSection\(\) \{.*?\n\}", notes.PAGE, re.S).group(0)
+    assert "wallComposer" not in wall, "the feed screen must not draw the composer"
+    community = re.search(r"async function renderCommunity\(\) \{.*?\n\}",
+                          notes.PAGE, re.S).group(0)
+    assert "wallComposer" in community and "view.compose" in community
+    assert "WALL_COMPOSE = {say: 'feed', confess: 'confession'}" in notes.PAGE
+    assert "go('community', wallOn === 'feed' ? 'say' : 'confess')" in notes.PAGE, \
+        "the + is what opens it"
+
+
+@pytest.mark.skipif(not NODE, reason="needs node")
+def test_the_plus_writes_on_community_and_adds_everywhere_else(tmp_path):
+    """Words on the wall are not an upload, so the + is never locked there --
+    a student may post one and may not add to the library, and the same button
+    has to say both things depending on where it is standing.
+    """
+    checks = """
+ROLE = 'student';
+location.hash = '#community';
+route();
+assert.equal(view.compose, null, 'Community opens on the feed, not on a form');
+assert.equal(fabEl.hidden, false, 'and the + is there');
+assert.equal(fabEl.className, '', 'a student may post words, so it is not locked');
+
+location.hash = '#classes';
+route();
+assert.equal(fabEl.className, 'locked', 'a student still may not add to the library');
+
+location.hash = '#community';
+route();
+fabEl.onclick();
+assert.equal(location.hash, '#community/say', 'the + opens the composer');
+route();
+assert.deepStrictEqual([view.tab, view.compose], ['community', 'say']);
+assert.equal(fabEl.hidden, true, 'and takes itself off the form it just opened');
+
+wallOn = 'confession';
+location.hash = '#community';
+route();
+fabEl.onclick();
+assert.equal(location.hash, '#community/confess',
+             'the + writes the list you are reading');
+"""
+    f = tmp_path / "fab.js"
+    f.write_text(STUB + SCRIPT.replace("__DATA__", json.dumps(DATA_FIXTURE)) + checks)
+    r = subprocess.run([NODE, str(f)], capture_output=True, text=True)
+    assert r.returncode == 0, r.stdout + r.stderr
+
+
+def test_the_now_line_passes_behind_the_words_it_used_to_cross():
+    """At 11:41 the current-time rule ran straight through "11:00-12:55 - 1 h
+    55 min - EE1125" and neither the time nor the code could be read. The words
+    knock it out and it carries on either side of them, which is what the hour
+    labels already do to the hour rules.
+    """
+    tokens = re.search(r"<style>\n(.*?)\n</style>", notes.PAGE, re.S).group(1)
+    knock = re.search(r"\.tl \.ev b,\.tl \.ev small\{([^}]*)\}", tokens)
+    assert knock, "the words in a block must knock the now line out"
+    for part in ("background:var(--fill)", "z-index:3", "width:fit-content"):
+        assert part in knock.group(1), f"the knockout needs {part}"
+    now = re.search(r"\.tl \.now\{([^}]*)\}", tokens).group(1)
+    assert "z-index:2" in now, "and the line still paints over the block's fill"
+    assert re.search(r"\.tl \.ev\{[^}]*--fill:color-mix", tokens), \
+        "a knockout can only be drawn in a fill that is a known colour"
+
+
+def test_every_class_on_the_day_is_named_in_the_same_ink():
+    """The two classes that were over were grey and the one running was black,
+    so three blocks forty-five minutes apart read as three different kinds of
+    thing. Over is said in the block and never in the words.
+    """
+    tokens = re.search(r"<style>\n(.*?)\n</style>", notes.PAGE, re.S).group(1)
+    done = re.search(r"\.tl \.ev\.done\{([^}]*)\}", tokens)
+    assert done, "a class that has happened still says so"
+    assert "color:" not in done.group(1).replace("border-left-color:", ""), \
+        "it says so in the fill and the rule, not in the ink"
+    assert not re.search(r"\.tl \.ev\.done b", tokens), \
+        "no rule may recolour one block's title and not another's"
+
+
+# ------------------------------------------ the reading screen's masthead
+
+def test_the_reading_screen_says_which_lecture_it_is():
+    """The header said "< MC1101" on the left and MC1101 on a chip on the right
+    -- the whole of it spent on one string, twice -- while the lecture's own
+    title appeared nowhere on the screen. Under that sat 150px of nothing.
+    """
+    assert '<header class="mast" id="mast" hidden>' in notes.PAGE
+    open_note = re.search(r"function openNote\(n, s\) \{.*?\n\}", notes.PAGE, re.S).group(0)
+    assert "rtitle.textContent = n.title;" in open_note, "the title goes on the screen"
+    assert "mast.hidden = false;" in open_note
+    assert "backBtn.textContent = '‹ ' + s.name;" in open_note, \
+        "back says the subject by name; the chip beside it is the code"
+    assert "backBtn.textContent = '‹ ' + s.code" not in notes.PAGE, \
+        "the code must not be printed twice in one header"
+    closing = re.search(r"function closeRead\(\) \{.*?\n\}", notes.PAGE, re.S).group(0)
+    assert "mast.hidden = true;" in closing, "nothing open, nothing to head"
+    assert "if (own && own.tagName === 'H1') own.remove();" in open_note, \
+        "a note that carries its own title must not print it twice"
+
+
+def test_a_list_in_a_note_still_has_its_bullets():
+    """Tailwind's preflight sets list-style:none on every ul and ol, which took
+    the markers off every list in every lecture note and left the indent
+    behind. A key-points list read as four stranded paragraphs.
+    """
+    tokens = re.search(r"<style>\n(.*?)\n</style>", notes.PAGE, re.S).group(1)
+    assert "article ul,.ann .md ul{list-style:disc}" in tokens
+    assert "article ol,.ann .md ol{list-style:decimal}" in tokens
+
+
+def test_a_heading_in_a_note_is_not_the_colour_a_link_is():
+    """Every '###' in every note was set in the accent, which is what a link
+    is and what nothing else in this app is -- so headings read as tappable
+    and tapping them did nothing."""
+    tokens = re.search(r"<style>\n(.*?)\n</style>", notes.PAGE, re.S).group(1)
+    h3 = re.search(r"article h3\{([^}]*)\}", tokens).group(1)
+    assert "var(--accent)" not in h3, "a heading is not a link"
+    assert "font-weight:700" in h3, "weight is what makes it a heading instead"
+    assert "article a{color:var(--accent)}" in tokens or "article .md a" in tokens \
+        or "var(--accent)" in re.search(r"\.ann \.md a\{([^}]*)\}", tokens).group(1), \
+        "the accent still belongs to links"
+
+
+def test_the_plus_button_has_room_reserved_for_it_everywhere():
+    """It is 58px of accent fixed over the page and it sat on live content on
+    16 of 38 screens -- a confession's third line, a card's buttons, the
+    paragraph under the timetable's Save button. The clearance is one token
+    now, used by both scrolling columns, and the button takes itself away
+    while a screen is moving under it and on any screen with a bar of its own.
+    """
+    tokens = re.search(r"<style>\n(.*?)\n</style>", notes.PAGE, re.S).group(1)
+    assert "--fabclear:calc(142px + env(safe-area-inset-bottom));" in tokens
+    assert "#nav{padding-bottom:var(--fabclear)}" in tokens
+    assert re.search(r"#doubts\{[^}]*var\(--fabclear\)", tokens), \
+        "the reading screen's tail needs the same clearance"
+    assert not re.search(r"padding[^;{}]*\b142px", tokens), \
+        "one clearance, written once, and it is the token"
+    assert "body.reading #fab{display:none}" in tokens, \
+        "the reading screen has the dock; it does not need a second bar"
+    assert "body.fabaway #fab{" in tokens
+    assert "document.body.classList.toggle('fabaway'," in notes.PAGE
+
+
+def test_the_wide_layout_has_something_to_say_with_nothing_open():
+    """At 1440x900 the app was a 320px column and 1120px of near-black with a
+    small grey box in it reading "Pick a lecture to start reading", under a bar
+    of four buttons -- Save, Share, Download, Print -- that acted on nothing.
+    It read as a screen that had failed to load.
+    """
+    tokens = re.search(r"<style>\n(.*?)\n</style>", notes.PAGE, re.S).group(1)
+    assert "body:not(.reading) .dock{display:none}" in tokens, \
+        "a bar of controls with nothing to control is worse than no bar"
+    assert "body:not(.reading) .dock{display:flex}" not in tokens
+    empty = re.search(r"function emptyRead\(\) \{.*?\n\}", notes.PAGE, re.S).group(0)
+    assert "Your shelf is on the left." in empty, "the pane says what it is for"
+    assert "'Added most recently'" in empty, \
+        "and carries the one list the column beside it does not already show"
+    assert "go('classes', x.s.code, x.n.title)" in empty, "each row opens in the pane"
+    closing = re.search(r"function closeRead\(\) \{.*?\n\}", notes.PAGE, re.S).group(0)
+    assert "emptyRead();" in closing, \
+        "closing a note must empty the pane, not leave its markup lying in it"
+    assert "doubtsBox.innerHTML = '';" in closing, \
+        "and take the closed note's thread with it"
+    assert re.search(r"\.empty\{[^}]*min-height:72dvh", tokens)
