@@ -2006,10 +2006,14 @@ const sectionOf = (tab, word) =>
   (SECTIONS[tab] || []).includes(word) ? word : null;
 
 const MOVED = {
-  // The timetable and the catch-up screen are Classes now -- they are about
-  // the week, and the week is where the subjects are.
-  'home/timetable': 'classes/timetable',
+  // The catch-up screen is Classes now -- it is about the week, and the week
+  // is where the subjects are.
   'home/attendance': 'classes/attendance',
+  // The timetable editor is gone: a section's week is the registrar's grid,
+  // set once by an admin, and a student editing their own copy of it only
+  // ever drifted away from the real one. Both old links land on Subjects,
+  // which is the screen that week is now read from.
+  'home/timetable': 'classes', 'classes/timetable': 'classes',
   // The wall and the class board are Community: they are people, not place.
   'campus/feed': 'community', 'campus/confession': 'community',
   'campus/board': 'community',
@@ -2676,8 +2680,8 @@ const emptyDay = (date, day) => {
                           : 'No classes on ' + DAYS[day] + '.';
   why.textContent = shut
     ? 'The institute is closed. Step to another day with the arrows above.'
-    : 'Nothing is timetabled. If that is wrong, your timetable is under '
-      + 'Classes and you can change any period in it.';
+    : 'Nothing is timetabled. The week is set once for the whole section, so '
+      + 'if that is wrong, say so on the wall.';
   el.append(what, why);
   return el;
 };
@@ -2787,7 +2791,7 @@ function calendarWeek() {
 }
 
 // Section I's bell. Seven periods and a lunch break, off the institute's
-// timetable notice (w.e.f. 24/8/2026). Period 8 exists in the timetable editor
+// timetable notice (w.e.f. 24/8/2026). Period 8 exists in the section grid
 // but has no time here, so it never reaches the timeline.
 // ponytail: one section's bell hardcoded; a table when a second section joins.
 const PERIOD_TIMES = {1: ['09:00', '09:55'], 2: ['10:00', '10:55'], 3: ['11:00', '11:55'],
@@ -2888,9 +2892,9 @@ function blockWithTimeline(label, date, rows) {
   nav.appendChild(box);
 }
 
-// 1. TODAY. Empty is the honest first state: nobody has typed a timetable in,
-// and the institute PDF's columns are ambiguous enough that a guessed one
-// would quietly file lectures under the wrong subject.
+// 1. TODAY. Empty is the honest first state: nobody has put the section's
+// week in yet, and the institute PDF's columns are ambiguous enough that a
+// guessed one would quietly file lectures under the wrong subject.
 function todayBlock() {
   // The server's day when there is a server, because the marks written from
   // this block are stamped with the server's date. A handset a few hours out
@@ -2902,11 +2906,7 @@ function todayBlock() {
     if (!live) {
       return block('Today', [quiet('Your timetable needs the server. Run: notes.py serve')]);
     }
-    const start = line('Set up your timetable',
-                       'Six days, one tap per class · about a minute',
-                       document.createElement('button'));
-    start.onclick = () => go('classes', 'timetable');
-    return block('Today', [start]);
+    return block('Today', [quiet('Your section\u2019s week has not been set up yet. A class rep or an admin sets it once, for everybody.')]);
   }
 
   // Today's classes, markable where they already are. This is the screen a
@@ -3127,81 +3127,6 @@ function aboutScreen() {
          'If something here is wrong \u2014 a period in the wrong hour, a '
          + 'subject under the wrong name \u2014 say so on the wall. It is '
          + 'faster to fix than to live with.');
-}
-
-// The one level inside Home. Six days of native selects: the iOS wheel is the
-// fastest subject picker on a phone, costs nothing to download, and is the
-// difference between filling this in and giving up on it.
-let draft = null, draftDay = 1;
-const slotKey = (d, p) => d + '-' + p;
-
-function renderTimetable() {
-  if (!draft) {
-    draft = {};
-    (TT || []).forEach(s => { draft[slotKey(s.day, s.period)] = s.code; });
-    draftDay = dayOf(new Date()) || 1;      // Sunday has no column: start at Monday
-  }
-
-  const days = document.createElement('div');
-  days.className = 'days';
-  for (let d = 1; d <= 6; d++) {
-    const b = document.createElement('button');
-    b.textContent = DAYS[d].slice(0, 3);
-    b.setAttribute('aria-label', DAYS[d]);
-    if (d === draftDay) b.setAttribute('aria-current', 'true');
-    b.onclick = () => { draftDay = d; render(); };
-    days.appendChild(b);
-  }
-  nav.appendChild(days);
-
-  for (let p = 1; p <= PERIODS; p++) {
-    const row = document.createElement('div');
-    row.className = 'slot';
-    row.innerHTML = '<span></span>';
-    row.querySelector('span').textContent = 'Period ' + p;
-    const sel = document.createElement('select');
-    sel.setAttribute('aria-label', DAYS[draftDay] + ', period ' + p);
-    const free = document.createElement('option');
-    free.value = ''; free.textContent = '— free —';
-    sel.appendChild(free);
-    for (const s of DATA) {
-      const o = document.createElement('option');
-      o.value = s.code; o.textContent = s.code + ' — ' + s.name;
-      sel.appendChild(o);
-    }
-    sel.value = draft[slotKey(draftDay, p)] || '';
-    sel.onchange = () => { draft[slotKey(draftDay, p)] = sel.value; };
-    row.appendChild(sel);
-    nav.appendChild(row);
-  }
-
-  const save = document.createElement('button');
-  save.className = 'save';
-  save.textContent = 'Save timetable';
-  save.onclick = saveTimetable;
-  nav.appendChild(save);
-  nav.appendChild(quiet('Periods are numbered, not timed. The institute grid does '
-                        + 'not say which hour is which clearly enough to print one.'));
-}
-
-async function saveTimetable() {
-  const slots = Object.keys(draft).filter(k => draft[k]).map(k => ({
-    day: +k.split('-')[0], period: +k.split('-')[1], code: draft[k]}));
-  busy('Saving your timetable…', true);
-  try {
-    const r = await fetch('/timetable', {
-      method: 'POST', headers: {'Content-Type': 'application/json'},
-      body: JSON.stringify({slots}),
-    });
-    const d = await r.json().catch(() => ({}));
-    if (!r.ok) throw new Error(d.error || 'could not save that');
-    TT = slots;
-    draft = null;
-    busyDone(slots.length ? 'Timetable saved' : 'Timetable cleared');
-    history.back();
-  } catch (e) {
-    busyDone('Could not save that: ' + e.message);
-  }
 }
 
 // ---- ATTENDANCE ----------------------------------------------------------
@@ -4632,11 +4557,7 @@ function renderDay() {
       return block(dayName(date),
         [quiet('Your timetable needs the server. Run: notes.py serve')]);
     }
-    const start = line('Set up your timetable',
-                       'Six days, one tap per class · about a minute',
-                       document.createElement('button'));
-    start.onclick = () => go('classes', 'timetable');
-    return block(dayName(date), [start]);
+    return block(dayName(date), [quiet('Your section\u2019s week has not been set up yet. A class rep or an admin sets it once, for everybody.')]);
   }
   const slots = slotsFor(date);
   const rows = [];
@@ -4698,10 +4619,6 @@ function renderSubjects() {
     mark.onclick = () => go('classes', 'attendance');
     week.push(mark);
   }
-  const tt = line('Your timetable', 'Add or change a period',
-                  document.createElement('button'));
-  tt.onclick = () => go('classes', 'timetable');
-  week.push(tt);
   block('Your week', week);
   // The institute's calendar, and what is next on it. Home shows today; this
   // is the tab that holds the week around it.
@@ -5236,7 +5153,7 @@ function render() {
   closeDrawer();
   paintDrawer();
   const s = view.code ? subjectOf(view.code) : null;
-  const searchable = view.tab === 'classes' && !view.edit && !view.att && !view.day
+  const searchable = view.tab === 'classes' && !view.att && !view.day
                     && !view.papers;
   nav.innerHTML = '';
   // Home keeps the brand; every other screen names itself in the same header,
@@ -5244,7 +5161,7 @@ function render() {
   // there is a level above to climb to.
   brand.hidden = view.tab !== 'home' || !!view.compose;
   shead.hidden = view.tab === 'home' && !view.compose;
-  lback.hidden = !s && !view.edit && !view.att && !view.compose && !view.day
+  lback.hidden = !s && !view.att && !view.compose && !view.day
                  && !view.me && !view.papers;
   scode.hidden = !s;
   // Search is the subject list's own tool. It must not answer over Community,
@@ -5273,7 +5190,6 @@ function render() {
   sname.textContent = s ? s.name
     : view.papers ? 'Past papers'
     : view.day ? 'Your day'
-    : view.edit ? 'Your timetable'
     : view.att ? 'Your attendance'
     : view.tab === 'community' && view.compose
       ? (view.compose === 'confess' ? 'Anonymous' : 'New post')
@@ -5290,7 +5206,6 @@ function render() {
   });
   paintFab();   // the + means the composer on Community and the sheet elsewhere
   if (needle) renderSearch(needle);
-  else if (view.edit) renderTimetable();
   else if (view.att) renderAttendance();
   else if (view.day) renderDay();
   else if (view.papers) renderPapers();
@@ -5338,10 +5253,8 @@ function route() {
   const tab = TABS.includes(parts[0]) ? parts[0] : 'home';
   const s = tab === 'classes' ? subjectOf(parts[1]) : null;
   const title = s ? parts[2] : null;
-  // The timetable editor is a level inside Classes and therefore a URL, so
-  // back climbs out of it exactly like every other step.
-  const edit = tab === 'classes' && parts[1] === 'timetable';
-  // And so is catching up on attendance, for the same reason.
+  // Catching up on attendance is a level inside Classes and therefore a URL,
+  // so back climbs out of it exactly like every other step.
   const att = tab === 'classes' && parts[1] === 'attendance';
   // The day view is the same shape one tab over: a level inside Classes, so
   // back climbs to the subject list rather than out of the app. 'day' can
@@ -5373,15 +5286,14 @@ function route() {
   // put in. One level under '#me', so '#me' on its own still lands somewhere.
   const me = tab === 'me' ? parts[1] || null : null;
   const was = view;
-  view = {tab, code: s ? s.code : null, title: title || null, edit, att, compose,
+  view = {tab, code: s ? s.code : null, title: title || null, att, compose,
           composeId, day: dayv, papers: papersv, me, sec};
   // Not every render, and not every keystroke inside one: only a step to a
   // different tab, a different subject or a different level of one.
   const moving = !was || was.tab !== view.tab || was.code !== view.code
-    || was.title !== view.title || was.edit !== view.edit || was.att !== view.att
+    || was.title !== view.title || was.att !== view.att
     || was.day !== view.day || was.me !== view.me || was.compose !== view.compose
     || was.papers !== view.papers || was.sec !== view.sec;
-  if (!edit) draft = null;      // walking away drops an unsaved week, not TT
   if (!att) attDate = null;     // and re-opening it starts on today, not last week
   if (!dayv) dayDate = null;    // today by default, every time it is opened
   const n = s && title ? s.notes.find(x => x.title === title) : null;
@@ -6039,7 +5951,6 @@ const DRAWER = [
   ['Classes',   'book',   null, [
     ['Subjects',                  ['classes']],
     ['Your day',                  ['classes', 'day']],
-    ['Your timetable',            ['classes', 'timetable']],
     ['Catching up',               ['classes', 'attendance']],
     ['Past papers',               ['classes', 'papers']],
   ]],
@@ -6072,7 +5983,7 @@ const YOU = [
 // at the top of that tab -- reading a lecture is standing in Subjects.
 const drawerHere = () => hashOf(view.tab,
   view.sec || view.me || (view.tab === 'classes'
-    ? (view.edit ? 'timetable' : view.att ? 'attendance' : view.day ? 'day'
+    ? (view.att ? 'attendance' : view.day ? 'day'
        : view.papers ? 'papers' : null)
     : null));
 
@@ -6421,7 +6332,7 @@ async function pollJobs() {
     const shape = JSON.stringify(jobs.map(j => [j.id, j.state, j.detail]));
     if (shape !== lastJobs) {
       lastJobs = shape;
-      if (view.tab === 'home' && !view.edit) render();
+      if (view.tab === 'home') render();
     }
     jobsBox.innerHTML = '';
     jobs.slice(0, 4).forEach(j => jobsBox.appendChild(jobRow(j)));
@@ -6460,11 +6371,10 @@ function paintFab() {
   // about the + button, so it waits rather than appearing and then locking --
   // and a 503 or a 403 leaves ROLE null, which is not permission either.
   // And it is gone wherever the screen already has a primary action of its
-  // own: a composer has Post, the timetable editor has Save timetable, and
-  // reading has the dock (that one is CSS, on body.reading). A + floating on
-  // top of those is a second way to add something you are not doing, and on
-  // the timetable it sat squarely on the paragraph that explains the screen.
-  fab.hidden = ROLE === null || !!view.compose || view.edit;
+  // own: a composer has Post, and reading has the dock (that one is CSS, on
+  // body.reading). A + floating on top of those is a second way to add
+  // something you are not doing.
+  fab.hidden = ROLE === null || !!view.compose;
   fab.className = (fabWrites() || mayAdd()) ? '' : 'locked';
   fab.setAttribute('aria-label', !fabWrites() ? 'Add a lecture or notes'
     : wallOn === 'feed' ? 'Write a post' : 'Write a confession');
@@ -7261,7 +7171,7 @@ RANK = {r: i for i, r in enumerate(ROLES)}
 # What each endpoint costs, in the same place as PUBLIC_PATHS and for the same
 # reason: the gate below reads this before dispatch, so a route added later is
 # refused to everyone but an admin until somebody names its price here. The
-# unnamed ones -- /data, /jobs, /log, /vote, /timetable, /doubts, the library
+# unnamed ones -- /data, /jobs, /log, /vote, /doubts, the library
 # itself -- are reads, personal settings, and the one thing a student can give
 # the class back. Asking and answering is deliberately not a privilege.
 ROLE_REQUIRED = {
@@ -9227,9 +9137,10 @@ def parse_timetable(text, known_codes):
 def db_timetable(conn, user_id):
     """One student's week, in the order Home reads it.
 
-    Nobody has typed the institute grid into this app, and the source PDF's
-    columns are ambiguous enough that guessing one would mis-file lectures in
-    silence. So it starts empty and the student fills it in.
+    Seeded from the section's template when the profile is made, and written
+    by nothing else: the grid is the registrar's, one per section, and a
+    student editing their own copy of it only ever drifted away from the real
+    one. An empty week means nobody has put that section's grid in yet.
     """
     return [
         {"day": day, "period": period, "code": code}
@@ -9239,42 +9150,6 @@ def db_timetable(conn, user_id):
             (user_id,),
         )
     ]
-
-
-def db_set_timetable(conn, user_id, slots):
-    """Replace the whole week. Returns the rows written.
-
-    Edited whole and never bigger than 48 rows, so replace beats a diff: there
-    is no half-saved state to reason about, and clearing a period is the same
-    operation as setting one.
-
-    Validates here rather than in the handler -- the check constraints and the
-    foreign key would refuse bad input anyway, but as a 500, and every caller
-    routes through this one function.
-    """
-    clean = {}
-    for s in slots:
-        try:
-            day, period = int(s["day"]), int(s["period"])
-        except (KeyError, TypeError, ValueError):
-            raise ValueError("a slot needs a day and a period")
-        code = s.get("code")
-        if not 1 <= day <= 6:
-            raise ValueError(f"day {day} is not Monday to Saturday")
-        if not 1 <= period <= PERIODS:
-            raise ValueError(f"period {period} is not 1 to {PERIODS}")
-        if code not in SUBJECTS:
-            raise ValueError(f"unknown subject {code!r}")
-        clean[(day, period)] = code            # last write wins; the PK would raise
-    with conn.transaction():
-        conn.execute("delete from timetable where profile_id = %s", (user_id,))
-        for (day, period), code in sorted(clean.items()):
-            conn.execute(
-                "insert into timetable (profile_id, day, period, subject_code) "
-                "values (%s, %s, %s, %s)",
-                (user_id, day, period, code),
-            )
-    return len(clean)
 
 
 # ---- Attendance. ---------------------------------------------------------
@@ -11853,8 +11728,6 @@ def build_server(args):
                 return self.do_chat()
             if self.path == "/bookmark":
                 return self.do_bookmark()
-            if self.path == "/timetable":
-                return self.do_timetable()
             if self.path == "/attendance":
                 return self.do_attendance()
             if self.path == "/cancelled":
@@ -13063,31 +12936,6 @@ def build_server(args):
             except Exception as e:
                 return self.reply(500, {"error": f"{type(e).__name__}: {e}"})
             return self.reply(200, {"subject": code, "messages": said})
-
-        def do_timetable(self):
-            """Save the whole week. It comes back down inside /data.
-
-            No GET of its own: Home already fetches /data on the way in, and a
-            second request for six rows is a second thing to be slow.
-            """
-            if not self.me:
-                return self.reply(404, {"error": "this server is running with --no-auth"})
-            try:
-                n = int(self.headers.get("Content-Length", 0))
-                if n > 20000:
-                    self.close_connection = True
-                    return self.reply(413, {"error": "too much"})
-                req = json.loads(self.rfile.read(n) or b"{}")
-                slots = req.get("slots")
-                if not isinstance(slots, list):
-                    return self.reply(400, {"error": "expected a list of slots"})
-                with db(self.me["id"]) as conn:
-                    saved = db_set_timetable(conn, self.me["id"], slots)
-            except ValueError as e:
-                return self.reply(400, {"error": str(e)})
-            except Exception as e:
-                return self.reply(500, {"error": f"{type(e).__name__}: {e}"})
-            return self.reply(200, {"saved": saved})
 
         def do_attendance(self):
             """Mark one class, or a day of them. Your own, and only your own.

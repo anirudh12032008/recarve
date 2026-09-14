@@ -159,7 +159,7 @@ def test_the_cli_writes_the_week_and_then_replaces_it(template, tmp_path, capsys
     run(tmp_path, "day,period,subject_code\nMonday,1,MC1101\nMonday,2,CY1107\n")
     assert template() == [(1, 1, "MC1101"), (1, 2, "CY1107")]
 
-    # Replaced whole, like db_set_timetable: clearing a period is the same
+    # Replaced whole, never merged: clearing a period is the same
     # operation as setting one, and there is no half-applied grid to reason about.
     run(tmp_path, "Tuesday,1,EE1125\n")
     assert template() == [(2, 1, "EE1125")]
