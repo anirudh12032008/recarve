@@ -163,3 +163,55 @@ def test_a_seat_already_taken_under_another_address_is_not_handed_over(db):
                (uid, section, "someone.else@stu.manit.ac.in"))
     assert notes.db_google(db, "26112011201",
                            "26112011201@stu.manit.ac.in") is None
+
+
+def test_the_roll_number_the_registrar_writes_and_the_one_you_typed(db):
+    """The bug this install would have hit on its own first sign-in.
+
+    The admin of this database is roll I60. The institute's list calls the
+    same seat 26I060. Matching those as strings gives him a second account,
+    as a student, and leaves the admin one behind with all its uploads.
+    """
+    section = a_section(db, 'GH')
+    listed(db, "26114011357", "26I060", section, name="ANIRUDH SAHU")
+    uid = make_user(db)
+    db.execute("insert into profiles (id, name, roll_no, status, role, section_id) "
+               "values (%s, 'Anirudh (admin)', 'I60', 'approved', 'admin', %s)",
+               (uid, section))
+
+    got = notes.db_google(db, "26114011357", "26114011357@stu.manit.ac.in")
+    assert got[0] == str(uid), "a new profile was made instead of adopting I60"
+    assert got[2] is True, "the admin came back as something other than an admin"
+    assert db.execute("select count(*) from profiles").fetchone()[0] == 1
+    kept = db.execute("select name, role from profiles where id = %s",
+                      (uid,)).fetchone()
+    assert kept == ("Anirudh (admin)", "admin"), "adoption overwrote the profile"
+
+
+@pytest.mark.parametrize("listed_roll,typed", [
+    ("26I060", "I60"),    # this install's admin
+    ("26I060", "I060"),   # the same, zero kept
+    ("26I060", "26I060"), # already the registrar's spelling
+    ("26A001", "a1"),     # lower case, and a section that is not I
+])
+def test_every_spelling_of_one_seat_finds_the_same_profile(db, listed_roll, typed):
+    section = a_section(db, 'G' + typed[:1].upper())
+    listed(db, "26112011201", listed_roll, section)
+    uid = make_user(db)
+    db.execute("insert into profiles (id, name, roll_no, status, section_id) "
+               "values (%s, 'Existing', %s, 'approved', %s)", (uid, typed, section))
+    got = notes.db_google(db, "26112011201", "26112011201@stu.manit.ac.in")
+    assert got and got[0] == str(uid), f"{typed!r} was not recognised as {listed_roll!r}"
+    assert db.execute("select count(*) from profiles").fetchone()[0] == 1
+
+
+def test_a_roll_number_that_is_not_this_seat_is_not_adopted(db):
+    """The other half: variants must not be so loose that they collide."""
+    section = a_section(db, 'GZ')
+    listed(db, "26112011201", "26A060", section)
+    uid = make_user(db)
+    db.execute("insert into profiles (id, name, roll_no, status, section_id) "
+               "values (%s, 'Different person', 'I60', 'approved', %s)", (uid, section))
+    got = notes.db_google(db, "26112011201", "26112011201@stu.manit.ac.in")
+    assert got[0] != str(uid), "section A's 26A060 adopted section I's I60"
+    assert db.execute("select count(*) from profiles").fetchone()[0] == 2
