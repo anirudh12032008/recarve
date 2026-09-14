@@ -1768,12 +1768,17 @@ const initialsOf = name => {
 // is written next to it every time it is used, and a reader that says "PN,
 // Priya Nair" has read the row twice.
 function face(name, size) {
+  // Trimmed once, so the hue and the letters are made of the same string --
+  // " Priya Nair " and "Priya Nair" were coming out two different colours --
+  // and so a name that is nothing but spaces lands in the branch below rather
+  // than drawing an empty coloured disc.
+  const who = (name || '').trim();
   const el = document.createElement('span');
-  el.className = 'face' + (name ? '' : ' none') + (size ? ' ' + size : '');
+  el.className = 'face' + (who ? '' : ' none') + (size ? ' ' + size : '');
   el.setAttribute('aria-hidden', 'true');
-  if (!name) return el;
-  el.style.setProperty('--h', nameHue(name));
-  el.textContent = initialsOf(name);
+  if (!who) return el;
+  el.style.setProperty('--h', nameHue(who));
+  el.textContent = initialsOf(who);
   return el;
 }
 
