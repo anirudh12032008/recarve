@@ -419,7 +419,6 @@ PROTECTED = [
     ("POST", "/explain", {"text": "what is a limit"}),
     ("POST", "/revise", {"subject": "MC1101"}),
     ("POST", "/vote", {"id": "x", "on": True}),
-    ("POST", "/timetable", {"slots": []}),
     ("POST", "/profile", {"name": "Renamed"}),
     ("POST", "/approve", {"id": "x"}),
     ("POST", "/role", {"id": "x", "role": "admin"}),

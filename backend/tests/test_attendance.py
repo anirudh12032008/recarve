@@ -160,8 +160,13 @@ def student_with_a_monday(db, role="student"):
     # create the next person, because the profiles policy is doing its job.
     as_admin_connection(db)
     uid = member(db, role=role)
+    # Straight in as the owner: nothing in the app writes a student's week any
+    # more -- the seeding trigger copies it from the section template -- so a
+    # test that needs a Monday puts one there itself.
+    for s in MONDAY:
+        db.execute("insert into timetable (profile_id, day, period, subject_code) "
+                   "values (%s, %s, %s, %s)", (uid, s["day"], s["period"], s["code"]))
     as_user(db, uid)
-    notes.db_set_timetable(db, uid, MONDAY)
     return uid
 
 

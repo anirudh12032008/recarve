@@ -680,7 +680,10 @@ const moved = (from, to) => {
   location.hash = from; route();
   assert.equal(location.hash, to, from + ' must still land on ' + to);
 };
-moved('#home/timetable', '#classes/timetable');
+// The editor is gone: a section's week is set once by an admin, so both old
+// links land on the screen that week is now read from.
+moved('#home/timetable', '#classes');
+moved('#classes/timetable', '#classes');
 moved('#home/attendance', '#classes/attendance');
 moved('#campus/new', '#home/new');
 moved('#campus/feed', '#community');
@@ -716,10 +719,11 @@ assert.equal(avatarAttrs['aria-expanded'], 'true', 'and says so to a screen read
 for (const g of ['Home', 'Classes', 'Campus', 'Community', 'You'])
   assert.ok(says(g), 'the drawer names the section: ' + g);
 // The levels that had no global way in at all before this.
-for (const row of ['Home', 'Your day', 'Your timetable', 'Catching up', 'Subjects',
+for (const row of ['Home', 'Your day', 'Catching up', 'Subjects',
                    'Past papers', 'Saved', 'Campus', 'Community', 'Your profile',
                    'Your contributions', 'About recarve'])
   assert.ok(says(row), 'the drawer holds: ' + row);
+assert.ok(!says('Your timetable'), 'and not a screen that no longer exists');
 assert.ok(!says('Class admin'), 'and nothing a student may not press');
 // Four sections in the map, and no more: the levels hang INSIDE two of them
 // rather than beside them. Counted, because a section that quietly stopped
@@ -746,8 +750,8 @@ writes = []; drawnFor = null;
 location.hash = '#classes/MC1101/week1'; route();
 assert.ok(lit(), 'reading a lecture is standing in Subjects');
 writes = []; drawnFor = null;
-location.hash = '#classes/timetable'; route();
-assert.ok(!lit(), 'and the timetable is not -- it is its own row');
+location.hash = '#classes/day'; route();
+assert.ok(!lit(), 'and your day is not -- it is its own row');
 
 // Tab wraps inside it rather than stepping out onto the page behind. The
 // arrows are gone with the menu: this is a <nav> of links, and a browser
@@ -895,10 +899,12 @@ assert.ok(says('Checking your timetable'), 'Home must not invent a timetable');
 assert.ok(!says('Needs you'), 'nothing is waiting, so there is no section');
 assert.ok(!says('New since'), 'no last visit, nothing to call new');
 
-// Empty is the honest first state, and it offers the way to fill it in.
+// Empty is the honest first state, and it says whose job filling it is rather
+// than offering the student an editor they no longer have.
 TT = []; live = true;
 home();
-assert.ok(says('Set up your timetable'), 'an empty timetable says how to fill it');
+assert.ok(says('has not been set up yet'), 'an empty timetable says who fills it');
+assert.ok(!says('Set up your timetable'), 'and never offers the student the grid');
 
 // A day with classes lists them in order, tappable, marked with what is there.
 TT = [{day: 3, period: 3, code: 'CY1107'}, {day: 3, period: 1, code: 'MC1101'}];
@@ -981,19 +987,12 @@ assert.ok(!says('Nothing new since you last looked'), 'nothing can be new in an 
 DATA.length = 0; DATA.push(...keep);
 SEEN = null;
 
-// The editor is a level inside Classes: its own URL, with a way back up. It
-// used to hang off Home, which made the week something you left Home to do.
+// The editor is gone. '#classes/timetable' is not a level any more: it is
+// rewritten to the subject list, and nothing on the way there offers a save.
 TT = [{day: 3, period: 1, code: 'MC1101'}];
 writes = []; location.hash = '#classes/timetable'; route();
-assert.deepStrictEqual([view.tab, view.edit], ['classes', true], 'the editor is a level');
-assert.ok(says('Period 1') && says('Period 8'), 'every period of the day is editable');
-assert.ok(says('Save timetable'), 'and there is a way to save it');
-assert.deepStrictEqual(chrome('#classes/timetable'), [true, false, false, true, true, true, false],
-                       'the editor names itself and keeps a way back up');
-assert.equal(draft['3-1'], 'MC1101', 'the editor opens on what is already saved');
-draft['3-2'] = 'CY1107';
-location.hash = '#home'; route();
-assert.equal(draft, null, 'walking away drops an unsaved week rather than saving it');
+assert.equal(location.hash, '#classes', 'the old editor URL lands on Subjects');
+assert.ok(!says('Save timetable'), 'and there is no week to save anywhere on it');
 
 // ---- Everything that waits on a promise, in one pass at the end. This file
 // is CommonJS, so top-level await is a syntax error; a rejection in here still
@@ -1013,44 +1012,6 @@ home();
 assert.ok(!says('Checking your timetable'), 'Home may not sit on checking forever');
 assert.ok(says('Your timetable needs the server'), 'it has to say what is wrong');
 
-// ---- Saving the week. The stub swallows save.onclick, so this drives
-// saveTimetable() by name, the way the practice checks drive the quiz.
-TT = []; draft = {'3-1': 'MC1101', '3-3': ''};
-fetches = []; backs = 0;
-reply = answer(true, {saved: 1});
-await saveTimetable();
-assert.equal(fetches[0][0], '/timetable', 'the save is the one request Home makes');
-assert.deepStrictEqual(JSON.parse(fetches[0][1].body),
-                       {slots: [{day: 3, period: 1, code: 'MC1101'}]},
-                       'day then period, and a period put back to free is not a slot');
-assert.deepStrictEqual(TT, [{day: 3, period: 1, code: 'MC1101'}],
-                       'Home shows the week that was just saved, not the old one');
-assert.equal(draft, null, 'a saved week is no longer a draft');
-assert.equal(backs, 1, 'and saving leaves the editor');
-
-// A refused save may not read as a saved one: the week on screen stays
-// whatever the server actually holds, and the reason is on screen.
-const saved = TT;
-draft = {'3-1': 'CY1107'};
-reply = answer(false, {error: 'day 9 is not a day'});
-writes = []; backs = 0;
-await saveTimetable();
-assert.deepStrictEqual(TT, saved, 'a refused save changes nothing');
-assert.ok(says('day 9 is not a day'), 'and says why it was refused');
-assert.ok(!says('Timetable saved'), 'a refused save must never report success');
-assert.equal(backs, 0, 'and leaves the student in the editor to fix it');
-
-// Every pick has to land in the draft: those selects are the only input the
-// save has, and an onchange that does nothing re-posts the old week in silence.
-location.hash = '#classes/timetable'; route();
-writes = [];
-renderTimetable();
-const picks = writes.filter(w => w[0] === 'onchange');
-assert.equal(picks.length, PERIODS, 'one select per period');
-qvalue = 'CY1107';
-picks[PERIODS - 1][1]();
-assert.equal(draft[slotKey(draftDay, PERIODS)], 'CY1107', 'a pick must land in the draft');
-qvalue = ''; draft = null;
 
 // ---- The jobs poll, which is the only thing that keeps 'Needs you' current.
 // 'Needs you' is written by Home's render and by nothing else; the job's own
@@ -1535,17 +1496,16 @@ assert.ok(wrote(['textContent', 'Below 75%']));
 location.hash = '#home'; writes = []; route();
 assert.ok(wrote(['textContent', 'Period 1 · Present']),
           "today's classes must be markable from Home");
-// And nothing else about the week: catching up and editing are Classes's, one
-// tap away, and printing them here as well was the same row in two places.
+// And nothing else about the week: catching up is Classes's, one tap away,
+// and printing it here as well was the same row in two places.
 assert.ok(!says('Catch up on another day'), 'Home is today, not the week around it');
-assert.ok(!says('Edit your timetable'));
 
-// They are on Classes, where the timetable they are about lives.
+// It is on Classes, where the timetable it is about lives.
 qvalue = '';                          // an earlier check left a search in the box
 location.hash = '#classes'; writes = []; route();
 assert.ok(says('Your week'), 'the week is a block on the subject list');
-assert.ok(says('Your attendance') && says('Your timetable'),
-          'and both screens are reached from it');
+assert.ok(says('Your attendance'), 'and catching up is reached from it');
+assert.ok(!says('Your timetable'), 'and the week itself is not editable from it');
 location.hash = '#home'; route();
 
 // The NUMBER is with the subject, because that is the screen you open when the
@@ -1945,32 +1905,35 @@ def test_home_costs_no_request_of_its_own():
     for wiring in ("TT = d.timetable || [];", "PENDING = d.pending || 0;",
                    "markSeen(d.now);", "JOBS = jobs;"):
         assert wiring in notes.PAGE, f"Home not wired: {wiring}"
-    # The editor's save is the only thing that talks to /timetable at all.
-    assert notes.PAGE.count("fetch('/timetable'") == 1
-    assert "body: JSON.stringify({slots})" in notes.PAGE
+    # And nothing on the page writes a timetable: the week is the section's,
+    # seeded from its template, and the student's copy is read-only.
+    assert "fetch('/timetable'" not in notes.PAGE
+    assert "{slots}" not in notes.PAGE
     # And Home must not be one of the screens that waits on a fetch to draw.
     home = re.search(r"\nfunction renderHome\(\) \{.*?\n\}", notes.PAGE, re.S).group(0)
     assert "await" not in home and "fetch" not in home
 
 
 def test_home_learns_the_server_is_there_before_it_draws():
-    """`live` is what decides whether an empty timetable reads as "set one up"
-    or as "there is no server to save it to". Set after the render rather than
+    """`live` is what decides whether an empty timetable reads as "nobody has
+    put the section's week in" or as "there is no server". Set after the render rather than
     before it, a perfectly good server said the second one -- and nothing
     redrew Home afterwards to correct it."""
     body = re.search(r"async function refresh\(\) \{.*?\n\}", notes.PAGE, re.S).group(0)
     assert body.index("live = true;") < body.index("render();")
 
 
-def test_the_timetable_editor_is_reachable_and_leads_back():
-    """A level inside Classes, so it is a URL: back climbs out of it like
-    every other step, and the tab bar is never the only way home."""
-    for wiring in ("const edit = tab === 'classes' && parts[1] === 'timetable';",
-                   "if (!edit) draft = null;",
-                   "start.onclick = () => go('classes', 'timetable');",
-                   "tt.onclick = () => go('classes', 'timetable');",
-                   "save.onclick = saveTimetable;"):
-        assert wiring in notes.PAGE, f"the timetable editor is not wired: {wiring}"
+def test_no_student_can_edit_a_timetable_from_this_page():
+    """The week belongs to the section, not to the reader of it. A student
+    editing their own copy only ever drifted away from the grid the registrar
+    published, so the editor and every way into it are gone -- and '#classes/
+    timetable' is rewritten to the subject list rather than left as a URL that
+    opens nothing."""
+    for gone in ("renderTimetable", "saveTimetable", "Save timetable",
+                 "Set up your timetable", "go('classes', 'timetable')",
+                 "view.edit"):
+        assert gone not in notes.PAGE, f"the timetable editor is still here: {gone}"
+    assert "'classes/timetable': 'classes'" in notes.PAGE
 
 
 def test_the_library_says_when_each_thing_arrived(tmp_path):
@@ -2110,7 +2073,7 @@ def test_every_way_in_is_locked_rather_than_missing():
         # The + button is shown and marked, not removed. It is away only where
         # there is no role yet, or where the screen has a primary action of its
         # own for it to be standing on.
-        "fab.hidden = ROLE === null || !!view.compose || view.edit;",
+        "fab.hidden = ROLE === null || !!view.compose;",
         # And it is not locked on Community, where what it opens is a box to
         # type in rather than an upload -- students write on the wall.
         "fab.className = (fabWrites() || mayAdd()) ? '' : 'locked';",
@@ -2322,9 +2285,9 @@ def test_attendance_rides_on_the_request_the_page_already_makes():
 
 
 def test_the_catch_up_screen_is_a_url_and_uses_the_platform_date_picker():
-    """A level inside Home, beside the timetable editor and reached the same
-    way, so back climbs out of it. The picker is the browser's own: it is the
-    fastest one on a phone and it costs nothing to ship."""
+    """A level inside Classes with a URL of its own, so back climbs out of it.
+    The picker is the browser's own: it is the fastest one on a phone and it
+    costs nothing to ship."""
     for wiring in ("const att = tab === 'classes' && parts[1] === 'attendance';",
                    "if (!att) attDate = null;",
                    "mark.onclick = () => go('classes', 'attendance');",
@@ -2508,7 +2471,7 @@ def test_saving_a_notice_disarms_the_button_that_started_it():
 
 def test_the_composer_is_a_url_like_every_other_level():
     """Without one the system back gesture threw away what was typed, and the
-    Campus tab button kept landing back on the form. The timetable editor is
+    Campus tab button kept landing back on the form. The catch-up screen is
     the pattern; this is the same shape, so back, the header button and Cancel
     are all the one mechanism."""
     assert "post.onclick = () => go('home', 'new');" in notes.PAGE
@@ -2518,7 +2481,7 @@ def test_the_composer_is_a_url_like_every_other_level():
     assert ("const compose = !sec && (tab === 'campus' || tab === 'home' || tab === 'community')\n"
             "    ? parts[1] || null : null;" in notes.PAGE)
     assert "composing" not in notes.PAGE, "no variable may outlive the URL"
-    assert ("lback.hidden = !s && !view.edit && !view.att && !view.compose && !view.day\n"
+    assert ("lback.hidden = !s && !view.att && !view.compose && !view.day\n"
             "                 && !view.me && !view.papers;" in notes.PAGE)
     compose = re.search(r"function renderCompose\(\) \{.*?\n\}", notes.PAGE, re.S).group(0)
     assert "history.back()" in compose, "Cancel is a step back, like every other one"
@@ -3412,7 +3375,7 @@ def test_a_heading_in_a_note_is_not_the_colour_a_link_is():
 def test_the_plus_button_has_room_reserved_for_it_everywhere():
     """It is 58px of accent fixed over the page and it sat on live content on
     16 of 38 screens -- a confession's third line, a card's buttons, the
-    paragraph under the timetable's Save button. The clearance is one token
+    paragraph under a composer's Post button. The clearance is one token
     now, used by both scrolling columns, and the button takes itself away
     while a screen is moving under it and on any screen with a bar of its own.
     """

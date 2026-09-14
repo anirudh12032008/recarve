@@ -391,7 +391,6 @@ MATRIX = [
     ("GET", "/log", None, "student"),
     ("GET", "/", None, "student"),
     ("POST", "/vote", {"id": "nope"}, "student"),
-    ("POST", "/timetable", {"slots": []}, "student"),
     ("POST", "/explain", {"text": "x" * 40}, "trusted"),
     ("POST", "/revise", {"subject": ""}, "trusted"),
     ("POST", "/upload", None, "trusted"),
