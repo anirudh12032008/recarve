@@ -139,6 +139,27 @@ def cookie(server):
     return value
 
 
+# ------------------------------------------------------------- the paint
+
+
+def test_the_super_screen_is_on_the_apps_own_scale():
+    """An admin screen that looks like a different product is an admin screen
+    you distrust. test_page enforces this for PAGE; SUPER_PAGE is a second
+    document with its own <style>, so it needs saying twice."""
+    import re
+
+    style = re.search(r"<style>\n(.*?)\n</style>", notes.SUPER_PAGE, re.S).group(1)
+    sizes = set(re.findall(r"font-size:(\d+px)", style))
+    assert sizes <= {"11px", "13px", "16px", "20px", "26px"}, \
+        f"off the type scale: {sorted(sizes)}"
+    weights = set(re.findall(r"font-weight:(\d+)", style))
+    assert weights <= {"400", "500", "600", "700"}, f"off the weight scale: {weights}"
+    radii = set(re.findall(r"border-radius:(\d+px)(?![\d ])", style))
+    assert radii <= {"7px", "11px", "14px", "18px"}, f"a fifth corner: {sorted(radii)}"
+    # The same purple, to the digit, light and dark.
+    assert "--accent:#6534c9" in style and "--accent:#ac93ff" in style
+
+
 # ------------------------------------------------- no env vars, no surface
 
 
@@ -275,6 +296,13 @@ def test_a_students_cookie_cannot_reach_super(server):
     for name in (notes.SESSION_COOKIE, notes.SUPER_COOKIE):
         status, _, _ = call(server, "GET", "/super/data", cookies={name: student})
         assert status == 403, f"a student session reached /super as {name}"
+    # And not because a student cookie happens to be the wrong shape: a cookie
+    # this server minted with the STUDENT key, over a payload shaped exactly
+    # like a /super deadline, does not verify here either. That is the key
+    # derivation and nothing else.
+    shaped = notes.sign_session(int(notes.time.time()) + 3600, SECRET)
+    assert call(server, "GET", "/super/data", cookies=supercookie(shaped))[0] == 403, \
+        "the two cookies are signed with the same key"
     status, body, _ = call(server, "GET", "/super",
                            cookies={notes.SESSION_COOKIE: student})
     assert "Every section" not in body, "the console was served to a student"
@@ -320,6 +348,11 @@ def test_a_write_from_another_site_is_refused(server, cookie):
 
 
 def test_a_new_section_starts_empty(server, cookie):
+    # Somebody has to be in SOME section, or "empty" is true of every query
+    # including one with no where clause on it.
+    join(server, "Elif", "24S010")
+    assert open_section(server, cookie, my_section(server, cookie))["members"]
+
     status, body, _ = call(server, "POST", "/super/section",
                            {"name": "SX", "grad_year": 2031, "set": set_id(server, cookie)},
                            cookies=supercookie(cookie))
