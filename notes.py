@@ -766,13 +766,23 @@ body.reading #read{display:block}
 .tl .hr{position:absolute;left:0;right:0;height:0;border-top:1px solid var(--line)}
 .tl .hr span{position:absolute;left:0;top:-8px;width:40px;font-size:11px;color:var(--mut);
   font-variant-numeric:tabular-nums;background:var(--bg);padding-right:4px}
+/* Opaque rather than an alpha over the page, because the words inside it have
+   to be able to knock the now line out from behind them -- see .now below --
+   and a knockout can only be drawn in a colour that is known. */
 .tl .ev{position:absolute;left:48px;right:0;border-radius:11px;padding:6px 10px;overflow:hidden;
   display:flex;flex-direction:column;justify-content:flex-start;border:0;font:inherit;
-  text-align:left;color:var(--fg);background:hsl(var(--h) var(--sat) var(--lum) / .2);
+  text-align:left;color:var(--fg);
+  --fill:color-mix(in srgb,hsl(var(--h) var(--sat) var(--lum)) 20%,var(--bg));
+  background:var(--fill);
   border-left:4px solid hsl(var(--h) var(--sat) var(--lum))}
-/* Already happened. Said in the ink, not in the block's opacity: dimming the
-   container dims the words that name the class. */
-.tl .ev.done b,.tl .ev.done small{color:var(--mut)}
+/* Already happened. Said in the furniture and never in the ink: greying the
+   title made the first two blocks of a day a different colour from the third
+   for a reason nobody can see on a screen -- three classes, three-quarters of
+   an hour apart, and the two that are over read as a different KIND of thing
+   rather than as the same thing earlier. The block goes pale, the rule down
+   its edge goes with it, and every class on the day is named in one ink. */
+.tl .ev.done{--fill:color-mix(in srgb,hsl(var(--h) var(--sat) var(--lum)) 8%,var(--bg));
+  border-left-color:color-mix(in srgb,hsl(var(--h) var(--sat) var(--lum)) 40%,var(--bg))}
 .tl .free{position:absolute;left:48px;right:0;border-radius:11px;border:1.5px dashed var(--line);
   display:flex;align-items:center;justify-content:center}
 .tl .lunch{position:absolute;left:48px;right:0;border-radius:11px;display:flex;
@@ -781,6 +791,23 @@ body.reading #read{display:block}
 .tl .now{position:absolute;left:40px;right:0;height:2px;background:var(--err);z-index:2}
 .tl .now::before{content:"";position:absolute;left:-5px;top:-4px;width:10px;height:10px;
   border-radius:50%;background:var(--err)}
+/* The one place the now line lands is the class that is running, and that is
+   the one class whose name is under it: at 11:41 the rule went straight
+   through "11:00-12:55 - 1 h 55 min - EE1125" and neither the time nor the
+   code could be read. The words knock it out and it carries on either side
+   of them -- the same thing the hour labels above already do to the hour
+   rules, so a rule passing behind type is a device this screen already has.
+   fit-content is what keeps the knockout the width of the words rather than
+   the width of the block. */
+.tl .ev b,.tl .ev small{position:relative;z-index:3;width:fit-content;max-width:100%;
+  background:var(--fill);padding-right:6px;border-radius:2px}
+/* --mut is 5.2:1 on the bare page, and a coloured block eats into that: on the
+   block that is running right now it fell to 3.6:1, and that is the line that
+   says when the class ends. The quiet ink inside a block is the block's own
+   ink thinned rather than the page's grey, so it stays quieter than the title
+   and still clears 4.5:1 on all eight subject colours in both themes -- 5.5:1
+   at the worst of them. */
+.tl .ev small{color:color-mix(in srgb,var(--fg) 70%,var(--fill))}
 .rename button.primary{background:var(--accent);color:var(--accent-fg);border:0}
 .row-del[disabled]{opacity:.45}
 

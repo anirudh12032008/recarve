@@ -3029,3 +3029,34 @@ assert.equal(location.hash, '#community/confess',
     f.write_text(STUB + SCRIPT.replace("__DATA__", json.dumps(DATA_FIXTURE)) + checks)
     r = subprocess.run([NODE, str(f)], capture_output=True, text=True)
     assert r.returncode == 0, r.stdout + r.stderr
+
+
+def test_the_now_line_passes_behind_the_words_it_used_to_cross():
+    """At 11:41 the current-time rule ran straight through "11:00-12:55 - 1 h
+    55 min - EE1125" and neither the time nor the code could be read. The words
+    knock it out and it carries on either side of them, which is what the hour
+    labels already do to the hour rules.
+    """
+    tokens = re.search(r"<style>\n(.*?)\n</style>", notes.PAGE, re.S).group(1)
+    knock = re.search(r"\.tl \.ev b,\.tl \.ev small\{([^}]*)\}", tokens)
+    assert knock, "the words in a block must knock the now line out"
+    for part in ("background:var(--fill)", "z-index:3", "width:fit-content"):
+        assert part in knock.group(1), f"the knockout needs {part}"
+    now = re.search(r"\.tl \.now\{([^}]*)\}", tokens).group(1)
+    assert "z-index:2" in now, "and the line still paints over the block's fill"
+    assert re.search(r"\.tl \.ev\{[^}]*--fill:color-mix", tokens), \
+        "a knockout can only be drawn in a fill that is a known colour"
+
+
+def test_every_class_on_the_day_is_named_in_the_same_ink():
+    """The two classes that were over were grey and the one running was black,
+    so three blocks forty-five minutes apart read as three different kinds of
+    thing. Over is said in the block and never in the words.
+    """
+    tokens = re.search(r"<style>\n(.*?)\n</style>", notes.PAGE, re.S).group(1)
+    done = re.search(r"\.tl \.ev\.done\{([^}]*)\}", tokens)
+    assert done, "a class that has happened still says so"
+    assert "color:" not in done.group(1).replace("border-left-color:", ""), \
+        "it says so in the fill and the rule, not in the ink"
+    assert not re.search(r"\.tl \.ev\.done b", tokens), \
+        "no rule may recolour one block's title and not another's"
