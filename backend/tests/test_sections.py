@@ -216,13 +216,15 @@ def test_the_subject_list_is_the_one_your_section_follows(db):
     """Subject sets are what makes the semester swap a pointer rather than a
     migration -- and they are decorative unless the list is filtered by them.
 
-    Set A ships empty (0040 says why at length), so the way to prove the lens
-    is to move one subject into it and watch it leave the other section's list.
+    Both sets have real contents as of 0047, so the lens has to do three things
+    at once: keep Group-ST's chemistry away from a Group-MT student, keep
+    Group-MT's physics away from a Group-ST one, and show Mathematics to both,
+    because MC1101 is genuinely on both scheme pages. The third is the one that
+    only works because 0046 made membership a relation instead of a column.
     """
     as_admin_connection(db)
     set_a = db.execute(
         "select id from subject_sets where name = 'Set A'").fetchone()[0]
-    db.execute("update subjects set set_id = %s where code = 'NC1151'", (set_a,))
 
     theirs = db.execute(
         "insert into sections (name, grad_year, subject_set_id) "
@@ -231,9 +233,14 @@ def test_the_subject_list_is_the_one_your_section_follows(db):
     b_side = member_of(db, a_section(db, 'B-side'), role="student")
 
     as_user(db, a_side)
-    assert [r[0] for r in db.execute("select code from subjects").fetchall()] \
-        == ['NC1151']
+    mt = {r[0] for r in db.execute("select code from subjects").fetchall()}
+    assert len(mt) == 14
+    assert 'PY1102' in mt and 'CY1107' not in mt
 
     as_user(db, b_side)
-    codes = [r[0] for r in db.execute("select code from subjects").fetchall()]
-    assert len(codes) == 11 and 'NC1151' not in codes and 'CY1107' in codes
+    st = {r[0] for r in db.execute("select code from subjects").fetchall()}
+    assert len(st) == 12
+    assert 'CY1107' in st and 'PY1102' not in st
+
+    assert mt & st == {'MC1101', 'NC1151'}, \
+        "the two codes both groups are taught, and nothing else, is shared"

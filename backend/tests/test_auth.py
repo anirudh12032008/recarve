@@ -468,9 +468,11 @@ def test_the_first_joiner_is_the_admin_and_can_read(server):
     assert subjects[0]["code"] == "MC1101"
     # Every subject ships, empty ones included: you cannot file a chemistry
     # recording under a subject the app never told you was there.
-    assert len(subjects) == len(notes.SUBJECTS) == 12
+    # Every subject ships, empty ones included -- both curriculums', since the
+    # library on disk is one install's and knows nothing about sections.
+    assert len(subjects) == len(notes.SUBJECTS) == 24
     empty = [s for s in subjects if not s["notes"] and not s["uploads"]]
-    assert len(empty) == 11, "the eleven subjects with nothing in them are still listed"
+    assert len(empty) == 23, "the subjects with nothing in them are still listed"
     # `kind` is what groups Lectures apart from the Revision sheet on the phone.
     assert {n["title"]: n["kind"] for n in subjects[0]["notes"]} == {
         "week1": "lecture", "Revision sheet": "revision"}

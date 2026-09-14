@@ -104,6 +104,22 @@ SUBJECTS = {
     "ME1127": ("Manufacturing-Science-Lab", ["ms-lab", "me1127"]),
     "SA1143": ("NSS-Yoga-UHV", ["nss", "yoga", "uhv", "sa1143", "sa1144", "sa1145"]),
     "NC1151": ("NCC", ["ncc", "nc1151"]),
+    # Group-MT, which is Sections A-E. Same page of the same timetable; they
+    # are here for the same reason the twelve above are -- a folder name and a
+    # set of aliases a filename can be filed under. MC1101 and NC1151 are on
+    # both scheme pages and are not repeated.
+    "PY1102": ("Physics", ["physics", "phy", "py1102"]),
+    "CE1103": ("Engineering-Mechanics", ["engg-mech", "mechanics", "ce1103"]),
+    "ME1104": ("Engineering-Graphics", ["engg-graphics", "graphics", "me1104"]),
+    "CS1105": ("Computer-Programming", ["comp-prog", "programming", "cs1105"]),
+    "HS1106": ("Communication-Skills", ["comm-skills", "communication", "hs1106"]),
+    "CE1121": ("Engineering-Mechanics-Lab", ["eml", "ce1121"]),
+    "PY1122": ("Physics-Lab", ["phy-lab", "physics-lab", "py1122"]),
+    "ME1123": ("Engineering-Graphics-Lab", ["graphics-lab", "me1123"]),
+    "CS1124": ("Computer-Programming-Lab", ["cp-lab", "cs1124"]),
+    "HS1128": ("Language-Lab", ["lang-lab", "language-lab", "hs1128"]),
+    "SA1141": ("Life-Skill-Management", ["lsm", "sa1141"]),
+    "SA1142": ("Physical-Education", ["phe", "sa1142"]),
 }
 
 
@@ -2658,6 +2674,66 @@ function savedScreen() {
   nav.appendChild(box);
 }
 
+// ---- About: who made this, and what it is standing on. ------------------
+//
+// Under Me and not a tab: it is read once, by somebody who wondered. It asks
+// the server for nothing -- every line is a constant -- so it is the one
+// screen that is whole on a train with no signal, which is also the only
+// honest place to put credits. What the app borrows, it owes whether or not
+// there is a network to fetch an acknowledgement over.
+const MADE_BY = {
+  name: 'Anirudh Sahu',
+  says: 'First-year ECE at MANIT Bhopal. Built recarve because the notes for '
+      + 'a lecture you missed were in eleven WhatsApp chats and none of them '
+      + 'were searchable.',
+  links: [
+    ['LinkedIn', 'anirudh-sahu', 'https://www.linkedin.com/in/anirudh-sahu-4b245327b/'],
+    ['Instagram', '@anirudh_sahu_12', 'https://www.instagram.com/anirudh_sahu_12/'],
+  ],
+};
+
+// Named, not listed: each line says what the thing actually does here, because
+// a credit that does not say what was borrowed is a logo wall.
+const CREDITS = [
+  ['MANIT Bhopal',
+   'The institute timetable, the scheme and the academic calendar every screen '
+   + 'is built on \u2014 Dr. Fozia Z. Haque, Prof. I/c Institute Time-Table'],
+  ['Claude, by Anthropic',
+   'Writes the notes and the practice questions from a recording. Once per '
+   + 'lecture, on the Mac, and then cached \u2014 never per student'],
+  ['Whisper, by OpenAI',
+   'Turns the recording into text before Claude ever sees it, through '
+   + 'mlx-whisper on Apple silicon'],
+  ['PostgreSQL',
+   'Every row here, and the row level security that is the actual wall between '
+   + 'one section and another'],
+  ['Tailwind CSS', 'The styling language this whole interface is written in'],
+  ['marked', 'Renders the notes out of Markdown'],
+  ['KaTeX', 'Renders the mathematics'],
+  ['Google Maps', 'Draws the campus on the map screen'],
+  ['psycopg', 'The Postgres driver underneath all of it'],
+  ['Everyone in the section',
+   'Every upload, every answered doubt and every recording. The library is '
+   + 'not the app\u2019s \u2014 it is theirs, and the app is where they put it'],
+];
+
+function aboutScreen() {
+  const who = [line(MADE_BY.name, MADE_BY.says)];
+  for (const [what, handle, href] of MADE_BY.links) {
+    const a = document.createElement('a');
+    a.href = href;
+    a.target = '_blank';
+    a.rel = 'noopener noreferrer';
+    who.push(line(what, handle, a));
+  }
+  block('Made by', who);
+  block('Standing on', CREDITS.map(([what, does]) => line(what, does)));
+  saying('recarve is one file and one database.',
+         'If something here is wrong \u2014 a period in the wrong hour, a '
+         + 'subject under the wrong name \u2014 say so on the wall. It is '
+         + 'faster to fix than to live with.');
+}
+
 // The one level inside Home. Six days of native selects: the iOS wheel is the
 // fastest subject picker on a phone, costs nothing to download, and is the
 // difference between filling this in and giving up on it.
@@ -4541,6 +4617,9 @@ async function renderMe() {
   // What you saved needs nothing from the server: the bookmarks rode in on the
   // /data the page already fetched.
   if (view.me === 'saved') return savedScreen();
+  // Before the fetch, not after: About is constants, and a screen that could
+  // have drawn offline should not fail behind "your profile needs the server".
+  if (view.me === 'about') return aboutScreen();
   const mine = painted;
   const box = document.createElement('div');
   box.className = 'mine';
@@ -5482,14 +5561,15 @@ tabBtns.forEach(b => { b.onclick = () => go(b.dataset.tab); });
 window.onpopstate = route;
 
 // ---- You, behind the avatar. ---------------------------------------------
-// Three of your own screens and, for the one person who runs the class, the
+// Four of your own screens and, for the one person who runs the class, the
 // way into the admin page -- marked with the same ink every other admin-only
 // control carries. It is a menu and not a fifth tab because none of it is
-// somewhere you go between classes, and not a sheet because four rows do not
+// somewhere you go between classes, and not a sheet because five rows do not
 // need the whole screen.
 const MENU_ITEMS = [['Your profile', () => go('me')],
                     ['Saved', () => go('me', 'saved')],
-                    ['Points and what you added', () => go('me', 'points')]];
+                    ['Points and what you added', () => go('me', 'points')],
+                    ['About recarve', () => go('me', 'about')]];
 
 // Your own face, in the header, on every screen. /data carries the role and
 // not the name -- it is the payload the whole app is built from and a name is
@@ -8792,7 +8872,8 @@ def db_subject_sets(conn):
     return [
         {"id": str(r[0]), "name": r[1], "subjects": r[2]}
         for r in conn.execute(
-            "select ss.id, ss.name, (select count(*) from subjects s where s.set_id = ss.id)"
+            "select ss.id, ss.name,"
+            " (select count(*) from subject_set_members m where m.set_id = ss.id)"
             " from subject_sets ss order by ss.name"
         )
     ]
@@ -8853,8 +8934,11 @@ def db_section(conn, section_id):
     codes = [
         {"code": r[0], "name": r[1]}
         for r in conn.execute(
-            "select code, name from subjects where set_id ="
-            " (select subject_set_id from sections where id = %s::uuid) order by code",
+            "select s.code, s.name from subjects s"
+            " join subject_set_members m on m.subject_code = s.code"
+            " where m.set_id ="
+            " (select subject_set_id from sections where id = %s::uuid)"
+            " order by s.sort, s.code",
             (section_id,),
         )
     ]

@@ -3,7 +3,7 @@
 -- the same grid.
 --
 -- This migration is SCHEMA ONLY. The actual periods are data, seeded separately
--- (backend/dev/seed_section_i.sql) into the live database. Tests therefore start
+-- (backend/dev/seed_timetables.sql) into the live database. Tests therefore start
 -- with an empty template and an empty timetable, which is the behaviour the
 -- timetable tests already assert.
 create table if not exists section_timetable (

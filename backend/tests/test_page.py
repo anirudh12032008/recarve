@@ -43,11 +43,11 @@ def baked_data(page):
 # ------------------------------------------------------ what gets built
 
 
-def test_an_empty_library_exports_the_twelve_subjects(tmp_path):
+def test_an_empty_library_exports_every_subject(tmp_path):
     """Nothing to show is not an error: this page is where the first thing goes.
 
-    It also has to name all twelve. You cannot file a chemistry recording under
-    a subject the app never told you was there.
+    It also has to name every one of them. You cannot file a chemistry recording
+    under a subject the app never told you was there.
     """
     args = make_args(tmp_path)
     args.library.mkdir()
@@ -643,16 +643,17 @@ ROLE = null;
 location.hash = '#classes'; route();
 
 // ---- The avatar's menu. Your own screens are behind it rather than in the
-// bar, so it is the only way to reach three of them with a thumb.
+// bar, so it is the only way to reach four of them with a thumb.
 ROLE = 'student';
 writes = []; menuEl.children.length = 0;
 avatarEl.onclick();
 assert.equal(menuEl.hidden, false, 'the avatar opens the menu');
 assert.equal(avatarAttrs['aria-expanded'], 'true', 'and says so to a screen reader');
-assert.ok(says('Your profile') && says('Saved') && says('Points and what you added'),
+assert.ok(says('Your profile') && says('Saved') && says('Points and what you added')
+          && says('About recarve'),
           'every one of your own screens is in it');
 assert.ok(!says('Class admin'), 'and nothing a student may not press');
-assert.equal(menuEl.children.length, 3);
+assert.equal(menuEl.children.length, 4);
 
 // Escape is one of the two ways out, and it hands the focus back to the button
 // that opened it rather than dropping it on the page behind.
@@ -676,7 +677,7 @@ writes = [];
 avatarEl.onclick();
 assert.ok(says('Class admin'), 'an admin is offered the way into the panel');
 assert.ok(wrote(['className', 'tag']), 'marked with the ink every admin row carries');
-assert.equal(menuEl.children.length, 4);
+assert.equal(menuEl.children.length, 5);
 avatarEl.onclick();
 assert.equal(menuEl.hidden, true, 'the avatar closes it again');
 ROLE = null;

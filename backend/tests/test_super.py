@@ -388,20 +388,32 @@ def test_a_new_section_starts_empty(server, cookie):
     assert one["subjects"], "but it has to know which codes it follows"
 
 
-def test_a_section_pointed_at_an_empty_set_says_so(server, cookie):
-    """0040 was asked to copy Set B's subjects into Set A and did not, so a
-    section pointed at Set A knows no codes and every timetable line it is
-    given is unknown. Not /super's bug to fix -- but a section created in one
-    tap that silently cannot be given a timetable is worth a test that fails
-    the day somebody backfills the set, rather than a surprise on a Tuesday."""
+def test_a_section_is_given_its_own_curriculums_codes_and_no_others(server, cookie):
+    """A week is refused in a code the section is not taught.
+
+    Until 0047 this test read the other way round -- Set A shipped empty, so a
+    section pointed at it knew no codes at all and every line was unknown. Both
+    sets have their real contents now, and the interesting question became the
+    one underneath: /super validates a pasted week against the section's OWN
+    set, so the same line is good for one section and nonsense for another.
+    """
+    sets = {s["name"]: s["id"] for s in data(server, cookie)["sets"]}
     call(server, "POST", "/super/section",
-         {"name": "SE", "grad_year": 2035, "set": empty_set_id(server, cookie)},
+         {"name": "SE", "grad_year": 2035, "set": sets["Set A"]},
          cookies=supercookie(cookie))
     one = open_section(server, cookie, find(server, cookie, "SE")["id"])
-    assert one["subjects"] == [], \
-        "Set A has subjects now -- delete this test and let /super use either set"
+    codes = {c["code"] for c in one["subjects"]}
+    assert "PY1102" in codes and "CY1107" not in codes
+
+    # Physics is Group-MT's, so it writes.
     status, body, _ = call(server, "POST", "/super/timetable",
-                           {"section": one["id"], "csv": "Monday,1,MC1101"},
+                           {"section": one["id"], "csv": "Monday,1,PY1102"},
+                           cookies=supercookie(cookie))
+    assert status == 200 and said(body)["written"] == 1
+
+    # Engineering Chemistry exists, and is not theirs.
+    status, body, _ = call(server, "POST", "/super/timetable",
+                           {"section": one["id"], "csv": "Monday,1,CY1107"},
                            cookies=supercookie(cookie))
     assert status == 400 and "unknown subject code" in said(body)["lines"][0]
 
@@ -628,19 +640,12 @@ def data(port, cookie):
 
 
 def set_id(port, cookie):
-    """The set that actually has subjects in it.
-
-    0040 left 'Set A' empty -- the spec asks for Set B's subjects to be copied
-    into it and the migration did not -- so a section pointed at Set A knows no
-    codes at all and every timetable line it is given is unknown. Which set is
-    which is not this file's business; that it matters is, and
-    test_a_section_pointed_at_an_empty_set_says_so is where it is written down.
+    """Any set with subjects in it -- both have them since 0047, and which is
+    which is not this file's business. That a section is only ever given its
+    own set's codes is, and
+    test_a_section_is_given_its_own_curriculums_codes_and_no_others says so.
     """
     return max(data(port, cookie)["sets"], key=lambda s: s["subjects"])["id"]
-
-
-def empty_set_id(port, cookie):
-    return min(data(port, cookie)["sets"], key=lambda s: s["subjects"])["id"]
 
 
 def find(port, cookie, name):
