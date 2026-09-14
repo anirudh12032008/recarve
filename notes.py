@@ -6518,12 +6518,15 @@ import psycopg
 
 DB_URL = os.environ.get("RECARVE_DB_URL", "postgresql:///recarve_test")
 SESSION_COOKIE = "recarve_session"
+# Ten minutes of one round trip to Google and back, scoped to the one path
+# that reads it. It is not a session and never becomes one.
+OAUTH_COOKIE = "recarve_oauth"
 ENV_PATH = Path(__file__).resolve().parent / ".env"
 
 # Requests are gated before they are dispatched, so a route added later is
 # protected whether or not whoever adds it remembers auth exists. These are the
 # only paths that opt out, and adding to this set is the deliberate act.
-PUBLIC_PATHS = {"/join", "/login"}
+PUBLIC_PATHS = {"/join", "/login", "/auth/google", "/auth/google/callback"}
 
 # Four roles, in order, and the order is the whole of it. A student reads
 # everything the class has; trusted adds the things that write content or spend
@@ -6831,22 +6834,153 @@ def db_join(conn, code, name, roll_no, phone, password):
                           (code, name, roll_no, phone, password)).fetchone()[0]
         if not ok:
             raise psycopg.Rollback(tx)
-        # The first person in is the admin. Nobody can approve anybody
-        # otherwise, so the invite that bootstraps the class also elects them.
         act_as(conn, None, local=True)
-        if conn.execute("select count(*) from profiles").fetchone()[0] == 1:
-            # role 'admin', which carries trusted with it: an untrusted
-            # uploader's files are forced pending by the materials trigger, and
-            # the admin is the one person nobody else can ever publish.
-            conn.execute(
-                "update profiles set status = 'approved', role = 'admin' "
-                "where id = %s",
-                (user_id,),
-            )
+        crown_if_first(conn, user_id)
         row = conn.execute("select status, role from profiles where id = %s",
                            (user_id,)).fetchone()
         result = (user_id, row[0], row[1] == "admin")
     return result
+
+
+# Google is the second door (0048), and the only thing it has to produce -- to
+# a server that has no profile for the person yet -- is a scholar number the
+# institute published. Three checks stand between the two: Google says it
+# verified the address, the address is in the institute's Workspace domain, and
+# what stands before the @ is the eleven digits the registrar assigns. After
+# those it is a lookup in roll_list, and the section is the registrar's answer
+# rather than anybody's typing.
+GOOGLE_DOMAIN = os.environ.get("RECARVE_GOOGLE_DOMAIN", "stu.manit.ac.in")
+
+
+def google_client():
+    """The OAuth client id and secret, or None if this install has no Google.
+
+    Two halves of one pair: an install holding one of them is misconfigured
+    rather than half enabled, so the button stays off and /auth/google 404s
+    rather than sending somebody to a page that cannot answer them.
+    """
+    cid = (os.environ.get("RECARVE_GOOGLE_CLIENT_ID") or "").strip()
+    secret = (os.environ.get("RECARVE_GOOGLE_SECRET") or "").strip()
+    return (cid, secret) if cid and secret else None
+
+
+def scholar_from_email(email, domain=None):
+    """The scholar number inside an institute address, or None.
+
+    26112011201@stu.manit.ac.in is a first year. A personal Gmail is not, and
+    neither is a staff address in the same domain: the local part has to be the
+    eleven digits the registrar assigns, which is also the key of the table it
+    is about to be looked up in. Nothing here decides whether the person is
+    ours -- roll_list does that -- this only decides whether there is a
+    question to ask.
+    """
+    local, _, host = (email or "").strip().lower().partition("@")
+    if host != (domain or GOOGLE_DOMAIN).strip().lower():
+        return None
+    return local if len(local) == 11 and local.isdigit() else None
+
+
+def google_claims(id_token):
+    """The payload of Google's id_token, unverified on purpose.
+
+    The signature is what protects a token that arrived by way of the browser.
+    This one did not: it came back in the body of a POST we made ourselves to
+    accounts.google.com over TLS, authenticated with the client secret. There
+    is no untrusted party between the two ends to forge it, and verifying a
+    signature would mean fetching and caching Google's keys -- a second thing
+    to be stale -- for no attacker it excludes.
+    """
+    import base64
+
+    payload = (id_token or "").split(".")[1:2]
+    if not payload:
+        return {}
+    raw = payload[0] + "=" * (-len(payload[0]) % 4)
+    return json.loads(base64.urlsafe_b64decode(raw))
+
+
+def crown_if_first(conn, user_id):
+    """The first person into an empty install is its admin.
+
+    Nobody can approve anybody otherwise, so whichever door let the first
+    person in also elects them. Called from inside both doors' transactions,
+    under the same advisory lock, so two people arriving in the same instant on
+    day zero cannot both come out as admin.
+    """
+    if conn.execute("select count(*) from profiles").fetchone()[0] == 1:
+        # role 'admin', which carries trusted with it: an untrusted uploader's
+        # files are forced pending by the materials trigger, and the admin is
+        # the one person nobody else can ever publish.
+        conn.execute(
+            "update profiles set status = 'approved', role = 'admin' where id = %s",
+            (user_id,),
+        )
+
+
+def db_google(conn, scholar, email):
+    """Put a verified institute address through. (id, status, is_admin) or None.
+
+    None means that scholar number is not on the list the registrar published,
+    and nothing is left behind.
+
+    Three cases, cheapest and most certain first:
+
+      1. We have seen this address before. That is a sign-in, not a join, and
+         it is the common case forever after the first week.
+      2. The roll number is already somebody's profile. That is a member who
+         joined by invite before this door existed, and the right thing is to
+         hand them the account they already have rather than refuse them for
+         owning it -- the institute says this address holds that roll number,
+         which is a better claim on the profile than the invite code was.
+      3. Nobody here yet. A new auth row, and join_with_google writes the
+         profile from the list.
+
+    Case 2 adopts only a profile that has no email yet. A profile that already
+    carries a different address is two Google accounts claiming one seat, and
+    that is a thing for a person to look at, not for a login to resolve.
+    """
+    row = conn.execute(
+        "select id, status, role from profiles where email = %s", (email,)
+    ).fetchone()
+    if row:
+        return (str(row[0]), row[1], row[2] == "admin")
+
+    listed = conn.execute(
+        "select roll_no from roll_list where scholar_no = %s", (scholar,)
+    ).fetchone()
+    if not listed:
+        return None
+
+    with conn.transaction():
+        conn.execute("select pg_advisory_xact_lock(hashtext('recarve-join'))")
+        row = conn.execute(
+            "update profiles set email = %s where roll_no = %s and email is null "
+            "returning id, status, role", (email, listed[0])
+        ).fetchone()
+        if row:
+            return (str(row[0]), row[1], row[2] == "admin")
+        if conn.execute("select 1 from profiles where roll_no = %s",
+                        (listed[0],)).fetchone():
+            # Somebody already holds that seat under another address.
+            return None
+
+        user_id = str(uuid.uuid4())
+        conn.execute(
+            "insert into auth.users (id, instance_id, aud, role, email) values "
+            "(%s, '00000000-0000-0000-0000-000000000000', 'authenticated', "
+            "'authenticated', %s)",
+            (user_id, email),
+        )
+        act_as(conn, user_id, local=True)
+        ok = conn.execute("select join_with_google(%s, %s)",
+                          (scholar, email)).fetchone()[0]
+        act_as(conn, None, local=True)
+        if not ok:
+            return None
+        crown_if_first(conn, user_id)
+        got = conn.execute("select status, role from profiles where id = %s",
+                           (user_id,)).fetchone()
+        return (user_id, got[0], got[1] == "admin")
 
 
 def normalise_phone(raw):
@@ -9254,6 +9388,7 @@ JOIN_BODY = r"""<div class="land">
 <h2>Join your section</h2>
 __INVITED__
 <p>__INTRO__</p>
+__GOOGLE__
 <form id="f">
   <label for="nm">Name</label><input id="nm" required autocomplete="name">
   <label for="roll">Roll number</label><input id="roll" required autocomplete="off">
@@ -9322,13 +9457,45 @@ def join_body(code="", inviter=None):
     intro = ("Section I notes. Your code is already in — add your details."
              if code else
              "Section I notes. You need the invite code from someone already in.")
-    return (JOIN_BODY.replace("__INVITED__", line)
-                     .replace("__INTRO__", intro)
-                     .replace("__CODE__", html.escape(code, quote=True)))
+    return with_google(JOIN_BODY.replace("__INVITED__", line)
+                                .replace("__INTRO__", intro)
+                                .replace("__CODE__", html.escape(code, quote=True)))
+
+
+# The Google button, in both doors and rendered by with_google() so that an
+# install without a client id shows neither it nor a dead link. The G is
+# Google's own four-colour mark, inline because the page is one file and a
+# second request for an 18px icon is a second thing that can fail on the
+# institute wifi.
+GOOGLE_BUTTON = r"""<style>
+.gbtn{display:flex;align-items:center;justify-content:center;gap:10px;width:100%;
+  box-sizing:border-box;margin:16px 0 4px;padding:13px 16px;border-radius:12px;
+  border:1px solid rgba(0,0,0,.12);background:#fff;color:#1f1f1f;
+  font-weight:600;font-size:15px;text-decoration:none}
+.gbtn:active{opacity:.86}
+.gor{margin:12px 0 0;text-align:center;font-size:13px;color:var(--mut)}
+.gor::before,.gor::after{content:"";display:inline-block;width:56px;height:1px;
+  margin:0 10px;vertical-align:middle;background:currentColor;opacity:.35}
+</style>
+<a class="gbtn" href="/auth/google"><svg width="18" height="18" viewBox="0 0 48 48"
+ aria-hidden="true"><path fill="#4285F4" d="M45 24c0-1.6-.1-2.7-.4-4H24v7.5h12c-.2 2-1.5 5-4.4 7l6.7 5.2C42.2 36 45 30.6 45 24z"/><path fill="#34A853" d="M24 46c5.9 0 10.9-2 14.5-5.3l-6.7-5.2c-1.9 1.3-4.4 2.2-7.8 2.2-6 0-11-4-12.8-9.4l-7 5.4C7.9 41 15.4 46 24 46z"/><path fill="#FBBC05" d="M11.2 28.3A13.6 13.6 0 0 1 10.5 24c0-1.5.3-3 .7-4.3l-7-5.4A22 22 0 0 0 2 24c0 3.5.9 6.9 2.3 9.7z"/><path fill="#EA4335" d="M24 10.2c3.3 0 6.2 1.2 8.5 3.3l6-6C34.9 4.1 29.9 2 24 2 15.4 2 7.9 7 4.3 14.3l7 5.4C13 14.2 18 10.2 24 10.2z"/></svg>Continue with your institute email</a>
+<p class="gor">or</p>
+"""
+
+
+def with_google(body):
+    """A door with the Google button in it, or the same door without.
+
+    The placeholder is filled at render time rather than at import, because
+    whether this install has Google is an environment fact and the module is
+    imported by the tests, the CLI and the worker as well as the server.
+    """
+    return body.replace("__GOOGLE__", GOOGLE_BUTTON if google_client() else "")
 
 
 LOGIN_BODY = r"""<h1>recarve</h1>
-<p>Section I notes. Sign in with your roll number.</p>
+<p>Section I notes.</p>
+__GOOGLE__
 <form id="f">
   <label for="roll">Roll number</label>
   <input id="roll" required autocomplete="username" autocapitalize="characters"
@@ -9343,6 +9510,12 @@ pick a new one.</p>
 <p><a href="/">New here? Join with an invite code</a></p>
 <script>
 const $ = i => document.getElementById(i);
+// A sign-in that came back from Google refused is a redirect to here carrying
+// the sentence, because there is nowhere else to put it: the callback is a
+// navigation, not a fetch, and a bare 403 page is how a student decides the
+// app is broken rather than that they used the wrong account.
+const gerr = new URLSearchParams(location.search).get('e');
+if (gerr) $('err').textContent = gerr;
 $('f').onsubmit = async e => {
   e.preventDefault();
   $('err').textContent = '';
@@ -10528,8 +10701,12 @@ def build_server(args):
                 return self.send_error(404)
             if self.path == "/sw.js":
                 return self.send_js(SW_JS)
+            if where == "/auth/google":
+                return self.do_google_start()
+            if where == "/auth/google/callback":
+                return self.do_google_callback()
             if self.path.split("?")[0] == "/login":
-                return self.send_html(GATE_PAGE.replace("__BODY__", LOGIN_BODY))
+                return self.send_html(GATE_PAGE.replace("__BODY__", with_google(LOGIN_BODY)))
             if self.path == "/data":
                 subjects = build_data(args.library, args.out.parent)
                 # `now` is this machine's clock, and the mtimes in `subjects`
@@ -10907,6 +11084,148 @@ def build_server(args):
             # still the gate's decision, not this answer's.
             return self.reply(200, {"status": status, "set_password": must_set},
                               cookie=cookie)
+
+        def origin(self):
+            """What this server is called from outside, which it cannot see.
+
+            Everything arrives through a tunnel, so Host is the tunnel's name
+            and the scheme on the socket is http whatever the phone typed.
+            X-Forwarded-Proto is what the tunnel writes; RECARVE_ORIGIN is the
+            override for an install that fronts itself differently, and it is
+            the one that has to match the redirect URI registered with Google
+            character for character.
+            """
+            fixed = (os.environ.get("RECARVE_ORIGIN") or "").strip()
+            if fixed:
+                return fixed.rstrip("/")
+            proto = self.headers.get("X-Forwarded-Proto", "http").split(",")[0].strip()
+            host = (self.headers.get("X-Forwarded-Host")
+                    or self.headers.get("Host") or "").split(",")[0].strip()
+            return f"{proto}://{host}"
+
+        def go(self, where, *cookies):
+            """A redirect and nothing else. The body of a 302 is never read."""
+            try:
+                self.send_response(302)
+                self.send_header("Location", where)
+                for cookie in cookies:
+                    self.send_header("Set-Cookie", cookie)
+                self.send_header("Content-Length", "0")
+                self.end_headers()
+            except (BrokenPipeError, ConnectionResetError):
+                pass
+
+        def google_refused(self, why):
+            """Back to the login screen holding the sentence.
+
+            A navigation cannot be answered with JSON the way every other
+            refusal here is, and a bare 403 page is how somebody who used their
+            personal Gmail decides the app is broken rather than that they
+            picked the wrong account.
+            """
+            import urllib.parse
+
+            log(f"google sign-in refused: {why}", "auth")
+            return self.go("/login?e=" + urllib.parse.quote(why),
+                           f"{OAUTH_COOKIE}=; Path=/auth/; HttpOnly; Max-Age=0")
+
+        def do_google_start(self):
+            """Hand the phone to Google, with a state cookie to know the
+            answer by.
+
+            hd asks Google to offer the institute's accounts first. It is a
+            courtesy to the student and no part of the check: the callback
+            reads the domain off the token Google signed, not off this.
+            """
+            pair = google_client()
+            if args.no_auth or not pair:
+                return self.send_error(404)
+            import urllib.parse
+
+            state = secrets.token_urlsafe(16)
+            where = "https://accounts.google.com/o/oauth2/v2/auth?" + urllib.parse.urlencode({
+                "client_id": pair[0],
+                "redirect_uri": self.origin() + "/auth/google/callback",
+                "response_type": "code", "scope": "openid email",
+                "state": state, "hd": GOOGLE_DOMAIN, "prompt": "select_account"})
+            # Lax, not Strict: this cookie's whole job is to be sent on the way
+            # back from accounts.google.com, and Strict is the setting that
+            # withholds it exactly then.
+            return self.go(where, f"{OAUTH_COOKIE}={state}; Path=/auth/; "
+                                  "HttpOnly; SameSite=Lax; Max-Age=600")
+
+        def do_google_callback(self):
+            """Google's answer, turned into the same signed cookie /join and
+            /login mint -- so everything downstream of a session is unchanged.
+
+            What is checked, in order: that this is the round trip we started
+            (the state cookie), that Google will trade the code with us (the
+            client secret), that the address is verified and in the institute's
+            Workspace domain, and that its scholar number is on the registrar's
+            list. The section is never asked for and never typed.
+            """
+            pair = google_client()
+            if args.no_auth or not pair:
+                return self.send_error(404)
+            import urllib.parse
+            import urllib.request
+
+            query = urllib.parse.parse_qs(self.path.partition("?")[2])
+            code = (query.get("code") or [""])[0]
+            state = (query.get("state") or [""])[0]
+            jar = http.cookies.SimpleCookie(self.headers.get("Cookie", ""))
+            morsel = jar.get(OAUTH_COOKIE)
+            if not code or not state or not morsel or not hmac.compare_digest(
+                    state, morsel.value):
+                return self.google_refused("that sign-in did not come back the "
+                                           "way it left - try again")
+            try:
+                body = urllib.parse.urlencode({
+                    "code": code, "client_id": pair[0], "client_secret": pair[1],
+                    "redirect_uri": self.origin() + "/auth/google/callback",
+                    "grant_type": "authorization_code"}).encode()
+                with urllib.request.urlopen(urllib.request.Request(
+                        "https://oauth2.googleapis.com/token", data=body),
+                        timeout=15) as got:
+                    claims = google_claims(json.loads(got.read()).get("id_token"))
+            except Exception as e:
+                log(f"google would not trade the code: {type(e).__name__}: {e}", "auth")
+                return self.google_refused("could not reach Google - try again")
+
+            email = (claims.get("email") or "").strip().lower()
+            if not claims.get("email_verified"):
+                return self.google_refused("Google has not verified that address")
+            # hd is present only on a Workspace account and is the domain that
+            # owns it. The address is checked too, because a Workspace can hold
+            # aliases in other domains and it is the scholar number in front of
+            # the @ that this whole door turns on.
+            if (claims.get("hd") or "").strip().lower() != GOOGLE_DOMAIN:
+                return self.google_refused(f"sign in with your @{GOOGLE_DOMAIN} "
+                                           "account, not a personal one")
+            scholar = scholar_from_email(email)
+            if not scholar:
+                return self.google_refused(f"{email} is not a student address")
+            try:
+                with db() as conn:
+                    found = db_google(conn, scholar, email)
+            except Exception as e:
+                log(f"google sign-in failed: {type(e).__name__}: {e}", "auth")
+                return self.google_refused("the library is offline - try again")
+            if not found:
+                # Not on the list, or on it under somebody else's Google
+                # account. One sentence for both: the first is a student the
+                # registrar has not filed, the second is a thing for a person
+                # to look at, and neither is fixed by typing again.
+                return self.google_refused(
+                    f"{scholar} is not on the section list - ask an admin for "
+                    "an invite code instead")
+            profile_id, status, is_admin = found
+            log(f"{email} signed in with Google as {status}"
+                + (", and is the admin" if is_admin else ""), "login")
+            return self.go("/",
+                           f"{SESSION_COOKIE}={sign_session(profile_id, secret)}; "
+                           "Path=/; HttpOnly; SameSite=Lax; Max-Age=31536000",
+                           f"{OAUTH_COOKIE}=; Path=/auth/; HttpOnly; Max-Age=0")
 
         def do_password(self):
             """Where a member sets their own password, first time or later.
