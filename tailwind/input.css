@@ -50,6 +50,25 @@
   .flag { @apply flex-none px-2 py-[3px] rounded-chip text-small font-semibold
                  bg-warn-bg text-warn; }
 
+  /* The fifth chip, and the only round one: a person. Same two colours as
+     .code and for the same reason -- --chip-lum behind and --chip-text on
+     top is a pair that clears 4.5:1 at every one of the 360 hues in both
+     themes, so a face is a shape this app already knows how to colour and
+     not a palette of its own. --h comes from the name (face() in the page),
+     which is what makes the same person the same colour on every screen.
+     32px is the row size; .sm is the one that rides a byline. */
+  .face { @apply flex-none inline-flex items-center justify-center select-none
+                 w-8 h-8 rounded-full text-small font-semibold tracking-tight
+                 bg-hue-chip text-hue-chip-ink; }
+  .face.sm { @apply w-6 h-6 text-micro tracking-normal; }
+  .face.xl { @apply w-14 h-14 text-head; }
+  /* Nobody, drawn as nobody. A confession has no author in its payload at all
+     and must never look as though it has one, so this branch carries no
+     letter and no hue -- an empty ring in the edge colour, identical on every
+     confession in the list. --edge is the token for the boundary of something
+     that draws no fill: 3.5:1 on the paper, 5.0:1 in the dark. */
+  .face.none { @apply bg-transparent border border-dashed border-edge; }
+
   /* Cards. One radius, one fill, no border on top of the fill -- a fill already
      separates a card from the page and an edge as well only muddies it. The
      exception is .blank.bad, where the border IS the signal. */

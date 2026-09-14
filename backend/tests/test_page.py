@@ -201,9 +201,15 @@ const avatarAttrs = {};
 let avatarFocused = 0;
 // Named apart from the script's own consts, and handed to it through els --
 // the page reaches for them by id, so these ARE its avatarEl and menuEl.
+// It holds something drawn -- the glyph it ships with, or the face the name
+// from /me makes -- so it has the two members that swap one for the other.
+const avatarKids = [];
 const avatarNode = {onclick: null, focus: () => { avatarFocused++; },
                     contains: () => false,
-                    setAttribute: (k, v) => { avatarAttrs[k] = v; }};
+                    setAttribute: (k, v) => { avatarAttrs[k] = v; },
+                    appendChild: c => { avatarKids.push(c); return c; }};
+Object.defineProperty(avatarNode, 'innerHTML',
+  {get: () => '', set: () => { avatarKids.length = 0; }});
 const menuNode = {hidden: true, children: [], onkeydown: null,
                   contains: () => false,
                   appendChild: c => { menuNode.children.push(c); return c; }};

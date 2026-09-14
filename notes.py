@@ -833,6 +833,9 @@ button.off:active{background:var(--surface)}
 .tally b{display:block;font-size:20px;font-weight:600;color:var(--fg);
   font-variant-numeric:tabular-nums}
 .mine .sub{margin:4px 0 0;font-size:16px;color:var(--mut)}
+/* Yours, at the size that makes the card yours -- above the name rather than
+   beside it, because the name is the 26px line this card is built around. */
+.mine>.face{margin-bottom:12px}
 .mine .edit{margin-top:16px;min-height:var(--tap);padding:0 16px;border-radius:11px;
   background:var(--bg);border:1px solid var(--edge);font-size:16px;font-weight:600;
   color:var(--accent)}
@@ -927,12 +930,21 @@ button.off:active{background:var(--surface)}
 .thread h2{margin:38px 0 0;font-size:20px;line-height:1.3;letter-spacing:-.012em;
   font-weight:600;padding-bottom:7px;border-bottom:1px solid var(--line)}
 .thread .quiet{padding:14px 0 0}
-.dbt{padding:16px 0;border-bottom:1px solid var(--line)}
+/* The question takes the same two columns its answers have: something in the
+   left one that says whose this is, the words in the right. Before this the
+   question and its answers were the same shape at the same weight, and a
+   thread read as four paragraphs. */
+.dbt{display:flex;gap:12px;align-items:flex-start;
+  padding:16px 0;border-bottom:1px solid var(--line)}
+.dbt>.what{flex:1;min-width:0}
 /* Somebody's typing, drawn as typing: pre-wrap keeps their line breaks and
    textContent is what puts it there. Nothing in this block is ever parsed. */
 .said{margin:0;font-size:16px;white-space:pre-wrap;overflow-wrap:anywhere}
-.dbt>.said{font-weight:600;line-height:1.5}
+.dbt>.what>.said{font-weight:600;line-height:1.5}
 .dbt .meta{margin:4px 0 0;font-size:13px;color:var(--mut)}
+/* A byline with a face on the front of it -- and only one that has a face, so
+   every other .meta in this app is left as the line of small grey it was. */
+.meta:has(.face){display:flex;align-items:center;gap:8px}
 .ans{display:flex;gap:12px;align-items:flex-start;
   margin:16px 0 0 2px;padding:0 0 0 12px;border-left:2px solid var(--line)}
 .ans .what{flex:1;min-width:0}
@@ -1350,6 +1362,12 @@ body.reading .tabs{display:none}
 .card summary{list-style:none;cursor:pointer;position:relative;
   display:flex;flex-direction:column;justify-content:center;
   min-height:var(--tap);padding-right:24px}
+/* A society's mark beside its two lines. Only the summary that has one turns
+   into a row: an event leads with a torn-off date and a place with its name,
+   and neither of those is somebody to draw. */
+.card summary:has(.face){flex-direction:row;align-items:center;gap:12px}
+.card summary .nm{display:flex;flex-direction:column;justify-content:center;
+  min-width:0}
 .card summary::-webkit-details-marker{display:none}
 .card summary::after{content:'›';position:absolute;right:0;top:50%;
   margin-top:-10px;width:20px;text-align:center;color:var(--mut);font-size:20px;
@@ -1697,6 +1715,69 @@ function noteRow(n, s) {
     }));
   }
   return el;
+}
+
+// ---- A face, wherever a person or a society is named. --------------------
+// One helper, six screens. Initials in a circle, and the hue of the circle is
+// read off the name itself, so the same person is the same colour on the feed,
+// in a thread, on the board and in the header -- and a list of twenty rows
+// stops being twenty rows that begin at the same x in the same grey.
+//
+// No image, no file, no letter that is not already on the screen beside it:
+// the two colours are the code chip's own, --chip-lum behind and --chip-text
+// on top, a pair that clears 4.5:1 at every one of the 360 hues in both
+// themes. Colour per name was already this app's idea; this is the same idea
+// applied to people.
+//
+// ANONYMOUS IS NOT A FACE. A confession carries no author at all -- `by` is
+// null for every one of them because `authenticated` has no select privilege
+// on posts.author_id (0035) -- and face(null) is the branch that draws that:
+// one empty ring, no letter, no hue, identical on every confession. Nothing
+// about it is derived from the row, because anything derived from the row is
+// a fingerprint even when it is not a name.
+const nameHue = name => {
+  let n = 0;
+  for (const ch of name) n = (n * 31 + ch.codePointAt(0)) % 360;
+  return n;
+};
+
+// The first letter of the first two words, or the first two letters when
+// there is only one -- which is how "Sneha Bhattacharya" and "Evolve" are
+// both shortened out loud. Stepped by code point rather than by index: a name
+// here is as likely to be written in Devanagari as in Latin, and name[0] cuts
+// a surrogate pair in half.
+const initialsOf = name => {
+  const words = name.trim().split(/\s+/).filter(Boolean);
+  if (!words.length) return '';
+  const letters = words.length > 1
+    ? [...words[0]][0] + [...words[1]][0]
+    : [...words[0]].slice(0, 2).join('');
+  return letters.toUpperCase();
+};
+
+// `size` is '' (32px, the row), 'sm' (24px, riding a byline) or 'xl' (the
+// profile). Always aria-hidden: the name it stands for is written next to it
+// every time it is used, and a reader that says "PN, Priya Nair" has read the
+// row twice.
+function face(name, size) {
+  const el = document.createElement('span');
+  el.className = 'face' + (name ? '' : ' none') + (size ? ' ' + size : '');
+  el.setAttribute('aria-hidden', 'true');
+  if (!name) return el;
+  el.style.setProperty('--h', nameHue(name));
+  el.textContent = initialsOf(name);
+  return el;
+}
+
+// A byline with a face on the front of it. Every list in this app writes who
+// said a thing the same way -- "name · 4 min ago" in the muted small -- so the
+// face goes on in one place too.
+function saidByFace(name, when) {
+  const p = document.createElement('p');
+  p.className = 'meta';
+  p.append(face(name, 'sm'), document.createTextNode(
+    (name || 'Anonymous') + ' · ' + ago(when, NOW)));
+  return p;
 }
 
 // One vote per person per item -- the votes primary key says so, and this is
@@ -2973,6 +3054,10 @@ function boardRow(r) {
   // No score, no place: everybody who has not started yet shares the last rank,
   // and printing that number would be an invented position.
   el.querySelector('.pos').textContent = r.score ? '#' + r.rank : '—';
+  // Twenty classmates, and the only thing telling one row from the next was
+  // which number was on it. The face goes between the rank and the name --
+  // where a rank reads as "who", not as "how many".
+  el.insertBefore(face(r.name), el.querySelector('.name'));
   el.querySelector('b').textContent = r.you ? r.name + ' (you)' : r.name;
   el.querySelector('small').textContent = r.score ? breakdown(r)
     : 'Add a recording or a set of slides and you are on the board';
@@ -3058,12 +3143,12 @@ function postCard(x, kind) {
   const said = document.createElement('p');
   said.className = 'said';
   said.textContent = x.body;
-  const meta = document.createElement('p');
-  meta.className = 'meta';
   // "Anonymous" is the honest word and it is written here, not sent: there is
   // no name in the payload to fall back to, and nothing to print if there is.
-  meta.textContent = (x.by || 'Anonymous') + ' \u00b7 ' + ago(x.at, NOW);
-  what.append(said, meta);
+  // The face is drawn off the same null, so a confession gets the empty ring
+  // and never a pair of letters -- there is nothing here to make letters out
+  // of, which is the point of the column not being selectable.
+  what.append(said, saidByFace(x.by, x.at));
   if (x.photos && x.photos.length) {
     const shots = document.createElement('div');
     shots.className = 'shots';
@@ -3357,7 +3442,14 @@ function clubCard(c) {
   const meta = document.createElement('span');
   meta.className = 'meta';
   meta.textContent = [c.category, c.hidden ? 'Hidden' : ''].filter(Boolean).join(' · ');
-  sum.append(h, meta);
+  const words = document.createElement('span');
+  words.className = 'nm';
+  words.append(h, meta);
+  // Twenty-four societies, and not one of them has a logo -- nor should this
+  // app invent one. The mark is the society's own initials in the colour its
+  // own name produces, which is the same rule people get, so the directory
+  // reads as a list of twenty-four things rather than twenty-four chevrons.
+  sum.append(face(c.name), words);
   el.appendChild(sum);
   if (c.blurb) {
     const p = document.createElement('p');
@@ -4150,6 +4242,10 @@ function profileCard(box, d) {
   box.className = 'mine';
   box.innerHTML = '<div class="score"></div><p class="sub"></p>'
                 + '<div><span class="badge"></span></div>';
+  // Your own, at the size that makes it yours rather than a row's mark -- and
+  // in the colour every other screen will draw you in, which is what makes it
+  // recognisable as you and not a decoration on a profile card.
+  if (d.name) box.insertBefore(face(d.name, 'xl'), box.firstChild);
   box.querySelector('.score').textContent = d.name || 'You';
   box.querySelector('.sub').textContent =
     [d.roll_no, d.section, d.phone].filter(Boolean).join(' · ');
@@ -4190,6 +4286,9 @@ function editProfile(box, d) {
       // The server's answer, not what was typed: it normalises the number, and
       // showing the typed one would say a different thing is stored.
       d.name = j.name; d.phone = j.phone;
+      // Rename yourself and the face in the header follows in the same tap --
+      // its letters and its colour are both made of the name.
+      drawMyFace(j.name);
       profileCard(box, d);
       busyDone('Saved');
     } catch (e) {
@@ -4226,6 +4325,10 @@ async function renderMe() {
   // Not just "are we still on this tab": a second paint of this same tab
   // replaced everything below, and appending to it now would double it.
   if (mine !== painted) return;
+  // This screen asked /me for its own reasons; the header may still be on the
+  // drawn glyph because its own request has not landed, or was made before
+  // anybody signed in. Free.
+  drawMyFace(d.name);
   if (view.me === 'points') return pointsScreen(box, d);
   profileCard(box, d);
 
@@ -4556,12 +4659,7 @@ function said(x) {
   return p;
 }
 
-function saidBy(x) {
-  const m = document.createElement('p');
-  m.className = 'meta';
-  m.textContent = x.by + ' · ' + ago(x.at, NOW);
-  return m;
-}
+const saidBy = x => saidByFace(x.by, x.at);
 
 // Taking your own words back, or -- inked as the power it is -- somebody
 // else's. Offered to nobody else, because the policy would only refuse them.
@@ -4619,20 +4717,26 @@ function answerCard(a, best) {
 function doubtCard(q) {
   const el = document.createElement('div');
   el.className = 'dbt';
-  el.append(said(q), saidBy(q));
+  // The question takes the left column its answers already have -- a face
+  // where they have a vote -- so a thread reads as one question and its
+  // replies rather than as four paragraphs of equal weight stacked up.
+  const what = document.createElement('div');
+  what.className = 'what';
+  what.append(said(q), saidBy(q));
+  el.append(face(q.by), what);
   const reply = document.createElement('button');
   reply.textContent = 'Answer this';
   const row = acts(reply, dropBtn(q));
-  el.appendChild(row);
+  what.appendChild(row);
   // The box appears where it was asked for and only there: a form under every
   // question on the screen is six forms nobody asked for.
   reply.onclick = () => {
     reply.disabled = true;
-    el.insertBefore(askBox('Answer ' + q.by + '…', 'Post this answer', q.id), row);
+    what.insertBefore(askBox('Answer ' + q.by + '…', 'Post this answer', q.id), row);
   };
   // Only the top answer is marked, and only when the class actually voted for
   // it: a rule down the side of the one answer with no votes says nothing.
-  q.answers.forEach((a, k) => el.appendChild(answerCard(a, k === 0 && a.votes > 0)));
+  q.answers.forEach((a, k) => what.appendChild(answerCard(a, k === 0 && a.votes > 0)));
   return el;
 }
 
@@ -5049,6 +5153,27 @@ const MENU_ITEMS = [['Your profile', () => go('me')],
                     ['Saved', () => go('me', 'saved')],
                     ['Points and what you added', () => go('me', 'points')]];
 
+// Your own face, in the header, on every screen. /data carries the role and
+// not the name -- it is the payload the whole app is built from and a name is
+// nobody's business but this one button's -- so the name comes from /me, the
+// route the profile screen already reads, asked for once and kept.
+//
+// Nothing about the button changes if that never answers: no server, a page
+// opened as a plain file, or a 403 mid-visit all leave the drawn glyph exactly
+// where it was, which is the state this header has always been able to be in.
+let myName = null;
+function drawMyFace(name) {
+  if (!name || name === myName) return;
+  myName = name;
+  avatarEl.innerHTML = '';
+  avatarEl.appendChild(face(name));
+}
+function needMyFace() {
+  if (myName) return;
+  fetch('/me').then(r => r.ok ? r.json() : Promise.reject())
+              .then(d => drawMyFace(d.name)).catch(() => {});
+}
+
 // Focus goes back to the avatar whenever it was inside the menu when it shut,
 // and stays where it is when it was not -- a tap on the page behind it must
 // not yank the caret back up to the header.
@@ -5169,6 +5294,9 @@ async function refresh() {
     NOW = d.now || NOW;
     ROLE = d.role || ROLE;
     applyRole();
+    // A role means there is somebody signed in to have a face. --no-auth
+    // sends none, and nobody is exactly who that server has.
+    if (d.role) needMyFace();
     markSeen(d.now);
     if (!subj.options.length) {
       for (const c of d.codes) {
