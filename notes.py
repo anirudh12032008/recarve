@@ -2110,6 +2110,51 @@ function fileRow(u, s) {
 // each of them. A file with no batch is unaffected -- it renders through
 // fileRow exactly as every upload always has, and that is the common case:
 // grouping only ever happens where an upload actually asked for it.
+// The sitting you are revising for, in the order you meet them. End term
+// leads because it is the one worth the most and the one people hunt for.
+const EXAMS = [['end', 'End term papers'], ['mid', 'Mid term papers'],
+               ['mini', 'Mini test papers']];
+const SHELF = {notes: 'notes', slides: 'slides', assignment: 'assignment',
+               lab: 'lab', syllabus: 'syllabus', book: 'book'};
+
+function papersSection(s) {
+  needPapers(s.code);
+  const all = PAPERS[s.code];
+  if (!all || !all.length) return;
+  for (const [key, label] of EXAMS)
+    block(label, all.filter(p => p.exam === key).map(p => paperRow(p, s)));
+  // Everything that is not a sitting: the seniors' notes, slides and lab
+  // manuals. One list, because splitting six kinds into six headings on a
+  // phone is more scrolling than reading.
+  block('Also from the archive',
+        all.filter(p => p.kind !== 'paper').map(p => paperRow(p, s)));
+}
+
+function paperRow(p, s) {
+  const el = document.createElement('div');
+  el.className = 'row';
+  el.style.setProperty('--h', hue(s.code));
+  el.innerHTML = '<i class="tick"></i>'
+               + '<a class="name" target="_blank" rel="noopener"><b></b><small></small></a>';
+  const a = el.querySelector('a');
+  a.href = p.path;
+  a.querySelector('b').textContent = p.title;
+  a.querySelector('small').textContent = paperSays(p);
+  return el;
+}
+
+// "2025-26 . Section B". The year leads because it is what a student scans
+// for; the section only shows when the paper had one, which is mostly the
+// mini tests -- nine of them for one subject in one year, told apart by
+// nothing else.
+function paperSays(p) {
+  const bits = [];
+  if (p.year) bits.push(p.year + '-' + String(p.year + 1).slice(2));
+  if (p.section) bits.push('Section ' + p.section);
+  if (p.kind !== 'paper') bits.push(SHELF[p.kind] || p.kind);
+  return bits.join(' \u00b7 ') || 'past paper';
+}
+
 function groupedFileRows(s) {
   const seen = new Set();
   const rows = [];
@@ -3653,6 +3698,20 @@ function needCampus() {
     .catch(() => { CAMPUS = {failed: true}; campusAsked = false; redrawCampus(); });
 }
 
+let PAPERS = {}, papersAsked = {};
+
+// Per subject rather than one payload for all of them: a student opens one
+// subject at a time, and the whole shelf is several hundred rows nobody on a
+// phone asked for.
+function needPapers(code) {
+  if (PAPERS[code] || papersAsked[code] || !live) return;
+  papersAsked[code] = true;
+  fetch('/papers?code=' + encodeURIComponent(code))
+    .then(r => r.ok ? r.json() : Promise.reject(new Error(r.status)))
+    .then(d => { PAPERS[code] = d.papers; papersAsked[code] = false; redrawSubject(code); })
+    .catch(() => { PAPERS[code] = []; papersAsked[code] = false; redrawSubject(code); });
+}
+const redrawSubject = code => { if (view.code === code) render(); };
 const redrawCampus = () => { if (view.tab === 'campus') render(); };
 const redrawCommunity = () => { if (view.tab === 'community') render(); };
 const campusList = key => (CAMPUS && CAMPUS[key]) || [];
@@ -4331,6 +4390,7 @@ function renderSubject(s) {
   }
   block('Lectures', lecturesOf(s).map(n => noteRow(n, s)));
   block('Notes & slides', groupedFileRows(s));
+  papersSection(s);
   const rev = revisionOf(s);
   block('Revision sheet', rev ? [noteRow(rev, s)] : []);
   roomSection(s);
@@ -8403,6 +8463,28 @@ def db_places(conn):
     ]
 
 
+def db_papers(conn, code):
+    """Every archived document for one subject, newest first.
+
+    The shelf the seniors' portal kept in 31 folder names, read back as four
+    columns. Ordering is year descending with nulls last, because a paper
+    nobody dated is still worth showing -- just not above this year's.
+
+    No section clause, and that is the design rather than an omission: 0050
+    put this table beside clubs and places instead of inside `materials`
+    precisely because every section sat the same End Term.
+    """
+    return [
+        {"id": str(i), "kind": k, "exam": e, "year": y, "section": sec,
+         "title": t, "path": key, "bytes": n}
+        for i, k, e, y, sec, t, key, n in conn.execute(
+            "select id, kind, exam, year, set_for_section, title, "
+            "       file_key, size_bytes "
+            "  from archive_documents where subject_code = %s "
+            " order by year desc nulls last, kind, exam, title", (code,))
+    ]
+
+
 def db_write_place(conn, slug, name, kind, lat, lng, approx, note):
     """Add or edit one pin. Admins only, by policy."""
     name = (name or "").strip()[:CLUB_NAME]
@@ -11068,6 +11150,20 @@ def build_server(args):
                 return self.do_chat_get()
             if self.path.split("?")[0] == "/confession-author":
                 return self.do_confession_author()
+            if self.path.split("?")[0] == "/papers":
+                if not self.me:
+                    return self.reply(404, {"error": "this server is running "
+                                                     "with --no-auth"})
+                # Named /papers rather than /archive because the library is
+                # served statically from the same root, and the files live at
+                # /archive/... -- a JSON route on that prefix would shadow
+                # every document it describes.
+                code = urllib.parse.parse_qs(
+                    urllib.parse.urlparse(self.path).query).get("code", [""])[0]
+                if code not in SUBJECTS:
+                    return self.reply(400, {"error": "unknown subject"})
+                with db(self.me["id"]) as conn:
+                    return self.reply(200, {"papers": db_papers(conn, code)})
             if self.path == "/jobs":
                 return self.reply(200, {"jobs": jobs.snapshot()})
             if self.path.split("?")[0] == "/worker/audio":

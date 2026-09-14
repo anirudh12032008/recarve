@@ -177,7 +177,12 @@ def test_a_student_cannot_take_a_paper_off_the_shelf(db):
     db.execute("delete from archive_documents")
 
     as_admin_connection(db)
-    left = db.execute("select count(*) from archive_documents").fetchone()
+    # Scoped to this test's own row. Counting the whole table assumes nobody
+    # ever imported anything into the dev database, which stopped being true
+    # the first time the real importer ran against it.
+    left = db.execute(
+        "select count(*) from archive_documents where file_key = %s",
+        (PAPER["file_key"],)).fetchone()
     assert left[0] == 1
 
 
@@ -331,3 +336,56 @@ def test_the_filename_outranks_the_folder_on_which_exam_it_was():
                     "Mini Test 2024-25 Section B.pdf")[1] == "mini"
     # The folder still answers when the name says nothing.
     assert classify("Mini Test", "Sem 1 Paper.pdf")[1] == "mini"
+
+
+# ---------------------------------------------------------------------------
+# What the subject screen actually receives
+
+
+def test_the_shelf_comes_back_newest_first_for_an_ordinary_student(db):
+    """db_papers is what /papers returns, read on the student's own
+    connection. The ordering is the feature: a student opening Chemistry in
+    exam week wants this year's paper above one from 2021."""
+    import importlib, pathlib as _pl, sys as _sys
+    _sys.path.insert(0, str(_pl.Path(__file__).resolve().parents[2]))
+    notes = importlib.import_module("notes")
+
+    as_admin_connection(db)
+    admin = member(db, admin=True)
+    student = member(db, role="student")
+
+    as_user(db, admin)
+    for year, title in [(2021, "End Term 2021-22"), (2025, "End Term 2025-26"),
+                        (2023, "End Term 2023")]:
+        shelve(db, exam="end", year=year, set_for_section=None, title=title,
+               file_key=f"archive/MC1101/papers/{year}-end.pdf")
+    shelve(db, kind="notes", exam=None, year=None, set_for_section=None,
+           title="Vector Calculus", file_key="archive/MC1101/notes/vector.pdf")
+
+    as_user(db, student)
+    got = notes.db_papers(db, "MC1101")
+
+    assert [p["title"] for p in got][:3] == [
+        "End Term 2025-26", "End Term 2023", "End Term 2021-22"]
+    # The undated note sorts last rather than first -- "nulls last" is load
+    # bearing, not decoration.
+    assert got[-1]["title"] == "Vector Calculus"
+    # The path is what the browser asks for, relative to the library root.
+    assert got[0]["path"].startswith("archive/")
+
+
+def test_a_student_in_another_section_sees_the_same_shelf(db):
+    """The whole reason 0050 exists. If this ever fails, the archive has been
+    quietly given a section and nine sections out of ten have lost it."""
+    import importlib, pathlib as _pl, sys as _sys
+    _sys.path.insert(0, str(_pl.Path(__file__).resolve().parents[2]))
+    notes = importlib.import_module("notes")
+
+    as_admin_connection(db)
+    admin = member(db, admin=True)
+    other = member(db, role="student")
+
+    as_user(db, admin)
+    shelve(db)
+    as_user(db, other)
+    assert len(notes.db_papers(db, "MC1101")) == 1

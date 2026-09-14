@@ -181,7 +181,7 @@ def sources(src):
 
 def main(src):
     by_squashed = {squash(name): code for name, code in SUBJECTS.items()}
-    dest_root = ROOT / "library" / ".archive"
+    dest_root = ROOT / "library" / "archive"
     rows, parked, skipped = [], [], []
     seen = 0
 
@@ -204,7 +204,7 @@ def main(src):
             if len(data) < 5000:
                 skipped.append((subject, m, len(data)))
                 continue
-            key = f"{code}/{folder}/{filename}"
+            key = f"archive/{code}/{folder}/{filename}"
             out = dest_root / code / folder / filename
             out.parent.mkdir(parents=True, exist_ok=True)
             out.write_bytes(data)
