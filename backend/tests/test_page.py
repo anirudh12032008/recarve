@@ -245,6 +245,12 @@ let activeEl = null;               // document.activeElement, so focus can be fo
 const dnavNode = {children: [], appendChild: c => { dnavNode.children.push(c); return c; }};
 Object.defineProperty(dnavNode, 'innerHTML',
   {get: () => '', set: () => { dnavNode.children.length = 0; }});
+// The foot of the rail, which holds one thing: You. Counted separately from
+// the map above it, because "You quietly moved back into the map" is exactly
+// what would go unnoticed if both were appended to the same node.
+const dyouNode = {children: [], appendChild: c => { dyouNode.children.push(c); return c; }};
+Object.defineProperty(dyouNode, 'innerHTML',
+  {get: () => '', set: () => { dyouNode.children.length = 0; }});
 // Everything in the drawer that can take focus. The page builds its own rows
 // out of document.createElement, which is the discard proxy and cannot be told
 // apart from a heading here -- so what querySelector/querySelectorAll hand back
@@ -265,7 +271,8 @@ const drawerNode = {
   querySelectorAll: () => drawerKeys,
 };
 const els = {ask: askEl, panel: panelEl, fab: fabEl, lock: lockEl, save: saveEl,
-             avatar: avatarNode, drawer: drawerNode, dnav: dnavNode};
+             avatar: avatarNode, drawer: drawerNode, dnav: dnavNode,
+             dyou: dyouNode};
 // The app asks the platform whether the phone is dark, and listens in case it
 // changes under it. Neither is a decision this page makes -- the media query
 // is what actually swaps the palette -- so the stand-in answers 'light' and
@@ -692,9 +699,11 @@ location.hash = '#classes'; route();
 
 // ---- The drawer. Every screen in the app behind the avatar, and the only
 // global way to the levels inside the four tabs, each of which used to be
-// reachable from one block on one screen and nowhere else. Five sections, and
-// the four the thumb bar names are four of them: a section with levels inside
-// it opens to show them, a section that IS one screen is a link.
+// reachable from one block on one screen and nowhere else. Four sections in
+// the map, which are the four the thumb bar names: a section with levels
+// inside it opens to show them, a section that IS one screen is a link. You is
+// the fifth thing in the rail and is not one of them -- it is whose account
+// this is, and it stands at the foot behind your own face.
 ROLE = 'student';
 writes = []; dnavNode.children.length = 0; drawnFor = null; focused.length = 0;
 activeEl = null;
@@ -702,8 +711,8 @@ avatarEl.onclick();
 assert.ok(bodyClasses.has('drawered'), 'the avatar opens the drawer');
 assert.equal(avatarAttrs['aria-expanded'], 'true', 'and says so to a screen reader');
 // The sections, which are the app's own shape and not a filing of it: the
-// four tabs, plus you. A rail that grouped Home under "Your week" and Subjects
-// under "The library" taught a hierarchy the router does not have.
+// four tabs, plus you at the foot. A rail that grouped Home under "Your week"
+// and Subjects under "The library" taught a hierarchy the router does not have.
 for (const g of ['Home', 'Classes', 'Campus', 'Community', 'You'])
   assert.ok(says(g), 'the drawer names the section: ' + g);
 // The levels that had no global way in at all before this.
@@ -712,10 +721,12 @@ for (const row of ['Home', 'Your day', 'Your timetable', 'Catching up', 'Subject
                    'Your contributions', 'About recarve'])
   assert.ok(says(row), 'the drawer holds: ' + row);
 assert.ok(!says('Class admin'), 'and nothing a student may not press');
-// Five sections, and no more: the levels hang INSIDE two of them rather than
-// beside them. Counted, because a section that quietly stopped being built
-// still says everything the OTHER sections say.
-assert.equal(dnavNode.children.length, 5);
+// Four sections in the map, and no more: the levels hang INSIDE two of them
+// rather than beside them. Counted, because a section that quietly stopped
+// being built still says everything the OTHER sections say.
+assert.equal(dnavNode.children.length, 4);
+// And You is at the foot, on its own, rather than a fifth row in the map.
+assert.equal(dyouNode.children.length, 1, 'You stands at the foot of the rail');
 assert.equal(focused[0], 'first', 'opening puts the focus inside it');
 
 // Where you are, in the drawer as well as in the bar. Standing three levels
@@ -832,7 +843,7 @@ writes = []; dnavNode.children.length = 0; drawnFor = null;
 avatarEl.onclick();
 assert.ok(says('Class admin'), 'an admin is offered the way into the panel');
 assert.ok(wrote(['className', 'tag']), 'marked with the ink every admin row carries');
-assert.equal(dnavNode.children.length, 6, 'a sixth section, and it is one row');
+assert.equal(dnavNode.children.length, 5, 'a fifth section, and it is one row');
 avatarEl.onclick();
 ROLE = null;
 
@@ -2048,10 +2059,11 @@ def test_the_progress_strip_cannot_cover_the_header():
     # The + used to stay while you read, on the grounds that adding works from
     # anywhere. What that meant in practice was 58px of accent sitting on the
     # paragraph, 76px above a dock that is already the reading screen's bar.
-    # It goes on the narrow layout and stays on the wide one, where it belongs
-    # to the list column and is nowhere near the note.
+    # It goes on every layout now: the wide one is two panes and not three, so
+    # a note covers the list it came out of there too, and a + left standing
+    # would be over the words exactly as it was on a phone.
     assert "body.reading #fab{display:none}" in notes.PAGE
-    assert "body.reading #fab{display:block}" in notes.PAGE
+    assert "body.reading #fab{display:block}" not in notes.PAGE
 
 
 # Same bug, the other floating thing: #busy was fixed with pointer-events, but
