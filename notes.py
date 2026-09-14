@@ -6117,13 +6117,28 @@ PASSWORD_PATHS = {"/password"}
 SUPER_PREFIX = "/super"
 SUPER_COOKIE = "recarve_super"
 
-# Five wrong passwords on the one account there is, and fifty per client
-# because the two numbers mean different things -- an account lockout and a
-# grinder -- and because with one account the first number would otherwise let
-# anybody on the internet lock the owner out of their own install. Same window
-# as the students', for the same reason.
+# The students' two numbers are per roll number and per client, and the tight
+# one is the per-account one because there are a hundred and ten accounts. Here
+# there is one, so that arrangement inverts: an account-wide lockout on the
+# only account is a button any stranger can press to shut the owner out of
+# their own install. So the tight number is per client -- five wrong passwords
+# from one address -- and the loose one is the backstop across every address at
+# once, for the grinder that has a thousand of them. Fifty wrong passwords in
+# fifteen minutes from anywhere is not somebody mistyping.
+#
+# The backstop can still shut the owner out, because every global limit can.
+# Fifteen minutes and a line in the log is the price; the alternative is a
+# distributed guesser with no wall in front of it at all.
 SUPER_TRIES = 5
-SUPER_TRIES_PER_CLIENT = 50
+SUPER_TRIES_TOTAL = 50
+SUPER_TOTAL_KEY = "super:everybody"
+
+# How long a /super cookie is good for. The students' runs a year because it is
+# how they stay signed in on a phone; this is a desk, a password manager and
+# four screens, and a cookie that outlives the sitting is a laptop somebody
+# left open. The deadline is inside the signature, so it is the server that
+# says when it is over rather than the browser that holds it.
+SUPER_SESSION = 12 * 60 * 60
 
 
 def super_admin(env=os.environ):
@@ -8219,6 +8234,20 @@ def db_bootstrap(conn):
 # the thing to check when editing them.
 
 
+class SuperRefused(ValueError):
+    """A refusal with a list attached: every bad line at once.
+
+    A ValueError because that is already what the db_ functions raise for
+    "a person typed something wrong", and the handler answers all of them the
+    same way. `lines` is the part a plain ValueError has nowhere to put --
+    learning one mistake per attempt is how a forty-line paste takes an hour.
+    """
+
+    def __init__(self, said, lines):
+        super().__init__(said)
+        self.lines = list(lines)
+
+
 def a_uuid(raw):
     """`raw` as a uuid string, or a sentence about why it is not one.
 
@@ -9771,7 +9800,225 @@ def build_server(args):
                 _principals[key] = (now, me)
             return me
 
+        # False until super_gate says otherwise, so a handler that reads it on
+        # a request that never went through the gate reads "no" rather than
+        # raising -- and a route added under /super later starts out shut.
+        is_super = False
+
+        def client_ip(self):
+            """Which visitor this is, as far as a rate limiter can tell.
+
+            Behind the Cloudflare Tunnel every socket comes from 127.0.0.1, so
+            without a forwarded address every phone on the internet shares one
+            bucket and the limits stop meaning anything. CF-Connecting-IP is
+            the one the tunnel writes itself -- and overwrites, so a client
+            cannot choose it -- and X-Forwarded-For is the fallback for an
+            install that is not behind one.
+
+            ponytail: off the tunnel a client can write either header, so this
+            is a brake on a naive grinder rather than a wall.
+            """
+            for header in ("CF-Connecting-IP", "X-Forwarded-For"):
+                got = self.headers.get(header, "").split(",")[0].strip()
+                if got:
+                    return got[:64]
+            return self.client_address[0]
+
+        def super_gate(self, where):
+            """/super's own door, settled before the student gate is reached.
+
+            Everything about this is beside the student path rather than on top
+            of it. The cookie is signed with its own key, so a student's cookie
+            does not verify here and this one does not verify there -- that is
+            arithmetic, not a check somebody has to remember. It is also
+            Path=/super, so a browser never sends it to a student route at all,
+            and the student gate never even sees it.
+
+            Returning False is "a response has already been sent".
+            """
+            # No pair, no surface -- and --no-auth has no database to show and
+            # no real secret to sign with, so it has none either. A login box
+            # here would tell whoever found the path that there is something
+            # behind it; a 404 is what every other unrouted path answers.
+            admin = super_admin()
+            if args.no_auth or not admin:
+                self.send_error(404)
+                return False
+            email = admin[0]
+            jar = http.cookies.SimpleCookie(self.headers.get("Cookie", ""))
+            morsel = jar.get(SUPER_COOKIE)
+            until = unsign_session(morsel.value, super_secret(secret, email)) if morsel else None
+            # The signature only says we minted it; the deadline inside says it
+            # is still ours to honour. A cookie the browser kept past Max-Age
+            # stops working here too, which is the half a browser cannot be
+            # asked to enforce.
+            self.is_super = bool(until and until.isdigit() and int(until) > time.time())
+            if where == SUPER_PREFIX + "/login":
+                return True          # the one route that is reached without it
+            if where == SUPER_PREFIX and self.command == "GET":
+                return True          # the screen serves whichever body fits
+            if not self.is_super:
+                return self.reply(403, {"error": "sign in at /super first"}) or False
+            # SameSite=Strict below is what stops another site's page carrying
+            # this cookie into a write. This is the second wall, and it is the
+            # cheaper one: a cross-site <form> can send text/plain shaped like
+            # JSON, but it cannot set a content type without a preflight the
+            # browser would have to ask us to allow, and we never do.
+            if self.command == "POST" and "application/json" not in \
+                    self.headers.get("Content-Type", ""):
+                return self.reply(415, {"error": "this route takes JSON"}) or False
+            return True
+
+        def do_super_login(self):
+            """The password, once, on its own limiter.
+
+            Both halves are compared whatever the first one says, and both with
+            compare_digest: an early return on a wrong email is a way to find
+            out the right one, and a byte-at-a-time == is a slower way to find
+            out the password.
+            """
+            email, password = super_admin()
+            try:
+                req = self.body(4000)
+                if req is None:
+                    return
+                mine = (f"super:{self.client_ip()}", SUPER_TRIES, "address")
+                everybody = (SUPER_TOTAL_KEY, SUPER_TRIES_TOTAL, "install")
+                for key, limit, what in (mine, everybody):
+                    if supers.locked(key, limit):
+                        log(f"locked out for {LOGIN_WINDOW // 60} minutes "
+                            f"({limit} wrong per {what})", "super")
+                        return self.reply(429, {
+                            "error": f"too many wrong tries - {limit} per {what}, "
+                                     f"then a {LOGIN_WINDOW // 60} minute wait"})
+                sent_email = (req.get("email") or "").strip().lower().encode()
+                sent_password = (req.get("password") or "")[:200].encode()
+                # & and not `and`: both comparisons run either way.
+                ok = (hmac.compare_digest(sent_email, email.lower().encode())
+                      & hmac.compare_digest(sent_password, password.encode()))
+            except Exception as e:
+                return self.reply(500, {"error": f"{type(e).__name__}: {e}"})
+            if not ok:
+                supers.fail(mine[0])
+                supers.fail(everybody[0])
+                log(f"a wrong password from {self.client_ip()}", "super")
+                # One sentence for both halves, for the same reason /login has
+                # one for a wrong roll number and a wrong password.
+                return self.reply(403, {"error": "that email and password do not match"})
+            supers.clear(mine[0], everybody[0])
+            log("signed in", "super")
+            until = int(time.time()) + SUPER_SESSION
+            # Path=/super so it is never sent anywhere else; Secure so it is
+            # never sent in the clear; Strict so no other site's page can spend
+            # it; HttpOnly so a script cannot read it back out.
+            cookie = (f"{SUPER_COOKIE}={sign_session(until, super_secret(secret, email))}; "
+                      f"Path={SUPER_PREFIX}; HttpOnly; Secure; SameSite=Strict; "
+                      f"Max-Age={SUPER_SESSION}")
+            return self.reply(200, {"ok": True}, cookie=cookie)
+
+        def super_do(self, fn, cap=4000):
+            """Run one /super handler on the owning connection and answer.
+
+            The five below differ by three lines each and agree about every
+            refusal, which is the point: a ValueError out of the db_ functions
+            is a sentence written for a person and becomes a 400, and nothing
+            else is allowed to become a 200.
+            """
+            try:
+                req = self.body(cap) if self.command == "POST" else {}
+                if req is None:
+                    return
+                with db() as conn:
+                    return self.reply(200, fn(conn, req))
+            except SuperRefused as e:
+                return self.reply(400, {"error": str(e), "lines": e.lines})
+            except ValueError as e:
+                return self.reply(400, {"error": str(e)})
+            except psycopg.errors.RaiseException as e:
+                return self.reply(400, {"error": str(e).splitlines()[0]})
+            except Exception as e:
+                return self.reply(500, {"error": f"{type(e).__name__}: {e}"})
+
+        def super_asked(self, name):
+            """One id off the query string, as a uuid or as a refusal."""
+            import urllib.parse
+
+            return a_uuid(urllib.parse.parse_qs(
+                self.path.partition("?")[2]).get(name, [""])[0])
+
+        def do_super_data(self):
+            return self.super_do(lambda conn, req: {
+                "sections": db_sections(conn), "sets": db_subject_sets(conn)})
+
+        def do_super_section(self):
+            return self.super_do(
+                lambda conn, req: db_section(conn, self.super_asked("id")))
+
+        def do_super_create(self):
+            def make(conn, req):
+                label = db_create_section(conn, req.get("name"), req.get("grad_year"),
+                                          a_uuid(req.get("set")))
+                log(f"created {label}", "super")
+                return {"label": label}
+            return self.super_do(make)
+
+        def do_super_role(self):
+            def grant(conn, req):
+                target = a_uuid(req.get("id"))
+                # actor None: the super admin is in no section and holds no
+                # profile, so there is no row they could be demoting. The
+                # self-check inside compares against a string that is not a
+                # uuid and the 0011 trigger passes an owning connection
+                # through, which is the same door db_join's promotion uses.
+                role = db_set_role(conn, None, target, (req.get("role") or "").strip())
+                log(f"{target} is now {role}", "super")
+                return {"role": role}
+            return self.super_do(grant)
+
+        def do_super_invite(self):
+            def mint(conn, req):
+                section = a_uuid(req.get("section"))
+                code = db_mint_invite(conn, section)
+                log(f"minted an invite for {section}", "super")
+                return {"code": code}
+            return self.super_do(mint)
+
+        def do_super_timetable(self):
+            """A pasted week, read entirely before any of it is written.
+
+            parse_timetable is the same pure function the CLI calls -- a second
+            parser here would be a second set of rules about what a day is, and
+            the one that disagreed would be whichever was not being read.
+            """
+            def write(conn, req):
+                section = a_uuid(req.get("section"))
+                # Also what proves the section exists, and what says which
+                # codes are known -- the set it follows, not every subject.
+                known = [c["code"] for c in db_section(conn, section)["subjects"]]
+                rows, errors = parse_timetable(req.get("csv") or "", known)
+                if errors:
+                    # Raised, not returned, so it cannot be mistaken for a
+                    # written week -- and carrying every complaint at once.
+                    raise SuperRefused("nothing was written - fix these lines "
+                                       "and paste again", errors)
+                written = db_set_section_timetable(conn, section, rows)
+                log(f"wrote {written} periods for {section}", "super")
+                return {"written": written}
+            return self.super_do(write, cap=20000)
+
         def do_GET(self):
+            # Before anything else, because these paths must never fall through
+            # to a student route or to the static file server.
+            where = self.path.split("?")[0]
+            if where == SUPER_PREFIX:
+                return self.send_html(SUPER_PAGE.replace(
+                    "__BODY__", SUPER_BODY if self.is_super else SUPER_LOGIN_BODY))
+            if where == SUPER_PREFIX + "/data":
+                return self.do_super_data()
+            if where == SUPER_PREFIX + "/section":
+                return self.do_super_section()
+            if where.startswith(SUPER_PREFIX + "/"):
+                return self.send_error(404)
             if self.path == "/sw.js":
                 return self.send_js(SW_JS)
             if self.path.split("?")[0] == "/login":
@@ -9944,6 +10191,14 @@ def build_server(args):
             return self.at_least("admin")
 
         def do_POST(self):
+            where = self.path.split("?")[0]
+            if where.startswith(SUPER_PREFIX):
+                return {SUPER_PREFIX + "/login": self.do_super_login,
+                        SUPER_PREFIX + "/section": self.do_super_create,
+                        SUPER_PREFIX + "/role": self.do_super_role,
+                        SUPER_PREFIX + "/invite": self.do_super_invite,
+                        SUPER_PREFIX + "/timetable": self.do_super_timetable,
+                        }.get(where, lambda: self.send_error(404))()
             if self.path == "/join":
                 return self.do_join()
             if self.path == "/login":
@@ -10107,15 +10362,13 @@ def build_server(args):
                 password = (req.get("password") or "")[:200]
                 # Behind the tunnel every socket comes from 127.0.0.1, so the
                 # forwarded address is the only thing that tells two phones
-                # apart at all.
+                # apart at all. client_ip() is where that is read, and it
+                # prefers the header the tunnel writes itself.
                 #
-                # ponytail: a client can write that header, so this half is a
-                # brake on a naive grinder rather than a wall. The per-roll
-                # limit is the one that protects an account, and nothing the
-                # caller sends can move it -- it is keyed on the roll number
-                # they are guessing at.
-                fwd = self.headers.get("X-Forwarded-For", "").split(",")[0].strip()
-                client = fwd[:64] or self.client_address[0]
+                # The per-roll limit is the one that protects an account, and
+                # nothing the caller sends can move it -- it is keyed on the
+                # roll number they are guessing at.
+                client = self.client_ip()
                 limits = ((f"roll:{roll.upper()}", LOGIN_TRIES, "roll number"),
                           (f"ip:{client}", LOGIN_TRIES_PER_CLIENT, "device"))
                 for key, limit, what in limits:
