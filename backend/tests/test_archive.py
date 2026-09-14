@@ -319,3 +319,15 @@ def test_every_classification_is_a_row_the_database_accepts(db):
         shelve(db, kind=kind, exam=exam, year=year, set_for_section=section,
                title=filename, file_key=f"MC1101/{folder}/{filename}",
                size_bytes=1000)
+
+
+def test_the_filename_outranks_the_folder_on_which_exam_it_was():
+    """A file's own name beats the folder somebody dropped it in. The archive
+    really does contain an End Term sitting in a Mini Test folder, and asking
+    both at once files it as a mini test."""
+    assert classify("Mini Test Previous Year Questions",
+                    "End Term 2023 Sem 1.pdf")[1] == "end"
+    assert classify("End Term Previous Year Questions",
+                    "Mini Test 2024-25 Section B.pdf")[1] == "mini"
+    # The folder still answers when the name says nothing.
+    assert classify("Mini Test", "Sem 1 Paper.pdf")[1] == "mini"

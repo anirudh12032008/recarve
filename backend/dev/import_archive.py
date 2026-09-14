@@ -47,6 +47,17 @@ SUBJECTS = {
     "Environmental Sciences": "CY1110",
     "Biology for Engineers": "BS1111",
     "Life Skill Management": "SA1141",
+
+    # The PYQ collection pages spell four of these differently from the
+    # subject browser on the same site -- "Engineering Mathematics 1" there,
+    # "Mathematics 1" here. Same course, same code. Aliases rather than a
+    # fuzzy match, because "Mathematics 1" and "Mathematics 2" are one
+    # character apart and a near-miss would file second-year papers under a
+    # first-year course silently.
+    "Engineering Mathematics 1": "MC1101",
+    "Engineering Physics": "PY1102",
+    "Basic Electrical and Electronics Engineering": "EE1108",
+    "Computer Programming & PS": "CS1105",
 }
 
 
@@ -94,9 +105,18 @@ def classify(folder, filename):
     # prefix match on "mi" would find both in "Mini Test".
     exam = None
     if kind == "paper":
-        for word in ("mini", "end", "mid"):
-            if re.search(rf"\b{word}\b", n) or re.search(rf"\b{word}\b", f):
-                exam = word
+        # The filename is asked first and completely, then the folder -- not
+        # both at once. Asking both in one pass lets the folder win whenever
+        # its word happens to come earlier in this tuple, which files
+        # "End Term 2023.pdf" as a mini test purely because it is sitting in
+        # "Mini Test Previous Year Questions". The name is the better witness
+        # and only gets overruled when it says nothing at all.
+        for source in (n, f):
+            for word in ("mini", "end", "mid"):
+                if re.search(rf"\b{word}\b", source):
+                    exam = word
+                    break
+            if exam:
                 break
 
     # year: the opening year of an academic year. "2025-26", "2025-2026" and
@@ -140,11 +160,23 @@ def sources(src):
         with zipfile.ZipFile(z) as zf:
             names = [m for m in zf.namelist() if not m.endswith("/")]
             yield z.stem.split("__", 1)[1].replace("-", " "), \
-                [(m, (lambda zf=zf, m=m: zf.read(m))) for m in names]
+                [(m, (lambda zf=zf, m=m: zf.read(m))) for m in names], None
     for d in sorted(p for p in src.glob("[MS]T__*") if p.is_dir()):
         files = [p for p in d.rglob("*") if p.is_file()]
         yield d.name.split("__", 1)[1].replace("-", " "), \
-            [(str(p.relative_to(d)), (lambda p=p: p.read_bytes())) for p in files]
+            [(str(p.relative_to(d)), (lambda p=p: p.read_bytes())) for p in files], None
+
+    # PYQ<year>/<Subject>/<Mini Test|Mid Term|End Term>/<file>. A better shape
+    # than the subject browser's: the exam is a folder rather than a guess off
+    # the filename, and the year is in the top directory rather than buried in
+    # whichever way that paper happened to be named. The year rides along as a
+    # hint so a file called plainly "End Term Sem 1.pdf" still lands in 2025.
+    for d in sorted(p for p in src.glob("PYQ[0-9][0-9][0-9][0-9]") if p.is_dir()):
+        hint = int(d.name[3:])
+        for subj in sorted(p for p in d.iterdir() if p.is_dir()):
+            files = [p for p in subj.rglob("*") if p.is_file()]
+            yield subj.name, \
+                [(str(p.relative_to(subj)), (lambda p=p: p.read_bytes())) for p in files], hint
 
 
 def main(src):
@@ -153,7 +185,7 @@ def main(src):
     rows, parked, skipped = [], [], []
     seen = 0
 
-    for subject, members in sources(src):
+    for subject, members, year_hint in sources(src):
         seen += 1
         code = by_squashed.get(squash(subject))
         if code is None:
@@ -162,6 +194,12 @@ def main(src):
         for m, read in members:
             folder, _, filename = m.replace(os.sep, "/").rpartition("/")
             kind, exam, year, section = classify(folder, filename)
+            # The directory knows the year for certain; a filename only
+            # sometimes mentions it. Never override what the name said -- a
+            # paper filed under PYQ2025 whose name says 2023 is a 2023 paper
+            # somebody shelved late, and the name is the better witness.
+            if year is None:
+                year = year_hint
             data = read()
             if len(data) < 5000:
                 skipped.append((subject, m, len(data)))
