@@ -142,6 +142,25 @@ def test_the_profile_carries_the_branch_the_registrar_printed(db):
     assert theirs["branch"] is None and theirs["year"] is None
 
 
+def test_the_policy_and_roll_variants_agree_on_a_seat(db):
+    """One rule about what spells a seat, said in two languages.
+
+    roll_variants() decides it in Python for the missing list and the Google
+    door; same_seat() decides it in SQL for the policy on roll_list. They have
+    to agree, and the day one of them learns a new spelling the other has to.
+    """
+    as_admin_connection(db)
+    for spellings in [("26I060", "I060", "I60"), ("26A001", "A001", "A1"),
+                      ("26J110", "J110", "J110")]:
+        seats = {db.execute("select same_seat(%s)", (s,)).fetchone()[0]
+                 for s in spellings}
+        assert len(seats) == 1, f"SQL split one seat across {seats}: {spellings}"
+        # And the function the rest of the app uses reaches the same set.
+        full = spellings[0]
+        assert set(notes.roll_variants(full)) >= set(spellings), \
+            f"roll_variants({full}) missed one of {spellings}"
+
+
 def test_one_student_cannot_read_another_students_line_of_the_roll_list(db):
     """The policy names exactly one row: yours."""
     as_admin_connection(db)
@@ -157,3 +176,32 @@ def test_one_student_cannot_read_another_students_line_of_the_roll_list(db):
     as_user(db, me)
     seen = [r[0] for r in db.execute("select roll_no from roll_list").fetchall()]
     assert seen == ['26A097'], f"a member reached somebody else's line: {seen}"
+
+
+def test_the_admin_who_typed_a_short_roll_number_still_gets_his_branch(db):
+    """The case the whole roll_variants business exists for, from this end.
+
+    This install's admin joined as I60 a year before anybody had the
+    registrar's file, which writes him 26I060. String equality gives him a
+    profile with no branch and no year, and lists him as a student who never
+    turned up.
+    """
+    as_admin_connection(db)
+    uid = make_user(db)
+    db.execute("insert into profiles (id, name, roll_no, status) "
+               "values (%s, 'Old Hand', 'I60', 'approved')", (uid,))
+    sid = db.execute("insert into roll_list (scholar_no, roll_no, name, section_id, branch)"
+                     " select '26116011160', '26I060', 'Old Hand', id,"
+                     "        'Electronics & Communications Engineering'"
+                     "   from sections where name = 'I' and grad_year = 2030"
+                     " returning section_id").fetchone()[0]
+
+    as_user(db, uid)
+    mine = notes.db_profile(db, uid)
+    assert mine["branch"] == "Electronics & Communications Engineering", \
+        "I60 and 26I060 are one seat"
+    assert mine["scholar_no"] == "26116011160" and mine["year"] == 1
+
+    as_admin_connection(db)
+    gone = [m["roll_no"] for m in notes.db_section(db, sid)["missing"]]
+    assert "26I060" not in gone, "he is sitting in the members list above"

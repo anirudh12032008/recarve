@@ -7538,18 +7538,23 @@ def db_profile(conn, user_id):
     that is not on it -- still gets a profile, just without those two lines.
     """
     row = conn.execute(
-        "select p.name, p.roll_no, p.phone, p.role, p.status, r.branch, r.scholar_no"
-        "  from profiles p"
-        "  left join roll_list r"
-        "    on upper(btrim(r.roll_no)) = upper(btrim(p.roll_no))"
-        " where p.id = %s",
+        "select name, roll_no, phone, role, status from profiles where id = %s",
         (user_id,),
     ).fetchone()
     if not row:
         return {}
+    # Their own line of the registrar's list, on the seat rather than the
+    # string -- the same same_seat() the policy on roll_list uses, so the row
+    # this asks for and the row that policy allows can never disagree.
+    listed = conn.execute(
+        "select branch, scholar_no from roll_list"
+        " where same_seat(roll_no) = same_seat(%s)",
+        (row[1],),
+    ).fetchone()
+    branch, scholar = listed if listed else (None, None)
     return {"name": row[0], "roll_no": row[1], "phone": row[2],
-            "role": row[3], "status": row[4], "branch": row[5],
-            "scholar_no": row[6], "year": year_of_study(row[6])}
+            "role": row[3], "status": row[4], "branch": branch,
+            "scholar_no": scholar, "year": year_of_study(scholar)}
 
 
 def db_edit_profile(conn, user_id, name, phone):
@@ -9160,13 +9165,19 @@ def db_section(conn, section_id):
     # Which is exactly why it is compared folded -- ' 26a026 ' and '26A026' are
     # one person, and a student who is listed as missing while sitting in the
     # members table above is worse than useless.
+    #
+    # Compared on the SEAT and not the string, which same_seat() decides and
+    # 0052 explains: the registrar writes 26I060 and the people who joined by
+    # invite a year before anybody had his file wrote I60. Matching the strings
+    # would list this install's own admin as a student who never turned up,
+    # which is the one row it is most obviously wrong about.
     missing = [
         {"scholar_no": r[0], "roll_no": r[1], "name": r[2]}
         for r in conn.execute(
             "select r.scholar_no, r.roll_no, r.name from roll_list r"
             " where r.section_id = %s::uuid"
             "   and not exists (select 1 from profiles p"
-            "                    where upper(btrim(p.roll_no)) = upper(btrim(r.roll_no)))"
+            "                    where same_seat(p.roll_no) = same_seat(r.roll_no))"
             " order by r.roll_no",
             (section_id,),
         )
