@@ -4558,8 +4558,14 @@ function profileCard(box, d) {
   // recognisable as you and not a decoration on a profile card.
   if (d.name) box.insertBefore(face(d.name, 'xl'), box.firstChild);
   box.querySelector('.score').textContent = d.name || 'You';
+  // Branch and year sit with the roll number because they are the same kind of
+  // fact -- what the institute says you are -- and none of them is editable.
+  // Absent for anybody the roll list has never heard of, and the line simply
+  // gets shorter rather than growing an "unknown".
+  const ORDINAL = {1: '1st', 2: '2nd', 3: '3rd'};
   box.querySelector('.sub').textContent =
-    [d.roll_no, d.section, d.phone].filter(Boolean).join(' · ');
+    [d.roll_no, d.branch, d.year ? (ORDINAL[d.year] || d.year + 'th') + ' year' : '',
+     d.section, d.phone].filter(Boolean).join(' · ');
   const badge = box.querySelector('.badge');
   badge.className = 'badge ' + (d.role || 'student');
   badge.textContent = ROLE_TITLE[d.role] || 'Student';
@@ -7478,16 +7484,46 @@ def db_remove_lecture(conn, code, title):
     return True
 
 
+def year_of_study(scholar_no, today=None):
+    """Which year they are in, from the two digits the scholar number opens with.
+
+    26... is an intake that arrived in 2026, and a B.Tech year runs July to
+    June, so the academic year that started this month is the one to count
+    from -- in September 2026 a 26 is in first year and in January 2027 they
+    still are. Returns None rather than a guess for anything that is not two
+    leading digits, and never returns less than 1: a number from an intake
+    that has not arrived yet is a bad number, not a zeroth year.
+    """
+    today = today or datetime.date.today()
+    if not (scholar_no or "")[:2].isdigit():
+        return None
+    began = 2000 + int(scholar_no[:2])
+    academic = today.year if today.month >= 7 else today.year - 1
+    return max(1, academic - began + 1)
+
+
 def db_profile(conn, user_id):
-    """The identity half of the Me tab. Read as themselves."""
+    """The identity half of the Me tab. Read as themselves.
+
+    The branch and the year come off the registrar's list rather than off the
+    profile, because they are the registrar's facts and not the student's to
+    edit. Left join and matched folded, so somebody the list has never heard
+    of -- a senior, a transfer, anybody who joined by invite with a roll number
+    that is not on it -- still gets a profile, just without those two lines.
+    """
     row = conn.execute(
-        "select name, roll_no, phone, role, status from profiles where id = %s",
+        "select p.name, p.roll_no, p.phone, p.role, p.status, r.branch, r.scholar_no"
+        "  from profiles p"
+        "  left join roll_list r"
+        "    on upper(btrim(r.roll_no)) = upper(btrim(p.roll_no))"
+        " where p.id = %s",
         (user_id,),
     ).fetchone()
     if not row:
         return {}
     return {"name": row[0], "roll_no": row[1], "phone": row[2],
-            "role": row[3], "status": row[4]}
+            "role": row[3], "status": row[4], "branch": row[5],
+            "scholar_no": row[6], "year": year_of_study(row[6])}
 
 
 def db_edit_profile(conn, user_id, name, phone):

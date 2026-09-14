@@ -100,3 +100,60 @@ def test_nobody_can_approve_themselves(db):
     assert db.execute(
         "select status from profiles where id = %s", (me,)
     ).fetchone()[0] == "pending"
+
+
+def test_the_year_is_read_off_the_front_of_the_scholar_number():
+    """A B.Tech year runs July to June, so January does not promote anybody."""
+    import datetime
+    sep26, jan27 = datetime.date(2026, 9, 14), datetime.date(2027, 1, 20)
+    assert notes.year_of_study("26113011101", sep26) == 1
+    assert notes.year_of_study("26113011101", jan27) == 1, "January is still first year"
+    assert notes.year_of_study("26113011101", datetime.date(2027, 7, 1)) == 2
+    assert notes.year_of_study("23113011101", sep26) == 4
+    # Not a guess, and never a zeroth year.
+    assert notes.year_of_study(None, sep26) is None
+    assert notes.year_of_study("", sep26) is None
+    assert notes.year_of_study("ab113011101", sep26) is None
+    assert notes.year_of_study("99113011101", sep26) == 1, "an intake not yet arrived"
+
+
+def test_the_profile_carries_the_branch_the_registrar_printed(db):
+    """Branch and year come off roll_list, matched on the roll number folded,
+    and a student the list has never heard of still gets a profile."""
+    as_admin_connection(db)
+    listed, stranger = make_user(db), make_user(db)
+    db.execute("insert into profiles (id, name, roll_no, status) values"
+               " (%s, 'Listed', ' 26a099 ', 'approved'),"
+               " (%s, 'Stranger', '26Z001', 'approved')", (listed, stranger))
+    db.execute("insert into roll_list (scholar_no, roll_no, name, section_id, branch)"
+               " select '26113011199', '26A099', 'Listed', id,"
+               "        'Electrical Engineering'"
+               "   from sections where name = 'I' and grad_year = 2030")
+
+    as_user(db, listed)
+    mine = notes.db_profile(db, listed)
+    assert mine["branch"] == "Electrical Engineering", "folded roll number still matches"
+    assert mine["scholar_no"] == "26113011199"
+    assert mine["year"] == notes.year_of_study("26113011199")
+
+    as_user(db, stranger)
+    theirs = notes.db_profile(db, stranger)
+    assert theirs["name"] == "Stranger", "not on the list is not an error"
+    assert theirs["branch"] is None and theirs["year"] is None
+
+
+def test_one_student_cannot_read_another_students_line_of_the_roll_list(db):
+    """The policy names exactly one row: yours."""
+    as_admin_connection(db)
+    me, them = make_user(db), make_user(db)
+    db.execute("insert into profiles (id, name, roll_no, status) values"
+               " (%s, 'Me', '26A097', 'approved'), (%s, 'Them', '26A098', 'approved')",
+               (me, them))
+    db.execute("insert into roll_list (scholar_no, roll_no, name, section_id, branch)"
+               " select v.s, v.r, v.n, s.id, 'Civil Engineering'"
+               "   from (values ('26111011197','26A097','Me'),"
+               "                ('26111011198','26A098','Them')) as v(s,r,n),"
+               "        sections s where s.name = 'I' and s.grad_year = 2030")
+    as_user(db, me)
+    seen = [r[0] for r in db.execute("select roll_no from roll_list").fetchall()]
+    assert seen == ['26A097'], f"a member reached somebody else's line: {seen}"
