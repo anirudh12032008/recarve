@@ -201,9 +201,15 @@ const avatarAttrs = {};
 let avatarFocused = 0;
 // Named apart from the script's own consts, and handed to it through els --
 // the page reaches for them by id, so these ARE its avatarEl and menuEl.
+// It holds something drawn -- the glyph it ships with, or the face the name
+// from /me makes -- so it has the two members that swap one for the other.
+const avatarKids = [];
 const avatarNode = {onclick: null, focus: () => { avatarFocused++; },
                     contains: () => false,
-                    setAttribute: (k, v) => { avatarAttrs[k] = v; }};
+                    setAttribute: (k, v) => { avatarAttrs[k] = v; },
+                    appendChild: c => { avatarKids.push(c); return c; }};
+Object.defineProperty(avatarNode, 'innerHTML',
+  {get: () => '', set: () => { avatarKids.length = 0; }});
 const menuNode = {hidden: true, children: [], onkeydown: null,
                   contains: () => false,
                   appendChild: c => { menuNode.children.push(c); return c; }};
@@ -2843,6 +2849,98 @@ assert.equal(refreshed, 1, 'the shelf is refetched with the new name');
 })().catch(e => { console.error(e); process.exit(1); });
 """
     f = tmp_path / "renamebtn.js"
+    f.write_text(script)
+    r = subprocess.run([NODE, str(f)], capture_output=True, text=True)
+    assert r.returncode == 0, r.stdout + r.stderr
+
+
+@pytest.mark.skipif(not NODE, reason="needs node")
+def test_an_anonymous_confession_is_never_drawn_with_initials(tmp_path):
+    """The face is the one thing on the wall made of somebody's name, so it is
+    the one thing that could undo what 0035 spent a column privilege on.
+
+    A confession arrives with `by: null` and nothing else about its author --
+    `authenticated` has no select on posts.author_id at all -- so the branch
+    under test is what this page does with that null. Nothing it draws may
+    carry a letter, a hue, or any other value read off the row: two letters in
+    a colour are an identity, and a *stable* colour per confession is a
+    fingerprint linking every confession one person ever wrote, which is
+    worse than the name would have been.
+
+    The second half is the other failure this could have: a face that is
+    always blank is not a face. A named post has to come out with initials and
+    a hue, or the first half passes on an empty feature.
+    """
+    fns = "\n".join(re.search(p, notes.PAGE, re.S).group(0) for p in (
+        r"const nameHue = .*?\n\};", r"const initialsOf = .*?\n\};",
+        r"function face\(name, size\) \{.*?\n\}",
+        r"function saidByFace\(name, when\) \{.*?\n\}",
+        r"function postCard\(x, kind\) \{.*?\n\}"))
+    script = """
+const assert = require('node:assert');
+function makeEl(tag) {
+  const el = { tag, kids: [], className: '', textContent: '', hues: [],
+    setAttribute(k, v) { el['@' + k] = v; },
+    style: { setProperty(k, v) { if (k === '--h') el.hues.push(String(v)); } },
+    appendChild(c) { el.kids.push(c); return c; },
+    append(...cs) { cs.forEach(c => el.appendChild(c)); } };
+  Object.defineProperty(el, 'innerHTML', { set() { el.kids = []; }, get() { return ''; } });
+  return el;
+}
+const document = { createElement: makeEl,
+                   createTextNode: t => ({ tag: '#text', kids: [], textContent: t, hues: [] }) };
+const NOW = 0;
+function ago() { return '4 min ago'; }
+function atLeast() { return false; }
+function voteBtn() { return makeEl('button'); }
+function acts(...b) { const r = makeEl('div'); b.filter(Boolean).forEach(x => r.appendChild(x)); return r; }
+function writePost() {}
+""" + fns + """
+const walk = (el, out = []) => (out.push(el), el.kids.forEach(k => walk(k, out)), out);
+const facesIn = el => walk(el).filter(n => String(n.className).split(' ').includes('face'));
+const textIn = el => walk(el).map(n => String(n.textContent)).join(' ');
+const huesIn = el => walk(el).flatMap(n => n.hues);
+
+// What the server actually sends for a confession, and all of it.
+const said = 'I have been pretending to understand thermodynamics since week two.';
+const conf = postCard({id: 'a1b2c3d4-0000-4000-8000-000000000001', body: said,
+                       by: null, at: 0, mine: false, votes: 3, voted: false, photos: []},
+                      'confession');
+
+const marks = facesIn(conf);
+assert.equal(marks.length, 1, 'a confession gets exactly one mark');
+const mark = marks[0];
+assert.ok(mark.className.split(' ').includes('none'),
+          'the anonymous branch, not the initials one');
+assert.equal(mark.textContent, '', 'no letter of any kind inside the mark');
+assert.deepStrictEqual(mark.hues, [], 'no hue: a stable colour per author IS the author');
+assert.deepStrictEqual(huesIn(conf), [], 'and nothing else on the row is coloured by one either');
+
+// Nothing anywhere in the row is a short run of capitals -- which is what
+// initials are, and what anybody adding one later would add.
+for (const node of walk(conf)) {
+  const t = String(node.textContent).trim();
+  assert.ok(!/^[A-Z\\u00C0-\\u024F]{1,3}$/.test(t),
+            'something on an anonymous row reads as initials: ' + JSON.stringify(t));
+}
+const shown = textIn(conf);
+assert.ok(shown.includes('Anonymous'), 'the honest word is still written');
+assert.ok(shown.includes(said), 'and the confession itself is still on the page');
+
+// The other half: a named post has to actually get a face, or the above is
+// a test that a broken feature stays broken.
+const post = postCard({id: 'p2', body: 'Library is open till 11.', by: 'Priya Nair',
+                       at: 0, mine: false, votes: 0, voted: false, photos: []}, 'feed');
+const named = facesIn(post);
+assert.equal(named.length, 1, 'a named post gets one face');
+assert.equal(named[0].textContent, 'PN', 'and it is her initials');
+assert.ok(!named[0].className.split(' ').includes('none'), 'not the anonymous mark');
+assert.equal(named[0].hues.length, 1, 'coloured from the name');
+// Deterministic, and the same name is the same colour every time it is drawn.
+assert.equal(nameHue('Priya Nair'), nameHue('Priya Nair'));
+assert.notEqual(nameHue('Priya Nair'), nameHue('Rohan Deshmukh'));
+"""
+    f = tmp_path / "anon.js"
     f.write_text(script)
     r = subprocess.run([NODE, str(f)], capture_output=True, text=True)
     assert r.returncode == 0, r.stdout + r.stderr
