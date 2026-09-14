@@ -135,8 +135,13 @@ def test_a_student_still_reads_everything_and_votes(db):
     assert db.execute("select count(*) from subjects").fetchone()[0] == 12
     db.execute("insert into votes (material_id, voter_id) values (%s, %s)", (mid, student))
     assert db.execute("select count(*) from votes").fetchone()[0] == 1
-    db.execute("insert into timetable (profile_id, day, period, subject_code) "
-               "values (%s, 1, 1, 'CY1107')", (student,))
+    # The timetable is the one thing on this list they read and cannot write:
+    # the week is the registrar's, one per section, and 0053 says so where it
+    # is enforced rather than in the handler that used to.
+    assert db.execute("select count(*) from timetable").fetchone()[0] == 0
+    with pytest.raises(psycopg.errors.InsufficientPrivilege), db.transaction():
+        db.execute("insert into timetable (profile_id, day, period, subject_code) "
+                   "values (%s, 1, 1, 'CY1107')", (student,))
 
 
 @pytest.mark.parametrize("role", ["student", "trusted", "cr"])
