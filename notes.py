@@ -677,7 +677,7 @@ PAGE = _themable(r"""<!doctype html>
      written once. The dock and the + both have to clear them, and the sum
      of the two used to be the literal 552 copied into three rules -- so
      widening the rail by a hair moved the + and left the dock behind. */
-  --railw:252px; --listw:320px; --panes:calc(var(--railw) + var(--listw));
+  --railw:252px; --colw:62rem;
   /* What the + button covers, reserved at the bottom of everything that
      scrolls. It is 58px across with its bottom edge 76px up, so it reaches
      134; 142 puts a row's own 8px under it as well. Written once here
@@ -881,21 +881,30 @@ body.drawered #drawer{transform:none;visibility:visible}
   width:3px;border-radius:0 2px 2px 0;background:var(--accent)}
 #drawer .kids a[aria-current]::before{left:-13px}
 #drawer .tag{margin-left:auto}
-/* Appearance, at the foot of the map. Three states and not two: following the
-   phone is what this app has always done and is still the right default, so
-   it stays an option you can come back to and not a thing you lose the moment
-   you touch the control. One track, three segments, the chosen one filled --
-   the same shape the day picker uses, and a segment says its own name rather
-   than leaving you to work out what a half-moon glyph would do next. */
-.theme{flex:none;display:flex;gap:2px;margin:8px 12px 4px;padding:3px;
-  border-radius:11px;background:color-mix(in srgb,var(--fg) 6%,transparent)}
-.theme button{flex:1;min-height:32px;border-radius:7px;font-size:11px;
-  font-weight:600;color:var(--mut)}
-.theme button[aria-pressed="true"]{background:var(--bg);color:var(--fg);
-  box-shadow:0 1px 2px rgba(0,0,0,.10)}
-@media (hover:hover){.theme button:hover{color:var(--fg)}}
-/* The map fills the rail and the setting sits under it, rather than the
-   setting riding up under the last row on a tall screen. */
+/* The foot of the map: your face, and the light. A row, because these are the
+   two things that belong to you rather than to a screen, and the bottom left
+   corner is where both have lived in every app anybody here already uses.
+   The light is placed ON the row rather than beside it in a flex track: the
+   four rows that open out of You are a list in a 252px rail, and taking 44px
+   off the column for a control that belongs to the row above them put "Your
+   contributions" on two lines. The row reserves the space; the list does not
+   pay for it. */
+.foot{flex:none;position:relative;padding:6px 0 0;
+  border-top:1px solid var(--line);margin-top:8px}
+#drawer .foot summary{padding-right:52px}
+/* One button and not three segments. The glyph is what the press would DO --
+   a moon while the page is light -- and the label says so in words, because a
+   half-moon on its own is a guess. Following the phone is still the default
+   and still what an untouched install does; the first press is what makes the
+   choice explicit, and from then on this is a switch with two ends. */
+#themebtn{position:absolute;top:7px;right:12px;
+  display:flex;align-items:center;justify-content:center;
+  width:var(--tap);height:var(--tap);border-radius:11px;color:var(--mut)}
+#themebtn:active{background:var(--line)}
+@media (hover:hover){#themebtn:hover{background:color-mix(in srgb,var(--fg) 6%,transparent);
+  color:var(--fg)}}
+/* The map fills the rail and the foot sits under it, rather than the foot
+   riding up under the last row on a tall screen. */
 #dnav{flex:1 0 auto}
 @media (hover:hover){
   #drawer a:hover,#drawer summary:hover{background:color-mix(in srgb,var(--fg) 6%,transparent)}
@@ -1656,36 +1665,32 @@ body.reading .tabs{display:none}
 
 @media (min-width:760px){
   body{display:flex}
-  #list{width:var(--listw);flex:none;border-right:1px solid var(--line);height:100dvh;overflow-y:auto;position:sticky;top:0}
-  #read{flex:1;display:block;min-width:0}
-  body.reading #list{display:block}
+  /* Two panes and not three. A 320px column of subjects parked between the
+     map and the note was a third piece of furniture doing the job the second
+     one already does: it IS the screen you are on. So the wide layout is the
+     phone's -- one content pane that the map points at and a note replaces --
+     with the map standing open beside it instead of sliding over it.
+     The pane does not stretch to 1100px because a row of six words does not
+     get better at that width; it is held to --colw and centred, and the map
+     is the only thing pinned to an edge. */
+  #list,#read{flex:1;min-width:0}
+  #list>*{max-width:var(--colw);margin-left:auto;margin-right:auto}
   article{max-width:70ch;margin:0 auto;padding:32px 40px 110px}
   /* The dock belongs to the note, so it stops where the note's column stops
      rather than stretching five buttons across 960px of empty pane. */
-  .dock{left:var(--panes);justify-content:center;padding-left:40px;padding-right:40px}
+  .dock{left:var(--railw);justify-content:center;padding-left:40px;padding-right:40px}
   .dock button{flex:0 1 9rem}
-  /* Nothing open yet. A 60px grey box reading "Pick a lecture to start
-     reading" under 800px of near-black is a screen that failed to load, and
-     centring the box did not change what it was: furniture. The invitation
-     is the pane now -- see .empty -- and it says what this half of the
-     window is for and what is in it.
-     The flex centring that used to live here was on #body itself, which is
-     the ARTICLE: with a note's markup still in it after a tab change, every
-     heading and paragraph became a flex item and the note laid itself out in
-     eleven vertical columns. closeRead() empties it now, and nothing on this
-     screen flexes a note's own children again. */
-  /* The list column's own header already carries the code chip and the
-     subject's name, and there is no back on a two-pane layout -- so this
-     strip was one chip pushed to the far right of a 1120px ruled bar, and
-     with nothing open it was a ruled bar holding nothing at all. The note's
-     masthead is the top of this pane now. */
-  .rtop{display:none}
+  /* A note covers the list it came out of, exactly as it does on a phone, so
+     the way back out of it is a button again and not the other pane. It is
+     held to the note's own column so that Back starts where the title does
+     rather than stranded at the far left of a 1100px bar. */
+  .rtop{max-width:calc(70ch + 80px);margin:0 auto;padding-left:40px;padding-right:40px}
   .mast{max-width:70ch;margin:0 auto;padding:32px 40px 0}
   .mast+article{padding-top:16px}
-  /* The + belongs to the list, so it sits at the list's right edge -- which
-     is a rail's width further along now that the rail stands before it. */
-  #fab{right:auto;left:calc(var(--panes) - 74px)}
-  body.reading #fab{display:block}
+  /* No thumb bar down here to clear, so the + sits where a floating control
+     sits on a desktop: in the corner. It still steps out while a note is
+     open, because the note has the dock. */
+  #fab{right:24px;left:auto;bottom:24px}
   /* Five buttons that act on nothing are worse than no bar: Save, Share,
      Download and Print with no note open were four live-looking controls
      over an empty pane. The dock belongs to the note and arrives with it. */
@@ -1790,10 +1795,14 @@ body.reading .tabs{display:none}
     <button id="dclose" aria-label="Close the menu">Close</button>
   </div>
   <div id="dnav"></div>
-  <div class="theme" role="group" aria-label="Appearance">
-    <button data-theme-set="system">System</button>
-    <button data-theme-set="light">Light</button>
-    <button data-theme-set="dark">Dark</button>
+  <!-- Who you are, at the foot of the map, where an account has sat in every
+       app anybody here has already used. The four rows that used to be a "You"
+       section halfway down the list open out of the face itself, and the one
+       appearance control stands beside it rather than under a heading of its
+       own. -->
+  <div class="foot">
+    <div id="dyou"></div>
+    <button id="themebtn" aria-label="Switch to dark"></button>
   </div>
 </nav>
 
@@ -1942,6 +1951,10 @@ const tabBtns = document.querySelectorAll('.tabs button');
 const avatarEl = document.getElementById('avatar');
 const drawerEl = document.getElementById('drawer');
 const dnav = document.getElementById('dnav');
+const dyou = document.getElementById('dyou');
+// Declared up here with the other handles rather than beside drawMyFace:
+// paintDrawer reads it, and paintDrawer runs on the first render.
+let myName = null;
 let current = null;                      // the note being read, or null
 let currentCode = null;                  // its subject's code, alongside it
 // Which tab, and how deep inside it. Classes goes subject -> note; Home has
@@ -6052,6 +6065,8 @@ const ICON = {
   rise:      '<path d="M3.8 17.8 9.2 12l3.6 3.4 7-7.8"/><path d="M15.4 7.6h4.4v4.4"/>',
   info:      '<circle cx="12" cy="12" r="8.4"/><path d="M12 11.2v5.2M12 7.9h.01"/>',
   shield:    '<path d="M12 3.6 19 6.2v5.3c0 4.2-2.8 7.2-7 8.7-4.2-1.5-7-4.5-7-8.7V6.2z"/>',
+  sun:       '<circle cx="12" cy="12" r="4.1"/><path d="M12 2.9v2.3M12 18.8v2.3M4.9 4.9l1.6 1.6M17.5 17.5l1.6 1.6M2.9 12h2.3M18.8 12h2.3M4.9 19.1l1.6-1.6M17.5 6.5l1.6-1.6"/>',
+  moon:      '<path d="M20.4 14.2A8.6 8.6 0 0 1 9.8 3.6 8.6 8.6 0 1 0 20.4 14.2z"/>',
 };
 // One <svg> from one path string, and nothing else in the app draws one.
 const icon = (name) => {
@@ -6092,12 +6107,16 @@ const DRAWER = [
     ['Doubts',                    ['community', 'doubts']],
     ['Who has contributed',       ['community', 'standings']],
   ]],
-  ['You',       'person', null, [
-    ['Your profile',              ['me']],
-    ['Saved',                     ['me', 'saved']],
-    ['Your contributions',         ['me', 'points']],
-    ['About recarve',             ['me', 'about']],
-  ]],
+];
+// You is not one of the five. It is whose account this is, which is a fact
+// about the reader and not a place in the app -- so it stands at the foot of
+// the rail behind your own face, where an account has stood in every app
+// anybody here already uses, and the four rows open out of it.
+const YOU = [
+  ['Your profile',              ['me']],
+  ['Saved',                     ['me', 'saved']],
+  ['Your contributions',        ['me', 'points']],
+  ['About recarve',             ['me', 'about']],
 ];
 
 // Which row is lit. Asked of `view` and not of the hash, because a hash is
@@ -6116,7 +6135,9 @@ const drawerHere = () => hashOf(view.tab,
 let drawnFor = null;
 function paintDrawer() {
   const here = drawerHere();
-  const key = ROLE + '|' + here;
+  // myName is in the key because the foot of the rail is your face, and that
+  // arrives one fetch after the first paint.
+  const key = ROLE + '|' + here + '|' + myName;
   if (key === drawnFor) return;
   drawnFor = key;
   dnav.innerHTML = '';
@@ -6144,11 +6165,13 @@ function paintDrawer() {
   // A section with levels inside it. <details> is the platform's own
   // disclosure -- it opens with no JavaScript, it is already keyboard and
   // screen-reader correct, and the open one is the one you are standing in.
+  // `mark` is an icon's name, or a node already drawn -- the foot of the rail
+  // hands it a face, which is the one glyph in here that is made of a name.
   const section = (label, mark, kids) => {
     const d = document.createElement('details');
     d.className = 'nav-sect';
     const sum = document.createElement('summary');
-    sum.appendChild(icon(mark));
+    sum.appendChild(typeof mark === 'string' ? icon(mark) : mark);
     const t = document.createElement('span');
     t.textContent = label;
     sum.appendChild(t);
@@ -6181,6 +6204,8 @@ function paintDrawer() {
     a.appendChild(tag);
     dnav.appendChild(a);
   }
+  dyou.innerHTML = '';
+  dyou.appendChild(section(myName || 'You', face(myName || ''), YOU));
 }
 
 // ---- Appearance. The phone's setting is the default and always was; this is
@@ -6195,23 +6220,35 @@ const BAR = {light: '#fcfcfd', dark: '#0f1115'};
 let theme = 'system';
 try { const t = localStorage.getItem('theme'); if (THEMES.includes(t)) theme = t; } catch (e) {}
 
+// What the page is ACTUALLY showing, which on 'system' is the phone's answer
+// and not the stored word. The button, the bar colour and the next press are
+// all asked of this rather than of `theme`.
+const isDark = () => theme === 'dark' || (theme === 'system'
+  && matchMedia('(prefers-color-scheme: dark)').matches);
+
+const themeBtn = document.getElementById('themebtn');
 function paintTheme() {
   if (theme === 'system') delete document.documentElement.dataset.theme;
   else document.documentElement.dataset.theme = theme;
-  const dark = theme === 'dark' || (theme === 'system'
-    && matchMedia('(prefers-color-scheme: dark)').matches);
+  const dark = isDark();
   const tc = document.getElementById('tc');
   if (tc) tc.setAttribute('content', dark ? BAR.dark : BAR.light);
-  for (const b of document.querySelectorAll('[data-theme-set]'))
-    b.setAttribute('aria-pressed', String(b.dataset.themeSet === theme));
+  // The glyph is what the press would DO, not what you are looking at: a moon
+  // on a light page. That is the way round every switch anybody here has used
+  // already, and the label says it in words, because a half-moon on its own
+  // is a guess either way.
+  themeBtn.innerHTML = '';
+  themeBtn.appendChild(icon(dark ? 'sun' : 'moon'));
+  themeBtn.setAttribute('aria-label', dark ? 'Switch to light' : 'Switch to dark');
 }
-for (const b of document.querySelectorAll('[data-theme-set]')) {
-  b.onclick = () => {
-    theme = b.dataset.themeSet;
-    try { localStorage.setItem('theme', theme); } catch (e) {}
-    paintTheme();
-  };
-}
+// 'system' is still the default and still what an untouched install does --
+// it is just no longer a third thing to press. The first press says which one
+// you meant, and from then on this is a switch with two ends.
+themeBtn.onclick = () => {
+  theme = isDark() ? 'light' : 'dark';
+  try { localStorage.setItem('theme', theme); } catch (e) {}
+  paintTheme();
+};
 // On 'system' the phone can change under the app -- sunset, or the student
 // flipping it in Settings with this still open -- and only the bar's colour
 // has to be told; the palette is the media query's own job.
@@ -6285,12 +6322,12 @@ drawerEl.addEventListener('touchend', (e) => {
 // Nothing about the button changes if that never answers: no server, a page
 // opened as a plain file, or a 403 mid-visit all leave the drawn glyph exactly
 // where it was, which is the state this header has always been able to be in.
-let myName = null;
 function drawMyFace(name) {
   if (!name || name === myName) return;
   myName = name;
   avatarEl.innerHTML = '';
   avatarEl.appendChild(face(name));
+  paintDrawer();   // the rail's foot is the same face, under the same name
 }
 function needMyFace() {
   if (myName) return;
