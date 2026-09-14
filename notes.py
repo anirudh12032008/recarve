@@ -6997,6 +6997,26 @@ def crown_if_first(conn, user_id):
         )
 
 
+def roll_variants(roll):
+    """The ways one seat's roll number may already have been typed.
+
+    The institute writes 26I060. The people already in this database wrote
+    I60 -- and 00, and 19 -- because they joined by invite, by hand, a year
+    before anybody had the registrar's file. Both name the same seat, and a
+    door that compares them as strings gives the admin of this install a
+    second account as a student and orphans the first.
+
+    '26I060' -> ('26I060', 'I060', 'I60'). Upper case, because roll_login
+    already treats a roll number as case-insensitive.
+    """
+    roll = (roll or "").strip().upper()
+    body = roll[2:] if roll[:2].isdigit() else roll
+    out = [roll, body]
+    if body[:1].isalpha():
+        out.append(body[0] + (body[1:].lstrip("0") or "0"))
+    return tuple(dict.fromkeys(v for v in out if v))
+
+
 def db_google(conn, scholar, email):
     """Put a verified institute address through. (id, status, is_admin) or None.
 
@@ -7033,14 +7053,20 @@ def db_google(conn, scholar, email):
 
     with conn.transaction():
         conn.execute("select pg_advisory_xact_lock(hashtext('recarve-join'))")
+        # Every spelling of the seat, not just the registrar's. See
+        # roll_variants: this install's own admin is I60 where the list says
+        # 26I060, and matching on the string alone would hand him a new
+        # student account and leave his admin one behind.
+        spellings = list(roll_variants(listed[0]))
         row = conn.execute(
-            "update profiles set email = %s where roll_no = %s and email is null "
-            "returning id, status, role", (email, listed[0])
+            "update profiles set email = %s "
+            "where upper(roll_no) = any(%s) and email is null "
+            "returning id, status, role", (email, spellings)
         ).fetchone()
         if row:
             return (str(row[0]), row[1], row[2] == "admin")
-        if conn.execute("select 1 from profiles where roll_no = %s",
-                        (listed[0],)).fetchone():
+        if conn.execute("select 1 from profiles where upper(roll_no) = any(%s)",
+                        (spellings,)).fetchone():
             # Somebody already holds that seat under another address.
             return None
 
