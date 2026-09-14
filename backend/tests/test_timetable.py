@@ -79,6 +79,30 @@ def test_your_timetable_is_yours_alone(db):
                    "values (%s, 4, 4, 'MC1101')", (mine,))
 
 
+def test_a_member_cannot_write_even_their_own_week(db):
+    """The wall, said where it is enforced.
+
+    The editor and POST /timetable are gone from notes.py, but a route table
+    is not a security boundary -- 0053 is. All three verbs, because a policy
+    narrowed to select and a grant narrowed with it have to refuse every way
+    in, not the one the handler happened to use.
+    """
+    me = member(db)
+    write_week(db, me, MONDAY)
+    as_user(db, me)
+    assert notes.db_timetable(db, me) == MONDAY, "reading it is still theirs"
+
+    for statement, params in (
+        ("insert into timetable (profile_id, day, period, subject_code) "
+         "values (%s, 2, 2, 'MC1101')", (me,)),
+        ("update timetable set subject_code = 'CY1107' where profile_id = %s", (me,)),
+        ("delete from timetable where profile_id = %s", (me,)),
+    ):
+        with pytest.raises(psycopg.errors.InsufficientPrivilege), db.transaction():
+            db.execute(statement, params)
+    assert notes.db_timetable(db, me) == MONDAY, "and the week came through untouched"
+
+
 def test_a_pending_joiner_cannot_write_one(db):
     """Approval is what makes you a member; nothing writes before it -- and the
     policy is what says so, not the missing endpoint."""
