@@ -9747,13 +9747,49 @@ def db_mint_invite(conn, section_id):
     return code
 
 
+def db_reseed_section_weeks(conn, section_id):
+    """Push a section's template onto every member's own week. Returns people.
+
+    The trigger on profiles seeds a member once, when they join, and that used
+    to be enough because a student could then fix their own week. Nobody can
+    now -- so a template that did not reach the people already in the section
+    would be a correction nobody ever sees, and the app would go on filing
+    lectures under the subject the old grid named.
+
+    Replaced, not merged, for the same reason the template is: a week half a
+    correction old is the state nobody can look at and tell is wrong. Both
+    statements name the section, so a missing where clause cannot reach past
+    it -- this runs on the owning connection, where no policy would stop one.
+
+    Every member, pending and blocked included, exactly as the trigger seeds
+    them: status decides what somebody may do, never which week is theirs.
+    """
+    conn.execute("delete from timetable t using profiles p"
+                 " where t.profile_id = p.id and p.section_id = %s::uuid",
+                 (section_id,))
+    conn.execute(
+        "insert into timetable (profile_id, section_id, day, period, subject_code)"
+        " select p.id, p.section_id, s.day, s.period, s.subject_code"
+        "   from profiles p join section_timetable s on s.section_id = p.section_id"
+        "  where p.section_id = %s::uuid",
+        (section_id,),
+    )
+    return conn.execute("select count(*) from profiles where section_id = %s::uuid",
+                        (section_id,)).fetchone()[0]
+
+
 def db_set_section_timetable(conn, section_id, rows):
-    """Replace one section's template week, all of it or none of it.
+    """Replace one section's template week, all of it or none of it, and put
+    it on every member of that section. Returns (periods, people).
 
     The rows have already been through parse_timetable, which is where a bad
     paste is refused; this only writes. Scoped to the one section in both
     statements -- the delete as much as the insert, since on this connection a
     missing where clause would take out every section's Monday.
+
+    The re-seed is inside the same transaction: a template that landed while
+    the weeks under it did not is the half-applied grid this whole path is
+    built to refuse.
     """
     with conn.transaction():
         conn.execute("delete from section_timetable where section_id = %s::uuid",
@@ -9764,7 +9800,8 @@ def db_set_section_timetable(conn, section_id, rows):
                 " values (%s, %s, %s, %s::uuid)",
                 (day, period, code, section_id),
             )
-    return len(rows)
+        people = db_reseed_section_weeks(conn, section_id)
+    return len(rows), people
 
 
 GATE_PAGE = r"""<!doctype html>
@@ -10944,7 +10981,8 @@ $('wr').onclick = () => run($('wr'), async () => {
   $('ttok').classList.add('hide');
   try {
     const got = await ask('/super/timetable', {section: open_id, csv: $('csv').value});
-    $('ttok').textContent = got.written + ' periods written, and nothing else touched.';
+    $('ttok').textContent = got.written + ' periods written, and put on '
+      + got.members + (got.members === 1 ? ' week.' : ' weeks.');
     $('ttok').classList.remove('hide');
     await show(open_id);
   } catch (e) {
@@ -11464,9 +11502,10 @@ def build_server(args):
                     # written week -- and carrying every complaint at once.
                     raise SuperRefused("nothing was written - fix these lines "
                                        "and paste again", errors)
-                written = db_set_section_timetable(conn, section, rows)
-                log(f"wrote {written} periods for {section}", "super")
-                return {"written": written}
+                written, people = db_set_section_timetable(conn, section, rows)
+                log(f"wrote {written} periods for {section}, "
+                    f"onto {people} weeks", "super")
+                return {"written": written, "members": people}
             return self.super_do(write, cap=20000)
 
         def do_GET(self):
@@ -13445,8 +13484,10 @@ def import_timetable(args):
     while any line is wrong -- a half-applied grid is the one state nobody can
     look at and tell is wrong.
 
-    It touches the template and nothing else. A student's own timetable is
-    theirs to edit, and the trigger on profiles seeds new members from here.
+    It writes the template and then puts it on every member of that section,
+    because nothing else can: a student cannot edit their own week, so a
+    correction that stopped at the template would be one nobody ever sees. The
+    trigger on profiles seeds whoever joins after this.
     """
     text = sys.stdin.read() if str(args.csv) == "-" else args.csv.read_text(encoding="utf-8")
     conn = db()
@@ -13503,7 +13544,14 @@ def import_timetable(args):
         for day, period, code in rows:
             conn.execute(f"insert into section_timetable ({cols}) values ({marks})",
                          (day, period, code) + params)
-    print(f"written: {len(rows)} periods")
+        # Only where there are sections to scope it to. A database old enough
+        # to have no section_id has no my_section() either, and rewriting every
+        # student's week on a guess is the silent damage this command refuses
+        # to do everywhere else.
+        people = db_reseed_section_weeks(conn, params[0]) if scoped else None
+    print(f"written: {len(rows)} periods"
+          + ("" if people is None else
+             f", onto {people} week{'' if people == 1 else 's'}"))
 
 
 def process(path, args):

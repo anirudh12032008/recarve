@@ -22,7 +22,7 @@ import pytest
 sys.path.insert(0, str(pathlib.Path(__file__).resolve().parents[2]))
 import notes  # noqa: E402
 
-from conftest import DB_URL  # noqa: E402
+from conftest import DB_URL, make_user  # noqa: E402
 
 KNOWN = ["MC1101", "CY1107", "EE1125"]
 
@@ -166,6 +166,31 @@ def test_the_cli_writes_the_week_and_then_replaces_it(template, tmp_path, capsys
 
     out = capsys.readouterr().out
     assert "Monday" in out and "Tuesday" in out, "it has to say what it changed"
+
+
+def test_the_cli_puts_the_week_it_writes_on_the_section(template, tmp_path, capsys):
+    """The other way a template is written, and it has to reach people for the
+    same reason /super does: nobody can edit their own week any more, so a
+    template nobody was seeded from is a correction nobody ever sees."""
+    with psycopg.connect(DB_URL, autocommit=True) as conn:
+        conn.execute("delete from timetable")
+        uid = make_user(conn)
+        conn.execute(
+            "insert into profiles (id, name, roll_no, status, section_id) values"
+            " (%s, 'Imported', '24T001', 'approved',"
+            "  (select id from sections where name = 'I'))", (uid,))
+    try:
+        run(tmp_path, "day,period,subject_code\nMonday,1,MC1101\nMonday,2,CY1107\n")
+        with psycopg.connect(DB_URL, autocommit=True) as conn:
+            assert sorted(conn.execute(
+                "select day, period, subject_code from timetable where profile_id = %s",
+                (uid,))) == [(1, 1, "MC1101"), (1, 2, "CY1107")]
+        assert "onto 1 week" in capsys.readouterr().out, \
+            "and it has to say how many people it just rewrote"
+    finally:
+        with psycopg.connect(DB_URL, autocommit=True) as conn:
+            conn.execute("delete from profiles where id = %s", (uid,))
+            conn.execute("delete from auth.users where id = %s", (uid,))
 
 
 def test_one_bad_line_writes_nothing_at_all(template, tmp_path, capsys):
