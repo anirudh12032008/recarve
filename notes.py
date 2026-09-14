@@ -6107,6 +6107,52 @@ LOGIN_WINDOW = 15 * 60
 # later starts out shut to somebody mid-change rather than open.
 PASSWORD_PATHS = {"/password"}
 
+# ---- The super admin. ----------------------------------------------------
+# Platform level, not a role: a super admin is not in `sections` at all, and no
+# row anywhere says who they are. Everything about this is deliberately beside
+# the student path rather than on top of it -- its own prefix, its own cookie,
+# its own key, its own limiter -- so that a bug in a student session cannot
+# climb into it. The one thing it does reuse is the crypto, because inventing a
+# second way to sign a cookie is how one of them ends up wrong.
+SUPER_PREFIX = "/super"
+SUPER_COOKIE = "recarve_super"
+
+# Five wrong passwords on the one account there is, and fifty per client
+# because the two numbers mean different things -- an account lockout and a
+# grinder -- and because with one account the first number would otherwise let
+# anybody on the internet lock the owner out of their own install. Same window
+# as the students', for the same reason.
+SUPER_TRIES = 5
+SUPER_TRIES_PER_CLIENT = 50
+
+
+def super_admin(env=os.environ):
+    """The super admin's (email, password), or None if this install has none.
+
+    Both or neither. An install that sets one of the two has made a typo, not a
+    decision, and the direction to be wrong in is the closed one -- with no
+    pair there is no /super at all, not even a login box to guess at.
+    """
+    email = (env.get("RECARVE_SUPER_EMAIL") or "").strip()
+    password = env.get("RECARVE_SUPER_PASSWORD") or ""
+    return (email, password) if email and password else None
+
+
+def super_secret(secret, email):
+    """The key /super's cookie is signed with: the session key, put through
+    HMAC with the email it belongs to.
+
+    Derived rather than separate so there is still one secret to keep and one
+    to rotate, and separate rather than shared so the two cookies cannot be
+    swapped: a student's cookie carries a tag made with `secret`, which does not
+    verify here, and this cookie's tag does not verify there. Neither direction
+    is a check somebody has to remember to write -- it is arithmetic.
+
+    The email is in the key, so changing RECARVE_SUPER_EMAIL logs the old one
+    out rather than leaving a cookie that outlives the account it names.
+    """
+    return hmac.new(secret, b"super:" + email.encode(), hashlib.sha256).digest()
+
 
 class Limiter:
     """Failed attempts per key, in a sliding window.
@@ -6735,17 +6781,26 @@ def db_edit_profile(conn, user_id, name, phone):
     return {"name": name, "phone": phone}
 
 
-def db_invite(conn):
+def db_invite(conn, section=None):
     """The live code an admin passes on, or None if there is not one.
 
     Read as whoever is asking: invites has no select policy for members, so a
     normal session sees an empty table here rather than a code it could hand
     to the whole college. Never mints one -- issuing invites is a decision,
     not something a screen does on its own while being looked at.
+
+    `section` is for the one caller that is not inside a section: /super reads
+    this on the owning connection, where no policy narrows it, so the clause
+    the policy would have added has to be said out loud or the super admin
+    would be shown some other section's code. An admin's own call passes None
+    and is scoped by "admins manage their own section's invites" exactly as it
+    always was.
     """
     row = conn.execute(
         "select code from invites where expires_at > now() and uses < max_uses "
-        "order by expires_at desc limit 1"
+        "and (%s::uuid is null or section_id = %s::uuid) "
+        "order by expires_at desc limit 1",
+        (section, section),
     ).fetchone()
     return row[0] if row else None
 
@@ -8148,6 +8203,190 @@ def db_bootstrap(conn):
     return code
 
 
+# ---- What the super admin reads and writes. ------------------------------
+#
+# Every function here runs on a connection with no user set -- the one that
+# owns the tables, which row level security does not apply to. That is not a
+# hole in 0042, it is the other side of it: a super admin is not in any
+# section, so there is no my_section() for a policy to compare against, and
+# 0040 says so in as many words ("creating one is the super admin's, on a
+# connection that owns these tables"). Nothing below drops, weakens or adds a
+# policy, and no student session ever reaches any of it -- the handler opens
+# this connection only after /super's own cookie has verified.
+#
+# The section clause a policy would have added is therefore written out by
+# hand in each of these, keyed on the section the screen is open on. That is
+# the thing to check when editing them.
+
+
+def a_uuid(raw):
+    """`raw` as a uuid string, or a sentence about why it is not one.
+
+    Every id /super is handed comes back off its own screen, so this is not
+    input validation so much as the difference between a 400 and a 500: a
+    ::uuid cast on junk is a psycopg DataError halfway through a handler.
+    """
+    try:
+        return str(uuid.UUID(str(raw)))
+    except (ValueError, AttributeError, TypeError):
+        raise ValueError("that is not something this screen can act on")
+
+
+def section_label(name, grad_year):
+    """'Section I '30'. The one place the display form is spelled."""
+    return f"Section {name} '{int(grad_year) % 100:02d}"
+
+
+def db_sections(conn):
+    """Every section there is, with the count that says whether anybody is in
+    it yet. The whole list, on purpose: this is the one screen that is above
+    the section line rather than inside it."""
+    return [
+        {"id": str(r[0]), "name": r[1], "grad_year": r[2],
+         "label": section_label(r[1], r[2]), "set": r[3], "set_id": str(r[4]) if r[4] else None,
+         "members": r[5], "invite": r[6]}
+        for r in conn.execute(
+            "select s.id, s.name, s.grad_year, ss.name, ss.id,"
+            "  (select count(*) from profiles p where p.section_id = s.id),"
+            "  (select i.code from invites i where i.section_id = s.id"
+            "    and i.expires_at > now() and i.uses < i.max_uses"
+            "    order by i.expires_at desc limit 1)"
+            " from sections s left join subject_sets ss on ss.id = s.subject_set_id"
+            " order by s.grad_year, s.name"
+        )
+    ]
+
+
+def db_subject_sets(conn):
+    """The curriculums a new section can be pointed at."""
+    return [
+        {"id": str(r[0]), "name": r[1], "subjects": r[2]}
+        for r in conn.execute(
+            "select ss.id, ss.name, (select count(*) from subjects s where s.set_id = ss.id)"
+            " from subject_sets ss order by ss.name"
+        )
+    ]
+
+
+def db_create_section(conn, name, grad_year, subject_set_id):
+    """A new section. Returns the row the list screen would show for it.
+
+    Validated here rather than left to the constraints, because "duplicate key
+    value violates unique constraint" is not a sentence to put in front of
+    somebody who typed the year wrong.
+    """
+    # A section name is a label, not a filename -- 'I', 'II', 'A'. Whitespace
+    # collapsed so "I " and "I" cannot both exist under a unique key that
+    # thinks they are different.
+    name = " ".join(str(name or "").split())[:20]
+    if not name:
+        raise ValueError("a section needs a name")
+    try:
+        grad_year = int(grad_year)
+    except (TypeError, ValueError):
+        raise ValueError("the graduation year has to be a number")
+    # Wide enough for anything anybody is graduating, narrow enough that a
+    # mistyped 20230 is refused rather than filed.
+    if not 2000 <= grad_year <= 2100:
+        raise ValueError("the graduation year has to be between 2000 and 2100")
+    if not conn.execute("select 1 from subject_sets where id = %s::uuid",
+                        (subject_set_id,)).fetchone():
+        raise ValueError("pick a subject set that exists")
+    if conn.execute("select 1 from sections where name = %s and grad_year = %s",
+                    (name, grad_year)).fetchone():
+        raise ValueError(f"{section_label(name, grad_year)} already exists")
+    conn.execute(
+        "insert into sections (name, grad_year, subject_set_id) values (%s, %s, %s::uuid)",
+        (name, grad_year, subject_set_id),
+    )
+    return section_label(name, grad_year)
+
+
+def db_section(conn, section_id):
+    """One section, opened: who is in it, the code that lets the next person
+    in, the subjects it follows, and the template week it has so far."""
+    head = conn.execute(
+        "select s.name, s.grad_year, ss.name from sections s"
+        " left join subject_sets ss on ss.id = s.subject_set_id where s.id = %s::uuid",
+        (section_id,),
+    ).fetchone()
+    if not head:
+        raise ValueError("no such section")
+    members = [
+        {"id": str(r[0]), "name": r[1], "roll_no": r[2], "status": r[3], "role": r[4]}
+        for r in conn.execute(
+            "select id, name, roll_no, status, role from profiles"
+            " where section_id = %s::uuid order by name",
+            (section_id,),
+        )
+    ]
+    codes = [
+        {"code": r[0], "name": r[1]}
+        for r in conn.execute(
+            "select code, name from subjects where set_id ="
+            " (select subject_set_id from sections where id = %s::uuid) order by code",
+            (section_id,),
+        )
+    ]
+    timetable = [
+        {"day": r[0], "period": r[1], "code": r[2]}
+        for r in conn.execute(
+            "select day, period, subject_code from section_timetable"
+            " where section_id = %s::uuid order by day, period",
+            (section_id,),
+        )
+    ]
+    return {"id": str(section_id), "label": section_label(head[0], head[1]),
+            "set": head[2], "members": members, "subjects": codes,
+            "timetable": timetable, "invite": db_invite(conn, section_id)}
+
+
+# How long a minted code lasts and how many it lets in. The same numbers
+# db_bootstrap uses for the very first one, because it is the same kind of
+# thing: a code that opens a section for as long as an intake takes to arrive.
+INVITE_DAYS = 30
+
+
+def db_mint_invite(conn, section_id):
+    """A fresh code for one section, because without one nobody can join it.
+
+    0044 reads the section off the invite, so a section with no code is a
+    section with no door -- and an admin cannot mint their own until there is
+    an admin, which takes somebody joining first. This is that first code, and
+    the super admin is the only one above the section line who can make it.
+    """
+    if not conn.execute("select 1 from sections where id = %s::uuid",
+                        (section_id,)).fetchone():
+        raise ValueError("no such section")
+    code = secrets.token_hex(4)
+    conn.execute(
+        "insert into invites (code, expires_at, section_id) "
+        f"values (%s, now() + interval '{INVITE_DAYS} days', %s::uuid)",
+        (code, section_id),
+    )
+    return code
+
+
+def db_set_section_timetable(conn, section_id, rows):
+    """Replace one section's template week, all of it or none of it.
+
+    The rows have already been through parse_timetable, which is where a bad
+    paste is refused; this only writes. Scoped to the one section in both
+    statements -- the delete as much as the insert, since on this connection a
+    missing where clause would take out every section's Monday.
+    """
+    with conn.transaction():
+        conn.execute("delete from section_timetable where section_id = %s::uuid",
+                     (section_id,))
+        for day, period, code in rows:
+            conn.execute(
+                "insert into section_timetable (day, period, subject_code, section_id)"
+                " values (%s, %s, %s, %s::uuid)",
+                (day, period, code, section_id),
+            )
+    return len(rows)
+
+
 GATE_PAGE = r"""<!doctype html>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
@@ -8897,6 +9136,369 @@ load();
 """.replace("__ROLES__", json.dumps(list(ROLES)))
 
 
+# ---- /super, the screen. -------------------------------------------------
+# Its own document rather than a body inside GATE_PAGE, for the reason the
+# whole feature is separate: GATE_PAGE is what a student is served, and none of
+# this is ever sent to anybody not holding /super's cookie. It also wants a
+# different room -- a 23rem card is the shape of a login box, and this is a
+# table of every section there is.
+#
+# Same paint as the app to the digit: one purple accent, the 11/13/16/20/26
+# type scale, the 7/11/14/18 corners. An admin screen that looks like a
+# different product is an admin screen you distrust. Desktop first, because it
+# is opened on a desk -- and the two tables scroll inside their own boxes so a
+# phone gets a narrow page rather than a broken one.
+SUPER_PAGE = r"""<!doctype html>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="robots" content="noindex,nofollow">
+<title>recarve super admin</title>
+<style>
+:root{color-scheme:light dark;--bg:#fcfcfd;--fg:#14161b;--mut:#656b76;--line:#e1e4ea;
+  --accent:#6534c9;--accent-fg:#fff;--err:#d1344b;--ok:#1a7f4b;
+  --admin:#232733;--admin-fg:#fcfcfd;--surface:#f2f3f7}
+@media (prefers-color-scheme:dark){
+  :root{--bg:#0f1115;--fg:#e7e9ee;--mut:#98a0ad;--line:#262a32;
+    --accent:#ac93ff;--accent-fg:#0f1115;--err:#e5484d;--ok:#3ee089;
+    --admin:#dfe4f0;--admin-fg:#0f1115;--surface:#171a20}}
+*{box-sizing:border-box}
+body{margin:0;min-height:100dvh;background:var(--bg);color:var(--fg);
+  font:16px/1.5 -apple-system,BlinkMacSystemFont,"Segoe UI",system-ui,sans-serif;
+  overflow-wrap:break-word}
+main{max-width:60rem;margin:0 auto;padding:24px 16px 64px}
+/* The login box is the one screen here that is a card in the middle of
+   nothing, so it says so rather than inheriting the console's width. Keyed on
+   the form being present, the way GATE_PAGE keys the landing off .land --
+   there are two bodies in this one document and only one of them is a box. */
+body:has(#f){display:grid;place-items:center;padding:24px}
+body:has(#f) main{width:100%;max-width:23rem;padding:0}
+h1{font-size:26px;font-weight:700;letter-spacing:-.01em;margin:0 0 4px}
+h2{font-size:20px;font-weight:600;margin:32px 0 4px}
+h3{font-size:16px;font-weight:600;margin:0 0 4px}
+p{color:var(--mut);margin:0 0 16px}
+p.lede{font-size:13px}
+label{display:block;font-size:11px;font-weight:500;letter-spacing:.02em;
+  text-transform:uppercase;color:var(--mut);margin:0 0 4px}
+/* --mut and not --line: with a transparent ground the border is the only
+   thing saying a box is here, and 1.4.11 wants 3:1 for that. */
+input,select,textarea{width:100%;padding:8px 12px;font:inherit;font-size:16px;
+  color:var(--fg);background:transparent;border:1px solid var(--mut);border-radius:11px}
+textarea{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:13px;
+  min-height:11rem;resize:vertical}
+input:focus,select:focus,textarea:focus,button:focus-visible{outline:2px solid var(--accent);
+  outline-offset:-1px}
+button{min-height:44px;padding:0 16px;font:inherit;font-size:16px;font-weight:600;
+  line-height:1;border:0;border-radius:11px;background:var(--accent);color:var(--accent-fg)}
+/* Every write on this screen is one only the super admin can make, so the ink
+   carries them and the accent is left to the ordinary action -- the same
+   division /admin makes inside the app. */
+button.adm{background:var(--admin);color:var(--admin-fg)}
+button.ghost{background:transparent;color:var(--admin);box-shadow:inset 0 0 0 1px var(--admin)}
+button[disabled]{background:var(--mut);color:var(--bg);box-shadow:none}
+.card{border:1px solid var(--line);border-radius:18px;padding:16px;margin:0 0 16px;
+  background:var(--surface)}
+.grid{display:grid;gap:12px;grid-template-columns:1fr;align-items:end}
+@media (min-width:40rem){.grid{grid-template-columns:2fr 1fr 2fr auto}}
+/* A table is the right shape for sections and members on a desk and the wrong
+   one on a phone, so it scrolls inside its own box rather than pushing the
+   page sideways. */
+.scroll{overflow-x:auto}
+table{width:100%;border-collapse:collapse;font-size:13px}
+th{text-align:left;font-size:11px;font-weight:600;letter-spacing:.02em;
+  text-transform:uppercase;color:var(--mut);padding:0 12px 8px 0;white-space:nowrap}
+td{padding:8px 12px 8px 0;border-top:1px solid var(--line);vertical-align:middle}
+td.name{font-size:16px;font-weight:600}
+td small{display:block;font-size:11px;color:var(--mut);font-weight:400}
+td select,td input{width:auto;min-height:44px;font-size:13px}
+td button{min-height:44px;font-size:13px}
+.num{font-variant-numeric:tabular-nums}
+.code{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:16px;
+  font-weight:700;letter-spacing:.05em}
+.pill{display:inline-block;padding:2px 8px;border-radius:7px;font-size:11px;font-weight:600;
+  background:var(--admin);color:var(--admin-fg)}
+.pill.q{background:transparent;color:var(--mut);box-shadow:inset 0 0 0 1px var(--mut)}
+.row{display:flex;flex-wrap:wrap;align-items:center;gap:12px}
+.spread{justify-content:space-between}
+.err{color:var(--err);font-size:13px;margin:8px 0 0;min-height:1.2em}
+.ok{color:var(--ok);font-size:13px;margin:8px 0 0}
+/* Every bad line at once, in the order they were pasted. A list you scroll is
+   the point: the alternative is learning one mistake per attempt. */
+ul.errs{margin:8px 0 0;padding:0 0 0 20px;color:var(--err);font-size:13px}
+ul.errs li{margin:0 0 4px;font-family:ui-monospace,SFMono-Regular,Menlo,monospace}
+.mut{color:var(--mut);font-size:13px}
+.hide{display:none}
+@media (prefers-reduced-motion:no-preference){main{animation:rise .18s ease-out both}}
+@keyframes rise{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+</style>
+<main>__BODY__</main>
+"""
+
+
+SUPER_LOGIN_BODY = r"""<h1>recarve</h1>
+<p class="lede">Super admin. If you were not looking for this, you want
+<a href="/">the app</a>.</p>
+<form id="f">
+  <label for="em">Email</label>
+  <input id="em" type="email" autocomplete="username" required>
+  <label for="pw">Password</label>
+  <input id="pw" type="password" autocomplete="current-password" required>
+  <p class="err" id="err" role="alert"></p>
+  <button id="go" type="submit">Sign in</button>
+</form>
+<script>
+const $ = id => document.getElementById(id);
+$('f').onsubmit = async e => {
+  e.preventDefault();
+  const go = $('go'), was = go.textContent;
+  go.disabled = true; go.textContent = 'Signing in…'; $('err').textContent = '';
+  try {
+    const r = await fetch('/super/login', {method: 'POST',
+      headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify({email: $('em').value, password: $('pw').value})});
+    if (r.ok) { location.href = '/super'; return; }
+    const said = await r.json().catch(() => ({}));
+    $('err').textContent = said.error || 'that did not work';
+  } catch (x) { $('err').textContent = 'no connection to the server'; }
+  go.disabled = false; go.textContent = was;
+};
+</script>
+"""
+
+
+SUPER_BODY = r"""<div class="row spread">
+  <div><h1>Every section</h1>
+  <p class="lede">Above the section line. Nothing on this screen is narrowed to
+  one class, which is the whole reason it is not in the app.</p></div>
+  <span class="pill">Super admin</span>
+</div>
+
+<div class="card">
+  <h3>Start a section</h3>
+  <p class="lede">A name, the year they graduate, and the curriculum they
+  follow. Shown everywhere as <b>Section&nbsp;I&nbsp;&rsquo;30</b>.</p>
+  <form id="new" class="grid">
+    <div><label for="nm">Name</label><input id="nm" required placeholder="II"></div>
+    <div><label for="yr">Graduates</label>
+      <input id="yr" class="num" type="number" min="2000" max="2100" required
+             placeholder="2030"></div>
+    <div><label for="set">Subject set</label><select id="set"></select></div>
+    <div><button class="adm" id="mk" type="submit">Create</button></div>
+  </form>
+  <p class="err" id="newerr" role="alert"></p>
+</div>
+
+<div class="card scroll">
+  <table>
+    <thead><tr><th>Section</th><th>Subjects</th><th class="num">Members</th>
+      <th>Invite code</th><th></th></tr></thead>
+    <tbody id="rows"><tr><td colspan="5" class="mut">loading&hellip;</td></tr></tbody>
+  </table>
+</div>
+
+<div id="one" class="hide">
+  <h2 id="onename"></h2>
+  <p class="lede" id="onesub"></p>
+
+  <div class="card scroll">
+    <h3>Members</h3>
+    <p class="lede">A role changed here goes down the same path the class
+    admin&rsquo;s own screen uses, and lands on their next tap.</p>
+    <table><thead><tr><th>Who</th><th>Roll</th><th>Status</th><th>Role</th></tr></thead>
+      <tbody id="members"></tbody></table>
+    <p class="err" id="roleerr" role="alert"></p>
+  </div>
+
+  <div class="card">
+    <h3>Timetable</h3>
+    <p class="lede">Paste <code>day,period,subject_code</code>, one line each.
+    Every line is read before any of them is written &mdash; if one is wrong,
+    none of them is.</p>
+    <textarea id="csv" spellcheck="false"
+      placeholder="day,period,subject_code&#10;Monday,1,MC1101&#10;Monday,2,MA1101"></textarea>
+    <p class="lede" id="known"></p>
+    <button class="adm" id="wr" type="button">Check and write</button>
+    <p class="err" id="tterr" role="alert"></p>
+    <ul class="errs hide" id="ttlist"></ul>
+    <p class="ok hide" id="ttok"></p>
+  </div>
+</div>
+
+<script>
+const $ = id => document.getElementById(id);
+// The ladder and the weekdays, handed down from ROLES and DAYS in notes.py
+// rather than typed again here. A dropdown that has quietly stopped offering
+// the newest role is a role nobody can be given.
+const ROLES = __ROLES__;
+const DAYS = __DAYS__;
+let open_id = null;
+
+// Section names, member names and roll numbers are all whatever somebody typed
+// into a form, so every one of them goes in through textContent.
+function cell(row, text, cls) {
+  const td = document.createElement('td');
+  if (cls) td.className = cls;
+  td.textContent = text === null || text === undefined ? '' : String(text);
+  row.appendChild(td);
+  return td;
+}
+
+async function ask(path, payload) {
+  const r = await fetch(path, payload === undefined ? {} : {method: 'POST',
+    headers: {'Content-Type': 'application/json'}, body: JSON.stringify(payload)});
+  const body = await r.json().catch(() => ({}));
+  if (!r.ok) throw body;
+  return body;
+}
+
+// One place where a control disables itself, does the thing, and says where it
+// went wrong -- because every control on this screen wants exactly that.
+async function run(control, fn, err) {
+  const was = control.textContent;
+  control.disabled = true;
+  if (err) $(err).textContent = '';
+  try { await fn(); }
+  catch (e) {
+    const said = (e && e.error) || 'the server refused that';
+    if (err) $(err).textContent = said; else alert(said);
+  }
+  control.disabled = false; control.textContent = was;
+}
+
+function sectionRow(s) {
+  const tr = document.createElement('tr');
+  const name = cell(tr, s.label, 'name');
+  const year = document.createElement('small');
+  year.textContent = 'graduates ' + s.grad_year;
+  name.appendChild(year);
+  cell(tr, s.set || 'no set');
+  cell(tr, s.members, 'num');
+  const code = cell(tr, '');
+  if (s.invite) {
+    code.className = 'code';
+    code.textContent = s.invite;
+  } else {
+    // A section with no code has no door: join_with_invite reads the section
+    // off the invite, so until one exists nobody can join this one at all.
+    const b = document.createElement('button');
+    b.className = 'ghost';
+    b.textContent = 'Mint a code';
+    b.onclick = () => run(b, async () => { await ask('/super/invite', {section: s.id}); await load(); });
+    code.appendChild(b);
+  }
+  const act = cell(tr, '');
+  const open = document.createElement('button');
+  open.textContent = 'Open';
+  open.onclick = () => show(s.id).catch(e => alert(e.error || 'could not open that'));
+  act.appendChild(open);
+  return tr;
+}
+
+async function load() {
+  const d = await ask('/super/data');
+  const rows = $('rows');
+  rows.innerHTML = '';
+  if (!d.sections.length) {
+    const tr = document.createElement('tr');
+    cell(tr, 'no sections yet', 'mut').colSpan = 5;
+    rows.appendChild(tr);
+  }
+  for (const s of d.sections) rows.appendChild(sectionRow(s));
+  const set = $('set');
+  if (!set.options.length) for (const ss of d.sets) {
+    const o = document.createElement('option');
+    o.value = ss.id;
+    o.textContent = ss.name + ' · ' + ss.subjects
+      + ' subject' + (ss.subjects === 1 ? '' : 's');
+    set.appendChild(o);
+  }
+  if (open_id) await show(open_id);
+}
+
+async function show(id) {
+  const s = await ask('/super/section?id=' + encodeURIComponent(id));
+  open_id = id;
+  $('one').classList.remove('hide');
+  $('onename').textContent = s.label;
+  $('onesub').textContent = s.members.length + ' member'
+    + (s.members.length === 1 ? '' : 's')
+    + ' · ' + (s.set || 'no subject set')
+    + ' · invite ' + (s.invite || 'none yet')
+    + ' · ' + s.timetable.length + ' period'
+    + (s.timetable.length === 1 ? '' : 's') + ' set';
+  const body = $('members');
+  body.innerHTML = '';
+  if (!s.members.length) {
+    const tr = document.createElement('tr');
+    cell(tr, 'nobody has joined yet — hand out the invite code', 'mut').colSpan = 4;
+    body.appendChild(tr);
+  }
+  for (const m of s.members) {
+    const tr = document.createElement('tr');
+    cell(tr, m.name, 'name');
+    cell(tr, m.roll_no);
+    const pill = document.createElement('span');
+    pill.className = m.status === 'approved' ? 'pill q' : 'pill';
+    pill.textContent = m.status;
+    cell(tr, '').appendChild(pill);
+    const sel = document.createElement('select');
+    sel.setAttribute('aria-label', 'Role for ' + m.name);
+    for (const r of ROLES) {
+      const o = document.createElement('option');
+      o.value = r; o.textContent = r;
+      if (r === m.role) o.selected = true;
+      sel.appendChild(o);
+    }
+    sel.onchange = () => run(sel, async () => {
+      await ask('/super/role', {id: m.id, role: sel.value});
+      await show(open_id);
+    }, 'roleerr');
+    cell(tr, '').appendChild(sel);
+    body.appendChild(tr);
+  }
+  $('known').textContent = s.subjects.length
+    ? 'Codes this section knows: ' + s.subjects.map(c => c.code).join(', ')
+    : 'This section’s subject set is empty, so every code would be unknown.';
+  $('csv').value = s.timetable.map(t => DAYS[t.day] + ',' + t.period + ',' + t.code).join('\n');
+}
+
+$('new').onsubmit = e => {
+  e.preventDefault();
+  run($('mk'), async () => {
+    await ask('/super/section',
+      {name: $('nm').value, grad_year: $('yr').value, set: $('set').value});
+    $('nm').value = ''; $('yr').value = '';
+    await load();
+  }, 'newerr');
+};
+
+$('wr').onclick = () => run($('wr'), async () => {
+  $('ttlist').classList.add('hide');
+  $('ttok').classList.add('hide');
+  try {
+    const got = await ask('/super/timetable', {section: open_id, csv: $('csv').value});
+    $('ttok').textContent = got.written + ' periods written, and nothing else touched.';
+    $('ttok').classList.remove('hide');
+    await show(open_id);
+  } catch (e) {
+    if (!e || !e.lines) throw e;
+    // Every complaint the parser made, in the order they were pasted.
+    const ul = $('ttlist');
+    ul.innerHTML = '';
+    for (const line of e.lines) {
+      const li = document.createElement('li');
+      li.textContent = line;
+      ul.appendChild(li);
+    }
+    ul.classList.remove('hide');
+    throw {error: e.error};
+  }
+}, 'tterr');
+
+load().catch(() => { $('rows').textContent = 'could not reach the server'; });
+</script>
+""".replace("__ROLES__", json.dumps(list(ROLES))).replace("__DAYS__", json.dumps(DAYS))
+
+
 EXPLAIN_PROMPT = """A student is reading their lecture notes and highlighted a passage they do not
 understand. Explain just that passage.
 
@@ -8937,6 +9539,11 @@ def build_server(args):
     budget = {"left": args.max_explains}
     jobs = Jobs(args)
     logins = Limiter()
+    # Its own limiter, not a shared one with its own key prefix: a classmate
+    # fat-fingering their password must not spend a try the super admin needs,
+    # and the two windows are free to diverge later without either moving the
+    # other.
+    supers = Limiter()
 
     secret = b"" if args.no_auth else session_secret()
     # Minted even under --no-auth: the worker routes are gated on it whatever
@@ -9052,6 +9659,15 @@ def build_server(args):
                     self.reply(403, {"error": "you are not approved to read this yet"})
                     return False
                 return True
+            # And the super admin is settled here, for exactly the reason the
+            # worker above is: before the cookie is read, before --no-auth
+            # waves anyone through, with its own `return` either way. A student
+            # session never reaches the branch that could make it a super
+            # admin, and a super admin's cookie never reaches the branch that
+            # would hand it a profile.
+            where = self.path.split("?")[0]
+            if where == SUPER_PREFIX or where.startswith(SUPER_PREFIX + "/"):
+                return self.super_gate(where)
             if args.no_auth:
                 return True
             try:
