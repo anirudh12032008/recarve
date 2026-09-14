@@ -11298,6 +11298,7 @@ def build_server(args):
                 # served statically from the same root, and the files live at
                 # /archive/... -- a JSON route on that prefix would shadow
                 # every document it describes.
+                import urllib.parse
                 code = urllib.parse.parse_qs(
                     urllib.parse.urlparse(self.path).query).get("code", [""])[0]
                 if code not in SUBJECTS:

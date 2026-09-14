@@ -204,7 +204,10 @@ def main(src):
             if len(data) < 5000:
                 skipped.append((subject, m, len(data)))
                 continue
-            key = f"archive/{code}/{folder}/{filename}"
+            # The server's static root is the repo root, not the library, so the
+            # path a browser asks for carries the library/ prefix -- the same
+            # place an upload's relpath lands after the browser normalises it.
+            key = f"library/archive/{code}/{folder}/{filename}"
             out = dest_root / code / folder / filename
             out.parent.mkdir(parents=True, exist_ok=True)
             out.write_bytes(data)
