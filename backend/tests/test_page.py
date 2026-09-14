@@ -3368,3 +3368,50 @@ def test_the_wide_layout_has_something_to_say_with_nothing_open():
     assert "doubtsBox.innerHTML = '';" in closing, \
         "and take the closed note's thread with it"
     assert re.search(r"\.empty\{[^}]*min-height:72dvh", tokens)
+
+
+# ------------------------------------------------- what a paper says it holds
+
+ANSWERS_CHECKS = """
+const assert = require('assert');
+
+// The four the portal actually has, spelled the four ways it spells them.
+assert.equal(answersIn({title: 'Mini Test 2024-25 Sem 2 Section B (with Answer Key)'}),
+             'with answers');
+assert.equal(answersIn({title: 'Quiz 2024-25 Sem 2 Section F with Solution'}),
+             'with answers');
+assert.equal(answersIn({title: 'End Term 2024-25 Sem 2 MS'}), 'marking scheme');
+assert.equal(answersIn({title: 'Marking Scheme 2023'}), 'marking scheme');
+
+// A marking scheme is answers ONLY and must not be read as a paper carrying
+// them: the two words mean different things to somebody revising.
+assert.notEqual(answersIn({title: 'End Term 2024-25 Sem 2 MS'}), 'with answers');
+
+// And the ninety-six that hold no answers at all say nothing, rather than
+// promising a key that is not in the file.
+for (const t of ['End Term 2025-26 Sem 1', 'Mid Term Section G Sem 1 2025-26 ',
+                 'MINI Test 2025-26 Sem 1 Sec B', 'End Term 2022-23 Sem 1'])
+  assert.equal(answersIn({title: t}), null, t + ' promises nothing');
+
+// 'MS' is a word here, not two letters inside one. These are the titles that
+// prove it: each holds the letters m-s and none of them is a marking scheme.
+assert.equal(answersIn({title: 'Signals and Systems End Term 2024-25'}), null);
+assert.equal(answersIn({title: 'Exams paper 2023'}), null);
+assert.equal(answersIn({title: 'Mechanisms Mid Term Sem 1'}), null);
+assert.equal(answersIn({title: ''}), null);
+assert.equal(answersIn({}), null);
+"""
+
+
+@pytest.mark.skipif(not NODE, reason="needs node")
+def test_a_paper_only_claims_answers_when_its_name_says_so(tmp_path):
+    """The archive has no column for answers -- the title is the whole of what
+    the portal ever recorded. So this reads titles, and it must not over-read
+    them: a paper wrongly marked 'with answers' sends somebody revising to a
+    file that does not have what they opened it for."""
+    fn = re.search(r"\nfunction answersIn\(p\) \{.*?\n\}", SCRIPT, re.S)
+    assert fn, "answersIn has been renamed or removed"
+    f = tmp_path / "answers_test.js"
+    f.write_text(fn.group(0) + ANSWERS_CHECKS)
+    r = subprocess.run([NODE, str(f)], capture_output=True, text=True)
+    assert r.returncode == 0, r.stdout + r.stderr

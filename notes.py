@@ -585,6 +585,12 @@ PAGE = r"""<!doctype html>
 <style>
 :root{
   --bg:#fcfcfd; --surface:#f2f3f7;
+  /* The plane the map stands on. A rail painted in --bg beside a page
+     painted in --bg is not a rail, it is text in the margin -- so it gets
+     a ground of its own. On paper it steps back to the card grey; in the
+     dark it steps DOWN past the page rather than up, because an elevated
+     surface reads as something that just opened and a rail never opened. */
+  --rail:#f2f3f7;
   --fg:#14161b; --mut:#656b76; --line:#e1e4ea;
   /* One accent, and it is a purple. Every member's action is this colour and
      nothing else in the app is: an admin's power is ink, an error is the one
@@ -642,6 +648,7 @@ PAGE = r"""<!doctype html>
 @media (prefers-color-scheme:dark){
   :root{
     --bg:#0f1115; --surface:#171a20;
+    --rail:#0b0d11;
     --fg:#e7e9ee; --mut:#98a0ad; --line:#262a32;
     /* The same purple, lifted off a near-black ground rather than pressed
        onto paper -- and what sits ON it goes dark, because the light version
@@ -801,8 +808,8 @@ body.drawered #drawer{transform:none;visibility:visible}
    at 11px -- the scale's floor, the size the week strip's day letters already
    take -- it recedes to what it is, which is a label on a group. --mut on the
    ground is 5.2:1 light and 7.2:1 dark: quiet, not faint. */
-.sect{margin:0;padding:24px 16px 8px;font-size:11px;font-weight:700;
-  letter-spacing:.07em;text-transform:uppercase;color:var(--mut)}
+.sect{margin:0;padding:24px 16px 8px;font-size:11px;font-weight:600;
+  letter-spacing:.02em;color:var(--mut)}
 /* An inset block carries its own bottom margin, so the 24px above the next
    section's name is already part paid. Without these three the gap after a
    card is 32-40px and the gap after a row is 24px, which is the kind of
@@ -1152,6 +1159,13 @@ button.off:active{background:var(--surface)}
   padding:0 40px 0 12px;font-size:16px;font-family:inherit;color:var(--fg);
   background:var(--bg);border:1px solid var(--edge);border-radius:11px;
   appearance:none;-webkit-appearance:none}
+/* The papers screen's filter bar. Three native pickers, side by side where
+   there is room and stacked where there is not -- 101 papers over six years
+   and eleven courses is more than a phone can be asked to scroll past. */
+.filters{display:flex;flex-wrap:wrap;gap:10px;margin:0 0 4px}
+.filters .pick{margin-top:0;flex:1 1 150px}
+.filters select{width:100%}
+.found{color:var(--mut);font-size:.85rem;padding:2px 2px 10px}
 .pick{position:relative;margin-top:16px}
 .pick select{margin-top:0}
 .pick::after{content:'\203a';position:absolute;right:15px;top:50%;margin-top:-11px;
@@ -2195,6 +2209,11 @@ function papersSection(s) {
 // Every paper in the archive, three blocks deep, whatever course set it. The
 // subject screen already answers "what has THIS course set"; this screen is
 // for the student who knows they want an end term and not which one.
+// Which slice of the archive is on screen. Module state and not part of the
+// URL: a filter is a lens on one screen rather than a place, and putting it in
+// the hash would put a back step between a student and the paper they came for.
+let pFilter = {code: '', year: '', exam: ''};
+
 function renderPapers() {
   needAllPapers();
   if (ALL_PAPERS === null)
@@ -2205,14 +2224,73 @@ function renderPapers() {
   if (!ALL_PAPERS.length)
     return void nav.appendChild(saying('No papers here yet.',
       'This fills up from the collections the seniors kept.'));
+
+  // The options are read off the archive rather than off SUBJECTS and a range
+  // of years: a filter that offers a course with no papers in it is a filter
+  // that promises something the next tap takes away.
+  const codes = [...new Set(ALL_PAPERS.map(p => p.subject_code))].sort();
+  const years = [...new Set(ALL_PAPERS.map(p => p.year).filter(Boolean))]
+                  .sort((a, b) => b - a);
+  const bar = document.createElement('div');
+  bar.className = 'filters';
+  bar.appendChild(paperPick('Subject', pFilter.code,
+    [['', 'All subjects']].concat(codes.map(c => {
+      const s = subjectOf(c);
+      return [c, s ? c + ' \u2014 ' + s.name : c];
+    })), v => { pFilter.code = v; render(); }));
+  bar.appendChild(paperPick('Year', pFilter.year,
+    [['', 'All years']].concat(years.map(
+      y => [String(y), y + '-' + String(y + 1).slice(2)])),
+    v => { pFilter.year = v; render(); }));
+  bar.appendChild(paperPick('Exam', pFilter.exam,
+    [['', 'All exams']].concat(EXAMS.map(([k, label]) => [k, label])),
+    v => { pFilter.exam = v; render(); }));
+  nav.appendChild(bar);
+
+  const shown = ALL_PAPERS.filter(p =>
+       (!pFilter.code || p.subject_code === pFilter.code)
+    && (!pFilter.year || String(p.year) === pFilter.year)
+    && (!pFilter.exam || p.exam === pFilter.exam));
+
+  const count = document.createElement('div');
+  count.className = 'found';
+  count.textContent = shown.length === ALL_PAPERS.length
+    ? ALL_PAPERS.length + ' papers'
+    : shown.length + ' of ' + ALL_PAPERS.length + ' papers';
+  nav.appendChild(count);
+
+  if (!shown.length)
+    return void nav.appendChild(saying('Nothing matches those three.',
+      'Widen one of them -- the archive does not have every sitting of every '
+      + 'course.'));
+
   for (const [key, label] of EXAMS)
-    block(label, ALL_PAPERS.filter(p => p.exam === key).map(crossPaperRow));
+    block(label, shown.filter(p => p.exam === key).map(crossPaperRow));
   // A paper with no sitting on it would otherwise be invisible on this screen
   // -- three blocks that between them do not hold every row is a screen that
   // quietly loses things.
   block('Other papers',
-        ALL_PAPERS.filter(p => !EXAMS.some(([k]) => k === p.exam))
-                  .map(crossPaperRow));
+        shown.filter(p => !EXAMS.some(([k]) => k === p.exam))
+             .map(crossPaperRow));
+}
+
+// One filter. The native wheel, dressed the way every other picker in the app
+// is dressed -- it is still the fastest thing on a phone and costs nothing.
+function paperPick(label, value, options, onPick) {
+  const wrap = document.createElement('div');
+  wrap.className = 'pick';
+  const sel = document.createElement('select');
+  sel.setAttribute('aria-label', label);
+  for (const [v, t] of options) {
+    const o = document.createElement('option');
+    o.value = v;
+    o.textContent = t;
+    sel.appendChild(o);
+  }
+  sel.value = value;
+  sel.onchange = () => onPick(sel.value);
+  wrap.appendChild(sel);
+  return wrap;
 }
 
 // The subject screen's row, plus the one thing it can leave out and this
@@ -2247,7 +2325,22 @@ function paperSays(p) {
   if (p.year) bits.push(p.year + '-' + String(p.year + 1).slice(2));
   if (p.section) bits.push('Section ' + p.section);
   if (p.kind !== 'paper') bits.push(SHELF[p.kind] || p.kind);
+  // Whether the answers are in there too. Four of these carry a key inside the
+  // same PDF and one is a marking scheme on its own; a student hunting for
+  // worked answers should not have to open eleven files to find out which.
+  const a = answersIn(p);
+  if (a) bits.push(a);
   return bits.join(' \u00b7 ') || 'past paper';
+}
+
+// What a title admits about its answers. Title-only, because that is the whole
+// of what the portal ever recorded -- there is no column for it and inventing
+// one would be inventing the fact.
+function answersIn(p) {
+  const t = p.title || '';
+  if (/\bms\b|marking\s*scheme/i.test(t)) return 'marking scheme';
+  if (/answer|solution|soln/i.test(t)) return 'with answers';
+  return null;
 }
 
 function groupedFileRows(s) {
