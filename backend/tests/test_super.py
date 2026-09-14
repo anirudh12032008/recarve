@@ -189,6 +189,29 @@ def test_without_both_env_vars_there_is_no_super_admin_at_all(server, missing, m
         assert "recarve super admin" not in body, "a 404 that renders the screen"
 
 
+def test_no_auth_has_no_super_admin_either(tmp_path, monkeypatch):
+    """--no-auth is this laptop with no database and no real cookie key --
+    `secret` is b"" there, so a cookie signed under it is one anybody can
+    forge. The env vars are set and it is still a 404."""
+    monkeypatch.setenv("RECARVE_SUPER_EMAIL", EMAIL)
+    monkeypatch.setenv("RECARVE_SUPER_PASSWORD", PASSWORD)
+    lib = tmp_path / "lib"
+    (lib / "MC1101-Mathematics-1" / "lectures").mkdir(parents=True)
+    args = notes.argparse.Namespace(
+        library=lib, out=lib / "site" / "index.html", host="127.0.0.1", port=0,
+        notes_model="claude-haiku-4-5", max_cost=1.0, max_explains=0,
+        no_auth=True, verbose=False)
+    srv = notes.build_server(args)
+    threading.Thread(target=srv.serve_forever, daemon=True).start()
+    try:
+        port = srv.server_address[1]
+        assert call(port, "GET", "/super")[0] == 404
+        assert sign_in(port)[0] == 404
+    finally:
+        srv.shutdown()
+        srv.server_close()
+
+
 def test_a_half_configured_install_cannot_be_signed_into(server, monkeypatch):
     """Not just the page -- the password itself stops working."""
     monkeypatch.delenv("RECARVE_SUPER_PASSWORD")
