@@ -3429,27 +3429,37 @@ def test_the_plus_button_has_room_reserved_for_it_everywhere():
     assert "document.body.classList.toggle('fabaway'," in notes.PAGE
 
 
-def test_the_wide_layout_has_something_to_say_with_nothing_open():
+def test_the_newest_lectures_are_on_the_screen_that_lists_the_subjects():
     """At 1440x900 the app was a 320px column and 1120px of near-black with a
     small grey box in it reading "Pick a lecture to start reading", under a bar
     of four buttons -- Save, Share, Download, Print -- that acted on nothing.
-    It read as a screen that had failed to load.
+    The pane earned itself by carrying "Added most recently", the one list the
+    column beside it did not already show. There is no second pane now, so the
+    list stands on the screen it was always about, and the pane with nothing in
+    it is not written at all.
     """
     tokens = re.search(r"<style>\n(.*?)\n</style>", notes.PAGE, re.S).group(1)
     assert "body:not(.reading) .dock{display:none}" in tokens, \
         "a bar of controls with nothing to control is worse than no bar"
     assert "body:not(.reading) .dock{display:flex}" not in tokens
-    empty = re.search(r"function emptyRead\(\) \{.*?\n\}", notes.PAGE, re.S).group(0)
-    assert "Your shelf is on the left." in empty, "the pane says what it is for"
-    assert "'Added most recently'" in empty, \
-        "and carries the one list the column beside it does not already show"
-    assert "go('classes', x.s.code, x.n.title)" in empty, "each row opens in the pane"
+    subjects = re.search(r"function renderSubjects\(\) \{.*?\n\}", notes.PAGE, re.S).group(0)
+    assert "block('Added most recently'" in subjects, \
+        "the newest lectures are on the screen that lists the subjects"
+    assert "go('classes', x.s.code, x.n.title)" in subjects, "each row opens its lecture"
+    # The list is lectures and the block above it is subjects. A recent list
+    # built off the same DATA.map as the subject rows would be the same list
+    # twice, which is what made the pane worth removing in the first place.
+    assert "b.onclick = () => go('classes', s.code);" in subjects, \
+        "and the subject rows it sits under are still there"
     closing = re.search(r"function closeRead\(\) \{.*?\n\}", notes.PAGE, re.S).group(0)
-    assert "emptyRead();" in closing, \
+    assert "body.innerHTML = '';" in closing, \
         "closing a note must empty the pane, not leave its markup lying in it"
     assert "doubtsBox.innerHTML = '';" in closing, \
         "and take the closed note's thread with it"
-    assert re.search(r"\.empty\{[^}]*min-height:72dvh", tokens)
+    # The pane that had something to say is gone, and so is everything that
+    # dressed it: #read is hidden on every layout until a note is open.
+    assert "function emptyRead" not in notes.PAGE
+    assert ".empty{" not in tokens
 
 
 # ------------------------------------------------- what a paper says it holds
