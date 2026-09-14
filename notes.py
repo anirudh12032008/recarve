@@ -11199,6 +11199,20 @@ def build_server(args):
             except (BrokenPipeError, ConnectionResetError):
                 pass
 
+        def no_google(self):
+            """This install has no Google, said the way every other refusal in
+            this file is said.
+
+            Not send_error(). The stdlib's version closes the connection, and
+            0021 put this server behind a tunnel that keeps connections alive
+            and pools them -- so the socket it closes is one cloudflared hands
+            the next request, which then answers 502 instead of 404. Observed
+            in production the day this shipped: the first /auth/google was a
+            404 and every one after it was a 502. reply() writes its own
+            Content-Length and leaves the connection where it found it.
+            """
+            return self.reply(404, {"error": "this install has no Google sign-in"})
+
         def google_refused(self, why):
             """Back to the login screen holding the sentence.
 
@@ -11223,7 +11237,7 @@ def build_server(args):
             """
             pair = google_client()
             if args.no_auth or not pair:
-                return self.send_error(404)
+                return self.no_google()
             import urllib.parse
 
             state = secrets.token_urlsafe(16)
@@ -11250,7 +11264,7 @@ def build_server(args):
             """
             pair = google_client()
             if args.no_auth or not pair:
-                return self.send_error(404)
+                return self.no_google()
             import urllib.parse
             import urllib.request
 
