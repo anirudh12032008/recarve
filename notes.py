@@ -1364,24 +1364,6 @@ button.off:active{background:var(--surface)}
    tapped to get here and nowhere afterwards, so the top fifth of the reading
    screen was a back button, a chip, and 150px of nothing above the markdown's
    own first heading. */
-/* The reading pane with nothing in it. Only ever seen on the wide layout,
-   where it is 1120px of the window, so it is written as a screen of its own
-   rather than as a message: what this half of the window is for, what happens
-   when you pick something, and what is on the shelf. */
-.empty{min-height:72dvh;display:flex;flex-direction:column;align-items:center;
-  justify-content:center;text-align:center;padding:40px 24px}
-.empty .lead{margin:0;font-size:20px;line-height:1.3;letter-spacing:-.015em;
-  font-weight:600;color:var(--fg)}
-.empty p{margin:12px 0 0;max-width:44ch;font-size:16px;color:var(--mut)}
-.empty .count{margin-top:24px;padding-top:16px;font-size:13px;
-  border-top:1px solid var(--line);font-variant-numeric:tabular-nums}
-/* Not a second list of subjects -- the column beside it is that. Lectures,
-   newest first, which is the one thing a pane this size can say that the
-   list cannot. */
-.empty .recent{width:100%;max-width:34rem;margin-top:32px;text-align:left}
-.empty .recent .sect{padding:0 4px 8px}
-.empty .recent .row{background:var(--surface)}
-.empty .recent .row+.row{margin-top:6px}
 .mast{max-width:70ch;margin:0 auto;padding:20px 18px 0}
 .mast h1{margin:0;font-size:26px;line-height:1.2;letter-spacing:-.022em;font-weight:700}
 .mast .meta{margin:6px 0 0;font-size:13px;color:var(--mut)}
@@ -4751,6 +4733,23 @@ function renderSubjects() {
     b.onclick = () => go('classes', s.code);
     return b;
   }));
+
+  // What landed most recently, across the whole library. The list above it is
+  // subjects and answers "where is X"; this is lectures, newest first, and
+  // answers the other thing somebody opens this screen for -- "what has been
+  // added since I last looked". It used to live in the empty reading pane on
+  // the wide layout, which is a pane that no longer exists.
+  const latest = DATA.flatMap(s => s.notes.map(n => ({n: n, s: s})))
+    .filter(x => x.n.at).sort((a, b) => b.n.at - a.n.at).slice(0, 4);
+  block('Added most recently', latest.map(x => {
+    const day = noteDay(x.n);
+    const r = line(x.n.title,
+                   day ? (+day.slice(8)) + ' ' + MONTHS[+day.slice(5, 7) - 1] : x.s.name,
+                   document.createElement('button'), hue(x.s.code));
+    r.appendChild(chip(x.s.code));
+    r.onclick = () => go('classes', x.s.code, x.n.title);
+    return r;
+  }));
 }
 
 // LEVEL 2: one subject, grouped.
@@ -5683,67 +5682,16 @@ function openNote(n, s) {
   loadDoubts({subject: s.code, title: n.title}, doubtsBox, 'Doubts');
 }
 
-// The reading pane with nothing in it. On a phone it is never seen -- #read
-// is hidden until a note is open -- but on a wide screen it is most of the
-// window, so it says what that half of the window is for rather than leaving
-// a note's leftover markup lying in it under a grey box.
-function emptyRead() {
-  const box = document.createElement('div');
-  box.className = 'empty';
-  const lead = document.createElement('p');
-  lead.className = 'lead';
-  lead.textContent = 'Your shelf is on the left.';
-  const p = document.createElement('p');
-  p.textContent = 'Pick a lecture and it opens here — the maths typeset, the '
-    + 'questions it ends with, and whatever your section has already asked '
-    + 'about it underneath.';
-  const count = document.createElement('p');
-  count.className = 'count';
-  const lectures = DATA.reduce((k, s) => k + s.notes.length, 0);
-  const files = DATA.reduce((k, s) => k + s.uploads.length, 0);
-  count.textContent = [plural(DATA.length, 'subject'),
-                       plural(lectures, 'lecture'),
-                       files ? plural(files, 'file') : null]
-    .filter(Boolean).join(' · ');
-  box.append(lead, p, count);
-  // The one thing worth putting in a pane this size that the list beside it
-  // does not already say: what landed most recently. The list is subjects;
-  // this is lectures, newest first, and each one opens in the pane it is
-  // standing in.
-  const latest = DATA.flatMap(s => s.notes.map(n => ({n: n, s: s})))
-    .filter(x => x.n.at).sort((a, b) => b.n.at - a.n.at).slice(0, 4);
-  if (latest.length) {
-    const recent = document.createElement('div');
-    recent.className = 'recent';
-    const h = document.createElement('p');
-    h.className = 'sect';
-    h.textContent = 'Added most recently';
-    recent.appendChild(h);
-    const rows = document.createElement('div');
-    rows.className = 'rows';
-    latest.forEach(x => {
-      const day = noteDay(x.n);
-      const r = line(x.n.title,
-                     day ? (+day.slice(8)) + ' ' + MONTHS[+day.slice(5, 7) - 1] : x.s.name,
-                     document.createElement('button'), hue(x.s.code));
-      r.appendChild(chip(x.s.code));
-      r.onclick = () => go('classes', x.s.code, x.n.title);
-      rows.appendChild(r);
-    });
-    recent.appendChild(rows);
-    box.appendChild(recent);
-  }
-  body.innerHTML = '';
-  body.appendChild(box);
-}
-
 function closeRead() {
   document.body.classList.remove('reading');
   mast.hidden = true;          // nothing open, nothing to head
-  emptyRead();                 // and the note's markup does not stay lying there
-  // The pane is only hidden on a phone. On a wide screen it is still on
-  // screen, so everything the last note left in it goes with the note: its
-  // code chip in the header, and its thread at the foot.
+  // The note's markup does not stay lying in the pane. Nothing is ever seen
+  // in there with no note open -- #read is hidden on every layout until one
+  // is -- but a tab change that leaves an article's children behind is how
+  // the next note gets laid out on top of the last one's.
+  body.innerHTML = '';
+  // Everything else the last note left goes with it too: its code chip in the
+  // header, and its thread at the foot.
   rcode.textContent = '';
   doubtsBox.innerHTML = '';
   threadOn = null;
