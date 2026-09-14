@@ -597,6 +597,71 @@ def test_a_good_paste_is_written_and_read_back(server, cookie):
         [(1, 1, codes[0]), (2, 3, codes[1])]
 
 
+def week_of(roll):
+    """One member's own week, straight out of the table as the owner."""
+    with psycopg.connect(DB_URL, autocommit=True) as conn:
+        return [tuple(r) for r in conn.execute(
+            "select t.day, t.period, t.subject_code from timetable t"
+            " join profiles p on p.id = t.profile_id"
+            " where p.roll_no = %s order by t.day, t.period", (roll,))]
+
+
+def test_a_written_week_lands_on_everybody_already_in_the_section(server, cookie):
+    """The trigger seeds whoever joins next. It cannot reach the people who
+    joined last term, and they have no editor to fix their own week with -- so
+    a correction that stopped at the template would be one nobody ever sees.
+    """
+    join(server, "Farah", "24S021", approved=True)
+    section = my_section(server, cookie)
+    codes = [c["code"] for c in open_section(server, cookie, section)["subjects"]]
+    before = week_of("24S021")
+
+    csv = f"day,period,subject_code\nMonday,1,{codes[0]}\nThursday,2,{codes[1]}\n"
+    status, body, _ = call(server, "POST", "/super/timetable",
+                           {"section": section, "csv": csv},
+                           cookies=supercookie(cookie))
+    assert status == 200, body
+    assert said(body)["written"] == 2
+    assert said(body)["members"] >= 1, "the admin is told whose weeks moved"
+
+    after = week_of("24S021")
+    assert after == [(1, 1, codes[0]), (4, 2, codes[1])], \
+        f"the corrected week did not reach a member who was already here: {after}"
+    assert after != before or not before, "this test proves nothing against an equal week"
+
+    # Replaced, not layered onto: a period the new grid does not name is gone.
+    status, _, _ = call(server, "POST", "/super/timetable",
+                        {"section": section, "csv": f"Monday,1,{codes[0]}"},
+                        cookies=supercookie(cookie))
+    assert status == 200
+    assert week_of("24S021") == [(1, 1, codes[0])], "a dropped period stayed on a week"
+
+
+def test_another_sections_weeks_are_not_touched_by_it(server, cookie):
+    """Both statements name the section. On the owning connection no policy
+    would stop one that did not, which is exactly why they say it twice."""
+    join(server, "Gita", "24S022", approved=True)
+    sets = {s["name"]: s["id"] for s in data(server, cookie)["sets"]}
+    call(server, "POST", "/super/section",
+         {"name": "SZ", "grad_year": 2036, "set": sets["Set A"]},
+         cookies=supercookie(cookie))
+    other = find(server, cookie, "SZ")["id"]
+
+    mine = my_section(server, cookie)
+    codes = [c["code"] for c in open_section(server, cookie, mine)["subjects"]]
+    call(server, "POST", "/super/timetable",
+         {"section": mine, "csv": f"Monday,1,{codes[0]}"}, cookies=supercookie(cookie))
+    assert week_of("24S022") == [(1, 1, codes[0])]
+
+    status, body, _ = call(server, "POST", "/super/timetable",
+                           {"section": other, "csv": "Tuesday,4,PY1102"},
+                           cookies=supercookie(cookie))
+    assert status == 200 and said(body)["members"] == 0, \
+        "an empty section has no weeks to write"
+    assert week_of("24S022") == [(1, 1, codes[0])], \
+        "SZ's paste reached a member of Section I"
+
+
 def test_a_bad_paste_writes_nothing_and_names_every_bad_line(server, cookie):
     """All at once. Learning one mistake per attempt is how forty lines take an
     evening -- and a half-written week sends a hundred people to wrong rooms."""
