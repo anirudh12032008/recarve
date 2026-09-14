@@ -266,6 +266,11 @@ const drawerNode = {
 };
 const els = {ask: askEl, panel: panelEl, fab: fabEl, lock: lockEl, save: saveEl,
              avatar: avatarNode, drawer: drawerNode, dnav: dnavNode};
+// The app asks the platform whether the phone is dark, and listens in case it
+// changes under it. Neither is a decision this page makes -- the media query
+// is what actually swaps the palette -- so the stand-in answers 'light' and
+// records nothing.
+const matchMedia = () => ({matches: false, addEventListener: () => {}});
 let selection = '';
 let onSelectionChange = () => {};
 const rect = {top: 100, left: 20, width: 80};
@@ -685,34 +690,45 @@ assert.deepStrictEqual([view.tab, view.compose], ['campus', 'club']);
 ROLE = null;
 location.hash = '#classes'; route();
 
-// ---- The drawer. Every screen in the app, in five named groups, behind the
-// avatar -- and the only global way to the levels inside the four tabs, each
-// of which used to be reachable from one block on one screen and nowhere else.
+// ---- The drawer. Every screen in the app behind the avatar, and the only
+// global way to the levels inside the four tabs, each of which used to be
+// reachable from one block on one screen and nowhere else. Five sections, and
+// the four the thumb bar names are four of them: a section with levels inside
+// it opens to show them, a section that IS one screen is a link.
 ROLE = 'student';
 writes = []; dnavNode.children.length = 0; drawnFor = null; focused.length = 0;
 activeEl = null;
 avatarEl.onclick();
 assert.ok(bodyClasses.has('drawered'), 'the avatar opens the drawer');
 assert.equal(avatarAttrs['aria-expanded'], 'true', 'and says so to a screen reader');
-// The five questions it is filed under, and not a flat list of screens.
-for (const g of ['Your week', 'The library', 'The section', 'You'])
-  assert.ok(says(g), 'the drawer names the group: ' + g);
+// The sections, which are the app's own shape and not a filing of it: the
+// four tabs, plus you. A rail that grouped Home under "Your week" and Subjects
+// under "The library" taught a hierarchy the router does not have.
+for (const g of ['Home', 'Classes', 'Campus', 'Community', 'You'])
+  assert.ok(says(g), 'the drawer names the section: ' + g);
 // The levels that had no global way in at all before this.
 for (const row of ['Home', 'Your day', 'Your timetable', 'Catching up', 'Subjects',
                    'Past papers', 'Saved', 'Campus', 'Community', 'Your profile',
-                   'Points and what you added', 'About recarve'])
+                   'Your contributions', 'About recarve'])
   assert.ok(says(row), 'the drawer holds: ' + row);
 assert.ok(!says('Class admin'), 'and nothing a student may not press');
-// Four headings and eleven rows. Counted, because a group that quietly stopped
-// being built still says everything the OTHER groups say.
-assert.equal(dnavNode.children.length, 16);
+// Five sections, and no more: the levels hang INSIDE two of them rather than
+// beside them. Counted, because a section that quietly stopped being built
+// still says everything the OTHER sections say.
+assert.equal(dnavNode.children.length, 5);
 assert.equal(focused[0], 'first', 'opening puts the focus inside it');
 
 // Where you are, in the drawer as well as in the bar. Standing three levels
 // deep inside a subject lights Subjects: that is the row this screen is under.
+// Everything the page does to one row, which is everything between that row's
+// own label and the next row's -- the label, the href, the handler and the
+// aria-current, in whatever order the painter writes them.
 const lit = () => {
   const at = writes.findIndex(w => w[0] === 'textContent' && w[1] === 'Subjects');
-  return writes.slice(at + 1, at + 3).some(
+  if (at < 0) return false;
+  let end = writes.findIndex((w, i) => i > at && w[0] === 'textContent');
+  if (end < 0) end = writes.length;
+  return writes.slice(at + 1, end).some(
     w => w[0] === '()' && w[1] === 'aria-current' && w[2] === 'page');
 };
 writes = []; drawnFor = null;
@@ -756,15 +772,67 @@ assert.ok(bodyClasses.has('drawered'));
 render();
 assert.ok(!bodyClasses.has('drawered'), 'going anywhere at all puts the drawer away');
 
+// ---- The lists inside a tab, each one addressable. Campus held three
+// unrelated things behind one scroll -- what is on, who runs it, where it is --
+// and the map was always last. Each is a level now, and the tab with none of
+// them named is still all three, because that is where the thumb bar lands.
+// The rail names these lists too, so a check that simply read every write
+// could not tell the map from the screen. route() first, which paints both;
+// then render() alone, which repaints only the screen -- paintDrawer is keyed
+// and will not redraw a rail it has already drawn for this URL.
+const screenAt = (hash) => {
+  location.hash = hash; route();
+  writes = [];
+  render();
+  return (word) => says(word);
+};
+let onScreen = screenAt('#campus');
+for (const h of ['Coming up on campus', 'Clubs and societies', 'Finding your way'])
+  assert.ok(onScreen(h), 'the whole tab still holds: ' + h);
+onScreen = screenAt('#campus/clubs');
+assert.equal(location.hash, '#campus/clubs',
+             'a section is a URL of its own and is not rewritten to Home -- the '
+             + 'rule that upgrades an old announcement id must not eat one');
+assert.ok(onScreen('Clubs and societies'), 'and it draws the list it names');
+assert.ok(!onScreen('Coming up on campus') && !onScreen('Finding your way'),
+          'and only that list: a level shows one thing, or it is not a level');
+onScreen = screenAt('#campus/places');
+assert.ok(onScreen('Finding your way') && !onScreen('Clubs and societies'),
+          'the map is reachable without scrolling past the other two');
+// A composer word still wins where it always did: 'club' is a form, 'clubs'
+// is a list, and the two sit at the same step of the hash. Asked of somebody
+// who may actually open the form -- a student is bounced back to the tab, and
+// a bounce would answer this question by accident rather than on purpose.
+ROLE = 'admin';
+location.hash = '#campus/club'; route();
+assert.equal(location.hash, '#campus/club', 'the composer keeps its own URL');
+ROLE = 'student'; drawnFor = null;
+// Community, the same shape.
+onScreen = screenAt('#community/doubts');
+assert.ok(!onScreen('Who has contributed'),
+          'one list on Community too, and not the board underneath it');
+
+// The map lights the level you are standing in, not just the tab it is under.
+const litRow = (label) => {
+  const at = writes.findIndex(w => w[0] === 'textContent' && w[1] === label);
+  if (at < 0) return false;
+  let end = writes.findIndex((w, i) => i > at && w[0] === 'textContent');
+  if (end < 0) end = writes.length;
+  return writes.slice(at + 1, end).some(
+    w => w[0] === '()' && w[1] === 'aria-current' && w[2] === 'page');
+};
+writes = []; drawnFor = null; location.hash = '#campus/places'; route();
+assert.ok(litRow('Where things are'), 'the map row is lit when you are on the map');
+assert.ok(!litRow('Everything on campus'), 'and the tab root is not lit as well');
+
 // The one row only an admin may press is BUILT for an admin, not drawn and
 // hidden from everybody else -- a hidden link is still a link in the markup.
 ROLE = 'admin';
 writes = []; dnavNode.children.length = 0; drawnFor = null;
 avatarEl.onclick();
 assert.ok(says('Class admin'), 'an admin is offered the way into the panel');
-assert.ok(says('Running the class'), 'under a group of its own');
 assert.ok(wrote(['className', 'tag']), 'marked with the ink every admin row carries');
-assert.equal(dnavNode.children.length, 18, 'one more heading and one more row');
+assert.equal(dnavNode.children.length, 6, 'a sixth section, and it is one row');
 avatarEl.onclick();
 ROLE = null;
 
@@ -2433,7 +2501,9 @@ def test_the_composer_is_a_url_like_every_other_level():
     are all the one mechanism."""
     assert "post.onclick = () => go('home', 'new');" in notes.PAGE
     assert "edit.onclick = () => go('home', a.id);" in notes.PAGE
-    assert ("const compose = (tab === 'campus' || tab === 'home' || tab === 'community')\n"
+    # A section word and a composer word sit at the same step of the hash, so
+    # the section is read first and the composer only takes what is left.
+    assert ("const compose = !sec && (tab === 'campus' || tab === 'home' || tab === 'community')\n"
             "    ? parts[1] || null : null;" in notes.PAGE)
     assert "composing" not in notes.PAGE, "no variable may outlive the URL"
     assert ("lback.hidden = !s && !view.edit && !view.att && !view.compose && !view.day\n"
@@ -3368,3 +3438,50 @@ def test_the_wide_layout_has_something_to_say_with_nothing_open():
     assert "doubtsBox.innerHTML = '';" in closing, \
         "and take the closed note's thread with it"
     assert re.search(r"\.empty\{[^}]*min-height:72dvh", tokens)
+
+
+# ------------------------------------------------- what a paper says it holds
+
+ANSWERS_CHECKS = """
+const assert = require('assert');
+
+// The four the portal actually has, spelled the four ways it spells them.
+assert.equal(answersIn({title: 'Mini Test 2024-25 Sem 2 Section B (with Answer Key)'}),
+             'with answers');
+assert.equal(answersIn({title: 'Quiz 2024-25 Sem 2 Section F with Solution'}),
+             'with answers');
+assert.equal(answersIn({title: 'End Term 2024-25 Sem 2 MS'}), 'marking scheme');
+assert.equal(answersIn({title: 'Marking Scheme 2023'}), 'marking scheme');
+
+// A marking scheme is answers ONLY and must not be read as a paper carrying
+// them: the two words mean different things to somebody revising.
+assert.notEqual(answersIn({title: 'End Term 2024-25 Sem 2 MS'}), 'with answers');
+
+// And the ninety-six that hold no answers at all say nothing, rather than
+// promising a key that is not in the file.
+for (const t of ['End Term 2025-26 Sem 1', 'Mid Term Section G Sem 1 2025-26 ',
+                 'MINI Test 2025-26 Sem 1 Sec B', 'End Term 2022-23 Sem 1'])
+  assert.equal(answersIn({title: t}), null, t + ' promises nothing');
+
+// 'MS' is a word here, not two letters inside one. These are the titles that
+// prove it: each holds the letters m-s and none of them is a marking scheme.
+assert.equal(answersIn({title: 'Signals and Systems End Term 2024-25'}), null);
+assert.equal(answersIn({title: 'Exams paper 2023'}), null);
+assert.equal(answersIn({title: 'Mechanisms Mid Term Sem 1'}), null);
+assert.equal(answersIn({title: ''}), null);
+assert.equal(answersIn({}), null);
+"""
+
+
+@pytest.mark.skipif(not NODE, reason="needs node")
+def test_a_paper_only_claims_answers_when_its_name_says_so(tmp_path):
+    """The archive has no column for answers -- the title is the whole of what
+    the portal ever recorded. So this reads titles, and it must not over-read
+    them: a paper wrongly marked 'with answers' sends somebody revising to a
+    file that does not have what they opened it for."""
+    fn = re.search(r"\nfunction answersIn\(p\) \{.*?\n\}", SCRIPT, re.S)
+    assert fn, "answersIn has been renamed or removed"
+    f = tmp_path / "answers_test.js"
+    f.write_text(fn.group(0) + ANSWERS_CHECKS)
+    r = subprocess.run([NODE, str(f)], capture_output=True, text=True)
+    assert r.returncode == 0, r.stdout + r.stderr

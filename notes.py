@@ -571,13 +571,53 @@ self.addEventListener('fetch', (e) => {
 """
 
 # Raw string: this is JavaScript, and its backslash escapes are not Python's.
+def _themable(page: str) -> str:
+    """Fill in __PALETTES__ with the page's own two palettes, under a choice.
+
+    The app follows the phone and always has, and that stays the default. A
+    student who wants it fixed one way sets `data-theme` on <html> and these
+    two blocks take over.
+
+    They are not written by hand. The light palette is the page's first
+    `:root{...}` and the dark one is the `:root{...}` inside the
+    prefers-color-scheme query, and this lifts both back out and re-emits them
+    under an explicit selector -- so there is exactly ONE copy of each palette
+    in the source. Copied by hand there would be four, and the two nobody
+    looks at are the two that go stale: a colour fixed for the students on
+    'system' and still wrong for everybody who chose.
+
+    `:root[data-theme=...]` and not `:root` on purpose: this page has exactly
+    two `:root{` blocks, light then dark, and test_the_ink_reads_in_both_themes
+    reads the theme off that pair by splitting on that literal.
+    """
+    light = re.search(r"^:root\{\n(.*?)\n\}", page, re.S | re.M).group(1)
+    dark = re.search(
+        r"^@media \(prefers-color-scheme:dark\)\{\n  :root\{\n(.*?)\n  \}\n\}",
+        page, re.S | re.M).group(1)
+    dark = "\n".join(ln[2:] if ln.startswith("  ") else ln for ln in dark.split("\n"))
+    return page.replace("__PALETTES__",
+                        ':root[data-theme="light"]{\n' + light + "\n}\n"
+                        ':root[data-theme="dark"]{\n' + dark + "\n}")
+
+
 # Raw string: this is JavaScript, and its backslash escapes are not Python's.
-PAGE = r"""<!doctype html>
+PAGE = _themable(r"""<!doctype html>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<meta name="theme-color" content="#fcfcfd" media="(prefers-color-scheme: light)">
-<meta name="theme-color" content="#0f1115" media="(prefers-color-scheme: dark)">
+<meta name="theme-color" id="tc" content="#fcfcfd">
 <title>recarve — Section I</title>
+<!-- The theme, settled before anything is drawn. It is four lines and it is
+     inline and blocking on purpose: read from storage, stamped on <html>, and
+     the whole page is painted once in the right colours. Deferred, or moved
+     into the script at the bottom with everything else, and a student who
+     chose dark gets a white flash on every single load -- which is the one
+     thing a dark theme exists to prevent. 'system' is the default and stamps
+     nothing, so the media query below stays in charge.
+     One line, and it has to stay one line: the suite lifts the app's script
+     out of this page with a greedy match between the first `\n<script>\n`
+     and the last `\n</script>`, so a second block written across lines up
+     here swallows all the markup in between and parses as nothing. -->
+<script>try{const t=localStorage.getItem('theme');if(t==='light'||t==='dark')document.documentElement.dataset.theme=t}catch(e){}</script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/marked/15.0.7/marked.min.js"></script>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.11/katex.min.css">
 <script defer src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.11/katex.min.js"></script>
@@ -585,6 +625,12 @@ PAGE = r"""<!doctype html>
 <style>
 :root{
   --bg:#fcfcfd; --surface:#f2f3f7;
+  /* The plane the map stands on. A rail painted in --bg beside a page
+     painted in --bg is not a rail, it is text in the margin -- so it gets
+     a ground of its own. On paper it steps back to the card grey; in the
+     dark it steps DOWN past the page rather than up, because an elevated
+     surface reads as something that just opened and a rail never opened. */
+  --rail:#f2f3f7;
   --fg:#14161b; --mut:#656b76; --line:#e1e4ea;
   /* One accent, and it is a purple. Every member's action is this colour and
      nothing else in the app is: an admin's power is ink, an error is the one
@@ -627,6 +673,11 @@ PAGE = r"""<!doctype html>
      4.5:1 that any of these three ever has to carry. */
   --g1:#6534c9; --g2:#9629cc; --g3:#c21362;
   --tap:44px;
+  /* The two columns that stand before the reading pane on a wide screen,
+     written once. The dock and the + both have to clear them, and the sum
+     of the two used to be the literal 552 copied into three rules -- so
+     widening the rail by a hair moved the + and left the dock behind. */
+  --railw:252px; --listw:320px; --panes:calc(var(--railw) + var(--listw));
   /* What the + button covers, reserved at the bottom of everything that
      scrolls. It is 58px across with its bottom edge 76px up, so it reaches
      134; 142 puts a row's own 8px under it as well. Written once here
@@ -642,6 +693,7 @@ PAGE = r"""<!doctype html>
 @media (prefers-color-scheme:dark){
   :root{
     --bg:#0f1115; --surface:#171a20;
+    --rail:#0b0d11;
     --fg:#e7e9ee; --mut:#98a0ad; --line:#262a32;
     /* The same purple, lifted off a near-black ground rather than pressed
        onto paper -- and what sits ON it goes dark, because the light version
@@ -658,8 +710,16 @@ PAGE = r"""<!doctype html>
     --g1:#ac93ff; --g2:#c58bff; --g3:#ff7ab6;
   }
 }
+/* Choosing for yourself. The phone's own setting is the default and the two
+   blocks above are it; these two are the same two palettes under an explicit
+   choice, and they are FILLED IN AT IMPORT from those blocks rather than
+   copied here -- a hand-copied palette is a palette that drifts, and the
+   drift would be a colour that is only wrong for the students who picked. */
+__PALETTES__
 *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
-html{-webkit-text-size-adjust:100%}
+html{-webkit-text-size-adjust:100%;color-scheme:light dark}
+html[data-theme="light"]{color-scheme:light}
+html[data-theme="dark"]{color-scheme:dark}
 body{
   margin:0;background:var(--bg);color:var(--fg);
   font:16px/1.65 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;
@@ -702,7 +762,7 @@ button:active,a:active,.row:active,summary:active{transition-duration:0s}
 .brand b,.shead h2,.mine:has(.tally) .score,#qscore{
   font-size:40px;line-height:1.05;letter-spacing:-.035em;font-weight:800}
 @supports ((-webkit-background-clip:text) or (background-clip:text)){
-  .brand b,.mine:has(.tally) .score,#qscore{
+  .brand b,.dhead b,.mine:has(.tally) .score,#qscore{
     background:linear-gradient(96deg,var(--g1) 0%,var(--g2) 46%,var(--g3) 100%);
     -webkit-background-clip:text;background-clip:text;color:transparent}
 }
@@ -755,37 +815,92 @@ body.reading #read{display:block}
 #scrim{position:fixed;inset:0;z-index:9;background:rgba(0,0,0,.45);
   opacity:0;visibility:hidden;transition:opacity 180ms ease-out,visibility 180ms}
 body.drawered #scrim{opacity:1;visibility:visible}
-#drawer{position:fixed;z-index:10;left:0;top:0;bottom:0;width:min(82vw,300px);
-  display:flex;flex-direction:column;background:var(--bg);
+#drawer{position:fixed;z-index:10;left:0;top:0;bottom:0;width:min(84vw,290px);
+  display:flex;flex-direction:column;background:var(--rail);
   border-right:1px solid var(--line);box-shadow:0 0 40px rgba(0,0,0,.32);
   transform:translateX(-101%);visibility:hidden;
   transition:transform 180ms ease-out,visibility 180ms;
   overflow-y:auto;overscroll-behavior:contain;
   padding-bottom:calc(16px + env(safe-area-inset-bottom))}
 body.drawered #drawer{transform:none;visibility:visible}
-.dhead{display:flex;align-items:center;gap:12px;flex:none;
-  padding:max(10px,env(safe-area-inset-top)) 12px 10px 16px}
-.dhead b{flex:1;font-size:20px;font-weight:700;letter-spacing:-.015em}
+/* The app says its own name once. On a phone that is here, at the top of the
+   map; on a wide screen the header beside it stands down (see the 760 block)
+   rather than printing "recarve" twice, thirty pixels apart. The section it
+   belongs to sits under the name, because which section you are in is a fact
+   about the whole app and not about the screen you happen to be on. */
+.dhead{display:flex;align-items:flex-start;gap:12px;flex:none;
+  padding:max(14px,env(safe-area-inset-top)) 12px 14px 16px}
+.dhead .who{flex:1;min-width:0;display:flex;flex-direction:column}
+.dhead b{font-size:20px;font-weight:700;letter-spacing:-.015em;line-height:1.15}
+.dhead small{font-size:11px;font-weight:500;color:var(--mut);margin-top:3px}
 #dclose{flex:none;min-width:var(--tap);min-height:var(--tap);border-radius:11px;
-  font-size:13px;color:var(--mut)}
-#dclose:active{background:var(--surface)}
-/* A group's name is the same 11px label a section heading is everywhere else
-   in the app -- it is the same thing doing the same job -- with the top space
-   halved, because a drawer is one column of them and 24px apiece turns five
-   groups into a scroll. */
-#drawer .sect{padding:16px 16px 6px}
-#drawer a{display:flex;align-items:center;gap:10px;min-height:var(--tap);
-  margin:0 8px;padding:0 12px;border-radius:11px;font-size:16px;
-  color:var(--fg);text-decoration:none}
-#drawer a:active{background:var(--surface)}
+  font-size:13px;color:var(--mut);margin:-8px -4px 0 0}
+#dclose:active{background:var(--line)}
+#dnav{padding:2px 0 4px}
+/* Five sections and eleven destinations. A section carries a mark, because
+   five marks are what the eye scans a column by; the levels inside it do not,
+   because indented under an open section they are a list being read and not a
+   column being scanned -- and an icon on each would push "Points and what you
+   added" onto a second line in a 252px rail. Drawn in the page rather than
+   fetched, so an offline handset has the whole map and not a row of empty
+   boxes. */
+#drawer a,#drawer summary{display:flex;align-items:center;gap:12px;
+  min-height:var(--tap);margin:1px 8px;padding:0 12px;border-radius:11px;
+  font-size:16px;line-height:1.25;font-weight:500;color:var(--fg);
+  text-decoration:none;list-style:none;cursor:pointer}
+#drawer summary::-webkit-details-marker{display:none}
+#drawer svg{flex:none;width:20px;height:20px;color:var(--mut)}
+#drawer a:active,#drawer summary:active{background:var(--line)}
+/* The twisty. It is the last thing in the row and the quietest thing in it:
+   what a section is called is the information, and whether it happens to be
+   open is something you can already see. */
+#drawer summary::after{content:'';flex:none;margin-left:auto;width:7px;height:7px;
+  border-right:1.6px solid var(--mut);border-bottom:1.6px solid var(--mut);
+  transform:rotate(45deg) translate(-2px,-2px);
+  transition:transform 140ms ease-out}
+#drawer details[open]>summary::after{transform:rotate(225deg) translate(-2px,-2px)}
+/* The levels inside a section, hung off one hairline so the indent is a
+   visible fact and not four rows that merely start further in. */
+#drawer .kids{margin:2px 0 6px 31px;padding-left:1px;border-left:1px solid var(--line)}
+#drawer .kids a{margin:0 8px 0 0;padding:0 12px;font-size:16px;color:var(--mut)}
+#drawer .kids a[aria-current]{color:var(--accent)}
+/* A section you are standing in keeps its name in the page's own ink while
+   it is open, so a collapsed rail still says which of the five you are in. */
+#drawer details[data-here]>summary{font-weight:600}
+#drawer details[data-here]>summary svg{color:var(--fg)}
 /* Where you are, said twice: in the accent, and with the same 3px tick a row
    carries -- so it survives a grey screen and a colourblind reader, which
-   colour alone does not. */
-#drawer a[aria-current]{background:var(--surface);color:var(--accent);font-weight:600}
-#drawer a[aria-current]::before{content:"";flex:none;width:3px;align-self:stretch;
-  margin:9px 0 9px -6px;border-radius:2px;background:var(--accent)}
+   colour alone does not. The fill is the accent thinned, not the card grey:
+   a grey slab is what a pressed control looks like, and this is not pressed.
+   The tick is the left edge of that fill rather than a bar floating beside
+   it, so the lit row reads as one object. */
+#drawer a[aria-current]{color:var(--accent);font-weight:600;position:relative;
+  background:color-mix(in srgb,var(--accent) 11%,transparent)}
+#drawer a[aria-current] svg{color:var(--accent)}
+#drawer a[aria-current]::before{content:"";position:absolute;left:0;top:9px;bottom:9px;
+  width:3px;border-radius:0 2px 2px 0;background:var(--accent)}
+#drawer .kids a[aria-current]::before{left:-13px}
 #drawer .tag{margin-left:auto}
-@media (hover:hover){#drawer a:hover{background:var(--surface)}}
+/* Appearance, at the foot of the map. Three states and not two: following the
+   phone is what this app has always done and is still the right default, so
+   it stays an option you can come back to and not a thing you lose the moment
+   you touch the control. One track, three segments, the chosen one filled --
+   the same shape the day picker uses, and a segment says its own name rather
+   than leaving you to work out what a half-moon glyph would do next. */
+.theme{flex:none;display:flex;gap:2px;margin:8px 12px 4px;padding:3px;
+  border-radius:11px;background:color-mix(in srgb,var(--fg) 6%,transparent)}
+.theme button{flex:1;min-height:32px;border-radius:7px;font-size:11px;
+  font-weight:600;color:var(--mut)}
+.theme button[aria-pressed="true"]{background:var(--bg);color:var(--fg);
+  box-shadow:0 1px 2px rgba(0,0,0,.10)}
+@media (hover:hover){.theme button:hover{color:var(--fg)}}
+/* The map fills the rail and the setting sits under it, rather than the
+   setting riding up under the last row on a tall screen. */
+#dnav{flex:1 0 auto}
+@media (hover:hover){
+  #drawer a:hover,#drawer summary:hover{background:color-mix(in srgb,var(--fg) 6%,transparent)}
+  #drawer a[aria-current]:hover{background:color-mix(in srgb,var(--accent) 16%,transparent)}
+}
 
 .group{padding:24px 16px 4px}
 .group h2{display:inline;margin:0 0 0 8px;font-size:13px;font-weight:500;color:var(--mut)}
@@ -801,8 +916,8 @@ body.drawered #drawer{transform:none;visibility:visible}
    at 11px -- the scale's floor, the size the week strip's day letters already
    take -- it recedes to what it is, which is a label on a group. --mut on the
    ground is 5.2:1 light and 7.2:1 dark: quiet, not faint. */
-.sect{margin:0;padding:24px 16px 8px;font-size:11px;font-weight:700;
-  letter-spacing:.07em;text-transform:uppercase;color:var(--mut)}
+.sect{margin:0;padding:24px 16px 8px;font-size:11px;font-weight:600;
+  letter-spacing:.02em;color:var(--mut)}
 /* An inset block carries its own bottom margin, so the 24px above the next
    section's name is already part paid. Without these three the gap after a
    card is 32-40px and the gap after a row is 24px, which is the kind of
@@ -1152,6 +1267,22 @@ button.off:active{background:var(--surface)}
   padding:0 40px 0 12px;font-size:16px;font-family:inherit;color:var(--fg);
   background:var(--bg);border:1px solid var(--edge);border-radius:11px;
   appearance:none;-webkit-appearance:none}
+/* The papers screen's filter bar. Three native pickers, side by side where
+   there is room and stacked where there is not -- 101 papers over six years
+   and eleven courses is more than a phone can be asked to scroll past. */
+.filters{display:flex;flex-wrap:wrap;gap:10px;margin:0 0 4px}
+/* min-width:0 or the flex item cannot shrink under its widest option --
+   'MC1101 - Mathematics 1' is wider than the third of a column it is given,
+   and the third picker drops to a row of its own. */
+.filters .pick{margin-top:0;flex:1 1 150px;min-width:0}
+/* Dressed like every other select in the app, and for the same reason: the
+   OS arrow has to go, or it lands beside the chevron .pick draws and every
+   filter wears two. */
+.filters select{width:100%;min-width:0;min-height:var(--tap);
+  padding:0 38px 0 12px;font-size:16px;font-family:inherit;color:var(--fg);
+  background:var(--bg);border:1px solid var(--edge);border-radius:11px;
+  appearance:none;-webkit-appearance:none}
+.found{color:var(--mut);font-size:.85rem;padding:2px 2px 10px}
 .pick{position:relative;margin-top:16px}
 .pick select{margin-top:0}
 .pick::after{content:'\203a';position:absolute;right:15px;top:50%;margin-top:-11px;
@@ -1286,15 +1417,19 @@ article img{max-width:100%;height:auto}
 table{border-collapse:collapse;font-size:16px;min-width:100%}
 td,th{border:1px solid var(--line);padding:8px 12px;text-align:left}
 th{background:var(--surface)}
-/* Scoped away from .card, which is Campus's own <details> and lays its
-   summary out as a name over a category. Left unscoped these five rules were
-   centring every club in the directory and ruling a line under the open one. */
-details:not(.card){margin:12px 0;background:var(--surface);border-radius:11px;overflow:hidden}
-details:not(.card)>summary{min-height:var(--tap);display:flex;align-items:center;
+/* A disclosure inside something you are READING: a worked step in a note, a
+   thread on a file. Scoped away from .card, which is Campus's own <details>
+   and lays its summary out as a name over a category -- left unscoped these
+   five rules were centring every club in the directory and ruling a line under
+   the open one -- and away from .nav-sect, which is a section of the map. A
+   section of the map is one row in a column of rows: a filled slab with a
+   ruled lid is a block of content, and five of them is not a navigation. */
+details:not(.card):not(.nav-sect){margin:12px 0;background:var(--surface);border-radius:11px;overflow:hidden}
+details:not(.card):not(.nav-sect)>summary{min-height:var(--tap);display:flex;align-items:center;
   padding:0 16px;color:var(--accent);font-size:16px;font-weight:600}
-details:not(.card)>summary:active{background:color-mix(in srgb,var(--fg) 7%,var(--surface))}
-details:not(.card)[open]>summary{border-bottom:1px solid var(--line)}
-details:not(.card)>:not(summary){padding:0 16px}
+details:not(.card):not(.nav-sect)>summary:active{background:color-mix(in srgb,var(--fg) 7%,var(--surface))}
+details:not(.card):not(.nav-sect)[open]>summary{border-bottom:1px solid var(--line)}
+details:not(.card):not(.nav-sect)>:not(summary){padding:0 16px}
 details:not(.card)>:not(summary):last-child{padding-bottom:4px}
 
 .dock{
@@ -1462,9 +1597,11 @@ body:not(.reading) .dock{display:none}
   backdrop-filter:blur(12px);border-top:1px solid var(--line);
 }
 .tabs button{
-  flex:1;min-height:var(--tap);border-radius:11px;font-size:13px;font-weight:500;
-  color:var(--mut);display:flex;align-items:center;justify-content:center;
+  flex:1;min-height:var(--tap);border-radius:11px;font-size:11px;font-weight:500;
+  color:var(--mut);display:flex;flex-direction:column;align-items:center;
+  justify-content:center;gap:3px;padding:5px 0 4px;
 }
+.tabs button svg{width:23px;height:23px}
 .tabs button[aria-current]{color:var(--accent);font-weight:600}
 .tabs button:active{background:var(--surface);transform:scale(.97)}
 body.reading .tabs{display:none}
@@ -1519,13 +1656,13 @@ body.reading .tabs{display:none}
 
 @media (min-width:760px){
   body{display:flex}
-  #list{width:320px;flex:none;border-right:1px solid var(--line);height:100dvh;overflow-y:auto;position:sticky;top:0}
+  #list{width:var(--listw);flex:none;border-right:1px solid var(--line);height:100dvh;overflow-y:auto;position:sticky;top:0}
   #read{flex:1;display:block;min-width:0}
   body.reading #list{display:block}
-  article{padding:32px 40px 110px}
+  article{max-width:70ch;margin:0 auto;padding:32px 40px 110px}
   /* The dock belongs to the note, so it stops where the note's column stops
      rather than stretching five buttons across 960px of empty pane. */
-  .dock{left:552px;justify-content:center;padding-left:40px;padding-right:40px}
+  .dock{left:var(--panes);justify-content:center;padding-left:40px;padding-right:40px}
   .dock button{flex:0 1 9rem}
   /* Nothing open yet. A 60px grey box reading "Pick a lecture to start
      reading" under 800px of near-black is a screen that failed to load, and
@@ -1543,11 +1680,11 @@ body.reading .tabs{display:none}
      with nothing open it was a ruled bar holding nothing at all. The note's
      masthead is the top of this pane now. */
   .rtop{display:none}
-  .mast{padding:32px 40px 0}
+  .mast{max-width:70ch;margin:0 auto;padding:32px 40px 0}
   .mast+article{padding-top:16px}
   /* The + belongs to the list, so it sits at the list's right edge -- which
-     is 232px further along now that the rail stands before it. */
-  #fab{right:auto;left:calc(552px - 74px)}
+     is a rail's width further along now that the rail stands before it. */
+  #fab{right:auto;left:calc(var(--panes) - 74px)}
   body.reading #fab{display:block}
   /* Five buttons that act on nothing are worse than no bar: Save, Share,
      Download and Print with no note open were four live-looking controls
@@ -1561,9 +1698,18 @@ body.reading .tabs{display:none}
      Same element, so there is one list of destinations in this app and not a
      wide one and a narrow one that drift apart. */
   #drawer{position:sticky;top:0;left:auto;bottom:auto;height:100dvh;
-    width:232px;flex:none;transform:none;visibility:visible;box-shadow:none;
+    width:var(--railw);flex:none;transform:none;visibility:visible;box-shadow:none;
     transition:none;padding-bottom:16px}
   #scrim,#dclose{display:none}
+  .dhead{padding:26px 16px 18px}
+  /* The name is in the rail, two inches to the left and on every screen. A
+     second "recarve" at the top of the list column was the app introducing
+     itself to somebody already inside it. */
+  .brand{display:none!important}
+  /* With the name gone and no screen name on Home, this strip has nothing in
+     it -- and an empty 44px band above the search box is furniture. */
+  .tophead{min-height:0;margin-bottom:0}
+  .tophead:has(.shead:not([hidden])){margin-bottom:4px}
   /* The face opened the drawer; with the rail already open it has nothing to
      open, and "Your profile" is a row in the rail two inches to the left. */
   #avatar{display:none}
@@ -1639,10 +1785,15 @@ body.reading .tabs{display:none}
 <div id="scrim"></div>
 <nav id="drawer" aria-label="Everywhere in recarve">
   <div class="dhead">
-    <b>recarve</b>
+    <span class="who"><b>recarve</b><small>Section I</small></span>
     <button id="dclose" aria-label="Close the menu">Close</button>
   </div>
   <div id="dnav"></div>
+  <div class="theme" role="group" aria-label="Appearance">
+    <button data-theme-set="system">System</button>
+    <button data-theme-set="light">Light</button>
+    <button data-theme-set="dark">Dark</button>
+  </div>
 </nav>
 
 <section id="list">
@@ -1758,10 +1909,22 @@ body.reading .tabs{display:none}
 </div>
 
 <nav class="tabs" id="tabs" aria-label="Sections">
-  <button data-tab="home">Home</button>
-  <button data-tab="classes">Classes</button>
-  <button data-tab="campus">Campus</button>
-  <button data-tab="community">Community</button>
+  <button data-tab="home"><svg viewBox="0 0 24 24" aria-hidden="true" fill="none"
+    stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"
+    ><path d="M3.8 10.4 12 4.2l8.2 6.2V20H3.8z"/><path d="M9.6 20v-5.4h4.8V20"/></svg
+    ><span>Home</span></button>
+  <button data-tab="classes"><svg viewBox="0 0 24 24" aria-hidden="true" fill="none"
+    stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"
+    ><path d="M12 7.3C10.6 6.1 8.7 5.5 4.8 5.5v12.2c3.9 0 5.8.6 7.2 1.8 1.4-1.2 3.3-1.8 7.2-1.8V5.5c-3.9 0-5.8.6-7.2 1.8z"/><path d="M12 7.3v12.2"/></svg
+    ><span>Classes</span></button>
+  <button data-tab="campus"><svg viewBox="0 0 24 24" aria-hidden="true" fill="none"
+    stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"
+    ><path d="M12 20.8s6.4-5.9 6.4-10.1a6.4 6.4 0 1 0-12.8 0C5.6 14.9 12 20.8 12 20.8z"/><circle cx="12" cy="10.4" r="2.3"/></svg
+    ><span>Campus</span></button>
+  <button data-tab="community"><svg viewBox="0 0 24 24" aria-hidden="true" fill="none"
+    stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"
+    ><circle cx="9" cy="8.6" r="3.3"/><path d="M2.9 19.6c.7-3.4 3.1-5.4 6.1-5.4s5.4 2 6.1 5.4"/><path d="M16.1 5.7a3.3 3.3 0 0 1 0 5.8M17 14.6c2.1.6 3.4 2.4 3.8 5"/></svg
+    ><span>Community</span></button>
 </nav>
 
 <script>
@@ -1782,7 +1945,8 @@ let current = null;                      // the note being read, or null
 let currentCode = null;                  // its subject's code, alongside it
 // Which tab, and how deep inside it. Classes goes subject -> note; Home has
 // one level under it, the timetable editor.
-let view = {tab: 'home', code: null, title: null, edit: false, att: false};
+let view = {tab: 'home', code: null, title: null, edit: false, att: false,
+            sec: null};
 
 // What the server told us last, held so Home can draw itself without asking
 // for anything. All three arrive on the /data the page already fetches.
@@ -1829,6 +1993,22 @@ const TAB_TITLE = {classes: 'Subjects', campus: 'Campus', community: 'Community'
 // sent before the move still opens the screen it named: route() rewrites the
 // hash in place and runs again, which is what the pre-tabs note links below
 // already did.
+// What is INSIDE Campus and Community. Each of these six was a heading you
+// had to scroll to and nothing else -- no URL, no way in from the map, and on
+// Campus you passed What's on and Clubs to reach the map every time. They are
+// levels now, the same way the day view and the timetable are levels inside
+// Classes: the tab with none of them named still shows all three, which is
+// what the thumb bar goes to.
+// None of these words may collide with a composer's -- COMPOSERS is event,
+// club and place, WALL_COMPOSE is say and confess -- because both live at the
+// same step of the hash.
+const SECTIONS = {
+  campus:    ['events', 'clubs', 'places'],
+  community: ['board', 'doubts', 'standings'],
+};
+const sectionOf = (tab, word) =>
+  (SECTIONS[tab] || []).includes(word) ? word : null;
+
 const MOVED = {
   // The timetable and the catch-up screen are Classes now -- they are about
   // the week, and the week is where the subjects are.
@@ -2195,6 +2375,11 @@ function papersSection(s) {
 // Every paper in the archive, three blocks deep, whatever course set it. The
 // subject screen already answers "what has THIS course set"; this screen is
 // for the student who knows they want an end term and not which one.
+// Which slice of the archive is on screen. Module state and not part of the
+// URL: a filter is a lens on one screen rather than a place, and putting it in
+// the hash would put a back step between a student and the paper they came for.
+let pFilter = {code: '', year: '', exam: ''};
+
 function renderPapers() {
   needAllPapers();
   if (ALL_PAPERS === null)
@@ -2205,14 +2390,73 @@ function renderPapers() {
   if (!ALL_PAPERS.length)
     return void nav.appendChild(saying('No papers here yet.',
       'This fills up from the collections the seniors kept.'));
+
+  // The options are read off the archive rather than off SUBJECTS and a range
+  // of years: a filter that offers a course with no papers in it is a filter
+  // that promises something the next tap takes away.
+  const codes = [...new Set(ALL_PAPERS.map(p => p.subject_code))].sort();
+  const years = [...new Set(ALL_PAPERS.map(p => p.year).filter(Boolean))]
+                  .sort((a, b) => b - a);
+  const bar = document.createElement('div');
+  bar.className = 'filters';
+  bar.appendChild(paperPick('Subject', pFilter.code,
+    [['', 'All subjects']].concat(codes.map(c => {
+      const s = subjectOf(c);
+      return [c, s ? c + ' \u2014 ' + s.name : c];
+    })), v => { pFilter.code = v; render(); }));
+  bar.appendChild(paperPick('Year', pFilter.year,
+    [['', 'All years']].concat(years.map(
+      y => [String(y), y + '-' + String(y + 1).slice(2)])),
+    v => { pFilter.year = v; render(); }));
+  bar.appendChild(paperPick('Exam', pFilter.exam,
+    [['', 'All exams']].concat(EXAMS.map(([k, label]) => [k, label])),
+    v => { pFilter.exam = v; render(); }));
+  nav.appendChild(bar);
+
+  const shown = ALL_PAPERS.filter(p =>
+       (!pFilter.code || p.subject_code === pFilter.code)
+    && (!pFilter.year || String(p.year) === pFilter.year)
+    && (!pFilter.exam || p.exam === pFilter.exam));
+
+  const count = document.createElement('div');
+  count.className = 'found';
+  count.textContent = shown.length === ALL_PAPERS.length
+    ? ALL_PAPERS.length + ' papers'
+    : shown.length + ' of ' + ALL_PAPERS.length + ' papers';
+  nav.appendChild(count);
+
+  if (!shown.length)
+    return void nav.appendChild(saying('Nothing matches those three.',
+      'Widen one of them -- the archive does not have every sitting of every '
+      + 'course.'));
+
   for (const [key, label] of EXAMS)
-    block(label, ALL_PAPERS.filter(p => p.exam === key).map(crossPaperRow));
+    block(label, shown.filter(p => p.exam === key).map(crossPaperRow));
   // A paper with no sitting on it would otherwise be invisible on this screen
   // -- three blocks that between them do not hold every row is a screen that
   // quietly loses things.
   block('Other papers',
-        ALL_PAPERS.filter(p => !EXAMS.some(([k]) => k === p.exam))
-                  .map(crossPaperRow));
+        shown.filter(p => !EXAMS.some(([k]) => k === p.exam))
+             .map(crossPaperRow));
+}
+
+// One filter. The native wheel, dressed the way every other picker in the app
+// is dressed -- it is still the fastest thing on a phone and costs nothing.
+function paperPick(label, value, options, onPick) {
+  const wrap = document.createElement('div');
+  wrap.className = 'pick';
+  const sel = document.createElement('select');
+  sel.setAttribute('aria-label', label);
+  for (const [v, t] of options) {
+    const o = document.createElement('option');
+    o.value = v;
+    o.textContent = t;
+    sel.appendChild(o);
+  }
+  sel.value = value;
+  sel.onchange = () => onPick(sel.value);
+  wrap.appendChild(sel);
+  return wrap;
 }
 
 // The subject screen's row, plus the one thing it can leave out and this
@@ -2247,7 +2491,22 @@ function paperSays(p) {
   if (p.year) bits.push(p.year + '-' + String(p.year + 1).slice(2));
   if (p.section) bits.push('Section ' + p.section);
   if (p.kind !== 'paper') bits.push(SHELF[p.kind] || p.kind);
+  // Whether the answers are in there too. Four of these carry a key inside the
+  // same PDF and one is a marking scheme on its own; a student hunting for
+  // worked answers should not have to open eleven files to find out which.
+  const a = answersIn(p);
+  if (a) bits.push(a);
   return bits.join(' \u00b7 ') || 'past paper';
+}
+
+// What a title admits about its answers. Title-only, because that is the whole
+// of what the portal ever recorded -- there is no column for it and inventing
+// one would be inventing the fact.
+function answersIn(p) {
+  const t = p.title || '';
+  if (/\bms\b|marking\s*scheme/i.test(t)) return 'marking scheme';
+  if (/answer|solution|soln/i.test(t)) return 'with answers';
+  return null;
 }
 
 function groupedFileRows(s) {
@@ -4292,9 +4551,11 @@ function renderCampus() {
     if (!composer[1]()) return void go('campus');
     return composer[0]();
   }
-  eventsSection();
-  clubsSection();
-  mapSection();
+  // No section named is the whole tab, which is where the thumb bar lands.
+  const only = view.sec;
+  if (!only || only === 'events') eventsSection();
+  if (!only || only === 'clubs') clubsSection();
+  if (!only || only === 'places') mapSection();
 }
 
 // Community is the people: what the section is saying, what it is asking, and
@@ -4315,8 +4576,10 @@ async function renderCommunity() {
     nav.appendChild(box);
     return;
   }
-  wallSection();
-  doubtsSection();
+  const only = view.sec;
+  if (!only || only === 'board') wallSection();
+  if (!only || only === 'doubts') doubtsSection();
+  if (only && only !== 'standings') return;
   heading('Who has contributed');
   windowPicker();
   const box = document.createElement('div');
@@ -5052,6 +5315,7 @@ function route() {
   // which is what lets '#campus/<uuid>' be recognised as one of these.
   const moved = MOVED[parts.slice(0, 2).join('/')]
     || (parts[0] === 'campus' && parts[1] && !COMPOSERS[parts[1]]
+        && !sectionOf('campus', parts[1])
         ? 'home/' + parts[1] : null);
   if (moved) {
     history.replaceState(null, '',
@@ -5082,7 +5346,11 @@ function route() {
   // Community has two of its own -- 'say' and 'confess' -- for the same
   // reason: the + opens a form, and a form with no URL loses what was typed
   // to the back gesture.
-  const compose = (tab === 'campus' || tab === 'home' || tab === 'community')
+  // Which list inside the tab, when it is one of them rather than the whole
+  // screen. Read before the composer, because both are parts[1] and a section
+  // word is never a composer word.
+  const sec = sectionOf(tab, parts[1]);
+  const compose = !sec && (tab === 'campus' || tab === 'home' || tab === 'community')
     ? parts[1] || null : null;
   // And the row being edited, when there is one: '#campus/club/robotics'. The
   // announcement composer carries its id in `compose` itself, which is a uuid
@@ -5093,13 +5361,13 @@ function route() {
   const me = tab === 'me' ? parts[1] || null : null;
   const was = view;
   view = {tab, code: s ? s.code : null, title: title || null, edit, att, compose,
-          composeId, day: dayv, papers: papersv, me};
+          composeId, day: dayv, papers: papersv, me, sec};
   // Not every render, and not every keystroke inside one: only a step to a
   // different tab, a different subject or a different level of one.
   const moving = !was || was.tab !== view.tab || was.code !== view.code
     || was.title !== view.title || was.edit !== view.edit || was.att !== view.att
     || was.day !== view.day || was.me !== view.me || was.compose !== view.compose
-    || was.papers !== view.papers;
+    || was.papers !== view.papers || was.sec !== view.sec;
   if (!edit) draft = null;      // walking away drops an unsaved week, not TT
   if (!att) attDate = null;     // and re-opening it starts on today, not last week
   if (!dayv) dayDate = null;    // today by default, every time it is opened
@@ -5764,26 +6032,78 @@ window.onpopstate = route;
 // the levels inside them -- your day, the timetable, catching up, what you
 // saved, what you have put in -- each of which was reachable from one block on
 // one screen and nowhere else.
+// ---- The one icon set. Twenty-four box, 1.7 stroke, no fills -- the same
+// hand the avatar glyph in the header was already drawn in. Every mark is a
+// path string and nothing here is fetched: the map has to be whole on a
+// handset with no signal, and an icon font or a sprite file is one more thing
+// that can fail to arrive.
+const ICON = {
+  home:      '<path d="M3.8 10.4 12 4.2l8.2 6.2V20H3.8z"/><path d="M9.6 20v-5.4h4.8V20"/>',
+  day:       '<rect x="3.8" y="5.2" width="16.4" height="14.6" rx="2.4"/><path d="M3.8 9.8h16.4M8.4 3.4v3.4M15.6 3.4v3.4"/><circle cx="8.6" cy="14.2" r="1.15" fill="currentColor" stroke="none"/>',
+  grid:      '<rect x="3.8" y="4.6" width="16.4" height="15" rx="2.4"/><path d="M3.8 9.4h16.4M9.6 9.4v10.2M15.4 9.4v10.2"/>',
+  back:      '<path d="M3.9 9.2V4.8M3.9 9.2h4.4"/><path d="M4.6 9.4A8.2 8.2 0 1 1 4.2 14"/><path d="M12 7.8v4.5l3 1.9"/>',
+  book:      '<path d="M12 7.3C10.6 6.1 8.7 5.5 4.8 5.5v12.2c3.9 0 5.8.6 7.2 1.8 1.4-1.2 3.3-1.8 7.2-1.8V5.5c-3.9 0-5.8.6-7.2 1.8z"/><path d="M12 7.3v12.2"/>',
+  paper:     '<path d="M6.2 3.8h6.6L18.4 9.4v10.8H6.2z"/><path d="M12.6 3.8v5.8h5.8"/><path d="M9.2 13.4h6M9.2 16.6h4"/>',
+  bookmark:  '<path d="M7 4.2h10v15.6l-5-3.7-5 3.7z"/>',
+  pin:       '<path d="M12 20.8s6.4-5.9 6.4-10.1a6.4 6.4 0 1 0-12.8 0C5.6 14.9 12 20.8 12 20.8z"/><circle cx="12" cy="10.4" r="2.3"/>',
+  people:    '<circle cx="9" cy="8.6" r="3.3"/><path d="M2.9 19.6c.7-3.4 3.1-5.4 6.1-5.4s5.4 2 6.1 5.4"/><path d="M16.1 5.7a3.3 3.3 0 0 1 0 5.8M17 14.6c2.1.6 3.4 2.4 3.8 5"/>',
+  person:    '<circle cx="12" cy="8.6" r="3.7"/><path d="M4.9 20c.8-3.7 3.7-5.8 7.1-5.8s6.3 2.1 7.1 5.8"/>',
+  rise:      '<path d="M3.8 17.8 9.2 12l3.6 3.4 7-7.8"/><path d="M15.4 7.6h4.4v4.4"/>',
+  info:      '<circle cx="12" cy="12" r="8.4"/><path d="M12 11.2v5.2M12 7.9h.01"/>',
+  shield:    '<path d="M12 3.6 19 6.2v5.3c0 4.2-2.8 7.2-7 8.7-4.2-1.5-7-4.5-7-8.7V6.2z"/>',
+};
+// One <svg> from one path string, and nothing else in the app draws one.
+const icon = (name) => {
+  const el = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+  el.setAttribute('viewBox', '0 0 24 24');
+  el.setAttribute('fill', 'none');
+  el.setAttribute('stroke', 'currentColor');
+  el.setAttribute('stroke-width', '1.7');
+  el.setAttribute('stroke-linecap', 'round');
+  el.setAttribute('stroke-linejoin', 'round');
+  el.setAttribute('aria-hidden', 'true');
+  el.innerHTML = ICON[name];
+  return el;
+};
+
+// Five sections, and the four that the thumb bar names are four of them. A
+// section with levels inside it opens to show them and is a <details>; a
+// section that IS one screen is a link and opens nothing. [label, mark,
+// where it goes (null for a section that only opens), what is inside it].
 const DRAWER = [
-  ['Your week',   [['Home', ['home']],
-                   ['Your day', ['classes', 'day']],
-                   ['Your timetable', ['classes', 'timetable']],
-                   ['Catching up', ['classes', 'attendance']]]],
-  ['The library', [['Subjects', ['classes']],
-                   ['Past papers', ['classes', 'papers']],
-                   ['Saved', ['me', 'saved']]]],
-  ['The section', [['Campus', ['campus']],
-                   ['Community', ['community']]]],
-  ['You',         [['Your profile', ['me']],
-                   ['Points and what you added', ['me', 'points']],
-                   ['About recarve', ['me', 'about']]]],
+  ['Home',      'home',   ['home']],
+  ['Classes',   'book',   null, [
+    ['Subjects',                  ['classes']],
+    ['Your day',                  ['classes', 'day']],
+    ['Your timetable',            ['classes', 'timetable']],
+    ['Catching up',               ['classes', 'attendance']],
+    ['Past papers',               ['classes', 'papers']],
+  ]],
+  ['Campus',    'pin',    null, [
+    ['Everything on campus',      ['campus']],
+    ["What's on",                 ['campus', 'events']],
+    ['Clubs and societies',       ['campus', 'clubs']],
+    ['Where things are',          ['campus', 'places']],
+  ]],
+  ['Community', 'people', null, [
+    ['All of Community',          ['community']],
+    ['The board',                 ['community', 'board']],
+    ['Doubts',                    ['community', 'doubts']],
+    ['Who has contributed',       ['community', 'standings']],
+  ]],
+  ['You',       'person', null, [
+    ['Your profile',              ['me']],
+    ['Saved',                     ['me', 'saved']],
+    ['Your contributions',         ['me', 'points']],
+    ['About recarve',             ['me', 'about']],
+  ]],
 ];
 
 // Which row is lit. Asked of `view` and not of the hash, because a hash is
 // three levels deep inside a subject and the row it belongs under is the one
 // at the top of that tab -- reading a lecture is standing in Subjects.
 const drawerHere = () => hashOf(view.tab,
-  view.me || (view.tab === 'classes'
+  view.sec || view.me || (view.tab === 'classes'
     ? (view.edit ? 'timetable' : view.att ? 'attendance' : view.day ? 'day'
        : view.papers ? 'papers' : null)
     : null));
@@ -5799,45 +6119,105 @@ function paintDrawer() {
   if (key === drawnFor) return;
   drawnFor = key;
   dnav.innerHTML = '';
-  const group = (title, rows) => {
-    const h = document.createElement('h2');
-    h.className = 'sect';
-    h.textContent = title;
-    dnav.appendChild(h);
-    rows.forEach(r => dnav.appendChild(r));
+  // One row, whether it is a section that is also a screen or a level inside
+  // one. The label is its own element rather than the anchor's text, because
+  // the mark has to sit beside it and not inside the sentence.
+  const link = (label, parts, mark, href) => {
+    const a = document.createElement('a');
+    const h = href || hashOf(...parts);
+    a.href = h;
+    if (mark) a.appendChild(icon(mark));
+    const t = document.createElement('span');
+    t.textContent = label;
+    a.appendChild(t);
+    // A real link, so it can be opened in a tab and read out as one -- but
+    // this app routes on pushState and not on the hash changing, so the tap
+    // itself has to go through go(). A listener rather than .onclick: these
+    // are the only handlers in the app built ten at a time on every step,
+    // and .onclick puts ten more writes in front of every screen that reads
+    // its own controls back out of them.
+    if (parts) a.addEventListener('click', (e) => { e.preventDefault(); go(...parts); });
+    if (h === here) a.setAttribute('aria-current', 'page');
+    return a;
   };
-  for (const [title, items] of DRAWER) {
-    group(title, items.map(([label, parts]) => {
-      const a = document.createElement('a');
-      const h = hashOf(...parts);
-      a.href = h;
-      a.textContent = label;
-      // A real link, so it can be opened in a tab and read out as one -- but
-      // this app routes on pushState and not on the hash changing, so the tap
-      // itself has to go through go(). A listener rather than .onclick: these
-      // are the only handlers in the app built ten at a time on every step,
-      // and .onclick puts ten more writes in front of every screen that reads
-      // its own controls back out of them.
-      a.addEventListener('click', (e) => { e.preventDefault(); go(...parts); });
-      if (h === here) a.setAttribute('aria-current', 'page');
-      return a;
-    }));
-  }
+  // A section with levels inside it. <details> is the platform's own
+  // disclosure -- it opens with no JavaScript, it is already keyboard and
+  // screen-reader correct, and the open one is the one you are standing in.
+  const section = (label, mark, kids) => {
+    const d = document.createElement('details');
+    d.className = 'nav-sect';
+    const sum = document.createElement('summary');
+    sum.appendChild(icon(mark));
+    const t = document.createElement('span');
+    t.textContent = label;
+    sum.appendChild(t);
+    d.appendChild(sum);
+    const inner = document.createElement('div');
+    inner.className = 'kids';
+    let holds = false;
+    for (const [klabel, kparts] of kids) {
+      const a = link(klabel, kparts);
+      if (hashOf(...kparts) === here) holds = true;
+      inner.appendChild(a);
+    }
+    d.appendChild(inner);
+    // Open on the section you are in, and on nothing else. Where you are is
+    // never behind a twisty you have to guess at.
+    if (holds) { d.open = true; d.setAttribute('data-here', ''); }
+    return d;
+  };
+  for (const [label, mark, parts, kids] of DRAWER)
+    dnav.appendChild(kids ? section(label, mark, kids) : link(label, parts, mark));
   // The admin panel is a page of its own behind its own gate. The row is
   // BUILT for an admin rather than drawn and hidden from everybody else: a
   // hidden link is still a link in the markup, and this app's rule is that the
   // server is the lock and the page does not advertise what it would refuse.
   if (atLeast('admin')) {
-    const a = document.createElement('a');
-    a.href = '/admin';
-    a.textContent = 'Class admin';
+    const a = link('Class admin', null, 'shield', '/admin');
     const tag = document.createElement('span');
     tag.className = 'tag';
     tag.textContent = 'Admin';
     a.appendChild(tag);
-    group('Running the class', [a]);
+    dnav.appendChild(a);
   }
 }
+
+// ---- Appearance. The phone's setting is the default and always was; this is
+// for the student whose phone is one way and who wants the app the other.
+// Stored under one key, read back by the blocking script in the head so the
+// first paint is already right, and applied here so the control answers the
+// moment it is pressed rather than on the next load.
+const THEMES = ['system', 'light', 'dark'];
+// The bar at the top of the phone, which is a colour and not a theme: it has
+// to be told the resolved answer, because 'system' is not a colour.
+const BAR = {light: '#fcfcfd', dark: '#0f1115'};
+let theme = 'system';
+try { const t = localStorage.getItem('theme'); if (THEMES.includes(t)) theme = t; } catch (e) {}
+
+function paintTheme() {
+  if (theme === 'system') delete document.documentElement.dataset.theme;
+  else document.documentElement.dataset.theme = theme;
+  const dark = theme === 'dark' || (theme === 'system'
+    && matchMedia('(prefers-color-scheme: dark)').matches);
+  const tc = document.getElementById('tc');
+  if (tc) tc.setAttribute('content', dark ? BAR.dark : BAR.light);
+  for (const b of document.querySelectorAll('[data-theme-set]'))
+    b.setAttribute('aria-pressed', String(b.dataset.themeSet === theme));
+}
+for (const b of document.querySelectorAll('[data-theme-set]')) {
+  b.onclick = () => {
+    theme = b.dataset.themeSet;
+    try { localStorage.setItem('theme', theme); } catch (e) {}
+    paintTheme();
+  };
+}
+// On 'system' the phone can change under the app -- sunset, or the student
+// flipping it in Settings with this still open -- and only the bar's colour
+// has to be told; the palette is the media query's own job.
+matchMedia('(prefers-color-scheme: dark)').addEventListener('change', () => {
+  if (theme === 'system') paintTheme();
+});
+paintTheme();
 
 // Opening remembers what to hand the focus back to, which is not always the
 // avatar: on the wide layout the rail is always open and nothing opened it.
@@ -5849,7 +6229,7 @@ function openDrawer() {
   document.body.classList.add('drawered');
   avatarEl.setAttribute('aria-expanded', 'true');
   paintDrawer();
-  const first = drawerEl.querySelector('a,button');
+  const first = drawerEl.querySelector('a,button,summary');
   if (first) first.focus();
 }
 
@@ -5876,7 +6256,7 @@ document.getElementById('scrim').onclick = closeDrawer;
 drawerEl.onkeydown = (e) => {
   if (e.key === 'Escape') { e.preventDefault(); return closeDrawer(); }
   if (e.key !== 'Tab' || !drawered()) return;
-  const items = Array.from(drawerEl.querySelectorAll('a,button'));
+  const items = Array.from(drawerEl.querySelectorAll('a,button,summary'));
   if (!items.length) return;
   e.preventDefault();
   const step = e.shiftKey ? -1 : 1;
@@ -6497,7 +6877,7 @@ seedHistory();
 route();
 </script>
 """.replace("__CSS__", (Path(__file__).parent / "web/app.css").read_text())\
-     .replace("__AUDIO_MB__", str(MAX_AUDIO_BYTES // 1048576)).replace("__DOC_MB__", str(MAX_DOC_BYTES // 1048576))
+     .replace("__AUDIO_MB__", str(MAX_AUDIO_BYTES // 1048576)).replace("__DOC_MB__", str(MAX_DOC_BYTES // 1048576)))
 
 
 # A note's questions live in <details><summary>Answer</summary> blocks. The
