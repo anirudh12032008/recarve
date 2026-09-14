@@ -1002,19 +1002,42 @@ button.off:active{background:var(--surface)}
 .compose input{min-height:var(--tap);padding:0 12px}
 .compose textarea{min-height:9.5em;line-height:1.6;padding:12px;resize:vertical}
 /* The two controls a browser draws itself if you let it: a subject picker and
-   a file button. Left alone they arrive as a white system select and a grey
-   "Choose files" slab in the middle of a dark composer. Same surface, same
-   border, same 44px as every other control here. */
+   a file button. Left alone they arrive as a white system select with the OS
+   chevron on it and a grey "Choose files / No file chosen" slab in a dashed
+   box -- the two most dated pixels in the app, and the only two an eighteen
+   year old has never seen in anything else they use.
+   The select keeps its native wheel, which is still the fastest picker on a
+   phone and costs nothing to download; what goes is the chrome around it.
+   appearance:none drops the OS arrow, and the chevron below is the same '>'
+   rotated a quarter turn that the club cards and the activity log already
+   draw, so one glyph says "this opens" everywhere in the app. */
 .compose select,.askbox select{width:100%;min-height:var(--tap);margin-top:16px;
-  padding:0 12px;font-size:16px;font-family:inherit;color:var(--fg);
-  background:var(--bg);border:1px solid var(--edge);border-radius:11px}
-.compose input[type=file],.askbox input[type=file]{display:block;width:100%;
-  margin-top:8px;padding:8px 12px;line-height:1.4;font-size:13px;color:var(--mut);
-  background:var(--bg);border:1px dashed var(--edge);border-radius:11px}
-.compose input[type=file]::file-selector-button,
-.askbox input[type=file]::file-selector-button{margin-right:12px;min-height:32px;
-  padding:0 12px;font:inherit;font-size:13px;font-weight:600;color:var(--fg);
-  background:var(--surface);border:1px solid var(--edge);border-radius:7px}
+  padding:0 40px 0 12px;font-size:16px;font-family:inherit;color:var(--fg);
+  background:var(--bg);border:1px solid var(--edge);border-radius:11px;
+  appearance:none;-webkit-appearance:none}
+.pick{position:relative;margin-top:16px}
+.pick select{margin-top:0}
+.pick::after{content:'\203a';position:absolute;right:15px;top:50%;margin-top:-11px;
+  font-size:20px;line-height:1;color:var(--mut);transform:rotate(90deg);
+  pointer-events:none}
+/* The file button. appearance:none does nothing to an <input type=file> -- the
+   slab is shadow DOM -- so the input is hidden and driven from a control that
+   is built out of the same parts as every other control here. It stays in the
+   DOM because it is what opens the picker and what holds the files; the same
+   trick the Add sheet's own hidden input has always used. The line beside the
+   button is what the browser's grey text was for: how many are picked. */
+.shotpick{display:flex;align-items:center;gap:12px;margin-top:8px}
+/* Scoped through .askbox, which sets every button in it to the full-width
+   accent slab the Post button is. This one is not that button. */
+.askbox .shotpick button{display:inline-flex;align-items:center;width:auto;flex:none;
+  min-height:var(--tap);padding:0 16px;border-radius:11px;
+  border:1px solid var(--edge);background:var(--bg);color:var(--accent);
+  font-size:13px;font-weight:600}
+.askbox .shotpick button:active{background:var(--surface);opacity:1}
+.shotpick span{flex:1;min-width:0;font-size:13px;color:var(--mut)}
+/* .quiet hangs off --hang, which is where a ROW's words begin. Inside a form
+   the words begin at the edge of the controls. */
+.askbox .quiet{padding:8px 0 0}
 .compose .pinrow{display:flex;align-items:center;gap:11px;min-height:var(--tap);
   margin-top:14px;font-size:16px;color:var(--fg)}
 .compose .pinrow input{width:22px;height:22px;min-height:0;flex:none;accent-color:var(--accent)}
@@ -3037,6 +3060,10 @@ function drawBoard(box) {
 // not a document: there is nothing to gain from parsing it.
 const WALLS = {feed: null, confession: null};
 const wallAsked = {feed: false, confession: false};
+// The two composers Community has, as URLs: '#community/say' and
+// '#community/confess'. Words rather than the list names, because a URL is
+// read by a person and "confess" says what the screen is for.
+const WALL_COMPOSE = {say: 'feed', confess: 'confession'};
 let wallOn = 'feed';        // which of the two Campus is showing
 
 function needWall(kind) {
@@ -3106,7 +3133,10 @@ async function writePost(payload, btn, err) {
     if (!r.ok) throw new Error(d.error || 'could not save that');
     busyDone(payload.delete ? 'Taken down' : 'Posted');
     WALLS[payload.kind] = d.posts || [];
-    render();
+    // Out of the composer the way you came in, exactly like Campus's and the
+    // notice board's: what you just wrote is the first thing on the feed
+    // behind it, so landing back on the form would hide the result.
+    if (view.compose) history.back(); else render();
   } catch (e) {
     if (btn) btn.disabled = false;
     if (err) { err.textContent = e.message; busyDone(''); }
@@ -3132,9 +3162,11 @@ function wallComposer(kind) {
   ta.setAttribute('aria-label', kind === 'feed' ? 'Your post' : 'Your confession');
   const err = document.createElement('p');
   err.className = 'err';
-  let picker = null, subj = null;
+  let picker = null, pick = null, shots = null;
   if (kind === 'feed' && mayAdd()) {
-    subj = document.createElement('select');
+    // The subject wheel, without the OS chevron: the wrapper draws the app's
+    // own chevron and the select keeps the native wheel behind it.
+    const subj = document.createElement('select');
     subj.setAttribute('aria-label', 'Which subject the photos file under');
     DATA.forEach(x => {
       const o = document.createElement('option');
@@ -3142,11 +3174,31 @@ function wallComposer(kind) {
       o.textContent = x.code + ' \u00b7 ' + x.name;
       subj.appendChild(o);
     });
+    pick = document.createElement('div');
+    pick.className = 'pick';
+    pick.appendChild(subj);
+    // Hidden, and opened by the button beside it. .click() on a display:none
+    // file input is what the Add sheet has always done; what changes here is
+    // that nothing on the screen says "No file chosen" any more.
     picker = document.createElement('input');
     picker.type = 'file';
     picker.accept = 'image/*';
     picker.multiple = true;
-    picker.setAttribute('aria-label', 'Photos for this post');
+    picker.hidden = true;
+    const open = document.createElement('button');
+    open.type = 'button';
+    open.textContent = 'Add photos';
+    const said = document.createElement('span');
+    said.textContent = 'None picked yet';
+    open.onclick = () => picker.click();
+    picker.onchange = () => {
+      const n = picker.files.length;
+      open.textContent = n ? 'Change photos' : 'Add photos';
+      said.textContent = n ? plural(n, 'photo') + ' ready to go' : 'None picked yet';
+    };
+    shots = document.createElement('div');
+    shots.className = 'shotpick';
+    shots.append(open, said, picker);
   }
   const go = document.createElement('button');
   go.textContent = kind === 'feed' ? 'Post this' : 'Post it anonymously';
@@ -3164,13 +3216,13 @@ function wallComposer(kind) {
     writePost({kind: kind, body: ta.value, batch: batch}, go, err);
   };
   box.append(ta);
-  if (subj) {
+  if (pick) {
     // Said rather than hidden: a photo posted here is a file in the library,
     // and pretending otherwise would be a surprise the first time somebody
     // found it on a subject's shelf.
     const note = quiet('Photos also file under the subject you pick, on that '
                        + 'subject\u2019s shelf.');
-    box.append(subj, picker, note);
+    box.append(pick, shots, note);
   } else if (kind === 'feed') {
     box.append(quiet('Photos are for trusted members. Words are for everybody.'));
   }
@@ -3201,11 +3253,10 @@ function wallSection() {
     return void box.appendChild(quiet('The section needs the server. '
                                       + 'Run: notes.py serve'));
   }
-  box.appendChild(wallComposer(wallOn));
   if (!list.length) {
     return void box.appendChild(quiet(wallOn === 'feed'
-      ? 'Nothing here yet. Lost something? Found something? Say so.'
-      : 'Nothing yet. Whatever you put here, nobody is ever told it was you.'));
+      ? 'Nothing here yet. Lost something? Found something? Tap + and say so.'
+      : 'Nothing yet. Tap + to write one — nobody is ever told it was you.'));
   }
   list.forEach(x => box.appendChild(postCard(x, wallOn)));
 }
@@ -3740,6 +3791,19 @@ function renderCampus() {
 // printed anywhere else.
 async function renderCommunity() {
   const mine = painted;
+  // Writing takes the tab over, the way it already does on Campus: the screen
+  // opens on what the section has said, and the + is how you say something.
+  // A composer sitting on top of the feed meant this tab opened on an empty
+  // form -- work -- rather than on the thing anybody came here to read.
+  if (view.compose) {
+    if (!WALL_COMPOSE[view.compose]) return void go('community');
+    wallOn = WALL_COMPOSE[view.compose];
+    const box = document.createElement('div');
+    box.className = 'wall';
+    box.appendChild(wallComposer(wallOn));
+    nav.appendChild(box);
+    return;
+  }
   wallSection();
   doubtsSection();
   heading('Who has contributed');
@@ -4382,7 +4446,9 @@ function render() {
   jobsBox.hidden = view.tab === 'home';
   // The one back button at this depth serves several levels now, so it has to
   // say which one it climbs to.
-  const up = view.compose && !COMPOSERS[view.compose] ? ['‹ Home', 'Back to the notice board']
+  const up = view.compose && view.tab === 'community'
+      ? ['‹ Community', 'Back to the section']
+    : view.compose && !COMPOSERS[view.compose] ? ['‹ Home', 'Back to the notice board']
     : view.compose ? ['‹ Campus', 'Back to Campus']
     : view.me ? ['‹ You', 'Back to your profile']
     : ['‹ Subjects', 'Back to all subjects'];
@@ -4396,6 +4462,8 @@ function render() {
     : view.day ? 'Your day'
     : view.edit ? 'Your timetable'
     : view.att ? 'Your attendance'
+    : view.tab === 'community' && view.compose
+      ? (view.compose === 'confess' ? 'Anonymous' : 'New post')
     // Campus has three composers of its own, and they used to borrow the
     // notice board's words: adding a club said "Edit notice" over it.
     : COMPOSERS[view.compose] ? (view.composeId ? 'Edit ' : 'Add ') + view.compose
@@ -4407,6 +4475,7 @@ function render() {
     if (b.dataset.tab === view.tab) b.setAttribute('aria-current', 'page');
     else b.removeAttribute('aria-current');
   });
+  paintFab();   // the + means the composer on Community and the sheet elsewhere
   if (needle) renderSearch(needle);
   else if (view.edit) renderTimetable();
   else if (view.att) renderAttendance();
@@ -4467,7 +4536,11 @@ function route() {
   // dropped what was typed and left the tab stuck on an empty form. Two tabs
   // have one now -- an event, a club or a place on Campus, and a notice on
   // Home, which is where the notice board lives.
-  const compose = (tab === 'campus' || tab === 'home') ? parts[1] || null : null;
+  // Community has two of its own -- 'say' and 'confess' -- for the same
+  // reason: the + opens a form, and a form with no URL loses what was typed
+  // to the back gesture.
+  const compose = (tab === 'campus' || tab === 'home' || tab === 'community')
+    ? parts[1] || null : null;
   // And the row being edited, when there is one: '#campus/club/robotics'. The
   // announcement composer carries its id in `compose` itself, which is a uuid
   // and can never be mistaken for one of the three words above.
@@ -5270,13 +5343,25 @@ async function pollJobs() {
 // learns the thing exists, never learns what a trusted member is, and never
 // asks the one person who could make them one.
 const mayAdd = () => atLeast('trusted');
-function applyRole() {
+// What the + does depends on where you are standing. On Community it is the
+// composer -- which everybody may use, students included, because words on
+// the wall are not an upload -- and everywhere else it is the Add sheet.
+const fabWrites = () => view.tab === 'community' && !view.compose;
+function paintFab() {
   const fab = document.getElementById('fab');
   // Unknown is not a role. Until /data answers there is nothing honest to say
   // about the + button, so it waits rather than appearing and then locking --
   // and a 503 or a 403 leaves ROLE null, which is not permission either.
-  fab.hidden = ROLE === null;
-  fab.className = mayAdd() ? '' : 'locked';
+  // And it is gone while a composer is open. A + that opens a second way to
+  // add things, on top of the form you are already filling in, is furniture
+  // standing on the Post button.
+  fab.hidden = ROLE === null || !!view.compose;
+  fab.className = (fabWrites() || mayAdd()) ? '' : 'locked';
+  fab.setAttribute('aria-label', !fabWrites() ? 'Add a lecture or notes'
+    : wallOn === 'feed' ? 'Write a post' : 'Write a confession');
+}
+function applyRole() {
+  paintFab();
   document.getElementById('lock').hidden = mayAdd();
   for (const id of ['opt-rec', 'opt-audio', 'opt-doc', 'opt-revise']) {
     const el = document.getElementById(id);
@@ -5299,7 +5384,9 @@ const closeSheet = () => {
   sheet.classList.remove('on'); rec.classList.remove('on'); prog.classList.remove('on');
   batchName.classList.remove('on'); pendingFiles = null;
 };
-document.getElementById('fab').onclick = openSheet;
+document.getElementById('fab').onclick = () => fabWrites()
+  ? go('community', wallOn === 'feed' ? 'say' : 'confess')
+  : openSheet();
 document.getElementById('opt-close').onclick = closeSheet;
 sheet.onclick = e => { if (e.target === sheet) closeSheet(); };
 

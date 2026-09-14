@@ -183,7 +183,12 @@ const panelEl = {classList: {add: () => {}, remove: () => {}, contains: () => fa
 // #fab is real for the same reason: render() sets .hidden on seven other
 // elements every route, so `wrote(['hidden', true])` was true before applyRole
 // had done anything at all.
-const fabEl = {hidden: null, className: null};
+// It is also the one button whose job changes with the screen -- the composer
+// on Community, the Add sheet everywhere else -- so its handler and the label
+// it says about itself are read back rather than thrown away.
+const fabAttrs = {};
+const fabEl = {hidden: null, className: null, onclick: null,
+               setAttribute: (k, v) => { fabAttrs[k] = v; }};
 // The banner in the add sheet that says who adding is for. Real, because
 // whether it is showing is the other half of what a locked + button means.
 const lockEl = {hidden: null};
@@ -1910,9 +1915,12 @@ def test_every_way_in_is_locked_rather_than_missing():
     the old answer and it taught nobody anything: the app simply looked like an
     app that does not do that. Each one stays, marked, with the reason."""
     for wiring in (
-        # The + button is shown and marked, not removed.
-        "fab.hidden = ROLE === null;",
-        "fab.className = mayAdd() ? '' : 'locked';",
+        # The + button is shown and marked, not removed. It is away in exactly
+        # two places: before a role is known, and on the form it just opened.
+        "fab.hidden = ROLE === null || !!view.compose;",
+        # And it is not locked on Community, where what it opens is a box to
+        # type in rather than an upload -- students write on the wall.
+        "fab.className = (fabWrites() || mayAdd()) ? '' : 'locked';",
         "document.getElementById('lock').hidden = mayAdd();",
         "el.className = mayAdd() ? 'opt' : 'opt locked';",
         # Each option refuses to start rather than 403ing halfway through.
@@ -2312,8 +2320,8 @@ def test_the_composer_is_a_url_like_every_other_level():
     are all the one mechanism."""
     assert "post.onclick = () => go('home', 'new');" in notes.PAGE
     assert "edit.onclick = () => go('home', a.id);" in notes.PAGE
-    assert ("const compose = (tab === 'campus' || tab === 'home') ? parts[1] || null : null;"
-            in notes.PAGE)
+    assert ("const compose = (tab === 'campus' || tab === 'home' || tab === 'community')\n"
+            "    ? parts[1] || null : null;" in notes.PAGE)
     assert "composing" not in notes.PAGE, "no variable may outlive the URL"
     assert ("lback.hidden = !s && !view.edit && !view.att && !view.compose && !view.day\n"
             "                 && !view.me;" in notes.PAGE)
@@ -2941,3 +2949,83 @@ def test_the_page_is_written_on_one_scale():
     # and 999px a pill -- shapes, not corners.
     assert radii <= {"2px", "4px", "5px", "7px", "11px", "14px", "18px", "999px"}, \
         f"a fifth corner: {sorted(radii)}"
+
+
+# --------------------------------------- the composer, and what draws it
+
+def test_no_screen_in_this_app_shows_a_raw_file_input():
+    """"Choose files / No file chosen" is the one control here that nobody
+    under twenty has ever seen in anything else they use, and a dashed grey
+    slab of it sat in the middle of the Community composer.
+
+    appearance:none does nothing to a file input -- the slab is shadow DOM --
+    so the input is hidden and a real control drives it. The select keeps its
+    native wheel, which is still the fastest picker on a phone, and loses the
+    OS chevron for the one this app draws everywhere else.
+    """
+    tokens = re.search(r"<style>\n(.*?)\n</style>", notes.PAGE, re.S).group(1)
+    assert "::file-selector-button" not in tokens, \
+        "a styled file button is still a file button: hide it and drive it"
+    assert "input[type=file]" not in tokens, "nothing styles a visible file input"
+    picker = re.search(r"function wallComposer\(kind\) \{.*?\n\}", notes.PAGE, re.S).group(0)
+    assert "picker.hidden = true" in picker, "the file input is hidden"
+    assert "picker.click()" in picker, "and opened by a control of our own"
+    assert re.search(r"\.compose select,\.askbox select\{[^}]*appearance:none", tokens), \
+        "the OS chevron goes; the wheel behind it stays"
+
+
+def test_community_opens_on_the_feed_and_its_composer_lives_behind_the_plus():
+    """The tab used to open on an empty form with the feed underneath it, so
+    the first thing a student saw on Community was work rather than content.
+
+    The composer is a level with a URL now, like Campus's three and the notice
+    board's -- which is what keeps the back gesture from dropping what was
+    typed.
+    """
+    wall = re.search(r"function wallSection\(\) \{.*?\n\}", notes.PAGE, re.S).group(0)
+    assert "wallComposer" not in wall, "the feed screen must not draw the composer"
+    community = re.search(r"async function renderCommunity\(\) \{.*?\n\}",
+                          notes.PAGE, re.S).group(0)
+    assert "wallComposer" in community and "view.compose" in community
+    assert "WALL_COMPOSE = {say: 'feed', confess: 'confession'}" in notes.PAGE
+    assert "go('community', wallOn === 'feed' ? 'say' : 'confess')" in notes.PAGE, \
+        "the + is what opens it"
+
+
+@pytest.mark.skipif(not NODE, reason="needs node")
+def test_the_plus_writes_on_community_and_adds_everywhere_else(tmp_path):
+    """Words on the wall are not an upload, so the + is never locked there --
+    a student may post one and may not add to the library, and the same button
+    has to say both things depending on where it is standing.
+    """
+    checks = """
+ROLE = 'student';
+location.hash = '#community';
+route();
+assert.equal(view.compose, null, 'Community opens on the feed, not on a form');
+assert.equal(fabEl.hidden, false, 'and the + is there');
+assert.equal(fabEl.className, '', 'a student may post words, so it is not locked');
+
+location.hash = '#classes';
+route();
+assert.equal(fabEl.className, 'locked', 'a student still may not add to the library');
+
+location.hash = '#community';
+route();
+fabEl.onclick();
+assert.equal(location.hash, '#community/say', 'the + opens the composer');
+route();
+assert.deepStrictEqual([view.tab, view.compose], ['community', 'say']);
+assert.equal(fabEl.hidden, true, 'and takes itself off the form it just opened');
+
+wallOn = 'confession';
+location.hash = '#community';
+route();
+fabEl.onclick();
+assert.equal(location.hash, '#community/confess',
+             'the + writes the list you are reading');
+"""
+    f = tmp_path / "fab.js"
+    f.write_text(STUB + SCRIPT.replace("__DATA__", json.dumps(DATA_FIXTURE)) + checks)
+    r = subprocess.run([NODE, str(f)], capture_output=True, text=True)
+    assert r.returncode == 0, r.stdout + r.stderr
