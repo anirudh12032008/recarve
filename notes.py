@@ -2030,6 +2030,7 @@ function counts(s) {
   if (lecturesOf(s).length) bits.push(plural(lecturesOf(s).length, 'lecture'));
   if (s.uploads.length) bits.push(plural(s.uploads.length, 'note'));
   if (revisionOf(s)) bits.push('revision sheet');
+  if (PAPER_COUNTS[s.code]) bits.push(plural(PAPER_COUNTS[s.code], 'paper'));
   return bits.join(' \u00b7 ') || 'Nothing yet';
 }
 
@@ -3183,6 +3184,7 @@ async function toggleBookmark(code, title, on, btn) {
 }
 
 let ATT = null;                // the server's attendance payload; null until it answers
+let PAPER_COUNTS = {};         // {code: n} past papers, for the subject list
 let attDate = null;            // which day the catch-up screen is showing
 let dayDate = null;            // and which day the day view under Classes is on
 
@@ -6252,6 +6254,7 @@ async function refresh() {
     TT = d.timetable || [];
     ATT = d.attendance || null;
     BOOKMARKS = d.bookmarks || [];
+    PAPER_COUNTS = d.paper_counts || {};
     PENDING = d.pending || 0;
     ANN = d.announcements || [];
     NOW = d.now || NOW;
@@ -8971,6 +8974,23 @@ def db_papers(conn, code=None):
     ]
 
 
+def db_paper_counts(conn):
+    """{subject_code: how many papers}, for the screen that lists subjects.
+
+    A count rather than the rows: that screen prints one number per course and
+    would otherwise pull the whole archive -- 296 rows to render twelve
+    subtitles -- on a phone that only wanted to know whether opening the
+    subject is worth it. The rows themselves still come from /papers, one
+    course at a time, when a course is actually opened.
+
+    No section clause, for the same reason db_papers has none: every section
+    sat the same End Term.
+    """
+    return {code: n for code, n in conn.execute(
+        "select subject_code, count(*) from archive_documents "
+        "group by subject_code")}
+
+
 def db_write_place(conn, slug, name, kind, lat, lng, approx, note):
     """Add or edit one pin. Admins only, by policy."""
     name = (name or "").strip()[:CLUB_NAME]
@@ -11575,6 +11595,11 @@ def build_server(args):
                             # Saved notes, on the same request: private to the
                             # person who asked, same as attendance above.
                             out["bookmarks"] = db_bookmarks(conn, self.me["id"])
+                            # And the paper counts, on the same request: the
+                            # subjects screen said "Nothing yet" under a course
+                            # holding thirty past papers, because it only ever
+                            # counted what this class had made itself.
+                            out["paper_counts"] = db_paper_counts(conn)
                             if self.me["admin"]:
                                 out["pending"] = len(db_pending(conn))
                         except psycopg.Error as e:

@@ -153,6 +153,32 @@ def test_an_approved_member_reads_what_an_admin_shelved(db):
     assert [r[0] for r in got] == ["Mini Test 2025-26 Sec B"]
 
 
+def test_the_subject_list_counts_papers_per_course(db):
+    """The screen that lists subjects prints one number per course, and it has
+    to be a count rather than the rows: pulling the whole archive to render
+    twelve subtitles is 296 rows to print twelve numbers.
+
+    Read as an ordinary student, because that is who looks at the list. A
+    course with nothing shelved must be absent rather than zero -- the caller
+    prints a subtitle only for a course that has papers, and a 0 would read as
+    "0 papers" under every lab.
+    """
+    import notes
+
+    as_admin_connection(db)
+    admin = member(db, admin=True)
+    reader = member(db)
+
+    as_user(db, admin)
+    shelve(db)
+    shelve(db, title="End Term 2024-25", exam="end", year=2024,
+           set_for_section=None, file_key="MC1101/papers/2024-end.pdf")
+    shelve(db, subject_code="CY1107", file_key="CY1107/papers/2025-mini-B.pdf")
+
+    as_user(db, reader)
+    assert notes.db_paper_counts(db) == {"MC1101": 2, "CY1107": 1}
+
+
 @pytest.mark.parametrize("role", ["student", "trusted"])
 def test_nobody_below_an_admin_shelves_a_document(db, role):
     """`materials` lets a trusted member upload. This table does not: the

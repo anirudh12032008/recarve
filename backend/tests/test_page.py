@@ -413,6 +413,19 @@ assert.deepStrictEqual(hist, ['#classes']);
 // What level 1 prints under each subject.
 assert.equal(counts(DATA[0]), '1 lecture \\u00b7 revision sheet');
 assert.equal(counts(DATA[1]), 'Nothing yet');
+
+// Past papers count too. A course can hold thirty of them and nothing this
+// class made itself, and until the archive was counted here that course said
+// "Nothing yet" over a full shelf.
+PAPER_COUNTS = {[DATA[1].code]: 30};
+assert.equal(counts(DATA[1]), '30 papers', 'papers alone are not "Nothing yet"');
+PAPER_COUNTS = {[DATA[0].code]: 1};
+assert.equal(counts(DATA[0]), '1 lecture \\u00b7 revision sheet \\u00b7 1 paper',
+             'one paper is singular, and it comes after what the class made');
+// A course with no papers must print nothing rather than "0 papers", which is
+// what every lab would otherwise wear.
+PAPER_COUNTS = {};
+assert.equal(counts(DATA[1]), 'Nothing yet');
 assert.equal(hashOf('classes', 'MC1101', 'week 1'), '#classes/MC1101/week%201');
 
 // + on a subject screen files it under that subject without touching the menu.
