@@ -148,9 +148,28 @@ const askEl = {style: {}, classList: {
   add: c => askCls.push('+' + c), remove: c => askCls.push('-' + c),
   contains: () => false,
 }};
+// document.body is real, because the drawer asks it whether it is open --
+// 'drawered' is the whole of that state and the discard proxy says yes to
+// every question. add/remove still record into `writes` the way they did when
+// the proxy swallowed them, so the checks that read body.reading back out of
+// there are unchanged.
+const bodyClasses = new Set();
+const bodyNode = {
+  contains: () => true,
+  appendChild: c => c,
+  classList: {
+    add: c => { writes.push(['()', c]); bodyClasses.add(c); },
+    remove: c => { writes.push(['()', c]); bodyClasses.delete(c); },
+    toggle: (c, on) => { writes.push(['()', c, on]);
+                         if (on) bodyClasses.add(c); else bodyClasses.delete(c); },
+    contains: c => bodyClasses.has(c),
+  },
+};
 const document = new Proxy(function () {}, {
   get: (t, k) => (
     k === 'getElementById' ? (id => els[id] || any)
+    : k === 'body' ? bodyNode
+    : k === 'activeElement' ? activeEl
     : k === 'getSelection' ? getSelection
     // The one listener whose decision is worth checking: what a highlight does
     // is a rule (only inside a note, only a real phrase, only for a member who
@@ -209,20 +228,44 @@ let avatarFocused = 0;
 // It holds something drawn -- the glyph it ships with, or the face the name
 // from /me makes -- so it has the two members that swap one for the other.
 const avatarKids = [];
-const avatarNode = {onclick: null, focus: () => { avatarFocused++; },
+const avatarNode = {onclick: null,
+                    focus: () => { avatarFocused++; activeEl = avatarNode; },
                     contains: () => false,
                     setAttribute: (k, v) => { avatarAttrs[k] = v; },
                     appendChild: c => { avatarKids.push(c); return c; }};
 Object.defineProperty(avatarNode, 'innerHTML',
   {get: () => '', set: () => { avatarKids.length = 0; }});
-const menuNode = {hidden: true, children: [], onkeydown: null,
-                  contains: () => false,
-                  appendChild: c => { menuNode.children.push(c); return c; }};
-Object.defineProperty(menuNode, 'innerHTML',
-  {get: () => '', set: () => { menuNode.children.length = 0; }});
-Object.defineProperty(menuNode, 'firstChild', {get: () => menuNode.children[0]});
+// The drawer and the strip of links inside it. Real for the same reason the
+// avatar is: whether it is open, what is in it, which row is lit and where the
+// focus goes when it shuts are the whole of what a drawer has to get right,
+// and the discard proxy answers 'yes' to every question about all four.
+// `children` is flat -- a group heading and then its rows -- which is what the
+// page appends, so a check can read the order straight off it.
+let activeEl = null;               // document.activeElement, so focus can be followed
+const dnavNode = {children: [], appendChild: c => { dnavNode.children.push(c); return c; }};
+Object.defineProperty(dnavNode, 'innerHTML',
+  {get: () => '', set: () => { dnavNode.children.length = 0; }});
+// Everything in the drawer that can take focus. The page builds its own rows
+// out of document.createElement, which is the discard proxy and cannot be told
+// apart from a heading here -- so what querySelector/querySelectorAll hand back
+// are three stand-ins that say when they are focused. What is IN the drawer is
+// checked off dnavNode.children and the textContent writes; this half is only
+// about where the focus goes.
+const focused = [];
+const focusable = name => {
+  const el = {name, focus: () => { activeEl = el; focused.push(name); }};
+  return el;
+};
+const drawerKeys = [focusable('first'), focusable('middle'), focusable('last')];
+const drawerNode = {
+  onkeydown: null,
+  contains: () => drawerKeys.includes(activeEl),
+  addEventListener: () => {},
+  querySelector: () => drawerKeys[0],
+  querySelectorAll: () => drawerKeys,
+};
 const els = {ask: askEl, panel: panelEl, fab: fabEl, lock: lockEl, save: saveEl,
-             avatar: avatarNode, menu: menuNode};
+             avatar: avatarNode, drawer: drawerNode, dnav: dnavNode};
 let selection = '';
 let onSelectionChange = () => {};
 const rect = {top: 100, left: 20, width: 80};
@@ -642,44 +685,87 @@ assert.deepStrictEqual([view.tab, view.compose], ['campus', 'club']);
 ROLE = null;
 location.hash = '#classes'; route();
 
-// ---- The avatar's menu. Your own screens are behind it rather than in the
-// bar, so it is the only way to reach four of them with a thumb.
+// ---- The drawer. Every screen in the app, in five named groups, behind the
+// avatar -- and the only global way to the levels inside the four tabs, each
+// of which used to be reachable from one block on one screen and nowhere else.
 ROLE = 'student';
-writes = []; menuEl.children.length = 0;
+writes = []; dnavNode.children.length = 0; drawnFor = null; focused.length = 0;
+activeEl = null;
 avatarEl.onclick();
-assert.equal(menuEl.hidden, false, 'the avatar opens the menu');
+assert.ok(bodyClasses.has('drawered'), 'the avatar opens the drawer');
 assert.equal(avatarAttrs['aria-expanded'], 'true', 'and says so to a screen reader');
-assert.ok(says('Your profile') && says('Saved') && says('Points and what you added')
-          && says('About recarve'),
-          'every one of your own screens is in it');
+// The five questions it is filed under, and not a flat list of screens.
+for (const g of ['Your week', 'The library', 'The section', 'You'])
+  assert.ok(says(g), 'the drawer names the group: ' + g);
+// The levels that had no global way in at all before this.
+for (const row of ['Home', 'Your day', 'Your timetable', 'Catching up', 'Subjects',
+                   'Saved', 'Campus', 'Community', 'Your profile',
+                   'Points and what you added', 'About recarve'])
+  assert.ok(says(row), 'the drawer holds: ' + row);
 assert.ok(!says('Class admin'), 'and nothing a student may not press');
-assert.equal(menuEl.children.length, 4);
+// Four headings and ten rows. Counted, because a group that quietly stopped
+// being built still says everything the OTHER groups say.
+assert.equal(dnavNode.children.length, 15);
+assert.equal(focused[0], 'first', 'opening puts the focus inside it');
 
-// Escape is one of the two ways out, and it hands the focus back to the button
-// that opened it rather than dropping it on the page behind.
-avatarFocused = 0;
-menuEl.contains = () => true;          // the focus is inside it, as it is on open
-menuEl.onkeydown({key: 'Escape', preventDefault: () => {}});
-assert.equal(menuEl.hidden, true, 'Escape closes it');
+// Where you are, in the drawer as well as in the bar. Standing three levels
+// deep inside a subject lights Subjects: that is the row this screen is under.
+const lit = () => {
+  const at = writes.findIndex(w => w[0] === 'textContent' && w[1] === 'Subjects');
+  return writes.slice(at + 1, at + 3).some(
+    w => w[0] === '()' && w[1] === 'aria-current' && w[2] === 'page');
+};
+writes = []; drawnFor = null;
+location.hash = '#classes/MC1101/week1'; route();
+assert.ok(lit(), 'reading a lecture is standing in Subjects');
+writes = []; drawnFor = null;
+location.hash = '#classes/timetable'; route();
+assert.ok(!lit(), 'and the timetable is not -- it is its own row');
+
+// Tab wraps inside it rather than stepping out onto the page behind. The
+// arrows are gone with the menu: this is a <nav> of links, and a browser
+// already walks links with Tab.
+bodyClasses.add('drawered');
+activeEl = drawerKeys[2]; focused.length = 0;
+drawerEl.onkeydown({key: 'Tab', shiftKey: false, preventDefault: () => {}});
+assert.equal(focused[0], 'first', 'Tab off the last row wraps to the first');
+activeEl = drawerKeys[0]; focused.length = 0;
+drawerEl.onkeydown({key: 'Tab', shiftKey: true, preventDefault: () => {}});
+assert.equal(focused[0], 'last', 'and Shift+Tab back off the first wraps to the last');
+
+// Escape is one of the three ways out -- the scrim and the Close button are
+// the other two -- and it hands the focus back to what opened it rather than
+// dropping it on the page behind.
+avatarFocused = 0; activeEl = drawerKeys[0];
+drawerEl.onkeydown({key: 'Escape', preventDefault: () => {}});
+assert.ok(!bodyClasses.has('drawered'), 'Escape closes it');
 assert.equal(avatarFocused, 1, 'and the focus goes back to the avatar');
 assert.equal(avatarAttrs['aria-expanded'], 'false');
 
+// The focus stays where it is when it was never inside -- a tap on the page
+// behind must not yank the caret up to the header.
+avatarEl.onclick();
+activeEl = null; avatarFocused = 0;
+avatarEl.onclick();
+assert.ok(!bodyClasses.has('drawered'), 'the avatar closes it again');
+assert.equal(avatarFocused, 0, 'and leaves a caret that was never in it alone');
+
 // Walking to one of them closes it: render() is what every navigation ends in.
 avatarEl.onclick();
-assert.equal(menuEl.hidden, false);
+assert.ok(bodyClasses.has('drawered'));
 render();
-assert.equal(menuEl.hidden, true, 'going anywhere at all puts the menu away');
-menuEl.contains = () => false;
+assert.ok(!bodyClasses.has('drawered'), 'going anywhere at all puts the drawer away');
 
-// The one row only an admin may press is in it, inked like every other.
+// The one row only an admin may press is BUILT for an admin, not drawn and
+// hidden from everybody else -- a hidden link is still a link in the markup.
 ROLE = 'admin';
-writes = [];
+writes = []; dnavNode.children.length = 0; drawnFor = null;
 avatarEl.onclick();
 assert.ok(says('Class admin'), 'an admin is offered the way into the panel');
+assert.ok(says('Running the class'), 'under a group of its own');
 assert.ok(wrote(['className', 'tag']), 'marked with the ink every admin row carries');
-assert.equal(menuEl.children.length, 5);
+assert.equal(dnavNode.children.length, 17, 'one more heading and one more row');
 avatarEl.onclick();
-assert.equal(menuEl.hidden, true, 'the avatar closes it again');
 ROLE = null;
 
 // + from here must leave the dropdown alone: 'me' matches no option, so the
@@ -1738,15 +1824,23 @@ def test_the_tab_bar_is_wired_and_gives_way_to_the_reading_dock():
     for wiring in ("tabBtns.forEach(b => { b.onclick = () => go(b.dataset.tab); });",
                    'data-tab="home"', 'data-tab="classes"',
                    'data-tab="campus"', 'data-tab="community"',
-                   # And Me is no longer one of them: it is behind the avatar.
-                   'id="avatar"',
+                   # And Me is no longer one of them: it is behind the avatar,
+                   # which opens the drawer that holds the whole map.
+                   'id="avatar"', 'id="drawer"',
                    # Reading takes the strip; back gives it straight back,
                    # because closeRead() drops the class that hid it.
-                   "body.reading .tabs{display:none}",
-                   # ...except on a wide screen, where the list stays beside
-                   # the note and the dock starts at its edge.
-                   "body.reading .tabs{display:flex}"):
+                   "body.reading .tabs{display:none}"):
         assert wiring in notes.PAGE, f"tab bar not wired: {wiring}"
+    # And on a wide screen there is no bar at all: the drawer stands open as a
+    # rail beside the two panes, and every tab in the bar is a row in it. A
+    # thumb bar pinned under a 320px column on a 1400px screen was a phone
+    # control that came along by accident.
+    wide = re.search(r"@media \(min-width:760px\)\{(.*?)\n\}\n", notes.PAGE, re.S).group(1)
+    assert ".tabs{display:none}" in wide, "the wide layout navigates from the rail"
+    assert "body.reading .tabs" not in wide, "there is no bar left to give back"
+    for rail in ("#drawer{position:sticky", "#scrim,#dclose{display:none}",
+                 "#avatar{display:none}"):
+        assert rail in wide, f"the rail is not wired: {rail}"
     # The last row of a list must clear both the bar and the FAB floating above
     # it, not sit under either: the FAB reaches 76 + 58 = 134px up, and at 80px
     # it covered the bottom 54px of the list -- the last row's vote button with

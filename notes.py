@@ -683,7 +683,6 @@ button:active,a:active,.row:active,summary:active{transition-duration:0s}
 @keyframes arrive{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
 @keyframes fadein{from{opacity:0}to{opacity:1}}
 @keyframes riseup{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:none}}
-@keyframes pop{from{opacity:0;transform:translateY(-5px)}to{opacity:1;transform:none}}
 /* A tab you switched to. Set by route(), and only when the tab actually
    changed -- render() runs on every vote and every mark, and a screen that
    re-animates when you tick one box is a screen that flickers. */
@@ -730,27 +729,63 @@ body.reading #read{display:block}
 .tophead{display:flex;align-items:flex-start;gap:12px;min-height:var(--tap);margin-bottom:4px}
 .brand{display:flex;flex-wrap:wrap;align-items:baseline;gap:0 8px;flex:1;min-width:0}
 .brand span{flex:1 0 100%;margin-top:2px;font-size:13px;color:var(--mut)}
-/* You, and the handful of things that are only yours. Out of the tab bar --
-   four tabs are the class, the campus and the library, and none of them is a
-   place you visit between classes the way those three are. A glyph drawn in
-   the page rather than an image or a webfont: nothing to download, nothing to
-   go missing offline, and it inherits the ink around it. */
+/* You, and the way into everywhere else. The four tabs at the bottom are the
+   four screens you cross between classes; this opens the whole map, which is
+   the only way to the levels inside them -- your day, the timetable, catching
+   up, what you saved, what you have put in. A glyph drawn in the page rather
+   than an image or a webfont: nothing to download, nothing to go missing
+   offline, and it inherits the ink around it. */
 #avatar{flex:none;width:var(--tap);height:var(--tap);margin-right:-8px;border-radius:50%;
   display:flex;align-items:center;justify-content:center;color:var(--mut)}
 #avatar svg{width:24px;height:24px}
 #avatar[aria-expanded="true"]{color:var(--accent);background:var(--surface)}
 #avatar:active{background:var(--surface)}
-/* Anchored under the avatar rather than filling the screen: it is four rows,
-   and a sheet for four rows is furniture. .top is sticky and therefore the
-   containing block, so this hangs off the header wherever the header is. */
-#menu{position:absolute;z-index:7;right:12px;top:calc(100% - 4px);min-width:15rem;
-  max-width:calc(100vw - 24px);padding:6px;border-radius:14px;background:var(--bg);
-  border:1px solid var(--line);box-shadow:0 12px 34px rgba(0,0,0,.18);
-  animation:pop 140ms ease-out;transform-origin:top right}
-#menu button,#menu a{display:flex;align-items:center;gap:8px;width:100%;min-height:var(--tap);
-  padding:0 12px;border-radius:11px;font-size:16px;color:var(--fg);text-decoration:none}
-#menu button:active,#menu a:active{background:var(--surface)}
-#menu .tag{margin-left:auto}
+
+/* ---- The map: a drawer on a phone, a rail on a wide screen. -------------
+   Off-canvas rather than a dropdown because it is eleven rows in five named
+   groups now and not four, and eleven rows hanging off a header is a column
+   of links with no edges. It slides from the left, which is the side the FAB
+   is not on: the + stays exactly where it was and the two never reach for the
+   same corner.
+   visibility, not just transform: a drawer that is only translated away is
+   still in the tab order and still read out, so Tab from the search box used
+   to walk off the screen into links nobody could see. visibility:hidden takes
+   it out of both, and transitioning it alongside the transform is what lets
+   it still slide rather than blink. */
+#scrim{position:fixed;inset:0;z-index:9;background:rgba(0,0,0,.45);
+  opacity:0;visibility:hidden;transition:opacity 180ms ease-out,visibility 180ms}
+body.drawered #scrim{opacity:1;visibility:visible}
+#drawer{position:fixed;z-index:10;left:0;top:0;bottom:0;width:min(82vw,300px);
+  display:flex;flex-direction:column;background:var(--bg);
+  border-right:1px solid var(--line);box-shadow:0 0 40px rgba(0,0,0,.32);
+  transform:translateX(-101%);visibility:hidden;
+  transition:transform 180ms ease-out,visibility 180ms;
+  overflow-y:auto;overscroll-behavior:contain;
+  padding-bottom:calc(16px + env(safe-area-inset-bottom))}
+body.drawered #drawer{transform:none;visibility:visible}
+.dhead{display:flex;align-items:center;gap:12px;flex:none;
+  padding:max(10px,env(safe-area-inset-top)) 12px 10px 16px}
+.dhead b{flex:1;font-size:20px;font-weight:700;letter-spacing:-.015em}
+#dclose{flex:none;min-width:var(--tap);min-height:var(--tap);border-radius:11px;
+  font-size:13px;color:var(--mut)}
+#dclose:active{background:var(--surface)}
+/* A group's name is the same 11px label a section heading is everywhere else
+   in the app -- it is the same thing doing the same job -- with the top space
+   halved, because a drawer is one column of them and 24px apiece turns five
+   groups into a scroll. */
+#drawer .sect{padding:16px 16px 6px}
+#drawer a{display:flex;align-items:center;gap:10px;min-height:var(--tap);
+  margin:0 8px;padding:0 12px;border-radius:11px;font-size:16px;
+  color:var(--fg);text-decoration:none}
+#drawer a:active{background:var(--surface)}
+/* Where you are, said twice: in the accent, and with the same 3px tick a row
+   carries -- so it survives a grey screen and a colourblind reader, which
+   colour alone does not. */
+#drawer a[aria-current]{background:var(--surface);color:var(--accent);font-weight:600}
+#drawer a[aria-current]::before{content:"";flex:none;width:3px;align-self:stretch;
+  margin:9px 0 9px -6px;border-radius:2px;background:var(--accent)}
+#drawer .tag{margin-left:auto}
+@media (hover:hover){#drawer a:hover{background:var(--surface)}}
 
 .group{padding:24px 16px 4px}
 .group h2{display:inline;margin:0 0 0 8px;font-size:13px;font-weight:500;color:var(--mut)}
@@ -1490,7 +1525,7 @@ body.reading .tabs{display:none}
   article{padding:32px 40px 110px}
   /* The dock belongs to the note, so it stops where the note's column stops
      rather than stretching five buttons across 960px of empty pane. */
-  .dock{left:320px;justify-content:center;padding-left:40px;padding-right:40px}
+  .dock{left:552px;justify-content:center;padding-left:40px;padding-right:40px}
   .dock button{flex:0 1 9rem}
   /* Nothing open yet. A 60px grey box reading "Pick a lecture to start
      reading" under 800px of near-black is a screen that failed to load, and
@@ -1510,16 +1545,29 @@ body.reading .tabs{display:none}
   .rtop{display:none}
   .mast{padding:32px 40px 0}
   .mast+article{padding-top:16px}
-  #fab{right:auto;left:calc(320px - 74px)}   /* the + belongs to the list */
+  /* The + belongs to the list, so it sits at the list's right edge -- which
+     is 232px further along now that the rail stands before it. */
+  #fab{right:auto;left:calc(552px - 74px)}
   body.reading #fab{display:block}
   /* Five buttons that act on nothing are worse than no bar: Save, Share,
      Download and Print with no note open were four live-looking controls
      over an empty pane. The dock belongs to the note and arrives with it. */
   body:not(.reading) .dock{display:none}
-  /* Two panes, two bars: the tabs stay under the list they navigate, and the
-     dock starts where the note does, so reading no longer costs the tabs. */
-  .tabs{right:auto;width:320px}
-  body.reading .tabs{display:flex}
+  /* The drawer stops being a drawer. There is room for the map to stand open
+     beside the two panes, so it does -- and the bottom bar goes, because a
+     thumb bar pinned under a 320px column on a 1400px screen is a phone
+     control that came along by accident. Nothing is lost: every tab in it is
+     a row in the rail, under the group it belongs to.
+     Same element, so there is one list of destinations in this app and not a
+     wide one and a narrow one that drift apart. */
+  #drawer{position:sticky;top:0;left:auto;bottom:auto;height:100dvh;
+    width:232px;flex:none;transform:none;visibility:visible;box-shadow:none;
+    transition:none;padding-bottom:16px}
+  #scrim,#dclose{display:none}
+  /* The face opened the drawer; with the rail already open it has nothing to
+     open, and "Your profile" is a row in the rail two inches to the left. */
+  #avatar{display:none}
+  .tabs{display:none}
   /* The screen's name is the biggest type in the app on a phone, where it has
      the whole width. Here it has a 320px column and the note beside it is the
      headline on this layout, so the name steps back one place on the scale --
@@ -1572,7 +1620,7 @@ body.reading .tabs{display:none}
 #campusmap{height:260px;margin:0 16px 8px;border-radius:14px;overflow:hidden;
   border:1px solid var(--line);background:var(--surface)}
 @media print{
-  .top,.dock,.tabs,#list,.rtop,#fab,#busy,#ask,#quiz{display:none!important}
+  .top,.dock,.tabs,#list,.rtop,#fab,#busy,#ask,#quiz,#drawer,#scrim{display:none!important}
   #read{display:block!important}
   article{padding:0;max-width:none}
   details{background:none;border:1px solid #999}
@@ -1583,6 +1631,20 @@ body.reading .tabs{display:none}
      because the token block has to stay the page's first <style>. -->
 <style>__CSS__</style>
 
+<!-- The map. One element, two shapes: a drawer over the page on a phone and a
+     rail beside it on a wide screen. It is first in the document so that a
+     keyboard and a screen reader meet the navigation before the screen it
+     navigates; closed, it is visibility:hidden and therefore in neither's
+     way. -->
+<div id="scrim"></div>
+<nav id="drawer" aria-label="Everywhere in recarve">
+  <div class="dhead">
+    <b>recarve</b>
+    <button id="dclose" aria-label="Close the menu">Close</button>
+  </div>
+  <div id="dnav"></div>
+</nav>
+
 <section id="list">
   <div class="top">
     <button class="back" id="lback" aria-label="Back to all subjects">&lsaquo; Subjects</button>
@@ -1592,12 +1654,11 @@ body.reading .tabs{display:none}
         <span class="code" id="scode"></span>
         <h2 id="sname"></h2>
       </div>
-      <button id="avatar" aria-haspopup="true" aria-expanded="false" aria-controls="menu"
-              aria-label="You and your things"><svg viewBox="0 0 24 24" aria-hidden="true"
+      <button id="avatar" aria-expanded="false" aria-controls="drawer"
+              aria-label="Everywhere in recarve"><svg viewBox="0 0 24 24" aria-hidden="true"
         fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"
         ><circle cx="12" cy="8.6" r="3.7"/><path d="M4.9 20c.8-3.7 3.7-5.8 7.1-5.8s6.3 2.1 7.1 5.8"/></svg></button>
     </div>
-    <div id="menu" role="menu" aria-label="You and your things" hidden></div>
     <input id="q" placeholder="Search notes and transcripts" autocomplete="off" enterkeyhint="search">
   </div>
   <div id="jobs"></div>
@@ -1715,7 +1776,8 @@ const scode = document.getElementById('scode'), sname = document.getElementById(
 const lback = document.getElementById('lback'), tools = document.getElementById('tools');
 const tabBtns = document.querySelectorAll('.tabs button');
 const avatarEl = document.getElementById('avatar');
-const menuEl = document.getElementById('menu');
+const drawerEl = document.getElementById('drawer');
+const dnav = document.getElementById('dnav');
 let current = null;                      // the note being read, or null
 let currentCode = null;                  // its subject's code, alongside it
 // Which tab, and how deep inside it. Classes goes subject -> note; Home has
@@ -4842,7 +4904,10 @@ let painted = 0;
 
 function render() {
   painted++;
-  closeMenu();
+  // Walking anywhere at all puts the drawer away; the rail, which is the same
+  // element on a wide screen, is never 'drawered' and so is never closed.
+  closeDrawer();
+  paintDrawer();
   const s = view.code ? subjectOf(view.code) : null;
   const searchable = view.tab === 'classes' && !view.edit && !view.att && !view.day;
   nav.innerHTML = '';
@@ -5626,16 +5691,148 @@ lback.onclick = () => history.back();
 tabBtns.forEach(b => { b.onclick = () => go(b.dataset.tab); });
 window.onpopstate = route;
 
-// ---- You, behind the avatar. ---------------------------------------------
-// Four of your own screens and, for the one person who runs the class, the
-// way into the admin page -- marked with the same ink every other admin-only
-// control carries. It is a menu and not a fifth tab because none of it is
-// somewhere you go between classes, and not a sheet because five rows do not
-// need the whole screen.
-const MENU_ITEMS = [['Your profile', () => go('me')],
-                    ['Saved', () => go('me', 'saved')],
-                    ['Points and what you added', () => go('me', 'points')],
-                    ['About recarve', () => go('me', 'about')]];
+// ---- The map, behind the avatar. -----------------------------------------
+// Five groups, and they are five questions rather than a filing of screens:
+// when am I where, what do I read, who else is here, what is mine, and -- for
+// the one person who runs the class -- who is waiting to be let in. The groups
+// come from what the screens DO, which is why Home sits with the timetable and
+// not with the subject list: Home is today, and so are the three levels under
+// Classes that are about the week rather than about a subject.
+//
+// The four tabs at the bottom stay exactly what they were, the four screens
+// you cross between classes. This is the whole map, and the only global way to
+// the levels inside them -- your day, the timetable, catching up, what you
+// saved, what you have put in -- each of which was reachable from one block on
+// one screen and nowhere else.
+const DRAWER = [
+  ['Your week',   [['Home', ['home']],
+                   ['Your day', ['classes', 'day']],
+                   ['Your timetable', ['classes', 'timetable']],
+                   ['Catching up', ['classes', 'attendance']]]],
+  ['The library', [['Subjects', ['classes']],
+                   ['Saved', ['me', 'saved']]]],
+  ['The section', [['Campus', ['campus']],
+                   ['Community', ['community']]]],
+  ['You',         [['Your profile', ['me']],
+                   ['Points and what you added', ['me', 'points']],
+                   ['About recarve', ['me', 'about']]]],
+];
+
+// Which row is lit. Asked of `view` and not of the hash, because a hash is
+// three levels deep inside a subject and the row it belongs under is the one
+// at the top of that tab -- reading a lecture is standing in Subjects.
+const drawerHere = () => hashOf(view.tab,
+  view.me || (view.tab === 'classes'
+    ? (view.edit ? 'timetable' : view.att ? 'attendance' : view.day ? 'day' : null)
+    : null));
+
+// Repainted when the role arrives or the screen changes, and not on every
+// render: render() runs on every vote and every ticked box, and on the wide
+// layout the rail is a live part of the page that somebody may have the
+// keyboard inside. Rebuilding it under them would drop the focus on the floor.
+let drawnFor = null;
+function paintDrawer() {
+  const here = drawerHere();
+  const key = ROLE + '|' + here;
+  if (key === drawnFor) return;
+  drawnFor = key;
+  dnav.innerHTML = '';
+  const group = (title, rows) => {
+    const h = document.createElement('h2');
+    h.className = 'sect';
+    h.textContent = title;
+    dnav.appendChild(h);
+    rows.forEach(r => dnav.appendChild(r));
+  };
+  for (const [title, items] of DRAWER) {
+    group(title, items.map(([label, parts]) => {
+      const a = document.createElement('a');
+      const h = hashOf(...parts);
+      a.href = h;
+      a.textContent = label;
+      // A real link, so it can be opened in a tab and read out as one -- but
+      // this app routes on pushState and not on the hash changing, so the tap
+      // itself has to go through go(). A listener rather than .onclick: these
+      // are the only handlers in the app built ten at a time on every step,
+      // and .onclick puts ten more writes in front of every screen that reads
+      // its own controls back out of them.
+      a.addEventListener('click', (e) => { e.preventDefault(); go(...parts); });
+      if (h === here) a.setAttribute('aria-current', 'page');
+      return a;
+    }));
+  }
+  // The admin panel is a page of its own behind its own gate. The row is
+  // BUILT for an admin rather than drawn and hidden from everybody else: a
+  // hidden link is still a link in the markup, and this app's rule is that the
+  // server is the lock and the page does not advertise what it would refuse.
+  if (atLeast('admin')) {
+    const a = document.createElement('a');
+    a.href = '/admin';
+    a.textContent = 'Class admin';
+    const tag = document.createElement('span');
+    tag.className = 'tag';
+    tag.textContent = 'Admin';
+    a.appendChild(tag);
+    group('Running the class', [a]);
+  }
+}
+
+// Opening remembers what to hand the focus back to, which is not always the
+// avatar: on the wide layout the rail is always open and nothing opened it.
+let drawerOpener = null;
+const drawered = () => document.body.classList.contains('drawered');
+
+function openDrawer() {
+  drawerOpener = document.activeElement;
+  document.body.classList.add('drawered');
+  avatarEl.setAttribute('aria-expanded', 'true');
+  paintDrawer();
+  const first = drawerEl.querySelector('a,button');
+  if (first) first.focus();
+}
+
+// Focus goes back to whatever opened it, and only when it was inside the
+// drawer when it shut -- a tap on the page behind must not yank the caret up
+// to the header. Nothing happens at all when the drawer is the wide layout's
+// rail, which is never 'drawered' and must never be closed.
+function closeDrawer() {
+  if (!drawered()) return;
+  document.body.classList.remove('drawered');
+  avatarEl.setAttribute('aria-expanded', 'false');
+  if (drawerEl.contains(document.activeElement)) (drawerOpener || avatarEl).focus();
+  drawerOpener = null;
+}
+
+avatarEl.onclick = () => { if (drawered()) closeDrawer(); else openDrawer(); };
+document.getElementById('dclose').onclick = closeDrawer;
+document.getElementById('scrim').onclick = closeDrawer;
+
+// Escape leaves it, and Tab wraps inside it rather than stepping out onto a
+// page that is still behind an open drawer. The trap is the overlay's alone:
+// the rail is part of the page and Tab must walk straight out of it into the
+// list beside it.
+drawerEl.onkeydown = (e) => {
+  if (e.key === 'Escape') { e.preventDefault(); return closeDrawer(); }
+  if (e.key !== 'Tab' || !drawered()) return;
+  const items = Array.from(drawerEl.querySelectorAll('a,button'));
+  if (!items.length) return;
+  e.preventDefault();
+  const step = e.shiftKey ? -1 : 1;
+  const at = items.indexOf(document.activeElement);
+  items[(at + step + items.length) % items.length].focus();
+};
+
+// The other way out, for a thumb: push it back the way it came. Only closing,
+// never opening -- an edge swipe to open would be fighting the OS back gesture
+// on one side and this app's own horizontal strips (the week, a card's tags)
+// everywhere else.
+let swipeFrom = null;
+drawerEl.addEventListener('touchstart',
+  (e) => { swipeFrom = e.touches[0].clientX; }, {passive: true});
+drawerEl.addEventListener('touchend', (e) => {
+  if (swipeFrom !== null && swipeFrom - e.changedTouches[0].clientX > 60) closeDrawer();
+  swipeFrom = null;
+}, {passive: true});
 
 // Your own face, in the header, on every screen. /data carries the role and
 // not the name -- it is the payload the whole app is built from and a name is
@@ -5657,63 +5854,6 @@ function needMyFace() {
   fetch('/me').then(r => r.ok ? r.json() : Promise.reject())
               .then(d => drawMyFace(d.name)).catch(() => {});
 }
-
-// Focus goes back to the avatar whenever it was inside the menu when it shut,
-// and stays where it is when it was not -- a tap on the page behind it must
-// not yank the caret back up to the header.
-function closeMenu() {
-  if (menuEl.hidden) return;
-  const inside = menuEl.contains(document.activeElement);
-  menuEl.hidden = true;
-  avatarEl.setAttribute('aria-expanded', 'false');
-  if (inside) avatarEl.focus();
-}
-
-function openMenu() {
-  menuEl.innerHTML = '';
-  for (const [label, act] of MENU_ITEMS) {
-    const b = document.createElement('button');
-    b.type = 'button';
-    b.setAttribute('role', 'menuitem');
-    b.textContent = label;
-    b.onclick = act;
-    menuEl.appendChild(b);
-  }
-  if (atLeast('admin')) {
-    const a = document.createElement('a');
-    a.href = '/admin';
-    a.setAttribute('role', 'menuitem');
-    a.textContent = 'Class admin';
-    const tag = document.createElement('span');
-    tag.className = 'tag';
-    tag.textContent = 'Admin';
-    a.appendChild(tag);
-    menuEl.appendChild(a);
-  }
-  menuEl.hidden = false;
-  avatarEl.setAttribute('aria-expanded', 'true');
-  menuEl.firstChild.focus();
-}
-
-avatarEl.onclick = () => { if (menuEl.hidden) openMenu(); else closeMenu(); };
-// Escape leaves it, the arrows walk it, and Tab wraps inside it rather than
-// stepping out onto a page that is still behind an open menu.
-menuEl.onkeydown = (e) => {
-  if (e.key === 'Escape') { e.preventDefault(); return closeMenu(); }
-  const step = e.key === 'ArrowDown' || (e.key === 'Tab' && !e.shiftKey) ? 1
-             : e.key === 'ArrowUp' || (e.key === 'Tab' && e.shiftKey) ? -1 : 0;
-  if (!step) return;
-  e.preventDefault();
-  const items = Array.from(menuEl.children);
-  const at = items.indexOf(document.activeElement);
-  items[(at + step + items.length) % items.length].focus();
-};
-// The other way out, for a thumb: anywhere that is not the menu or the button
-// that opened it.
-document.addEventListener('pointerdown', (e) => {
-  if (!menuEl.hidden && !menuEl.contains(e.target)
-      && !avatarEl.contains(e.target)) closeMenu();
-});
 
 document.getElementById('save').onclick = async (e) => {
   if (!current) return;
