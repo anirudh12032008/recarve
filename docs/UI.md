@@ -111,8 +111,11 @@ module.exports = {
         base:  ['16px', { lineHeight: '1.65' }],
         head:  ['20px', { lineHeight: '1.3', letterSpacing: '-.015em' }],
         big:   ['26px', { lineHeight: '1.2', letterSpacing: '-.022em' }],
+        // The display step. Four call sites, listed in §2a, and no fifth.
+        display: ['40px', { lineHeight: '1.05', letterSpacing: '-.035em' }],
       },
-      fontWeight: { normal: '400', medium: '500', semibold: '600', bold: '700' },
+      fontWeight: { normal: '400', medium: '500', semibold: '600', bold: '700',
+                    display: '800' },
       spacing: {
         // 4px grid. 'tap' is the floor for anything a thumb lands on.
         tap:  'var(--tap)',   // 44px
@@ -131,7 +134,70 @@ module.exports = {
 ```
 
 Sizes not on the scale (`#fab`'s 30px glyph, `.tile small`'s 10px) become
-arbitrary values at their one call site, so the scale stays five entries.
+arbitrary values at their one call site, so the scale stays six entries.
+
+---
+
+## 2a. The display step, and why the scale grew
+
+Counted across `PAGE` before 2026-09-14: the largest type was 26px at weight
+700, the body is 16px, and 89% of the app's text nodes sat between 13px and
+16px. `GATE_PAGE` — the same product's front door — opens at 40px on a 375px
+phone (`clamp(2.5rem,9.5vw,4.4rem)` sits on its 2.5rem floor at that width) at
+weight 850, with a violet→pink gradient across the second half of the headline
+and 47 gradient-carrying elements on the page. A member met one voice on the
+way in and a different, flatter one the moment they were let through.
+
+Quiet interfaces that work are quiet in **colour** and loud in **typography**.
+This app was quiet in both, which is not restraint. So:
+
+| step | px / weight | where, and nowhere else |
+|------|-------------|-------------------------|
+| display | 40 / 800 | the screen's own name (`.shead h2`); the app's name on Home (`.brand b`); the points total (`.mine:has(.tally) .score`); a practice run's result (`#qscore`) |
+| big  | 26 / 700 | `article h1`, `#rec .time`, `.mine .score` on the profile, an attendance percentage (`.row.att .name b`), the screen's name on the two-pane layout |
+| head | 20 / 700 | `.ann h3`, `article h2`, `#sheet h3`, the calendar's month and dates |
+| base | 16 / 400–600 | everything a person reads |
+| small| 13 / 400–600 | the second line of a row, every meta string |
+| micro| 11 / 700 | a section's name, the week strip's day letters |
+
+`40 / 16` is **2.5×**, which is the landing page's own ratio. 800 rather than
+the gate's 850 because 800 is a step every system font actually has; on
+`-apple-system` the two are within one variable-axis notch of each other.
+
+**Why 40 and not 34.** 34px is the size you pick when you want "bigger"
+without committing. 40 is the number the front door already uses at the width
+this app is used at, so the two documents measure the same rather than merely
+rhyming. There is one rule declaring it and the test asserts there is exactly
+one (`test_the_page_is_written_on_one_scale`); a second declaration is the
+drift that turned five sizes into eleven last time.
+
+**The gradient.** `--g1/--g2/--g3` in `:root`, swapped with everything else in
+the dark block, composed once into
+`linear-gradient(96deg,var(--g1) 0%,var(--g2) 46%,var(--g3) 100%)` with
+`background-clip:text`. It carries **three** things and they are one thing three
+times — the subject of the screen you are standing on: the app's own name on
+Home, the points total, the practice result. Not the screen's name, which is on
+every screen; a gradient on every screen is wallpaper.
+
+Dark takes the gate's literal stops (`#ac93ff`/`#c58bff`/`#ff7ab6`), worst
+ratio 7.53:1 on `--bg` and 6.95:1 on `--surface`. Light cannot: those three are
+2.1:1 on the paper. It takes the same family pressed down —
+`#6534c9` (the app's own accent) / `#9629cc` / `#c21362` — worst ratio 5.75:1 on
+`--bg` and 5.31:1 on `--surface`. Everything clears 4.5:1 in both themes.
+
+The whole block sits inside
+`@supports ((-webkit-background-clip:text) or (background-clip:text))`, because
+`color:transparent` on a browser that cannot clip the background is a score
+that is not there at all. Without the gradient the number is still 40px and
+still `--fg`.
+
+**The header, at 40px.** `.tophead` aligns to `flex-start` and both `.brand`
+and `.shead` wrap, so the code chip and the avatar share the first line and the
+name takes the whole width under them. It wraps rather than ellipsising: at
+26px on a shared row `Mathematics 1` showed four letters and a dot-dot-dot, and
+the tail of a subject's name is the half that says which subject it is. On the
+two-pane layout (≥760px) the name steps back to `big`, because there the note
+beside it is the headline.
 
 **Spacing rule:** only `p-*`/`gap-*` values on the 4px grid — 1, 2, 3, 4, 5, 6
 (4/8/12/16/20/24px). Today's 9, 11, 13, 22 round to the nearest. The two

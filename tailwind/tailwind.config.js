@@ -32,8 +32,16 @@ module.exports = {
         base:  ['16px', { lineHeight: '1.65' }],
         head:  ['20px', { lineHeight: '1.3', letterSpacing: '-.015em' }],
         big:   ['26px', { lineHeight: '1.2', letterSpacing: '-.022em' }],
+        /* The display step: the size GATE_PAGE's headline lands on at 375px,
+           so the app and its own front door measure the same. Four call sites,
+           all of them the subject of a screen, and they are written as one
+           rule in the token block rather than four @applys -- see docs/UI.md
+           §2a and test_the_page_is_written_on_one_scale, which asserts there
+           is exactly one of each. */
+        display: ['40px', { lineHeight: '1.05', letterSpacing: '-.035em' }],
       },
-      fontWeight: { normal: '400', medium: '500', semibold: '600', bold: '700' },
+      fontWeight: { normal: '400', medium: '500', semibold: '600', bold: '700',
+                    display: '800' },
       spacing: {
         // 4px grid. 'tap' is the floor for anything a thumb lands on.
         tap:  'var(--tap)',   // 44px

@@ -2924,18 +2924,34 @@ def test_the_stylesheet_is_inlined_not_fetched():
 
 
 def test_the_page_is_written_on_one_scale():
-    """Five type sizes, four weights, four radii -- and the reasons for each.
+    """Six type sizes, five weights, four radii -- and the reasons for each.
 
     Drift is what eleven sizes and eleven radii looked like before, and it
     arrives one declaration at a time. 30px is the FAB's single glyph and 50%
     is a circle, neither of which is a step on any scale.
+
+    40px/800 is the display step, added deliberately on 2026-09-14. It is the
+    size GATE_PAGE's headline lands on at 375px -- clamp(2.5rem,9.5vw,4.4rem)
+    sits on its 2.5rem floor at that width -- and it takes the app's
+    largest-to-body ratio to 2.5x, which is the landing page's ratio. Before
+    it the app topped out at 26px, a ratio of 1.6x, and read as a different
+    product from its own front door. It is spent in four places and no more:
+    the screen's own name, the app's name on Home, the points total, and the
+    result of a practice run.
     """
     tokens = re.search(r"<style>\n(.*?)\n</style>", notes.PAGE, re.S).group(1)
+    scale = {"11px", "13px", "16px", "20px", "26px", "30px", "40px"}
     sizes = set(re.findall(r"font-size:(\d+px)", tokens))
-    assert sizes <= {"11px", "13px", "16px", "20px", "26px", "30px"}, \
-        f"off the type scale: {sorted(sizes - {'11px', '13px', '16px', '20px', '26px', '30px'})}"
+    assert sizes <= scale, f"off the type scale: {sorted(sizes - scale)}"
+    # One rule, not a size anybody may reach for: a second declaration of it is
+    # exactly the drift this test exists to catch.
+    assert tokens.count("font-size:40px") == 1, \
+        "40px is the display step and belongs to one rule"
     weights = set(re.findall(r"font-weight:(\d+)", tokens))
-    assert weights <= {"400", "500", "600", "700"}, f"off the weight scale: {weights}"
+    assert weights <= {"400", "500", "600", "700", "800"}, \
+        f"off the weight scale: {weights}"
+    assert tokens.count("font-weight:800") == 1, \
+        "800 is the display weight and belongs to that same one rule"
     radii = set(re.findall(r"border-radius:(\d+px)(?![\d ])", tokens))
     # 2px is a progress bar's cap, 4px the focus ring, 5px half of a 10px bar
     # and 999px a pill -- shapes, not corners.

@@ -600,6 +600,16 @@ PAGE = r"""<!doctype html>
      edge and not a word: 3.5:1 on the paper and 5.0:1 in the dark, clearing
      1.4.11's 3:1 with the room 70% did not have. */
   --edge:color-mix(in srgb,var(--mut) 80%,transparent);
+  /* The one gesture the landing page makes that this app never did: violet
+     through orchid into pink, across the words that name what a screen is
+     about. Three stops rather than two so the middle of a short word is not
+     already at the pink end. Pressed onto paper here -- the gate's own
+     #ac93ff/#c58bff/#ff7ab6 are 2.1:1 on this ground and would fail every
+     word they carried -- and the darkest of these three is the accent the
+     whole app is built on, so the family is the same family. 5.75:1 at worst
+     on the paper and 5.31:1 at worst on a surface card, both clearing the
+     4.5:1 that any of these three ever has to carry. */
+  --g1:#6534c9; --g2:#9629cc; --g3:#c21362;
   --tap:44px;
   /* 4 (.rows) + 12 (.row) + 3 (.tick) + 12 (gap): where a row's words begin.
      Anything standing in for a row lines up with them, and everything that is
@@ -619,6 +629,10 @@ PAGE = r"""<!doctype html>
     --sat:48%; --lum:70%; --chip-lum:22%; --chip-text:78%;
     --warn:#f0bd6a; --warn-bg:#2b2114;
     --err:#ef5f63;
+    /* The landing page's three stops, to the digit: in the dark the app is
+       standing on the same near-black the gate is, so nothing has to be
+       darkened to be readable. 7.53:1 at worst on the ground. */
+    --g1:#ac93ff; --g2:#c58bff; --g3:#ff7ab6;
   }
 }
 *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
@@ -653,6 +667,23 @@ button:active,a:active,.row:active,summary:active{transition-duration:0s}
 #nav.swap,#read.swap{animation:arrive 180ms ease-out}
 @media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
 [hidden]{display:none!important}   /* beats the display: on .brand and .shead */
+/* Display type, and the one place a gradient is allowed. Three things carry
+   it and they are the same thing three times: the subject of the screen you
+   are on -- the app's own name on Home, the score on Your contributions, the
+   result of a practice run. Never a heading you did not come for, never a
+   control, never an ornament.
+   @supports, because background-clip:text with a transparent colour is a
+   number that disappears entirely on a browser that cannot do it, and a score
+   you cannot read is worse than a score that is not purple.
+   The screen's own name takes the size and not the gradient: it is on every
+   screen, and a gradient on every screen is wallpaper. */
+.brand b,.shead h2,.mine:has(.tally) .score,#qscore{
+  font-size:40px;line-height:1.05;letter-spacing:-.035em;font-weight:800}
+@supports ((-webkit-background-clip:text) or (background-clip:text)){
+  .brand b,.mine:has(.tally) .score,#qscore{
+    background:linear-gradient(96deg,var(--g1) 0%,var(--g2) 46%,var(--g3) 100%);
+    -webkit-background-clip:text;background-clip:text;color:transparent}
+}
 
 #read{display:none}
 body.reading #list{display:none}
@@ -663,17 +694,19 @@ body.reading #read{display:block}
   border-bottom:1px solid var(--line);
   padding:max(10px,env(safe-area-inset-top)) 16px 10px;
 }
-/* One line at the top of every screen: what you are looking at, and you. The
-   screen's own name is the largest type in the app, because with four tabs and
-   three levels inside two of them, the cheapest way to say where somebody is
-   standing is to say it. Everything else up here is quiet around it.
-   The back button takes the line above rather than sharing this one: at 375px
-   a 26px name, a code chip, "< Subjects" and the avatar on one row left the
-   name four letters wide. */
-.tophead{display:flex;align-items:center;gap:12px;min-height:var(--tap);margin-bottom:4px}
-.brand{display:flex;align-items:baseline;gap:8px;flex:1;min-width:0}
-.brand b{font-size:26px;letter-spacing:-.022em;font-weight:700}
-.brand span{font-size:13px;color:var(--mut)}
+/* The top of every screen: what you are looking at, and you. The screen's own
+   name is the largest type in the app, because with four tabs and three levels
+   inside two of them, the cheapest way to say where somebody is standing is to
+   say it. Everything else up here is quiet around it.
+   At 40px the name no longer shares a line with anything. The code chip sits
+   above it and the avatar beside the chip; the name takes the whole width
+   under them, so "Your contributions" runs to two lines instead of ellipsising
+   after four letters, which is what 26px on a shared row already had to do.
+   The avatar goes to the top of that block rather than its middle: it belongs
+   to the chip's line, not to the name's. */
+.tophead{display:flex;align-items:flex-start;gap:12px;min-height:var(--tap);margin-bottom:4px}
+.brand{display:flex;flex-wrap:wrap;align-items:baseline;gap:0 8px;flex:1;min-width:0}
+.brand span{flex:1 0 100%;margin-top:2px;font-size:13px;color:var(--mut)}
 /* You, and the handful of things that are only yours. Out of the tab bar --
    four tabs are the class, the campus and the library, and none of them is a
    place you visit between classes the way those three are. A glyph drawn in
@@ -698,12 +731,12 @@ body.reading #read{display:block}
 
 .group{padding:24px 16px 4px}
 .group h2{display:inline;margin:0 0 0 8px;font-size:13px;font-weight:500;color:var(--mut)}
-.shead{display:flex;align-items:center;gap:9px;flex:1;min-width:0}
-/* The screen's name, at the weight a screen's name is. It ellipsises rather
-   than wraps: at this depth the code chip beside it already says which
-   subject, so the tail of a long name is the cheapest thing on the row. */
-.shead h2{margin:0;font-size:26px;font-weight:700;letter-spacing:-.022em;
-  color:var(--fg);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.shead{display:flex;flex-wrap:wrap;align-items:center;gap:0 9px;flex:1;min-width:0}
+/* The screen's name, on its own line, in the app's display size. It wraps
+   rather than ellipsising now that it has the whole width: at 26px on a shared
+   row "Mathematics 1" showed four letters and a dot-dot-dot, and the tail of a
+   subject's name is the half that says which subject it is. */
+.shead h2{flex:1 0 100%;margin:2px 0 0;color:var(--fg);overflow-wrap:anywhere}
 /* A section's name is the smallest thing on the screen, not the same size as
    the secondary line inside its own rows. At 13px it competed with the rows
    it was labelling, and five of them down Home read as five equal headings;
@@ -798,8 +831,8 @@ button.off:active{background:var(--surface)}
 /* attended / held / the percentage. The one figure on this screen somebody
    opened this screen for, so it leads the row rather than sharing its weight
    with "Edit your timetable". Tabular, so a column of them does not wobble. */
-.row.att .name b{font-size:20px;font-weight:600;letter-spacing:-.012em;
-  font-variant-numeric:tabular-nums;line-height:1.3}
+.row.att .name b{font-size:26px;font-weight:700;letter-spacing:-.022em;
+  font-variant-numeric:tabular-nums;line-height:1.2}
 /* Below 75%. The number in amber and the word beside it, in the calmest
    arrangement that still cannot be missed -- the student already knows it is
    bad, and what they need off this row is the figure and the next step, not a
@@ -826,7 +859,12 @@ button.off:active{background:var(--surface)}
 .days{scrollbar-width:none}
 .days::-webkit-scrollbar{display:none}
 .dpick .step[disabled]{opacity:.35}
+/* .score is the first line of the card whatever the card is: your name on the
+   profile, "Your details" on the form, the total on Your contributions. Only
+   the last of those is a number somebody came to see, and :has(.tally) is what
+   tells them apart -- the tally is only ever drawn under the total. */
 .mine .score{font-size:26px;font-weight:700;letter-spacing:-.02em}
+.mine:has(.tally) .score{font-variant-numeric:tabular-nums}
 .mine p{margin:4px 0 0;font-size:13px;color:var(--mut)}
 .tally{display:flex;gap:24px;margin-top:16px}
 .tally div{font-size:13px;color:var(--mut)}
@@ -1284,7 +1322,10 @@ body.reading .tabs{display:none}
 #qq{font-size:20px;line-height:1.4;font-weight:600}
 #qq p{margin:0 0 10px}
 #qq .katex-display{font-weight:400}
-#qscore{font-size:26px;font-weight:700;margin:0 0 6px}
+/* The one number a finished run is for, on a screen with nothing else on it.
+   Size and gradient are set with the other display type at the top of this
+   block; what is left here is the space under it. */
+#qscore{margin:0 0 10px}
 #qsub{margin:0;color:var(--mut)}
 #qa{margin-top:24px;padding-top:20px;font-size:16px}
 #qa:has(>*){border-top:1px solid var(--line)}
@@ -1317,10 +1358,11 @@ body.reading .tabs{display:none}
   .tabs{right:auto;width:320px}
   body.reading .tabs{display:flex}
   /* The screen's name is the biggest type in the app on a phone, where it has
-     the whole width. Here it has a 320px column with a code chip and the
-     avatar already in it, and 26px left "Mathematics 1" showing four letters
-     and an ellipsis. The note beside it is the headline on this layout. */
-  .shead h2,.brand b{font-size:20px;letter-spacing:-.015em}
+     the whole width. Here it has a 320px column and the note beside it is the
+     headline on this layout, so the name steps back one place on the scale --
+     far enough not to compete with the reading column, still the largest thing
+     in the column it names. */
+  .shead h2,.brand b{font-size:26px;letter-spacing:-.022em;line-height:1.15}
 }
 /* ---- Campus: societies, what they are running, and where anything is. ----
    Cards rather than rows, because each of these carries more than two lines
