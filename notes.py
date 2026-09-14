@@ -9084,9 +9084,35 @@ def db_section(conn, section_id):
             (section_id,),
         )
     ]
+    # Who the registrar says is in this section and the app has never seen.
+    #
+    # roll_list is the institute's answer to "who belongs here" and profiles is
+    # the app's answer to "who turned up"; the gap between them is the only
+    # list that says who still has to be chased, and until now nothing could
+    # show it -- a section screen could say 12 members and not that 93 people
+    # were missing from it.
+    #
+    # Joined on the roll number rather than the scholar number because that is
+    # the one both sides always hold: a Google joiner gets it copied out of
+    # roll_list, and somebody who came through an invite typed it themselves.
+    # Which is exactly why it is compared folded -- ' 26a026 ' and '26A026' are
+    # one person, and a student who is listed as missing while sitting in the
+    # members table above is worse than useless.
+    missing = [
+        {"scholar_no": r[0], "roll_no": r[1], "name": r[2]}
+        for r in conn.execute(
+            "select r.scholar_no, r.roll_no, r.name from roll_list r"
+            " where r.section_id = %s::uuid"
+            "   and not exists (select 1 from profiles p"
+            "                    where upper(btrim(p.roll_no)) = upper(btrim(r.roll_no)))"
+            " order by r.roll_no",
+            (section_id,),
+        )
+    ]
     return {"id": str(section_id), "label": section_label(head[0], head[1]),
             "set": head[2], "members": members, "subjects": codes,
-            "timetable": timetable, "invite": db_invite(conn, section_id)}
+            "timetable": timetable, "missing": missing,
+            "invite": db_invite(conn, section_id)}
 
 
 # How long a minted code lasts and how many it lets in. The same numbers
@@ -10090,9 +10116,18 @@ SUPER_BODY = r"""<div class="row spread">
     <h3>Members</h3>
     <p class="lede">A role changed here goes down the same path the class
     admin&rsquo;s own screen uses, and lands on their next tap.</p>
-    <table><thead><tr><th>Who</th><th>Roll</th><th>Status</th><th>Role</th></tr></thead>
+    <table><thead><tr><th>Who</th><th>Roll</th><th>Status</th><th>Role</th>
+      <th>Access</th></tr></thead>
       <tbody id="members"></tbody></table>
     <p class="err" id="roleerr" role="alert"></p>
+  </div>
+
+  <div class="card scroll">
+    <h3 id="missinghead">Not joined yet</h3>
+    <p class="lede">On the institute&rsquo;s roll list for this section, with no
+    account here. Nobody to chase means the section is all in.</p>
+    <table><thead><tr><th>Who</th><th>Roll</th><th>Scholar no.</th></tr></thead>
+      <tbody id="missing"></tbody></table>
   </div>
 
   <div class="card">
@@ -10222,7 +10257,7 @@ async function show(id) {
   body.innerHTML = '';
   if (!s.members.length) {
     const tr = document.createElement('tr');
-    cell(tr, 'nobody has joined yet — hand out the invite code', 'mut').colSpan = 4;
+    cell(tr, 'nobody has joined yet — hand out the invite code', 'mut').colSpan = 5;
     body.appendChild(tr);
   }
   for (const m of s.members) {
@@ -10246,7 +10281,41 @@ async function show(id) {
       await show(open_id);
     }, 'roleerr');
     cell(tr, '').appendChild(sel);
+    // Blocking is reversible and never deletes: the row stays, the uploads and
+    // the votes stay, and the same button puts them back. That is why it reads
+    // Block rather than Remove.
+    const blocked = m.status === 'blocked';
+    const b = document.createElement('button');
+    b.type = 'button';
+    b.className = blocked ? 'ghost' : 'adm';
+    b.textContent = blocked ? 'Unblock' : 'Block';
+    b.onclick = () => run(b, async () => {
+      await ask('/super/block', {id: m.id, blocked: !blocked});
+      await show(open_id);
+    }, 'roleerr');
+    cell(tr, '').appendChild(b);
     body.appendChild(tr);
+  }
+
+  // Who the registrar lists and this app has never seen. The heading carries
+  // the count because that is the number somebody acts on -- "93 not joined"
+  // is a morning's chasing and "0" is a section that is all in.
+  const gone = s.missing || [];
+  $('missinghead').textContent = gone.length
+    ? 'Not joined yet - ' + gone.length : 'Not joined yet - none';
+  const miss = $('missing');
+  miss.innerHTML = '';
+  if (!gone.length) {
+    const tr = document.createElement('tr');
+    cell(tr, 'everybody on the roll list has an account', 'mut').colSpan = 3;
+    miss.appendChild(tr);
+  }
+  for (const m of gone) {
+    const tr = document.createElement('tr');
+    cell(tr, m.name, 'name');
+    cell(tr, m.roll_no);
+    cell(tr, m.scholar_no, 'mut');
+    miss.appendChild(tr);
   }
   $('known').textContent = s.subjects.length
     ? 'Codes this section knows: ' + s.subjects.map(c => c.code).join(', ')
@@ -10739,6 +10808,30 @@ def build_server(args):
                 return {"role": role}
             return self.super_do(grant)
 
+        def do_super_block(self):
+            """Shut somebody out of any section, or let them back in.
+
+            The same db_set_status the class admin's own screen calls, so there
+            is one rule about what blocking means and one place it is written.
+            What differs is who may reach it: a class admin may only aim it
+            inside their own section, and this surface is above the section
+            line, which is the whole reason it exists -- nine of the ten
+            sections have no admin yet, so without this there is nobody at all
+            who can shut a bad account out of them.
+
+            actor None for the same reason db_set_role passes it: the super
+            admin holds no profile, so there is no row they could be blocking
+            by accident, and the self-check compares against a string that is
+            not a uuid. The 0011 trigger still stands behind it.
+            """
+            def shut(conn, req):
+                target = a_uuid(req.get("id"))
+                blocked = bool(req.get("blocked", True))
+                status = db_set_status(conn, None, target, blocked)
+                log(f"{target} is now {status}", "super")
+                return {"status": status}
+            return self.super_do(shut)
+
         def do_super_invite(self):
             def mint(conn, req):
                 section = a_uuid(req.get("section"))
@@ -10964,6 +11057,7 @@ def build_server(args):
                 return {SUPER_PREFIX + "/login": self.do_super_login,
                         SUPER_PREFIX + "/section": self.do_super_create,
                         SUPER_PREFIX + "/role": self.do_super_role,
+                        SUPER_PREFIX + "/block": self.do_super_block,
                         SUPER_PREFIX + "/invite": self.do_super_invite,
                         SUPER_PREFIX + "/timetable": self.do_super_timetable,
                         }.get(where, lambda: self.send_error(404))()

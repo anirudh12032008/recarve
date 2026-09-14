@@ -418,6 +418,72 @@ def test_a_section_is_given_its_own_curriculums_codes_and_no_others(server, cook
     assert status == 400 and "unknown subject code" in said(body)["lines"][0]
 
 
+def test_a_section_says_who_the_registrar_lists_and_the_app_has_never_seen(server, cookie):
+    """The gap between roll_list and profiles is the list somebody acts on.
+
+    A section screen that says "12 members" and nothing else cannot tell you
+    whether that is everybody or a tenth of them.
+    """
+    sid = my_section(server, cookie)
+    with psycopg.connect(DB_URL, autocommit=True) as conn:
+        conn.execute("delete from roll_list")
+        # One who joined, under a roll number typed with different case and
+        # spacing than the registrar wrote it, and two who never turned up.
+        joined = conn.execute(
+            "select roll_no from profiles where section_id = %s limit 1",
+            (sid,)).fetchone()[0]
+        conn.execute(
+            "insert into roll_list (scholar_no, roll_no, name, section_id) values"
+            " ('26111011101', %s, 'Already Here', %s),"
+            " ('26111011102', '26X101', 'Absent One', %s),"
+            " ('26111011103', '26X102', 'Absent Two', %s)",
+            (f"  {joined.lower()} ", sid, sid, sid))
+
+    one = open_section(server, cookie, sid)
+    assert [m["roll_no"] for m in one["missing"]] == ["26X101", "26X102"], \
+        "the joined one is not missing, folded roll number and all"
+    assert one["missing"][0]["name"] == "Absent One"
+    assert one["missing"][0]["scholar_no"] == "26111011102"
+
+    with psycopg.connect(DB_URL, autocommit=True) as conn:
+        conn.execute("delete from roll_list")
+    assert open_section(server, cookie, sid)["missing"] == [], \
+        "an empty roll list is a section with nobody to chase, not an error"
+
+
+def test_the_super_admin_can_shut_a_student_out_of_any_section(server, cookie):
+    """Nine of the ten sections have no admin, so without this there is nobody
+    at all who can block a bad account in them."""
+    status, body, theirs = join(server, "Farhan", "24S077")
+    assert status == 200
+    me = next(m for m in open_section(server, cookie, my_section(server, cookie))["members"]
+              if m["roll_no"] == "24S077")
+    assert me["status"] == "pending", "a second joiner waits for an admin"
+
+    status, body, _ = call(server, "POST", "/super/block", {"id": me["id"], "blocked": True},
+                           cookies=supercookie(cookie))
+    assert (status, said(body)["status"]) == (200, "blocked")
+    after = next(m for m in open_section(server, cookie, my_section(server, cookie))["members"]
+                 if m["roll_no"] == "24S077")
+    assert after["status"] == "blocked"
+
+    # A block keeps the person: reversible with the same control, and their
+    # uploads and votes are still theirs. Unblocking lets them in rather than
+    # putting them back to pending -- the super admin deciding they may stay is
+    # the same decision an admin's Approve makes.
+    status, body, _ = call(server, "POST", "/super/block", {"id": me["id"], "blocked": False},
+                           cookies=supercookie(cookie))
+    assert (status, said(body)["status"]) == (200, "approved")
+
+
+def test_blocking_refuses_what_is_not_a_member(server, cookie):
+    for payload, complaint in [({"id": str(notes.uuid.uuid4())}, "no such member"),
+                               ({"id": "not-a-uuid"}, "act on")]:
+        status, body, _ = call(server, "POST", "/super/block", payload,
+                               cookies=supercookie(cookie))
+        assert status == 400 and complaint in said(body)["error"], body
+
+
 def test_a_section_cannot_be_created_twice_or_with_a_wrong_year(server, cookie):
     sets = set_id(server, cookie)
     call(server, "POST", "/super/section", {"name": "SY", "grad_year": 2032, "set": sets},
