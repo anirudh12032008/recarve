@@ -854,8 +854,12 @@ button.off:active{background:var(--surface)}
 .rank .pos{flex:none;width:2.6em;font-size:13px;color:var(--mut);
   font-variant-numeric:tabular-nums}
 .rank .name{flex:1;min-width:0}
-.rank .name b,.rank .name small{display:block;
-  white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.rank .name b,.rank .name small{display:block}
+/* The line under the name is a summary and its first words are the whole of
+   it, so that is the one that gets cut. The name itself wraps to a second
+   line instead: the face beside it costs the column 44px, and a board is a
+   list of people -- "Sneha Bhatt…" is not one of them. */
+.rank .name small{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .rank .name b{font-weight:600}
 .rank .name small{font-size:13px;color:var(--mut)}
 /* Earned, not decorative: only shown from Regular up, so a word here means
@@ -930,13 +934,11 @@ button.off:active{background:var(--surface)}
 .thread h2{margin:38px 0 0;font-size:20px;line-height:1.3;letter-spacing:-.012em;
   font-weight:600;padding-bottom:7px;border-bottom:1px solid var(--line)}
 .thread .quiet{padding:14px 0 0}
-/* The question takes the same two columns its answers have: something in the
-   left one that says whose this is, the words in the right. Before this the
-   question and its answers were the same shape at the same weight, and a
-   thread read as four paragraphs. */
-.dbt{display:flex;gap:12px;align-items:flex-start;
-  padding:16px 0;border-bottom:1px solid var(--line)}
-.dbt>.what{flex:1;min-width:0}
+.dbt{padding:16px 0;border-bottom:1px solid var(--line)}
+/* The question's own words, its byline and its buttons, in one box -- so the
+   answer form opens under the question it answers and above the answers
+   already there, rather than at the end of everything. */
+.dbt>.what{min-width:0}
 /* Somebody's typing, drawn as typing: pre-wrap keeps their line breaks and
    textContent is what puts it there. Nothing in this block is ever parsed. */
 .said{margin:0;font-size:16px;white-space:pre-wrap;overflow-wrap:anywhere}
@@ -1735,10 +1737,16 @@ function noteRow(n, s) {
 // one empty ring, no letter, no hue, identical on every confession. Nothing
 // about it is derived from the row, because anything derived from the row is
 // a fingerprint even when it is not a name.
+// Knuth's multiplier rather than the usual 31, and the wrap left until the
+// end: taking the remainder at every step throws away everything but the last
+// couple of letters, which is how the eight names on the seeded board came out
+// three degrees apart. Measured on the real board and the real twenty-four
+// societies -- this is the one that puts no two names next to each other in
+// the same colour.
 const nameHue = name => {
   let n = 0;
-  for (const ch of name) n = (n * 31 + ch.codePointAt(0)) % 360;
-  return n;
+  for (const ch of name) n = (Math.imul(n, 2654435761) + ch.codePointAt(0)) | 0;
+  return Math.abs(n) % 360;
 };
 
 // The first letter of the first two words, or the first two letters when
@@ -1755,10 +1763,10 @@ const initialsOf = name => {
   return letters.toUpperCase();
 };
 
-// `size` is '' (32px, the row), 'sm' (24px, riding a byline) or 'xl' (the
-// profile). Always aria-hidden: the name it stands for is written next to it
-// every time it is used, and a reader that says "PN, Priya Nair" has read the
-// row twice.
+// `size` is '' -- the row and the byline, which are the same size -- or 'xl',
+// which is only the profile card. Always aria-hidden: the name it stands for
+// is written next to it every time it is used, and a reader that says "PN,
+// Priya Nair" has read the row twice.
 function face(name, size) {
   const el = document.createElement('span');
   el.className = 'face' + (name ? '' : ' none') + (size ? ' ' + size : '');
@@ -1775,7 +1783,7 @@ function face(name, size) {
 function saidByFace(name, when) {
   const p = document.createElement('p');
   p.className = 'meta';
-  p.append(face(name, 'sm'), document.createTextNode(
+  p.append(face(name), document.createTextNode(
     (name || 'Anonymous') + ' · ' + ago(when, NOW)));
   return p;
 }
@@ -4717,13 +4725,13 @@ function answerCard(a, best) {
 function doubtCard(q) {
   const el = document.createElement('div');
   el.className = 'dbt';
-  // The question takes the left column its answers already have -- a face
-  // where they have a vote -- so a thread reads as one question and its
-  // replies rather than as four paragraphs of equal weight stacked up.
+  // One rule, and it is saidBy's: the face leads the byline, here and on an
+  // answer and on the wall alike. A second one in a column of its own would
+  // be the same person twice on the same row.
   const what = document.createElement('div');
   what.className = 'what';
   what.append(said(q), saidBy(q));
-  el.append(face(q.by), what);
+  el.append(what);
   const reply = document.createElement('button');
   reply.textContent = 'Answer this';
   const row = acts(reply, dropBtn(q));

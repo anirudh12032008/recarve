@@ -56,11 +56,12 @@
      themes, so a face is a shape this app already knows how to colour and
      not a palette of its own. --h comes from the name (face() in the page),
      which is what makes the same person the same colour on every screen.
-     32px is the row size; .sm is the one that rides a byline. */
+     One size for every row and every byline in the app, and one more for the
+     profile card, which is the only screen where the face is of the person
+     reading it. */
   .face { @apply flex-none inline-flex items-center justify-center select-none
                  w-8 h-8 rounded-full text-small font-semibold tracking-tight
                  bg-hue-chip text-hue-chip-ink; }
-  .face.sm { @apply w-6 h-6 text-micro tracking-normal; }
   .face.xl { @apply w-14 h-14 text-head; }
   /* Nobody, drawn as nobody. A confession has no author in its payload at all
      and must never look as though it has one, so this branch carries no
