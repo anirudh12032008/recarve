@@ -126,36 +126,55 @@ def classify(folder, filename):
     return kind, exam, year, section
 
 
-def main(src):
-    zips = sorted(pathlib.Path(src).glob("[MS]T__*.zip"))
-    if not zips:
-        sys.exit(f"no MT__/ST__ zips in {src}")
+def sources(src):
+    """Yield (subject_label, [(member_path, read_bytes)]) per subject.
 
+    Two shapes arrive depending on how the files were pulled: one zip per
+    subject, or one directory per subject when the page streamed them
+    straight to disk. Both carry the same thing -- a subject name in the top
+    level and the portal's folder names under it -- so the difference is
+    worth exactly this function and nothing further down.
+    """
+    src = pathlib.Path(src)
+    for z in sorted(src.glob("[MS]T__*.zip")):
+        with zipfile.ZipFile(z) as zf:
+            names = [m for m in zf.namelist() if not m.endswith("/")]
+            yield z.stem.split("__", 1)[1].replace("-", " "), \
+                [(m, (lambda zf=zf, m=m: zf.read(m))) for m in names]
+    for d in sorted(p for p in src.glob("[MS]T__*") if p.is_dir()):
+        files = [p for p in d.rglob("*") if p.is_file()]
+        yield d.name.split("__", 1)[1].replace("-", " "), \
+            [(str(p.relative_to(d)), (lambda p=p: p.read_bytes())) for p in files]
+
+
+def main(src):
     by_squashed = {squash(name): code for name, code in SUBJECTS.items()}
     dest_root = ROOT / "library" / ".archive"
     rows, parked, skipped = [], [], []
+    seen = 0
 
-    for z in zips:
-        subject = z.stem.split("__", 1)[1].replace("-", " ")
+    for subject, members in sources(src):
+        seen += 1
         code = by_squashed.get(squash(subject))
-        with zipfile.ZipFile(z) as zf:
-            members = [m for m in zf.namelist() if not m.endswith("/")]
-            if code is None:
-                parked.append((subject, len(members)))
+        if code is None:
+            parked.append((subject, len(members)))
+            continue
+        for m, read in members:
+            folder, _, filename = m.replace(os.sep, "/").rpartition("/")
+            kind, exam, year, section = classify(folder, filename)
+            data = read()
+            if len(data) < 5000:
+                skipped.append((subject, m, len(data)))
                 continue
-            for m in members:
-                folder, _, filename = m.rpartition("/")
-                kind, exam, year, section = classify(folder, filename)
-                data = zf.read(m)
-                if len(data) < 5000:
-                    skipped.append((subject, m, len(data)))
-                    continue
-                key = f"{code}/{folder}/{filename}"
-                out = dest_root / code / folder / filename
-                out.parent.mkdir(parents=True, exist_ok=True)
-                out.write_bytes(data)
-                rows.append((code, kind, exam, year, section,
-                             pathlib.Path(filename).stem, key, len(data), SOURCE))
+            key = f"{code}/{folder}/{filename}"
+            out = dest_root / code / folder / filename
+            out.parent.mkdir(parents=True, exist_ok=True)
+            out.write_bytes(data)
+            rows.append((code, kind, exam, year, section,
+                         pathlib.Path(filename).stem, key, len(data), SOURCE))
+
+    if not seen:
+        sys.exit(f"no MT__/ST__ zips or directories in {src}")
 
     with psycopg.connect(DB_URL, autocommit=True) as conn:
         before = conn.execute("select count(*) from archive_documents").fetchone()[0]
@@ -169,7 +188,7 @@ def main(src):
             )
         after = conn.execute("select count(*) from archive_documents").fetchone()[0]
 
-    print(f"{len(zips)} zip(s), {len(rows)} file(s) staged")
+    print(f"{seen} subject source(s), {len(rows)} file(s) staged")
     print(f"shelved {after - before} new row(s); "
           f"{len(rows) - (after - before)} already present")
     if skipped:
