@@ -9446,6 +9446,12 @@ async function load() {
 async function show(id) {
   const s = await ask('/super/section?id=' + encodeURIComponent(id));
   open_id = id;
+  // The paste box is about to be refilled from the section, so last paste's
+  // complaints have to go with it -- five red lines under a textarea whose
+  // contents they are no longer about is a screen that looks broken.
+  $('ttlist').classList.add('hide');
+  $('ttok').classList.add('hide');
+  $('tterr').textContent = '';
   $('one').classList.remove('hide');
   $('onename').textContent = s.label;
   $('onesub').textContent = s.members.length + ' member'
