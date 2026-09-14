@@ -2192,6 +2192,39 @@ function papersSection(s) {
         all.filter(p => p.kind !== 'paper').map(p => paperRow(p, s)));
 }
 
+// Every paper in the archive, three blocks deep, whatever course set it. The
+// subject screen already answers "what has THIS course set"; this screen is
+// for the student who knows they want an end term and not which one.
+function renderPapers() {
+  needAllPapers();
+  if (ALL_PAPERS === null)
+    return void nav.appendChild(saying('Reading the archive\u2026'));
+  if (ALL_PAPERS === 'failed')
+    return void nav.appendChild(saying('The archive did not answer.',
+      'It needs the server. Nothing is lost -- try again in a moment.'));
+  if (!ALL_PAPERS.length)
+    return void nav.appendChild(saying('No papers here yet.',
+      'This fills up from the collections the seniors kept.'));
+  for (const [key, label] of EXAMS)
+    block(label, ALL_PAPERS.filter(p => p.exam === key).map(crossPaperRow));
+  // A paper with no sitting on it would otherwise be invisible on this screen
+  // -- three blocks that between them do not hold every row is a screen that
+  // quietly loses things.
+  block('Other papers',
+        ALL_PAPERS.filter(p => !EXAMS.some(([k]) => k === p.exam))
+                  .map(crossPaperRow));
+}
+
+// The subject screen's row, plus the one thing it can leave out and this
+// screen cannot: which course this paper belongs to.
+function crossPaperRow(p) {
+  const s = subjectOf(p.subject_code) || {code: p.subject_code};
+  const el = paperRow(p, s);
+  const small = el.querySelector('small');
+  small.textContent = p.subject_code + ' \u00b7 ' + small.textContent;
+  return el;
+}
+
 function paperRow(p, s) {
   const el = document.createElement('div');
   el.className = 'row';
@@ -3774,6 +3807,24 @@ function needPapers(code) {
     .catch(() => { PAPERS[code] = []; papersAsked[code] = false; redrawSubject(code); });
 }
 const redrawSubject = code => { if (view.code === code) render(); };
+
+// The whole archive in one payload. `needPapers` is per subject on purpose --
+// a student opens one course at a time -- but the papers screen is the other
+// question, "what is there at all", asked the week before an exam by somebody
+// who does not yet know which paper they want. That question cannot be
+// answered a subject at a time, so it gets the one fetch it needs.
+let ALL_PAPERS = null, allPapersAsked = false;
+function needAllPapers() {
+  if (ALL_PAPERS || allPapersAsked || !live) return;
+  allPapersAsked = true;
+  fetch('/papers')
+    .then(r => r.ok ? r.json() : Promise.reject(new Error(r.status)))
+    .then(d => { ALL_PAPERS = d.papers || []; allPapersAsked = false;
+                 redrawPapers(); })
+    .catch(() => { ALL_PAPERS = 'failed'; allPapersAsked = false;
+                   redrawPapers(); });
+}
+const redrawPapers = () => { if (view.papers) render(); };
 const redrawCampus = () => { if (view.tab === 'campus') render(); };
 const redrawCommunity = () => { if (view.tab === 'community') render(); };
 const campusList = key => (CAMPUS && CAMPUS[key]) || [];
@@ -4909,7 +4960,8 @@ function render() {
   closeDrawer();
   paintDrawer();
   const s = view.code ? subjectOf(view.code) : null;
-  const searchable = view.tab === 'classes' && !view.edit && !view.att && !view.day;
+  const searchable = view.tab === 'classes' && !view.edit && !view.att && !view.day
+                    && !view.papers;
   nav.innerHTML = '';
   // Home keeps the brand; every other screen names itself in the same header,
   // and #lback -- the only back button at this depth -- appears only where
@@ -4917,7 +4969,7 @@ function render() {
   brand.hidden = view.tab !== 'home' || !!view.compose;
   shead.hidden = view.tab === 'home' && !view.compose;
   lback.hidden = !s && !view.edit && !view.att && !view.compose && !view.day
-                 && !view.me;
+                 && !view.me && !view.papers;
   scode.hidden = !s;
   // Search is the subject list's own tool. It must not answer over Community,
   // and it must not answer over the three screens inside Classes that are not
@@ -4943,6 +4995,7 @@ function render() {
     scode.style.setProperty('--h', hue(s.code));
   }
   sname.textContent = s ? s.name
+    : view.papers ? 'Past papers'
     : view.day ? 'Your day'
     : view.edit ? 'Your timetable'
     : view.att ? 'Your attendance'
@@ -4964,6 +5017,7 @@ function render() {
   else if (view.edit) renderTimetable();
   else if (view.att) renderAttendance();
   else if (view.day) renderDay();
+  else if (view.papers) renderPapers();
   else if (view.tab === 'home') renderHome();
   else if (view.tab === 'campus') renderCampus();
   else if (view.tab === 'community') renderCommunity();
@@ -5016,6 +5070,11 @@ function route() {
   // back climbs to the subject list rather than out of the app. 'day' can
   // never collide with a subject -- every code is letters and digits.
   const dayv = tab === 'classes' && parts[1] === 'day';
+  // The archive, across every course. A level inside Classes for the same
+  // reason the three above are: back climbs to the subject list, and the
+  // screen has a URL somebody can send. 'papers' cannot collide with a
+  // subject code -- every code carries digits.
+  const papersv = tab === 'classes' && parts[1] === 'papers';
   // So is the composer, for the same reason: without a URL the back gesture
   // dropped what was typed and left the tab stuck on an empty form. Two tabs
   // have one now -- an event, a club or a place on Campus, and a notice on
@@ -5034,12 +5093,13 @@ function route() {
   const me = tab === 'me' ? parts[1] || null : null;
   const was = view;
   view = {tab, code: s ? s.code : null, title: title || null, edit, att, compose,
-          composeId, day: dayv, me};
+          composeId, day: dayv, papers: papersv, me};
   // Not every render, and not every keystroke inside one: only a step to a
   // different tab, a different subject or a different level of one.
   const moving = !was || was.tab !== view.tab || was.code !== view.code
     || was.title !== view.title || was.edit !== view.edit || was.att !== view.att
-    || was.day !== view.day || was.me !== view.me || was.compose !== view.compose;
+    || was.day !== view.day || was.me !== view.me || was.compose !== view.compose
+    || was.papers !== view.papers;
   if (!edit) draft = null;      // walking away drops an unsaved week, not TT
   if (!att) attDate = null;     // and re-opening it starts on today, not last week
   if (!dayv) dayDate = null;    // today by default, every time it is opened
@@ -5710,6 +5770,7 @@ const DRAWER = [
                    ['Your timetable', ['classes', 'timetable']],
                    ['Catching up', ['classes', 'attendance']]]],
   ['The library', [['Subjects', ['classes']],
+                   ['Past papers', ['classes', 'papers']],
                    ['Saved', ['me', 'saved']]]],
   ['The section', [['Campus', ['campus']],
                    ['Community', ['community']]]],
@@ -5723,7 +5784,8 @@ const DRAWER = [
 // at the top of that tab -- reading a lecture is standing in Subjects.
 const drawerHere = () => hashOf(view.tab,
   view.me || (view.tab === 'classes'
-    ? (view.edit ? 'timetable' : view.att ? 'attendance' : view.day ? 'day' : null)
+    ? (view.edit ? 'timetable' : view.att ? 'attendance' : view.day ? 'day'
+       : view.papers ? 'papers' : null)
     : null));
 
 // Repainted when the role arrives or the screen changes, and not on every
@@ -8603,8 +8665,9 @@ def db_places(conn):
     ]
 
 
-def db_papers(conn, code):
-    """Every archived document for one subject, newest first.
+def db_papers(conn, code=None):
+    """Every archived document for one subject, newest first -- or, with no
+    code, the whole archive at once for the cross-subject papers screen.
 
     The shelf the seniors' portal kept in 31 folder names, read back as four
     columns. Ordering is year descending with nulls last, because a paper
@@ -8614,14 +8677,21 @@ def db_papers(conn, code):
     put this table beside clubs and places instead of inside `materials`
     precisely because every section sat the same End Term.
     """
+    # The subject screen groups by exam under one course, so it wants the
+    # course's own order; the papers screen groups by exam across all of them
+    # and wants the newest sitting first whatever course set it.
+    where = "" if code is None else "where subject_code = %s "
+    args = () if code is None else (code,)
+    order = ("order by year desc nulls last, subject_code, title"
+             if code is None else
+             "order by year desc nulls last, kind, exam, title")
     return [
-        {"id": str(i), "kind": k, "exam": e, "year": y, "section": sec,
-         "title": t, "path": key, "bytes": n}
-        for i, k, e, y, sec, t, key, n in conn.execute(
-            "select id, kind, exam, year, set_for_section, title, "
-            "       file_key, size_bytes "
-            "  from archive_documents where subject_code = %s "
-            " order by year desc nulls last, kind, exam, title", (code,))
+        {"id": str(i), "subject_code": sc, "kind": k, "exam": e, "year": y,
+         "section": sec, "title": t, "path": key, "bytes": n}
+        for i, sc, k, e, y, sec, t, key, n in conn.execute(
+            "select id, subject_code, kind, exam, year, set_for_section, "
+            "       title, file_key, size_bytes "
+            "  from archive_documents " + where + order, args)
     ]
 
 
@@ -11301,10 +11371,14 @@ def build_server(args):
                 import urllib.parse
                 code = urllib.parse.parse_qs(
                     urllib.parse.urlparse(self.path).query).get("code", [""])[0]
-                if code not in SUBJECTS:
+                # No code at all is the papers screen asking for the whole
+                # archive. An unknown code is still a mistake worth naming --
+                # the empty string is a question, "CS9999" is a typo.
+                if code and code not in SUBJECTS:
                     return self.reply(400, {"error": "unknown subject"})
                 with db(self.me["id"]) as conn:
-                    return self.reply(200, {"papers": db_papers(conn, code)})
+                    return self.reply(200,
+                                      {"papers": db_papers(conn, code or None)})
             if self.path == "/jobs":
                 return self.reply(200, {"jobs": jobs.snapshot()})
             if self.path.split("?")[0] == "/worker/audio":

@@ -699,13 +699,13 @@ for (const g of ['Your week', 'The library', 'The section', 'You'])
   assert.ok(says(g), 'the drawer names the group: ' + g);
 // The levels that had no global way in at all before this.
 for (const row of ['Home', 'Your day', 'Your timetable', 'Catching up', 'Subjects',
-                   'Saved', 'Campus', 'Community', 'Your profile',
+                   'Past papers', 'Saved', 'Campus', 'Community', 'Your profile',
                    'Points and what you added', 'About recarve'])
   assert.ok(says(row), 'the drawer holds: ' + row);
 assert.ok(!says('Class admin'), 'and nothing a student may not press');
-// Four headings and ten rows. Counted, because a group that quietly stopped
+// Four headings and eleven rows. Counted, because a group that quietly stopped
 // being built still says everything the OTHER groups say.
-assert.equal(dnavNode.children.length, 15);
+assert.equal(dnavNode.children.length, 16);
 assert.equal(focused[0], 'first', 'opening puts the focus inside it');
 
 // Where you are, in the drawer as well as in the bar. Standing three levels
@@ -764,7 +764,7 @@ avatarEl.onclick();
 assert.ok(says('Class admin'), 'an admin is offered the way into the panel');
 assert.ok(says('Running the class'), 'under a group of its own');
 assert.ok(wrote(['className', 'tag']), 'marked with the ink every admin row carries');
-assert.equal(dnavNode.children.length, 17, 'one more heading and one more row');
+assert.equal(dnavNode.children.length, 18, 'one more heading and one more row');
 avatarEl.onclick();
 ROLE = null;
 
@@ -2437,7 +2437,7 @@ def test_the_composer_is_a_url_like_every_other_level():
             "    ? parts[1] || null : null;" in notes.PAGE)
     assert "composing" not in notes.PAGE, "no variable may outlive the URL"
     assert ("lback.hidden = !s && !view.edit && !view.att && !view.compose && !view.day\n"
-            "                 && !view.me;" in notes.PAGE)
+            "                 && !view.me && !view.papers;" in notes.PAGE)
     compose = re.search(r"function renderCompose\(\) \{.*?\n\}", notes.PAGE, re.S).group(0)
     assert "history.back()" in compose, "Cancel is a step back, like every other one"
 

@@ -389,3 +389,38 @@ def test_a_student_in_another_section_sees_the_same_shelf(db):
     shelve(db)
     as_user(db, other)
     assert len(notes.db_papers(db, "MC1101")) == 1
+
+
+def test_the_papers_screen_reads_every_subject_in_one_query(db):
+    """db_papers with no code is the cross-subject papers screen. It must
+    carry subject_code on every row -- without it the screen cannot say which
+    course set a paper, and every row reads the same."""
+    import importlib, pathlib as _pl, sys as _sys
+    _sys.path.insert(0, str(_pl.Path(__file__).resolve().parents[2]))
+    notes = importlib.import_module("notes")
+
+    as_admin_connection(db)
+    admin = member(db, admin=True)
+    student = member(db, role="student")
+
+    as_user(db, admin)
+    shelve(db, exam="end", year=2021, set_for_section=None,
+           title="Maths End Term", file_key="archive/MC1101/2021-end.pdf")
+    shelve(db, subject_code="HS1106", exam="end", year=2025,
+           set_for_section=None, title="Comms End Term",
+           file_key="archive/HS1106/2025-end.pdf")
+
+    as_user(db, student)
+    every = notes.db_papers(db)
+
+    # Not an equality on the whole table: this database is shared with every
+    # other test in the file, so the assertion is about the two rows this test
+    # put there and the shape of all of them.
+    assert all(p["subject_code"] for p in every), "every row says whose it is"
+    mine = [p for p in every if p["title"] in ("Comms End Term", "Maths End Term")]
+    assert {p["subject_code"] for p in mine} == {"MC1101", "HS1106"}
+    # Newest first ACROSS subjects: the whole point of the screen is that it
+    # does not care which course set the paper.
+    assert [p["title"] for p in mine] == ["Comms End Term", "Maths End Term"]
+    # And asking for one subject still answers with only that subject.
+    assert {p["subject_code"] for p in notes.db_papers(db, "MC1101")} == {"MC1101"}
