@@ -9937,174 +9937,204 @@ button[disabled]{background:var(--mut);color:var(--bg);box-shadow:none}
 .hint{color:var(--mut);font-size:.8rem;margin:0 0 .8rem}
 /* ---- The landing, which only the join screen carries. A cold tap off a
    WhatsApp link is the one moment this app has to sell itself, so it drops
-   the plain card every other gate screen uses and commits to one look: dark,
-   whichever theme the phone is in. Everything is scoped under .land -- login,
+   the plain card every other gate screen uses and commits to one look --
+   whichever theme the phone is in. Everything is scoped under .land: login,
    waiting and the admin panel never see a line of it. The form inside is the
    same form, the same ids and the same script; only the room around it moved.
-   No web font and no image: it has to paint fast on the class wifi.
 
-   The look is now one idea rather than six: ink, one violet, hairlines, and
-   a lot of air. No gradients on text, no glass, no glow, no grid overlay --
-   every one of those was a second thing competing with the sentence that
-   actually sells this, and on a 360px phone they were what you noticed. */
-body:has(.land){display:block;padding:0;background:#08090c}
+   The look is the thing this app replaces: the ruled notebook that gets
+   photocopied the night before the mid-sem. Pale blue rules across the page,
+   a red margin down the left, everything written in ballpoint blue. Every
+   line of text sits ON a rule -- 28px, and every size and margin below is a
+   multiple of it -- because paper that the writing floats above is a texture,
+   and paper the writing sits on is a notebook.
+
+   That buys the one argument this page has to make without words: the
+   professor's sentence is set in handwriting and what came out of it is set
+   in type, on the same page, one under the other. Nothing else on the page
+   is allowed to be loud.
+
+   The rules and the margin are two CSS gradients and one border -- no image,
+   nothing to request, and it paints on the class wifi. The one webfont is
+   loaded from the body of this page alone with display=swap, so a slow font
+   costs the landing a reflow and costs the app nothing. */
+body:has(.land){display:block;padding:0;background:#faf9f4}
 main:has(.land){max-width:none}
-.land{--bg:#08090c;--fg:#f2f3f6;--mut:#8b91a0;--line:#1e2128;
-  --accent:#b9a2ff;--accent-fg:#08090c;--surface:#0e1015;--err:#ff6b7a;
-  color-scheme:dark;color:var(--fg);background:var(--bg);
-  font-feature-settings:"kern","liga"}
-.land .wrap{max-width:46rem;margin:0 auto;
-  padding:max(20px,env(safe-area-inset-top)) 22px 48px}
-.land p{color:var(--mut)}
-.land a{color:var(--fg)}
-.land nav{display:flex;align-items:center;justify-content:space-between;min-height:48px}
-.logo{font-size:1rem;font-weight:700;letter-spacing:-.02em;color:var(--fg)}
-.logo i{display:inline-block;width:.34em;height:.34em;margin-left:.16em;border-radius:50%;
-  background:var(--accent);vertical-align:.12em}
-.land nav a{text-decoration:none;font-weight:600;font-size:.9rem;color:var(--mut);
-  display:inline-flex;align-items:center;min-height:44px}
-.land nav a:hover{color:var(--fg)}
+.land{--rule:28px;
+  --paper:#faf9f4; --ink:#1f2a5b; --pencil:#5d6484; --red:#c13a32;
+  --line:#cbd9e6; --accent:var(--ink); --accent-fg:#faf9f4;
+  --bg:var(--paper); --fg:var(--ink); --mut:var(--pencil); --err:#b3261e;
+  --surface:#f3f1e8;
+  color-scheme:light;min-height:100dvh;color:var(--ink);background:var(--paper);
+  font:16.5px/var(--rule) ui-sans-serif,system-ui,-apple-system,"Segoe UI",sans-serif;
+  /* The rules run the height of the page and stop 1px short of each 28, so
+     the baseline of every line lands on one rather than through it. */
+  background-image:repeating-linear-gradient(to bottom,
+    transparent 0,transparent calc(var(--rule) - 1px),
+    var(--line) calc(var(--rule) - 1px),var(--line) var(--rule));
+  background-position:0 2px}
+.hand{font-family:Kalam,"Segoe Print",cursive}
+.land .wrap{position:relative;max-width:41rem;margin:0 auto;
+  padding:0 20px 56px 52px;border-left:1px solid transparent}
+/* The margin. A real one: the writing keeps off it, and the page number and
+   the step numbers are the only things allowed to live in it. */
+.land .wrap::before{content:"";position:absolute;top:0;bottom:0;left:34px;
+  width:1px;background:#dc9a95}
+@media (min-width:620px){.land .wrap{padding-left:88px}
+  .land .wrap::before{left:64px}}
+.land p{color:var(--ink);margin:0 0 var(--rule);max-width:64ch}
+.land a{color:var(--ink)}
+.land nav{display:flex;align-items:baseline;justify-content:space-between;
+  padding:var(--rule) 0 0}
+.logo{font-size:1.35rem;font-weight:700;color:var(--ink);
+  font-family:Kalam,"Segoe Print",cursive}
+.land nav a{font-size:.95rem;color:var(--pencil);text-decoration:none;
+  border-bottom:1px solid var(--line);padding-bottom:1px}
+.land nav a:hover{color:var(--ink);border-color:var(--ink)}
 
-/* The hero is one column at every width. Two columns was the demo shouting
-   over the headline; stacked, each gets read once, in order. */
-.hero{padding:9vh 0 0}
-@media (min-width:880px){.hero{padding:14vh 0 0}}
-.pill{display:inline-flex;align-items:center;gap:8px;font-size:.76rem;font-weight:500;
-  color:var(--mut);letter-spacing:.01em}
-.pill b{width:6px;height:6px;border-radius:50%;background:#3ee089}
-.hero h1{font-size:clamp(2.4rem,8vw,3.6rem);line-height:1.02;letter-spacing:-.035em;
-  font-weight:700;margin:20px 0 20px;color:var(--fg);max-width:13ch}
-.hero h1 span{display:block;color:var(--mut)}
-.hero .lede{font-size:1.05rem;line-height:1.65;max-width:42ch;margin:0 0 30px}
-.ctas{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
-.cta{display:inline-flex;align-items:center;justify-content:center;min-height:48px;
-  padding:0 20px;border-radius:10px;font-weight:600;text-decoration:none;font-size:.98rem}
-.cta.go{background:var(--fg);color:var(--bg)}
-.cta.soft{color:var(--mut);border:1px solid var(--line)}
-.cta.soft:hover{color:var(--fg)}
-/* Three numbers on one hairline. They are facts, not badges, so they are set
-   like facts: figures above, the words under them, nothing drawn around. */
-.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;
-  margin:40px 0 0;padding:22px 0 0;border-top:1px solid var(--line)}
-.stats div{font-size:.78rem;line-height:1.35;color:var(--mut)}
-.stats b{display:block;font-size:1.15rem;font-weight:600;color:var(--fg);
-  letter-spacing:-.02em;margin:0 0 2px;font-variant-numeric:tabular-nums}
+/* The hero is the top of the page, written on it. The headline is the one
+   handwritten thing at size; the sentence under it is typed, which is the
+   whole promise in two lines of type setting. */
+.hero{padding:calc(var(--rule) * 2) 0 0}
+.date{color:var(--pencil);font-size:.9rem;margin:0 0 var(--rule)}
+.hero h1{font-family:Kalam,"Segoe Print",cursive;font-weight:700;
+  font-size:clamp(2.35rem,8.5vw,3.5rem);line-height:calc(var(--rule) * 2);
+  letter-spacing:-.01em;margin:0 0 var(--rule);color:var(--ink);max-width:16ch;
+  text-wrap:balance}
+.hero h1 span{display:block}
+.hero .lede{font-size:1.05rem;max-width:40ch}
+.ctas{display:flex;gap:16px;flex-wrap:wrap;align-items:center;
+  margin:0 0 calc(var(--rule) * 2)}
+.cta{display:inline-flex;align-items:center;justify-content:center;
+  min-height:56px;padding:0 22px;font-weight:600;font-size:1rem;
+  text-decoration:none;border-radius:2px}
+.cta.go{background:var(--ink);color:var(--paper)}
+.cta.soft{color:var(--ink);background:transparent;padding:0 2px;
+  box-shadow:inset 0 -1px 0 var(--ink)}
+/* The three facts, written the way you would write them down: one per rule,
+   the figure first. Not three boxes. */
+.stats{margin:0 0 calc(var(--rule) * 2);padding:0;list-style:none;
+  color:var(--pencil)}
+.stats b{color:var(--ink);font-weight:700;font-variant-numeric:tabular-nums}
 
-/* The demonstration. A lecture recording on top, the notes it became below --
-   the one thing this app does that a classmate cannot picture from a
-   sentence, so it is shown happening rather than described. One box, one
-   hairline down the middle of it; the arrow between the halves is the whole
-   claim. */
-.demo{margin:56px 0 0;border:1px solid var(--line);border-radius:14px;
-  background:var(--surface);overflow:hidden}
-.rec{display:flex;align-items:center;gap:9px;padding:13px 16px;
-  border-bottom:1px solid var(--line)}
-.rec .dot{width:7px;height:7px;border-radius:50%;background:#ff4d6d;animation:blink 1.6s infinite}
-.rec .t{font:600 .76rem ui-monospace,SFMono-Regular,Menlo,monospace;color:var(--fg)}
-.rec .sub{font-size:.76rem;color:var(--mut);margin-left:auto}
-.said{padding:18px 16px;font-size:.95rem;line-height:1.65;color:var(--fg)}
-.said small,.notes h3,.q small{display:block;font-size:.68rem;color:var(--mut);
-  letter-spacing:.09em;text-transform:uppercase;font-weight:600;margin:0 0 8px}
-.said em{font-style:normal;color:var(--accent)}
-.flow{display:flex;align-items:center;gap:10px;padding:0 16px;font-size:.72rem;
-  color:var(--mut);letter-spacing:.02em}
-.flow::before,.flow::after{content:"";flex:1;height:1px;background:var(--line)}
-.notes{padding:18px 16px}
-.notes h3{margin:0 0 10px}
-.notes ul{margin:0 0 14px;padding-left:1.1rem;font-size:.93rem;line-height:1.6;color:var(--fg)}
-.notes li{margin:.3rem 0}
-.notes code{font:.85rem ui-monospace,SFMono-Regular,Menlo,monospace;color:var(--accent);
-  overflow-wrap:anywhere}
-.q{font-size:.88rem;line-height:1.6;color:var(--mut);padding:14px 0 0;
-  border-top:1px solid var(--line)}
+/* The demonstration, and the only place two typefaces meet. What was said is
+   handwritten; what came back is typed; the red hook in the margin is the
+   arrow between them. No box around either -- a box would make them two
+   things, and the point is that they are one thing twice. */
+.demo{margin:0 0 calc(var(--rule) * 2);position:relative}
+.demo h3{font-size:.95rem;font-weight:400;color:var(--pencil);margin:0;
+  line-height:var(--rule)}
+.said{font-family:Kalam,"Segoe Print",cursive;font-size:1.45rem;
+  line-height:calc(var(--rule) * 2);color:var(--ink);margin:0 0 var(--rule)}
+.said em{font-style:normal}
+.notes{position:relative}
+.notes ul{margin:0 0 var(--rule);padding-left:1.2rem}
+.notes li{margin:0}
+.notes code{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;
+  font-size:.92em;overflow-wrap:anywhere}
+.q{color:var(--pencil);margin:0}
+.q b{color:var(--ink);font-weight:600}
 .q i{font-style:normal}
 
-/* The two lists. Rules instead of cards: six bordered boxes on a phone is six
-   boxes; six rules is a list you read. */
-.sect{padding:76px 0 0}
-.kicker{font-size:.7rem;font-weight:600;letter-spacing:.11em;text-transform:uppercase;
-  color:var(--mut);margin:0 0 12px}
-.sect h2{font-size:clamp(1.45rem,5vw,1.9rem);line-height:1.2;letter-spacing:-.025em;
-  margin:0 0 8px;color:var(--fg);max-width:22ch;font-weight:600}
-.grid,.steps{display:grid;gap:0}
-@media (min-width:700px){.grid{grid-template-columns:1fr 1fr;column-gap:40px}}
-.card,.steps>div{padding:20px 0;border-top:1px solid var(--line)}
-.card h3,.steps b{margin:0 0 4px;font-size:.98rem;font-weight:600;color:var(--fg);display:block}
-.card p,.steps span{margin:0;font-size:.9rem;line-height:1.6;color:var(--mut)}
-.steps{counter-reset:s}
-.steps>div{display:grid;grid-template-columns:1.7rem 1fr}
-.steps>div::before{counter-increment:s;content:counter(s);font-variant-numeric:tabular-nums;
-  font-size:.8rem;font-weight:600;color:var(--mut);line-height:1.6}
+/* The two lists. On a ruled page a list is already a list -- it needs a
+   heading that means something and nothing else around it. */
+.sect{padding:calc(var(--rule) * 2) 0 0}
+.sect h2{font-size:1.4rem;font-weight:700;line-height:var(--rule);
+  margin:0 0 var(--rule);color:var(--ink);max-width:24ch}
+.card{margin:0 0 var(--rule)}
+.card h3{font-size:1rem;font-weight:700;margin:0;line-height:var(--rule)}
+.card p{color:var(--pencil);margin:0}
+/* Three steps, and they are genuinely one after another, so they are
+   numbered -- in the margin, in red, where a number written beside a line
+   belongs. */
+.steps{margin:0;padding:0;list-style:none;counter-reset:s}
+.steps li{position:relative;margin:0 0 var(--rule)}
+.steps li::before{counter-increment:s;content:counter(s) ".";position:absolute;
+  left:-40px;color:var(--red);font-variant-numeric:tabular-nums}
+@media (min-width:620px){.steps li::before{left:-46px}}
+.steps b{font-weight:700}
+.steps span{color:var(--pencil)}
 
-/* The form: the same fields and script as ever, in a card of its own. */
-.joincard{scroll-margin-top:16px;max-width:26rem;margin:76px auto 0;padding:26px 22px;
-  border-radius:16px;border:1px solid var(--line);background:var(--surface)}
-.joincard h2{font-size:1.3rem;font-weight:600;letter-spacing:-.02em;margin:0 0 6px;color:var(--fg)}
-.joincard .by{display:inline-block;font-size:.82rem;font-weight:500;color:var(--accent);
+/* The form. The one thing on this page that is not written on the paper but
+   clipped to it: a slip, squared off, with its own ground. */
+.joincard{scroll-margin-top:var(--rule);max-width:26rem;
+  margin:calc(var(--rule) * 2) 0 0;padding:20px 22px 24px;
+  background:#fffef9;border:1px solid var(--line);
+  box-shadow:0 1px 0 rgba(31,42,91,.12),0 10px 24px -20px rgba(31,42,91,.5)}
+.joincard h2{font-family:Kalam,"Segoe Print",cursive;font-size:1.5rem;
+  font-weight:700;line-height:var(--rule);margin:0 0 4px;color:var(--ink)}
+.joincard .by{color:var(--red);font-size:.9rem;margin:0 0 4px}
+.joincard p{font-size:.95rem}
+.land label{text-transform:none;letter-spacing:0;font-size:.85rem;
+  font-weight:600;color:var(--pencil);margin:0 0 2px}
+.land input{border-radius:2px;border:1px solid #b9c4d6;background:#fff;
+  color:var(--ink)}
+.land input[readonly]{background:transparent;border-style:dashed;
+  color:var(--pencil)}
+.land .hint{color:var(--pencil);font-size:.85rem;line-height:22px;
   margin:0 0 10px}
-.joincard input{background:#08090c;border-color:#333846}
-.joincard input[readonly]{background:transparent;border-style:dashed;color:var(--mut)}
-.joincard button{min-height:50px;border-radius:10px;margin-top:8px;font-weight:650;
-  background:var(--fg);color:var(--bg)}
-.joincard button[disabled]{background:var(--line);color:var(--mut)}
-.land .login{text-align:center;margin:18px 0 0;font-size:.9rem}
-.land .login a{color:var(--mut);display:inline-flex;align-items:center;min-height:44px}
-.land .login a:hover{color:var(--fg)}
-.land footer{text-align:center;font-size:.8rem;color:var(--mut);padding:72px 0 8px}
+.land .err{color:var(--err)}
+.joincard button{min-height:50px;border-radius:2px;margin-top:10px;
+  font-weight:700;background:var(--ink);color:var(--paper)}
+.joincard button[disabled]{background:var(--pencil);color:var(--paper)}
+.land .login{margin:var(--rule) 0 0}
+.land .login a{color:var(--pencil)}
+.land footer{color:var(--pencil);font-size:.9rem;
+  padding:calc(var(--rule) * 2) 0 0}
 
-@keyframes blink{50%{opacity:.2}}
-@keyframes rise{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
-.rise{animation:rise .6s cubic-bezier(.2,.7,.2,1) both}
-.d1{animation-delay:.06s}.d2{animation-delay:.14s}.d3{animation-delay:.22s}.d4{animation-delay:.3s}
+/* One moment of motion on the page: the handwritten line arriving, once,
+   the way a line arrives when somebody writes it. Nothing else moves. */
+@keyframes ink{from{opacity:0;transform:translateY(4px) rotate(-.4deg)}
+  to{opacity:1;transform:none}}
+.hero h1{animation:ink .8s cubic-bezier(.2,.7,.2,1) both}
 @media (prefers-reduced-motion:reduce){
   .land *,.land *::before{animation:none!important}}
 </style>
 <main>__BODY__</main>
 """
 
-JOIN_BODY = r"""<div class="land">
+JOIN_BODY = r"""<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Kalam:wght@400;700&amp;display=swap">
+<div class="land">
 <div class="wrap">
 
-<nav><span class="logo">recarve<i></i></span><a href="/login">Log in</a></nav>
+<nav><span class="logo">recarve</span><a href="/login">Log in</a></nav>
 
 <section class="hero">
-  <span class="pill rise"><b></b>Section I &middot; MANIT Bhopal &middot; 2026&ndash;27</span>
-  <h1 class="rise d1">Sleep through class. <span>Wake up to notes.</span></h1>
-  <p class="lede rise d2">Every lecture, written down. One person records the class. Everyone
+  <p class="date">Section I, MANIT Bhopal &mdash; 2026&ndash;27</p>
+  <h1>Sleep through class. <span>Wake up to notes.</span></h1>
+  <p class="lede">Every lecture, written down. One person records the class. Everyone
   gets the notes &mdash; Hindi, English, or both in the same sentence.</p>
-  <div class="ctas rise d3">
+  <div class="ctas">
     <a class="cta go" href="#join">Join Section I</a>
-    <a class="cta soft" href="#how">How it works</a>
+    <a class="cta soft" href="#how">See how it works</a>
   </div>
-  <div class="stats rise d4">
-    <div><b>12</b>subjects, one shelf</div>
-    <div><b>~10 min</b>from class to notes</div>
-    <div><b>&#8377;0</b>to use, always</div>
-  </div>
+  <ul class="stats">
+    <li><b>12</b> subjects on one shelf</li>
+    <li><b>About 10 minutes</b> from the end of class to the notes</li>
+    <li><b>Free</b>, and staying free</li>
+  </ul>
 </section>
 
-<div class="demo rise d2" aria-label="A recorded lecture becoming notes">
-  <div class="rec"><span class="dot"></span><span class="t">REC 42:17</span>
-    <span class="sub">MC1101 &middot; Maths</span></div>
-  <div class="said"><small>What the professor said</small>&ldquo;&#2340;&#2379; &#2360;&#2348;&#2360;&#2375;
-    &#2346;&#2361;&#2354;&#2375; &#2361;&#2350; <em>limit</em> &#2325;&#2366; <em>concept</em>
-    &#2360;&#2350;&#2333;&#2375;&#2306;&#2327;&#2375;, &#2347;&#2367;&#2352; <em>power rule</em>
-    &#2342;&#2375;&#2326;&#2375;&#2306;&#2327;&#2375;&rdquo;</div>
-  <div class="flow">transcribed &amp; written up &#8595;</div>
+<div class="demo">
+  <h3>What the professor said, MC1101, Tuesday</h3>
+  <p class="said">&ldquo;&#2340;&#2379; &#2360;&#2348;&#2360;&#2375; &#2346;&#2361;&#2354;&#2375;
+  &#2361;&#2350; <em>limit</em> &#2325;&#2366; <em>concept</em>
+  &#2360;&#2350;&#2333;&#2375;&#2306;&#2327;&#2375;, &#2347;&#2367;&#2352;
+  <em>power rule</em> &#2342;&#2375;&#2326;&#2375;&#2306;&#2327;&#2375;&rdquo;</p>
   <div class="notes">
-    <h3>What you get</h3>
+    <h3>What you get, ten minutes later</h3>
     <ul>
       <li>The limit is the basis of the derivative</li>
       <li>Power rule: <code>d/dx x&#8319; = n&#183;x&#8319;&#8315;&#185;</code></li>
     </ul>
-    <div class="q"><small>Practice</small>What is d/dx of x&#8309;? <i>(answer hidden
-    until you tap)</i></div>
+    <p class="q"><b>Then it asks you:</b> what is d/dx of x&#8309;?
+    <i>The answer stays hidden until you have had a go.</i></p>
   </div>
 </div>
 
 <section class="sect" id="how">
-  <p class="kicker">Why it exists</p>
-  <h2>The class material, finally in one place.</h2>
+  <h2>What ends up on the shelf</h2>
   <div class="grid">
     <div class="card"><h3>Hindi and English mixed</h3><p>The way your professors
       actually talk, switching mid-sentence &mdash; transcribed properly, not garbled.</p></div>
@@ -10115,24 +10145,23 @@ JOIN_BODY = r"""<div class="land">
       groups and Teams.</p></div>
     <div class="card"><h3>Your 75%, per subject</h3><p>Mark attendance in one tap. It
       tells you exactly how many classes you can miss &mdash; and never rounds you up.</p></div>
-    <div class="card"><h3>Ask the section</h3><p>Stuck at 1&nbsp;am? Post a doubt under
+    <div class="card"><h3>Somewhere to ask</h3><p>Stuck at 1&nbsp;am? Post a doubt under
       the lecture. Classmates answer, the best answer rises.</p></div>
-    <div class="card"><h3>Works with no signal</h3><p>Anything you&rsquo;ve opened stays
+    <div class="card"><h3>Readable with no signal</h3><p>Anything you&rsquo;ve opened stays
       readable in a dead corridor. Built for phones and bad wifi.</p></div>
   </div>
 </section>
 
 <section class="sect">
-  <p class="kicker">How it works</p>
-  <h2>One phone in the room is enough.</h2>
-  <div class="steps">
-    <div><div><b>Someone records</b><span>Any trusted classmate hits record, or uploads the
-      audio after.</span></div></div>
-    <div><div><b>It gets written up</b><span>Transcribed, summarised, and turned into practice
-      questions &mdash; about ten minutes later.</span></div></div>
-    <div><div><b>Everyone reads</b><span>The whole section gets the notes, filed under the right
-      subject, on any phone.</span></div></div>
-  </div>
+  <h2>One phone in the room is enough</h2>
+  <ol class="steps">
+    <li><b>Someone records.</b> <span>Any trusted classmate hits record, or uploads the
+      audio after.</span></li>
+    <li><b>It gets written up.</b> <span>Transcribed, summarised, and turned into practice
+      questions, about ten minutes later.</span></li>
+    <li><b>Everyone reads.</b> <span>The whole section gets the notes, filed under the right
+      subject, on any phone.</span></li>
+  </ol>
 </section>
 
 <div class="joincard" id="join">
