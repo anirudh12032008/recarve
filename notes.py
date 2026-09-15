@@ -9877,7 +9877,7 @@ def db_set_section_timetable(conn, section_id, rows):
 GATE_PAGE = r"""<!doctype html>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<title>recarve — Section I</title>
+<title>recarve — MANIT first year</title>
 <style>
 :root{color-scheme:light dark;--bg:#fcfcfd;--fg:#14161b;--mut:#656b76;--line:#e1e4ea;
   /* The same purple the app is built on, to the digit. These screens are the
@@ -10005,19 +10005,25 @@ button[disabled]{background:var(--mut);color:var(--bg);box-shadow:none}
    Two webfonts, both loaded from the body of this page alone with swap, so
    the app pays nothing for them and a slow font costs the landing a reflow
    rather than a blank page. */
-body:has(.land){display:block;padding:0;background:#fff}
+body:has(.land){display:block;padding:0;background:#faf9f4}
 main:has(.land){max-width:none}
-.land{--ink:#16183d; --body:#5b6070; --hair:#e4e5ea;
+.land{--ink:#16183d; --body:#5b6070; --hair:#e6e4da;
   --paper:#faf9f4; --rule:#cbd9e6; --red:#c13a32;
-  --bg:#fff; --fg:var(--ink); --mut:var(--body); --line:var(--hair);
-  --accent:var(--ink); --accent-fg:#fff; --err:#b3261e; --surface:#f6f7f9;
-  color-scheme:light;background:#fff;color:var(--ink);
+  --bg:var(--paper); --fg:var(--ink); --mut:var(--body); --line:var(--hair);
+  --accent:var(--ink); --accent-fg:var(--paper); --err:#b3261e;
+  --surface:#f3f2ea;
+  color-scheme:light;background:var(--paper);color:var(--ink);
   font:400 17px/1.6 Figtree,ui-sans-serif,system-ui,-apple-system,sans-serif;
   -webkit-font-smoothing:antialiased}
 .land .wrap{max-width:1080px;margin:0 auto;padding:0 24px 96px}
 .land p{color:var(--body);margin:0 0 20px}
 .land h1,.land h2,.land h3{color:var(--ink);font-weight:500;
   letter-spacing:-.02em;margin:0}
+/* Every heading that sets the scene is handwritten; every heading inside a
+   claim stays typed, because the contrast only means something while the two
+   are doing different jobs. */
+.land .hero h1,.land .sect>h2,.land .end h2{font-family:Kalam,"Segoe Print",cursive;
+  font-weight:700;letter-spacing:-.005em}
 .land a{color:var(--ink)}
 
 .land nav{display:flex;align-items:center;justify-content:space-between;
@@ -10030,8 +10036,11 @@ main:has(.land){max-width:none}
 
 /* The hero: centred, one claim, one button, and the room to read it. */
 .land .hero{text-align:center;padding:72px 0 0}
-.land .hero h1{font-size:clamp(2.4rem,5.6vw,4.2rem);line-height:1.06;
-  max-width:17ch;margin:0 auto;text-wrap:balance}
+.land .hero h1{font-size:clamp(2rem,4.6vw,3.6rem);line-height:1.12;
+  max-width:22ch;margin:0 auto}
+/* The two sentences are the two halves of the joke; letting them reflow into
+   each other loses it. */
+.land .hero h1 span{display:block}
 .land .hero .lede{font-size:clamp(1.05rem,2.4vw,1.3rem);line-height:1.55;
   margin:24px auto 0;max-width:34rem}
 .land .hero .where{font-size:.92rem;margin:12px 0 0}
@@ -10061,13 +10070,23 @@ main:has(.land){max-width:none}
    one it holds its caption instead of collapsing -- an empty frame that says
    what it is for is a note to the person filling it, not a broken image. */
 .land .shot{margin:56px 0 0;padding:0;position:relative;aspect-ratio:16/9;
-  border-radius:24px;overflow:hidden;background:var(--surface);
+  border-radius:24px;overflow:hidden;background:#fffdf6;
+  background-image:repeating-linear-gradient(to bottom,
+    transparent 0,transparent 31px,var(--rule) 31px,var(--rule) 32px);
   border:1px solid var(--hair);display:grid;place-items:center}
+/* A frame holding the real thing is a screen, not a sheet: the rules and the
+   caption both get out of the way the moment something is dropped in. */
+.land .shot:has(img),.land .shot:has(video){background-image:none;
+  background:#0e1016}
 .land .shot>img,.land .shot>video{width:100%;height:100%;object-fit:cover;
   display:block}
 .land .shot figcaption{font-size:.9rem;color:#9498a6;text-align:center;
   padding:0 24px;max-width:36ch}
-.land .shot:has(img) figcaption,.land .shot:has(video) figcaption{display:none}
+/* The caption is the empty state. A frame holding anything -- the stand-in
+   film or the real thing -- does not need to be told what it is for. */
+.land .shot:has(img) figcaption,.land .shot:has(video) figcaption,
+.land .shot:has(.loop) figcaption,
+.land .shot:has(img) .loop,.land .shot:has(video) .loop{display:none}
 .land .hero-shot{margin-top:64px}
 
 /* One section heading, centred, the way the page opens. */
@@ -10162,17 +10181,71 @@ main:has(.land){max-width:none}
 .land .joincard button[disabled]{background:#9498a6;color:#fff}
 .land .login{margin:24px 0 0;font-size:.95rem}
 .land .login a{color:var(--body)}
-.land footer{text-align:center;color:#9498a6;font-size:.9rem;
+.land footer{text-align:center;color:var(--body);font-size:.9rem;
   padding:96px 0 0}
+.land footer p{margin:0}
+.land footer p+p{margin:10px 0 0;display:flex;gap:22px;justify-content:center}
+.land footer a{color:var(--body);text-underline-offset:3px;
+  display:inline-flex;align-items:center;min-height:44px}
+.land footer a:hover{color:var(--ink)}
 
-/* One moment of motion: the hero arriving, once. Nothing else moves, so
-   whatever goes in the frames is the only thing on the page that does. */
+/* ---- Motion. Two kinds, and no library: the hero arriving once on load,
+   and the frames arriving as they are scrolled to. The second is a
+   scroll-driven animation -- the browser ties the keyframes to how far the
+   element has come up the viewport, which is the scroll-linked feel a motion
+   library is usually imported for, at no bytes and on the compositor rather
+   than on the main thread of a phone.
+
+   It is inside @supports on purpose. Where the timeline is not understood the
+   rule never applies, so the page is simply the page with nothing hidden --
+   which is the failure a reveal effect has to have, because the other one is
+   a blank page. */
 @keyframes lift{from{opacity:0;transform:translateY(10px)}to{opacity:1;
   transform:none}}
 .land .hero>*{animation:lift .7s cubic-bezier(.2,.7,.2,1) both}
 .land .hero .lede{animation-delay:.08s}
 .land .hero .where{animation-delay:.12s}
 .land .hero .ctas{animation-delay:.16s}
+@supports (animation-timeline:view()){
+  @media (prefers-reduced-motion:no-preference){
+    /* Only the frames and the sheet: the words stay where they were put.
+       A page where every paragraph slides in is a page you wait for. */
+    .land .row .shot,.land .demo{animation:lift linear both;
+      animation-timeline:view();animation-range:entry 8% cover 26%}}}
+
+/* ---- The stand-in film in the hero frame. Delete this block and the .loop
+   markup together when the real recording goes in -- everything here is
+   scoped to .loop and nothing else uses it.
+
+   It is CSS because it has to be: a placeholder that costs a video request is
+   a placeholder that costs more than the thing it stands in for. */
+.land .loop{position:absolute;inset:0;display:grid;
+  grid-template-rows:auto auto auto;align-content:space-evenly;gap:10px;
+  padding:6%;
+  font-size:clamp(9px,1.35vw,15px);color:var(--ink);text-align:left}
+.land .loop .bar{display:flex;align-items:center;gap:.7em;padding:.7em 1em;
+  border-radius:.8em;background:#fff;border:1px solid var(--hair)}
+.land .loop .rd{width:.55em;height:.55em;border-radius:50%;background:var(--red);
+  animation:blip 1.4s ease-in-out infinite}
+.land .loop .who{color:var(--body);margin-left:auto;font-size:.85em}
+.land .loop .wave{display:flex;align-items:center;gap:.28em;height:2.2em}
+.land .loop .wave i{flex:1;border-radius:.2em;background:var(--ink);opacity:.32;
+  height:25%;animation:bars 1.1s ease-in-out infinite}
+.land .loop .sheet{padding:.9em 1.1em;border-radius:.8em;background:#fff;
+  border:1px solid var(--hair);display:grid;align-content:start;gap:.62em}
+.land .loop .sheet i{display:block;height:.62em;border-radius:.31em;
+  background:var(--ink);opacity:.14;transform-origin:left;
+  animation:write 7s cubic-bezier(.2,.7,.2,1) infinite}
+.land .loop .sheet i:nth-child(1){width:62%}
+.land .loop .sheet i:nth-child(2){width:88%;animation-delay:.5s}
+.land .loop .sheet i:nth-child(3){width:74%;animation-delay:1s}
+.land .loop .sheet i:nth-child(4){width:46%;animation-delay:1.5s;
+  background:var(--red);opacity:.3}
+@keyframes blip{50%{opacity:.25}}
+@keyframes bars{0%,100%{height:22%}50%{height:100%}}
+/* Written, held, and gone again, so the frame loops without a cut. */
+@keyframes write{0%{transform:scaleX(0)}14%,72%{transform:scaleX(1)}
+  86%,100%{transform:scaleX(0)}}
 @media (prefers-reduced-motion:reduce){
   .land *,.land *::before{animation:none!important}}
 </style>
@@ -10187,10 +10260,11 @@ JOIN_BODY = r"""<link rel="preconnect" href="https://fonts.gstatic.com" crossori
 <nav><span class="logo">recarve</span><a href="/login">Log in</a></nav>
 
 <section class="hero">
-  <h1>Sleep through class. Wake up to notes.</h1>
+  <h1>Sleep through class. <span>Wake up to notes.</span></h1>
   <p class="lede">Every lecture, written down. One person records the class. Everyone
   gets the notes &mdash; Hindi, English, or both in the same sentence.</p>
-  <p class="where">Section I, MANIT Bhopal, 2026&ndash;27</p>
+  <p class="where">Every first-year section at MANIT Bhopal, 2026&ndash;27.
+  Your address says which one is yours.</p>
   <div class="ctas">__DOOR__</div>
 </section>
 
@@ -10208,6 +10282,14 @@ JOIN_BODY = r"""<link rel="preconnect" href="https://fonts.gstatic.com" crossori
      muted + playsinline or iOS refuses to start it, and a poster= frame is
      what a phone on bad wifi sees first. -->
 <figure class="shot hero-shot" id="shot-hero">
+  <!-- A stand-in until the real recording exists. Drop the <video> in above
+       this div and delete the div; the caption hides itself either way. -->
+  <div class="loop" aria-hidden="true">
+    <div class="bar"><span class="rd"></span>Recording<span class="who">MC1101,
+      Maths</span></div>
+    <div class="wave"><i style="animation-delay:-.0s"></i><i style="animation-delay:-.37s"></i><i style="animation-delay:-.74s"></i><i style="animation-delay:-.11s"></i><i style="animation-delay:-.48s"></i><i style="animation-delay:-.85s"></i><i style="animation-delay:-.22s"></i><i style="animation-delay:-.59s"></i><i style="animation-delay:-.96s"></i><i style="animation-delay:-.33s"></i><i style="animation-delay:-.7s"></i><i style="animation-delay:-.07s"></i><i style="animation-delay:-.44s"></i><i style="animation-delay:-.81s"></i><i style="animation-delay:-.18s"></i><i style="animation-delay:-.55s"></i><i style="animation-delay:-.92s"></i><i style="animation-delay:-.29s"></i></div>
+    <div class="sheet"><i></i><i></i><i></i><i></i></div>
+  </div>
   <figcaption>Hero animation &mdash; a lecture being recorded, and the notes
   appearing under it.</figcaption>
 </figure>
@@ -10261,6 +10343,28 @@ JOIN_BODY = r"""<link rel="preconnect" href="https://fonts.gstatic.com" crossori
       lecture. Classmates answer, the best answer rises.</p></div>
     <div><h3>Readable with no signal</h3><p>Anything you&rsquo;ve opened stays
       readable in a dead corridor. Built for phones and bad wifi.</p></div>
+  </div>
+</section>
+
+<section class="sect">
+  <h2>And the half that is not lectures</h2>
+  <p>The same app carries the rest of first year, because the rest of first
+  year is also scattered across eleven group chats.</p>
+  <div class="three">
+    <div><h3>Coming up on campus</h3><p>Every fest, talk, audition and deadline
+      on one list, with the date it actually happens on.</p></div>
+    <div><h3>Clubs and societies</h3><p>Who runs what, what they do, and where
+      to find them when recruitment opens.</p></div>
+    <div><h3>Finding your way</h3><p>The campus map. Which building the lab is
+      in, where the department sits, what the canteen is called.</p></div>
+  </div>
+  <div class="three">
+    <div><h3>The feed</h3><p>Your section, talking. Lost keys, a change of room,
+      somebody selling a drafter.</p></div>
+    <div><h3>Confessions</h3><p>Anonymous, and anonymous properly &mdash; no
+      name is stored against it, so nobody can be shown one later.</p></div>
+    <div><h3>Who has contributed</h3><p>Standings for the people who record and
+      upload, because somebody has to and it should be seen.</p></div>
   </div>
 </section>
 
@@ -10325,7 +10429,11 @@ JOIN_BODY = r"""<link rel="preconnect" href="https://fonts.gstatic.com" crossori
   <p class="login"><a href="/login">Already joined? Log in</a></p>
 </section>
 
-<footer>Made by a Section I student who kept falling asleep in class.</footer>
+<footer><p>Made by Anirudh Sahu, first-year ECE at MANIT Bhopal, who kept
+falling asleep in class.</p>
+<p><a href="https://www.linkedin.com/in/anirudh-sahu-4b245327b/" rel="me noopener"
+target="_blank">LinkedIn</a> <a href="https://www.instagram.com/anirudh_sahu_12/"
+rel="me noopener" target="_blank">Instagram</a></p></footer>
 </div>
 </div>
 <script>
