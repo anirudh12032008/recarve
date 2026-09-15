@@ -730,14 +730,12 @@ def test_an_admin_reset_is_the_only_thing_that_opens_that_door_again(server):
 # ------------------------------------------------------ the join screen says so
 
 
-def test_the_join_form_states_the_rules_above_the_box(server):
-    """It is the first screen 110 people see, and a rule you learn from an
-    error message is a rule you learn twice."""
+def test_the_first_screen_has_no_password_to_state_rules_about(server):
+    """The rules used to be printed above the box, because a rule you learn
+    from an error message is a rule you learn twice. There is no box: the
+    institute address is the credential, so the best version of that advice
+    is not having to give it."""
     port, _ = server
     page = call(port, "GET", "/")[1]
-    assert 'id="pw"' in page and 'autocomplete="new-password"' in page
-    assert f"At least {notes.MIN_PASSWORD} characters" in page
-    assert "not your roll number" in page
-    assert "do not use anywhere else" in page
-    assert page.index("At least") < page.index('id="pw"'), \
-        "a rule below the box is a rule you read after failing it"
+    assert 'id="pw"' not in page and "<form" not in page
+    assert f"At least {notes.MIN_PASSWORD} characters" not in page

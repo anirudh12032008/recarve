@@ -330,8 +330,6 @@ def test_nobody_is_named_before_there_is_an_admin(db):
     db.execute("insert into invites (code, expires_at) "
                "values ('BOOTSTRAP', now() + interval '1 day')")
     assert notes.db_inviter(db, "BOOTSTRAP") is None
-    assert "Invited by" not in notes.join_body("BOOTSTRAP", None), \
-        "an empty name is worse than no line"
 
 
 # ------------------------------------------------------- the real server
@@ -410,7 +408,10 @@ def join(port, name, roll, code="LETMEIN", phone="9876543210",
 # admin, which is the behaviour under test.
 def test_a_stranger_gets_the_join_screen_and_nothing_else(server):
     status, body, _ = call(server, "GET", "/")
-    assert status == 200 and 'id="f"' in body, "the front door is the join form"
+    assert status == 200 and "<form" not in body, \
+        "the front door asks a stranger for nothing"
+    assert "/auth/google" in body or 'href="/login"' in body, \
+        "but it is still a door"
     assert "limits and continuity" not in body
 
     for method, path in [("GET", "/data"), ("GET", "/log"), ("GET", "/jobs"),
@@ -438,10 +439,10 @@ def test_a_stranger_is_told_what_they_are_joining(server):
     for point in ("Hindi and English mixed", "Practice questions from every lecture",
                   "Everything in one place, per subject", "Your 75%, per subject"):
         assert point in body, f"the landing lost: {point}"
-    # Every call to action lands on the form, which is on the same page.
-    assert 'href="#join"' in body and 'id="join"' in body
-    # And it is a wrapper, not a replacement -- the form it wraps still works.
-    assert 'id="f"' in body and 'id="roll"' in body and 'id="pw"' in body
+    # There is nothing to fill in: the address says who they are and
+    # roll_list says where they sit. Which door is offered depends on whether
+    # this install has Google, and test_gate_page covers both branches.
+    assert "<form" not in body and "<input" not in body
 
     # Only the front door carries it. /login is for somebody already sold.
     _, login, _ = call(server, "GET", "/login")
@@ -481,18 +482,19 @@ def test_the_first_joiner_is_the_admin_and_can_read(server):
     pytest.admin_cookie = cookie
 
 
-def test_the_front_door_opens_when_it_cannot_say_who_invited_you(server, monkeypatch):
-    """Who is inviting them is a nicety; being able to join is not. The lookup
-    runs on the owning connection before anybody has a session, so a dropped
-    connection there used to be a 500 on the one page a stranger may see."""
-    def cannot(conn, code):
+def test_the_front_door_does_not_touch_the_database_at_all(server, monkeypatch):
+    """It used to look up who was inviting you before it could answer, which
+    made the one page a stranger may see depend on a healthy connection. There
+    is nothing on it to look up any more: every line is a constant, so a
+    database that is down cannot take the front door with it."""
+    def cannot(*a, **k):
         raise psycopg.OperationalError("the connection is closed")
 
     monkeypatch.setattr(notes, "db_inviter", cannot)
+    monkeypatch.setattr(notes, "db", cannot)
     status, body, _ = call(server, "GET", "/?code=LETMEIN")
-    assert status == 200, "a missing name may not take the front door down"
-    assert 'id="code"' in body and 'value="LETMEIN"' in body, "the form still fills in"
-    assert "Invited by" not in body, "and simply says nobody"
+    assert status == 200, "the front door may not depend on the database"
+    assert "LETMEIN" not in body, "nothing a stranger wrote reaches the page"
 
 
 def test_being_let_in_is_not_permission_to_read_the_repo(server):
@@ -604,47 +606,40 @@ def test_an_upload_records_who_sent_it(server):
 # is the admin by now, which is who these expect to be named.
 
 
-def test_the_invite_link_lands_on_the_form_with_the_code_already_in_it(server):
-    status, page, _ = call(server, "GET", "/?code=LETMEIN")
-    assert status == 200
-    assert 'value="LETMEIN"' in page, "the code did not survive the trip"
-    assert 'id="ph"' in page and 'id="nm"' in page and 'id="roll"' in page
-    assert 'value="Section I" readonly' in page, "one section, shown not asked"
-    assert "Invited by Asha" in page, "the admin's name, out of the database"
+def test_a_link_carrying_a_code_lands_on_the_same_page_as_every_other(server):
+    """The form is gone, so the query string has nowhere to land. The endpoint
+    behind it is untouched -- an admin with a code can still be walked through
+    a join by hand -- but the page a stranger loads is one page, the same one,
+    whatever is hung off the end of the link."""
+    _, withcode, _ = call(server, "GET", "/?code=LETMEIN")
+    _, plain, _ = call(server, "GET", "/")
+    assert withcode == plain, "the link changed the page"
+    assert "LETMEIN" not in withcode
 
-    # And it is a real join, not just a filled box.
+    # And /join still answers, which is what the code was ever for.
     status, body, cookie = join(server, "Kavya", "24U010", phone="+91 98765 43210")
     assert (status, body["status"]) == (200, "pending") and cookie
-
-
-def test_typing_the_code_by_hand_still_works(server):
-    """Most of the class will arrive this way -- no query string at all."""
-    status, page, _ = call(server, "GET", "/")
-    assert status == 200 and 'id="code"' in page
-    assert 'value=""' in page, "an empty box, not a stale one"
     assert join(server, "Rohit", "24U011")[0] == 200
 
 
-def test_a_bad_code_in_the_link_fails_exactly_as_a_typed_one_does(server):
-    """The form must not become a checker for invite codes -- neither the page
-    that carries one nor the answer when it is submitted."""
-    _, bad, _ = call(server, "GET", "/?code=NOPE")
-    _, good, _ = call(server, "GET", "/?code=LETMEIN")
-    assert bad.replace("NOPE", "LETMEIN") == good, "the page reviewed the code"
-
+def test_a_bad_code_fails_exactly_as_a_typed_one_does(server):
+    """/join must not become a checker for invite codes."""
     from_link = join(server, "Mallory", "24U900", code="NOPE")
     typed = join(server, "Mallory", "24U901", code="ALSO-NOT-IT")
     assert from_link == typed == (403, {"error": "that invite code is wrong, expired or used up"},
                                   None)
 
 
-def test_a_code_in_the_url_cannot_write_html_into_the_page(server):
-    """It is a query parameter: a stranger writes it, and it is reflected."""
+def test_a_code_in_the_url_reaches_the_page_in_no_form_at_all(server):
+    """It used to be reflected into the invite box, escaped. There is no box
+    now and nothing is substituted into the landing, so the whole class of
+    bug is gone rather than handled: the payload must not appear on the page
+    escaped, unescaped or otherwise."""
     payload = '"><script>alert(1)</script>'
     status, page, _ = call(server, "GET", "/?code=" + urllib.parse.quote(payload))
     assert status == 200
     assert "<script>alert(1)" not in page
-    assert "&lt;script&gt;" in page, "it must appear, escaped, not vanish"
+    assert "&lt;script&gt;" not in page and "alert(1)" not in page
 
 
 def test_a_roll_number_can_only_be_registered_once(server):

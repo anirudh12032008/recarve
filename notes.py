@@ -10019,11 +10019,9 @@ main:has(.land){max-width:none}
 .land p{color:var(--body);margin:0 0 20px}
 .land h1,.land h2,.land h3{color:var(--ink);font-weight:500;
   letter-spacing:-.02em;margin:0}
-/* Every heading that sets the scene is handwritten; every heading inside a
-   claim stays typed, because the contrast only means something while the two
-   are doing different jobs. */
-.land .hero h1,.land .sect>h2,.land .end h2{font-family:Kalam,"Segoe Print",cursive;
-  font-weight:700;letter-spacing:-.005em}
+/* The handwriting is spent twice on this page: the name at the top, and the
+   sentence the professor said. Set at 3rem across every section heading it
+   stopped being a voice and became a wallpaper. */
 .land a{color:var(--ink)}
 
 .land nav{display:flex;align-items:center;justify-content:space-between;
@@ -10035,25 +10033,23 @@ main:has(.land){max-width:none}
 .land nav a:hover{color:var(--ink)}
 
 /* The hero: centred, one claim, one button, and the room to read it. */
-.land .hero{text-align:center;padding:72px 0 0}
-.land .hero h1{font-size:clamp(2rem,4.6vw,3.6rem);line-height:1.12;
-  max-width:22ch;margin:0 auto}
+.land .hero{text-align:center;padding:clamp(64px,13vh,150px) 0 0}
+.land .hero h1{font-size:clamp(2.5rem,6.6vw,5.5rem);line-height:1.02;
+  letter-spacing:-.035em;max-width:16ch;margin:0 auto}
 /* The two sentences are the two halves of the joke; letting them reflow into
    each other loses it. */
 .land .hero h1 span{display:block}
-.land .hero .lede{font-size:clamp(1.05rem,2.4vw,1.3rem);line-height:1.55;
-  margin:24px auto 0;max-width:34rem}
-.land .hero .where{font-size:.92rem;margin:12px 0 0}
+.land .hero .lede{font-size:clamp(1.1rem,1.9vw,1.5rem);line-height:1.5;
+  margin:32px auto 0;max-width:36rem}
+.land .hero .where{font-size:1rem;margin:20px auto 0;max-width:32rem}
 .land .ctas{display:flex;flex-direction:column;align-items:center;gap:14px;
-  margin:36px 0 0}
+  margin:48px 0 0}
 .land .cta{display:inline-flex;align-items:center;justify-content:center;
   gap:10px;min-height:54px;padding:0 26px;border-radius:12px;font-size:1.02rem;
   font-weight:600;text-decoration:none;background:var(--ink);color:#fff;
   border:0}
 .land .cta:hover{background:#23265a}
 .land .cta svg{flex:none}
-.land .alt{font-size:.95rem;color:var(--body);margin:0}
-.land .alt a{color:var(--ink);text-underline-offset:3px}
 /* The Google button is the front door now, so on this page it is the primary
    control rather than the alternative to one: the same markup /login carries,
    wearing the same clothes as every other button here. */
@@ -10069,19 +10065,18 @@ main:has(.land){max-width:none}
    and everything inside is clipped to the same corner. Until something is in
    one it holds its caption instead of collapsing -- an empty frame that says
    what it is for is a note to the person filling it, not a broken image. */
-.land .shot{margin:56px 0 0;padding:0;position:relative;aspect-ratio:16/9;
-  border-radius:24px;overflow:hidden;background:#fffdf6;
-  background-image:repeating-linear-gradient(to bottom,
-    transparent 0,transparent 31px,var(--rule) 31px,var(--rule) 32px);
-  border:1px solid var(--hair);display:grid;place-items:center}
-/* A frame holding the real thing is a screen, not a sheet: the rules and the
-   caption both get out of the way the moment something is dropped in. */
-.land .shot:has(img),.land .shot:has(video){background-image:none;
-  background:#0e1016}
+.land .shot{margin:64px 0 0;padding:0;position:relative;aspect-ratio:16/9;
+  border-radius:26px;overflow:hidden;border:0;display:grid;place-items:center;
+  background:
+    radial-gradient(70% 90% at 12% 8%,rgba(122,92,255,.30),transparent 62%),
+    radial-gradient(60% 80% at 88% 18%,rgba(32,196,168,.22),transparent 60%),
+    radial-gradient(70% 70% at 70% 100%,rgba(255,138,76,.16),transparent 62%),
+    #0b0d13;
+  box-shadow:0 40px 80px -48px rgba(22,24,61,.55)}
 .land .shot>img,.land .shot>video{width:100%;height:100%;object-fit:cover;
   display:block}
-.land .shot figcaption{font-size:.9rem;color:#9498a6;text-align:center;
-  padding:0 24px;max-width:36ch}
+.land .shot figcaption{font-size:.9rem;color:rgba(255,255,255,.62);
+  text-align:center;padding:0 24px;max-width:36ch}
 /* The caption is the empty state. A frame holding anything -- the stand-in
    film or the real thing -- does not need to be told what it is for. */
 .land .shot:has(img) figcaption,.land .shot:has(video) figcaption,
@@ -10090,15 +10085,16 @@ main:has(.land){max-width:none}
 .land .hero-shot{margin-top:64px}
 
 /* One section heading, centred, the way the page opens. */
-.land .sect{padding:112px 0 0}
-.land .sect>h2{font-size:clamp(1.8rem,4vw,2.6rem);line-height:1.15;
-  text-align:center;max-width:20ch;margin:0 auto}
-.land .sect>h2+p{text-align:center;max-width:34rem;margin:16px auto 0}
+.land .sect{padding:clamp(88px,14vh,176px) 0 0}
+.land .sect>h2{font-size:clamp(1.9rem,3.6vw,3rem);line-height:1.12;
+  letter-spacing:-.03em;text-align:center;max-width:20ch;margin:0 auto}
+.land .sect>h2+p{text-align:center;max-width:36rem;margin:20px auto 0;
+  font-size:1.08rem}
 
 /* A claim and the thing it claims, side by side on a wide screen and stacked
    on a phone. The text column stays narrow at every width: a line of body
    copy 90 characters long is not read, it is skimmed. */
-.land .row{display:grid;gap:8px 56px;align-items:center;padding:56px 0 0}
+.land .row{display:grid;gap:20px 72px;align-items:center;padding:72px 0 0}
 @media (min-width:900px){
   .land .row{grid-template-columns:minmax(0,4fr) minmax(0,7fr);padding:72px 0 0}
   .land .row .shot{margin:0}
@@ -10106,8 +10102,9 @@ main:has(.land){max-width:none}
      would have swapped the contents and left the picture in the narrow one. */
   .land .row.flip{grid-template-columns:minmax(0,7fr) minmax(0,4fr)}
   .land .row.flip>div{order:2}}
-.land .row h3{font-size:1.45rem;line-height:1.25;margin:0 0 12px}
-.land .row p{margin:0;max-width:34ch}
+.land .row h3{font-size:1.6rem;line-height:1.2;letter-spacing:-.02em;
+  margin:0 0 14px}
+.land .row p{margin:0;max-width:32ch;font-size:1.05rem;line-height:1.6}
 
 /* The proof, and the only ruled paper on the page. What was said is
    handwritten; what came back is typed; they sit on the same sheet. */
@@ -10157,30 +10154,10 @@ main:has(.land){max-width:none}
 
 /* The last door. The button again, and under it the invite form for anybody
    the registrar's list has not caught up with. */
-.land .end{text-align:center;padding:112px 0 0}
-.land .end h2{font-size:clamp(1.8rem,4vw,2.6rem);line-height:1.15;
-  max-width:20ch;margin:0 auto}
-/* The same sentence is the heading of the card three inches below it, and
-   the hero has already offered the invite code once. */
-.land .end .alt{display:none}
-.land .joincard{max-width:26rem;margin:56px auto 0;padding:28px 24px 26px;
-  text-align:left;border:1px solid var(--hair);border-radius:20px;
-  background:#fff;scroll-margin-top:24px}
-.land .joincard h3{font-size:1.15rem;margin:0 0 6px}
-.land .joincard .by{color:var(--red);font-size:.92rem;margin:0 0 6px}
-.land .joincard p{font-size:.95rem}
-.land label{text-transform:none;letter-spacing:0;font-size:.85rem;
-  font-weight:600;color:var(--body);margin:0 0 4px}
-.land input{border-radius:10px;border:1px solid #c3c6d0;background:#fff;
-  color:var(--ink)}
-.land input[readonly]{background:#f6f7f9;border-style:dashed;color:var(--body)}
-.land .hint{color:var(--body);font-size:.85rem;line-height:1.45;margin:0 0 12px}
-.land .err{color:var(--err)}
-.land .joincard button{min-height:52px;border-radius:12px;margin-top:12px;
-  font-weight:600;background:var(--ink);color:#fff}
-.land .joincard button[disabled]{background:#9498a6;color:#fff}
-.land .login{margin:24px 0 0;font-size:.95rem}
-.land .login a{color:var(--body)}
+.land .end{text-align:center;padding:clamp(96px,16vh,190px) 0 0}
+.land .end h2{font-size:clamp(1.9rem,3.6vw,3rem);line-height:1.12;
+  letter-spacing:-.03em;max-width:20ch;margin:0 auto}
+.land .end>p{max-width:34rem;margin:20px auto 0}
 .land footer{text-align:center;color:var(--body);font-size:.9rem;
   padding:96px 0 0}
 .land footer p{margin:0}
@@ -10220,27 +10197,31 @@ main:has(.land){max-width:none}
    It is CSS because it has to be: a placeholder that costs a video request is
    a placeholder that costs more than the thing it stands in for. */
 .land .loop{position:absolute;inset:0;display:grid;
-  grid-template-rows:auto auto auto;align-content:space-evenly;gap:10px;
-  padding:6%;
-  font-size:clamp(9px,1.35vw,15px);color:var(--ink);text-align:left}
-.land .loop .bar{display:flex;align-items:center;gap:.7em;padding:.7em 1em;
-  border-radius:.8em;background:#fff;border:1px solid var(--hair)}
-.land .loop .rd{width:.55em;height:.55em;border-radius:50%;background:var(--red);
+  grid-template-rows:auto auto auto;align-content:space-evenly;gap:1.1em;
+  padding:7%;font-size:clamp(9px,1.35vw,15px);color:#eef0f6;text-align:left}
+.land .loop .bar{display:flex;align-items:center;gap:.7em;padding:.8em 1.1em;
+  border-radius:.9em;background:rgba(255,255,255,.07);
+  border:1px solid rgba(255,255,255,.12);
+  -webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px)}
+.land .loop .rd{width:.55em;height:.55em;border-radius:50%;background:#ff5b6e;
   animation:blip 1.4s ease-in-out infinite}
-.land .loop .who{color:var(--body);margin-left:auto;font-size:.85em}
-.land .loop .wave{display:flex;align-items:center;gap:.28em;height:2.2em}
-.land .loop .wave i{flex:1;border-radius:.2em;background:var(--ink);opacity:.32;
-  height:25%;animation:bars 1.1s ease-in-out infinite}
-.land .loop .sheet{padding:.9em 1.1em;border-radius:.8em;background:#fff;
-  border:1px solid var(--hair);display:grid;align-content:start;gap:.62em}
-.land .loop .sheet i{display:block;height:.62em;border-radius:.31em;
-  background:var(--ink);opacity:.14;transform-origin:left;
+.land .loop .who{color:rgba(255,255,255,.55);margin-left:auto;font-size:.85em}
+.land .loop .wave{display:flex;align-items:center;gap:.28em;height:2.4em}
+.land .loop .wave i{flex:1;border-radius:.2em;height:25%;
+  background:linear-gradient(180deg,#b3a2ff,#6fe3cd);opacity:.85;
+  animation:bars 1.1s ease-in-out infinite}
+.land .loop .sheet{padding:1em 1.2em;border-radius:.9em;
+  background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.12);
+  display:grid;align-content:start;gap:.68em;
+  -webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px)}
+.land .loop .sheet i{display:block;height:.6em;border-radius:.3em;
+  background:rgba(255,255,255,.55);transform-origin:left;
   animation:write 7s cubic-bezier(.2,.7,.2,1) infinite}
 .land .loop .sheet i:nth-child(1){width:62%}
 .land .loop .sheet i:nth-child(2){width:88%;animation-delay:.5s}
 .land .loop .sheet i:nth-child(3){width:74%;animation-delay:1s}
 .land .loop .sheet i:nth-child(4){width:46%;animation-delay:1.5s;
-  background:var(--red);opacity:.3}
+  background:#6fe3cd}
 @keyframes blip{50%{opacity:.25}}
 @keyframes bars{0%,100%{height:22%}50%{height:100%}}
 /* Written, held, and gone again, so the frame loops without a cut. */
@@ -10402,31 +10383,9 @@ JOIN_BODY = r"""<link rel="preconnect" href="https://fonts.gstatic.com" crossori
 
 <section class="end">
   <h2>Sign in with your institute email</h2>
+  <p>Your section, your seat and your name all come off the registrar&rsquo;s
+  list. There is nothing to fill in.</p>
   <div class="ctas">__DOOR__</div>
-
-  <div class="joincard" id="join">
-    <h3>Not on the registrar&rsquo;s list yet?</h3>
-    __INVITED__
-    <p>__INTRO__</p>
-    <form id="f">
-      <label for="nm">Name</label><input id="nm" required autocomplete="name">
-      <label for="roll">Roll number</label><input id="roll" required autocomplete="off">
-      <label for="ph">Phone number</label>
-      <input id="ph" required type="tel" inputmode="tel" autocomplete="tel">
-      <label for="sec">Section</label>
-      <input id="sec" value="Section I" readonly tabindex="-1">
-      <label for="code">Invite code</label>
-      <input id="code" required autocomplete="off" autocapitalize="off" value="__CODE__">
-      <label for="pw">Password</label>
-      <p class="hint">At least __MIN__ characters, and not your roll number. Use
-      something you do not use anywhere else.</p>
-      <input id="pw" required type="password" autocomplete="new-password" minlength="__MIN__">
-      <button>Join</button>
-      <p class="err" id="err"></p>
-    </form>
-    <p class="hint">An admin approves you before you can read the class&rsquo;s notes.</p>
-  </div>
-  <p class="login"><a href="/login">Already joined? Log in</a></p>
 </section>
 
 <footer><p>Made by Anirudh Sahu, first-year ECE at MANIT Bhopal, who kept
@@ -10436,55 +10395,20 @@ target="_blank">LinkedIn</a> <a href="https://www.instagram.com/anirudh_sahu_12/
 rel="me noopener" target="_blank">Instagram</a></p></footer>
 </div>
 </div>
-<script>
-const $ = i => document.getElementById(i);
-$('f').onsubmit = async e => {
-  e.preventDefault();
-  $('err').textContent = '';
-  // /join opens a database connection before it replies. Left alone the button
-  // looks dead on mobile data, and the second tap races the first: one wins,
-  // the other comes back 409 and tells the joiner they already exist.
-  const b = $('f').querySelector('button');
-  b.disabled = true;
-  b.textContent = 'Joining\u2026';
-  try {
-    const res = await fetch('/join', {method: 'POST', headers: {'Content-Type': 'application/json'},
-      body: JSON.stringify({name: $('nm').value, roll_no: $('roll').value,
-                            phone: $('ph').value, code: $('code').value,
-                            password: $('pw').value})});
-    const j = await res.json().catch(() => ({}));
-    if (res.ok) return location.reload();
-    $('err').textContent = j.error || 'could not join';
-  } catch (e) { $('err').textContent = 'no connection to the server'; }
-  b.disabled = false;
-  b.textContent = 'Join';
-};
-</script>
-""".replace("__MIN__", str(MIN_PASSWORD))
+"""
 
 
-def join_body(code="", inviter=None):
-    """The join form, carrying whatever the invite link brought with it.
 
-    Both substitutions are escaped. The code is a query parameter a stranger
-    writes, and the name is whatever an admin typed into this same form on the
-    day they joined -- neither is a place to run script from.
+def join_body():
+    """The landing, which is now one button.
 
-    The code is not checked here, on purpose: a page anyone can load that says
-    whether a code is good is a code checker. It is validated where a typed one
-    is, by join_with_invite when the form is submitted, and a bad one fails
-    there with the same sentence whichever way it arrived.
+    Nothing is substituted into it any more: the invite form is gone, so
+    there is no code to reflect, no inviter to name and nothing on the page
+    that a stranger's query string can reach. /join still answers a POST --
+    the endpoint and its rules are untouched -- it simply has no form on this
+    page pointing at it.
     """
-    line = f'<p class="by">Invited by {html.escape(inviter)}</p>' if inviter else ""
-    # Telling somebody who tapped a link that they need a code they can see in
-    # the box is how a form reads as broken before it has been used.
-    intro = ("Section I notes. Your code is already in — add your details."
-             if code else
-             "Section I notes. You need the invite code from someone already in.")
-    return (JOIN_BODY.replace("__DOOR__", front_door())
-                     .replace("__INVITED__", line)
-                     .replace("__INTRO__", intro)
-                     .replace("__CODE__", html.escape(code, quote=True)))
+    return JOIN_BODY.replace("__DOOR__", front_door())
 
 
 def front_door():
@@ -10507,10 +10431,8 @@ def front_door():
     markup after the style block is taken.
     """
     if not google_client():
-        return '<a class="cta" href="#join">Join with an invite code</a>'
-    return (GOOGLE_BUTTON.split("</style>\n", 1)[-1]
-            + '<p class="alt">Not on the registrar\u2019s list yet? '
-              '<a href="#join">Join with an invite code</a></p>')
+        return '<a class="cta" href="/login">Log in</a>'
+    return GOOGLE_BUTTON.split("</style>\n", 1)[-1]
 
 
 # The Google button, in both doors and rendered by with_google() so that an
@@ -11594,18 +11516,7 @@ def build_server(args):
             it saves is typing -- the code still has to survive join_with_invite
             on the way through.
             """
-            import urllib.parse
-
-            code = urllib.parse.parse_qs(
-                self.path.partition("?")[2]).get("code", [""])[0].strip()[:64]
-            inviter = None
-            try:
-                with db() as conn:
-                    inviter = db_inviter(conn, code)
-            except psycopg.Error as e:
-                # Who is inviting them is a nicety; being able to join is not.
-                log(f"cannot say who is inviting: {e}", "join")
-            return join_body(code, inviter)
+            return join_body()
 
         def principal(self):
             """Whose session this is, re-read from the database at least every

@@ -175,63 +175,48 @@ def test_a_name_with_no_spaces_in_it_cannot_push_the_gate_sideways():
         "the name in a row is a flex item and needs its own"
 
 
-# --------------------------------------------------------- the join form
+# ------------------------------------------------------- the only door
 
 
-def test_the_form_asks_for_the_five_things_and_shows_the_sixth():
+def test_the_landing_asks_for_nothing_at_all():
+    """The invite form is gone. An institute address already says who somebody
+    is and which section they sit in -- roll_list carries the whole first year
+    and join_with_google reads the seat off it -- so there is nothing left for
+    a joiner to type, and nothing left on this page to type into."""
     body = notes.join_body()
-    for field in ('id="nm"', 'id="roll"', 'id="ph"', 'id="code"', 'id="pw"'):
-        assert field in body, f"{field} is not on the form"
-    assert 'id="sec" value="Section I" readonly' in body, \
-        "there is one section; a box you can type in invites the wrong one"
-    # A box that is rendered and never read is the same as no box: the handler
-    # sees a blank password and refuses every join in the class with a 400,
-    # while the form still looks right in the page source.
-    assert "phone: $('ph').value" in body, "collected but never sent"
-    assert "password: $('pw').value" in body, "collected but never sent"
+    for gone in ('id="f"', 'id="nm"', 'id="roll"', 'id="ph"', 'id="code"',
+                 'id="pw"', "<form", "<input"):
+        assert gone not in body, f"{gone} is still on the landing"
+    assert "invite code" not in body.lower()
 
 
-def test_the_number_field_opens_a_keypad_and_does_not_zoom_the_page():
-    """type=tel is the keypad. The 16px comes from font:inherit on input --
-    anything smaller and iOS zooms the whole form on focus and the joiner is
-    left scrolling sideways with one thumb."""
+def test_the_landing_reflects_nothing_a_stranger_wrote():
+    """It takes no arguments now, so there is no query parameter reaching the
+    page and no escaping left to get wrong. This is the test that the hole
+    was closed by removal rather than by careful quoting."""
+    import inspect
+
+    assert not inspect.signature(notes.join_body).parameters
+    assert "__" not in notes.join_body(), "an unsubstituted placeholder shipped"
+
+
+def test_the_door_is_the_institute_email_when_there_is_one(monkeypatch):
+    monkeypatch.setenv("RECARVE_GOOGLE_CLIENT_ID", "id")
+    monkeypatch.setenv("RECARVE_GOOGLE_SECRET", "secret")
     body = notes.join_body()
-    assert 'type="tel"' in body and 'inputmode="tel"' in body
-    assert "font:inherit" in rule("input")
+    assert body.count('href="/auth/google"') == 2, "top of the page and bottom"
+    assert "<style>" not in body, "the button's stylesheet pasted into the body"
 
 
-def test_a_form_nobody_was_linked_to_carries_no_code_and_no_name():
+def test_without_google_the_door_is_the_one_that_still_answers(monkeypatch):
+    """A landing whose only button is a route that 404s is a landing with no
+    door. Members from before the list still have a roll number and a
+    password, and /login is where those go."""
+    monkeypatch.delenv("RECARVE_GOOGLE_CLIENT_ID", raising=False)
+    monkeypatch.delenv("RECARVE_GOOGLE_SECRET", raising=False)
     body = notes.join_body()
-    assert 'id="code" required autocomplete="off" autocapitalize="off" value=""' in body
-    assert "Invited by" not in body, "an empty name is worse than no line"
-    assert "You need the invite code" in body, "say where the code comes from"
-
-
-def test_a_form_that_came_from_a_link_does_not_ask_for_what_it_already_has():
-    """"You need the invite code" over a box that already holds one is how a
-    form reads as broken before it has been used."""
-    body = notes.join_body("392b9ea7")
-    assert "You need the invite code" not in body
-    assert "already in" in body
-
-
-def test_the_inviter_is_named_when_the_database_knows_one():
-    assert '<p class="by">Invited by Anirudh</p>' in notes.join_body("392b9ea7", "Anirudh")
-
-
-@pytest.mark.parametrize("hostile", [
-    '"><script>alert(1)</script>',
-    "' onfocus=alert(1) autofocus '",
-    "</form><form action=//evil",
-])
-def test_neither_the_code_nor_the_name_can_get_out_of_the_page(hostile):
-    """The code is a query parameter a stranger writes and the page reflects.
-    The name is whatever an admin typed into this same form months ago."""
-    body = notes.join_body(hostile, hostile)
-    assert hostile not in body, "reflected verbatim"
-    assert "<script>alert" not in body
-    value = body.split('id="code"')[1].split('value="')[1].split('"')[0]
-    assert not set(value) & set("<>'"), f"attribute is escapable: {value}"
+    assert "/auth/google" not in body
+    assert 'href="/login"' in body
 
 
 # ------------------------------------------ what the admin screen does on a no
@@ -391,59 +376,5 @@ def test_the_admin_panel_wires_every_button_to_what_it_says(tmp_path):
     the person sitting next to Approve left the suite green."""
     f = tmp_path / "admin.js"
     f.write_text(STUB + ADMIN_SCRIPT + CHECKS)
-    r = subprocess.run([NODE, str(f)], capture_output=True, text=True)
-    assert r.returncode == 0, r.stdout + r.stderr
-
-
-# ------------------------------------------- what the join button does meanwhile
-
-JOIN_SCRIPT = re.search(r"<script>\n(.*)\n</script>", notes.JOIN_BODY, re.S).group(1)
-
-JOIN_STUB = """
-const assert = require('node:assert');
-const btn = {disabled: false, textContent: 'Join'};
-const form = {onsubmit: null, querySelector: () => btn};
-const err = {textContent: ''};
-const boxes = {};
-const document = {getElementById: id => id === 'f' ? form : id === 'err' ? err
-                                      : (boxes[id] = boxes[id] || {value: ''})};
-let reloaded = 0;
-const location = {reload: () => { reloaded++; }};
-// The request is held open, because the whole point is what the button says
-// while it is in flight.
-let land, reply;
-const fetch = () => new Promise(res => { land = () => res(reply); });
-const answer = (ok, body) => ({ok, status: ok ? 200 : 409, json: async () => body});
-"""
-
-JOIN_CHECKS = """
-(async () => {
-  const first = form.onsubmit({preventDefault() {}});
-  assert.equal(btn.disabled, true, 'a second tap during /join races the first');
-  assert.notEqual(btn.textContent, 'Join', 'and the button must say it is working');
-
-  // The 409 the double tap used to produce, and the only one that accuses a
-  // brand new joiner of already existing.
-  reply = answer(false, {error: 'that roll number is already registered'});
-  land(); await first;
-  assert.equal(btn.disabled, false, 'a refusal has to hand the button back');
-  assert.equal(btn.textContent, 'Join');
-  assert.match(err.textContent, /already registered/);
-  assert.equal(reloaded, 0);
-
-  const second = form.onsubmit({preventDefault() {}});
-  reply = answer(true, {});
-  land(); await second;
-  assert.equal(reloaded, 1, 'and a good answer still goes through');
-})().catch(e => { console.error(e); process.exit(1); });
-"""
-
-
-@pytest.mark.skipif(not NODE, reason="needs node")
-def test_the_join_button_says_something_while_it_waits(tmp_path):
-    """/join opens a database connection before it answers. It is the one
-    screen every student sees and the only slow action with no busy state."""
-    f = tmp_path / "join.js"
-    f.write_text(JOIN_STUB + JOIN_SCRIPT + JOIN_CHECKS)
     r = subprocess.run([NODE, str(f)], capture_output=True, text=True)
     assert r.returncode == 0, r.stdout + r.stderr
