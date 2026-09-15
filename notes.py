@@ -1200,6 +1200,13 @@ button.off:active{background:var(--surface)}
 /* The one the class voted up. Said in the rule, never by dimming the others,
    which are still answers worth reading. */
 .ans.top{border-left-color:var(--accent)}
+/* The bot's. It sits in the answer column because that is what it is an
+   answer to, and it is dashed because it is the one thing on this screen
+   nobody in the section stands behind and nothing keeps: close the note and
+   it is gone. Grey, never the accent -- the accent on .ans.top is the class
+   saying this one is right, and no machine gets to borrow that. */
+.ans.ai{border-left-style:dashed;border-left-color:var(--mut)}
+.ans.ai .meta{color:var(--mut);font-size:13px}
 .thread .acts{display:flex;flex-wrap:wrap;gap:8px;margin-top:12px}
 .thread .acts button,.post .acts button,.msg .acts button{
   min-height:var(--tap);padding:0 16px;border-radius:11px;
@@ -5451,7 +5458,12 @@ function doubtCard(q) {
   el.append(what);
   const reply = document.createElement('button');
   reply.textContent = 'Answer this';
-  const row = acts(reply, dropBtn(q));
+  // Second, always, and worded as the lesser thing it is. A classmate who was
+  // in the room beats this every time, and the button that asks one of them
+  // is the one the thumb lands on first.
+  const robot = document.createElement('button');
+  robot.textContent = 'Ask AI';
+  const row = acts(reply, robot, dropBtn(q));
   what.appendChild(row);
   // The box appears where it was asked for and only there: a form under every
   // question on the screen is six forms nobody asked for.
@@ -5459,6 +5471,7 @@ function doubtCard(q) {
     reply.disabled = true;
     what.insertBefore(askBox('Answer ' + q.by + '…', 'Post this answer', q.id), row);
   };
+  robot.onclick = () => askTheMachine(q, robot, what, row);
   // Only the top answer is marked, and only when the class actually voted for
   // it: a rule down the side of the one answer with no votes says nothing.
   q.answers.forEach((a, k) => what.appendChild(answerCard(a, k === 0 && a.votes > 0)));
@@ -5496,6 +5509,43 @@ function drawDoubts(instead) {
           + 'if you are stuck, somebody else is too.'));
   }
   THREAD.forEach(q => box.appendChild(doubtCard(q)));
+}
+
+// Nothing here touches THREAD and nothing here redraws. The answer is put on
+// the screen and only on the screen: it was never stored, so a redraw -- which
+// any answer posted after it will cause -- is what takes it away again, and
+// that is the correct behaviour rather than a bug to work around.
+async function askTheMachine(q, btn, what, row) {
+  btn.disabled = true;
+  busy('Thinking…', true);
+  const el = document.createElement('div');
+  el.className = 'ans ai';
+  const body = document.createElement('div');
+  body.className = 'what';
+  const meta = document.createElement('p');
+  meta.className = 'meta';
+  body.appendChild(meta);
+  el.appendChild(body);
+  what.insertBefore(el, row.nextSibling);
+  try {
+    const r = await fetch('/doubts/ai', {
+      method: 'POST', headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify({id: q.id}),
+    });
+    const d = await r.json().catch(() => ({}));
+    if (!r.ok) throw new Error(d.error || 'could not answer that');
+    const out = document.createElement('div');
+    mdInto(out, d.text);
+    body.insertBefore(out, meta);
+    // Said under the answer and not over it, because it is what you want to
+    // know after reading one: who said this, and is it staying.
+    meta.textContent = 'AI, not a classmate. Not saved — check it against the lecture.';
+    busyDone('');
+  } catch (e) {
+    btn.disabled = false;
+    el.remove();
+    busyDone('Could not answer that: ' + e.message);
+  }
 }
 
 async function writeDoubt(payload, btn, err) {
@@ -11044,6 +11094,71 @@ Rules:
 - If the passage is too fragmentary to explain, say so and ask what specifically is unclear."""
 
 
+# The other side of the same coin. Explain is handed a passage with the note
+# around it; this is handed a sentence somebody typed at one in the morning and
+# nothing else, so the one rule Explain does not need is the rule that matters
+# most here: say when the question alone is not enough to answer, instead of
+# inventing the lecture it was about.
+DOUBT_PROMPT = """A student asked their classmates a question about a lecture. Answer it.
+
+Rules:
+- 3-6 sentences. A classmate answering at one in the morning, not a textbook.
+- Plain language first, then the technical statement.
+- Maths as LaTeX: $...$ inline, $$...$$ display.
+- You were given the question and nothing else -- no slides, no recording, no
+  note. If answering needs something you were not given, say which thing, and
+  answer the part you can.
+- Never guess at what a specific lecturer said or did. You do not know."""
+
+# Groq's free tier, the largest model on it. Named here rather than only in
+# argparse because build_server is handed an args by the tests too, and a
+# default that lives in the parser is a default those never get.
+AI_MODEL = "llama-3.3-70b-versatile"
+
+
+def groq(system, user, model, max_tokens=1200):
+    """One call to Groq's OpenAI-shaped endpoint, over stdlib.
+
+    Every other API in this file arrives as a client library. This one is a
+    single POST with two strings in and one string out, and urllib is already
+    imported three routes down for the Google callback -- a dependency for this
+    would be a dependency for nothing.
+
+    Groq's free tier is rate limited by the day rather than by the dollar, so
+    there is no price_of() here and nothing to log a cost for. What limits it
+    is the cache and the session budget, in the callers.
+    """
+    import urllib.error
+    import urllib.request
+
+    key = (os.environ.get("GROQ_API_KEY") or "").strip()
+    if not key:
+        raise RuntimeError("no GROQ_API_KEY set")
+    body = json.dumps({
+        "model": model,
+        "max_tokens": max_tokens,
+        "temperature": 0.3,
+        "messages": [{"role": "system", "content": system},
+                     {"role": "user", "content": user}],
+    }).encode()
+    req = urllib.request.Request(
+        "https://api.groq.com/openai/v1/chat/completions", data=body,
+        headers={"Authorization": f"Bearer {key}", "Content-Type": "application/json"})
+    try:
+        with urllib.request.urlopen(req, timeout=60) as r:
+            got = json.loads(r.read())
+    except urllib.error.HTTPError as e:
+        # Groq says why in the body -- a bad key, an unknown model, the daily
+        # limit. Losing that and reporting "HTTP 400" to a phone would make all
+        # three look like the same problem.
+        detail = (e.read() or b"").decode("utf-8", "replace")[:400]
+        raise RuntimeError(f"groq {e.code}: {detail}") from None
+    text = (got["choices"][0]["message"]["content"] or "").strip()
+    if not text:
+        raise RuntimeError("groq returned nothing")
+    return text
+
+
 def build_server(args):
     """Everything serve() needs, assembled but not yet listening.
 
@@ -11069,7 +11184,11 @@ def build_server(args):
     cache_dir.mkdir(parents=True, exist_ok=True)
     inbox = Path(args.library) / ".inbox"
     inbox.mkdir(parents=True, exist_ok=True)
+    # Explain and the doubt bot draw on one budget because they draw on one
+    # free tier: Groq counts requests per day, and it does not care which of
+    # the two screens a request came from.
     budget = {"left": args.max_explains}
+    ai_model = getattr(args, "ai_model", AI_MODEL)
     jobs = Jobs(args)
     logins = Limiter()
     # Its own limiter, not a shared one with its own key prefix: a classmate
@@ -11793,6 +11912,8 @@ def build_server(args):
                 return self.do_vote()
             if self.path == "/doubts":
                 return self.do_doubts()
+            if self.path == "/doubts/ai":
+                return self.do_doubts_ai()
             if self.path == "/posts":
                 return self.do_posts()
             if self.path == "/chat":
@@ -11833,20 +11954,11 @@ def build_server(args):
                     return self.reply(429, {"error": "explain limit reached for this session"})
                 budget["left"] -= 1
 
-                import anthropic
-
-                msg = anthropic.Anthropic().messages.create(
-                    model=args.notes_model,
-                    max_tokens=1200,
-                    system=EXPLAIN_PROMPT,
-                    messages=[{"role": "user", "content":
-                               f"From the note \"{req.get('title', '')}\":\n\n{text}"}],
-                )
-                out = "".join(b.text for b in msg.content if b.type == "text")
+                out = groq(EXPLAIN_PROMPT,
+                           f"From the note \"{req.get('title', '')}\":\n\n{text}",
+                           ai_model)
                 hit.write_text(out)
-                rate_in, rate_out = price_of(args.notes_model)
-                cost = msg.usage.input_tokens / 1e6 * rate_in + msg.usage.output_tokens / 1e6 * rate_out
-                log(f"~${cost:.4f}, {budget['left']} left, cached {key[:8]}", "explain", 1)
+                log(f"{budget['left']} left, cached {key[:8]}", "explain", 1)
                 self.reply(200, {"text": out})
             except Exception as e:
                 # Surface the real reason on the phone; a silent failure here is
@@ -12845,6 +12957,70 @@ def build_server(args):
                 return self.reply(500, {"error": f"{type(e).__name__}: {e}"})
             return self.reply(200, {"doubts": thread})
 
+        def do_doubts_ai(self):
+            """A machine's shot at a question, for when no classmate is awake.
+
+            Nothing is written. The answer is not a row in doubts, does not
+            carry an author, cannot be voted on and is gone when the thread is
+            closed again -- which is the point: the table is the class
+            answering the class, and a bot with a profile in it would sit on
+            top of every thread being more confident than the people this
+            feature exists for.
+
+            Deliberately not in ROLE_REQUIRED, unlike /explain. The rung on
+            /explain is there because Anthropic bills for it; this is Groq's
+            free tier, and the whole argument for doubts being open to students
+            is that asking costs the class nothing. What is required is
+            approval, same as asking and answering.
+
+            The question is read back out of Postgres rather than taken from
+            the request, under the caller's own RLS. That is the entire
+            permission check: a question the select policy will not show you is
+            a question you cannot ask about either, and no new policy had to be
+            written to say so.
+            """
+            if not self.me:
+                return self.reply(404, {"error": "this server is running with --no-auth"})
+            try:
+                req = self.body(2000)
+                if req is None:
+                    return
+                with db(self.me["id"]) as conn:
+                    row = conn.execute(
+                        "select subject_code, body from doubts "
+                        "where id = %s and parent_id is null and deleted_at is null",
+                        ((req.get("id") or "").strip(),)).fetchone()
+                if not row:
+                    return self.reply(404, {"error": "that question is gone"})
+                code, question = row
+
+                # Same cache as Explain, same reason: a hundred and ten people
+                # on one thread must be one call. The subject is in the key
+                # because it is in the prompt -- the same sentence is a
+                # different question in two different courses.
+                key = hashlib.sha256(f"{code}\n{question}".encode()).hexdigest()[:32]
+                hit = cache_dir / f"doubt-{key}.md"
+                if hit.exists():
+                    return self.reply(200, {"text": hit.read_text(), "cached": True})
+
+                if budget["left"] <= 0:
+                    return self.reply(429, {"error": "AI limit reached for this session"})
+                budget["left"] -= 1
+
+                subject = SUBJECTS.get(code, (code,))[0].replace("-", " ")
+                out = groq(DOUBT_PROMPT, f"In {subject}:\n\n{question}", ai_model)
+                hit.write_text(out)
+                log(f"{budget['left']} left, cached {key[:8]}", "doubt-ai", 1)
+                self.reply(200, {"text": out})
+            except psycopg.errors.InvalidTextRepresentation:
+                return self.reply(404, {"error": "no such question"})
+            except Exception as e:
+                # The phone is told the real reason, exactly as /explain does:
+                # a missing key, a spent daily quota and a dropped connection
+                # are three different problems and one message for all three
+                # sends everybody to the wrong fix.
+                self.reply(500, {"error": f"{type(e).__name__}: {e}"})
+
         def do_posts_get(self):
             """One wall, fetched when Campus opens it.
 
@@ -13278,8 +13454,14 @@ def serve(args):
     The API key never leaves the Mac: the phone posts the highlighted text here
     and gets prose back.
     """
+    # Two keys now, and only one of them is about serve(). Anthropic is what
+    # turns a recording into notes, on this machine, in the worker thread;
+    # Groq is what the phone reaches, and it is the free one.
+    if not os.environ.get("GROQ_API_KEY"):
+        print("no GROQ_API_KEY set - Explain and Ask AI will return an error",
+              file=sys.stderr)
     if not os.environ.get("ANTHROPIC_API_KEY"):
-        print("no ANTHROPIC_API_KEY set - Explain will return an error", file=sys.stderr)
+        print("no ANTHROPIC_API_KEY set - uploads cannot become notes", file=sys.stderr)
 
     srv = build_server(args)
     ip = lan_ip() if args.host == "0.0.0.0" else args.host   # print what it bound to
@@ -13847,8 +14029,15 @@ def main():
     sv.add_argument("--out", type=Path, default=Path(__file__).parent / "site" / "index.html")
     sv.add_argument("--notes-model", default="claude-haiku-4-5")
     sv.add_argument("--max-cost", type=float, default=1.00)
-    sv.add_argument("--max-explains", type=int, default=300,
-                    help="spend guard: stop answering after this many taps")
+    # Both names, one dest. The flag was --max-explains when Explain was the
+    # only thing that called anything, and a deploy script somewhere still
+    # says that.
+    sv.add_argument("--max-ai", "--max-explains", dest="max_explains",
+                    type=int, default=300,
+                    help="guard on Groq's daily free tier: stop answering "
+                         "after this many taps, across Explain and Ask AI")
+    sv.add_argument("--ai-model", default=AI_MODEL,
+                    help="the Groq model behind Explain and Ask AI")
     sv.add_argument("--remote-workers", dest="remote", action="store_true",
                     help="hand lectures to `notes.py worker` on another machine "
                          "instead of transcribing them here (the cloud VM has no GPU)")

@@ -17,6 +17,7 @@ import json
 import os
 import pathlib
 import sys
+import tempfile
 import threading
 
 import psycopg
@@ -532,3 +533,157 @@ def test_a_signed_out_caller_gets_nowhere(server):
     assert call(port, "GET", "/doubts?subject=CY1107")[0] in (302, 401, 403)
     assert call(port, "POST", "/doubts", {"subject": "CY1107", "body": "x"})[0] \
         in (302, 401, 403)
+
+
+# ----------------------------------------------- Ask AI, over HTTP
+#
+# The bot answers nothing that is not already a row this caller can read, and
+# it answers the same question once. Both of those are the whole feature: the
+# first is its only permission check, and the second is what keeps a hundred
+# and ten classmates on one thread inside a free tier.
+#
+# Groq itself is stubbed everywhere below. What is under test is the route --
+# who it refuses, what it looks up, and when it declines to call out at all --
+# and a test that needs the network to say so is a test that fails on a train.
+
+
+@pytest.fixture
+def ai(server):
+    """A second server on the same database, with a budget to spend.
+
+    Its own, and function-scoped, because the budget is a closure inside
+    build_server: one call spent by one test is a call the next one does not
+    have, and a shared server would make these pass or fail in file order.
+    """
+    port, who = server
+    lib = pathlib.Path(tempfile.mkdtemp())
+    args = notes.argparse.Namespace(
+        library=lib, out=lib / "site" / "index.html", host="127.0.0.1", port=0,
+        notes_model="claude-haiku-4-5", max_cost=1.0, max_explains=2,
+        ai_model="stub-model", no_auth=False, verbose=False,
+    )
+    srv = notes.build_server(args)
+    threading.Thread(target=srv.serve_forever, daemon=True).start()
+    yield srv.server_address[1], who, port
+    srv.shutdown()
+    srv.server_close()
+
+
+@pytest.fixture
+def calls(monkeypatch):
+    """Every groq() the route makes, and what it was asked."""
+    seen = []
+
+    def stub(system, user, model, max_tokens=1200):
+        seen.append({"system": system, "user": user, "model": model})
+        return "Because the denominator is what changes."
+
+    monkeypatch.setattr(notes, "groq", stub)
+    return seen
+
+
+def test_the_machine_answers_a_question_on_the_thread(ai, calls):
+    aiport, who, port = ai
+    status, body, _ = write(port, who["Chan"], body="Why does the ratio flip?")
+    assert status == 200, body
+    qid = json.loads(body)["doubts"][0]["id"]
+
+    status, body, _ = call(aiport, "POST", "/doubts/ai", {"id": qid},
+                           cookie=who["Chan"])
+    assert status == 200, body
+    assert json.loads(body)["text"] == "Because the denominator is what changes."
+    # Asked about the question as stored, under the subject it was asked in --
+    # not about anything the phone put in the request.
+    assert len(calls) == 1
+    assert "Why does the ratio flip?" in calls[0]["user"]
+    assert calls[0]["model"] == "stub-model"
+
+
+def test_the_same_question_is_answered_once_for_the_whole_section(ai, calls):
+    aiport, who, port = ai
+    status, body, _ = write(port, who["Chan"], body="What cancels on the left?")
+    qid = json.loads(body)["doubts"][0]["id"]
+
+    first = call(aiport, "POST", "/doubts/ai", {"id": qid}, cookie=who["Chan"])
+    second = call(aiport, "POST", "/doubts/ai", {"id": qid}, cookie=who["Dia"])
+    assert first[0] == second[0] == 200, second[1]
+    assert json.loads(first[1])["text"] == json.loads(second[1])["text"]
+    # A different classmate, on the same question, and still one call out.
+    assert len(calls) == 1
+    assert json.loads(second[1])["cached"] is True
+
+
+def test_a_student_may_ask_the_machine(ai, calls):
+    """Not in ROLE_REQUIRED, and this is the test that says so.
+
+    The rung on /explain exists because Anthropic bills for it. This one is
+    free, and a student being able to use it is the point rather than an
+    oversight -- so it is pinned here, where removing the line in
+    ROLE_REQUIRED would be caught.
+    """
+    aiport, who, port = ai
+    status, body, _ = write(port, who["Chan"], body="Is the sign right here?")
+    qid = json.loads(body)["doubts"][0]["id"]
+    assert call(aiport, "POST", "/doubts/ai", {"id": qid},
+                cookie=who["Chan"])[0] == 200
+
+
+def test_a_question_that_is_gone_is_not_answered(ai, calls):
+    aiport, who, port = ai
+    status, body, _ = write(port, who["Chan"], body="Taken back in a moment.")
+    qid = json.loads(body)["doubts"][0]["id"]
+    write(port, who["Chan"], id=qid, delete=True)
+
+    status, body, _ = call(aiport, "POST", "/doubts/ai", {"id": qid},
+                           cookie=who["Chan"])
+    assert status == 404, body
+    assert not calls          # and nothing was spent finding that out
+
+
+def test_a_made_up_question_id_is_not_answered(ai, calls):
+    aiport, who, _ = ai
+    assert call(aiport, "POST", "/doubts/ai", {"id": "not-a-uuid"},
+                cookie=who["Chan"])[0] == 404
+    assert call(aiport, "POST", "/doubts/ai",
+                {"id": "00000000-0000-0000-0000-000000000000"},
+                cookie=who["Chan"])[0] == 404
+    assert not calls
+
+
+def test_an_answer_is_not_a_question(ai, calls):
+    """You may ask the machine about a question, and not about an answer.
+
+    The route reads `parent_id is null`, so an answer's id finds no row -- the
+    bot arguing with a classmate under that classmate's own answer is not a
+    thing this can be pointed at.
+    """
+    aiport, who, port = ai
+    status, body, _ = write(port, who["Chan"], body="Where does the 2 come from?")
+    qid = json.loads(body)["doubts"][0]["id"]
+    status, body, _ = write(port, who["Dia"], parent=qid, body="From the balance.")
+    aid = json.loads(body)["doubts"][0]["answers"][0]["id"]
+
+    assert call(aiport, "POST", "/doubts/ai", {"id": aid},
+                cookie=who["Chan"])[0] == 404
+    assert not calls
+
+
+def test_the_budget_stops_it(ai, calls):
+    """Two calls is the whole run, and the third is refused rather than made."""
+    aiport, who, port = ai
+    ids = []
+    for text in ("First distinct question.", "Second distinct question.",
+                 "Third distinct question."):
+        status, body, _ = write(port, who["Chan"], body=text)
+        ids.append(json.loads(body)["doubts"][0]["id"])
+
+    got = [call(aiport, "POST", "/doubts/ai", {"id": i}, cookie=who["Chan"])[0]
+           for i in ids]
+    assert got == [200, 200, 429]
+    assert len(calls) == 2
+
+
+def test_a_signed_out_caller_cannot_ask_the_machine(ai, calls):
+    aiport, _, _ = ai
+    assert call(aiport, "POST", "/doubts/ai", {"id": "x"})[0] in (302, 401, 403)
+    assert not calls
