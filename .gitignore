@@ -6,3 +6,9 @@ site/
 *.partial.json
 .worker/
 .claude/
+
+# The registrar's published list: 1054 real students, names and ID numbers.
+# Applied to the live database by hand, never committed. See
+# backend/dev/seed_roll_list.sample.sql for the shape.
+backend/dev/seed_roll_list.sql
+backend/dev/seed_roll_branches.sql
