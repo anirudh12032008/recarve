@@ -85,7 +85,7 @@ NOTES_LANG = {
     "hinglish": "romanized Hinglish, the way the professor actually speaks, keeping all technical terms in English",
 }
 
-# MANIT Bhopal, B.Tech I Sem 2026-27, Group-ST Section I.
+# B.Tech I Sem 2026-27, one first-year section.
 # Codes and names from the Scheme page of the institute timetable.
 # code -> (folder name, filename aliases used for auto-filing)
 SUBJECTS = {
@@ -93,7 +93,7 @@ SUBJECTS = {
     "CY1107": ("Engineering-Chemistry", ["chem", "chemistry", "engg-chem", "cy1107"]),
     "EE1108": ("Basic-Electrical-Electronics", ["beee", "electrical", "electronics", "ee1108"]),
     "ME1109": ("Manufacturing-Science", ["manufact", "manufacturing", "me1109"]),
-    # MANIT calls it Environmental Science; students call it EVS or
+    # The scheme calls it Environmental Science; students call it EVS or
     # Environmental Studies. Same course, CY1110.
     "CY1110": ("Environmental-Science",
                ["envsci", "env-sci", "environmental", "environmental-studies", "evs", "cy1110"]),
@@ -3086,7 +3086,7 @@ function savedScreen() {
 // there is a network to fetch an acknowledgement over.
 const MADE_BY = {
   name: 'Anirudh Sahu',
-  says: 'First-year ECE at MANIT Bhopal. Built recarve because the notes for '
+  says: 'A first-year engineering student. Built recarve because the notes for '
       + 'a lecture you missed were in eleven WhatsApp chats and none of them '
       + 'were searchable.',
   links: [
@@ -3098,9 +3098,9 @@ const MADE_BY = {
 // Named, not listed: each line says what the thing actually does here, because
 // a credit that does not say what was borrowed is a logo wall.
 const CREDITS = [
-  ['MANIT Bhopal',
-   'The institute timetable, the scheme and the academic calendar every screen '
-   + 'is built on \u2014 Dr. Fozia Z. Haque, Prof. I/c Institute Time-Table'],
+  ['Your institute',
+   'The timetable, the scheme and the academic calendar every screen '
+   + 'is built on \u2014 published by the institute time-table office'],
   ['Claude, by Anthropic',
    'Writes the notes and the practice questions from a recording. Once per '
    + 'lecture, on the Mac, and then cached \u2014 never per student'],
@@ -3138,7 +3138,7 @@ function aboutScreen() {
 }
 
 // ---- ATTENDANCE ----------------------------------------------------------
-// 75% per subject is what MANIT actually checks before it lets you sit the
+// 75% per subject is what the institute actually checks before it lets you sit the
 // paper, so every number here is per subject and there is no overall figure at
 // all -- an average nobody is refused an exam over would only be comforting.
 //
@@ -7203,7 +7203,7 @@ ENV_PATH = Path(__file__).resolve().parent / ".env"
 # Requests are gated before they are dispatched, so a route added later is
 # protected whether or not whoever adds it remembers auth exists. These are the
 # only paths that opt out, and adding to this set is the deliberate act.
-PUBLIC_PATHS = {"/join", "/login", "/auth/google", "/auth/google/callback"}
+PUBLIC_PATHS = {"/join", "/login", "/demo", "/auth/google", "/auth/google/callback"}
 
 # Four roles, in order, and the order is the whole of it. A student reads
 # everything the class has; trusted adds the things that write content or spend
@@ -7519,6 +7519,64 @@ def db_join(conn, code, name, roll_no, phone, password):
     return result
 
 
+# --------------------------------------------------------------------------
+# The demo door. RECARVE_DEMO=1, and only ever on a throwaway database.
+#
+# A reviewer with no institute address still has to see the app rather than a
+# sign-in screen, so this mints one profile and hands its session to whoever
+# asks for it. Everything downstream is the ordinary path -- the same invite
+# code, the same signed cookie, the same RLS policies, the same section -- so
+# this is a door and not a bypass, and with RECARVE_DEMO unset it is a 404.
+#
+# ponytail: one shared profile, not one per visitor. Two days of refreshes
+# would otherwise leave the section full of ghosts, and a reviewer who closes
+# the tab should find what they left. Per-visitor profiles when the demo is
+# ever shown to more than a handful of people.
+DEMO = (os.environ.get("RECARVE_DEMO") or "").strip() == "1"
+DEMO_ROLL = "DEMO001"
+
+
+def db_demo_session(conn):
+    """The demo profile's id, made on the first ask and reused after. Or None.
+
+    None means the database has no section to put anybody in, which is a
+    demo that was never seeded rather than a caller who did anything wrong.
+    Runs on the owning connection: there is no session yet to act as.
+    """
+    row = conn.execute("select id from profiles where roll_no = %s",
+                       (DEMO_ROLL,)).fetchone()
+    if row:
+        return str(row[0])
+    # The section the seeded people are actually in, not the alphabetically
+    # first one -- a demo visitor dropped into an empty section sees an empty
+    # app, which is the one thing this door exists to prevent.
+    section = conn.execute(
+        "select coalesce((select section_id from profiles group by section_id "
+        "                 order by count(*) desc limit 1), default_section())"
+    ).fetchone()
+    if not section or not section[0]:
+        return None
+    section_id = str(section[0])
+    code = db_invite(conn, section_id)
+    if not code:
+        code = secrets.token_hex(4)
+        conn.execute(
+            "insert into invites (code, section_id, expires_at) values "
+            "(%s, %s, now() + interval '30 days')",
+            (code, section_id),
+        )
+    got = db_join(conn, code, "Demo Visitor", DEMO_ROLL, "9000000000",
+                  secrets.token_urlsafe(16))
+    if not got:
+        return None
+    # A demo that lands in the pending queue shows nothing, and a seeded
+    # database has no admin sitting there to approve it. trusted rather than
+    # student so the AI routes -- which are the thing worth showing -- answer.
+    conn.execute("update profiles set status = 'approved', role = 'trusted' "
+                 "where id = %s", (got[0],))
+    return got[0]
+
+
 # Google is the second door (0048), and the only thing it has to produce -- to
 # a server that has no profile for the person yet -- is a scholar number the
 # institute published. Three checks stand between the two: Google says it
@@ -7526,7 +7584,7 @@ def db_join(conn, code, name, roll_no, phone, password):
 # what stands before the @ is the eleven digits the registrar assigns. After
 # those it is a lookup in roll_list, and the section is the registrar's answer
 # rather than anybody's typing.
-GOOGLE_DOMAIN = os.environ.get("RECARVE_GOOGLE_DOMAIN", "stu.manit.ac.in")
+GOOGLE_DOMAIN = os.environ.get("RECARVE_GOOGLE_DOMAIN", "students.example.edu")
 
 
 def google_client():
@@ -7544,7 +7602,7 @@ def google_client():
 def scholar_from_email(email, domain=None):
     """The scholar number inside an institute address, or None.
 
-    26112011201@stu.manit.ac.in is a first year. A personal Gmail is not, and
+    26112011201@students.example.edu is a first year. A personal Gmail is not, and
     neither is a staff address in the same domain: the local part has to be the
     eleven digits the registrar assigns, which is also the key of the table it
     is about to be looked up in. Nothing here decides whether the person is
@@ -9223,7 +9281,7 @@ def db_timetable(conn, user_id):
 
 
 # ---- Attendance. ---------------------------------------------------------
-# MANIT wants 75% in EACH subject, not 75% overall, so every number here is
+# The rule is 75% in EACH subject, not 75% overall, so every number here is
 # per subject. Overall attendance would be a comforting average that nobody is
 # ever refused an exam over.
 #
@@ -9877,7 +9935,7 @@ def db_set_section_timetable(conn, section_id, rows):
 GATE_PAGE = r"""<!doctype html>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<title>recarve — MANIT first year</title>
+<title>recarve — first-year notes</title>
 <style>
 :root{color-scheme:light dark;--bg:#fcfcfd;--fg:#14161b;--mut:#656b76;--line:#e1e4ea;
   /* The same purple the app is built on, to the digit. These screens are the
@@ -10244,8 +10302,8 @@ JOIN_BODY = r"""<link rel="preconnect" href="https://fonts.gstatic.com" crossori
   <h1>Sleep through class. <span>Wake up to notes.</span></h1>
   <p class="lede">Every lecture, written down. One person records the class. Everyone
   gets the notes &mdash; Hindi, English, or both in the same sentence.</p>
-  <p class="where">Every first-year section at MANIT Bhopal, 2026&ndash;27.
-  Your address says which one is yours.</p>
+  <p class="where">Every first-year section, 2026&ndash;27. Your institute
+  address says which one is yours.</p>
   <div class="ctas">__DOOR__</div>
 </section>
 
@@ -10388,7 +10446,7 @@ JOIN_BODY = r"""<link rel="preconnect" href="https://fonts.gstatic.com" crossori
   <div class="ctas">__DOOR__</div>
 </section>
 
-<footer><p>Made by Anirudh Sahu, first-year ECE at MANIT Bhopal, who kept
+<footer><p>Made by Anirudh Sahu, a first-year engineering student who kept
 falling asleep in class.</p>
 <p><a href="https://www.linkedin.com/in/anirudh-sahu-4b245327b/" rel="me noopener"
 target="_blank">LinkedIn</a> <a href="https://www.instagram.com/anirudh_sahu_12/"
@@ -10408,7 +10466,18 @@ def join_body():
     the endpoint and its rules are untouched -- it simply has no form on this
     page pointing at it.
     """
-    return JOIN_BODY.replace("__DOOR__", front_door())
+    body = JOIN_BODY.replace("__DOOR__", front_door())
+    if DEMO:
+        # The address sentence promises a door this install does not have, and
+        # the header's "Log in" points at one a reviewer has no account for.
+        body = body.replace(
+            """<p class="where">Every first-year section, 2026&ndash;27. Your institute
+  address says which one is yours.</p>""",
+            '<p class="where">A live demo, seeded with invented students. '
+            'Everything you can click is the real app.</p>')
+        body = body.replace('<a href="/login">Log in</a>',
+                            '<a href="/demo">Open the demo</a>')
+    return body
 
 
 def front_door():
@@ -10430,6 +10499,8 @@ def front_door():
     wants nor may paste twice -- .land dresses .gbtn itself -- so only the
     markup after the style block is taken.
     """
+    if DEMO:
+        return '<a class="cta" href="/demo">Open the demo</a>'
     if not google_client():
         return '<a class="cta" href="/login">Log in</a>'
     return GOOGLE_BUTTON.split("</style>\n", 1)[-1]
@@ -11801,6 +11872,8 @@ def build_server(args):
                 return self.send_error(404)
             if self.path == "/sw.js":
                 return self.send_js(SW_JS)
+            if where == "/demo":
+                return self.do_demo()
             if where == "/auth/google":
                 return self.do_google_start()
             if where == "/auth/google/callback":
@@ -12283,6 +12356,29 @@ def build_server(args):
             # withholds it exactly then.
             return self.go(where, f"{OAUTH_COOKIE}={state}; Path=/auth/; "
                                   "HttpOnly; SameSite=Lax; Max-Age=600")
+
+        def do_demo(self):
+            """Hand the caller the demo profile's session and send them in.
+
+            Public by necessity and open by design: RECARVE_DEMO says this
+            install is a throwaway with invented data in it. Anywhere else the
+            path does not exist.
+            """
+            if not DEMO or args.no_auth:
+                return self.send_error(404)
+            try:
+                with db() as conn:
+                    profile_id = db_demo_session(conn)
+            except Exception as e:
+                log(f"the demo door failed: {type(e).__name__}: {e}", "auth")
+                return self.reply(500, {"error": f"{type(e).__name__}: {e}"})
+            if not profile_id:
+                return self.reply(503, {"error": "this demo has no section to "
+                                                 "put you in - seed it first"})
+            log("somebody came in through the demo door", "login")
+            # Two days, which is what this install is for.
+            return self.go("/", f"{SESSION_COOKIE}={sign_session(profile_id, secret)}; "
+                                "Path=/; HttpOnly; SameSite=Lax; Max-Age=172800")
 
         def do_google_callback(self):
             """Google's answer, turned into the same signed cookie /join and
