@@ -1,0 +1,10 @@
+# The server and the CLI.
+psycopg[binary]>=3.2
+
+# Transcription. Only the machine that actually runs the worker needs these --
+# the VM has no GPU and never imports them.
+faster-whisper>=1.0
+numpy>=1.26
+
+# Tests.
+pytest>=8.0

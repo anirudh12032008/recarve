@@ -16,9 +16,10 @@ export PATH="/opt/homebrew/bin:/usr/bin:/bin:/usr/sbin:/sbin"
 set -a; [ -f ./.env ] && . ./.env; set +a
 export SSL_CERT_FILE="/Users/anirudh/Developer/recarve/.venv/lib/python3.14/site-packages/certifi/cacert.pem"
 
-VM=azureuser@4.224.80.229
-KEY=/Users/anirudh/.ssh/recarve_azure
-PORT=18420
+# Set these for your own install, or put them in .env beside the API keys.
+VM="${RECARVE_VM:?set RECARVE_VM=user@host, or put it in .env}"
+KEY="${RECARVE_VM_KEY:-$HOME/.ssh/id_ed25519}"
+PORT="${RECARVE_TUNNEL_PORT:-18420}"
 
 ssh -N -L "${PORT}:127.0.0.1:8000" -i "$KEY" \
     -o ExitOnForwardFailure=yes -o ServerAliveInterval=20 -o ServerAliveCountMax=3 \
