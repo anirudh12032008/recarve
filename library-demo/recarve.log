@@ -1,0 +1,7 @@
+08:25:36  backfill    registered 5 existing file(s) under the admin
+08:25:36  ready       http://127.0.0.1:8742   <- open this on your phone
+08:25:36  ready       library library-demo
+08:25:36  ready       log file library-demo/recarve.log
+08:25:36  ready       http://127.0.0.1:8742/admin   <- approve joiners here
+08:25:51  login       somebody came in through the demo door
+08:26:34  login       somebody came in through the demo door
