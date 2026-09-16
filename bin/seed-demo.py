@@ -52,6 +52,19 @@ WALL = [
 # grid and the Campus tab look like anything at all. seed_roll_list.sql is
 # deliberately NOT here: it is 1054 real students, and this database is open.
 SEEDS = ("seed_timetables.sql", "seed_campus.sql")
+
+# In order, and the order is the whole of it. "Students'' Council MANIT" wants
+# the name dropped, not swapped -- "Students'' Council the institute" reads
+# like a bug -- while a sentence of prose wants a noun in its place.
+NAME_SUBS = (
+    ("MANIT campus", "the campus"),
+    ("MANIT Bhopal", "the institute"),
+    (" MANIT", ""),
+    ("MANIT", "the institute"),
+    (", Bhopal", ""),
+    ("around Bhopal", "around the city"),
+    ("Bhopal", "the city"),
+)
 ROOT = Path(__file__).resolve().parent.parent
 
 
@@ -59,7 +72,8 @@ def seed_sql(conn):
     """Apply the dev data seeds, with the institute's name taken out of them."""
     for name in SEEDS:
         sql = (ROOT / "backend" / "dev" / name).read_text()
-        sql = sql.replace("MANIT Bhopal", "the institute").replace("MANIT", "the institute")
+        for before, after in NAME_SUBS:
+            sql = sql.replace(before, after)
         conn.execute(sql)
         print(f"applied {name}")
 
