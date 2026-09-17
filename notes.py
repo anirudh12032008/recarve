@@ -621,6 +621,8 @@ PAGE = _themable(r"""<!doctype html>
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Figtree:wght@400;500;600;700&amp;family=Kalam:wght@700&amp;display=swap">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/marked/15.0.7/marked.min.js"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/notyf/3.10.0/notyf.min.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/notyf/3.10.0/notyf.min.js"></script>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.11/katex.min.css">
 <script defer src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.11/katex.min.js"></script>
 <script defer src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.11/contrib/auto-render.min.js"></script>
@@ -1631,6 +1633,10 @@ body:has(#ask.on) #fab{display:none}
   padding:13px 15px;border-radius:11px;background:var(--surface);
   border:1px solid var(--line);box-shadow:0 8px 26px rgba(0,0,0,.22)}
 #busy.on{display:block}
+/* Notyf's own sheet, moved clear of the FAB and the dock like the strip is. */
+.notyf{padding-bottom:calc(144px + env(safe-area-inset-bottom));font-family:inherit}
+.notyf__toast{max-width:34rem;border-radius:11px}
+.notyf__message u{font-weight:600;margin-left:6px}
 #busy.said{pointer-events:auto}
 #busy.bad{border-color:var(--err)}
 #busy .toast{display:flex;align-items:center;gap:10px}
@@ -6085,11 +6091,28 @@ function busy(msg, hold) {
 // The outcome. Always closable; good news leaves by itself, bad news stays
 // until somebody has read it. `act` is [label, fn]: one thing to do about it.
 let toastTimer = null;
+// Notyf says it when it loaded. It comes off a CDN and this app is read in
+// corridors with no signal, so without it the strip below says it instead.
+const notyf = typeof Notyf === 'undefined' ? null : new Notyf({
+  dismissible: true, ripple: false, position: {x: 'center', y: 'bottom'},
+  types: [{type: 'success', background: '#6534c9'},
+          {type: 'error', background: '#c62b41'}]});
+const toastText = s => String(s).replace(/[&<>]/g,
+  c => ({'&': '&amp;', '<': '&lt;', '>': '&gt;'}[c]));
 function busyDone(msg, {bad = false, act = null} = {}) {
   clearTimeout(toastTimer);
   const shut = () => { clearTimeout(toastTimer); held = false;
                        busyBox.className = ''; };
   if (!msg) return shut();
+  if (notyf) {
+    shut();                       // the strip was only the "working on it"
+    // Notyf takes markup, and half of what is said here a server wrote.
+    const n = notyf.open({
+      type: bad ? 'error' : 'success', duration: bad ? 0 : act ? 8000 : 4000,
+      message: toastText(msg) + (act ? ' <u>' + toastText(act[0]) + '</u>' : '')});
+    if (act) n.on('click', () => { notyf.dismiss(n); act[1](); });
+    return;
+  }
   held = true;                    // keep the outcome up long enough to read
   busyBox.innerHTML = '<div class="toast"><p class="waitmsg"></p></div>';
   busyBox.querySelector('.waitmsg').textContent = msg;
