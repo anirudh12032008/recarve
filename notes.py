@@ -1585,6 +1585,12 @@ body:has(#ask.on) #fab{display:none}
   padding:13px 15px;border-radius:11px;background:var(--surface);
   border:1px solid var(--line);box-shadow:0 8px 26px rgba(0,0,0,.22)}
 #busy.on{display:block}
+#busy.said{pointer-events:auto}
+#busy.bad{border-color:var(--err)}
+#busy .toast{display:flex;align-items:center;gap:10px}
+#busy .toast .waitmsg{flex:1;margin:0}
+#busy .tact{font-weight:600;color:var(--accent);padding:6px 4px}
+#busy .tshut{font-size:20px;line-height:1;color:var(--mut);padding:4px 6px}
 .dock button:active{opacity:.7;transform:scale(.98)}
 body:not(.reading) .dock{display:none}
 
@@ -2108,7 +2114,7 @@ async function renameItem(payload, btn) {
     await refresh();
   } catch (e) {
     btn.disabled = false;
-    busyDone(e.message);
+    oops('Could not rename that', e);
   }
 }
 
@@ -2163,7 +2169,7 @@ function noteRow(n, s) {
         await refresh();
       } catch (e) {
         btn.disabled = false; btn.classList.remove('armed'); btn.textContent = 'Remove';
-        busyDone(e.message);
+        oops('Could not remove that lecture', e);
       }
     }));
   }
@@ -2279,7 +2285,7 @@ function voteBtn(u, answer) {
       else await (answer ? loadDoubts() : refresh());
     } catch (e) {
       b.disabled = false;
-      busyDone(e.message);
+      oops('Vote not counted', e);
     }
   };
   return b;
@@ -2352,7 +2358,7 @@ function fileRow(u, s) {
         await refresh();
       } catch (e) {
         btn.disabled = false; btn.classList.remove('armed'); btn.textContent = 'Remove';
-        busyDone(e.message);
+        oops('Could not remove that', e);
       }
     }));
   }
@@ -2582,7 +2588,7 @@ function fileGroupRow(files, s) {
         await refresh();
       } catch (e) {
         btn.disabled = false; btn.classList.remove('armed'); btn.textContent = 'Remove';
-        busyDone(e.message);
+        oops('Could not remove that', e);
       }
     }));
   }
@@ -3258,7 +3264,7 @@ async function attPost(url, payload, btns) {
     render();
   } catch (e) {
     btns.forEach(b => { b.disabled = false; });
-    busyDone(e.message);
+    oops('Could not save that', e);
   }
 }
 
@@ -3528,7 +3534,7 @@ async function saveAnn(payload, err, btn) {
     if (btn) btn.disabled = false;
     busyDone('');
     if (err) err.textContent = e.message;
-    else busyDone('Could not save that: ' + e.message);
+    else oops('Could not save that', e);
   }
 }
 
@@ -3805,7 +3811,7 @@ async function writePost(payload, btn, err) {
   } catch (e) {
     if (btn) btn.disabled = false;
     if (err) { err.textContent = e.message; busyDone(''); }
-    else busyDone(e.message);
+    else oops('Could not post that', e);
   }
 }
 
@@ -4045,7 +4051,10 @@ function eventCard(e) {
   h.textContent = e.title;
   const meta = document.createElement('span');
   meta.className = 'meta';
-  meta.textContent = [dateSpan(e), e.society, e.venue].filter(Boolean).join(' · ');
+  // Said out loud, because Edit on every card you added reads exactly like
+  // Edit on every card there is.
+  meta.textContent = [dateSpan(e), e.society, e.venue, e.mine && 'Added by you']
+    .filter(Boolean).join(' · ');
   el.append(h, meta);
   if (e.blurb) {
     const p = document.createElement('p');
@@ -4358,7 +4367,7 @@ async function saveCampus(path, payload, err, btn) {
     if (btn) btn.disabled = false;
     busyDone('');
     if (err) err.textContent = e.message;
-    else busyDone('Could not save that: ' + e.message);
+    else oops('Could not save that', e);
   }
 }
 
@@ -4831,7 +4840,7 @@ async function sayInRoom(payload, btn) {
     render();
   } catch (e) {
     if (btn) btn.disabled = false;
-    busyDone(e.message);
+    oops('Message not sent', e);
   }
 }
 
@@ -5558,7 +5567,7 @@ async function askTheMachine(q, btn, what, row) {
   } catch (e) {
     btn.disabled = false;
     el.remove();
-    busyDone('Could not answer that: ' + e.message);
+    oops('Could not answer that', e);
   }
 }
 
@@ -5580,7 +5589,7 @@ async function writeDoubt(payload, btn, err) {
   } catch (e) {
     if (btn) btn.disabled = false;
     if (err) { err.textContent = e.message; busyDone(''); }
-    else busyDone('Could not save that: ' + e.message);
+    else oops('Could not save that', e);
   }
 }
 
@@ -5941,18 +5950,45 @@ function failed(box, what, how) {
 function busy(msg, hold) {
   if (held && !hold) return;
   held = held || !!hold;
+  clearTimeout(toastTimer);
   waiting(busyBox, msg);
+  busyBox.classList.remove('said', 'bad');
   busyBox.classList.add('on');
 }
 
-function busyDone(msg) {
-  if (!msg) { held = false; return busyBox.classList.remove('on'); }
+// The outcome. Always closable; good news leaves by itself, bad news stays
+// until somebody has read it. `act` is [label, fn]: one thing to do about it.
+let toastTimer = null;
+function busyDone(msg, {bad = false, act = null} = {}) {
+  clearTimeout(toastTimer);
+  const shut = () => { clearTimeout(toastTimer); held = false;
+                       busyBox.className = ''; };
+  if (!msg) return shut();
   held = true;                    // keep the outcome up long enough to read
-  busyBox.innerHTML = '<p class="waitmsg"></p>';
+  busyBox.innerHTML = '<div class="toast"><p class="waitmsg"></p></div>';
   busyBox.querySelector('.waitmsg').textContent = msg;
-  busyBox.classList.add('on');
-  setTimeout(() => { held = false; busyBox.classList.remove('on'); }, 3500);
+  const row = busyBox.firstChild;
+  if (act) {
+    const b = document.createElement('button');
+    b.className = 'tact';
+    b.textContent = act[0];
+    b.onclick = () => { shut(); act[1](); };
+    row.appendChild(b);
+  }
+  const x = document.createElement('button');
+  x.className = 'tshut';
+  x.textContent = '×';
+  x.setAttribute('aria-label', 'Dismiss');
+  x.onclick = shut;
+  row.appendChild(x);
+  busyBox.className = 'on said' + (bad ? ' bad' : '');
+  if (!bad) toastTimer = setTimeout(shut, act ? 8000 : 4000);
 }
+
+// What did not happen, then why. The server's own sentence is the why unless
+// it is only the same words again.
+const oops = (what, e) => busyDone(
+  /^could not/i.test(e.message || '') ? what : what + ': ' + e.message, {bad: true});
 
 backBtn.onclick = () => history.back();
 lback.onclick = () => history.back();
@@ -6353,6 +6389,22 @@ async function refresh() {
   }
 }
 
+// What a lecture is waiting on, in words. A queued row used to say "queued"
+// and nothing else, for as long as the Mac that transcribes was asleep.
+// WORKER is seconds since it last asked for work: undefined when this server
+// transcribes by itself, null when no worker has ever called.
+let WORKER;
+function jobSays(j) {
+  if (j.state !== 'queued' || j.detail) return j.detail || j.state;
+  if (WORKER === undefined || JOBS.some(x => x.state === 'transcribing')) {
+    return 'Waiting its turn';
+  }
+  if (WORKER === null) return 'Waiting for the transcriber to come online';
+  if (WORKER < 300) return 'Transcriber is online, starting soon';
+  return 'Transcriber offline, last seen ' + ago(0, WORKER)
+       + '. It starts when it is back';
+}
+
 function jobRow(j) {
   const el = document.createElement('div');
   el.className = 'job' + (j.state === 'failed' ? ' failed' : '');
@@ -6363,7 +6415,7 @@ function jobRow(j) {
     (pct ? '<div class="bar"><i></i></div>' : '') +
     '</div><span class="st"></span>';
   el.querySelector('.nm').textContent = j.name.replace(/^[A-Z]{2}\d{4}-/, '');
-  el.querySelector('.st').textContent = j.detail || j.state;
+  el.querySelector('.st').textContent = jobSays(j);
   if (pct) el.querySelector('.bar i').style.width = pct + '%';
   return el;
 }
@@ -6388,28 +6440,50 @@ async function pullLog() {
 }
 
 let lastDone = 0, lastJobs = '';
+// A lecture this page watched being worked on, and how it ended. Only ones it
+// watched: a reload must not replay every lecture finished since the restart.
+const watched = new Set();
+function jobNews(jobs) {
+  for (const j of jobs) {
+    const name = j.name.replace(/^[A-Z]{2}\d{4}-/, '').replace(/\.\w+$/, '');
+    if (j.state === 'queued' || j.state === 'transcribing') watched.add(j.key);
+    else if (watched.delete(j.key)) {
+      if (j.state === 'done') {
+        busyDone('Notes for ' + name + ' are ready', {act: ['Open', () =>
+          go('classes', j.subject, j.name.replace(/\.\w+$/, ''))]});
+      } else {
+        busyDone(name + ' could not be transcribed: ' + j.detail, {bad: true});
+      }
+    }
+  }
+}
 async function pollJobs() {
   if (!live) return;
   try {
     const r = await fetch('/jobs');
-    const {jobs} = await r.json();
+    const {jobs, worker} = await r.json();
     JOBS = jobs;
+    WORKER = worker;
+    jobNews(jobs);
     // Home draws the same jobs under "Needs you", and only when they have
     // actually moved: a rebuild every two seconds fights the thumb.
-    const shape = JSON.stringify(jobs.map(j => [j.id, j.state, j.detail]));
+    const shape = JSON.stringify(jobs.map(j => [j.id, j.state, jobSays(j)]));
     if (shape !== lastJobs) {
       lastJobs = shape;
       if (view.tab === 'home') render();
     }
     jobsBox.innerHTML = '';
-    jobs.slice(0, 4).forEach(j => jobsBox.appendChild(jobRow(j)));
+    // Finished rows leave: they sat in this header on every tab, for the
+    // whole class, until the server next restarted. jobNews() says it once.
+    jobs.filter(j => j.state !== 'done').slice(0, 4)
+        .forEach(j => jobsBox.appendChild(jobRow(j)));
     // The jobs list lives on the subject screens, and + now works while you
     // are reading, so a lecture uploaded from a note would otherwise
     // transcribe out of sight. Mirror it into the shared strip.
     const running = jobs.find(j => j.state === 'queued' || j.state === 'transcribing');
     if (running && document.body.classList.contains('reading')) {
       busy(running.name.replace(/^[A-Z]{2}\d{4}-/, '') + ' · '
-           + (running.detail || running.state));
+           + jobSays(running));
     } else if (!held) {
       busyBox.classList.remove('on');
     }
@@ -6747,7 +6821,7 @@ document.getElementById('opt-revise').onclick = async () => {
     await refresh();               // the sheet is a note now; show it
     busyDone('Revision sheet ready for ' + code);
   } catch (e) {
-    busyDone('Revision sheet failed: ' + e.message);
+    oops('Revision sheet failed', e);
   }
 };
 
@@ -7080,6 +7154,7 @@ class Jobs:
         # thread has nothing to run -- but the thread still starts, because a
         # document still finishes here and the two modes must not fork.
         self.remote = bool(getattr(args, "remote", False))
+        self.seen = None           # when a remote worker last asked for work
         threading.Thread(target=self._run, daemon=True).start()
 
     def add(self, path, subject, kind, run=True):
@@ -12196,7 +12271,13 @@ def build_server(args):
                     return self.reply(200,
                                       {"papers": db_papers(conn, code or None)})
             if self.path == "/jobs":
-                return self.reply(200, {"jobs": jobs.snapshot()})
+                out = {"jobs": jobs.snapshot()}
+                if jobs.remote:
+                    # Seconds since a worker last polled, so a queued lecture
+                    # can say whether anything is coming for it.
+                    out["worker"] = (None if jobs.seen is None
+                                     else int(time.time() - jobs.seen))
+                return self.reply(200, out)
             if self.path.split("?")[0] == "/worker/audio":
                 return self.do_worker_audio()
             if self.path == "/log":
@@ -12918,6 +12999,7 @@ def build_server(args):
             means a second worker steps over the row the first is holding
             rather than being handed it twice.
             """
+            jobs.seen = time.time()
             if not jobs.remote:
                 # Two consumers of one queue would transcribe the same lecture
                 # twice. If this machine is draining the queue itself, nobody
@@ -12945,7 +13027,9 @@ def build_server(args):
                                  (f"the audio for {title} is no longer on the server", lid))
                 log(f"{path.name} has no audio left; giving up on it", "worker")
                 return self.reply(200, {})
-            jobs.track(path, code, "transcribing", f"claimed by a worker (try {attempts})")
+            jobs.track(path, code, "transcribing",
+                       "Sending the recording to the transcriber"
+                       + (f" (try {attempts})" if attempts > 1 else ""))
             log(f"{path.name} claimed by a worker (try {attempts})", "worker")
             return self.reply(200, {"id": str(lid), "subject": code, "title": title,
                                     "name": path.name, "attempts": attempts})
@@ -12979,6 +13063,7 @@ def build_server(args):
             req = self.body(20000)
             if req is None:
                 return
+            jobs.seen = time.time()    # mid-lecture it reports, it does not poll
             row = self.lecture(str(req.get("id") or "")[:64])
             if not row:
                 return self.reply(404, {"error": "no such lecture"})
@@ -13998,7 +14083,7 @@ def worker(args):
             raise ValueError(f"notes would cost up to ${worst:.2f}, over "
                              f"--max-cost ${args.max_cost:.2f}")
         try:
-            call("/worker/progress", {"id": job["id"], "detail": "writing the notes"})
+            call("/worker/progress", {"id": job["id"], "detail": "Writing the notes"})
         except Exception:
             pass
         notes, usage = make_notes(transcript, args.notes_lang, args.notes_model)
