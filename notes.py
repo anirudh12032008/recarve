@@ -1287,22 +1287,46 @@ button.off:active{background:var(--surface)}
   padding:0 40px 0 12px;font-size:16px;font-family:inherit;color:var(--fg);
   background:var(--bg);border:1px solid var(--edge);border-radius:11px;
   appearance:none;-webkit-appearance:none}
-/* The papers screen's filter bar. Three native pickers, side by side where
-   there is room and stacked where there is not -- 101 papers over six years
-   and eleven courses is more than a phone can be asked to scroll past. */
-.filters{display:flex;flex-wrap:wrap;gap:10px;margin:0 0 4px}
-/* min-width:0 or the flex item cannot shrink under its widest option --
-   'MC1101 - Mathematics 1' is wider than the third of a column it is given,
-   and the third picker drops to a row of its own. */
-.filters .pick{margin-top:0;flex:1 1 150px;min-width:0}
-/* Dressed like every other select in the app, and for the same reason: the
-   OS arrow has to go, or it lands beside the chevron .pick draws and every
-   filter wears two. */
-.filters select{width:100%;min-width:0;min-height:var(--tap);
-  padding:0 38px 0 12px;font-size:16px;font-family:inherit;color:var(--fg);
-  background:var(--bg);border:1px solid var(--edge);border-radius:11px;
-  appearance:none;-webkit-appearance:none}
-.found{color:var(--mut);font-size:.85rem;padding:2px 2px 10px}
+/* The papers screen. One subject at a time, picked from a strip that scrolls
+   sideways; under it, a card per year and a tap target per paper. The strip
+   bleeds to the screen edge so a half-shown chip says there are more. */
+.pp-subs{display:flex;gap:8px;overflow-x:auto;scrollbar-width:none;
+  padding:4px 16px 12px;scroll-padding:0 16px;-webkit-overflow-scrolling:touch}
+.pp-subs::-webkit-scrollbar{display:none}
+.pp-sub{flex:none;min-height:38px;padding:0 14px;border-radius:999px;
+  border:1px solid var(--line);background:transparent;color:var(--mut);
+  font-family:inherit;font-size:13px;font-weight:500;white-space:nowrap}
+.pp-sub[aria-selected=true]{background:var(--fg);border-color:var(--fg);color:var(--bg)}
+.pp-head{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;
+  gap:12px;padding:8px 16px 16px}
+.pp-head b{display:block;font-size:16px;font-weight:600;color:var(--fg)}
+.pp-head small{display:block;margin-top:2px;font-size:13px;color:var(--mut)}
+.seg{display:inline-flex;padding:3px;border-radius:11px;background:var(--surface)}
+.seg button{min-height:32px;padding:0 12px;border:0;border-radius:7px;background:transparent;
+  color:var(--mut);font-family:inherit;font-size:13px;font-weight:500}
+.seg button[aria-pressed=true]{background:var(--bg);color:var(--fg);
+  box-shadow:0 1px 2px rgba(0,0,0,.12)}
+.pp-grid{display:grid;gap:12px;padding:0 16px 24px}
+@media (min-width:900px){.pp-grid{grid-template-columns:1fr 1fr;align-items:start}}
+.pp-year{border:1px solid var(--line);border-radius:14px;padding:14px 14px 6px}
+.pp-year h3{margin:0 0 6px;font-size:13px;font-weight:600;color:var(--mut);
+  font-variant-numeric:tabular-nums}
+.pp-row{display:flex;gap:12px;align-items:flex-start;padding:6px 0 8px}
+.pp-row+.pp-row{border-top:1px solid var(--line);padding-top:10px}
+.pp-exam{flex:none;width:40px;padding-top:9px;font-size:13px;font-weight:500;color:var(--fg)}
+.pp-chips{display:flex;flex-wrap:wrap;gap:6px;min-width:0}
+.pp-chip{position:relative;display:inline-flex;align-items:center;justify-content:center;
+  min-width:38px;height:36px;padding:0 10px;border-radius:7px;background:var(--surface);
+  color:var(--fg);font-size:16px;font-weight:600;text-decoration:none;
+  font-variant-numeric:tabular-nums}
+.pp-chip.wide{font-weight:500;font-size:13px}
+.pp-chip:active{transform:scale(.96)}
+@media (hover:hover){.pp-chip:hover{background:color-mix(in srgb,var(--accent) 14%,var(--surface));
+  color:var(--accent)}}
+.pp-chip:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+/* Answers inside the PDF: a dot, and the chip's label says it in words. */
+.pp-ans{position:absolute;top:5px;right:5px;width:6px;height:6px;border-radius:50%;
+  background:var(--accent)}
 .pick{position:relative;margin-top:16px}
 .pick select{margin-top:0}
 .pick::after{content:'\203a';position:absolute;right:15px;top:50%;margin-top:-11px;
@@ -2372,119 +2396,177 @@ function fileRow(u, s) {
 // grouping only ever happens where an upload actually asked for it.
 // The sitting you are revising for, in the order you meet them. End term
 // leads because it is the one worth the most and the one people hunt for.
-const EXAMS = [['end', 'End term papers'], ['mid', 'Mid term papers'],
-               ['mini', 'Mini test papers']];
+const EXAMS = [['end', 'End'], ['mid', 'Mid'], ['mini', 'Mini']];
 const SHELF = {notes: 'notes', slides: 'slides', assignment: 'assignment',
                lab: 'lab', syllabus: 'syllabus', book: 'book'};
 
+// The subject screen: the same year-by-exam grid the papers screen draws, so a
+// course with forty sittings is five short cards and not forty rows. The
+// seniors' notes and slides are not sittings and keep their rows.
 function papersSection(s) {
   needPapers(s.code);
   const all = PAPERS[s.code];
   if (!all || !all.length) return;
-  for (const [key, label] of EXAMS)
-    block(label, all.filter(p => p.exam === key).map(p => paperRow(p, s)));
-  // Everything that is not a sitting: the seniors' notes, slides and lab
-  // manuals. One list, because splitting six kinds into six headings on a
-  // phone is more scrolling than reading.
+  const sittings = all.filter(p => p.kind === 'paper');
+  if (sittings.length) {
+    heading('Past papers');
+    nav.appendChild(paperGrid(sittings));
+  }
   block('Also from the archive',
         all.filter(p => p.kind !== 'paper').map(p => paperRow(p, s)));
 }
 
-// Every paper in the archive, three blocks deep, whatever course set it. The
-// subject screen already answers "what has THIS course set"; this screen is
-// for the student who knows they want an end term and not which one.
 // Which slice of the archive is on screen. Module state and not part of the
-// URL: a filter is a lens on one screen rather than a place, and putting it in
-// the hash would put a back step between a student and the paper they came for.
-let pFilter = {code: '', year: '', exam: ''};
+// URL: a filter is a lens on one screen rather than a place.
+let pFilter = {code: '', exam: ''};
 
 function renderPapers() {
   needAllPapers();
   if (ALL_PAPERS === null)
-    return void nav.appendChild(saying('Reading the archive\u2026'));
+    return void nav.appendChild(saying('Reading the archive…'));
   if (ALL_PAPERS === 'failed')
     return void nav.appendChild(saying('The archive did not answer.',
-      'It needs the server. Nothing is lost -- try again in a moment.'));
+      'It needs the server. Nothing is lost, try again in a moment.'));
   if (!ALL_PAPERS.length)
     return void nav.appendChild(saying('No papers here yet.',
       'This fills up from the collections the seniors kept.'));
 
-  // The options are read off the archive rather than off SUBJECTS and a range
-  // of years: a filter that offers a course with no papers in it is a filter
-  // that promises something the next tap takes away.
-  const codes = [...new Set(ALL_PAPERS.map(p => p.subject_code))].sort();
-  const years = [...new Set(ALL_PAPERS.map(p => p.year).filter(Boolean))]
-                  .sort((a, b) => b - a);
-  const bar = document.createElement('div');
-  bar.className = 'filters';
-  bar.appendChild(paperPick('Subject', pFilter.code,
-    [['', 'All subjects']].concat(codes.map(c => {
-      const s = subjectOf(c);
-      return [c, s ? c + ', ' + s.name : c];
-    })), v => { pFilter.code = v; render(); }));
-  bar.appendChild(paperPick('Year', pFilter.year,
-    [['', 'All years']].concat(years.map(
-      y => [String(y), y + '-' + String(y + 1).slice(2)])),
-    v => { pFilter.year = v; render(); }));
-  bar.appendChild(paperPick('Exam', pFilter.exam,
-    [['', 'All exams']].concat(EXAMS.map(([k, label]) => [k, label])),
-    v => { pFilter.exam = v; render(); }));
-  nav.appendChild(bar);
+  // Subjects in the order the student's own list has them, then anything the
+  // archive holds that their curriculum does not. One subject at a time: all
+  // 296 at once was the clutter this screen was rebuilt to get rid of.
+  const have = new Set(ALL_PAPERS.map(p => p.subject_code));
+  const codes = DATA.map(s => s.code).filter(c => have.has(c))
+    .concat([...have].filter(c => !subjectOf(c)).sort());
+  if (!have.has(pFilter.code)) pFilter.code = codes[0];
 
-  const shown = ALL_PAPERS.filter(p =>
-       (!pFilter.code || p.subject_code === pFilter.code)
-    && (!pFilter.year || String(p.year) === pFilter.year)
-    && (!pFilter.exam || p.exam === pFilter.exam));
-
-  const count = document.createElement('div');
-  count.className = 'found';
-  count.textContent = shown.length === ALL_PAPERS.length
-    ? ALL_PAPERS.length + ' papers'
-    : shown.length + ' of ' + ALL_PAPERS.length + ' papers';
-  nav.appendChild(count);
-
-  if (!shown.length)
-    return void nav.appendChild(saying('Nothing matches those three.',
-      'Widen one of them -- the archive does not have every sitting of every '
-      + 'course.'));
-
-  for (const [key, label] of EXAMS)
-    block(label, shown.filter(p => p.exam === key).map(crossPaperRow));
-  // A paper with no sitting on it would otherwise be invisible on this screen
-  // -- three blocks that between them do not hold every row is a screen that
-  // quietly loses things.
-  block('Other papers',
-        shown.filter(p => !EXAMS.some(([k]) => k === p.exam))
-             .map(crossPaperRow));
-}
-
-// One filter. The native wheel, dressed the way every other picker in the app
-// is dressed -- it is still the fastest thing on a phone and costs nothing.
-function paperPick(label, value, options, onPick) {
-  const wrap = document.createElement('div');
-  wrap.className = 'pick';
-  const sel = document.createElement('select');
-  sel.setAttribute('aria-label', label);
-  for (const [v, t] of options) {
-    const o = document.createElement('option');
-    o.value = v;
-    o.textContent = t;
-    sel.appendChild(o);
+  const subs = document.createElement('div');
+  subs.className = 'pp-subs';
+  subs.setAttribute('role', 'tablist');
+  for (const c of codes) {
+    const s = subjectOf(c);
+    const b = document.createElement('button');
+    b.className = 'pp-sub';
+    b.setAttribute('role', 'tab');
+    b.setAttribute('aria-selected', String(c === pFilter.code));
+    b.textContent = s ? s.name : c;
+    b.onclick = () => { pFilter.code = c; render(); };
+    subs.appendChild(b);
   }
-  sel.value = value;
-  sel.onchange = () => onPick(sel.value);
-  wrap.appendChild(sel);
-  return wrap;
+  nav.appendChild(subs);
+  // The chosen chip in view, or on a phone the fifth subject is chosen and
+  // off the right edge.
+  requestAnimationFrame(() => subs.querySelector('[aria-selected=true]')
+    ?.scrollIntoView({block: 'nearest', inline: 'center'}));
+
+  const mine = ALL_PAPERS.filter(p => p.subject_code === pFilter.code);
+  if (pFilter.exam && !mine.some(p => p.exam === pFilter.exam)) pFilter.exam = '';
+  const s = subjectOf(pFilter.code);
+  const head = document.createElement('div');
+  head.className = 'pp-head';
+  head.innerHTML = '<div><b></b><small></small></div><div class="seg" role="group" aria-label="Exam"></div>';
+  head.querySelector('b').textContent = s ? s.name : pFilter.code;
+  head.querySelector('small').textContent =
+    pFilter.code + ' · ' + mine.length + (mine.length === 1 ? ' paper' : ' papers');
+  const seg = head.querySelector('.seg');
+  for (const [k, label] of [['', 'All']].concat(EXAMS)) {
+    if (k && !mine.some(p => p.exam === k)) continue;
+    const b = document.createElement('button');
+    b.textContent = label;
+    b.setAttribute('aria-pressed', String(pFilter.exam === k));
+    b.onclick = () => { pFilter.exam = k; render(); };
+    seg.appendChild(b);
+  }
+  nav.appendChild(head);
+
+  const shown = mine.filter(p => !pFilter.exam || p.exam === pFilter.exam);
+  if (!shown.length)
+    return void nav.appendChild(saying('No ' + pFilter.exam + ' papers for this course.',
+      'The archive does not have every sitting of every course.'));
+  nav.appendChild(paperGrid(shown));
 }
 
-// The subject screen's row, plus the one thing it can leave out and this
-// screen cannot: which course this paper belongs to.
-function crossPaperRow(p) {
-  const s = subjectOf(p.subject_code) || {code: p.subject_code};
-  const el = paperRow(p, s);
-  const small = el.querySelector('small');
-  small.textContent = p.subject_code + ' \u00b7 ' + small.textContent;
-  return el;
+// Year cards, newest first; inside each, one line per exam; on each line, one
+// tap target per paper, named by what tells it apart from its neighbours.
+function paperGrid(papers) {
+  const years = new Map();
+  for (const p of papers) {
+    const y = p.year || 0;
+    if (!years.has(y)) years.set(y, []);
+    years.get(y).push(p);
+  }
+  const grid = document.createElement('div');
+  grid.className = 'pp-grid';
+  for (const y of [...years.keys()].sort((a, b) => (b || -1) - (a || -1))) {
+    const card = document.createElement('section');
+    card.className = 'pp-year';
+    const h = document.createElement('h3');
+    h.textContent = y ? y + '–' + String(y + 1).slice(2) : 'Undated';
+    card.appendChild(h);
+    const inYear = years.get(y);
+    const lines = EXAMS.concat([[null, 'Other']]);
+    for (const [k, label] of lines) {
+      const these = inYear.filter(p => k ? p.exam === k
+                                         : !EXAMS.some(([e]) => e === p.exam));
+      if (!these.length) continue;
+      const row = document.createElement('div');
+      row.className = 'pp-row';
+      const name = document.createElement('span');
+      name.className = 'pp-exam';
+      name.textContent = label;
+      const chips = document.createElement('div');
+      chips.className = 'pp-chips';
+      const named = these.map(p => [paperLabel(p), p])
+        .sort((a, b) => (a[1].section ? 0 : 1) - (b[1].section ? 0 : 1)
+                        || a[0].localeCompare(b[0], undefined, {numeric: true}));
+      const seen = {};
+      for (const [text, p] of named) {
+        seen[text] = (seen[text] || 0) + 1;
+        chips.appendChild(paperChip(p, seen[text] > 1 ? text + ' \u00b7 ' + seen[text] : text,
+                                    label));
+      }
+      row.append(name, chips);
+      card.appendChild(row);
+    }
+    grid.appendChild(card);
+  }
+  return grid;
+}
+
+// What tells a paper apart from the others in its cell. The section letter is
+// a column, so it wins; the rest is read off the portal's title, which is the
+// only place semester, set and supplementary were ever written down.
+function paperLabel(p) {
+  if (p.section) return p.section;
+  const t = p.title || '';
+  const bits = [];
+  if (/supp/i.test(t)) bits.push('Supp.');
+  const sem = t.match(/sem(?:ester)?\s*-?\s*([12])/i);
+  if (sem) bits.push('Sem ' + sem[1]);
+  if (/online/i.test(t)) bits.push('Online');
+  if (/offline/i.test(t)) bits.push('Offline');
+  const set = t.match(/set\s*-?\s*(\d)/i);
+  if (set) bits.push('Set ' + set[1]);
+  if (/workshop/i.test(t)) bits.push('Workshop');
+  return bits.join(' ') || 'Paper';
+}
+
+function paperChip(p, text, exam) {
+  const a = document.createElement('a');
+  a.className = 'pp-chip' + (text.length > 2 ? ' wide' : '');
+  a.href = p.path;
+  a.target = '_blank';
+  a.rel = 'noopener';
+  a.title = p.title;
+  a.textContent = text;
+  const ans = answersIn(p);
+  if (ans) {
+    const dot = document.createElement('i');
+    dot.className = 'pp-ans';
+    a.appendChild(dot);
+  }
+  a.setAttribute('aria-label', [{End: 'End term', Mid: 'Mid term', Mini: 'Mini test'}[exam] || exam, p.year ? p.year + '-' + String(p.year + 1).slice(2) : '',
+    p.section ? 'Section ' + p.section : text, ans || ''].filter(Boolean).join(' '));
+  return a;
 }
 
 function paperRow(p, s) {
@@ -2496,30 +2578,13 @@ function paperRow(p, s) {
   const a = el.querySelector('a');
   a.href = p.path;
   a.querySelector('b').textContent = p.title;
-  a.querySelector('small').textContent = paperSays(p);
+  a.querySelector('small').textContent = [p.year ? p.year + '-' + String(p.year + 1).slice(2) : '',
+    SHELF[p.kind] || p.kind].filter(Boolean).join(' · ');
   return el;
 }
 
-// "2025-26 . Section B". The year leads because it is what a student scans
-// for; the section only shows when the paper had one, which is mostly the
-// mini tests -- nine of them for one subject in one year, told apart by
-// nothing else.
-function paperSays(p) {
-  const bits = [];
-  if (p.year) bits.push(p.year + '-' + String(p.year + 1).slice(2));
-  if (p.section) bits.push('Section ' + p.section);
-  if (p.kind !== 'paper') bits.push(SHELF[p.kind] || p.kind);
-  // Whether the answers are in there too. Four of these carry a key inside the
-  // same PDF and one is a marking scheme on its own; a student hunting for
-  // worked answers should not have to open eleven files to find out which.
-  const a = answersIn(p);
-  if (a) bits.push(a);
-  return bits.join(' \u00b7 ') || 'past paper';
-}
-
 // What a title admits about its answers. Title-only, because that is the whole
-// of what the portal ever recorded -- there is no column for it and inventing
-// one would be inventing the fact.
+// of what the portal ever recorded.
 function answersIn(p) {
   const t = p.title || '';
   if (/\bms\b|marking\s*scheme/i.test(t)) return 'marking scheme';
