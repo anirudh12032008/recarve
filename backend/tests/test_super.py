@@ -798,3 +798,40 @@ def open_section(port, cookie, section_id):
 def section_of(port, cookie, roll):
     members = open_section(port, cookie, my_section(port, cookie))["members"]
     return next(m for m in members if m["roll_no"] == roll)
+
+
+# ------------------------------------------------------ who was here (0054)
+
+def test_a_tap_is_stamped_and_a_poll_is_not(server, cookie):
+    _, _, student = join(server, "Seen Once", "24S777")
+    mine = {notes.SESSION_COOKIE: student}
+    notes._seen.clear()
+    call(server, "GET", "/jobs", cookies=mine)
+    people = said(call(server, "GET", "/super/data", cookies=supercookie(cookie))[1])["people"]
+    assert [p["last_seen"] for p in people if p["roll_no"] == "24S777"] == [None], \
+        "a background poll counted as somebody being here"
+
+    call(server, "GET", "/classes?x=1", cookies=mine,
+         headers={"User-Agent": "Mozilla/5.0 (iPhone; CPU iPhone OS 19_0)"})
+    call(server, "GET", "/", cookies=mine)  # inside the minute: not a second stamp
+    d = said(call(server, "GET", "/super/data", cookies=supercookie(cookie))[1])
+    me = next(p for p in d["people"] if p["roll_no"] == "24S777")
+    assert me["last_seen"] and me["last_path"] == "/classes" and me["device"] == "iPhone"
+    assert (me["days"], me["minutes"]) == (1, 1)
+    assert d["people"][0]["roll_no"] == "24S777", "most recently seen comes first"
+    u = d["stats"]["users"]
+    assert u["now"] >= 1 and u["d1"] >= 1 and u["total"] >= u["ever"] >= 1
+    assert len(d["stats"]["days"]) == 14 and d["stats"]["days"][-1]["users"] >= 1
+    assert d["stats"]["server"]["disk_total"] > 0 and d["stats"]["db"]["size"] > 0
+
+
+def test_a_member_cannot_read_or_write_who_was_here(server):
+    """RLS with no policy: zero rows to read, and no privilege to write."""
+    join(server, "Somebody Seen", "24S778")
+    with psycopg.connect(DB_URL) as conn:
+        uid = conn.execute("select id from profiles where roll_no = '24S778'").fetchone()[0]
+        conn.execute("insert into activity_days (profile_id) values (%s)", (uid,))
+        conn.execute("select set_config('role', 'authenticated', true)")
+        assert conn.execute("select count(*) from activity_days").fetchone()[0] == 0
+        with pytest.raises(psycopg.errors.InsufficientPrivilege):
+            conn.execute("insert into activity_days (profile_id) values (%s)", (uid,))
