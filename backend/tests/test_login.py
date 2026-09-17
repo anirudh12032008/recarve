@@ -739,3 +739,13 @@ def test_the_first_screen_has_no_password_to_state_rules_about(server):
     page = call(port, "GET", "/")[1]
     assert 'id="pw"' not in page and "<form" not in page
     assert f"At least {notes.MIN_PASSWORD} characters" not in page
+
+
+def test_logging_out_tells_the_phone_to_forget_the_cookie(server):
+    # No session needed: a pending member has to be able to leave too.
+    port, _ = server
+    status, _, headers = call(port, "POST", "/logout", {})
+    assert status == 200
+    assert headers["Set-Cookie"].startswith(f"{notes.SESSION_COOKIE}=;")
+    assert "Max-Age=0" in headers["Set-Cookie"]
+    assert "fetch('/logout', {method: 'POST'})" in notes.PAGE

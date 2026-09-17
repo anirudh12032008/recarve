@@ -5069,6 +5069,16 @@ async function renderMe() {
     }
     block('Admin', rows);
   }
+
+  const out = line('Log out', 'On this phone only', document.createElement('button'));
+  out.onclick = async () => {
+    try { await fetch('/logout', {method: 'POST'}); } catch {}
+    // The offline copies are this person's library; the next one to sign in
+    // on this phone should not be reading it.
+    try { (await caches.keys()).forEach(k => caches.delete(k)); } catch {}
+    location.href = '/';
+  };
+  block('This device', [out]);
 }
 
 // The score, the rules that made it, and the two lists of what you put in. The
@@ -7207,7 +7217,7 @@ ENV_PATH = Path(__file__).resolve().parent / ".env"
 # Requests are gated before they are dispatched, so a route added later is
 # protected whether or not whoever adds it remembers auth exists. These are the
 # only paths that opt out, and adding to this set is the deliberate act.
-PUBLIC_PATHS = {"/join", "/login", "/auth/google", "/auth/google/callback"}
+PUBLIC_PATHS = {"/join", "/login", "/logout", "/auth/google", "/auth/google/callback"}
 
 # Four roles, in order, and the order is the whole of it. A student reads
 # everything the class has; trusted adds the things that write content or spend
@@ -10085,8 +10095,9 @@ main:has(.land){max-width:none}
 /* The caption is the empty state. A frame holding anything -- the stand-in
    film or the real thing -- does not need to be told what it is for. */
 .land .shot:has(img) figcaption,.land .shot:has(video) figcaption,
-.land .shot:has(.loop) figcaption,
-.land .shot:has(img) .loop,.land .shot:has(video) .loop{display:none}
+.land .shot:has(>div) figcaption{display:none}
+/* A film dropped in over an animation wins the frame. */
+.land .shot:has(img)>div,.land .shot:has(video)>div{display:none}
 .land .hero-shot{margin-top:64px}
 
 /* One section heading, centred, the way the page opens. */
@@ -10195,45 +10206,192 @@ main:has(.land){max-width:none}
     .land .row .shot,.land .demo{animation:lift linear both;
       animation-timeline:view();animation-range:entry 8% cover 26%}}}
 
-/* ---- The stand-in film in the hero frame. Delete this block and the .loop
-   markup together when the real recording goes in -- everything here is
-   scoped to .loop and nothing else uses it.
-
-   It is CSS because it has to be: a placeholder that costs a video request is
-   a placeholder that costs more than the thing it stands in for. */
-.land .loop{position:absolute;inset:0;display:grid;
-  grid-template-rows:auto auto auto;align-content:space-evenly;gap:1.1em;
-  padding:7%;font-size:clamp(9px,1.35vw,15px);color:#eef0f6;text-align:left}
-.land .loop .bar{display:flex;align-items:center;gap:.7em;padding:.8em 1.1em;
-  border-radius:.9em;background:rgba(255,255,255,.07);
-  border:1px solid rgba(255,255,255,.12);
-  -webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px)}
-.land .loop .rd{width:.55em;height:.55em;border-radius:50%;background:#ff5b6e;
-  animation:blip 1.4s ease-in-out infinite}
-.land .loop .who{color:rgba(255,255,255,.55);margin-left:auto;font-size:.85em}
-.land .loop .wave{display:flex;align-items:center;gap:.28em;height:2.4em}
-.land .loop .wave i{flex:1;border-radius:.2em;height:25%;
-  background:linear-gradient(180deg,#b3a2ff,#6fe3cd);opacity:.85;
-  animation:bars 1.1s ease-in-out infinite}
-.land .loop .sheet{padding:1em 1.2em;border-radius:.9em;
-  background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.12);
-  display:grid;align-content:start;gap:.68em;
-  -webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px)}
-.land .loop .sheet i{display:block;height:.6em;border-radius:.3em;
-  background:rgba(255,255,255,.55);transform-origin:left;
-  animation:write 7s cubic-bezier(.2,.7,.2,1) infinite}
-.land .loop .sheet i:nth-child(1){width:62%}
-.land .loop .sheet i:nth-child(2){width:88%;animation-delay:.5s}
-.land .loop .sheet i:nth-child(3){width:74%;animation-delay:1s}
-.land .loop .sheet i:nth-child(4){width:46%;animation-delay:1.5s;
-  background:#6fe3cd}
-@keyframes blip{50%{opacity:.25}}
-@keyframes bars{0%,100%{height:22%}50%{height:100%}}
-/* Written, held, and gone again, so the frame loops without a cut. */
-@keyframes write{0%{transform:scaleX(0)}14%,72%{transform:scaleX(1)}
-  86%,100%{transform:scaleX(0)}}
 @media (prefers-reduced-motion:reduce){
   .land *,.land *::before{animation:none!important}}
+/* ---- The four films in the frames: .hr the hero, .mx the mixed line, .qz
+   the quiz, .at attendance. Each is scoped to its own prefix, sized in cqi
+   off its own frame, and goes when a real recording replaces its markup. */
+.hr{position:relative;width:100%;aspect-ratio:16/9;container-type:inline-size;overflow:hidden;font-family:Figtree,system-ui,sans-serif;color:#e7e9ee;-webkit-font-smoothing:antialiased}
+.hr *{box-sizing:border-box;margin:0;padding:0}
+.hr-stage{position:absolute;left:50%;top:50%;width:78cqi;transform:translate(-50%,-50%)}
+.hr-bar{position:relative;display:flex;align-items:center;gap:1.6cqi;padding:1.5cqi 2.2cqi 1.5cqi 4.6cqi;background:#171a20;border:1px solid rgba(255,255,255,.08);border-radius:1.36cqi;font-size:2.6cqi;line-height:1.2;animation:hr-fade 10s infinite}
+.hr-dot{position:absolute;left:2.2cqi;top:50%;width:1.3cqi;height:1.3cqi;margin-top:-.65cqi;border-radius:50%}
+.hr-dot-rec{opacity:0;animation:hr-recvis 10s infinite}
+.hr-dot-rec::before{content:"";position:absolute;inset:0;border-radius:50%;background:#e5484d;animation:hr-pulse 1.4s ease-in-out infinite}
+.hr-dot-ok{background:#ac93ff;animation:hr-okvis 10s infinite}
+.hr-status{display:grid;font-weight:600;white-space:nowrap}
+.hr-status>span{grid-area:1/1}
+.hr-s1{opacity:0;animation:hr-s1 10s infinite}
+.hr-s2{opacity:0;animation:hr-s2 10s infinite}
+.hr-s3{animation:hr-s3 10s infinite}
+.hr-course,.hr-time{color:#98a0ad;white-space:nowrap}
+.hr-time{font-variant-numeric:tabular-nums}
+.hr-wave{flex:1;display:flex;align-items:center;justify-content:center;gap:.5cqi;height:3.2cqi;opacity:.45;transform:scaleY(.14);animation:hr-flat 10s infinite}
+.hr-wave>span{width:.5cqi;height:100%;border-radius:1cqi;background:#e7e9ee;opacity:.75;transform:scaleY(var(--h));animation:hr-wave .9s ease-in-out infinite alternate}
+.hr-wave>span:nth-child(3n){animation-duration:.7s}
+.hr-wave>span:nth-child(4n+1){animation-duration:1.15s}
+.hr-prog{height:.45cqi;margin:2.2cqi .8cqi 0;border-radius:1cqi;background:rgba(255,255,255,.08);overflow:hidden;animation:hr-fade 10s infinite}
+.hr-fill{display:block;height:100%;background:#ac93ff;transform-origin:left;animation:hr-fill 10s ease-in-out infinite}
+.hr-later{margin:.7cqi .8cqi 1.2cqi;text-align:right;font-family:Kalam,cursive;font-size:2.8cqi;line-height:1.2;color:#ac93ff;animation:hr-later 10s infinite}
+.hr-card{padding:3cqi 3.4cqi 3.4cqi;background:#171a20;border:1px solid rgba(255,255,255,.08);border-radius:1.36cqi;animation:hr-card 10s infinite}
+.hr-meta{font-size:2.4cqi;line-height:1.3;color:#98a0ad;margin-bottom:1.2cqi}
+.hr-line{position:relative;width:fit-content;max-width:100%}
+.hr-h{font-size:4cqi;font-weight:700;line-height:1.25;letter-spacing:-.01em;margin-bottom:1.8cqi}
+.hr-li{font-size:3.1cqi;line-height:1.4;padding-left:1.2em}
+.hr-li+.hr-li{margin-top:1cqi}
+.hr-li::before{content:"";position:absolute;left:.3em;top:.55em;width:.34em;height:.34em;border-radius:50%;background:#ac93ff}
+.hr-sup{position:relative;top:-.5em;font-size:.62em;line-height:0}
+.hr-cover{position:absolute;inset:-.1em -.2em;background:#171a20;transform-origin:right;transform:scaleX(0);animation-duration:10s;animation-iteration-count:infinite;animation-timing-function:linear}
+.hr-c1{animation-name:hr-c1}.hr-c2{animation-name:hr-c2}.hr-c3{animation-name:hr-c3}
+@keyframes hr-fade{0%{opacity:0}3%,92%{opacity:1}98%,100%{opacity:0}}
+@keyframes hr-pulse{0%,100%{opacity:1}50%{opacity:.35}}
+@keyframes hr-recvis{0%,34%{opacity:1}38%,100%{opacity:0}}
+@keyframes hr-okvis{0%,35%{opacity:0}39%,100%{opacity:1}}
+@keyframes hr-s1{0%,34%{opacity:1}37%,100%{opacity:0}}
+@keyframes hr-s2{0%,35%{opacity:0}38%,73%{opacity:1}76%,100%{opacity:0}}
+@keyframes hr-s3{0%,74%{opacity:0}77%,100%{opacity:1}}
+@keyframes hr-flat{0%,33%{transform:scaleY(1);opacity:1}39%,100%{transform:scaleY(.14);opacity:.45}}
+@keyframes hr-wave{from{transform:scaleY(.22)}to{transform:scaleY(1)}}
+@keyframes hr-fill{0%,38%{transform:scaleX(0)}50%,100%{transform:scaleX(1)}}
+@keyframes hr-later{0%,44%{opacity:0;transform:translateY(.4em)}49%,92%{opacity:1;transform:none}98%,100%{opacity:0;transform:none}}
+@keyframes hr-card{0%,49%{opacity:0;transform:translateY(1.5cqi)}53%,92%{opacity:1;transform:none}98%,100%{opacity:0;transform:none}}
+@keyframes hr-c1{0%,53%{transform:scaleX(1)}59%,100%{transform:scaleX(0)}}
+@keyframes hr-c2{0%,60%{transform:scaleX(1)}67%,100%{transform:scaleX(0)}}
+@keyframes hr-c3{0%,68%{transform:scaleX(1)}75%,100%{transform:scaleX(0)}}
+@media (prefers-reduced-motion:reduce){.hr *,.hr *::before{animation:none!important}}
+.mx{position:relative;width:100%;aspect-ratio:16/9;container-type:inline-size;overflow:hidden;font-family:Figtree,"Noto Sans Devanagari","Nirmala UI","Kohinoor Devanagari",system-ui,sans-serif;color:#e7e9ee;-webkit-font-smoothing:antialiased}
+.mx *{box-sizing:border-box;margin:0;padding:0}
+.mx-stage{position:absolute;left:50%;top:50%;width:82cqi;transform:translate(-50%,-50%)}
+.mx-card{padding:3cqi 3.6cqi 3.2cqi;background:#171a20;border:1px solid rgba(255,255,255,.08);border-radius:1.36cqi}
+.mx-head{display:flex;align-items:center;gap:1.4cqi;font-size:2.6cqi;line-height:1.2;white-space:nowrap}
+.mx-rec{position:relative;width:1.2cqi;height:1.2cqi;border-radius:50%;background:#e5484d;animation:mx-pulse 1.4s ease-in-out infinite}
+.mx-live{font-weight:600}
+.mx-course{margin-left:auto;color:#98a0ad}
+.mx-wave{display:flex;align-items:center;gap:.45cqi;height:2.8cqi}
+.mx-wave>span{width:.45cqi;height:100%;border-radius:1cqi;background:#e7e9ee;opacity:.6;transform:scaleY(var(--h));animation:mx-wave .9s ease-in-out infinite alternate}
+.mx-wave>span:nth-child(3n){animation-duration:.7s}
+.mx-wave>span:nth-child(4n+1){animation-duration:1.15s}
+.mx-prev{margin-top:2.6cqi;font-size:3cqi;line-height:1.6;color:#98a0ad}
+.mx-now{margin-top:.8cqi;font-size:4.3cqi;line-height:1.7;animation:mx-clear 9s infinite}
+.mx-w{display:inline-block;isolation:isolate;animation-duration:9s;animation-iteration-count:infinite;animation-timing-function:ease-out}
+.mx-en{position:relative;color:#ac93ff}
+.mx-en::before{content:"";position:absolute;z-index:-1;inset:.16em -.2em .1em;border-radius:.3em;background:rgba(172,147,255,.16);transform-origin:left;animation-duration:9s;animation-iteration-count:infinite;animation-timing-function:ease-out}
+.mx-w1{animation-name:mx-w1}
+.mx-w2{animation-name:mx-w2}
+.mx-w3{animation-name:mx-w3}
+.mx-w4{animation-name:mx-w4}
+.mx-w5{animation-name:mx-w5}
+.mx-w5::before{animation-name:mx-h5}
+.mx-w6{animation-name:mx-w6}
+.mx-w7{animation-name:mx-w7}
+.mx-w7::before{animation-name:mx-h7}
+.mx-w8{animation-name:mx-w8}
+.mx-w9{animation-name:mx-w9}
+.mx-w10{animation-name:mx-w10}
+.mx-w10::before{animation-name:mx-h10}
+.mx-w11{animation-name:mx-w11}
+.mx-foot{display:flex;align-items:center;justify-content:space-between;gap:2cqi;margin-top:2.2cqi}
+.mx-chip{padding:.35em .9em;border:1px solid rgba(255,255,255,.08);border-radius:10cqi;font-size:2.3cqi;line-height:1.2;color:#98a0ad;white-space:nowrap}
+.mx-note{font-family:Kalam,cursive;font-size:2.9cqi;line-height:1.2;color:#ac93ff;white-space:nowrap;animation:mx-note 9s infinite}
+@keyframes mx-pulse{0%,100%{opacity:1}50%{opacity:.35}}
+@keyframes mx-wave{from{transform:scaleY(.22)}to{transform:scaleY(1)}}
+@keyframes mx-clear{0%,89%{opacity:1}95%,100%{opacity:0}}
+@keyframes mx-note{0%,60%{opacity:0;transform:translateY(.3em)}65%,89%{opacity:1;transform:none}95%,100%{opacity:0;transform:none}}
+@keyframes mx-w1{0%,5%{opacity:0;transform:translateY(.3em)}7.5%,100%{opacity:1;transform:none}}
+@keyframes mx-w2{0%,9%{opacity:0;transform:translateY(.3em)}11.5%,100%{opacity:1;transform:none}}
+@keyframes mx-w3{0%,13%{opacity:0;transform:translateY(.3em)}15.5%,100%{opacity:1;transform:none}}
+@keyframes mx-w4{0%,17%{opacity:0;transform:translateY(.3em)}19.5%,100%{opacity:1;transform:none}}
+@keyframes mx-w5{0%,21%{opacity:0;transform:translateY(.3em)}23.5%,100%{opacity:1;transform:none}}
+@keyframes mx-h5{0%,22.5%{opacity:0;transform:scaleX(0)}27%,100%{opacity:1;transform:none}}
+@keyframes mx-w6{0%,27%{opacity:0;transform:translateY(.3em)}29.5%,100%{opacity:1;transform:none}}
+@keyframes mx-w7{0%,30%{opacity:0;transform:translateY(.3em)}32.5%,100%{opacity:1;transform:none}}
+@keyframes mx-h7{0%,31.5%{opacity:0;transform:scaleX(0)}36%,100%{opacity:1;transform:none}}
+@keyframes mx-w8{0%,36%{opacity:0;transform:translateY(.3em)}38.5%,100%{opacity:1;transform:none}}
+@keyframes mx-w9{0%,44%{opacity:0;transform:translateY(.3em)}46.5%,100%{opacity:1;transform:none}}
+@keyframes mx-w10{0%,48%{opacity:0;transform:translateY(.3em)}50.5%,100%{opacity:1;transform:none}}
+@keyframes mx-h10{0%,49.5%{opacity:0;transform:scaleX(0)}54%,100%{opacity:1;transform:none}}
+@keyframes mx-w11{0%,55%{opacity:0;transform:translateY(.3em)}57.5%,100%{opacity:1;transform:none}}
+@media (prefers-reduced-motion:reduce){.mx *,.mx *::before{animation:none!important}}
+.qz{position:relative;width:100%;aspect-ratio:16/9;container-type:inline-size;overflow:hidden;font-family:Figtree,system-ui,sans-serif;color:#e7e9ee;-webkit-font-smoothing:antialiased}
+.qz *{box-sizing:border-box;margin:0;padding:0}
+.qz-stage{position:absolute;left:50%;top:50%;width:66cqi;transform:translate(-50%,-50%)}
+.qz-card{padding:3.2cqi 3.6cqi 3.4cqi;background:#171a20;border:1px solid rgba(255,255,255,.08);border-radius:1.36cqi;animation:qz-card 8s infinite}
+.qz-head{display:flex;justify-content:space-between;gap:2cqi;font-size:2.4cqi;line-height:1.3;color:#98a0ad;white-space:nowrap}
+.qz-q{margin-top:2cqi;font-size:4.6cqi;font-weight:700;line-height:1.25;letter-spacing:-.01em}
+.qz-sup{position:relative;top:-.5em;font-size:.62em;line-height:0}
+.qz-ans{display:grid;align-items:center;height:11cqi;margin-top:2.4cqi;padding:0 3cqi;border:1px dashed rgba(255,255,255,.14);border-radius:1cqi;overflow:hidden}
+.qz-row{grid-area:1/1;display:flex;align-items:baseline;gap:2.4cqi;white-space:nowrap}
+.qz-a{font-size:5.4cqi;font-weight:700;line-height:1.2}
+.qz-why{font-size:2.6cqi;color:#98a0ad}
+.qz-blur{filter:blur(1.1cqi);opacity:0;animation:qz-blur 8s infinite}
+.qz-clear{animation:qz-clear 8s infinite}
+.qz-foot{display:flex;align-items:center;justify-content:space-between;gap:2cqi;margin-top:2.6cqi}
+.qz-hint{font-family:Kalam,cursive;font-size:2.8cqi;line-height:1.2;color:#98a0ad;white-space:nowrap}
+.qz-btnwrap{position:relative;display:block}
+.qz-btn{display:grid;animation:qz-press 8s infinite}
+.qz-face{grid-area:1/1;padding:.6em 1.25em;border:1px solid #ac93ff;border-radius:10cqi;font-size:2.8cqi;font-weight:600;line-height:1.2;text-align:center;white-space:nowrap}
+.qz-show{background:#ac93ff;color:#0b0d13;opacity:0;animation:qz-show 8s infinite}
+.qz-hide{border-color:rgba(172,147,255,.45);color:#ac93ff;animation:qz-hide 8s infinite}
+.qz-tap,.qz-ripple{position:absolute;left:50%;top:50%;border-radius:50%;pointer-events:none;opacity:0}
+.qz-tap{width:4.4cqi;height:4.4cqi;margin:-2.2cqi 0 0 -2.2cqi;background:rgba(231,233,238,.2);border:1px solid rgba(231,233,238,.6);animation:qz-tap 8s ease-in-out infinite}
+.qz-ripple{width:12cqi;height:12cqi;margin:-6cqi 0 0 -6cqi;background:rgba(172,147,255,.28);animation:qz-ripple 8s ease-out infinite}
+@keyframes qz-card{0%{opacity:0;transform:translateY(1cqi)}5%,90%{opacity:1;transform:none}96%,100%{opacity:0;transform:none}}
+@keyframes qz-tap{0%,12%{opacity:0;transform:translate(7cqi,5cqi)}24%{opacity:1;transform:none}27%{opacity:1;transform:scale(.78)}31%{opacity:1;transform:none}42%,100%{opacity:0;transform:translate(3cqi,4cqi)}}
+@keyframes qz-ripple{0%,27%{opacity:0;transform:scale(.15)}28%{opacity:1;transform:scale(.2)}40%,100%{opacity:0;transform:none}}
+@keyframes qz-press{0%,26%{transform:none}28%{transform:scale(.95)}31%,100%{transform:none}}
+@keyframes qz-show{0%,29%{opacity:1}33%,100%{opacity:0}}
+@keyframes qz-hide{0%,29%{opacity:0}33%,100%{opacity:1}}
+@keyframes qz-blur{0%,29%{opacity:1}39%,100%{opacity:0}}
+@keyframes qz-clear{0%,29%{opacity:0}39%,100%{opacity:1}}
+@media (prefers-reduced-motion:reduce){.qz *{animation:none!important}}
+.at{position:relative;width:100%;aspect-ratio:16/9;container-type:inline-size;overflow:hidden;font-family:Figtree,system-ui,sans-serif;color:#e7e9ee;-webkit-font-smoothing:antialiased}
+.at *{box-sizing:border-box;margin:0;padding:0}
+.at-stage{position:absolute;left:50%;top:50%;width:66cqi;transform:translate(-50%,-50%)}
+.at-card{padding:3.2cqi 3.6cqi 3.4cqi;background:#171a20;border:1px solid rgba(255,255,255,.08);border-radius:1.36cqi;animation:at-card 9s infinite}
+.at-head{display:flex;align-items:baseline;justify-content:space-between;gap:2cqi;white-space:nowrap}
+.at-subj{font-size:3.6cqi;font-weight:700;line-height:1.2}
+.at-code{margin-right:.6em;font-size:.66em;font-weight:500;color:#98a0ad}
+.at-pct{font-size:4.4cqi;font-weight:700;line-height:1.2;font-variant-numeric:tabular-nums}
+.at-roll{display:inline-block;vertical-align:baseline;clip-path:inset(0 -.2em)}
+.at-col{position:relative;display:inline-block;transform:translateY(-100%)}
+.at-next{position:absolute;left:0;top:100%}
+.at-col-p{animation:at-rollp 9s cubic-bezier(.3,.7,.2,1) infinite}
+.at-col-n{animation:at-rolln 9s cubic-bezier(.3,.7,.2,1) infinite}
+.at-bar{position:relative;height:1cqi;margin-top:2.2cqi;border-radius:1cqi;background:rgba(255,255,255,.08)}
+.at-fill{position:absolute;inset:0;border-radius:1cqi;background:#ac93ff;transform-origin:left;transform:scaleX(.82);animation:at-fill 9s ease-in-out infinite}
+.at-min{position:absolute;left:75%;top:-.6cqi;bottom:-.6cqi;width:1px;background:rgba(231,233,238,.65)}
+.at-minrow{position:relative;height:3.4cqi}
+.at-minlabel{position:absolute;left:75%;top:.9cqi;transform:translateX(-50%);font-size:2.1cqi;line-height:1.2;color:#98a0ad;white-space:nowrap}
+.at-big{margin-top:1cqi;font-size:3.4cqi;line-height:1.1;color:#98a0ad;white-space:nowrap}
+.at-num{margin:0 .02em;font-size:3em;font-weight:700;line-height:1.1;color:#ac93ff;font-variant-numeric:tabular-nums}
+.at-today{display:flex;align-items:center;justify-content:space-between;gap:2cqi;margin-top:2.6cqi;padding-top:2.6cqi;border-top:1px solid rgba(255,255,255,.08);white-space:nowrap}
+.at-t{margin-right:.7em;font-size:2.9cqi;font-weight:600}
+.at-muted{font-size:2.5cqi;color:#98a0ad}
+.at-btns{display:flex;gap:1.2cqi}
+.at-pwrap{position:relative;display:block}
+.at-pbtn,.at-abtn{position:relative;display:grid;padding:.55em 1.1em;border:1px solid rgba(255,255,255,.12);border-radius:10cqi;font-size:2.6cqi;font-weight:600;line-height:1.2;text-align:center}
+.at-abtn{color:#98a0ad}
+.at-abtn,.at-pbtn{height:calc(1.2em + 1.1em + 2px)}
+.at-pbtn{animation:at-press 9s infinite}
+.at-pfill{position:absolute;inset:-1px;border-radius:10cqi;background:#ac93ff;animation:at-pfill 9s infinite}
+.at-plab{position:relative;grid-area:1/1;display:flex;align-items:center;justify-content:center;height:1.2em}
+.at-plab1{opacity:0;animation:at-plab1 9s infinite}
+.at-plab2{color:#0b0d13;animation:at-plab2 9s infinite}
+.at-check{display:block;flex:none;width:.85em;height:.85em;margin:-.12em .3em 0 0}
+.at-tap,.at-ripple{position:absolute;left:50%;top:50%;border-radius:50%;pointer-events:none;opacity:0}
+.at-tap{width:4.4cqi;height:4.4cqi;margin:-2.2cqi 0 0 -2.2cqi;background:rgba(231,233,238,.2);border:1px solid rgba(231,233,238,.6);animation:at-tap 9s ease-in-out infinite}
+.at-ripple{width:11cqi;height:11cqi;margin:-5.5cqi 0 0 -5.5cqi;background:rgba(172,147,255,.28);animation:at-ripple 9s ease-out infinite}
+@keyframes at-card{0%{opacity:0;transform:translateY(1cqi)}5%,89%{opacity:1;transform:none}95%,100%{opacity:0;transform:none}}
+@keyframes at-tap{0%,12%{opacity:0;transform:translate(6cqi,5cqi)}24%{opacity:1;transform:none}27%{opacity:1;transform:scale(.78)}30%{opacity:1;transform:none}40%,100%{opacity:0;transform:translate(3cqi,4cqi)}}
+@keyframes at-ripple{0%,27%{opacity:0;transform:scale(.15)}28%{opacity:1;transform:scale(.2)}39%,100%{opacity:0;transform:none}}
+@keyframes at-press{0%,26%{transform:none}28%{transform:scale(.94)}31%,100%{transform:none}}
+@keyframes at-pfill{0%,27%{opacity:0}32%,100%{opacity:1}}
+@keyframes at-plab1{0%,27%{opacity:1}31%,100%{opacity:0}}
+@keyframes at-plab2{0%,27%{opacity:0}31%,100%{opacity:1}}
+@keyframes at-fill{0%,34%{transform:scaleX(.81)}42%,100%{transform:scaleX(.82)}}
+@keyframes at-rollp{0%,35%{transform:none}41%,100%{transform:translateY(-100%)}}
+@keyframes at-rolln{0%,41%{transform:none}49%,100%{transform:translateY(-100%)}}
+@media (prefers-reduced-motion:reduce){.at *{animation:none!important}}
 </style>
 <main>__BODY__</main>
 """
@@ -10266,14 +10424,28 @@ JOIN_BODY = r"""<div class="land">
      muted + playsinline or iOS refuses to start it, and a poster= frame is
      what a phone on bad wifi sees first. -->
 <figure class="shot hero-shot" id="shot-hero">
-  <!-- A stand-in until the real recording exists. Drop the <video> in above
-       this div and delete the div; the caption hides itself either way. -->
-  <div class="loop" aria-hidden="true">
-    <div class="bar"><span class="rd"></span>Recording<span class="who">MC1101,
-      Maths</span></div>
-    <div class="wave"><i style="animation-delay:-.0s"></i><i style="animation-delay:-.37s"></i><i style="animation-delay:-.74s"></i><i style="animation-delay:-.11s"></i><i style="animation-delay:-.48s"></i><i style="animation-delay:-.85s"></i><i style="animation-delay:-.22s"></i><i style="animation-delay:-.59s"></i><i style="animation-delay:-.96s"></i><i style="animation-delay:-.33s"></i><i style="animation-delay:-.7s"></i><i style="animation-delay:-.07s"></i><i style="animation-delay:-.44s"></i><i style="animation-delay:-.81s"></i><i style="animation-delay:-.18s"></i><i style="animation-delay:-.55s"></i><i style="animation-delay:-.92s"></i><i style="animation-delay:-.29s"></i></div>
-    <div class="sheet"><i></i><i></i><i></i><i></i></div>
+<div class="hr" aria-hidden="true">
+  <div class="hr-stage">
+    <div class="hr-bar">
+      <span class="hr-dot hr-dot-rec"></span>
+      <span class="hr-dot hr-dot-ok"></span>
+      <span class="hr-status"><span class="hr-s1">Recording</span><span class="hr-s2">Making notes</span><span class="hr-s3">Notes ready</span></span>
+      <span class="hr-course">MC1101 · Maths</span>
+      <span class="hr-wave">
+        <span style="--h:.35;animation-delay:-.2s"></span><span style="--h:.6;animation-delay:-.5s"></span><span style="--h:.9;animation-delay:-.1s"></span><span style="--h:.5;animation-delay:-.7s"></span><span style="--h:.75;animation-delay:-.3s"></span><span style="--h:1;animation-delay:-.6s"></span><span style="--h:.45;animation-delay:-.4s"></span><span style="--h:.8;animation-delay:-.8s"></span><span style="--h:.55;animation-delay:-.15s"></span><span style="--h:.95;animation-delay:-.45s"></span><span style="--h:.4;animation-delay:-.65s"></span><span style="--h:.7;animation-delay:-.25s"></span><span style="--h:.5;animation-delay:-.55s"></span><span style="--h:.3;animation-delay:-.35s"></span>
+      </span>
+      <span class="hr-time">12:04</span>
+    </div>
+    <div class="hr-prog"><span class="hr-fill"></span></div>
+    <div class="hr-later">about 10 min later</div>
+    <div class="hr-card">
+      <div class="hr-meta">Today's notes</div>
+      <div class="hr-line hr-h">Limits and derivatives<span class="hr-cover hr-c1"></span></div>
+      <div class="hr-li hr-line">The limit is the basis of the derivative<span class="hr-cover hr-c2"></span></div>
+      <div class="hr-li hr-line">Power rule: d/dx x<span class="hr-sup">n</span> = n·x<span class="hr-sup">n−1</span><span class="hr-cover hr-c3"></span></div>
+    </div>
   </div>
+</div>
   <figcaption>Hero animation &mdash; a lecture being recorded, and the notes
   appearing under it.</figcaption>
 </figure>
@@ -10290,7 +10462,27 @@ JOIN_BODY = r"""<div class="land">
       transcribed properly, not garbled.</p>
     </div>
     <figure class="shot" id="shot-mixed">
-      <figcaption>Preview &mdash; a mixed Hindi and English line being
+<div class="mx" aria-hidden="true">
+  <div class="mx-stage">
+    <div class="mx-card">
+      <div class="mx-head">
+        <span class="mx-rec"></span>
+        <span class="mx-live">Live transcript</span>
+        <span class="mx-wave"><span style="--h:.4;animation-delay:-.2s"></span><span style="--h:.7;animation-delay:-.5s"></span><span style="--h:1;animation-delay:-.1s"></span><span style="--h:.55;animation-delay:-.7s"></span><span style="--h:.85;animation-delay:-.3s"></span><span style="--h:.45;animation-delay:-.6s"></span><span style="--h:.75;animation-delay:-.4s"></span><span style="--h:.35;animation-delay:-.8s"></span><span style="--h:.6;animation-delay:-.15s"></span><span style="--h:.9;animation-delay:-.45s"></span></span>
+        <span class="mx-course">MC1101 · Maths</span>
+      </div>
+      <!-- divs, not paragraphs: `.land p` outranks `.mx *` and would repaint
+           these in the page's body grey with the page's margins. -->
+      <div class="mx-prev">अच्छा, आज से हम derivatives start करेंगे।</div>
+      <div class="mx-now"><span class="mx-w mx-w1">तो</span> <span class="mx-w mx-w2">सबसे</span> <span class="mx-w mx-w3">पहले</span> <span class="mx-w mx-w4">हम</span> <span class="mx-w mx-w5 mx-en">limit</span> <span class="mx-w mx-w6">का</span> <span class="mx-w mx-w7 mx-en">concept</span> <span class="mx-w mx-w8">समझेंगे,</span> <span class="mx-w mx-w9">फिर</span> <span class="mx-w mx-w10 mx-en">power rule</span> <span class="mx-w mx-w11">देखेंगे</span></div>
+      <div class="mx-foot">
+        <span class="mx-chip">Hindi + English</span>
+        <span class="mx-note">written exactly as spoken</span>
+      </div>
+    </div>
+  </div>
+</div>
+    <figcaption>Preview &mdash; a mixed Hindi and English line being
       transcribed.</figcaption>
     </figure>
   </div>
@@ -10302,7 +10494,27 @@ JOIN_BODY = r"""<div class="land">
       subject before the mid-sem.</p>
     </div>
     <figure class="shot" id="shot-quiz">
-      <figcaption>Preview &mdash; a practice question, and the answer being
+<div class="qz" aria-hidden="true">
+  <div class="qz-stage">
+    <div class="qz-card">
+      <div class="qz-head"><span>MC1101 Maths practice</span><span>Question 3 of 12</span></div>
+      <div class="qz-q">What is d/dx of x<span class="qz-sup">5</span>?</div>
+      <div class="qz-ans">
+        <div class="qz-row qz-blur"><span class="qz-a">5x<span class="qz-sup">4</span></span><span class="qz-why">power rule: 5·x<span class="qz-sup">5−1</span></span></div>
+        <div class="qz-row qz-clear"><span class="qz-a">5x<span class="qz-sup">4</span></span><span class="qz-why">power rule: 5·x<span class="qz-sup">5−1</span></span></div>
+      </div>
+      <div class="qz-foot">
+        <span class="qz-hint">try it in your head first</span>
+        <span class="qz-btnwrap">
+          <span class="qz-btn"><span class="qz-face qz-show">Show answer</span><span class="qz-face qz-hide">Hide answer</span></span>
+          <span class="qz-ripple"></span>
+          <span class="qz-tap"></span>
+        </span>
+      </div>
+    </div>
+  </div>
+</div>
+    <figcaption>Preview &mdash; a practice question, and the answer being
       revealed.</figcaption>
     </figure>
   </div>
@@ -10314,7 +10526,35 @@ JOIN_BODY = r"""<div class="land">
       can miss &mdash; and never rounds you up.</p>
     </div>
     <figure class="shot" id="shot-attendance">
-      <figcaption>Preview &mdash; marking a class, and the number of misses
+<div class="at" aria-hidden="true">
+  <div class="at-stage">
+    <div class="at-card">
+      <div class="at-head">
+        <div class="at-subj"><span class="at-code">MC1101</span>Maths</div>
+        <div class="at-pct">8<span class="at-roll"><span class="at-col at-col-p">1<span class="at-next">2</span></span></span>%</div>
+      </div>
+      <div class="at-bar"><span class="at-fill"></span><span class="at-min"></span></div>
+      <div class="at-minrow"><span class="at-minlabel">75% needed</span></div>
+      <div class="at-big">You can miss <span class="at-roll at-num"><span class="at-col at-col-n">4<span class="at-next">5</span></span></span> more</div>
+      <div class="at-today">
+        <div class="at-when"><span class="at-t">Today</span><span class="at-muted">9:00 lecture</span></div>
+        <div class="at-btns">
+          <span class="at-pwrap">
+            <span class="at-pbtn">
+              <span class="at-pfill"></span>
+              <span class="at-plab at-plab1">Present</span>
+              <span class="at-plab at-plab2"><svg class="at-check" viewBox="0 0 12 12"><path d="M2.4 6.3l2.3 2.3 4.9-5.1" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>Present</span>
+            </span>
+            <span class="at-ripple"></span>
+            <span class="at-tap"></span>
+          </span>
+          <span class="at-abtn"><span class="at-plab">Absent</span></span>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+    <figcaption>Preview &mdash; marking a class, and the number of misses
       left moving.</figcaption>
     </figure>
   </div>
@@ -12025,6 +12265,10 @@ def build_server(args):
                 return self.do_join()
             if self.path == "/login":
                 return self.do_login()
+            if self.path == "/logout":
+                # The cookie is signed, not stored, so leaving is forgetting it.
+                return self.reply(200, {"ok": True}, cookie=(
+                    f"{SESSION_COOKIE}=; Path=/; HttpOnly; SameSite=Lax; Max-Age=0"))
             if self.path == "/password":
                 return self.do_password()
             if self.path == "/reset":
