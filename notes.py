@@ -604,7 +604,7 @@ def _themable(page: str) -> str:
 PAGE = _themable(r"""<!doctype html>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<meta name="theme-color" id="tc" content="#fcfcfd">
+<meta name="theme-color" id="tc" content="#faf9f4">
 <title>recarve — Section I</title>
 <!-- The theme, settled before anything is drawn. It is four lines and it is
      inline and blocking on purpose: read from storage, stamped on <html>, and
@@ -618,20 +618,24 @@ PAGE = _themable(r"""<!doctype html>
      and the last `\n</script>`, so a second block written across lines up
      here swallows all the markup in between and parses as nothing. -->
 <script>try{const t=localStorage.getItem('theme');if(t==='light'||t==='dark')document.documentElement.dataset.theme=t}catch(e){}</script>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Figtree:wght@400;500;600;700&amp;family=Kalam:wght@700&amp;display=swap">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/marked/15.0.7/marked.min.js"></script>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.11/katex.min.css">
 <script defer src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.11/katex.min.js"></script>
 <script defer src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.11/contrib/auto-render.min.js"></script>
 <style>
 :root{
-  --bg:#fcfcfd; --surface:#f2f3f7;
+  /* The landing page's paper and ink, so the door and the room behind it
+     are the same place. */
+  --bg:#faf9f4; --surface:#f3f2ea;
   /* The plane the map stands on. A rail painted in --bg beside a page
      painted in --bg is not a rail, it is text in the margin -- so it gets
      a ground of its own. On paper it steps back to the card grey; in the
      dark it steps DOWN past the page rather than up, because an elevated
      surface reads as something that just opened and a rail never opened. */
-  --rail:#f2f3f7;
-  --fg:#14161b; --mut:#656b76; --line:#e1e4ea;
+  --rail:#f3f2ea;
+  --fg:#16183d; --mut:#5b6070; --line:#e6e4da;
   /* One accent, and it is a purple. Every member's action is this colour and
      nothing else in the app is: an admin's power is ink, an error is the one
      red, a term below 75% is amber. Deep enough to carry white at 7.3:1 and to
@@ -641,7 +645,7 @@ PAGE = _themable(r"""<!doctype html>
   /* Admin ink. Red already means error, so power is not red: it is the page's
      own ink, filled. Accent is every member's action, grey is neutral, ink is
      the handful of things only an admin may press. 14.5:1 either way round. */
-  --admin:#232733; --admin-fg:#fcfcfd;
+  --admin:#232733; --admin-fg:#faf9f4;
   --sat:62%; --lum:38%; --chip-lum:94%; --chip-text:28%;
   /* Below 75% attendance. Not red: red is an error the app made, and this is
      a fact about a term that is still going. Amber, and never carrying the
@@ -722,7 +726,7 @@ html[data-theme="light"]{color-scheme:light}
 html[data-theme="dark"]{color-scheme:dark}
 body{
   margin:0;background:var(--bg);color:var(--fg);
-  font:16px/1.65 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;
+  font:16px/1.65 Figtree,-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;
   overflow-wrap:break-word;
 }
 button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
@@ -6127,7 +6131,7 @@ function paintDrawer() {
 const THEMES = ['system', 'light', 'dark'];
 // The bar at the top of the phone, which is a colour and not a theme: it has
 // to be told the resolved answer, because 'system' is not a colour.
-const BAR = {light: '#fcfcfd', dark: '#0f1115'};
+const BAR = {light: '#faf9f4', dark: '#0f1115'};
 let theme = 'system';
 try { const t = localStorage.getItem('theme'); if (THEMES.includes(t)) theme = t; } catch (e) {}
 
@@ -9878,8 +9882,10 @@ GATE_PAGE = r"""<!doctype html>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <title>recarve — MANIT first year</title>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Figtree:wght@400;500;600&amp;family=Kalam:wght@400;700&amp;display=swap">
 <style>
-:root{color-scheme:light dark;--bg:#fcfcfd;--fg:#14161b;--mut:#656b76;--line:#e1e4ea;
+:root{color-scheme:light dark;--bg:#faf9f4;--fg:#16183d;--mut:#5b6070;--line:#e6e4da;
   /* The same purple the app is built on, to the digit. These screens are the
      first thing anybody sees and the app is the second: a brand that changes
      colour between the login button and the first screen behind it reads as
@@ -9891,7 +9897,7 @@ GATE_PAGE = r"""<!doctype html>
      ordinary blue action, grey stays neutral, and a solid slab of ink is what
      only an admin can press. The same pair marks the same thing inside the
      app, on the Me tab, so the treatment is one thing in two files. */
-  --admin:#232733;--admin-fg:#fcfcfd;--surface:#f2f3f7}
+  --admin:#232733;--admin-fg:#faf9f4;--surface:#f3f2ea}
 @media (prefers-color-scheme:dark){
   /* The accent goes pale in the dark, so what sits on it has to go dark too --
      white on it is 2.8:1. Same pair PAGE carries. */
@@ -9902,7 +9908,7 @@ GATE_PAGE = r"""<!doctype html>
     --admin:#dfe4f0;--admin-fg:#0f1115;--surface:#171a20}}
 *{box-sizing:border-box}
 body{margin:0;min-height:100dvh;display:grid;place-items:center;padding:24px;background:var(--bg);
-  color:var(--fg);font:16px/1.5 -apple-system,BlinkMacSystemFont,"Segoe UI",system-ui,sans-serif;
+  color:var(--fg);font:16px/1.5 Figtree,-apple-system,BlinkMacSystemFont,"Segoe UI",system-ui,sans-serif;
   /* A name is whatever the joiner typed: one 80-character word with no spaces
      in it used to push this page sideways. */
   overflow-wrap:break-word}
@@ -10002,9 +10008,8 @@ button[disabled]{background:var(--mut);color:var(--bg);box-shadow:none}
    Handwriting on paper above, type below. That is the product, and it is the
    only thing here allowed to be loud.
 
-   Two webfonts, both loaded from the body of this page alone with swap, so
-   the app pays nothing for them and a slow font costs the landing a reflow
-   rather than a blank page. */
+   Two webfonts, loaded in the head with swap, so a slow font costs a reflow
+   rather than a blank page. The login screens and the app use Figtree too. */
 body:has(.land){display:block;padding:0;background:#faf9f4}
 main:has(.land){max-width:none}
 .land{--ink:#16183d; --body:#5b6070; --hair:#e6e4da;
@@ -10233,9 +10238,7 @@ main:has(.land){max-width:none}
 <main>__BODY__</main>
 """
 
-JOIN_BODY = r"""<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Figtree:wght@400;500;600&amp;family=Kalam:wght@400;700&amp;display=swap">
-<div class="land">
+JOIN_BODY = r"""<div class="land">
 <div class="wrap">
 
 <nav><span class="logo">recarve</span><a href="/login">Log in</a></nav>
@@ -10324,6 +10327,16 @@ JOIN_BODY = r"""<link rel="preconnect" href="https://fonts.gstatic.com" crossori
       lecture. Classmates answer, the best answer rises.</p></div>
     <div><h3>Readable with no signal</h3><p>Anything you&rsquo;ve opened stays
       readable in a dead corridor. Built for phones and bad wifi.</p></div>
+  </div>
+  <div class="three">
+    <div><h3>Past papers</h3><p>Previous years&rsquo; mid-sems and end-sems,
+      filed under the subject they belong to, the night before you need
+      them.</p></div>
+    <div><h3>A chat per subject</h3><p>One room for Maths, one for Physics.
+      The question about tomorrow&rsquo;s tutorial goes where the people who
+      know are.</p></div>
+    <div><h3>The notice board</h3><p>Announcements from your CR, pinned at the
+      top &mdash; not forty messages up in a group you muted.</p></div>
   </div>
 </section>
 
@@ -10830,9 +10843,9 @@ SUPER_PAGE = r"""<!doctype html>
 <meta name="robots" content="noindex,nofollow">
 <title>recarve super admin</title>
 <style>
-:root{color-scheme:light dark;--bg:#fcfcfd;--fg:#14161b;--mut:#656b76;--line:#e1e4ea;
+:root{color-scheme:light dark;--bg:#faf9f4;--fg:#16183d;--mut:#5b6070;--line:#e6e4da;
   --accent:#6534c9;--accent-fg:#fff;--err:#d1344b;--ok:#1a7f4b;
-  --admin:#232733;--admin-fg:#fcfcfd;--surface:#f2f3f7}
+  --admin:#232733;--admin-fg:#faf9f4;--surface:#f3f2ea}
 @media (prefers-color-scheme:dark){
   :root{--bg:#0f1115;--fg:#e7e9ee;--mut:#98a0ad;--line:#262a32;
     --accent:#ac93ff;--accent-fg:#0f1115;--err:#e5484d;--ok:#3ee089;
