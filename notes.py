@@ -8005,6 +8005,150 @@ def forget_principal(profile_id):
         _principals.pop(str(profile_id).lower(), None)
 
 
+# ---- Who was here and when (0054), for /super and nobody else. -----------
+# A person is stamped at most once a minute, and never by the polls a tab
+# makes on its own: a phone left open on a desk is not somebody using the app,
+# and "last did" reading /jobs for the whole class says nothing about anyone.
+SEEN_EVERY = 60
+SEEN_IGNORES = ("/jobs", "/log", "/room", "/sw.js", "/manifest")
+_seen = {}
+_seen_lock = threading.Lock()
+STARTED = time.time()
+
+
+def note_seen(profile_id, path, agent):
+    """Stamp today's activity_days row, on the owning connection.
+
+    Never raises: this is bookkeeping for one screen, and a student's request
+    does not fail because it could not be counted.
+    """
+    path = path.partition("?")[0][:80]
+    if path.startswith(SEEN_IGNORES):
+        return
+    key, now = str(profile_id).lower(), time.monotonic()
+    with _seen_lock:
+        if now - _seen.get(key, -SEEN_EVERY) < SEEN_EVERY:
+            return
+        _seen[key] = now
+    try:
+        with db() as conn:
+            conn.execute(
+                "insert into activity_days (profile_id, last_path, agent)"
+                " values (%s::uuid, %s, %s)"
+                " on conflict (profile_id, day) do update set last_seen = now(),"
+                " minutes = activity_days.minutes + 1,"
+                " last_path = excluded.last_path, agent = excluded.agent",
+                (key, path, (agent or "")[:200]))
+    except Exception as e:
+        log(f"could not stamp {key}: {type(e).__name__}", "seen")
+
+
+def device_of(agent):
+    """'iPhone', 'Android', 'Mac'... off a user agent. Order matters: an
+    Android phone says Linux and an iPad says Mac OS X."""
+    for mark, name in (("iPhone", "iPhone"), ("iPad", "iPad"), ("Android", "Android"),
+                       ("Windows", "Windows"), ("Macintosh", "Mac"), ("Linux", "Linux")):
+        if mark in (agent or ""):
+            return name
+    return ""
+
+
+def server_stats():
+    """The machine this is running on, read off /proc where there is one.
+
+    No psutil: the VM is Linux and /proc is the same numbers without a
+    dependency. On a Mac the memory and uptime keys are simply absent, and the
+    screen draws what it is given.
+    """
+    import shutil
+
+    disk = shutil.disk_usage("/")
+    out = {"disk_total": disk.total, "disk_used": disk.used,
+           "cpus": os.cpu_count(), "app_uptime": int(time.time() - STARTED)}
+    try:
+        out["load"] = [round(x, 2) for x in os.getloadavg()]
+    except OSError:
+        pass
+    try:
+        mem = {}
+        for line in Path("/proc/meminfo").read_text().splitlines():
+            k, _, v = line.partition(":")
+            mem[k] = int(v.split()[0]) * 1024
+        out["mem_total"] = mem["MemTotal"]
+        out["mem_used"] = mem["MemTotal"] - mem["MemAvailable"]
+        out["swap_used"] = mem["SwapTotal"] - mem["SwapFree"]
+        out["uptime"] = int(float(Path("/proc/uptime").read_text().split()[0]))
+        for line in Path("/proc/self/status").read_text().splitlines():
+            if line.startswith("VmRSS:"):
+                out["app_mem"] = int(line.split()[1]) * 1024
+    except (OSError, KeyError, ValueError, IndexError):
+        pass
+    return out
+
+
+# Counted for the dashboard. Names are typed here, never taken from a request.
+STAT_TABLES = ("lectures", "materials", "archive_documents", "announcements",
+               "doubts", "posts", "messages", "events", "bookmarks")
+
+
+def db_stats(conn):
+    """Everything on /super that is a number: people, activity, content, and
+    the database's own size. Owning connection, every section at once."""
+    one = lambda q: conn.execute(q).fetchone()
+    p = one("select count(*), count(*) filter (where status = 'approved'),"
+            " count(*) filter (where status = 'pending'),"
+            " count(*) filter (where status = 'blocked'),"
+            " count(*) filter (where created_at > now() - interval '7 days')"
+            " from profiles")
+    a = one("select count(distinct profile_id) filter (where last_seen > now() - interval '5 minutes'),"
+            " count(distinct profile_id) filter (where last_seen > now() - interval '24 hours'),"
+            " count(distinct profile_id) filter (where last_seen > now() - interval '7 days'),"
+            " count(distinct profile_id) filter (where last_seen > now() - interval '30 days'),"
+            " count(distinct profile_id), coalesce(sum(minutes) filter (where day = current_date), 0)"
+            " from activity_days")
+    days = [{"day": r[0].isoformat(), "users": r[1], "minutes": r[2]} for r in conn.execute(
+        "select d::date, count(a.profile_id), coalesce(sum(a.minutes), 0)"
+        " from generate_series(current_date - 13, current_date, interval '1 day') d"
+        " left join activity_days a on a.day = d::date group by 1 order by 1")]
+    devices = {}
+    for (agent,) in conn.execute(
+            "select distinct on (profile_id) agent from activity_days"
+            " order by profile_id, last_seen desc"):
+        name = device_of(agent) or "Other"
+        devices[name] = devices.get(name, 0) + 1
+    db_size, conns = one("select pg_database_size(current_database()),"
+                         " (select count(*) from pg_stat_activity)")
+    return {
+        "users": {"total": p[0], "approved": p[1], "pending": p[2], "blocked": p[3],
+                  "new_7d": p[4], "now": a[0], "d1": a[1], "d7": a[2], "d30": a[3],
+                  "ever": a[4], "minutes_today": a[5]},
+        "days": days, "devices": devices,
+        "content": {t: one(f"select count(*) from {t}")[0] for t in STAT_TABLES},
+        "db": {"size": db_size, "connections": conns},
+        "server": server_stats(),
+    }
+
+
+def db_activity(conn):
+    """Every person there is, most recently seen first, never-seen last."""
+    return [
+        {"id": str(r[0]), "name": r[1], "roll_no": r[2], "status": r[3], "role": r[4],
+         "section": section_label(r[5], r[6]) if r[5] else None,
+         "joined": r[7].isoformat(), "last_seen": r[8].isoformat() if r[8] else None,
+         "last_path": r[9], "device": device_of(r[10]), "days": r[11], "minutes": r[12]}
+        for r in conn.execute(
+            "select p.id, p.name, p.roll_no, p.status, p.role, s.name, s.grad_year,"
+            "  p.created_at, l.last_seen, l.last_path, l.agent,"
+            "  coalesce(t.days, 0), coalesce(t.minutes, 0)"
+            " from profiles p left join sections s on s.id = p.section_id"
+            " left join lateral (select last_seen, last_path, agent from activity_days"
+            "   where profile_id = p.id order by day desc limit 1) l on true"
+            " left join lateral (select count(*) days, sum(minutes) minutes"
+            "   from activity_days where profile_id = p.id) t on true"
+            " order by l.last_seen desc nulls last, p.name")
+    ]
+
+
 def db_principal(conn, profile_id):
     """Who a session belongs to, or None. Read as themselves, so a deleted or
     never-created profile comes back empty rather than trusted."""
@@ -11379,6 +11523,22 @@ td button{min-height:44px;font-size:13px}
 ul.errs{margin:8px 0 0;padding:0 0 0 20px;color:var(--err);font-size:13px}
 ul.errs li{margin:0 0 4px;font-family:ui-monospace,SFMono-Regular,Menlo,monospace}
 .mut{color:var(--mut);font-size:13px}
+/* The numbers above the sections: tiles, three meters, fourteen bars. */
+.tiles{display:grid;gap:12px;grid-template-columns:repeat(auto-fill,minmax(8.5rem,1fr));margin:0 0 16px}
+.tile{border:1px solid var(--line);border-radius:14px;padding:12px;background:var(--surface)}
+.tile b{display:block;font-size:26px;font-weight:700;line-height:1.2;font-variant-numeric:tabular-nums}
+.tile span{font-size:11px;font-weight:500;letter-spacing:.02em;text-transform:uppercase;color:var(--mut)}
+.meter{margin:0 0 12px;font-size:13px}
+.meter i{display:block;height:8px;border-radius:7px;background:var(--line);overflow:hidden;margin:4px 0 0}
+.meter i u{display:block;height:100%;background:var(--accent)}
+.meter.hot i u{background:var(--err)}
+.bars{display:flex;align-items:flex-end;gap:4px;height:6rem}
+.bars div{flex:1;min-height:2px;border-radius:7px 7px 0 0;background:var(--accent)}
+.two{display:grid;gap:16px;grid-template-columns:1fr}
+@media (min-width:40rem){.two{grid-template-columns:1fr 1fr}}
+.two .card{margin:0}
+.dot{display:inline-block;width:8px;height:8px;border-radius:50%;background:var(--mut);margin:0 8px 0 0}
+.dot.on{background:var(--ok)}
 .hide{display:none}
 @media (prefers-reduced-motion:no-preference){main{animation:rise .18s ease-out both}}
 @keyframes rise{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
@@ -11425,6 +11585,26 @@ SUPER_BODY = r"""<div class="row spread">
   <span class="pill">Super admin</span>
 </div>
 
+<div class="tiles" id="tiles"></div>
+<div class="two">
+  <div class="card"><h3>Server</h3><p class="lede" id="srvsub"></p><div id="meters"></div></div>
+  <div class="card"><h3>People a day</h3>
+    <p class="lede" id="dayssub">The last fourteen days.</p>
+    <div class="bars" id="bars"></div>
+    <p class="lede" id="devices" style="margin:12px 0 0"></p></div>
+</div>
+
+<h2>Everybody</h2>
+<p class="lede">Most recently here first. The dot is green inside five minutes.
+Minutes are minutes with a tap in them, not a tab left open.</p>
+<div class="card scroll">
+  <input id="find" placeholder="Filter by name, roll or section" style="margin:0 0 12px">
+  <table><thead><tr><th>Who</th><th>Section</th><th>Last here</th><th>Last did</th>
+    <th>On</th><th class="num">Days</th><th class="num">Minutes</th><th>Joined</th></tr></thead>
+    <tbody id="people"></tbody></table>
+</div>
+
+<h2>Sections</h2>
 <div class="card">
   <h3>Start a section</h3>
   <p class="lede">A name, the year they graduate, and the curriculum they
@@ -11555,8 +11735,106 @@ function sectionRow(s) {
   return tr;
 }
 
+const size = b => b >= 2**30 ? (b / 2**30).toFixed(1) + ' GB' : Math.round(b / 2**20) + ' MB';
+const span = s => s >= 86400 ? Math.floor(s / 86400) + 'd ' + Math.floor(s % 86400 / 3600) + 'h'
+  : s >= 3600 ? Math.floor(s / 3600) + 'h ' + Math.floor(s % 3600 / 60) + 'm' : Math.floor(s / 60) + 'm';
+function ago(iso) {
+  if (!iso) return 'never';
+  const s = (Date.now() - new Date(iso)) / 1000;
+  return s < 90 ? 'just now' : span(s) + ' ago';
+}
+
+function tile(n, label) {
+  const d = document.createElement('div');
+  d.className = 'tile';
+  d.innerHTML = '<b></b><span></span>';
+  d.firstChild.textContent = n;
+  d.lastChild.textContent = label;
+  $('tiles').appendChild(d);
+}
+
+function meter(label, used, total, text) {
+  const pct = total ? Math.min(100, used / total * 100) : 0;
+  const d = document.createElement('div');
+  d.className = 'meter' + (pct > 85 ? ' hot' : '');
+  d.innerHTML = '<span></span><i><u></u></i>';
+  d.firstChild.textContent = label + ' · ' + text + ' · ' + Math.round(pct) + '%';
+  d.querySelector('u').style.width = pct + '%';
+  $('meters').appendChild(d);
+}
+
+let PEOPLE = [];
+function people() {
+  const q = $('find').value.trim().toLowerCase();
+  const body = $('people');
+  body.innerHTML = '';
+  for (const m of PEOPLE) {
+    if (q && ![m.name, m.roll_no, m.section].join(' ').toLowerCase().includes(q)) continue;
+    const tr = document.createElement('tr');
+    const who = cell(tr, '', 'name');
+    const dot = document.createElement('span');
+    dot.className = 'dot' + (m.last_seen && Date.now() - new Date(m.last_seen) < 3e5 ? ' on' : '');
+    who.append(dot, m.name);
+    const sub = document.createElement('small');
+    sub.textContent = [m.roll_no, m.role, m.status === 'approved' ? null : m.status]
+      .filter(Boolean).join(' · ');
+    who.appendChild(sub);
+    cell(tr, m.section || 'none');
+    cell(tr, ago(m.last_seen)).title = m.last_seen ? new Date(m.last_seen).toLocaleString() : '';
+    cell(tr, m.last_path || '', 'mut');
+    cell(tr, m.device);
+    cell(tr, m.days, 'num');
+    cell(tr, m.minutes, 'num');
+    cell(tr, new Date(m.joined).toLocaleDateString());
+    body.appendChild(tr);
+  }
+}
+$('find').oninput = people;
+
+function stats(st) {
+  const u = st.users, sv = st.server;
+  $('tiles').innerHTML = '';
+  tile(u.total, 'People');
+  tile(u.now, 'Here now');
+  tile(u.d1, 'Last 24 hours');
+  tile(u.d7, 'Last 7 days');
+  tile(u.d30, 'Last 30 days');
+  tile(u.total - u.ever, 'Never opened it');
+  tile(u.new_7d, 'Joined this week');
+  tile(u.pending, 'Waiting');
+  tile(u.blocked, 'Blocked');
+  tile(u.minutes_today, 'Minutes today');
+  for (const [k, n] of Object.entries(st.content)) tile(n, k.replace('_', ' '));
+
+  $('meters').innerHTML = '';
+  if (sv.mem_total) meter('Memory', sv.mem_used, sv.mem_total, size(sv.mem_used) + ' of ' + size(sv.mem_total));
+  meter('Disk', sv.disk_used, sv.disk_total, size(sv.disk_used) + ' of ' + size(sv.disk_total));
+  if (sv.load) meter('Load', sv.load[0], sv.cpus, sv.load.join(' ') + ' on ' + sv.cpus + ' cpu');
+  $('srvsub').textContent = [
+    sv.uptime ? 'up ' + span(sv.uptime) : null, 'app up ' + span(sv.app_uptime),
+    sv.app_mem ? 'app ' + size(sv.app_mem) : null,
+    sv.swap_used ? 'swap ' + size(sv.swap_used) : null,
+    'database ' + size(st.db.size), st.db.connections + ' connections',
+  ].filter(Boolean).join(' · ');
+
+  const top = Math.max(1, ...st.days.map(d => d.users));
+  $('bars').innerHTML = '';
+  for (const d of st.days) {
+    const b = document.createElement('div');
+    b.style.height = d.users / top * 100 + '%';
+    b.title = d.day + ': ' + d.users + ' people, ' + d.minutes + ' minutes';
+    $('bars').appendChild(b);
+  }
+  $('dayssub').textContent = 'The last fourteen days. Most in a day: ' + Math.max(...st.days.map(d => d.users)) + '.';
+  $('devices').textContent = Object.entries(st.devices)
+    .map(([k, n]) => k + ' ' + n).join(' · ');
+}
+
 async function load() {
   const d = await ask('/super/data');
+  stats(d.stats);
+  PEOPLE = d.people;
+  people();
   const rows = $('rows');
   rows.innerHTML = '';
   if (!d.sections.length) {
@@ -12022,14 +12300,17 @@ def build_server(args):
             with _principals_lock:
                 seen = _principals.get(key)
             if seen and now - seen[0] < PRINCIPAL_TTL:
-                return seen[1]
-            with db(profile_id) as conn:
-                me = db_principal(conn, profile_id)
-            with _principals_lock:
-                # One entry per phone that has ever signed in to this process,
-                # which is the class. Nobody unsigned reaches here: the cookie
-                # was checked against the secret two lines up.
-                _principals[key] = (now, me)
+                me = seen[1]
+            else:
+                with db(profile_id) as conn:
+                    me = db_principal(conn, profile_id)
+                with _principals_lock:
+                    # One entry per phone that has ever signed in to this
+                    # process, which is the class. Nobody unsigned reaches
+                    # here: the cookie was checked against the secret above.
+                    _principals[key] = (now, me)
+            if me:
+                note_seen(profile_id, self.path, self.headers.get("User-Agent"))
             return me
 
         # False until super_gate says otherwise, so a handler that reads it on
@@ -12180,7 +12461,8 @@ def build_server(args):
 
         def do_super_data(self):
             return self.super_do(lambda conn, req: {
-                "sections": db_sections(conn), "sets": db_subject_sets(conn)})
+                "sections": db_sections(conn), "sets": db_subject_sets(conn),
+                "stats": db_stats(conn), "people": db_activity(conn)})
 
         def do_super_section(self):
             return self.super_do(
