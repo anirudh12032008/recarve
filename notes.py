@@ -938,6 +938,28 @@ body.drawered #drawer{transform:none;visibility:visible}
 .blank+.sect{padding-top:8px}
 .card+.sect,.cal+.sect,.mine+.sect{padding-top:16px}
 .rows{padding:4px 4px 0}
+/* The subjects, as tiles. Two across on a phone, as many as fit on a wide
+   screen; the subject's colour is one short bar, not a bar and a badge. */
+.sj-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));
+  gap:10px;padding:4px 16px 0}
+.sj{display:flex;flex-direction:column;align-items:flex-start;gap:4px;min-width:0;
+  min-height:104px;padding:14px;border:1px solid var(--line);border-radius:14px;
+  text-align:left;color:var(--fg)}
+.sj-code{display:flex;align-items:center;gap:6px;font-size:11px;font-weight:600;
+  letter-spacing:.02em;color:var(--mut);font-variant-numeric:tabular-nums}
+.sj-code::before{content:'';width:14px;height:4px;border-radius:2px;
+  background:hsl(var(--h) var(--sat) var(--lum))}
+.sj b{font-size:16px;font-weight:600;line-height:1.25;overflow-wrap:anywhere}
+.sj small{margin-top:auto;font-size:13px;color:var(--mut);line-height:1.35}
+.sj:active{transform:scale(.98)}
+@media (hover:hover){.sj:hover{background:var(--surface)}}
+.sj:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.sj-empty{display:flex;flex-wrap:wrap;gap:6px;padding:4px 16px 0}
+.sj-empty button{min-height:34px;padding:0 12px;border-radius:999px;
+  border:1px solid var(--line);color:var(--mut);font-size:13px}
+@media (hover:hover){.sj-empty button:hover{color:var(--fg);background:var(--surface)}}
+.more{display:block;margin:4px 0 0 var(--hang);min-height:var(--tap);padding:0 12px;
+  font-size:13px;font-weight:600;color:var(--accent)}
 /* Hover is the one thing left in the token block for these: Tailwind would
    emit it happily, but the neighbours below share the media query and reading
    them in one place is worth more than the utilities. */
@@ -2792,7 +2814,8 @@ function comingUpBlock() {
   const items = (ATT.upcoming || (ATT.next ? [ATT.next] : []))
     .filter(n => n.what !== 'campus');
   if (!items.length) return;
-  block('Coming up', items.map(n => {
+  const shown = upAll ? items : items.slice(0, 3);
+  const rows = shown.map(n => {
     const row = line(n.title, [whenSays(n), n.where].filter(Boolean).join(' · '),
                      document.createElement('div'));
     // A tear-off date, so the list reads as a calendar and not as prose.
@@ -2803,8 +2826,19 @@ function comingUpBlock() {
     tile.querySelector('b').textContent = +n.date.slice(8);
     row.insertBefore(tile, row.firstChild);
     return row;
-  }));
+  });
+  if (items.length > shown.length) {
+    const more = document.createElement('button');
+    more.className = 'more';
+    more.textContent = 'Show ' + (items.length - shown.length) + ' more';
+    more.onclick = () => { upAll = true; render(); };
+    rows.push(more);
+  }
+  block('Coming up', rows);
 }
+// Whether the whole of "Coming up" is open. Three dates answer "what is next";
+// the other six are a tap away rather than a scroll in the way of the subjects.
+let upAll = false;
 
 // How far away a calendar entry is, in the words a student would use -- and
 // honest about a window already running rather than naming the day it ends.
@@ -4698,10 +4732,45 @@ function renderSubjects() {
     week.push(mark);
   }
   block('Your week', week);
-  // The institute's calendar, and what is next on it. Home shows today; this
-  // is the tab that holds the week around it.
-  if (ATT) calendarWeek();
-  comingUpBlock();
+
+  // The subjects are what this screen is named for, so they come before the
+  // calendar. A course with something in it is a tile; the labs and activities
+  // nobody has uploaded to yet are one line of names underneath rather than a
+  // dozen rows that each say "Nothing yet".
+  const full = DATA.filter(s => counts(s) !== 'Nothing yet');
+  const empty = DATA.filter(s => counts(s) === 'Nothing yet');
+  if (full.length) {
+    heading('Subjects');
+    const grid = document.createElement('div');
+    grid.className = 'sj-grid';
+    for (const s of full) {
+      const b = document.createElement('button');
+      b.className = 'sj';
+      b.style.setProperty('--h', hue(s.code));
+      b.innerHTML = '<span class="sj-code"></span><b></b><small></small>';
+      b.querySelector('.sj-code').textContent = s.code;
+      b.querySelector('b').textContent = s.name;
+      // The tile's short form: the revision sheet is on the subject's own
+      // screen, and here it only pushed the paper count onto a third line.
+      b.querySelector('small').textContent = counts(s).replace(/ \u00b7 revision sheet|revision sheet \u00b7 /, '');
+      b.onclick = () => go('classes', s.code);
+      grid.appendChild(b);
+    }
+    nav.appendChild(grid);
+  }
+  if (empty.length) {
+    heading(full.length ? 'Nothing uploaded yet' : 'Subjects');
+    const wrap = document.createElement('div');
+    wrap.className = 'sj-empty';
+    for (const s of empty) {
+      const b = document.createElement('button');
+      b.textContent = s.name;
+      b.title = s.code;
+      b.onclick = () => go('classes', s.code);
+      wrap.appendChild(b);
+    }
+    nav.appendChild(wrap);
+  }
 
   // One run over the whole library, because the week before an exam is not
   // spent one subject at a time. What is due comes first, so tapping this
@@ -4716,18 +4785,10 @@ function renderSubjects() {
     block('Practice', [b]);
   }
 
-  block('Subjects', DATA.map(s => {
-    const b = document.createElement('button');
-    b.className = 'row';
-    b.style.setProperty('--h', hue(s.code));
-    b.innerHTML = '<i class="tick"></i><span class="name"><b></b><small></small></span>'
-                + '<span class="code"></span>';
-    b.querySelector('b').textContent = s.name;
-    b.querySelector('small').textContent = counts(s);
-    b.querySelector('.code').textContent = s.code;
-    b.onclick = () => go('classes', s.code);
-    return b;
-  }));
+  // The institute's calendar, and what is next on it. Home shows today; this
+  // is the tab that holds the week around it.
+  if (ATT) calendarWeek();
+  comingUpBlock();
 
   // What landed most recently, across the whole library. The list above it is
   // subjects and answers "where is X"; this is lectures, newest first, and
