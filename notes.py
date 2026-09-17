@@ -56,7 +56,7 @@ Anything the transcript garbled badly enough that you had to guess, quoted with 
 Rules:
 - Start directly at "## Summary". Do not add a title heading of your own; the file already has one.
 - Write ALL mathematics as LaTeX: $...$ inline, $$...$$ for display equations. Never write maths as
-  plain text like "lim(h->0) [f(x+h)-f(x)]/h" — it is rendered with KaTeX and plain text stays ugly.
+  plain text like "lim(h->0) [f(x+h)-f(x)]/h", it is rendered with KaTeX and plain text stays ugly.
 - Write the notes in {notes_lang}.
 - Preserve technical terms in English exactly as a textbook would write them.
 - Where the transcript is clearly a mis-transcription of a known technical term, silently correct it.
@@ -434,7 +434,7 @@ def format_transcript(segments):
 
 
 def lecture_title(stem, code):
-    return stem + (f" — {SUBJECTS[code][0].replace('-', ' ')}" if code else "")
+    return stem + (f", {SUBJECTS[code][0].replace('-', ' ')}" if code else "")
 
 
 def lecture_note(stem, code, notes, transcript):
@@ -605,7 +605,7 @@ PAGE = _themable(r"""<!doctype html>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="theme-color" id="tc" content="#faf9f4">
-<title>recarve — Section I</title>
+<title>recarve · Section I</title>
 <!-- The theme, settled before anything is drawn. It is four lines and it is
      inline and blocking on purpose: read from storage, stamped on <html>, and
      the whole page is painted once in the right colours. Deferred, or moved
@@ -1847,7 +1847,7 @@ body.reading .tabs{display:none}
     <select id="subj"></select>
     <div id="lock" hidden>
       <b>Adding is for trusted members</b>
-      An admin makes you one &mdash; ask in your class group and say what you want
+      An admin makes you one. Ask in your class group and say what you want
       to add. Until then everything here is still yours to read, search,
       practise from and upvote.
     </div>
@@ -2414,7 +2414,7 @@ function renderPapers() {
   bar.appendChild(paperPick('Subject', pFilter.code,
     [['', 'All subjects']].concat(codes.map(c => {
       const s = subjectOf(c);
-      return [c, s ? c + ' \u2014 ' + s.name : c];
+      return [c, s ? c + ', ' + s.name : c];
     })), v => { pFilter.code = v; render(); }));
   bar.appendChild(paperPick('Year', pFilter.year,
     [['', 'All years']].concat(years.map(
@@ -2688,7 +2688,7 @@ const emptyDay = (date, day) => {
   const el = document.createElement('div');
   el.className = 'blank';
   const what = document.createElement('p'), why = document.createElement('p');
-  what.textContent = shut ? shut.title + ' — no classes.'
+  what.textContent = shut ? shut.title + ', no classes.'
                           : 'No classes on ' + DAYS[day] + '.';
   why.textContent = shut
     ? 'The institute is closed. Step to another day with the arrows above.'
@@ -2788,7 +2788,7 @@ function calendarWeek() {
     b.setAttribute('aria-label', dayName(date) + (shut ? ', ' + shut.title
       : n ? ', ' + n + (n === 1 ? ' class' : ' classes') : ', no classes'));
     b.onclick = () => { dayDate = date; go('classes', 'day'); };
-    if (shut && !why) why = DAYS[dayOfISO(date)] + ': ' + shut.title + ' — no classes';
+    if (shut && !why) why = DAYS[dayOfISO(date)] + ': ' + shut.title + ', no classes';
     week.appendChild(b);
   }
   box.appendChild(week);
@@ -3104,10 +3104,10 @@ const MADE_BY = {
 const CREDITS = [
   ['MANIT Bhopal',
    'The institute timetable, the scheme and the academic calendar every screen '
-   + 'is built on \u2014 Dr. Fozia Z. Haque, Prof. I/c Institute Time-Table'],
+   + 'is built on, Dr. Fozia Z. Haque, Prof. I/c Institute Time-Table'],
   ['Claude, by Anthropic',
    'Writes the notes and the practice questions from a recording. Once per '
-   + 'lecture, on the Mac, and then cached \u2014 never per student'],
+   + 'lecture, on the Mac, and then cached, never per student'],
   ['Whisper, by OpenAI',
    'Turns the recording into text before Claude ever sees it, through '
    + 'mlx-whisper on Apple silicon'],
@@ -3121,7 +3121,7 @@ const CREDITS = [
   ['psycopg', 'The Postgres driver underneath all of it'],
   ['Everyone in the section',
    'Every upload, every answered doubt and every recording. The library is '
-   + 'not the app\u2019s \u2014 it is theirs, and the app is where they put it'],
+   + 'not the app\u2019s, it is theirs, and the app is where they put it'],
 ];
 
 function aboutScreen() {
@@ -3136,8 +3136,8 @@ function aboutScreen() {
   block('Made by', who);
   block('Standing on', CREDITS.map(([what, does]) => line(what, does)));
   saying('recarve is one file and one database.',
-         'If something here is wrong \u2014 a period in the wrong hour, a '
-         + 'subject under the wrong name \u2014 say so on the wall. It is '
+         'If something here is wrong, a period in the wrong hour, a '
+         + 'subject under the wrong name, say so on the wall. It is '
          + 'faster to fix than to live with.');
 }
 
@@ -3289,7 +3289,7 @@ function markCtl(date, slot, mayCancel) {
     b.textContent = glyph;
     b.setAttribute('aria-pressed', now && now.state === state ? 'true' : 'false');
     b.setAttribute('aria-label',
-                   label + ' — period ' + slot.period + ', ' + slot.code);
+                   label + ', period ' + slot.period + ', ' + slot.code);
     b.onclick = () => attPost('/attendance', {marks: [{date, period: slot.period,
       state: now && now.state === state ? 'clear' : state}]}, btns);
     btns.push(b);
@@ -3520,7 +3520,7 @@ async function saveAnn(payload, err, btn) {
     const d = await r.json().catch(() => ({}));
     if (!r.ok) throw new Error(d.error || 'could not save that');
     ANN = d.announcements || [];
-    busyDone(payload.deleted ? 'Hidden — you can still put it back'
+    busyDone(payload.deleted ? 'Hidden. You can still put it back'
                              : (payload.id ? 'Saved' : 'Posted'));
     // Out of the composer the way you came in, exactly like the timetable's.
     if (view.compose) history.back(); else render();
@@ -3606,10 +3606,10 @@ function renderAnnouncements() {
   if (!list.length) {
     return saying('Nothing on the notice board yet.',
       atLeast('cr')
-        ? 'Anything the whole section needs to know goes here — a moved '
+        ? 'Anything the whole section needs to know goes here: a moved '
           + 'lab, a deadline, where the lecture is. Everyone approved sees it, '
           + 'and pinned ones stay at the top.'
-        : 'This is where the section is told things — a moved lab, a '
+        : 'This is where the section is told things: a moved lab, a '
           + 'deadline, where a lecture is. Your CR or your admin puts them up, and '
           + 'they are the first thing on this screen until you have read them.');
   }
@@ -3656,7 +3656,7 @@ function boardRow(r) {
     + '<span class="lvl"></span><span class="pts"></span>';
   // No score, no place: everybody who has not started yet shares the last rank,
   // and printing that number would be an invented position.
-  el.querySelector('.pos').textContent = r.score ? '#' + r.rank : '—';
+  el.querySelector('.pos').textContent = r.score ? '#' + r.rank : '-';
   // Twenty classmates, and the only thing telling one row from the next was
   // which number was on it. The face goes between the rank and the name --
   // where a rank reads as "who", not as "how many".
@@ -3695,7 +3695,7 @@ function drawBoard(box) {
       ? 'Nobody has added anything this week yet.'
       : 'Nobody has added anything yet.';
     two.textContent = 'The first recording or set of slides puts somebody here. '
-      + 'Points are recognition only — every note in the library is open to '
+      + 'Points are recognition only: every note in the library is open to '
       + 'everyone whatever this says.';
     box.append(one, two);
     return;
@@ -3821,7 +3821,7 @@ function wallComposer(kind) {
   const ta = document.createElement('textarea');
   ta.maxLength = 2000;
   ta.placeholder = kind === 'feed'
-    ? 'Say something to the section — lost something, found something, or ask.'
+    ? 'Say something to the section: lost something, found something, or ask.'
     : 'Say it without your name on it. Three a day, and an admin can take one '
       + 'down, but nobody is ever told who wrote it.';
   ta.setAttribute('aria-label', kind === 'feed' ? 'Your post' : 'Your confession');
@@ -3921,7 +3921,7 @@ function wallSection() {
   if (!list.length) {
     return void box.appendChild(quiet(wallOn === 'feed'
       ? 'Nothing here yet. Lost something? Found something? Tap + and say so.'
-      : 'Nothing yet. Tap + to write one — nobody is ever told it was you.'));
+      : 'Nothing yet. Tap + to write one. Nobody is ever told it was you.'));
   }
   list.forEach(x => box.appendChild(postCard(x, wallOn)));
 }
@@ -4052,7 +4052,7 @@ function eventCard(e) {
     p.textContent = e.blurb;
     el.appendChild(p);
   }
-  if (e.deleted) el.appendChild(quiet('Taken down — only you and the admins see this.'));
+  if (e.deleted) el.appendChild(quiet('Taken down. Only you and the admins see this.'));
   if (mayEditEvent(e)) {
     const acts = document.createElement('div');
     acts.className = 'acts';
@@ -4086,7 +4086,7 @@ function eventsSection() {
   const list = campusList('events');
   if (!list.length) {
     return saying('Nothing on the calendar right now.',
-      'A fest, a workshop, a competition — anything with a date on it goes '
+      'A fest, a workshop, a competition: anything with a date on it goes '
       + 'here and stays until the day it ends. Nothing is invented: an event '
       + 'is here because somebody in the section put it here.');
   }
@@ -4171,7 +4171,7 @@ function clubsSection() {
   const list = campusList('clubs');
   if (!list.length) {
     return saying('No societies listed yet.',
-      'This is the directory of what runs on campus — what each society does '
+      'This is the directory of what runs on campus: what each society does '
       + 'and how to reach them. Your class admin fills it in.');
   }
   list.forEach(c => nav.appendChild(clubCard(c)));
@@ -4327,7 +4327,7 @@ function placesSection() {
   const list = campusList('places');
   if (!list.length) {
     return saying('No places listed yet.',
-      'Lecture halls, hostels, the canteens, the gates — everywhere a '
+      'Lecture halls, hostels, the canteens, the gates: everywhere a '
       + 'first-year has to find in week one.');
   }
   PLACE_KINDS.forEach(([kind, label]) => {
@@ -4414,7 +4414,7 @@ function eventForm() {
   ].map(f => Object.assign(f, {value: f.value != null ? f.value : e[f.name]})),
   e.id ? 'Save changes' : 'Add it', (got, err, btn) => {
     if (!got.title.value.trim()) return void (err.textContent = 'An event needs a name.');
-    if (!got.date.value) return void (err.textContent = 'An event needs a date — that is the whole point of one.');
+    if (!got.date.value) return void (err.textContent = 'An event needs a date. That is the whole point of one.');
     saveCampus('/event', {
       id: e.id, title: got.title.value, society: got.society.value,
       date: got.date.value, ends: got.ends.value, venue: got.venue.value,
@@ -4912,7 +4912,7 @@ const ROLE_SAYS = {
 // Said in exactly one place, and read by the sheet, the Explain panel and this
 // screen. A lock that gives three different reasons is three locks.
 const LOCK_ADD = 'Adding to the library is for trusted members. An admin makes '
-  + 'you one — ask in your class group and say what you want to add.';
+  + 'you one. Ask in your class group and say what you want to add.';
 // What each action is worth, in the order the tally above shows them. The
 // numbers are the view's -- change them there and change them here, and the
 // test that reads both is what says so.
@@ -4923,7 +4923,7 @@ const POINT_RULES = [
 ];
 const LOCK_EXPLAIN = 'Explain is for trusted members: every tap spends the '
   + 'class’s API budget on the Mac that runs this. An admin makes you '
-  + 'trusted — ask in your class group.';
+  + 'trusted. Ask in your class group.';
 
 // Your own two fields, in the card they replace. Nothing else on this screen
 // is yours to change: /profile writes name and phone, and the database pins
@@ -5055,12 +5055,12 @@ async function renderMe() {
                                    : d.pending + ' people are waiting to be let in')
                 : 'Members, roles, the invite link, and anything reported', a)));
     if (d.invite) {
-      const b = line(d.invite, 'Invite code — tap to copy',
+      const b = line(d.invite, 'Invite code, tap to copy',
                      document.createElement('button'));
       const cap = b.querySelector('small');
       b.onclick = async () => {
         try { await navigator.clipboard.writeText(d.invite); flash(cap, 'Copied'); }
-        catch { flash(cap, 'Copy failed — read it out'); }
+        catch { flash(cap, 'Copy failed. Read it out'); }
       };
       rows.push(inked(b));
     } else {
@@ -5158,7 +5158,7 @@ function renderSearch(needle) {
   }
   if (!shown) saying('Nothing matches that. Try a subject code like CY1107.',
                      'This reads every note and every transcript in the library, '
-                     + 'not only their titles \u2014 so a word you remember the '
+                     + 'not only their titles, so a word you remember the '
                      + 'professor saying will find the lecture it was said in.');
 }
 
@@ -5512,14 +5512,14 @@ function drawDoubts(instead) {
   const onFile = !!(threadOn && threadOn.material);
   box.appendChild(askBox(
     onFile
-      ? 'Say something about this file — a page that is wrong, or what it is.'
+      ? 'Say something about this file: a page that is wrong, or what it is.'
       : 'Ask the section about this. Somebody who was there will know.',
     onFile ? 'Post this comment' : 'Ask the section', null));
   if (!THREAD.length) {
     return box.appendChild(quiet(
       onFile
         ? 'Nothing said about this one yet.'
-        : 'No questions on this one yet. Asking is worth as much as answering — '
+        : 'No questions on this one yet. Asking is worth as much as answering, '
           + 'if you are stuck, somebody else is too.'));
   }
   THREAD.forEach(q => box.appendChild(doubtCard(q)));
@@ -5553,7 +5553,7 @@ async function askTheMachine(q, btn, what, row) {
     body.insertBefore(out, meta);
     // Said under the answer and not over it, because it is what you want to
     // know after reading one: who said this, and is it staying.
-    meta.textContent = 'AI, not a classmate. Not saved — check it against the lecture.';
+    meta.textContent = 'AI, not a classmate. Not saved: check it against the lecture.';
     busyDone('');
   } catch (e) {
     btn.disabled = false;
@@ -6331,7 +6331,7 @@ async function refresh() {
     if (!subj.options.length) {
       for (const c of d.codes) {
         const o = document.createElement('option');
-        o.value = c.code; o.textContent = c.code + ' — ' + c.name;
+        o.value = c.code; o.textContent = c.code + ', ' + c.name;
         subj.appendChild(o);
       }
     }
@@ -6519,7 +6519,7 @@ function upload(blob, name) {
   if (blob.size > cap) {
     prog.classList.add('err');
     fill.style.width = '100%';
-    ptxt.textContent = `${name} is ${mb(blob.size)} — the limit is ${mb(cap)}`;
+    ptxt.textContent = `${name} is ${mb(blob.size)}, the limit is ${mb(cap)}`;
     return;
   }
 
@@ -6541,7 +6541,7 @@ function upload(blob, name) {
   const fail = (msg, retry = true) => {
     prog.classList.add('err');
     fill.style.width = '100%';
-    ptxt.textContent = msg + (retry ? ' — tap an option to try again' : '');
+    ptxt.textContent = msg + (retry ? ', tap an option to try again' : '');
   };
 
   xhr.onload = () => {
@@ -6586,7 +6586,7 @@ async function uploadBatch(files, title) {
     if (f.size > LIMIT_DOC) {
       prog.classList.add('err');
       fill.style.width = '100%';
-      ptxt.textContent = `${f.name} is ${mb(f.size)} — the limit is ${mb(LIMIT_DOC)}`;
+      ptxt.textContent = `${f.name} is ${mb(f.size)}, the limit is ${mb(LIMIT_DOC)}`;
       return;
     }
     const label = `File ${i + 1} of ${files.length}`;
@@ -6960,7 +6960,7 @@ def export(args):
 
     lib = Path(args.library)
     if not lib.exists():
-        raise SystemExit(f"no library at {lib} yet — transcribe or add something first")
+        raise SystemExit(f"no library at {lib} yet, transcribe or add something first")
 
     out = args.out
     data = build_data(lib, out.parent)
@@ -6968,7 +6968,7 @@ def export(args):
     if not any(s["notes"] or s["uploads"] for s in data):
         # Not fatal any more: the page lists the twelve subjects, and it is
         # where you go to put the first thing into one of them.
-        print("library is empty — the page will list the subjects and nothing else",
+        print("library is empty, the page will list the subjects and nothing else",
               file=sys.stderr)
 
     out.parent.mkdir(parents=True, exist_ok=True)
@@ -7050,7 +7050,7 @@ def revise(args):
     text = "".join(b.text for b in msg.content if b.type == "text")
 
     out = folder / "revision.md"
-    out.write_text(f"# Revision — {SUBJECTS[code][0].replace('-', ' ')}\n\n{text}\n")
+    out.write_text(f"# Revision, {SUBJECTS[code][0].replace('-', ' ')}\n\n{text}\n")
     cost = msg.usage.input_tokens / 1e6 * rate_in + msg.usage.output_tokens / 1e6 * rate_out
     print(f"  {msg.usage.input_tokens} in / {msg.usage.output_tokens} out (~${cost:.3f})",
           file=sys.stderr)
@@ -9891,7 +9891,7 @@ def db_set_section_timetable(conn, section_id, rows):
 GATE_PAGE = r"""<!doctype html>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<title>recarve — MANIT first year</title>
+<title>recarve · MANIT first year</title>
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Figtree:wght@400;500;600&amp;family=Kalam:wght@400;700&amp;display=swap">
 <style>
@@ -10404,7 +10404,7 @@ JOIN_BODY = r"""<div class="land">
 <section class="hero">
   <h1>Sleep through class. <span>Wake up to notes.</span></h1>
   <p class="lede">Every lecture, written down. One person records the class. Everyone
-  gets the notes &mdash; Hindi, English, or both in the same sentence.</p>
+  gets the notes: Hindi, English, or both in the same sentence.</p>
   <p class="where">Every first-year section at MANIT Bhopal, 2026&ndash;27.
   Your address says which one is yours.</p>
   <div class="ctas">__DOOR__</div>
@@ -10446,7 +10446,7 @@ JOIN_BODY = r"""<div class="land">
     </div>
   </div>
 </div>
-  <figcaption>Hero animation &mdash; a lecture being recorded, and the notes
+  <figcaption>Hero animation: a lecture being recorded, and the notes
   appearing under it.</figcaption>
 </figure>
 
@@ -10458,7 +10458,7 @@ JOIN_BODY = r"""<div class="land">
   <div class="row">
     <div>
       <h3>Hindi and English mixed</h3>
-      <p>The way your professors actually talk, switching mid-sentence &mdash;
+      <p>The way your professors actually talk, switching mid-sentence:
       transcribed properly, not garbled.</p>
     </div>
     <figure class="shot" id="shot-mixed">
@@ -10482,7 +10482,7 @@ JOIN_BODY = r"""<div class="land">
     </div>
   </div>
 </div>
-    <figcaption>Preview &mdash; a mixed Hindi and English line being
+    <figcaption>Preview: a mixed Hindi and English line being
       transcribed.</figcaption>
     </figure>
   </div>
@@ -10514,7 +10514,7 @@ JOIN_BODY = r"""<div class="land">
     </div>
   </div>
 </div>
-    <figcaption>Preview &mdash; a practice question, and the answer being
+    <figcaption>Preview: a practice question, and the answer being
       revealed.</figcaption>
     </figure>
   </div>
@@ -10523,7 +10523,7 @@ JOIN_BODY = r"""<div class="land">
     <div>
       <h3>Your 75%, per subject</h3>
       <p>Mark attendance in one tap. It tells you exactly how many classes you
-      can miss &mdash; and never rounds you up.</p>
+      can miss, and never rounds you up.</p>
     </div>
     <figure class="shot" id="shot-attendance">
 <div class="at" aria-hidden="true">
@@ -10554,14 +10554,14 @@ JOIN_BODY = r"""<div class="land">
     </div>
   </div>
 </div>
-    <figcaption>Preview &mdash; marking a class, and the number of misses
+    <figcaption>Preview: marking a class, and the number of misses
       left moving.</figcaption>
     </figure>
   </div>
 
   <div class="three">
     <div><h3>Everything in one place, per subject</h3><p>Everyone&rsquo;s notes,
-      slides and photos of the board &mdash; not scattered across five WhatsApp
+      slides and photos of the board, not scattered across five WhatsApp
       groups and Teams.</p></div>
     <div><h3>Somewhere to ask</h3><p>Stuck at 1&nbsp;am? Post a doubt under the
       lecture. Classmates answer, the best answer rises.</p></div>
@@ -10576,7 +10576,7 @@ JOIN_BODY = r"""<div class="land">
       The question about tomorrow&rsquo;s tutorial goes where the people who
       know are.</p></div>
     <div><h3>The notice board</h3><p>Announcements from your CR, pinned at the
-      top &mdash; not forty messages up in a group you muted.</p></div>
+      top, not forty messages up in a group you muted.</p></div>
   </div>
 </section>
 
@@ -10595,7 +10595,7 @@ JOIN_BODY = r"""<div class="land">
   <div class="three">
     <div><h3>The feed</h3><p>Your section, talking. Lost keys, a change of room,
       somebody selling a drafter.</p></div>
-    <div><h3>Confessions</h3><p>Anonymous, and anonymous properly &mdash; no
+    <div><h3>Confessions</h3><p>Anonymous, and anonymous properly: no
       name is stored against it, so nobody can be shown one later.</p></div>
     <div><h3>Who has contributed</h3><p>Standings for the people who record and
       upload, because somebody has to and it should be seen.</p></div>
@@ -10772,7 +10772,7 @@ $('f').onsubmit = async e => {
 
 SET_PASSWORD_BODY = r"""<h1>Pick a password</h1>
 <p>One thing before the library opens. Until you set a password, anyone who
-knows your roll number can sign in as you — and a roll number is on every list
+knows your roll number can sign in as you, and a roll number is on every list
 in the institute.</p>
 <form id="f">
   <label for="pw">New password</label>
@@ -10816,7 +10816,7 @@ $('f').onsubmit = async e => {
 
 WAIT_BODY = r"""<h1>Almost in</h1>
 <p>Your request is with the admin. This page lets you through the moment they
-approve you — leave it open, it rechecks itself.</p>
+approve you. Leave it open; it rechecks itself.</p>
 <script>setTimeout(() => location.reload(), 15000);</script>
 """
 
@@ -10833,7 +10833,7 @@ ADMIN_BODY = r"""<p><a href="/">&lsaquo; Back to recarve</a></p>
 <div id="list">loading&hellip;</div>
 
 <h2>Members</h2>
-<p>Students read. Trusted members upload, record and use Explain &mdash; that one
+<p>Students read. Trusted members upload, record and use Explain, that one
 spends money. Admins also let people in. Resetting a password puts somebody
 back to signing in with their roll number until they pick a new one. You cannot
 change your own row: an admin who demotes themselves leaves a class nobody can
@@ -11249,7 +11249,7 @@ SUPER_BODY = r"""<div class="row spread">
   <div class="card">
     <h3>Timetable</h3>
     <p class="lede">Paste <code>day,period,subject_code</code>, one line each.
-    Every line is read before any of them is written &mdash; if one is wrong,
+    Every line is read before any of them is written, if one is wrong,
     none of them is.</p>
     <textarea id="csv" spellcheck="false"
       placeholder="day,period,subject_code&#10;Monday,1,MC1101&#10;Monday,2,MA1101"></textarea>
@@ -11373,7 +11373,7 @@ async function show(id) {
   body.innerHTML = '';
   if (!s.members.length) {
     const tr = document.createElement('tr');
-    cell(tr, 'nobody has joined yet — hand out the invite code', 'mut').colSpan = 5;
+    cell(tr, 'nobody has joined yet. Hand out the invite code', 'mut').colSpan = 5;
     body.appendChild(tr);
   }
   for (const m of s.members) {
@@ -11607,7 +11607,7 @@ def build_server(args):
         if adopted:
             log(f"registered {adopted} existing file(s) under the admin", "backfill")
         if first:
-            log(f"nobody has joined yet — whoever uses invite code {first} first "
+            log(f"nobody has joined yet, whoever uses invite code {first} first "
                 f"becomes the admin", "invite")
 
     # The queue lives in memory but the audio lives on disk, so a restart used
@@ -13046,7 +13046,7 @@ def build_server(args):
                 # disk forever.
                 path.unlink(missing_ok=True)
             jobs.track(path, code, "failed" if over else "queued",
-                       error if over else f"{error} — retrying ({attempts} of {MAX_ATTEMPTS})")
+                       error if over else f"{error}, retrying ({attempts} of {MAX_ATTEMPTS})")
             log(f"{path.name}: {error}" + ("" if over else f" (try {attempts}, will retry)"),
                 "worker-fail")
             return self.reply(200, {"retrying": not over})
@@ -13112,7 +13112,7 @@ def build_server(args):
                     self.close_connection = True   # body left unread; do not reuse
                     what = "a recording" if is_audio else "notes and slides"
                     return self.reply(413, {
-                        "error": f"{name} is {mb(n, up=True)} — the limit for {what} "
+                        "error": f"{name} is {mb(n, up=True)}, the limit for {what} "
                                  f"is {mb(cap)}", "limit": cap, "size": n})
                 dest = (inbox / f"{code}-{name}") if is_audio \
                     else (subject_dir(args.library, code, "uploads") / name)
@@ -14431,7 +14431,7 @@ def main():
                     help="hand lectures to `notes.py worker` on another machine "
                          "instead of transcribing them here (the cloud VM has no GPU)")
     sv.add_argument("--no-auth", action="store_true",
-                    help="no join screen, no database, no gate — the old single-user "
+                    help="no join screen, no database, no gate, the old single-user "
                          "behaviour, for working on this laptop")
     sv.add_argument("--verbose", action="store_true")
     sv.set_defaults(func=serve)

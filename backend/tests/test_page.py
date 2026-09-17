@@ -1623,7 +1623,7 @@ location.hash = '#classes'; route();
 ATT.closed = [{date: '2026-09-14', title: 'Ganesh Chaturthi', kind: 'holiday'}];
 dayDate = '2026-09-14';
 location.hash = '#classes/day'; writes = []; route();
-assert.ok(says('Ganesh Chaturthi — no classes.'),
+assert.ok(says('Ganesh Chaturthi, no classes.'),
           'the day names the holiday, not "No classes on Monday"');
 assert.ok(!wrote(['textContent', 'Period 1 · Not marked']),
           'and offers no class to mark on a day the institute closed');
@@ -1678,7 +1678,7 @@ assert.ok(wrote(['className', 'today has']), 'today is marked, and has classes')
 assert.ok(wrote(['()', 'aria-label', 'Wednesday 9 September, Test holiday']),
           'a closed day is marked as one, in words');
 assert.ok(wrote(['()', 'aria-label', 'Today, 3 classes']), 'today says how many classes');
-assert.ok(says('Wednesday: Test holiday — no classes'), 'and the strip says why');
+assert.ok(says('Wednesday: Test holiday, no classes'), 'and the strip says why');
 assert.ok(says('Mid-term examinations') && says('In 50 days · Oct 27'), 'several dates, not one');
 assert.ok(wrote(['textContent', 'Oct']) && wrote(['textContent', 27]), 'each on a tear-off date tile');
 ATT.closed = []; delete ATT.upcoming;
@@ -2072,7 +2072,7 @@ def test_a_refused_upload_is_not_told_to_try_again():
     up = re.search(r"function upload\(blob, name\) \{.*?\n\}", notes.PAGE, re.S).group(0)
     assert "if (xhr.status === 403)" in up, "a no is not a failed upload"
     assert "fail(LOCK_ADD, false)" in up, "and it says the same thing every other lock does"
-    assert "retry ? ' — tap an option to try again' : ''" in up
+    assert "retry ? ', tap an option to try again' : ''" in up
 
 
 # -------------------------------------------------- what a student is shown
