@@ -690,3 +690,12 @@ def test_the_worker_token_is_read_out_of_a_dotenv_file(tmp_path):
         assert notes.worker_token(env_path=env) == "minted-later"
     finally:
         os.environ["RECARVE_WORKER_TOKEN"] = TOKEN
+
+
+def test_jobs_says_when_the_worker_was_last_heard_from(remote):
+    """A queued lecture on the phone has to be able to say whether anything is
+    coming for it: seconds since a worker last asked for work."""
+    port = remote["port"]
+    claim(port)
+    seen = js(call(port, "GET", "/jobs", cookie=remote["admin"]))[1]["worker"]
+    assert seen is not None and 0 <= seen < 5
