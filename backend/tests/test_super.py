@@ -803,7 +803,7 @@ def section_of(port, cookie, roll):
 # ------------------------------------------------------ who was here (0054)
 
 def test_a_tap_is_stamped_and_a_poll_is_not(server, cookie):
-    _, _, student = join(server, "Seen Once", "24S777")
+    _, _, student = join(server, "Seen Once", "24S777", approved=True)
     mine = {notes.SESSION_COOKIE: student}
     notes._seen.clear()
     call(server, "GET", "/jobs", cookies=mine)
@@ -821,8 +821,33 @@ def test_a_tap_is_stamped_and_a_poll_is_not(server, cookie):
     assert d["people"][0]["roll_no"] == "24S777", "most recently seen comes first"
     u = d["stats"]["users"]
     assert u["now"] >= 1 and u["d1"] >= 1 and u["total"] >= u["ever"] >= 1
-    assert len(d["stats"]["days"]) == 14 and d["stats"]["days"][-1]["users"] >= 1
+    assert len(d["stats"]["days"]) == 30 and d["stats"]["days"][-1]["users"] >= 1
     assert d["stats"]["server"]["disk_total"] > 0 and d["stats"]["db"]["size"] > 0
+    # The same day, from the other side: their own Me screen counts it as a
+    # streak of one, off a table they cannot read directly.
+    me_screen = said(call(server, "GET", "/me", cookies=mine)[1])
+    assert me_screen["activity"] == {"streak": 1, "active_days": 1}
+
+
+def test_a_streak_is_days_in_a_row_ending_now(server, cookie):
+    """Yesterday and today are a streak of two; a gap before that ends it, and
+    a run that ended two days ago is no streak at all."""
+    _, _, student = join(server, "Streak Kept", "24S779", approved=True)
+    mine = {notes.SESSION_COOKIE: student}
+    with psycopg.connect(DB_URL, autocommit=True) as conn:
+        (pid,) = conn.execute("select id from profiles where roll_no = '24S779'").fetchone()
+        stamp = lambda back: conn.execute(
+            "insert into activity_days (profile_id, day, last_path, agent)"
+            " values (%s, current_date - %s, '/', '') on conflict do nothing", (pid, back))
+        stamp(1); stamp(4); stamp(5)
+        notes._seen.clear()
+        call(server, "GET", "/classes", cookies=mine)  # today
+        assert said(call(server, "GET", "/me", cookies=mine)[1])["activity"] == \
+            {"streak": 2, "active_days": 4}
+        conn.execute("delete from activity_days where profile_id = %s and day >= current_date - 1", (pid,))
+        stamp(2)
+        assert said(call(server, "GET", "/me", cookies=mine)[1])["activity"] == \
+            {"streak": 0, "active_days": 3}
 
 
 def test_a_member_cannot_read_or_write_who_was_here(server):

@@ -5449,6 +5449,28 @@ async function renderMe() {
     can.push(line('What trusted adds', LOCK_ADD));
   block('Your access', can);
 
+  // What you have put in and how often you are here, as two rows rather than
+  // a second card: the score already has a screen of its own, and the streak
+  // is one number. Absent when the server could not count it, not zero.
+  if (d.activity) {
+    const a = d.activity, p = d.points || {};
+    const streak = a.streak
+      ? a.streak + (a.streak === 1 ? ' day' : ' days') + ' in a row'
+      : 'No streak yet';
+    const pts = line((p.score || 0) + (p.score === 1 ? ' point' : ' points'),
+                     [p.uploads || 0, 'uploads'].join(' ') + ' · ' + (p.recordings || 0)
+                     + ' recordings · tap for the rules', document.createElement('a'));
+    pts.href = hashOf('me', 'points');
+    pts.onclick = (e) => { e.preventDefault(); go('me', 'points'); };
+    block('Your activity', [
+      line(streak, a.active_days
+        ? 'Here on ' + a.active_days + (a.active_days === 1 ? ' day' : ' days')
+          + ' so far. Open it tomorrow to keep the streak.'
+        : 'Today is the first day that counts.'),
+      pts,
+    ]);
+  }
+
   // The things only an admin can do, on the only screen that is theirs, marked
   // as theirs. The server decides: a member's /me carries no invite code at
   // all, and the invites table has no read policy for them either.
@@ -5484,7 +5506,21 @@ async function renderMe() {
     try { (await caches.keys()).forEach(k => caches.delete(k)); } catch {}
     location.href = '/';
   };
-  block('This device', [out]);
+  // What this phone is holding for offline. Filled in after the block is
+  // drawn, because the estimate is async and the row should not wait on it.
+  const kept = line('Offline copies', 'Checking what is saved here…');
+  block('This device', [kept, out]);
+  (async () => {
+    const sub = kept.querySelector('small');
+    try {
+      const n = (await caches.keys()).length;
+      const est = navigator.storage && navigator.storage.estimate
+        ? await navigator.storage.estimate() : {};
+      const mb = est.usage ? Math.max(1, Math.round(est.usage / 2**20)) + ' MB used' : null;
+      sub.textContent = [n ? n + (n === 1 ? ' cache' : ' caches') : 'Nothing cached yet',
+                         mb, navigator.onLine ? 'online' : 'offline'].filter(Boolean).join(' · ');
+    } catch { sub.textContent = 'This browser does not say'; }
+  })();
 }
 
 // The score, the rules that made it, and the two lists of what you put in. The
@@ -8470,6 +8506,23 @@ def note_seen(profile_id, path, agent):
         log(f"could not stamp {key}: {type(e).__name__}", "seen")
 
 
+def db_streak(conn, user_id):
+    """One member's own activity: days in a row with a tap in them, ending
+    today or yesterday, and how many days ever. Owning connection, because
+    activity_days has no member policy; the filter is the session's own id."""
+    gaps = [r[0] for r in conn.execute(
+        "select current_date - day from activity_days where profile_id = %s::uuid"
+        " order by 1", (str(user_id),))]
+    streak = 0
+    if gaps and gaps[0] <= 1:
+        streak = 1
+        for a, b in zip(gaps, gaps[1:]):
+            if b != a + 1:
+                break
+            streak += 1
+    return {"streak": streak, "active_days": len(gaps)}
+
+
 def device_of(agent):
     """'iPhone', 'Android', 'Mac'... off a user agent. Order matters: an
     Android phone says Linux and an iPad says Mac OS X."""
@@ -8535,7 +8588,7 @@ def db_stats(conn):
             " from activity_days")
     days = [{"day": r[0].isoformat(), "users": r[1], "minutes": r[2]} for r in conn.execute(
         "select d::date, count(a.profile_id), coalesce(sum(a.minutes), 0)"
-        " from generate_series(current_date - 13, current_date, interval '1 day') d"
+        " from generate_series(current_date - 29, current_date, interval '1 day') d"
         " left join activity_days a on a.day = d::date group by 1 order by 1")]
     devices = {}
     for (agent,) in conn.execute(
@@ -11879,11 +11932,11 @@ SUPER_PAGE = r"""<!doctype html>
 <title>recarve super admin</title>
 <style>
 :root{color-scheme:light dark;--bg:#faf9f4;--fg:#16183d;--mut:#5b6070;--line:#e6e4da;
-  --accent:#6534c9;--accent-fg:#fff;--err:#d1344b;--ok:#1a7f4b;
+  --accent:#6534c9;--accent-fg:#fff;--err:#d1344b;--ok:#1a7f4b;--warn:#a05a00;
   --admin:#232733;--admin-fg:#faf9f4;--surface:#f3f2ea}
 @media (prefers-color-scheme:dark){
   :root{--bg:#0f1115;--fg:#e7e9ee;--mut:#98a0ad;--line:#262a32;
-    --accent:#ac93ff;--accent-fg:#0f1115;--err:#e5484d;--ok:#3ee089;
+    --accent:#ac93ff;--accent-fg:#0f1115;--err:#e5484d;--ok:#3ee089;--warn:#f0bd6a;
     --admin:#dfe4f0;--admin-fg:#0f1115;--surface:#171a20}}
 *{box-sizing:border-box}
 body{margin:0;min-height:100dvh;background:var(--bg);color:var(--fg);
@@ -11958,9 +12011,17 @@ ul.errs li{margin:0 0 4px;font-family:ui-monospace,SFMono-Regular,Menlo,monospac
 .meter{margin:0 0 12px;font-size:13px}
 .meter i{display:block;height:8px;border-radius:7px;background:var(--line);overflow:hidden;margin:4px 0 0}
 .meter i u{display:block;height:100%;background:var(--accent)}
+.meter.warm i u{background:var(--warn)}
 .meter.hot i u{background:var(--err)}
-.bars{display:flex;align-items:flex-end;gap:4px;height:6rem}
-.bars div{flex:1;min-height:2px;border-radius:7px 7px 0 0;background:var(--accent)}
+/* Thirty days as one line. Inline SVG, so it is the page's own colours. */
+.spark{display:block;width:100%;height:6rem}
+.spark path{fill:var(--accent);opacity:.15}
+.spark polyline{fill:none;stroke:var(--accent);stroke-width:2;stroke-linejoin:round}
+.spark circle{fill:var(--accent)}
+th[data-k]{cursor:pointer;user-select:none}
+th[aria-sort]{color:var(--fg)}
+th[aria-sort=ascending]::after{content:' \2191'}
+th[aria-sort=descending]::after{content:' \2193'}
 .two{display:grid;gap:16px;grid-template-columns:1fr}
 @media (min-width:40rem){.two{grid-template-columns:1fr 1fr}}
 .two .card{margin:0}
@@ -12008,7 +12069,8 @@ $('f').onsubmit = async e => {
 SUPER_BODY = r"""<div class="row spread">
   <div><h1>Every section</h1>
   <p class="lede">Above the section line. Nothing on this screen is narrowed to
-  one class, which is the whole reason it is not in the app.</p></div>
+  one class, which is the whole reason it is not in the app.
+  <span id="stamp"></span></p></div>
   <span class="pill">Super admin</span>
 </div>
 
@@ -12016,8 +12078,8 @@ SUPER_BODY = r"""<div class="row spread">
 <div class="two">
   <div class="card"><h3>Server</h3><p class="lede" id="srvsub"></p><div id="meters"></div></div>
   <div class="card"><h3>People a day</h3>
-    <p class="lede" id="dayssub">The last fourteen days.</p>
-    <div class="bars" id="bars"></div>
+    <p class="lede" id="dayssub">The last thirty days.</p>
+    <svg class="spark" id="spark" viewBox="0 0 300 60" preserveAspectRatio="none" role="img"></svg>
     <p class="lede" id="devices" style="margin:12px 0 0"></p></div>
 </div>
 
@@ -12026,8 +12088,10 @@ SUPER_BODY = r"""<div class="row spread">
 Minutes are minutes with a tap in them, not a tab left open.</p>
 <div class="card scroll">
   <input id="find" placeholder="Filter by name, roll or section" style="margin:0 0 12px">
-  <table><thead><tr><th>Who</th><th>Section</th><th>Last here</th><th>Last did</th>
-    <th>On</th><th class="num">Days</th><th class="num">Minutes</th><th>Joined</th></tr></thead>
+  <table><thead><tr><th data-k="name">Who</th><th data-k="section">Section</th>
+    <th data-k="last_seen" aria-sort="descending">Last here</th><th data-k="last_path">Last did</th>
+    <th data-k="device">On</th><th class="num" data-k="days">Days</th>
+    <th class="num" data-k="minutes">Minutes</th><th data-k="joined">Joined</th></tr></thead>
     <tbody id="people"></tbody></table>
 </div>
 
@@ -12183,7 +12247,7 @@ function tile(n, label) {
 function meter(label, used, total, text) {
   const pct = total ? Math.min(100, used / total * 100) : 0;
   const d = document.createElement('div');
-  d.className = 'meter' + (pct > 85 ? ' hot' : '');
+  d.className = 'meter' + (pct > 85 ? ' hot' : pct > 65 ? ' warm' : '');
   d.innerHTML = '<span></span><i><u></u></i>';
   d.firstChild.textContent = label + ' · ' + text + ' · ' + Math.round(pct) + '%';
   d.querySelector('u').style.width = pct + '%';
@@ -12191,11 +12255,19 @@ function meter(label, used, total, text) {
 }
 
 let PEOPLE = [];
+// Which column, and which way. Nulls (never seen) sink to the bottom either way.
+let SORT = {k: 'last_seen', dir: -1};
 function people() {
   const q = $('find').value.trim().toLowerCase();
   const body = $('people');
   body.innerHTML = '';
-  for (const m of PEOPLE) {
+  const rows = PEOPLE.slice().sort((a, b) => {
+    const x = a[SORT.k], y = b[SORT.k];
+    if (x == null || x === '') return y == null || y === '' ? 0 : 1;
+    if (y == null || y === '') return -1;
+    return (typeof x === 'number' ? x - y : String(x).localeCompare(String(y))) * SORT.dir;
+  });
+  for (const m of rows) {
     if (q && ![m.name, m.roll_no, m.section].join(' ').toLowerCase().includes(q)) continue;
     const tr = document.createElement('tr');
     const who = cell(tr, '', 'name');
@@ -12217,6 +12289,15 @@ function people() {
   }
 }
 $('find').oninput = people;
+for (const th of document.querySelectorAll('th[data-k]')) th.onclick = () => {
+  const k = th.dataset.k;
+  // Numbers and dates open biggest first; words open A to Z.
+  SORT = SORT.k === k ? {k, dir: -SORT.dir}
+       : {k, dir: ['name', 'section', 'last_path', 'device'].includes(k) ? 1 : -1};
+  for (const t of document.querySelectorAll('th[data-k]')) t.removeAttribute('aria-sort');
+  th.setAttribute('aria-sort', SORT.dir > 0 ? 'ascending' : 'descending');
+  people();
+};
 
 function stats(st) {
   const u = st.users, sv = st.server;
@@ -12245,23 +12326,43 @@ function stats(st) {
   ].filter(Boolean).join(' · ');
 
   const top = Math.max(1, ...st.days.map(d => d.users));
-  $('bars').innerHTML = '';
-  for (const d of st.days) {
-    const b = document.createElement('div');
-    b.style.height = d.users / top * 100 + '%';
-    b.title = d.day + ': ' + d.users + ' people, ' + d.minutes + ' minutes';
-    $('bars').appendChild(b);
-  }
-  $('dayssub').textContent = 'The last fourteen days. Most in a day: ' + Math.max(...st.days.map(d => d.users)) + '.';
+  const n = st.days.length, W = 300, H = 60;
+  const pt = (d, i) => [(i / (n - 1) * (W - 6) + 3).toFixed(1), (H - 4 - d.users / top * (H - 8)).toFixed(1)];
+  const pts = st.days.map(pt);
+  const svg = $('spark'), NS = 'http://www.w3.org/2000/svg';
+  svg.innerHTML = '';
+  const area = document.createElementNS(NS, 'path');
+  area.setAttribute('d', 'M' + pts[0][0] + ',' + H + ' L' + pts.map(p => p.join(',')).join(' ') + ' L' + pts[n - 1][0] + ',' + H + 'Z');
+  const ln = document.createElementNS(NS, 'polyline');
+  ln.setAttribute('points', pts.map(p => p.join(',')).join(' '));
+  svg.append(area, ln);
+  st.days.forEach((d, i) => {
+    const c = document.createElementNS(NS, 'circle');
+    c.setAttribute('cx', pts[i][0]); c.setAttribute('cy', pts[i][1]); c.setAttribute('r', 2.5);
+    const t = document.createElementNS(NS, 'title');
+    t.textContent = d.day + ': ' + d.users + ' people, ' + d.minutes + ' minutes';
+    c.appendChild(t);
+    svg.appendChild(c);
+  });
+  $('dayssub').textContent = 'The last thirty days. Most in a day: ' + top + '. Today: ' + st.days[n - 1].users + '.';
   $('devices').textContent = Object.entries(st.devices)
     .map(([k, n]) => k + ' ' + n).join(' · ');
 }
 
-async function load() {
+// The numbers and the people, and nothing that somebody may be typing into.
+// The section screen refills the paste box, so it is not on the timer.
+async function refresh() {
   const d = await ask('/super/data');
   stats(d.stats);
   PEOPLE = d.people;
   people();
+  $('stamp').textContent = 'Updated ' + new Date().toLocaleTimeString() + ', refreshes every minute.';
+  return d;
+}
+setInterval(() => { if (!document.hidden) refresh().catch(() => {}); }, 60000);
+
+async function load() {
+  const d = await refresh();
   const rows = $('rows');
   rows.innerHTML = '';
   if (!d.sections.length) {
@@ -13065,6 +13166,14 @@ def build_server(args):
                     out["admin"] = bool(self.me["admin"])
                     out["role"] = self.me["role"]
                     out["invite"] = db_invite(conn) if self.me["admin"] else None
+                    # Streak and days active, off the same table /super reads.
+                    # A member cannot read that table themselves, so the
+                    # owning connection answers, for this session's id only.
+                    try:
+                        with db() as own:
+                            out["activity"] = db_streak(own, self.me["id"])
+                    except psycopg.Error as e:
+                        log(f"cannot count the streak: {e}", "me")
                     if self.me["admin"]:
                         # The badge on the Admin row: a queue you have to open
                         # a second screen to discover is a queue that waits.
