@@ -1799,6 +1799,10 @@ body.reading .tabs{display:none}
 /* The date, torn off, so an event reads as a date first and a name second --
    the same tile Home's Coming up list already uses. */
 .card .when{font-size:13px;color:var(--mut);font-weight:600}
+/* How far away the next one is, in the accent: one chip on one card. */
+.card .soon{display:inline-block;margin-top:8px;padding:3px 10px;border-radius:999px;
+  font-size:13px;font-weight:600;color:var(--accent);
+  background:color-mix(in srgb,var(--accent) 12%,var(--surface))}
 /* A club opens in place. <details> is the platform's own disclosure: it works
    with no JavaScript, it is keyboard and screen-reader correct already, and it
    needs no URL of its own for something that is two sentences long. */
@@ -4149,7 +4153,7 @@ function dateSpan(e) {
 // A card, not a row: an event carries a date, a society, a venue and a line of
 // description, and a row that wraps to four lines is a row pretending to be a
 // card.
-function eventCard(e) {
+function eventCard(e, soon) {
   const el = document.createElement('div');
   el.className = 'card' + (e.deleted ? ' gone' : '');
   const h = document.createElement('h3');
@@ -4161,15 +4165,34 @@ function eventCard(e) {
   meta.textContent = [dateSpan(e), e.society, e.venue, e.mine && 'Added by you']
     .filter(Boolean).join(' · ');
   el.append(h, meta);
+  // The soonest one carries how far away it is, in the words Classes already
+  // uses for the institute's own dates. One chip, on one card: a countdown on
+  // every card is a column of numbers and not an answer to "what is next".
+  if (soon) {
+    const c = document.createElement('span');
+    c.className = 'soon';
+    c.textContent = whenSays(e);
+    el.appendChild(c);
+  }
   if (e.blurb) {
     const p = document.createElement('p');
     p.textContent = e.blurb;
     el.appendChild(p);
   }
   if (e.deleted) el.appendChild(quiet('Taken down. Only you and the admins see this.'));
+  const acts = document.createElement('div');
+  acts.className = 'acts';
+  // Two things a student does with a date: put it in their own calendar, and
+  // send it to the group. Both stay on the phone; neither asks the server.
+  const cal = document.createElement('button');
+  cal.textContent = 'Add to calendar';
+  cal.onclick = () => save(e.title.replace(/[\\/:*?"<>|]+/g, ' ').trim() + '.ics',
+                           icsFor(e), 'text/calendar');
+  const sh = document.createElement('button');
+  sh.textContent = 'Share';
+  sh.onclick = ev => shareEvent(e, ev.currentTarget);
+  acts.append(cal, sh);
   if (mayEditEvent(e)) {
-    const acts = document.createElement('div');
-    acts.className = 'acts';
     const edit = document.createElement('button');
     edit.textContent = 'Edit';
     edit.onclick = () => go('campus', 'event', e.id);
@@ -4177,9 +4200,63 @@ function eventCard(e) {
     drop.textContent = e.deleted ? 'Put it back' : 'Take it down';
     drop.onclick = () => saveCampus('/event', {id: e.id, deleted: !e.deleted});
     acts.append(edit, drop);
-    el.appendChild(acts);
   }
+  el.appendChild(acts);
   return el;
+}
+
+// An all-day VEVENT, built by hand: RFC 5545 is a dozen lines and every
+// calendar on a phone opens a .ics. DTEND is exclusive, so a one-day event
+// ends the morning after it starts.
+function icsFor(e) {
+  const day = d => d.replace(/-/g, '');
+  const esc = t => String(t || '').replace(/\\/g, '\\\\').replace(/\n/g, '\\n')
+                                  .replace(/[,;]/g, m => '\\' + m);
+  return ['BEGIN:VCALENDAR', 'VERSION:2.0', 'PRODID:-//recarve//campus//EN',
+          'BEGIN:VEVENT', 'UID:' + e.id + '@recarve',
+          'DTSTART;VALUE=DATE:' + day(e.date),
+          'DTEND;VALUE=DATE:' + day(shiftDay(e.ends || e.date, 1)),
+          'SUMMARY:' + esc(e.title),
+          e.venue ? 'LOCATION:' + esc(e.venue) : '',
+          'DESCRIPTION:' + esc([e.society, e.blurb].filter(Boolean).join('. ')),
+          'END:VEVENT', 'END:VCALENDAR'].filter(Boolean).join('\r\n') + '\r\n';
+}
+
+async function shareEvent(e, btn) {
+  const text = [e.title, dateSpan(e), e.venue, e.society].filter(Boolean).join(' · ');
+  if (navigator.share) {
+    try { await navigator.share({title: e.title, text}); return; }
+    catch (err) { if (err.name === 'AbortError') return; }
+  }
+  try { await navigator.clipboard.writeText(text); flash(btn, 'Copied'); }
+  catch { flash(btn, 'Copy failed'); }
+}
+
+// Which of the calendar a student is looking at: all of it, today, this week,
+// or one society's. Not a URL: it is a glance, not a place to come back to.
+let eventFilter = 'all';
+function eventShows(e, filter, today) {
+  if (filter === 'all') return true;
+  if (filter === 'today') return e.date <= today && (e.ends || e.date) >= today;
+  if (filter === 'week') return e.date <= shiftDay(today, 6) && (e.ends || e.date) >= today;
+  return e.society === filter;
+}
+
+function eventFilterRow(list) {
+  const row = document.createElement('div');
+  row.className = 'days';
+  const socs = [...new Set(list.map(e => e.society).filter(Boolean))].sort();
+  const opts = [['all', 'All'], ['today', 'Today'], ['week', 'This week']]
+    .concat(socs.map(s => [s, s]));
+  if (!opts.some(([k]) => k === eventFilter)) eventFilter = 'all';
+  for (const [key, label] of opts) {
+    const b = document.createElement('button');
+    b.textContent = label;
+    if (key === eventFilter) b.setAttribute('aria-current', 'true');
+    b.onclick = () => { eventFilter = key; render(); };
+    row.appendChild(b);
+  }
+  nav.appendChild(row);
 }
 
 function eventsSection() {
@@ -4204,7 +4281,17 @@ function eventsSection() {
       + 'here and stays until the day it ends. Nothing is invented: an event '
       + 'is here because somebody in the section put it here.');
   }
-  list.forEach(e => nav.appendChild(eventCard(e)));
+  eventFilterRow(list);
+  const today = attToday();
+  const some = list.filter(e => eventShows(e, eventFilter, today));
+  if (!some.length) {
+    return saying(eventFilter === 'today' ? 'Nothing on today.'
+                : eventFilter === 'week' ? 'Nothing on this week.'
+                : 'Nothing from ' + eventFilter + ' right now.',
+      'The list is sorted soonest first: tap All to see what is further out.');
+  }
+  const next = some.find(e => !e.deleted);
+  some.forEach(e => nav.appendChild(eventCard(e, e === next)));
 }
 
 // A club opens where it stands. <details> is the platform's own disclosure --
@@ -4398,6 +4485,18 @@ function directionsFor(p) {
   return a;
 }
 
+// No pin yet is not no answer: Google Maps knows most of the campus by name,
+// so a place still gets a link, an honest one that searches rather than points.
+function findFor(p) {
+  const a = document.createElement('a');
+  a.href = 'https://www.google.com/maps/search/?api=1&query='
+         + encodeURIComponent(p.name + ' MANIT Bhopal');
+  a.target = '_blank';
+  a.rel = 'noopener noreferrer';
+  a.textContent = 'Find on the map';
+  return a;
+}
+
 function placeCard(p) {
   const el = document.createElement('div');
   el.className = 'card' + (p.hidden ? ' gone' : '');
@@ -4412,7 +4511,7 @@ function placeCard(p) {
   el.append(h, meta);
   const acts = document.createElement('div');
   acts.className = 'acts';
-  if (p.lat != null && p.lng != null) acts.appendChild(directionsFor(p));
+  acts.appendChild(p.lat != null && p.lng != null ? directionsFor(p) : findFor(p));
   if (mayCurate()) {
     const edit = document.createElement('button');
     edit.textContent = 'Edit';
