@@ -3047,8 +3047,11 @@ def test_an_anonymous_confession_is_never_drawn_with_initials(tmp_path):
     fns = "\n".join(re.search(p, notes.PAGE, re.S).group(0) for p in (
         r"const nameHue = .*?\n\};", r"const initialsOf = .*?\n\};",
         r"function face\(name, size\) \{.*?\n\}",
+        r"function ago\(then, now\) \{.*?\n\}", r"const agoNow = .*?\n",
+        r"function agoSpan\(when\) \{.*?\n\}",
         r"function saidByFace\(name, when\) \{.*?\n\}",
         r"function postCard\(x, kind\) \{.*?\n\}"))
+    fns = "let NOW_AT = 0;\n" + fns
     script = """
 const assert = require('node:assert');
 function makeEl(tag) {
