@@ -3483,3 +3483,51 @@ def test_a_paper_only_claims_answers_when_its_name_says_so(tmp_path):
     f.write_text(fn.group(0) + ANSWERS_CHECKS)
     r = subprocess.run([NODE, str(f)], capture_output=True, text=True)
     assert r.returncode == 0, r.stdout + r.stderr
+
+
+# ------------------------------------------------------------ campus events
+
+CAMPUS_CHECKS = r"""
+const assert = require('node:assert');
+const T = '2026-09-07';
+const one = {id: 'e1', title: 'Robotics; demo, night', date: '2026-09-08',
+             ends: '2026-09-08', venue: 'LT-1', society: 'Robotics', blurb: 'Bring\nfriends'};
+const fest = {id: 'e2', title: 'Fest', date: '2026-09-05', ends: '2026-09-09',
+              society: 'Drama'};
+const far = {id: 'e3', title: 'Far', date: '2026-10-01', ends: '2026-10-01', society: 'Robotics'};
+
+// Today is an event that is on today, including a fest that started last week.
+assert.ok(eventShows(fest, 'today', T));
+assert.ok(!eventShows(one, 'today', T));
+assert.ok(eventShows(one, 'week', T));
+assert.ok(!eventShows(far, 'week', T));
+assert.ok(eventShows(far, 'Robotics', T) && !eventShows(fest, 'Robotics', T));
+assert.ok(eventShows(far, 'all', T));
+
+// The .ics is one all-day VEVENT with an exclusive end, and the text is escaped
+// the way RFC 5545 wants it rather than pasted in.
+const ics = icsFor(one);
+assert.ok(ics.startsWith('BEGIN:VCALENDAR\r\n'));
+assert.ok(ics.includes('DTSTART;VALUE=DATE:20260908\r\nDTEND;VALUE=DATE:20260909\r\n'));
+assert.ok(ics.includes('SUMMARY:Robotics\\; demo\\, night\r\n'));
+assert.ok(ics.includes('LOCATION:LT-1\r\n'));
+assert.ok(ics.includes('DESCRIPTION:Robotics. Bring\\nfriends\r\n'));
+assert.ok(ics.endsWith('END:VCALENDAR\r\n'));
+const multi = icsFor(fest);
+assert.ok(multi.includes('DTEND;VALUE=DATE:20260910'), 'a fest ends the morning after its last day');
+assert.ok(!multi.includes('LOCATION:'), 'no venue, no LOCATION line');
+"""
+
+
+@pytest.mark.skipif(not NODE, reason="needs node")
+def test_campus_events_filter_and_export_by_the_calendar_rules(tmp_path):
+    """Today includes a fest already running; the week is the next seven days;
+    the .ics a phone imports is all-day with the exclusive DTEND the standard
+    asks for, and commas in a title do not split a field."""
+    src = "".join(re.search(p, SCRIPT, re.S).group(0) for p in (
+        r"const isoDay = .*?;\n", r"const shiftDay = .*?;\n", r"\nfunction icsFor\(e\) \{.*?\n\}",
+        r"\nfunction eventShows\(e, filter, today\) \{.*?\n\}"))
+    f = tmp_path / "campus_test.js"
+    f.write_text(src + CAMPUS_CHECKS)
+    r = subprocess.run([NODE, str(f)], capture_output=True, text=True)
+    assert r.returncode == 0, r.stdout + r.stderr
