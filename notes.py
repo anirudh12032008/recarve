@@ -1219,6 +1219,11 @@ button.off:active{background:var(--surface)}
 .said{margin:0;font-size:16px;white-space:pre-wrap;overflow-wrap:anywhere}
 .dbt>.what>.said{font-weight:600;line-height:1.5}
 .dbt .meta{margin:4px 0 0;font-size:13px;color:var(--mut)}
+/* How the question stands. The count is quiet; an unanswered one is the
+   accent, because it is the one the thread wants somebody to look at. */
+.dbt .flag{font-weight:600;color:var(--accent)}
+.dbt.answered .flag{color:var(--mut);font-weight:500}
+.dbt-filter{padding:14px 0 0}
 /* A byline with a face on the front of it -- and only one that has a face, so
    every other .meta in this app is left as the line of small grey it was. */
 .meta:has(.face){display:flex;align-items:center;gap:8px}
@@ -1277,6 +1282,11 @@ button.off:active{background:var(--surface)}
 .msg{padding:8px 0;border-bottom:1px solid var(--line)}
 .msg .meta{margin:4px 0 0;font-size:13px;color:var(--mut)}
 .msg.me .said{color:var(--accent)}
+/* Shown only when new lines landed while you were reading older ones. */
+.room .jump{display:block;margin:8px auto 0;min-height:32px;padding:0 14px;
+  border-radius:11px;border:1px solid var(--edge);background:var(--bg);
+  color:var(--accent);font-size:13px;font-weight:600}
+.room .jump:active{background:var(--surface)}
 .msg .acts button{min-height:0;padding:2px 0;background:none;border:0;
   font-size:13px;color:var(--mut)}
 /* One line and a Send, not the five-line box a question gets: a message is a
@@ -2297,8 +2307,8 @@ function face(name, size) {
 function saidByFace(name, when) {
   const p = document.createElement('p');
   p.className = 'meta';
-  p.append(face(name), document.createTextNode(
-    (name || 'Anonymous') + ' · ' + ago(when, NOW)));
+  p.append(face(name), document.createTextNode((name || 'Anonymous') + ' · '),
+           agoSpan(when));
   return p;
 }
 
@@ -3552,6 +3562,7 @@ function renderAttendance() {
 // spends a request of its own drawing one.
 let ANN = [];                   // the board as the server sent it
 let NOW = 0;                    // the server's clock, which `at` is stamped by
+let NOW_AT = 0;                 // this phone's clock when NOW last arrived
 const READ_SENT = new Set();    // ids already marked read this visit
 
 // The same three lines as the admin screen's, against the same clock: `at` and
@@ -3564,6 +3575,29 @@ function ago(then, now) {
   if (d < 172800) return Math.round(d / 3600) + ' h ago';
   return Math.round(d / 86400) + ' days ago';
 }
+
+// NOW as it is right now, not as it was when /data last answered: the
+// server's seconds plus however long this phone has held them. Only the
+// difference of the local clock is used, so a handset set to the wrong year
+// still ages a message correctly.
+const agoNow = () => NOW + (NOW_AT ? Math.max(0, Date.now() - NOW_AT) / 1000 : 0);
+
+// "2 min ago" that stays true. Every byline puts its seconds on a span, and
+// once a minute the spans are re-read; nothing else is redrawn, so a half
+// typed answer is not lost to the clock.
+function agoSpan(when) {
+  const el = document.createElement('span');
+  el.className = 'ago';
+  el.setAttribute('data-at', when || 0);
+  el.textContent = ago(when, agoNow());
+  return el;
+}
+setInterval(() => {
+  const now = agoNow();
+  document.querySelectorAll('.ago[data-at]').forEach(el => {
+    el.textContent = ago(+el.getAttribute('data-at'), now);
+  });
+}, 30000);
 
 const liveAnn = () => ANN.filter(a => !a.deleted);
 
@@ -4893,7 +4927,7 @@ function chatLine(m) {
   said.textContent = m.body;
   const meta = document.createElement('p');
   meta.className = 'meta';
-  meta.textContent = m.by + ' · ' + ago(m.at, NOW);
+  meta.append(document.createTextNode(m.by + ' · '), agoSpan(m.at));
   el.append(said, meta);
   if (m.mine || atLeast('admin')) {
     const drop = document.createElement('button');
@@ -4906,6 +4940,8 @@ function chatLine(m) {
 }
 
 function drawRoom(log) {
+  // A log that has not been drawn yet is at the bottom by definition.
+  const atBottom = !log.childElementCount || nearBottom(log);
   log.innerHTML = '';
   if (roomDead) {
     return log.appendChild(quiet('The room needs the server. Run: notes.py serve'));
@@ -4916,7 +4952,27 @@ function drawRoom(log) {
       + 'homework, or say where the lab moved to.'));
   }
   roomMsgs.forEach(m => log.appendChild(chatLine(m)));
-  log.scrollTop = log.scrollHeight;     // newest at the bottom, in view
+  // Newest at the bottom, in view -- unless somebody had scrolled up to read
+  // what was said earlier, in which case a poll must not yank them back down.
+  // They get a button instead, and it goes away once they are at the bottom.
+  if (atBottom) log.scrollTop = log.scrollHeight;
+  else if (log.parentNode) roomJump(log);
+}
+
+// Within a few lines of the bottom counts as at it: a log that is being read
+// as it arrives, rather than one scrolled back to last week.
+const nearBottom = log => log.scrollHeight - log.scrollTop - log.clientHeight < 40;
+
+function roomJump(log) {
+  let b = log.parentNode.querySelector('.jump');
+  if (!b) {
+    b = document.createElement('button');
+    b.className = 'jump';
+    b.textContent = 'Newer messages \u2193';
+    b.onclick = () => { log.scrollTop = log.scrollHeight; b.remove(); };
+    log.after(b);
+  }
+  log.onscroll = () => { if (nearBottom(log)) b.remove(); };
 }
 
 // One place merges what came back, whether it came from a poll or from
@@ -5536,7 +5592,36 @@ let THREAD = [];        // the open thread's questions, newest first
 let threadOn = null;
 let threadBox = null;   // where it is drawn -- #doubts, or a row on a shelf
 let threadWord = 'Doubts';
+let doubtFilter = 'all';   // 'all' | 'open' | 'mine'; remembered across threads
 const doubtsBox = document.getElementById('doubts');
+
+const DOUBT_FILTERS = [
+  ['all', 'All', () => true],
+  ['open', 'Unanswered', q => !q.answers.length],
+  ['mine', 'Mine', q => q.mine],
+];
+
+// Which questions to show, as one row of the same segmented control the
+// papers use. Only drawn once a thread is long enough to want it: three
+// questions do not need a filter, and a row of buttons over them is noise.
+function doubtFilterRow() {
+  const seg = document.createElement('div');
+  seg.className = 'seg';
+  seg.setAttribute('role', 'group');
+  seg.setAttribute('aria-label', 'Show');
+  for (const [k, label, keep] of DOUBT_FILTERS) {
+    const b = document.createElement('button');
+    const n = THREAD.filter(keep).length;
+    b.textContent = k === 'all' ? label : label + ' ' + n;
+    b.setAttribute('aria-pressed', String(doubtFilter === k));
+    b.onclick = () => { doubtFilter = k; drawDoubts(); };
+    seg.appendChild(b);
+  }
+  const row = document.createElement('div');
+  row.className = 'dbt-filter';
+  row.appendChild(seg);
+  return row;
+}
 
 // Typing, drawn as typing. The single most important line in this section.
 function said(x) {
@@ -5568,6 +5653,16 @@ function acts(...buttons) {
 
 // A textarea and one button. Used for the question at the top of the thread
 // and for an answer under a question, because they are the same act.
+// Half a question survives a tab switch, a redraw or a closed app: the draft
+// is kept in localStorage under the thread and the question it answers, and
+// taken out again the moment it is posted. localStorage can throw (private
+// mode, full quota), and a draft that cannot be kept is not worth an error.
+const draftKey = parent => 'draft:' + JSON.stringify(threadOn) + ':' + (parent || '');
+function draftGet(k) { try { return localStorage.getItem(k) || ''; } catch (e) { return ''; } }
+function draftSet(k, v) {
+  try { v ? localStorage.setItem(k, v) : localStorage.removeItem(k); } catch (e) {}
+}
+
 function askBox(placeholder, label, parent) {
   const box = document.createElement('div');
   box.className = 'askbox';
@@ -5575,12 +5670,18 @@ function askBox(placeholder, label, parent) {
   ta.maxLength = 2000;
   ta.placeholder = placeholder;
   ta.setAttribute('aria-label', label);
+  const key = draftKey(parent);
+  ta.value = draftGet(key);
+  ta.oninput = () => draftSet(key, ta.value);
   const err = document.createElement('p');
   err.className = 'err';
   const go = document.createElement('button');
   go.textContent = label;
   go.onclick = () => {
     if (!ta.value.trim()) return void (err.textContent = 'Type something first.');
+    // Forgotten before the request, not after it: a success redraws the
+    // thread and this box with it, and a failure leaves the words in the box.
+    draftSet(key, '');
     writeDoubt({parent: parent || null, body: ta.value}, go, err);
   };
   box.append(ta, err, go);
@@ -5603,13 +5704,23 @@ function answerCard(a, best) {
 
 function doubtCard(q) {
   const el = document.createElement('div');
-  el.className = 'dbt';
+  el.className = 'dbt' + (q.answers.length ? ' answered' : '');
   // One rule, and it is saidBy's: the face leads the byline, here and on an
   // answer and on the wall alike. A second one in a column of its own would
   // be the same person twice on the same row.
   const what = document.createElement('div');
   what.className = 'what';
-  what.append(said(q), saidBy(q));
+  const by = saidBy(q);
+  // How the question stands, said in the byline: the count when the section
+  // has answered, and a quiet flag when nobody has yet, which is the one
+  // somebody scanning the thread to help is looking for.
+  const state = document.createElement('span');
+  state.className = 'flag';
+  state.textContent = q.answers.length
+    ? q.answers.length + (q.answers.length === 1 ? ' answer' : ' answers')
+    : 'Unanswered';
+  by.append(document.createTextNode(' · '), state);
+  what.append(said(q), by);
   el.append(what);
   const reply = document.createElement('button');
   reply.textContent = 'Answer this';
@@ -5663,7 +5774,15 @@ function drawDoubts(instead) {
         : 'No questions on this one yet. Asking is worth as much as answering, '
           + 'if you are stuck, somebody else is too.'));
   }
-  THREAD.forEach(q => box.appendChild(doubtCard(q)));
+  if (THREAD.length > 3) box.appendChild(doubtFilterRow());
+  const keep = DOUBT_FILTERS.find(f => f[0] === doubtFilter)[2];
+  const shown = THREAD.filter(keep);
+  if (!shown.length) {
+    return box.appendChild(quiet(doubtFilter === 'mine'
+      ? 'You have not asked anything on this one.'
+      : 'Every question here has an answer.'));
+  }
+  shown.forEach(q => box.appendChild(doubtCard(q)));
 }
 
 // Nothing here touches THREAD and nothing here redraws. The answer is put on
@@ -6507,6 +6626,7 @@ async function refresh() {
     PENDING = d.pending || 0;
     ANN = d.announcements || [];
     NOW = d.now || NOW;
+    NOW_AT = Date.now();
     ROLE = d.role || ROLE;
     applyRole();
     // A role means there is somebody signed in to have a face. --no-auth
