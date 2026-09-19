@@ -956,6 +956,18 @@ body.drawered #drawer{transform:none;visibility:visible}
 .sj:active{transform:scale(.98)}
 @media (hover:hover){.sj:hover{background:var(--surface)}}
 .sj:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+/* Home's greeting: one warm line and the date under it, sized like a row's
+   name so it does not shout over the timetable beneath. */
+.hello{display:flex;flex-direction:column;gap:2px;padding:12px 16px 0}
+.hello b{font-size:20px;font-weight:700;letter-spacing:-.018em;line-height:1.2}
+.hello small{font-size:13px;color:var(--mut)}
+/* A class called off: struck through and quiet, so a glance down Today reads
+   the holes without reading the words. */
+.row.gone .name b{text-decoration:line-through;color:var(--mut)}
+.row.gone .tick{opacity:.35}
+/* Now or next: the row that leads Today, tinted with its subject. */
+.row.next{background:color-mix(in srgb,hsl(var(--h) var(--sat) var(--lum)) 7%,var(--bg))}
+.quick{padding-top:12px}
 .sj-empty{display:flex;flex-wrap:wrap;gap:6px;padding:4px 16px 0}
 .sj-empty button{min-height:34px;padding:0 12px;border-radius:999px;
   border:1px solid var(--line);color:var(--mut);font-size:13px}
@@ -3062,8 +3074,33 @@ function todayBlock() {
     const all = allPresentRow(date, slots);
     if (all) rows.push(all);
   }
+  const next = nowNextRow(date);
+  if (next) rows.unshift(next);
   if (!rows.length) rows.push(emptyDay(date, day));
   blockWithTimeline('Today \u00b7 ' + DAYS[day], date, rows);
+}
+
+// The one line a student between periods actually wants: what is on now and
+// when it ends, or what is next and how long until it. A class called off is
+// skipped, the same as the timeline skips it. Home redraws once a minute
+// while it is on screen, so the number stays honest.
+function nowNextRow(date) {
+  const blocks = timelineBlocks(date)
+    .filter(b => !b.periods.every(p => offAt(date, b.code, p)));
+  if (!blocks.length) return null;
+  const d = new Date(), now = d.getHours() * 60 + d.getMinutes();
+  const on = blocks.find(b => now >= b.start && now < b.end);
+  const up = blocks.find(b => b.start > now);
+  const b = on || up;
+  if (!b) return null;
+  const s = subjectOf(b.code);
+  const sub = on ? 'Now \u00b7 ends in ' + long(b.end - now)
+                 : 'Next \u00b7 ' + hhmm(b.start) + ', in ' + long(b.start - now);
+  const el = line(s.name, sub, document.createElement('button'), hue(b.code));
+  el.classList.add('next');
+  el.appendChild(chip(b.code));
+  el.onclick = () => go('classes', b.code);
+  return el;
 }
 
 // 2. NEEDS YOU. Only what is actually waiting on a person: a transcription
@@ -3084,11 +3121,13 @@ function needsBlock() {
 // 3. NEW SINCE YOU LAST LOOKED. No last look, no section -- on a first visit
 // everything is new, and saying so is noise rather than news.
 function newBlock() {
-  if (!SEEN) return;
+  // First visit: nothing is "new", but the five latest things say what kind
+  // of library this is better than a blank does.
+  const since = SEEN || 0, label = SEEN ? 'New since you last looked' : 'Latest in the library';
   const fresh = [];
   for (const s of DATA) {
     for (const n of s.notes) {
-      if (!(n.at > SEEN)) continue;
+      if (!(n.at > since)) continue;
       fresh.push([n.at, () => {
         const b = line(n.title, n.by ? 'recorded by ' + n.by
                        : (n.kind === 'revision' ? 'revision sheet' : 'lecture'),
@@ -3099,7 +3138,7 @@ function newBlock() {
       }]);
     }
     for (const u of s.uploads) {
-      if (!(u.at > SEEN)) continue;
+      if (!(u.at > since)) continue;
       fresh.push([u.at, () => {
         const a = document.createElement('a');
         a.href = u.path; a.target = '_blank'; a.rel = 'noopener';
@@ -3111,15 +3150,15 @@ function newBlock() {
     }
   }
   if (!fresh.length) {
-    return block('New since you last looked',
-                 [quiet('Nothing new since you last looked.')]);
+    if (!SEEN) return;
+    return block(label, [quiet('Nothing new since you last looked.')]);
   }
   fresh.sort((a, b) => b[0] - a[0]);
-  const rows = fresh.slice(0, 12).map(f => f[1]());
-  if (fresh.length > rows.length) {
+  const rows = fresh.slice(0, SEEN ? 12 : 5).map(f => f[1]());
+  if (SEEN && fresh.length > rows.length) {
     rows.push(quiet('and ' + (fresh.length - rows.length) + ' more, under Classes.'));
   }
-  block('New since you last looked', rows);
+  block(label, rows);
 }
 
 // 2b. THE WAY IN, for the one person who runs the class. An admin opens Home
@@ -3141,12 +3180,47 @@ function adminBlock() {
 // Everything here that has a life of its own elsewhere is a way INTO that
 // place rather than a second copy of it -- the timetable, the catch-up screen
 // and every note on this screen open on the tab that owns them.
+// 0. HELLO. The time of day, the name the server gave us, and the date, so
+// the screen says which day "Today" is before the timetable does.
+function helloBlock() {
+  const d = new Date(), h = d.getHours();
+  const part = h < 12 ? 'morning' : h < 17 ? 'afternoon' : 'evening';
+  const el = document.createElement('div');
+  el.className = 'hello';
+  el.innerHTML = '<b></b><small></small>';
+  el.querySelector('b').textContent = 'Good ' + part + (myName ? ', ' + myName.split(' ')[0] : '');
+  el.querySelector('small').textContent =
+    d.toLocaleDateString('en-IN', {weekday: 'long', day: 'numeric', month: 'long'});
+  nav.appendChild(el);
+}
+
+// 0b. QUICK ACTIONS. The four places a student leaves Home for most often,
+// as pills, so each is one tap rather than a drawer and a level.
+function quickBlock() {
+  const box = document.createElement('div');
+  box.className = 'sj-empty quick';
+  const acts = [['Record', () => document.getElementById('fab').onclick()],
+                ['Your day', () => go('classes', 'day')],
+                ['Catch up', () => go('classes', 'attendance')],
+                ['Saved', () => go('me', 'saved')],
+                ['The board', () => go('community', 'board')]];
+  for (const [label, fn] of acts) {
+    const b = document.createElement('button');
+    b.textContent = label;
+    b.onclick = fn;
+    box.appendChild(b);
+  }
+  nav.appendChild(box);
+}
+
 function renderHome() {
   // Writing a notice takes the screen over, the same way Campus's three forms
   // take theirs: it is one thing at a time on a phone. A student who types the
   // URL falls through to the board, which is the same answer /announce gives
   // them -- hiding the composer is a courtesy, the gate is the lock.
   if (view.compose && atLeast('cr')) return renderCompose();
+  helloBlock();
+  quickBlock();
   todayBlock();
   needsBlock();
   renderAnnouncements();
@@ -3431,7 +3505,7 @@ function classRow(date, slot, mayCancel) {
   const gone = offAt(date, slot.code, slot.period);
   const m = markAt(date, slot.period);
   const el = document.createElement('div');
-  el.className = 'row';
+  el.className = gone ? 'row gone' : 'row';
   el.style.setProperty('--h', hue(slot.code));
   el.innerHTML = '<i class="tick"></i>'
                + '<button class="name"><b></b><small></small></button>';
@@ -6438,6 +6512,7 @@ function drawMyFace(name) {
   avatarEl.innerHTML = '';
   avatarEl.appendChild(face(name));
   paintDrawer();   // the rail's foot is the same face, under the same name
+  if (view.tab === 'home' && !view.compose) render();   // the greeting names you
 }
 function needMyFace() {
   if (myName) return;
@@ -6984,6 +7059,11 @@ if (navigator.serviceWorker) {
 refresh();
 setInterval(pollJobs, 2000);
 setInterval(pullLog, 3000);
+// Home's "ends in 23 min" is a clock; once a minute, and only while Home is
+// the screen in front of somebody, it is redrawn so the number is true.
+setInterval(() => {
+  if (view.tab === 'home' && !view.compose && document.visibilityState !== 'hidden') render();
+}, 60000);
 
 // ---- Explain: highlight anything in a note, tap the button ----
 const ask = document.getElementById('ask'), panel = document.getElementById('panel');
