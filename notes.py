@@ -1431,6 +1431,26 @@ button.off:active{background:var(--surface)}
 .rtop .back{display:block;min-width:0;max-width:calc(100% - 88px);
   line-height:var(--tap);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .rtop .code{margin-left:auto}
+/* One step of text size, cycled by tapping. Sits before the chip, quiet. */
+.rtop .aa{margin-left:auto;min-width:var(--tap);height:var(--tap);border-radius:11px;
+  font-size:13px;font-weight:600;color:var(--mut)}
+.rtop .aa+.code{margin-left:0}
+/* How far down the note you are: a hairline of accent along the foot of the
+   sticky reading header. Its width is the scroll fraction and nothing else
+   here moves. */
+#rprog{position:absolute;left:0;bottom:-1px;height:2px;width:0;
+  background:var(--accent);pointer-events:none}
+/* The note's own URL, one tap. Share sends the words; this sends the place. */
+.mast .copylink{margin:8px 0 0;min-height:34px;padding:0 12px;border-radius:999px;
+  font-size:13px;font-weight:600;color:var(--accent);background:var(--surface)}
+/* The lecture before and after this one, at the foot of the note, where the
+   reader who has finished is. j and k on a keyboard press the same buttons. */
+.rnav{display:flex;gap:8px;max-width:70ch;margin:0 auto;padding:8px 18px 0}
+.rnav:empty{display:none}
+.rnav button{flex:1;min-width:0;min-height:var(--tap);padding:8px 12px;border-radius:11px;
+  background:var(--surface);font-size:13px;font-weight:600;text-align:left;
+  white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.rnav .next{text-align:right}
 /* The lecture's title, which is what this screen is. It lived in the row you
    tapped to get here and nowhere afterwards, so the top fifth of the reading
    screen was a back button, a chip, and 150px of nothing above the markdown's
@@ -1442,7 +1462,7 @@ button.off:active{background:var(--surface)}
    weight rather than a fifth size that would read as body text. */
 /* The dock's clearance moved to #doubts, which is the last thing on the
    reading screen now: 142px is #nav's, and the FAB reaches 76 + 58 = 134. */
-article{padding:24px 18px 8px;max-width:70ch;margin:0 auto}
+article{padding:24px 18px 8px;max-width:70ch;margin:0 auto;font-size:var(--rfs,16px)}
 /* Under the masthead the note starts where the masthead left off. */
 .mast+article{padding-top:20px}
 .mast+article>:first-child{margin-top:0}
@@ -1896,13 +1916,17 @@ body.reading .tabs{display:none}
 <section id="read">
   <div class="top rtop">
     <button class="back" id="back" aria-label="Back to the subject">&lsaquo; Back</button>
+    <button class="aa" id="aa" aria-label="Text size">Aa</button>
     <span class="code" id="rcode"></span>
+    <i id="rprog"></i>
   </div>
   <header class="mast" id="mast" hidden>
     <h1 id="rtitle"></h1>
     <p class="meta" id="rmeta"></p>
+    <button class="copylink" id="copylink">Copy link</button>
   </header>
   <article id="body"><p class="blank">Pick a lecture to start reading.</p></article>
+  <nav class="rnav" id="rnav" aria-label="Previous and next lecture"></nav>
   <section id="doubts" class="thread" aria-label="Doubts"></section>
 </section>
 
@@ -4822,6 +4846,18 @@ function renderSubjects() {
   }
   block('Your week', week);
 
+  // The note this phone last had open, one tap from the top of the tab.
+  const last = lsGet(LAST_KEY);
+  const ls = last && subjectOf(last.code);
+  const ln = ls && ls.notes.find(n => n.title === last.title);
+  if (ln) {
+    const r = line(ln.title, ls.name + ' \u00b7 pick up where you left off',
+                   document.createElement('button'), hue(ls.code));
+    r.appendChild(chip(ls.code));
+    r.onclick = () => go('classes', ls.code, ln.title);
+    block('Continue reading', [r]);
+  }
+
   // The subjects are what this screen is named for, so they come before the
   // calendar. A course with something in it is a tile; the labs and activities
   // nobody has uploaded to yet are one line of names underneath rather than a
@@ -5870,13 +5906,23 @@ function openNote(n, s) {
   });
 
   document.body.classList.add('reading');
-  window.scrollTo(0, 0);
+  // Back to where this note was left, when it is the note that was left; the
+  // top otherwise.
+  const last = lsGet(LAST_KEY);
+  const back = last && last.code === s.code && last.title === n.title ? last.y || 0 : 0;
+  window.scrollTo(0, back);
+  readY = back;
+  rememberRead();
+  paintRnav(n, s);
   paintSaveBtn();
   loadDoubts({subject: s.code, title: n.title}, doubtsBox, 'Doubts');
 }
 
 function closeRead() {
+  if (current) rememberRead();   // the scroll position it is left at
   document.body.classList.remove('reading');
+  rnav.innerHTML = '';
+  rprog.style.width = '0';
   mast.hidden = true;          // nothing open, nothing to head
   // The note's markup does not stay lying in the pane. Nothing is ever seen
   // in there with no note open -- #read is hidden on every layout until one
@@ -6547,6 +6593,87 @@ document.getElementById('print').onclick = () => {
   window.print();
 };
 
+// ---- Reading: where you were, how far, how big. ---------------------------
+// All per device, in localStorage, like the practice scores: what somebody
+// was reading on their own phone is not a fact about the class. localStorage
+// throws outright in private mode, so both touches are guarded.
+const LAST_KEY = 'recarve.last', FS_KEY = 'recarve.fontsize';
+const FS = [15, 16, 18, 20];    // one tap steps to the next, wrapping round
+const rnav = document.getElementById('rnav'), rprog = document.getElementById('rprog');
+const readEl = document.getElementById('read'), aaBtn = document.getElementById('aa');
+let readY = 0;
+function lsGet(k) { try { return JSON.parse(localStorage.getItem(k)); } catch (e) { return null; } }
+function lsSet(k, v) { try { localStorage.setItem(k, JSON.stringify(v)); } catch (e) {} }
+
+function rememberRead() {
+  if (current) lsSet(LAST_KEY, {code: currentCode, title: current.title, y: readY});
+}
+// Ridden on the scroll the + already listens to: the hairline, and the place
+// to come back to. Written on the way out (closeRead, pagehide), not per pixel.
+function readScroll(y) {
+  if (!current) return;
+  readY = y;
+  const room = document.documentElement.scrollHeight - window.innerHeight;
+  rprog.style.width = (room > 0 ? Math.min(100, y / room * 100) : 0) + '%';
+}
+addEventListener('pagehide', rememberRead);
+
+// The lecture before and after, in the order the subject lists them.
+function paintRnav(n, s) {
+  rnav.innerHTML = '';
+  const list = lecturesOf(s), i = list.indexOf(n);
+  if (i < 0) return;
+  const mk = (m, cls, label) => {
+    const b = document.createElement('button');
+    b.className = cls;
+    b.textContent = label;
+    b.onclick = () => go('classes', s.code, m.title);
+    rnav.appendChild(b);
+  };
+  if (i > 0) mk(list[i - 1], 'prev', '\u2039 ' + list[i - 1].title);
+  if (i < list.length - 1) mk(list[i + 1], 'next', list[i + 1].title + ' \u203a');
+}
+
+// Text size: one button, four steps, remembered.
+function applyFs() {
+  const px = FS.includes(lsGet(FS_KEY)) ? lsGet(FS_KEY) : 16;
+  readEl.style.setProperty('--rfs', px + 'px');
+  aaBtn.setAttribute('aria-label', 'Text size, ' + px + ' pixels');
+}
+aaBtn.onclick = () => {
+  const cur = lsGet(FS_KEY);
+  lsSet(FS_KEY, FS[(Math.max(0, FS.indexOf(cur)) + 1) % FS.length]);
+  applyFs();
+};
+applyFs();
+
+document.getElementById('copylink').onclick = async (e) => {
+  if (!current) return;
+  const url = location.origin + location.pathname
+              + hashOf('classes', currentCode, current.title);
+  try { await navigator.clipboard.writeText(url); flash(e.currentTarget, 'Copied'); }
+  catch { flash(e.currentTarget, 'Copy failed'); }
+};
+
+// Keys, for the laptop at the desk: / finds, j and k step lectures, Esc backs
+// out. Never while typing, and never with a modifier held.
+document.addEventListener('keydown', (e) => {
+  if (e.metaKey || e.ctrlKey || e.altKey) return;
+  const t = e.target;
+  const typing = t && (t.tagName === 'INPUT' || t.tagName === 'TEXTAREA' || t.isContentEditable);
+  if (e.key === 'Escape') {
+    if (typing) { if (t === q && q.value) { q.value = ''; render(); } t.blur(); }
+    else if (current && quiz.hidden !== false && !sheet.classList.contains('on')) history.back();
+    return;
+  }
+  if (typing) return;
+  if (e.key === '/' && !q.hidden && !current) { e.preventDefault(); q.focus(); return; }
+  if (!current) return;
+  const b = e.key === 'j' ? rnav.querySelector('.next')
+          : e.key === 'k' ? rnav.querySelector('.prev') : null;
+  if (b) b.click();
+});
+
 // ---- Adding things: record, upload, revise. All work happens on the Mac. ----
 const sheet = document.getElementById('sheet'), subj = document.getElementById('subj');
 const fileInput = document.getElementById('file'), rec = document.getElementById('rec');
@@ -6788,7 +6915,8 @@ function fabScroll(y) {
   clearTimeout(fabRest);
   fabRest = setTimeout(() => document.body.classList.remove('fabaway'), 650);
 }
-addEventListener('scroll', () => fabScroll(window.scrollY), {passive: true});
+addEventListener('scroll', () => { fabScroll(window.scrollY); readScroll(window.scrollY); },
+                 {passive: true});
 listEl.addEventListener('scroll', () => fabScroll(listEl.scrollTop), {passive: true});
 document.getElementById('opt-close').onclick = closeSheet;
 sheet.onclick = e => { if (e.target === sheet) closeSheet(); };
