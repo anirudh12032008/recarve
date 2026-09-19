@@ -486,7 +486,7 @@ def test_an_approximate_pin_says_so_on_its_own_row():
 def test_the_screen_never_invents_a_number_nobody_is_behind():
     """No RSVP here, so no "N going". A count with nothing behind it on a
     screen a hundred and ten people read is worse than a blank space."""
-    campus_js = notes.PAGE[notes.PAGE.index("function eventCard(e)"):
+    campus_js = notes.PAGE[notes.PAGE.index("function eventCard(e, soon)"):
                            notes.PAGE.index("function renderCampus()")]
     for invented in ("going", "interested", "attending", "members"):
         assert invented not in campus_js.lower(), \
@@ -511,7 +511,7 @@ def test_coming_up_is_the_institute_s_calendar_and_campus_keeps_its_own():
 def test_a_club_and_an_event_are_never_interpolated_into_html():
     """These are words other people typed, drawn on a hundred and ten phones."""
     for fn in ("eventCard", "clubCard", "placeCard"):
-        body = re.search(rf"function {fn}\((\w+)\) \{{.*?\n\}}",
+        body = re.search(rf"function {fn}\(([\w, ]+)\) \{{.*?\n\}}",
                          notes.PAGE, re.S).group(0)
         assert "innerHTML" not in body, f"{fn} builds HTML out of typed words"
         assert "textContent" in body
