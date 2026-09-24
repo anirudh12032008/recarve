@@ -617,7 +617,7 @@ PAGE = _themable(r"""<!doctype html>
      out of this page with a greedy match between the first `\n<script>\n`
      and the last `\n</script>`, so a second block written across lines up
      here swallows all the markup in between and parses as nothing. -->
-<script>try{const t=localStorage.getItem('theme');if(t==='light'||t==='dark')document.documentElement.dataset.theme=t}catch(e){}</script>
+<script>let t='light';try{t=localStorage.getItem('theme')||t}catch(e){}if(t==='light'||t==='dark')document.documentElement.dataset.theme=t</script>
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Figtree:wght@400;500;600;700&amp;family=Kalam:wght@700&amp;display=swap">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/marked/15.0.7/marked.min.js"></script>
@@ -6712,7 +6712,10 @@ const THEMES = ['system', 'light', 'dark'];
 // The bar at the top of the phone, which is a colour and not a theme: it has
 // to be told the resolved answer, because 'system' is not a colour.
 const BAR = {light: '#faf9f4', dark: '#0f1115'};
-let theme = 'system';
+// Light until somebody picks otherwise, whatever the phone is set to; the
+// head script above makes the same call before first paint. 'system' stays in
+// THEMES for anyone who stored it before.
+let theme = 'light';
 try { const t = localStorage.getItem('theme'); if (THEMES.includes(t)) theme = t; } catch (e) {}
 
 // What the page is ACTUALLY showing, which on 'system' is the phone's answer
