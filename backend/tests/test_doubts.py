@@ -591,7 +591,10 @@ def test_the_machine_answers_a_question_on_the_thread(ai, calls):
     status, body, _ = call(aiport, "POST", "/doubts/ai", {"id": qid},
                            cookie=who["Chan"])
     assert status == 200, body
-    assert json.loads(body)["text"] == "Because the denominator is what changes."
+    # On the thread now, for everybody, as the machine's and not as Chan's.
+    ans = json.loads(body)["doubts"][0]["answers"]
+    assert [(a["body"], a["by"], a["ai"], a["mine"]) for a in ans] == \
+        [("Because the denominator is what changes.", "AI", True, False)]
     # Asked about the question as stored, under the subject it was asked in --
     # not about anything the phone put in the request.
     assert len(calls) == 1
@@ -607,10 +610,15 @@ def test_the_same_question_is_answered_once_for_the_whole_section(ai, calls):
     first = call(aiport, "POST", "/doubts/ai", {"id": qid}, cookie=who["Chan"])
     second = call(aiport, "POST", "/doubts/ai", {"id": qid}, cookie=who["Dia"])
     assert first[0] == second[0] == 200, second[1]
-    assert json.loads(first[1])["text"] == json.loads(second[1])["text"]
-    # A different classmate, on the same question, and still one call out.
+    # A different classmate, on the same question: still one call out, and
+    # still one AI answer on the thread rather than two.
     assert len(calls) == 1
-    assert json.loads(second[1])["cached"] is True
+    ans = json.loads(second[1])["doubts"][0]["answers"]
+    assert [a["ai"] for a in ans] == [True]
+    # And Dia's own read of the thread shows it too -- it is stored, not handed
+    # to whoever pressed the button.
+    status, body, _ = call(port, "GET", "/doubts?subject=CY1107&title=CY1107-week1", cookie=who["Dia"])
+    assert any(a["ai"] for q in json.loads(body)["doubts"] for a in q["answers"])
 
 
 def test_a_student_may_ask_the_machine(ai, calls):
