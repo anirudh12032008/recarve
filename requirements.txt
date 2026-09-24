@@ -1,6 +1,10 @@
 # The server and the CLI.
 psycopg[binary]>=3.2
 
+# Notes, /explain and revision summaries. Imported lazily, so a missing
+# install only shows up when someone presses the button.
+anthropic>=0.70
+
 # Transcription. Only the machine that actually runs the worker needs these --
 # the VM has no GPU and never imports them.
 faster-whisper>=1.0
