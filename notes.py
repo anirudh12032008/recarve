@@ -12569,7 +12569,10 @@ def groq(system, user, model, max_tokens=1200):
     }).encode()
     req = urllib.request.Request(
         "https://api.groq.com/openai/v1/chat/completions", data=body,
-        headers={"Authorization": f"Bearer {key}", "Content-Type": "application/json"})
+        # Cloudflare in front of Groq answers urllib's default User-Agent with
+        # 403 "error code: 1010"; any honest name gets through.
+        headers={"Authorization": f"Bearer {key}", "Content-Type": "application/json",
+                 "User-Agent": "recarve/1.0"})
     try:
         with urllib.request.urlopen(req, timeout=60) as r:
             got = json.loads(r.read())
