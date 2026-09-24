@@ -1877,8 +1877,24 @@ body.reading .tabs{display:none}
    element is never created at all and the places list stands on its own. */
 #campusmap{height:260px;margin:0 16px 8px;border-radius:14px;overflow:hidden;
   border:1px solid var(--line);background:var(--surface)}
+/* The tour. A card in the middle of the screen, clear of the tab bar, the +
+   and the menu button it points at, with the real screen live behind it. */
+#tour{position:fixed;z-index:30;left:50%;top:50%;transform:translate(-50%,-50%);
+  width:min(420px,calc(100% - 32px));background:var(--bg);color:var(--fg);
+  border:1px solid var(--line);border-radius:18px;padding:18px 18px 14px;
+  box-shadow:0 18px 48px rgba(0,0,0,.22)}
+#tour small{color:var(--mut)}
+#tour h3{margin:4px 0 6px;font-size:20px}
+#tour p{margin:0 0 14px;color:var(--mut);line-height:1.5}
+#tour .go{display:flex;gap:8px;align-items:center;justify-content:flex-end}
+#tour .go button{min-height:var(--tap);padding:0 14px;border-radius:14px}
+#tour .go .skip{margin-right:auto;background:none;border:0;color:var(--mut)}
+#tour .go .next{background:var(--accent);color:var(--accent-fg);border:0;font-weight:600}
+#tour .go .prev{background:none;border:1px solid var(--line);color:var(--fg)}
+.tour-on{outline:3px solid var(--accent)!important;outline-offset:3px;border-radius:14px}
+@media (min-width:760px){#tour{left:calc(50% + var(--railw) / 2)}}
 @media print{
-  .top,.dock,.tabs,#list,.rtop,#fab,#busy,#ask,#quiz,#drawer,#scrim{display:none!important}
+  .top,.dock,.tabs,#list,.rtop,#fab,#busy,#ask,#quiz,#drawer,#scrim,#tour{display:none!important}
   #read{display:block!important}
   article{padding:0;max-width:none}
   details{background:none;border:1px solid #999}
@@ -5512,6 +5528,11 @@ async function renderMe() {
     block('Admin', rows);
   }
 
+  const tour = line('Take the tour again', 'A one-minute walk through every part of recarve',
+                    document.createElement('button'));
+  tour.onclick = startTour;
+  block('Help', [tour]);
+
   const out = line('Log out', 'On this phone only', document.createElement('button'));
   out.onclick = async () => {
     try { await fetch('/logout', {method: 'POST'}); } catch {}
@@ -6986,6 +7007,9 @@ async function refresh() {
     // sends none, and nobody is exactly who that server has.
     if (d.role) needMyFace();
     markSeen(d.now);
+    // After render below, so the first step rings a drawn screen. Not over a
+    // shared link: somebody opening a lecture came for the lecture.
+    if (d.role && /^(#home)?$/.test(location.hash)) setTimeout(maybeTour);
     if (!subj.options.length) {
       for (const c of d.codes) {
         const o = document.createElement('option');
@@ -7524,6 +7548,91 @@ ask.onclick = async () => {
 document.getElementById('close').onclick = () => panel.classList.remove('on');
 
 q.oninput = render;
+
+// ---- The tour. Once, the first time somebody signs in on this phone, and
+// again whenever they ask for it from their profile. Each step opens the real
+// screen behind the card rather than a picture of it, and rings the control
+// that gets you back there. [where it opens, what it rings (first one
+// visible wins: the tab bar on a phone, the rail on a wide screen), title, text]
+// ponytail: done-ness is per device in localStorage; move it to profiles if
+// a second device showing it again ever annoys anyone.
+const TOUR = [
+  [['home'], [], 'Welcome to recarve',
+   "Everything Section I needs, in one place. Here's a one-minute look around. Skip whenever you like."],
+  [['home'], ['#tabs [data-tab=home]', '#dnav a[href="#home"]'], 'Home',
+   'Your next class with a countdown, the rest of today, and whatever just landed in the library. Open it before class.'],
+  [['classes'], ['#tabs [data-tab=classes]', '#dnav a[href="#classes"]'], 'Classes',
+   'Every subject, with its lectures, notes and revision sheet. Search at the top looks through notes and transcripts. Select any sentence while reading and tap Explain.'],
+  [['classes', 'day'], ['#dnav a[href="#classes/day"]', '#tabs [data-tab=classes]'], 'Your day and attendance',
+   'Your timetable for today, attendance per subject under Catching up, and past papers by year, all inside Classes.'],
+  [['campus'], ['#tabs [data-tab=campus]', '#dnav a[href="#campus"]'], 'Campus',
+   "What's on, clubs and societies, and where things are. Any event can go straight into your calendar."],
+  [['community'], ['#tabs [data-tab=community]', '#dnav a[href="#community"]'], 'Community',
+   'The notice board, doubts on any lecture (Ask AI answers each one once, for everybody), and who has contributed.'],
+  [['home'], ['#fab'], 'Add to the library',
+   'The + records a class, uploads notes or photos, or makes a revision sheet. Trusted members add; everyone reads.'],
+  [['home'], ['#menubtn', '#dyou'], 'Everything else',
+   'The menu holds every screen. Your profile, saved lectures and your streak sit at the foot of it.'],
+  [['me'], [], "That's the tour",
+   'You can take it again any time from your profile, under Help.'],
+];
+const TOUR_KEY = 'tour';
+let tourAt = -1;
+
+function tourStep(i) {
+  document.querySelectorAll('.tour-on').forEach(el => el.classList.remove('tour-on'));
+  let card = document.getElementById('tour');
+  if (i < 0 || i >= TOUR.length) {
+    tourAt = -1;
+    if (card) card.remove();
+    try { localStorage.setItem(TOUR_KEY, 'done'); } catch (e) {}
+    return;
+  }
+  tourAt = i;
+  const [where, rings, title, text] = TOUR[i];
+  // Replace, not push: ten tour steps are not ten places Back should visit.
+  history.replaceState(null, '', hashOf(...where));
+  route();
+  if (!card) {
+    card = document.createElement('div');
+    card.id = 'tour';
+    card.setAttribute('role', 'dialog');
+    card.setAttribute('aria-label', 'Tour of recarve');
+    card.innerHTML = '<small></small><h3></h3><p></p><div class="go">'
+      + '<button class="skip">Skip</button><button class="prev">Back</button>'
+      + '<button class="next primary"></button></div>';
+    card.querySelector('.skip').onclick = () => tourStep(-1);
+    card.querySelector('.prev').onclick = () => tourStep(tourAt - 1);
+    card.querySelector('.next').onclick = () => tourStep(tourAt + 1);
+    card.onkeydown = (e) => { if (e.key === 'Escape') tourStep(-1); };
+    document.body.appendChild(card);
+  }
+  card.querySelector('small').textContent = (i + 1) + ' of ' + TOUR.length;
+  card.querySelector('h3').textContent = title;
+  card.querySelector('p').textContent = text;
+  card.querySelector('.prev').hidden = i === 0;
+  card.querySelector('.skip').hidden = i === TOUR.length - 1;
+  card.querySelector('.next').textContent = i === TOUR.length - 1 ? 'Done'
+    : i === 0 ? 'Show me' : 'Next';
+  card.querySelector('.next').focus();
+  // A closed drawer is visibility:hidden and still has a box, so ask the
+  // browser whether it can actually be seen where it knows how to say.
+  const seen = el => el && (el.checkVisibility
+    ? el.checkVisibility({visibilityProperty: true}) : el.getClientRects().length);
+  const ring = rings.map(s => document.querySelector(s)).find(seen);
+  if (ring) ring.classList.add('tour-on');
+}
+
+function startTour() { tourStep(0); }
+
+// First sign-in on this device. Storage that throws counts as done: a tour
+// that comes back on every load is worse than one that never shows.
+function maybeTour() {
+  if (tourAt >= 0) return;
+  let done = true;
+  try { done = !!localStorage.getItem(TOUR_KEY); } catch (e) {}
+  if (!done) startTour();
+}
 
 // A deep link arrives as one history entry, so back would leave the app rather
 // than climb a step. Seed every step above it -- the tab, then each level
