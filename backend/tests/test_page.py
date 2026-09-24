@@ -3534,3 +3534,12 @@ def test_campus_events_filter_and_export_by_the_calendar_rules(tmp_path):
     f.write_text(src + CAMPUS_CHECKS)
     r = subprocess.run([NODE, str(f)], capture_output=True, text=True)
     assert r.returncode == 0, r.stdout + r.stderr
+
+
+def test_the_tour_starts_once_and_the_profile_can_start_it_again():
+    """First sign-in on a device, never over a shared link, and Help on the
+    profile brings it back. Done-ness is one localStorage key."""
+    page = notes.PAGE
+    assert "if (d.role && /^(#home)?$/.test(location.hash)) setTimeout(maybeTour);" in page
+    assert "localStorage.setItem(TOUR_KEY, 'done')" in page
+    assert "tour.onclick = startTour;" in page and "block('Help', [tour]);" in page
