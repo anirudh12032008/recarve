@@ -806,6 +806,14 @@ body.reading #read{display:block}
 #avatar svg{width:24px;height:24px}
 #avatar[aria-expanded="true"]{color:var(--accent);background:var(--surface)}
 #avatar:active{background:var(--surface)}
+/* The same drawer the face opens, as the three lines everyone already reads as
+   "there is more here" -- a face alone reads as "your profile", and the map
+   behind it went undiscovered. */
+#menubtn{flex:none;width:var(--tap);height:var(--tap);margin-left:-8px;border-radius:50%;
+  display:flex;align-items:center;justify-content:center;color:var(--fg)}
+#menubtn svg{width:24px;height:24px}
+#menubtn[aria-expanded="true"]{color:var(--accent);background:var(--surface)}
+#menubtn:active{background:var(--surface)}
 
 /* ---- The map: a drawer on a phone, a rail on a wide screen. -------------
    Off-canvas rather than a dropdown because it is eleven rows in five named
@@ -1811,6 +1819,7 @@ body.reading .tabs{display:none}
   /* The face opened the drawer; with the rail already open it has nothing to
      open, and "Your profile" is a row in the rail two inches to the left. */
   #avatar{display:none}
+  #menubtn{display:none}
   .tabs{display:none}
   /* The screen's name is the biggest type in the app on a phone, where it has
      the whole width. Here it has a 320px column and the note beside it is the
@@ -1907,6 +1916,10 @@ body.reading .tabs{display:none}
   <div class="top">
     <button class="back" id="lback" aria-label="Back to all subjects">&lsaquo; Subjects</button>
     <div class="tophead">
+      <button id="menubtn" aria-expanded="false" aria-controls="drawer"
+              aria-label="Open the menu"><svg viewBox="0 0 24 24" aria-hidden="true"
+        fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"
+        ><path d="M4 7h16M4 12h16M4 17h16"/></svg></button>
       <div class="brand" id="brand"><b>recarve</b><span>Section I</span></div>
       <div class="shead" id="shead" hidden>
         <span class="code" id="scode"></span>
@@ -2050,6 +2063,7 @@ const scode = document.getElementById('scode'), sname = document.getElementById(
 const lback = document.getElementById('lback'), tools = document.getElementById('tools');
 const tabBtns = document.querySelectorAll('.tabs button');
 const avatarEl = document.getElementById('avatar');
+const menuBtn = document.getElementById('menubtn');
 const drawerEl = document.getElementById('drawer');
 const dnav = document.getElementById('dnav');
 const dyou = document.getElementById('dyou');
@@ -6750,6 +6764,7 @@ function openDrawer() {
   drawerOpener = document.activeElement;
   document.body.classList.add('drawered');
   avatarEl.setAttribute('aria-expanded', 'true');
+  menuBtn.setAttribute('aria-expanded', 'true');
   paintDrawer();
   const first = drawerEl.querySelector('a,button,summary');
   if (first) first.focus();
@@ -6763,11 +6778,12 @@ function closeDrawer() {
   if (!drawered()) return;
   document.body.classList.remove('drawered');
   avatarEl.setAttribute('aria-expanded', 'false');
+  menuBtn.setAttribute('aria-expanded', 'false');
   if (drawerEl.contains(document.activeElement)) (drawerOpener || avatarEl).focus();
   drawerOpener = null;
 }
 
-avatarEl.onclick = () => { if (drawered()) closeDrawer(); else openDrawer(); };
+avatarEl.onclick = menuBtn.onclick = () => { if (drawered()) closeDrawer(); else openDrawer(); };
 document.getElementById('dclose').onclick = closeDrawer;
 document.getElementById('scrim').onclick = closeDrawer;
 
