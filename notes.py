@@ -12539,7 +12539,7 @@ Rules:
 # Groq's free tier, the largest model on it. Named here rather than only in
 # argparse because build_server is handed an args by the tests too, and a
 # default that lives in the parser is a default those never get.
-AI_MODEL = "llama-3.3-70b-versatile"
+AI_MODEL = "openai/gpt-oss-120b"   # llama-3.3-70b-versatile was retired
 
 
 def groq(system, user, model, max_tokens=1200):
