@@ -5954,7 +5954,18 @@ function answerCard(a, best) {
   el.className = 'ans' + (best ? ' top' : '');
   const what = document.createElement('div');
   what.className = 'what';
-  what.append(said(a), saidBy(a));
+  if (a.ai) {
+    el.className += ' ai';
+    const out = document.createElement('div');
+    // Shown to the whole section and talked into by a question, so it goes
+    // through the same escape a notice does, not the one notes get.
+    out.innerHTML = mdSafe(a.body);
+    typeset(out);
+    const meta = document.createElement('p');
+    meta.className = 'meta';
+    meta.textContent = 'AI, not a classmate. Check it against the lecture.';
+    what.append(out, saidBy(a), meta);
+  } else what.append(said(a), saidBy(a));
   const drop = dropBtn(a);
   if (drop) what.appendChild(acts(drop));
   el.append(voteBtn(a, true), what);
@@ -5986,8 +5997,10 @@ function doubtCard(q) {
   // Second, always, and worded as the lesser thing it is. A classmate who was
   // in the room beats this every time, and the button that asks one of them
   // is the one the thumb lands on first.
-  const robot = document.createElement('button');
-  robot.textContent = 'Ask AI';
+  // Once per question: after the first tap the answer is on the thread for
+  // everybody, and the button has nothing left to do.
+  const robot = q.answers.some(a => a.ai) ? null : document.createElement('button');
+  if (robot) robot.textContent = 'Ask AI';
   const row = acts(reply, robot, dropBtn(q));
   what.appendChild(row);
   // The box appears where it was asked for and only there: a form under every
@@ -5996,7 +6009,7 @@ function doubtCard(q) {
     reply.disabled = true;
     what.insertBefore(askBox('Answer ' + q.by + '…', 'Post this answer', q.id), row);
   };
-  robot.onclick = () => askTheMachine(q, robot, what, row);
+  if (robot) robot.onclick = () => askTheMachine(q, robot);
   // Only the top answer is marked, and only when the class actually voted for
   // it: a rule down the side of the one answer with no votes says nothing.
   q.answers.forEach((a, k) => what.appendChild(answerCard(a, k === 0 && a.votes > 0)));
@@ -6044,22 +6057,11 @@ function drawDoubts(instead) {
   shown.forEach(q => box.appendChild(doubtCard(q)));
 }
 
-// Nothing here touches THREAD and nothing here redraws. The answer is put on
-// the screen and only on the screen: it was never stored, so a redraw -- which
-// any answer posted after it will cause -- is what takes it away again, and
-// that is the correct behaviour rather than a bug to work around.
-async function askTheMachine(q, btn, what, row) {
+// Posted to the thread by the server, which hands the thread back -- the same
+// redraw an answer from a classmate gets.
+async function askTheMachine(q, btn) {
   btn.disabled = true;
   busy('Thinking…', true);
-  const el = document.createElement('div');
-  el.className = 'ans ai';
-  const body = document.createElement('div');
-  body.className = 'what';
-  const meta = document.createElement('p');
-  meta.className = 'meta';
-  body.appendChild(meta);
-  el.appendChild(body);
-  what.insertBefore(el, row.nextSibling);
   try {
     const r = await fetch('/doubts/ai', {
       method: 'POST', headers: {'Content-Type': 'application/json'},
@@ -6067,16 +6069,11 @@ async function askTheMachine(q, btn, what, row) {
     });
     const d = await r.json().catch(() => ({}));
     if (!r.ok) throw new Error(d.error || 'could not answer that');
-    const out = document.createElement('div');
-    mdInto(out, d.text);
-    body.insertBefore(out, meta);
-    // Said under the answer and not over it, because it is what you want to
-    // know after reading one: who said this, and is it staying.
-    meta.textContent = 'AI, not a classmate. Not saved: check it against the lecture.';
-    busyDone('');
+    busyDone('AI answered');
+    THREAD = d.doubts || [];
+    drawDoubts();
   } catch (e) {
     btn.disabled = false;
-    el.remove();
     oops('Could not answer that', e);
   }
 }
@@ -9240,12 +9237,12 @@ def db_doubts(conn, user_id, code, lecture_id=None, material_id=None):
     that cannot be gamed by answering later.
     """
     questions, answers = [], {}
-    for did, parent, body, who, at, mine, votes, voted in conn.execute(
+    for did, parent, body, who, at, mine, votes, voted, ai in conn.execute(
         "select d.id, d.parent_id, d.body, p.name, "
         "  extract(epoch from d.created_at)::bigint, d.author_id = %(me)s, "
         "  (select count(*) from votes v where v.doubt_id = d.id), "
         "  exists (select 1 from votes v "
-        "           where v.doubt_id = d.id and v.voter_id = %(me)s) "
+        "           where v.doubt_id = d.id and v.voter_id = %(me)s), d.by_ai "
         "from doubts d join profiles p on p.id = d.author_id "
         "left join doubts q on q.id = d.parent_id "
         # An answer is on the thread its question is on. coalesce is what says
@@ -9264,8 +9261,10 @@ def db_doubts(conn, user_id, code, lecture_id=None, material_id=None):
         "order by d.created_at",
         {"me": user_id, "code": code, "lec": lecture_id, "mat": material_id},
     ):
-        row = {"id": str(did), "body": body, "by": who, "at": at,
-               "mine": mine, "votes": votes, "voted": voted}
+        # The machine's answer is stored under whoever pressed Ask AI (0055);
+        # it is shown as nobody's, so it is not theirs to delete either.
+        row = {"id": str(did), "body": body, "by": "AI" if ai else who, "at": at,
+               "mine": mine and not ai, "votes": votes, "voted": voted, "ai": ai}
         (questions if parent is None else
          answers.setdefault(str(parent), [])).append(row)
     for q in questions:
@@ -9275,7 +9274,8 @@ def db_doubts(conn, user_id, code, lecture_id=None, material_id=None):
     return questions
 
 
-def db_ask(conn, user_id, code, lecture_id, parent_id, body, material_id=None):
+def db_ask(conn, user_id, code, lecture_id, parent_id, body, material_id=None,
+           by_ai=False):
     """Ask the section something, or answer somebody who did.
 
     Which of the two it is, is parent_id and nothing else -- and whether that
@@ -9286,15 +9286,15 @@ def db_ask(conn, user_id, code, lecture_id, parent_id, body, material_id=None):
     An answer is written with no subject and no lecture: it belongs to its
     question, and the question is the one row that says which thread this is.
     """
-    body = (body or "").strip()[:DOUBT_BODY]
+    body = (body or "").strip()[:8000 if by_ai else DOUBT_BODY]
     if not body:
         raise ValueError("a question needs something in it")
     if parent_id:
         code, lecture_id, material_id = None, None, None
     return str(conn.execute(
         "insert into doubts (subject_code, lecture_id, material_id, parent_id, "
-        "author_id, body) values (%s, %s, %s, %s, %s, %s) returning id",
-        (code, lecture_id, material_id, parent_id, user_id, body),
+        "author_id, body, by_ai) values (%s, %s, %s, %s, %s, %s, %s) returning id",
+        (code, lecture_id, material_id, parent_id, user_id, body, by_ai),
     ).fetchone()[0])
 
 
@@ -14420,12 +14420,12 @@ def build_server(args):
         def do_doubts_ai(self):
             """A machine's shot at a question, for when no classmate is awake.
 
-            Nothing is written. The answer is not a row in doubts, does not
-            carry an author, cannot be voted on and is gone when the thread is
-            closed again -- which is the point: the table is the class
-            answering the class, and a bot with a profile in it would sit on
-            top of every thread being more confident than the people this
-            feature exists for.
+            Written to the thread as an answer marked by_ai (0055), once per
+            question: the first tap answers it for the whole section, and a
+            second tap -- or a second phone in the same second, which the
+            unique index catches -- gets that same answer back rather than
+            another call. It is voted on like any answer, so a classmate who
+            was in the room can still out-rank it.
 
             Deliberately not in ROLE_REQUIRED, unlike /explain. The rung on
             /explain is there because Anthropic bills for it; this is Groq's
@@ -14445,14 +14445,28 @@ def build_server(args):
                 req = self.body(2000)
                 if req is None:
                     return
+                qid = (req.get("id") or "").strip()
                 with db(self.me["id"]) as conn:
                     row = conn.execute(
-                        "select subject_code, body from doubts "
+                        "select subject_code, lecture_id, material_id, body, "
+                        "  exists (select 1 from doubts a where a.parent_id = d.id "
+                        "           and a.by_ai and a.deleted_at is null) "
+                        "from doubts d "
                         "where id = %s and parent_id is null and deleted_at is null",
-                        ((req.get("id") or "").strip(),)).fetchone()
+                        (qid,)).fetchone()
                 if not row:
                     return self.reply(404, {"error": "that question is gone"})
-                code, question = row
+                code, lecture, material, question, answered = row
+                lecture = lecture and str(lecture)
+                material = material and str(material)
+
+                def thread():
+                    with db(self.me["id"]) as conn:
+                        return self.reply(200, {"doubts": db_doubts(
+                            conn, self.me["id"], code, lecture, material)})
+
+                if answered:
+                    return thread()
 
                 # Same cache as Explain, same reason: a hundred and ten people
                 # on one thread must be one call. The subject is in the key
@@ -14461,17 +14475,21 @@ def build_server(args):
                 key = hashlib.sha256(f"{code}\n{question}".encode()).hexdigest()[:32]
                 hit = cache_dir / f"doubt-{key}.md"
                 if hit.exists():
-                    return self.reply(200, {"text": hit.read_text(), "cached": True})
-
-                if budget["left"] <= 0:
-                    return self.reply(429, {"error": "AI limit reached for this session"})
-                budget["left"] -= 1
-
-                subject = SUBJECTS.get(code, (code,))[0].replace("-", " ")
-                out = groq(DOUBT_PROMPT, f"In {subject}:\n\n{question}", ai_model)
-                hit.write_text(out)
-                log(f"{budget['left']} left, cached {key[:8]}", "doubt-ai", 1)
-                self.reply(200, {"text": out})
+                    out = hit.read_text()
+                else:
+                    if budget["left"] <= 0:
+                        return self.reply(429, {"error": "AI limit reached for this session"})
+                    budget["left"] -= 1
+                    subject = SUBJECTS.get(code, (code,))[0].replace("-", " ")
+                    out = groq(DOUBT_PROMPT, f"In {subject}:\n\n{question}", ai_model)
+                    hit.write_text(out)
+                    log(f"{budget['left']} left, cached {key[:8]}", "doubt-ai", 1)
+                try:
+                    with db(self.me["id"]) as conn:
+                        db_ask(conn, self.me["id"], None, None, qid, out, by_ai=True)
+                except psycopg.errors.UniqueViolation:
+                    pass   # somebody else's tap got there first; show theirs
+                return thread()
             except psycopg.errors.InvalidTextRepresentation:
                 return self.reply(404, {"error": "no such question"})
             except Exception as e:
