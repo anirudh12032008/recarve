@@ -8610,6 +8610,48 @@ def db_inviter(conn, code):
     return row[0] if row else None
 
 
+# The library as /data serves it, remembered until a file in it changes. Every
+# /data used to read and parse every note off disk to say, nearly always, what
+# it said a minute ago -- and /data is what every open tab asks for. The key is
+# every path build_data reads with its mtime and size, so whatever writes the
+# library -- an upload, the remote worker, a rename, a hand edit on the VM --
+# moves the key without having to remember that a cache exists.
+_library = {}
+_library_lock = threading.Lock()
+
+
+def library_data(library, relative_to):
+    """build_data, reused while nothing under the library has changed.
+
+    Each caller gets its own dicts and lists over the shared note text:
+    apply_meta writes one student's votes and "voted" into them, and those
+    must never reach the next student to ask.
+    """
+    lib = Path(library)
+    try:
+        key = tuple(sorted(
+            (str(p), st.st_mtime_ns, st.st_size)
+            for pattern in ("*/revision.md", "*/lectures/*.md", "*/uploads/*")
+            for p in lib.glob(pattern) for st in (p.stat(),)))
+    except OSError:
+        # Listed then gone -- an upload's .part renamed mid-listing. Read it
+        # all, keep nothing; the next request finds a still library.
+        return build_data(library, relative_to)
+    where = (str(lib), str(relative_to))
+    with _library_lock:
+        held = _library.get(where)
+    if held and held[0] == key:
+        data = held[1]
+    else:
+        # A file that changes after the key was taken is stored under the old
+        # key, which the next request no longer matches: it errs to a re-read.
+        data = build_data(library, relative_to)
+        with _library_lock:
+            _library[where] = (key, data)
+    return [{**s, "notes": [dict(n) for n in s["notes"]],
+             "uploads": [dict(u) for u in s["uploads"]]} for s in data]
+
+
 # Who each signed-in phone is, remembered for a moment. The gate reads a
 # principal on every single request -- every static file, every photo, every
 # two-second job poll -- and every read was a brand-new Postgres connection,
@@ -13656,7 +13698,7 @@ def build_server(args):
             if self.path.split("?")[0] == "/login":
                 return self.send_html(GATE_PAGE.replace("__BODY__", with_google(LOGIN_BODY)))
             if self.path == "/data":
-                subjects = build_data(args.library, args.out.parent)
+                subjects = library_data(args.library, args.out.parent)
                 # `now` is this machine's clock, and the mtimes in `subjects`
                 # are the same clock. Home's "new since you last looked" is a
                 # comparison between two of these, never against the phone's
