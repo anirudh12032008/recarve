@@ -170,12 +170,14 @@ const document = new Proxy(function () {}, {
     k === 'getElementById' ? (id => els[id] || any)
     : k === 'body' ? bodyNode
     : k === 'activeElement' ? activeEl
+    : k === 'visibilityState' ? visibility
     : k === 'getSelection' ? getSelection
     // The one listener whose decision is worth checking: what a highlight does
     // is a rule (only inside a note, only a real phrase, only for a member who
     // may spend), and the proxy would swallow it.
     : k === 'addEventListener'
-      ? ((ev, fn) => { if (ev === 'selectionchange') onSelectionChange = fn; })
+      ? ((ev, fn) => { if (ev === 'selectionchange') onSelectionChange = fn;
+                       if (ev === 'visibilitychange') onVisibility = fn; })
     : any),
   set: (t, k, v) => (writes.push([k, v]), true),
   apply: (t, self, a) => (writes.push(['()'].concat(a)), any),
@@ -280,6 +282,7 @@ const els = {ask: askEl, panel: panelEl, fab: fabEl, lock: lockEl, save: saveEl,
 const matchMedia = () => ({matches: false, addEventListener: () => {}});
 let selection = '';
 let onSelectionChange = () => {};
+let onVisibility = () => {}, visibility = 'visible';
 const rect = {top: 100, left: 20, width: 80};
 const getSelection = () => ({
   toString: () => selection,
@@ -299,7 +302,10 @@ const fetch = (url, init) => {
   return reply ? Promise.resolve(reply) : new Promise(() => {});
 };
 const answer = (ok, body) => ({ok, status: ok ? 200 : 503, json: async () => body});
-const setInterval = () => 0, setTimeout = () => 0, clearInterval = () => {};
+// Nothing fires; the job poll's next delay is kept so its cadence can be read.
+let jobsDelay = null;
+const setInterval = () => 0, clearInterval = () => {};
+const setTimeout = (fn, ms) => { if (fn === pollJobs) jobsDelay = ms; return 0; };
 const clearTimeout = () => {};
 // The page listens for 'scroll' on the window to take the + out of the way.
 const addEventListener = () => {};
@@ -1047,6 +1053,27 @@ reply = moving('80% - 4 of 5 min');
 location.hash = '#classes/MC1101'; route(); writes = [];
 await pollJobs();
 assert.ok(!says('Needs you'), 'it is Home that is redrawn, not whatever else is open');
+
+// ---- How often it asks. Every two seconds from every open tab was most of
+// what the server answered for an idle class (load test, 2026-09-25).
+assert.equal(jobsDelay, 2000, 'while a lecture transcribes, progress stays live');
+reply = answer(true, {jobs: []});
+await pollJobs();
+assert.equal(live, true, 'still talking to a server');
+assert.equal(jobsDelay, 30000, 'with nothing running, a tab asks every thirty seconds');
+reply = answer(true, {jobs: [{id: 2, name: 'CY1107-two.m4a', state: 'queued', detail: ''}]});
+await pollJobs();
+assert.equal(jobsDelay, 2000, 'a queued lecture (an upload just made) is watched closely again');
+visibility = 'hidden'; jobsDelay = null;
+await pollJobs();
+assert.equal(jobsDelay, null, 'a hidden tab schedules nothing');
+visibility = 'visible'; const before = fetches.length;
+onVisibility();   // pollJobs fetches before its first await, so this is synchronous
+assert.equal(fetches.length - before, 1, 'coming back into view asks at once instead of waiting');
+assert.equal(live, true, 'and every step above was a real poll, not the waiting-on-/data path');
+// Leave JOBS as the checks below found it: one lecture at 80%.
+reply = moving('80% - 4 of 5 min');
+await pollJobs();
 
 // ---- What the server says this session may do. The lock is the server's;
 // what the page owes a student is not offering the two buttons it would refuse.
