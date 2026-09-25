@@ -3372,6 +3372,10 @@ const CREDITS = [
   ['KaTeX', 'Renders the mathematics'],
   ['Google Maps', 'Draws the campus on the map screen'],
   ['psycopg', 'The Postgres driver underneath all of it'],
+  ['NIT Bhopal Freshers',
+   'The previous year question papers. Credited to nitbfreshers.42web.io, and '
+   + 'used here only for educational purposes and MANIT student welfare',
+   'https://nitbfreshers.42web.io/'],
   ['Everyone in the section',
    'Every upload, every answered doubt and every recording. The library is '
    + 'not the app\u2019s, it is theirs, and the app is where they put it'],
@@ -3387,7 +3391,14 @@ function aboutScreen() {
     who.push(line(what, handle, a));
   }
   block('Made by', who);
-  block('Standing on', CREDITS.map(([what, does]) => line(what, does)));
+  block('Standing on', CREDITS.map(([what, does, href]) => {
+    if (!href) return line(what, does);
+    const a = document.createElement('a');
+    a.href = href;
+    a.target = '_blank';
+    a.rel = 'noopener noreferrer';
+    return line(what, does, a);
+  }));
   saying('recarve is one file and one database.',
          'If something here is wrong, a period in the wrong hour, a '
          + 'subject under the wrong name, say so on the wall. It is '
