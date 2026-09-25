@@ -71,6 +71,40 @@ def test_notes_carry_the_kind_that_groups_them(tmp_path):
         "week1": "lecture", "Revision sheet": "revision"}
 
 
+def test_data_reads_the_library_only_when_it_changes(tmp_path, monkeypatch):
+    """/data reuses the library until a file moves, and never shares a student's votes."""
+    folder = tmp_path / "library" / "MC1101-Mathematics-1"
+    (folder / "lectures").mkdir(parents=True)
+    (folder / "uploads").mkdir()
+    (folder / "lectures" / "week1.md").write_text("## Summary\nlimits\n")
+    (folder / "uploads" / "a.pdf").write_bytes(b"x")
+    reads = []
+    real = notes.build_data
+    monkeypatch.setattr(notes, "build_data", lambda *a: reads.append(1) or real(*a))
+    mc = lambda data: next(s for s in data if s["code"] == "MC1101")
+
+    first = notes.library_data(tmp_path / "library", tmp_path)
+    assert notes.library_data(tmp_path / "library", tmp_path) == first
+    assert len(reads) == 1, "an unchanged library is not read again"
+
+    # apply_meta writes one student's view into what it is handed.
+    notes.apply_meta(first, {("MC1101", "a.pdf"): {"votes": 3, "voted": True}},
+                     {("MC1101", "week1"): "Asha"})
+    again = mc(notes.library_data(tmp_path / "library", tmp_path))
+    assert "voted" not in again["uploads"][0], "one student's vote reached the next"
+    assert "by" not in again["notes"][0]
+
+    (folder / "lectures" / "week1.md").write_text("## Summary\nlimits, continuity\n")
+    assert "continuity" in mc(notes.library_data(tmp_path / "library", tmp_path))["notes"][0]["md"]
+    (folder / "uploads" / "b.pdf").write_bytes(b"y")
+    assert [u["name"] for u in mc(notes.library_data(tmp_path / "library", tmp_path))["uploads"]] \
+        == ["a.pdf", "b.pdf"], "a new upload shows up"
+    (folder / "uploads" / "a.pdf").unlink()
+    assert [u["name"] for u in mc(notes.library_data(tmp_path / "library", tmp_path))["uploads"]] \
+        == ["b.pdf"], "a removed one goes"
+    assert len(reads) == 4
+
+
 def test_serving_makes_the_library_before_it_exports_it(tmp_path):
     """A fresh clone has no library folder, and `serve` used to die on that."""
     args = make_args(tmp_path)
