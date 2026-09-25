@@ -1742,7 +1742,32 @@ assert.ok(wrote(['()', 'aria-label', 'Today, 3 classes']), 'today says how many 
 assert.ok(says('Wednesday: Test holiday, no classes'), 'and the strip says why');
 assert.ok(says('Mid-term examinations') && says('In 50 days · Oct 27'), 'several dates, not one');
 assert.ok(wrote(['textContent', 'Oct']) && wrote(['textContent', 27]), 'each on a tear-off date tile');
+assert.ok(says('See the whole month'), 'the strip is the way into the month');
 ATT.closed = []; delete ATT.upcoming;
+
+// ---- The month. Both calendars on one page, and the whole term behind it:
+// `closed` only reaches three weeks ahead, so mid-terms in November have to
+// come from the whole-term list or a November Monday draws three classes.
+ATT.calendar = [
+  {date: '2026-09-14', ends: '2026-09-14', title: 'Ganesh Chaturthi', kind: 'holiday',
+   teaching: false, notable: true},
+  {date: '2026-10-27', ends: '2026-11-03', title: 'Mid-term examinations', kind: 'exam',
+   teaching: false, notable: true}];
+CAMPUS = {events: [{id: 'e1', title: 'Robotics fest', society: 'Robotics', venue: 'OAT',
+                    date: '2026-09-21', ends: '2026-09-21', deleted: false}]};
+location.hash = '#classes/calendar'; writes = []; route();
+assert.ok(says('Calendar') && says('September 2026') && says('This month'));
+assert.ok(says('Ganesh Chaturthi') && says('Robotics fest'), 'both calendars, together');
+assert.ok(wrote(['()', 'aria-label', 'Monday 14 September, Ganesh Chaturthi']),
+          'a holiday from the whole-term list closes the day');
+assert.ok(wrote(['()', 'aria-label', 'Monday 21 September, 3 classes, Robotics fest']),
+          'an ordinary day with a fest on it says both');
+assert.equal(slotsFor('2026-11-02').length, 0, 'mid-terms past the closed window still empty a day');
+calMonth = '2026-10'; writes = []; render();
+assert.ok(says('October 2026') && says('Mid-term examinations') && !says('Robotics fest'),
+          'stepping a month shows that month');
+delete ATT.calendar; CAMPUS = null;
+location.hash = '#classes'; route();
 
 ATT.next = null;
 writes = []; render();
@@ -2556,7 +2581,7 @@ def test_the_composer_is_a_url_like_every_other_level():
             "    ? parts[1] || null : null;" in notes.PAGE)
     assert "composing" not in notes.PAGE, "no variable may outlive the URL"
     assert ("lback.hidden = !s && !view.att && !view.compose && !view.day\n"
-            "                 && !view.me && !view.papers;" in notes.PAGE)
+            "                 && !view.me && !view.papers && !view.cal;" in notes.PAGE)
     compose = re.search(r"function renderCompose\(\) \{.*?\n\}", notes.PAGE, re.S).group(0)
     assert "history.back()" in compose, "Cancel is a step back, like every other one"
 
