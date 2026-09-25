@@ -1909,7 +1909,7 @@ body.reading .tabs{display:none}
 }
 /* The visitor login reads and never writes (the server refuses its POSTs), so
    nothing that would send one is drawn. Votes stay as counts, just not taps. */
-body.visitor :is(#fab,#save,#ask,.saybox,.askbox,.mark,.edit,.w){display:none!important}
+body.visitor :is(#fab,#save,.saybox,.askbox,.mark,.edit,.w){display:none!important}
 body.visitor .vote{pointer-events:none}
 </style>
 <!-- Tailwind's compiled sheet, inlined. It comes AFTER the token block above
@@ -2115,6 +2115,7 @@ let PENDING = 0;    // classmates waiting for an admin; 0 for everyone else
 // export has no server and nobody to be, so it assumes the role that leaves
 // every button working and lets each one say what it needs.
 let ROLE = null;    // null until /data answers; see refresh() for no server at all
+let VISITOR = false; // the shared read-only login; Explain is its one exception
 let JOBS = [];      // the last /jobs answer
 
 // The ladder, in the same order as ROLES in notes.py -- change it there and
@@ -7133,7 +7134,8 @@ async function refresh() {
     ROLE = d.role || ROLE;
     // The shared try-it login reads and never writes; the server refuses its
     // POSTs, and this takes the controls that would send one off the screen.
-    document.body.classList.toggle('visitor', !!d.visitor);
+    VISITOR = !!d.visitor;
+    document.body.classList.toggle('visitor', VISITOR);
     const plus = TOUR.findIndex(t => t[1][0] === '#fab');
     if (d.visitor && plus >= 0) TOUR.splice(plus, 1);   // no + to point at
     applyRole();
@@ -7663,7 +7665,7 @@ document.addEventListener('selectionchange', () => {
                            window.scrollY + r.top - 52) + 'px';
   ask.style.left = Math.max(12, Math.min(window.innerWidth - 130,
                                          r.left + r.width / 2 - 55)) + 'px';
-  if (mayAdd()) ask.classList.remove('locked');
+  if (mayAdd() || VISITOR) ask.classList.remove('locked');
   else ask.classList.add('locked');
   ask.classList.add('on');
 });
@@ -7675,7 +7677,7 @@ ask.onclick = async () => {
   // The refusal arrives in the panel the button opens, in the same sentence
   // the Me tab and the add sheet use, rather than as a 403 dressed as a
   // failure. No request is made: this one costs money when it succeeds.
-  if (!mayAdd()) { out.textContent = LOCK_EXPLAIN; return; }
+  if (!mayAdd() && !VISITOR) { out.textContent = LOCK_EXPLAIN; return; }
   waiting(out, 'Reading that passage\u2026');
   try {
     const res = await fetch('/explain', {
@@ -8249,6 +8251,10 @@ ROLE_REQUIRED = {
 # profiles.roll_login column is what says a row is allowed to be in it at all.
 MIN_PASSWORD = 8
 VISITOR = "visitor"   # the shared try-it login, username = password
+# What the visitor may spend on Explain in any 24 hours: per device, so one
+# stranger cannot use up the rest, and for the whole account, which caps the bill.
+VISITOR_EXPLAINS_PER_DEVICE = 10
+VISITOR_EXPLAINS_PER_DAY = 50
 
 # Failed logins per roll number and per client, in a sliding window. The two
 # numbers are far apart on purpose: five is a fat-fingered password on one
@@ -13339,6 +13345,7 @@ def build_server(args):
     # and the two windows are free to diverge later without either moving the
     # other.
     supers = Limiter()
+    visitor_ai = Limiter(window=24 * 3600)
 
     secret = b"" if args.no_auth else session_secret()
     # Minted even under --no-auth: the worker routes are gated on it whatever
@@ -13491,7 +13498,7 @@ def build_server(args):
                 # The shared visitor login looks and never touches: every
                 # write, and every AI call that costs money, is a POST.
                 if (self.me.get("visitor") and self.command not in ("GET", "HEAD")
-                        and path != "/logout"):
+                        and path not in ("/logout", "/explain")):
                     self.reply(403, {"error": "visitors can look around but not "
                                      "post. Sign in with your institute email "
                                      "to join in."})
@@ -13501,6 +13508,8 @@ def build_server(args):
                 # dispatch, so curl is refused exactly as the app's own screens
                 # are, and so a route added later starts out shut.
                 need = ROLE_REQUIRED.get(path)
+                if self.me.get("visitor") and path == "/explain":
+                    need = None   # rationed in the handler instead
                 if need and RANK.get(self.me["role"], 0) < RANK[need]:
                     self.reply(403, {"error": f"{path} needs {need} access",
                                      "required": need, "role": self.me["role"]})
@@ -14112,6 +14121,16 @@ def build_server(args):
                 hit = cache_dir / f"{key}.md"
                 if hit.exists():
                     return self.reply(200, {"text": hit.read_text(), "cached": True})
+
+                if self.me and self.me.get("visitor"):
+                    device = "ip:" + self.client_ip()
+                    if (visitor_ai.locked(device, VISITOR_EXPLAINS_PER_DEVICE)
+                            or visitor_ai.locked("all", VISITOR_EXPLAINS_PER_DAY)):
+                        return self.reply(429, {"error": "that's today's Explain "
+                                          "limit for visitors. Sign in with your "
+                                          "institute email for more."})
+                    visitor_ai.fail(device)
+                    visitor_ai.fail("all")
 
                 if budget["left"] <= 0:
                     return self.reply(429, {"error": "explain limit reached for this session"})
