@@ -159,6 +159,7 @@ PEOPLE = [
     # below is refused for being the roll number and not for being short.
     ("Longroll", "LONGROLL2024", "student", "approved", None),
     ("Resettee", "R0", "student", "approved", "resettee-password"),
+    ("Visitor", "visitor", "student", "approved", "visitor"),
     ("Ratelim", "R1",  "student", "approved", "ratelim-password"),
     ("Cleared", "R2",  "student", "approved", "cleared-password"),
     ("Waiting", "P1",  "student", "pending",  "waiting-password"),
@@ -748,3 +749,18 @@ def test_logging_out_tells_the_phone_to_forget_the_cookie(server):
     assert headers["Set-Cookie"].startswith(f"{notes.SESSION_COOKIE}=;")
     assert "Max-Age=0" in headers["Set-Cookie"]
     assert "fetch('/logout', {method: 'POST'})" in notes.PAGE
+
+
+def test_the_visitor_looks_and_never_writes(server):
+    """The shared try-it login reads the library; every POST but leaving is
+    refused, its own password included."""
+    port, _ = server
+    status, _, cookie = login(port, "visitor", "visitor", client="10.9.0.1")
+    assert status == 200 and cookie
+    assert call(port, "GET", "/data", cookie=cookie)[0] == 200
+    for path, body in (("/posts", {"body": "hi"}), ("/password", {"password": "x" * 12}),
+                       ("/explain", {"text": "limits"})):
+        code, reply, _ = call(port, "POST", path, body, cookie=cookie)
+        assert code == 403 and "visitors" in reply, path
+    assert password_of("visitor") == "visitor"
+    assert call(port, "POST", "/logout", {}, cookie=cookie)[0] == 200

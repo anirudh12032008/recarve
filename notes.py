@@ -8771,7 +8771,7 @@ def db_principal(conn, profile_id):
     never-created profile comes back empty rather than trusted."""
     try:
         row = conn.execute(
-            "select name, status, role, password is null from profiles where id = %s",
+            "select name, status, role, password is null, roll_no from profiles where id = %s",
             (profile_id,),
         ).fetchone()
     except psycopg.errors.InvalidTextRepresentation:
@@ -8782,7 +8782,8 @@ def db_principal(conn, profile_id):
     # request, like status, so an admin's reset lands on somebody's next tap
     # rather than whenever their cookie happens to expire.
     return {"id": str(profile_id), "name": row[0], "status": row[1],
-            "role": row[2], "admin": row[2] == "admin", "must_set": row[3]}
+            "role": row[2], "admin": row[2] == "admin", "must_set": row[3],
+            "visitor": (row[4] or "").lower() == VISITOR}
 
 
 def db_login(conn, roll, password):
@@ -13295,6 +13296,14 @@ def build_server(args):
                         return False
                     self.reply(403, {"error": "pick a password before anything "
                                               "else opens", "set_password": True})
+                    return False
+                # The shared visitor login looks and never touches: every
+                # write, and every AI call that costs money, is a POST.
+                if (self.me.get("visitor") and self.command not in ("GET", "HEAD")
+                        and path != "/logout"):
+                    self.reply(403, {"error": "visitors can look around but not "
+                                     "post. Sign in with your institute email "
+                                     "to join in."})
                     return False
                 # Approved says you are a classmate. Role says what you may do
                 # with that, and this is where a student is refused -- before
