@@ -1022,6 +1022,14 @@ body.drawered #drawer{transform:none;visibility:visible}
 .week .today{background:var(--accent);color:var(--accent-fg)}
 .week .today small,.week .today b{color:var(--accent-fg)}
 .week .today.has i::before{background:var(--accent-fg)}
+/* The month view: weekday letters over the grid, and a campus event as a
+   hollow ring beside the class dot -- the same two calendars, told apart. */
+.week > small{text-align:center}
+.week .ev i::after{content:"";width:6px;height:6px;border-radius:50%;
+  box-shadow:inset 0 0 0 1.5px var(--accent)}
+.week .today.ev i::after{box-shadow:inset 0 0 0 1.5px var(--accent-fg)}
+.cal .mon:has(.step){align-items:center}
+.cal .more{margin:8px 0 0}
 /* The day as a timeline, Google-Calendar style: a class is as tall as it is
    long, free time is a dashed gap you can see at a glance, lunch is shaded,
    and a red line says where you are in the day right now. */
@@ -1107,10 +1115,10 @@ button.off:active{background:var(--surface)}
 /* Yesterday and tomorrow, at thumb size. The picker is for jumping a month;
    stepping one day is the move somebody makes walking out of a lecture, and it
    must not cost a modal wheel. */
-.dpick .step{flex:none;width:var(--tap);height:var(--tap);border-radius:11px;
+.dpick .step,.cal .step{flex:none;width:var(--tap);height:var(--tap);border-radius:11px;
   border:1px solid var(--edge);background:var(--bg);color:var(--fg);
   font-size:20px;line-height:1}
-.dpick .step:active{background:var(--surface)}
+.dpick .step:active,.cal .step:active{background:var(--surface)}
 /* Swiped, not dragged: the bar a desktop browser draws under this strip is
    furniture for a gesture nobody makes on the phone this is used on. */
 .days{scrollbar-width:none}
@@ -2993,8 +3001,102 @@ function calendarWeek() {
     p.textContent = why;
     box.appendChild(p);
   }
+  const all = document.createElement('button');
+  all.className = 'more';
+  all.textContent = 'See the whole month';
+  all.onclick = () => go('classes', 'calendar');
+  box.appendChild(all);
   heading('Calendar');
   nav.appendChild(box);
+}
+
+// The month, under Classes: the week strip's days, a whole month of them, with
+// the institute's dates and Campus's events on the same page. The one place
+// both calendars are shown together -- each still lives on its own tab.
+let calMonth = null;           // 'YYYY-MM' the month view is on; null is this month
+function renderCalendar() {
+  needCampus();
+  const today = attToday();
+  const ym = calMonth || today.slice(0, 7);
+  const first = ym + '-01';
+  const last = shiftDay(shiftDay(first, 32).slice(0, 7) + '-01', -1);
+  const step = n => {
+    const d = new Date(first + 'T12:00:00');
+    d.setMonth(d.getMonth() + n);
+    calMonth = isoDay(d).slice(0, 7);
+    render();
+  };
+  // Everything that touches this month, from both sources.
+  const inst = ((ATT && ATT.calendar) || [])
+    .filter(c => c.date <= last && c.ends >= first)
+    .map(c => ({...c, what: 'academic'}));
+  const evs = ((CAMPUS && CAMPUS.events) || [])
+    .filter(e => !e.deleted && e.date <= last && e.ends >= first)
+    .map(e => ({...e, what: 'campus',
+                where: [e.society, e.venue].filter(Boolean).join(' · ')}));
+  const on = (list, date) => list.find(x => x.date <= date && date <= x.ends);
+
+  const box = document.createElement('div');
+  box.className = 'cal';
+  const head = document.createElement('div');
+  head.className = 'mon';
+  const back = document.createElement('button');
+  back.className = 'step'; back.textContent = '‹';
+  back.setAttribute('aria-label', 'The month before');
+  back.onclick = () => step(-1);
+  const fwd = document.createElement('button');
+  fwd.className = 'step'; fwd.textContent = '›';
+  fwd.setAttribute('aria-label', 'The month after');
+  fwd.onclick = () => step(1);
+  const name = document.createElement('b');
+  name.textContent = MONTHS[+ym.slice(5) - 1] + ' ' + ym.slice(0, 4);
+  head.append(back, name, fwd);
+  box.appendChild(head);
+
+  const grid = document.createElement('div');
+  grid.className = 'week';
+  for (const d of ['M', 'T', 'W', 'T', 'F', 'S', 'S']) {
+    const s = document.createElement('small');
+    s.textContent = d;
+    grid.appendChild(s);
+  }
+  for (let i = (dayOfISO(first) + 6) % 7; i > 0; i--)
+    grid.appendChild(document.createElement('span'));
+  for (let date = first; date <= last; date = shiftDay(date, 1)) {
+    const shut = closedOn(date);
+    const n = TT ? slotsFor(date).length : 0;
+    const inDay = on(inst, date), ev = on(evs, date);
+    const b = document.createElement('button');
+    b.className = [date === today ? 'today' : '', date < today ? 'past' : '',
+                   shut ? 'off' : n ? 'has' : '', ev ? 'ev' : ''].filter(Boolean).join(' ');
+    b.innerHTML = '<b></b><i></i>';
+    b.querySelector('b').textContent = +date.slice(8);
+    b.setAttribute('aria-label', [dayName(date),
+      shut ? shut.title : n ? n + (n === 1 ? ' class' : ' classes') : 'no classes',
+      !shut && inDay ? inDay.title : '', ev ? ev.title : ''].filter(Boolean).join(', '));
+    b.onclick = () => { dayDate = date; go('classes', 'day'); };
+    grid.appendChild(b);
+  }
+  box.appendChild(grid);
+  nav.appendChild(box);
+
+  const rows = [...inst, ...evs]
+    .sort((a, b) => a.date < b.date ? -1 : a.date > b.date ? 1 : 0)
+    .map(n => {
+      const short = d => MONTHS[+d.slice(5, 7) - 1].slice(0, 3) + ' ' + (+d.slice(8));
+      const when = n.ends !== n.date ? short(n.date) + ' – ' + short(n.ends) : short(n.date);
+      const row = line(n.title, [when, n.what === 'campus' ? 'Campus' : '', n.where]
+                       .filter(Boolean).join(' · '), document.createElement('div'));
+      const tile = document.createElement('span');
+      tile.className = 'tile';
+      tile.innerHTML = '<small></small><b></b>';
+      tile.querySelector('small').textContent = MONTHS[+n.date.slice(5, 7) - 1].slice(0, 3);
+      tile.querySelector('b').textContent = +n.date.slice(8);
+      row.insertBefore(tile, row.firstChild);
+      return row;
+    });
+  if (rows.length) block('This month', rows);
+  else saying('Nothing on the calendar this month.');
 }
 
 // Section I's bell. Seven periods and a lunch break, off the institute's
@@ -3491,8 +3593,11 @@ const markable = date => !!ATT && date <= ATT.today
 // The institute's own answer for this date -- a holiday, the mid-sem break, an
 // exam window -- or null on an ordinary day. Not a mark and not a cancellation:
 // nobody in this section decided it and nobody here can undo it.
+// Past the `closed` window (three weeks ahead), the whole-term list answers it.
 const closedOn = date =>
-  (ATT && ATT.closed ? ATT.closed.find(c => c.date === date) : null) || null;
+  (ATT && ATT.closed ? ATT.closed.find(c => c.date === date) : null)
+  || (ATT && ATT.calendar || []).find(c => !c.teaching && c.date <= date && date <= c.ends)
+  || null;
 const MONTHS = ['January', 'February', 'March', 'April', 'May', 'June', 'July',
                 'August', 'September', 'October', 'November', 'December'];
 // What to call a day on a heading. The three days a student thinks of by name
@@ -4312,7 +4417,7 @@ function needAllPapers() {
                    redrawPapers(); });
 }
 const redrawPapers = () => { if (view.papers) render(); };
-const redrawCampus = () => { if (view.tab === 'campus') render(); };
+const redrawCampus = () => { if (view.tab === 'campus' || view.cal) render(); };
 const redrawCommunity = () => { if (view.tab === 'community') render(); };
 const campusList = key => (CAMPUS && CAMPUS[key]) || [];
 
@@ -5671,7 +5776,7 @@ function render() {
   paintDrawer();
   const s = view.code ? subjectOf(view.code) : null;
   const searchable = view.tab === 'classes' && !view.att && !view.day
-                    && !view.papers;
+                    && !view.papers && !view.cal;
   nav.innerHTML = '';
   // Home keeps the brand; every other screen names itself in the same header,
   // and #lback -- the only back button at this depth -- appears only where
@@ -5679,7 +5784,7 @@ function render() {
   brand.hidden = view.tab !== 'home' || !!view.compose;
   shead.hidden = view.tab === 'home' && !view.compose;
   lback.hidden = !s && !view.att && !view.compose && !view.day
-                 && !view.me && !view.papers;
+                 && !view.me && !view.papers && !view.cal;
   scode.hidden = !s;
   // Search is the subject list's own tool. It must not answer over Community,
   // and it must not answer over the three screens inside Classes that are not
@@ -5707,6 +5812,7 @@ function render() {
   sname.textContent = s ? s.name
     : view.papers ? 'Past papers'
     : view.day ? 'Your day'
+    : view.cal ? 'Calendar'
     : view.att ? 'Your attendance'
     : view.tab === 'community' && view.compose
       ? (view.compose === 'confess' ? 'Anonymous' : 'New post')
@@ -5725,6 +5831,7 @@ function render() {
   if (needle) renderSearch(needle);
   else if (view.att) renderAttendance();
   else if (view.day) renderDay();
+  else if (view.cal) renderCalendar();
   else if (view.papers) renderPapers();
   else if (view.tab === 'home') renderHome();
   else if (view.tab === 'campus') renderCampus();
@@ -5782,6 +5889,8 @@ function route() {
   // screen has a URL somebody can send. 'papers' cannot collide with a
   // subject code -- every code carries digits.
   const papersv = tab === 'classes' && parts[1] === 'papers';
+  // The month, the same kind of level; 'calendar' has no digits either.
+  const calv = tab === 'classes' && parts[1] === 'calendar';
   // So is the composer, for the same reason: without a URL the back gesture
   // dropped what was typed and left the tab stuck on an empty form. Two tabs
   // have one now -- an event, a club or a place on Campus, and a notice on
@@ -5804,15 +5913,16 @@ function route() {
   const me = tab === 'me' ? parts[1] || null : null;
   const was = view;
   view = {tab, code: s ? s.code : null, title: title || null, att, compose,
-          composeId, day: dayv, papers: papersv, me, sec};
+          composeId, day: dayv, papers: papersv, cal: calv, me, sec};
   // Not every render, and not every keystroke inside one: only a step to a
   // different tab, a different subject or a different level of one.
   const moving = !was || was.tab !== view.tab || was.code !== view.code
     || was.title !== view.title || was.att !== view.att
     || was.day !== view.day || was.me !== view.me || was.compose !== view.compose
-    || was.papers !== view.papers || was.sec !== view.sec;
+    || was.papers !== view.papers || was.cal !== view.cal || was.sec !== view.sec;
   if (!att) attDate = null;     // and re-opening it starts on today, not last week
   if (!dayv) dayDate = null;    // today by default, every time it is opened
+  if (!calv && !dayv) calMonth = null;   // this month, unless back from a day in it
   const n = s && title ? s.notes.find(x => x.title === title) : null;
   if (n) openNote(n, s); else closeRead();
   render();
@@ -6626,6 +6736,7 @@ const DRAWER = [
   ['Classes',   'book',   null, [
     ['Subjects',                  ['classes']],
     ['Your day',                  ['classes', 'day']],
+    ['Calendar',                  ['classes', 'calendar']],
     ['Catching up',               ['classes', 'attendance']],
     ['Past papers',               ['classes', 'papers']],
   ]],
@@ -6659,7 +6770,7 @@ const YOU = [
 const drawerHere = () => hashOf(view.tab,
   view.sec || view.me || (view.tab === 'classes'
     ? (view.att ? 'attendance' : view.day ? 'day'
-       : view.papers ? 'papers' : null)
+       : view.papers ? 'papers' : view.cal ? 'calendar' : null)
     : null));
 
 // Repainted when the role arrives or the screen changes, and not on every
@@ -10419,6 +10530,17 @@ def db_attendance(conn, user_id, window=ATT_WINDOW):
                 "  join academic_calendar c "
                 "    on not c.teaching and g::date between c.starts_on and c.ends_on "
                 " order by g", (window,))
+        ],
+        # The whole term as the institute published it, for the month view.
+        # A few dozen rows a semester; `closed` above stays the lookup the
+        # attendance screens use, this is only what they fall back to beyond it.
+        "calendar": [
+            {"date": s.isoformat(), "ends": e.isoformat(), "title": t,
+             "kind": k, "teaching": teach, "notable": notable}
+            for s, e, t, k, teach, notable in conn.execute(
+                "select starts_on, ends_on, title, kind, teaching, notable "
+                "  from academic_calendar where notable or not teaching "
+                " order by starts_on")
         ],
         # The next thing worth counting down to. `ends_on >= current_date` so a
         # window already running still names itself -- during mid-term week the
