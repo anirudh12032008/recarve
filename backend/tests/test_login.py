@@ -759,8 +759,23 @@ def test_the_visitor_looks_and_never_writes(server):
     assert status == 200 and cookie
     assert call(port, "GET", "/data", cookie=cookie)[0] == 200
     for path, body in (("/posts", {"body": "hi"}), ("/password", {"password": "x" * 12}),
-                       ("/explain", {"text": "limits"})):
+                       ("/doubts", {"body": "why?"})):
         code, reply, _ = call(port, "POST", path, body, cookie=cookie)
         assert code == 403 and "visitors" in reply, path
     assert password_of("visitor") == "visitor"
     assert call(port, "POST", "/logout", {}, cookie=cookie)[0] == 200
+
+
+def test_the_visitor_may_explain_but_only_so_often(server, monkeypatch):
+    """Explain is the visitor's one way in, and it is rationed before a single
+    paid call is made."""
+    port, _ = server
+    _, _, cookie = login(port, "visitor", "visitor", client="10.9.0.2")
+    code, _, _ = call(port, "POST", "/explain", {"text": "limits and continuity"},
+                      cookie=cookie, client="10.9.0.2")
+    assert code != 403, "the gate let the visitor through to the handler"
+    monkeypatch.setattr(notes, "VISITOR_EXPLAINS_PER_DEVICE", 0)
+    code, reply, _ = call(port, "POST", "/explain",
+                          {"text": "a passage nobody has asked about before"},
+                          cookie=cookie, client="10.9.0.2")
+    assert code == 429 and "visitors" in reply

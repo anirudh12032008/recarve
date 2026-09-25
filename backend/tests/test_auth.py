@@ -444,10 +444,10 @@ def test_a_stranger_is_told_what_they_are_joining(server):
     # this install has Google, and test_gate_page covers both branches.
     assert "<form" not in body and "<input" not in body
 
-    # Only the front door carries it. /login is for somebody already sold.
+    # /login wears the landing's look but not its pitch: it is for somebody
+    # already sold.
     _, login, _ = call(server, "GET", "/login")
     assert "Every lecture, written down." not in login
-    assert 'class="land"' not in login, "the landing's look is the front door's alone"
 
 
 def test_a_wrong_invite_code_does_not_get_in(server):

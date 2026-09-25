@@ -2122,7 +2122,7 @@ def test_every_way_in_is_locked_rather_than_missing():
         # Each option refuses to start rather than 403ing halfway through.
         "if (!mayAdd()) return;",
         # Explain is offered, and answers in the panel it opens.
-        "if (!mayAdd()) { out.textContent = LOCK_EXPLAIN; return; }",
+        "if (!mayAdd() && !VISITOR) { out.textContent = LOCK_EXPLAIN; return; }",
         "else ask.classList.add('locked');",
     ):
         assert wiring in notes.PAGE, f"the lock is not wired: {wiring}"
@@ -2143,7 +2143,7 @@ def test_a_locked_control_never_costs_a_request():
     """The point of showing the lock is that the phone already knows the
     answer. Both handlers have to return before the fetch, not after it."""
     ask = re.search(r"ask\.onclick = async \(\) => \{.*?\n\};", notes.PAGE, re.S).group(0)
-    assert ask.index("if (!mayAdd())") < ask.index("fetch('/explain'")
+    assert ask.index("if (!mayAdd() && !VISITOR)") < ask.index("fetch('/explain'")
     rev = re.search(r"getElementById\('opt-revise'\)\.onclick = async \(\) => \{.*?\n\};",
                     notes.PAGE, re.S).group(0)
     assert rev.index("if (!mayAdd())") < rev.index("fetch('/revise'")
