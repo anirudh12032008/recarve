@@ -1899,6 +1899,10 @@ body.reading .tabs{display:none}
   article{padding:0;max-width:none}
   details{background:none;border:1px solid #999}
 }
+/* The visitor login reads and never writes (the server refuses its POSTs), so
+   nothing that would send one is drawn. Votes stay as counts, just not taps. */
+body.visitor :is(#fab,#save,#ask,.saybox,.askbox,.mark,.edit,.w){display:none!important}
+body.visitor .vote{pointer-events:none}
 </style>
 <!-- Tailwind's compiled sheet, inlined. It comes AFTER the token block above
      because these utilities are written in terms of those variables, and
@@ -3275,6 +3279,7 @@ function quickBlock() {
   for (const [label, fn] of acts) {
     const b = document.createElement('button');
     b.textContent = label;
+    if (label === 'Record') b.className = 'w';
     b.onclick = fn;
     box.appendChild(b);
   }
@@ -3651,6 +3656,7 @@ function allPresentRow(date, slots) {
   const b = line('Mark all ' + todo.length + ' present',
                  'Then change the ones you missed',
                  document.createElement('button'));
+  b.classList.add('w');
   b.onclick = () => attPost('/attendance',
     {marks: todo.map(sl => ({date, period: sl.period, state: 'present'}))}, [b]);
   return b;
@@ -6025,6 +6031,7 @@ function doubtCard(q) {
   what.append(said(q), by);
   el.append(what);
   const reply = document.createElement('button');
+  reply.className = 'w';
   reply.textContent = 'Answer this';
   // Second, always, and worded as the lesser thing it is. A classmate who was
   // in the room beats this every time, and the button that asks one of them
@@ -6032,7 +6039,7 @@ function doubtCard(q) {
   // Once per question: after the first tap the answer is on the thread for
   // everybody, and the button has nothing left to do.
   const robot = q.answers.some(a => a.ai) ? null : document.createElement('button');
-  if (robot) robot.textContent = 'Ask AI';
+  if (robot) { robot.textContent = 'Ask AI'; robot.className = 'w'; }
   const row = acts(reply, robot, dropBtn(q));
   what.appendChild(row);
   // The box appears where it was asked for and only there: a form under every
@@ -7013,6 +7020,11 @@ async function refresh() {
     NOW = d.now || NOW;
     NOW_AT = Date.now();
     ROLE = d.role || ROLE;
+    // The shared try-it login reads and never writes; the server refuses its
+    // POSTs, and this takes the controls that would send one off the screen.
+    document.body.classList.toggle('visitor', !!d.visitor);
+    const plus = TOUR.findIndex(t => t[1][0] === '#fab');
+    if (d.visitor && plus >= 0) TOUR.splice(plus, 1);   // no + to point at
     applyRole();
     // A role means there is somebody signed in to have a face. --no-auth
     // sends none, and nobody is exactly who that server has.
@@ -13657,6 +13669,7 @@ def build_server(args):
                 # to credit, which is the whole point of --no-auth.
                 if self.me:
                     out["role"] = self.me["role"]
+                    out["visitor"] = self.me.get("visitor", False)
                     with db(self.me["id"]) as conn:
                         apply_meta(subjects, *db_meta(conn, self.me["id"]))
                         # Home's extras are extras. A migration not yet applied
