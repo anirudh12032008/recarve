@@ -7114,8 +7114,22 @@ function jobNews(jobs) {
     }
   }
 }
+// Two seconds only while a lecture is actually queued or transcribing. With
+// nothing running a tab asks every thirty -- soon enough to see a classmate's
+// upload start -- and a hidden one not at all. An idle class's open tabs
+// polling every two seconds were most of what the server answered, and what
+// ran it out of Postgres connections at a hundred phones (2026-09-25).
+let jobsTimer = null;
+function nextJobs(ms) {
+  clearTimeout(jobsTimer);
+  jobsTimer = document.visibilityState === 'hidden' ? null : setTimeout(pollJobs, ms);
+}
+document.addEventListener('visibilitychange', () => {
+  if (document.visibilityState === 'hidden') clearTimeout(jobsTimer);
+  else pollJobs();
+});
 async function pollJobs() {
-  if (!live) return;
+  if (!live) return nextJobs(2000);   // no request: still waiting on /data
   try {
     const r = await fetch('/jobs');
     const {jobs, worker} = await r.json();
@@ -7147,6 +7161,7 @@ async function pollJobs() {
     const done = jobs.filter(j => j.state === 'done').length;
     if (done !== lastDone) { lastDone = done; refresh(); }
   } catch {}
+  nextJobs(JOBS.some(j => j.state === 'queued' || j.state === 'transcribing') ? 2000 : 30000);
 }
 
 // Nothing here is the lock -- the server is, and /upload, /revise and /explain
@@ -7491,7 +7506,7 @@ if (navigator.serviceWorker) {
   navigator.serviceWorker.register('/sw.js').catch(() => {});
 }
 refresh();
-setInterval(pollJobs, 2000);
+pollJobs();
 setInterval(pullLog, 3000);
 // Home's "ends in 23 min" is a clock; once a minute, and only while Home is
 // the screen in front of somebody, it is redrawn so the number is true.
