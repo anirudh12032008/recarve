@@ -11051,6 +11051,21 @@ main:has(.land){max-width:none}
 .land .gbtn:hover{background:#23265a}
 .land .gbtn svg{background:#fff;border-radius:50%;padding:3px;box-sizing:content-box}
 .land .gor{display:none}
+/* /login wears the landing's clothes: same paper, logo and ink button, one
+   screen tall. The form underneath is the side door, folded. */
+.land .login h1{font-size:clamp(2.2rem,5vw,3.6rem)}
+.land .login .lede{margin-top:20px}
+.land .login .ctas{margin-top:36px}
+.land .login .err{text-align:center}
+.land .try{max-width:22rem;margin:40px auto 0;text-align:left}
+.land .try summary{list-style:none;cursor:pointer;text-align:center;
+  color:var(--body);text-decoration:underline;text-underline-offset:3px;
+  min-height:44px;display:flex;align-items:center;justify-content:center}
+.land .try summary::-webkit-details-marker{display:none}
+.land .try summary:hover{color:var(--ink)}
+.land .try form{margin-top:16px}
+.land .try button{min-height:54px;border-radius:12px}
+.land .try .err{text-align:left}
 
 /* The frames. 16:9, because that is what a screen recording of this app is,
    and everything inside is clipped to the same corner. Until something is in
@@ -11695,21 +11710,34 @@ def with_google(body):
     return body.replace("__GOOGLE__", GOOGLE_BUTTON if google_client() else "")
 
 
-LOGIN_BODY = r"""<h1>recarve</h1>
-<p>Section I notes.</p>
-__GOOGLE__
-<form id="f">
-  <label for="roll">Roll number</label>
-  <input id="roll" required autocomplete="username" autocapitalize="characters"
-         autocorrect="off" spellcheck="false" placeholder="I0">
-  <label for="pw">Password</label>
-  <input id="pw" required type="password" autocomplete="current-password">
-  <button>Log in</button>
-  <p class="err" id="err"></p>
-</form>
-<p class="hint">Had yours reset by the admin? Sign in with your roll number, then
-pick a new one.</p>
-<p><a href="/">New here? Join with an invite code</a></p>
+LOGIN_BODY = r"""<div class="land">
+<div class="wrap">
+
+<nav><span class="logo">recarve</span><a href="/">Home</a></nav>
+
+<section class="hero login">
+  <h1>Welcome back.</h1>
+  <p class="lede">Your notes are where the lecture left them.</p>
+  <div class="ctas">__GOOGLE__</div>
+  <p class="err" id="gerr"></p>
+  <!-- The institute address is the door. Username and password are for the
+       few accounts an admin hands out by hand, so they sit folded away. -->
+  <details class="try">
+    <summary>Not a MANIT student but wanna try?</summary>
+    <form id="f">
+      <label for="roll">Username</label>
+      <input id="roll" required autocomplete="username" autocapitalize="none"
+             autocorrect="off" spellcheck="false">
+      <label for="pw">Password</label>
+      <input id="pw" required type="password" autocomplete="current-password">
+      <button>Log in</button>
+      <p class="err" id="err"></p>
+    </form>
+  </details>
+</section>
+
+</div>
+</div>
 <script>
 const $ = i => document.getElementById(i);
 // A sign-in that came back from Google refused is a redirect to here carrying
@@ -11717,7 +11745,9 @@ const $ = i => document.getElementById(i);
 // navigation, not a fetch, and a bare 403 page is how a student decides the
 // app is broken rather than that they used the wrong account.
 const gerr = new URLSearchParams(location.search).get('e');
-if (gerr) $('err').textContent = gerr;
+if (gerr) $('gerr').textContent = gerr;
+// No Google on this install: the folded form is the only door, so open it.
+if (!document.querySelector('.gbtn')) document.querySelector('.try').open = true;
 $('f').onsubmit = async e => {
   e.preventDefault();
   $('err').textContent = '';

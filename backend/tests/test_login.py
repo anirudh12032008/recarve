@@ -70,7 +70,6 @@ def test_the_example_roll_number_is_not_a_real_one():
     """The placeholder is on the first screen 110 people will see. A real
     classmate's roll number sitting in it is that person's login name, in grey,
     on a page anyone can load."""
-    assert 'placeholder="I0"' in notes.LOGIN_BODY
     assert "I60" not in notes.LOGIN_BODY
 
 
