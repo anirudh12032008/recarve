@@ -8099,6 +8099,7 @@ ROLE_REQUIRED = {
 # it logs in with the roll number, opens nothing until it is replaced, and the
 # profiles.roll_login column is what says a row is allowed to be in it at all.
 MIN_PASSWORD = 8
+VISITOR = "visitor"   # the shared try-it login, username = password
 
 # Failed logins per roll number and per client, in a sliding window. The two
 # numbers are far apart on purpose: five is a fat-fingered password on one
@@ -8853,6 +8854,10 @@ def db_set_password(conn, user_id, new):
                        (user_id,)).fetchone()
     if not row:
         raise ValueError("no such member")
+    # The visitor login is shared with strangers on purpose; one of them
+    # changing it would lock out every other.
+    if (row[0] or "").lower() == VISITOR:
+        raise ValueError("the visitor account's password can't be changed")
     new = check_password(new, row[0])
     conn.execute(
         "update profiles set password = %s, roll_login = false where id = %s",
@@ -11194,7 +11199,7 @@ main:has(.land){max-width:none}
   @media (prefers-reduced-motion:no-preference){
     /* Only the frames and the sheet: the words stay where they were put.
        A page where every paragraph slides in is a page you wait for. */
-    .land .row .shot,.land .demo{animation:lift linear both;
+    .land .row .shot,.land .demo,.land .gl{animation:lift linear both;
       animation-timeline:view();animation-range:entry 8% cover 26%}}}
 
 @media (prefers-reduced-motion:reduce){
@@ -11249,7 +11254,16 @@ main:has(.land){max-width:none}
 @keyframes hr-c1{0%,53%{transform:scaleX(1)}59%,100%{transform:scaleX(0)}}
 @keyframes hr-c2{0%,60%{transform:scaleX(1)}67%,100%{transform:scaleX(0)}}
 @keyframes hr-c3{0%,68%{transform:scaleX(1)}75%,100%{transform:scaleX(0)}}
-@media (prefers-reduced-motion:reduce){.hr *,.hr *::before{animation:none!important}}
+.hr-mark{position:relative;isolation:isolate}
+.hr-mark::before{content:"";position:absolute;z-index:-1;inset:.1em -.15em .05em;border-radius:.25em;background:rgba(172,147,255,.34);transform-origin:left;transform:scaleX(0);animation:hr-mark 10s infinite}
+.hr-extra{display:flex;flex-wrap:wrap;gap:1.2cqi;margin-top:2.4cqi}
+.hr-pill{padding:.4em .9em;border:1px solid rgba(172,147,255,.45);border-radius:10cqi;font-size:2.3cqi;font-weight:600;color:#ac93ff;white-space:nowrap;opacity:0;animation-duration:10s;animation-iteration-count:infinite}
+.hr-p1{animation-name:hr-p1;background:#ac93ff;color:#0b0d13}.hr-p2{animation-name:hr-p2}.hr-p3{animation-name:hr-p3}
+@keyframes hr-mark{0%,76%{transform:scaleX(0)}80%,100%{transform:scaleX(1)}}
+@keyframes hr-p1{0%,79%{opacity:0;transform:translateY(.5em)}82%,100%{opacity:1;transform:none}}
+@keyframes hr-p2{0%,82%{opacity:0;transform:translateY(.5em)}85%,100%{opacity:1;transform:none}}
+@keyframes hr-p3{0%,85%{opacity:0;transform:translateY(.5em)}88%,100%{opacity:1;transform:none}}
+@media (prefers-reduced-motion:reduce){.hr *,.hr *::before{animation:none!important}.hr-pill{opacity:1}}
 .mx{position:relative;width:100%;aspect-ratio:16/9;container-type:inline-size;overflow:hidden;font-family:Figtree,"Noto Sans Devanagari","Nirmala UI","Kohinoor Devanagari",system-ui,sans-serif;color:#e7e9ee;-webkit-font-smoothing:antialiased}
 .mx *{box-sizing:border-box;margin:0;padding:0}
 .mx-stage{position:absolute;left:50%;top:50%;width:82cqi;transform:translate(-50%,-50%)}
@@ -11383,6 +11397,233 @@ main:has(.land){max-width:none}
 @keyframes at-rollp{0%,35%{transform:none}41%,100%{transform:translateY(-100%)}}
 @keyframes at-rolln{0%,41%{transform:none}49%,100%{transform:translateY(-100%)}}
 @media (prefers-reduced-motion:reduce){.at *{animation:none!important}}
+/* ---- Four more films, same rules as the four above: .ex Explain, .rv the
+   revision sheet, .dq Ask AI on a doubt, .hm Home. */
+.ex,.rv,.dq,.hm{position:relative;width:100%;aspect-ratio:16/9;container-type:inline-size;overflow:hidden;font-family:Figtree,system-ui,sans-serif;color:#e7e9ee;-webkit-font-smoothing:antialiased}
+.ex *,.rv *,.dq *,.hm *{box-sizing:border-box;margin:0;padding:0}
+.ex-stage,.rv-stage,.dq-stage,.hm-stage{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%)}
+.ex-card,.rv-card,.dq-card,.hm-card{background:#171a20;border:1px solid rgba(255,255,255,.08);border-radius:1.36cqi}
+.fx-m{color:#98a0ad}
+.fx-tap,.fx-ripple{position:absolute;left:50%;top:50%;border-radius:50%;pointer-events:none;opacity:0}
+.fx-tap{width:4.4cqi;height:4.4cqi;margin:-2.2cqi 0 0 -2.2cqi;background:rgba(231,233,238,.2);border:1px solid rgba(231,233,238,.6)}
+.fx-ripple{width:11cqi;height:11cqi;margin:-5.5cqi 0 0 -5.5cqi;background:rgba(172,147,255,.28)}
+
+/* Explain: a line of notes, the phrase highlighted, the answer under it. */
+.ex-stage{width:80cqi}
+.ex-card{padding:3cqi 3.6cqi 3.4cqi;animation:ex-card 10s infinite}
+.ex-meta{font-size:2.4cqi;line-height:1.3;margin-bottom:1.6cqi}
+.ex-p{font-size:3.1cqi;line-height:1.55}
+.ex-mark{position:relative;isolation:isolate;display:inline-block}
+.ex-mark::before{content:"";position:absolute;z-index:-1;inset:.12em -.15em .05em;border-radius:.25em;background:rgba(172,147,255,.34);transform-origin:left;transform:scaleX(0);animation:ex-hl 10s infinite}
+.ex-pop{position:absolute;left:50%;bottom:calc(100% + .5cqi);transform:translateX(-50%);opacity:0;animation:ex-pop 10s infinite}
+.ex-btn{display:block;padding:.45em 1em;border-radius:10cqi;background:#ac93ff;color:#0b0d13;font-size:2.4cqi;font-weight:600;line-height:1.2;white-space:nowrap;animation:ex-press 10s infinite}
+.ex-pop .fx-tap{animation:ex-tap 10s ease-in-out infinite}
+.ex-pop .fx-ripple{animation:ex-ripple 10s ease-out infinite}
+.ex-ans{margin-top:2.4cqi;padding:2.2cqi 2.6cqi;border-left:.5cqi solid #ac93ff;border-radius:0 1cqi 1cqi 0;background:rgba(172,147,255,.08);opacity:0;animation:ex-ans 10s infinite}
+.ex-h{display:flex;align-items:center;gap:1cqi;font-size:2.3cqi;font-weight:600;color:#ac93ff;margin-bottom:1cqi}
+.ex-l{font-size:2.8cqi;line-height:1.5;white-space:nowrap;clip-path:inset(0 100% 0 0);animation-duration:10s;animation-iteration-count:infinite;animation-timing-function:linear}
+.ex-l1{animation-name:ex-l1}.ex-l2{animation-name:ex-l2}
+.ex-code{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:.9em;color:#ac93ff}
+@keyframes ex-card{0%{opacity:0;transform:translateY(1cqi)}4%,90%{opacity:1;transform:none}96%,100%{opacity:0;transform:none}}
+@keyframes ex-hl{0%,10%{transform:scaleX(0)}18%,100%{transform:scaleX(1)}}
+@keyframes ex-pop{0%,19%{opacity:0;transform:translate(-50%,.6em)}23%,34%{opacity:1;transform:translate(-50%,0)}38%,100%{opacity:0;transform:translate(-50%,0)}}
+@keyframes ex-press{0%,28%{transform:none}30%{transform:scale(.92)}33%,100%{transform:none}}
+@keyframes ex-tap{0%,20%{opacity:0;transform:translate(6cqi,5cqi)}27%{opacity:1;transform:none}30%{opacity:1;transform:scale(.78)}33%{opacity:1;transform:none}40%,100%{opacity:0;transform:translate(3cqi,4cqi)}}
+@keyframes ex-ripple{0%,29%{opacity:0;transform:scale(.15)}30%{opacity:1;transform:scale(.2)}40%,100%{opacity:0;transform:none}}
+@keyframes ex-ans{0%,36%{opacity:0;transform:translateY(1cqi)}41%,100%{opacity:1;transform:none}}
+@keyframes ex-l1{0%,42%{clip-path:inset(0 100% 0 0)}54%,100%{clip-path:inset(0 0 0 0)}}
+@keyframes ex-l2{0%,55%{clip-path:inset(0 100% 0 0)}68%,100%{clip-path:inset(0 0 0 0)}}
+
+/* The revision sheet: twelve lectures read, one page comes back. */
+.rv-stage{width:70cqi}
+.rv-card{padding:3cqi 3.6cqi 3.4cqi;animation:ex-card 10s infinite}
+.rv-head{display:flex;justify-content:space-between;align-items:baseline;gap:2cqi;white-space:nowrap}
+.rv-t{font-size:3.6cqi;font-weight:700;line-height:1.2}
+.rv-st{display:grid;font-size:2.4cqi;text-align:right}
+.rv-st>span{grid-area:1/1}
+.rv-s1{animation:rv-s1 10s infinite}
+.rv-s2{color:#ac93ff;opacity:0;animation:rv-s2 10s infinite}
+.rv-prog{height:.6cqi;margin-top:1.8cqi;border-radius:1cqi;background:rgba(255,255,255,.08);overflow:hidden}
+.rv-fill{display:block;height:100%;background:#ac93ff;transform-origin:left;transform:scaleX(0);animation:rv-fill 10s ease-in-out infinite}
+.rv-sec{margin-top:2.2cqi;opacity:0;animation-duration:10s;animation-iteration-count:infinite}
+.rv-sec1{animation-name:rv-a}.rv-sec2{animation-name:rv-b}.rv-sec3{animation-name:rv-c}
+.rv-h{font-size:2.9cqi;font-weight:700;line-height:1.3}
+.rv-n{display:inline-block;width:1.6em;color:#ac93ff;font-variant-numeric:tabular-nums}
+.rv-li{font-size:2.6cqi;line-height:1.55;color:#c3c8d2;padding-left:1.6em}
+.rv-note{position:absolute;right:-2cqi;bottom:-4.6cqi;transform:rotate(-4deg);font-family:Kalam,cursive;font-size:3cqi;color:#ac93ff;white-space:nowrap;opacity:0;animation:rv-note 10s infinite}
+@keyframes rv-s1{0%,32%{opacity:1}35%,100%{opacity:0}}
+@keyframes rv-s2{0%,33%{opacity:0}36%,100%{opacity:1}}
+@keyframes rv-fill{0%,5%{transform:scaleX(0)}33%,100%{transform:scaleX(1)}}
+@keyframes rv-a{0%,37%{opacity:0;transform:translateY(1cqi)}42%,100%{opacity:1;transform:none}}
+@keyframes rv-b{0%,45%{opacity:0;transform:translateY(1cqi)}50%,100%{opacity:1;transform:none}}
+@keyframes rv-c{0%,53%{opacity:0;transform:translateY(1cqi)}58%,100%{opacity:1;transform:none}}
+@keyframes rv-note{0%,64%{opacity:0;transform:rotate(-4deg) translateY(.4em)}69%,100%{opacity:1;transform:rotate(-4deg)}}
+
+/* Ask AI under a doubt nobody has answered at 1 am. */
+.dq-stage{width:70cqi}
+.dq-card{padding:3cqi 3.6cqi 3.2cqi;animation:ex-card 10s infinite}
+.dq-who{display:flex;align-items:center;gap:1.4cqi;font-size:2.4cqi}
+.dq-av{display:grid;place-items:center;width:4.4cqi;height:4.4cqi;border-radius:50%;background:#2a2f3a;font-size:2.2cqi;font-weight:700;color:#e7e9ee}
+.dq-q{margin-top:1.6cqi;font-size:3.8cqi;font-weight:700;line-height:1.3;letter-spacing:-.01em}
+.dq-foot{display:flex;align-items:center;justify-content:space-between;margin-top:2.2cqi;font-size:2.4cqi}
+.dq-cnt{display:grid}.dq-cnt>span{grid-area:1/1}
+.dq-c0{animation:dq-c0 10s infinite}
+.dq-c1{opacity:0;animation:dq-c1 10s infinite}
+.dq-bw{position:relative;display:block}
+.dq-btn{display:grid;animation:dq-press 10s infinite}
+.dq-face{grid-area:1/1;padding:.5em 1.1em;border:1px solid #ac93ff;border-radius:10cqi;font-weight:600;line-height:1.2;text-align:center;white-space:nowrap}
+.dq-ask{background:#ac93ff;color:#0b0d13;animation:dq-ask 10s infinite}
+.dq-think{color:#ac93ff;opacity:0;animation:dq-think 10s infinite}
+.dq-bw .fx-tap{animation:dq-tap 10s ease-in-out infinite}
+.dq-bw .fx-ripple{animation:dq-ripple 10s ease-out infinite}
+.dq-a{margin-top:2.2cqi;padding-top:2.2cqi;border-top:1px solid rgba(255,255,255,.08);opacity:0;animation:dq-a 10s infinite}
+.dq-ah{display:flex;align-items:center;gap:1.2cqi;font-size:2.3cqi}
+.dq-ai{padding:.2em .6em;border-radius:.6em;background:rgba(172,147,255,.18);color:#ac93ff;font-weight:700}
+.dq-up{margin-left:auto;color:#ac93ff;font-weight:600;opacity:0;animation:dq-up 10s infinite}
+.dq-l{margin-top:1cqi;font-size:2.9cqi;line-height:1.5;color:#c3c8d2;clip-path:inset(0 100% 0 0);animation-duration:10s;animation-iteration-count:infinite;animation-timing-function:linear}
+.dq-l1{animation-name:dq-l1}.dq-l2{animation-name:dq-l2;margin-top:0}
+@keyframes dq-c0{0%,40%{opacity:1}43%,100%{opacity:0}}
+@keyframes dq-c1{0%,41%{opacity:0}44%,100%{opacity:1}}
+@keyframes dq-press{0%,20%{transform:none}22%{transform:scale(.94)}25%,100%{transform:none}}
+@keyframes dq-ask{0%,22%{opacity:1}25%,100%{opacity:0}}
+@keyframes dq-think{0%,22%{opacity:0}25%,36%{opacity:1}39%,100%{opacity:.35}}
+@keyframes dq-tap{0%,8%{opacity:0;transform:translate(6cqi,5cqi)}18%{opacity:1;transform:none}21%{opacity:1;transform:scale(.78)}24%{opacity:1;transform:none}32%,100%{opacity:0;transform:translate(3cqi,4cqi)}}
+@keyframes dq-ripple{0%,21%{opacity:0;transform:scale(.15)}22%{opacity:1;transform:scale(.2)}32%,100%{opacity:0;transform:none}}
+@keyframes dq-a{0%,38%{opacity:0;transform:translateY(1cqi)}42%,100%{opacity:1;transform:none}}
+@keyframes dq-l1{0%,43%{clip-path:inset(0 100% 0 0)}55%,100%{clip-path:inset(0 0 0 0)}}
+@keyframes dq-l2{0%,55%{clip-path:inset(0 100% 0 0)}66%,100%{clip-path:inset(0 0 0 0)}}
+@keyframes dq-up{0%,72%{opacity:0;transform:translateY(.4em)}76%,100%{opacity:1;transform:none}}
+
+/* Home: what is on now, what is next, and the streak ticking over. */
+.hm-stage{width:80cqi}
+.hm-stage>*{animation:ex-card 10s infinite}
+.hm-top{display:flex;align-items:flex-end;justify-content:space-between;gap:2cqi;white-space:nowrap}
+.hm-hi{font-size:4.2cqi;font-weight:700;line-height:1.15;letter-spacing:-.01em}
+.hm-date{font-size:2.4cqi;margin-top:.6cqi}
+.hm-streak{display:flex;align-items:center;padding:.55em 1em;border:1px solid rgba(255,255,255,.1);border-radius:10cqi;font-size:2.5cqi;font-weight:600}
+.hm-flame{margin-right:.9cqi;width:1.6cqi;height:2.1cqi;border-radius:50% 50% 50% 50%/60% 60% 40% 40%;background:linear-gradient(#ffb057,#ff6a3d);animation:hm-flame 10s infinite}
+.hm-roll{display:inline-block;clip-path:inset(0 -.2em);font-variant-numeric:tabular-nums}
+.hm-col{position:relative;display:inline-block;animation:hm-roll 10s cubic-bezier(.3,.7,.2,1) infinite}
+.hm-next{position:absolute;left:0;top:100%}
+.hm-chips{display:flex;gap:1.2cqi;margin-top:1.8cqi}
+.hm-chips>span{padding:.45em .95em;border:1px solid rgba(255,255,255,.1);border-radius:10cqi;font-size:2.2cqi;color:#c3c8d2;white-space:nowrap;animation:hm-chip 10s infinite both}
+.hm-chips>span:nth-child(2){animation-delay:.12s}.hm-chips>span:nth-child(3){animation-delay:.24s}.hm-chips>span:nth-child(4){animation-delay:.36s}
+.hm-grid{display:grid;grid-template-columns:1.25fr 1fr;gap:1.6cqi;margin-top:1.8cqi}
+.hm-card{padding:2cqi 2.6cqi}
+.hm-now{border-color:rgba(172,147,255,.5);box-shadow:inset .6cqi 0 0 #ac93ff}
+.hm-tag{font-size:2cqi;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:#ac93ff}
+.hm-nx .hm-tag{color:#98a0ad}
+.hm-t{margin-top:.8cqi;font-size:3.2cqi;font-weight:700;line-height:1.2}
+.hm-m{font-size:2.3cqi;margin-top:.5cqi}
+.hm-ends{margin-top:1cqi;font-size:2.4cqi;color:#c3c8d2}
+.hm-ends b{color:#e7e9ee;font-variant-numeric:tabular-nums}
+.hm-bar{height:.6cqi;margin-top:1.2cqi;border-radius:1cqi;background:rgba(255,255,255,.08);overflow:hidden}
+.hm-bar>span{display:block;height:100%;background:#ac93ff;transform-origin:left;transform:scaleX(.42);animation:hm-bar 10s linear infinite}
+.hm-nx{animation:hm-nx 10s infinite}
+.hm-x{display:flex;justify-content:space-between;margin-top:1.6cqi;padding:1.4cqi 2.6cqi;font-size:2.4cqi;color:#98a0ad}
+.hm-strike{position:relative}
+.hm-strike::after{content:"";position:absolute;left:-.1em;right:-.1em;top:55%;height:1px;background:#e5484d;transform-origin:left;transform:scaleX(0);animation:hm-strike 10s infinite}
+.hm-off{color:#e5484d;opacity:0;animation:hm-off 10s infinite}
+@keyframes hm-chip{0%,3%{opacity:0;transform:translateY(.8cqi)}8%,100%{opacity:1;transform:none}}
+@keyframes hm-bar{0%{transform:scaleX(.42)}90%,100%{transform:scaleX(.6)}}
+@keyframes hm-nx{0%,12%{opacity:0;transform:translateX(2cqi)}18%,100%{opacity:1;transform:none}}
+@keyframes hm-strike{0%,38%{transform:scaleX(0)}46%,100%{transform:scaleX(1)}}
+@keyframes hm-off{0%,44%{opacity:0}49%,100%{opacity:1}}
+@keyframes hm-roll{0%,62%{transform:none}70%,100%{transform:translateY(-100%)}}
+@keyframes hm-flame{0%,62%,78%,100%{transform:none}68%{transform:scale(1.5) rotate(-8deg)}}
+@media (prefers-reduced-motion:reduce){.ex *,.rv *,.dq *,.hm *,.ex *::before,.hm *::after{animation:none!important}
+  .ex-pop,.ex-ans,.rv-sec,.rv-s2,.dq-a,.dq-up,.hm-off{opacity:1}.ex-l,.dq-l{clip-path:none}
+  .rv-s1,.dq-c0,.dq-think{opacity:0}.ex-mark::before,.rv-fill,.hm-strike::after{transform:none}}
+
+/* ---- The small ones. Every short claim gets a glimpse of the screen that
+   makes it true: a tile off the same dark frame, with a card in it in the
+   app's own colours. Children cascade in on a shared loop via --i. */
+.land .gl{position:relative;aspect-ratio:16/10;margin:0 0 20px;border-radius:18px;
+  overflow:hidden;container-type:inline-size;display:grid;place-items:center;
+  font-family:Figtree,system-ui,sans-serif;color:#e7e9ee;-webkit-font-smoothing:antialiased;
+  background:
+    radial-gradient(80% 90% at 10% 0%,rgba(122,92,255,.30),transparent 62%),
+    radial-gradient(70% 80% at 100% 100%,rgba(32,196,168,.18),transparent 60%),
+    #0b0d13;
+  box-shadow:0 30px 60px -44px rgba(22,24,61,.6)}
+.gl *{box-sizing:border-box;margin:0;padding:0}
+.gl-c{width:80cqi;padding:4.4cqi 5cqi;background:#171a20;border:1px solid rgba(255,255,255,.08);border-radius:3cqi;font-size:4.2cqi;line-height:1.35}
+.gl-hd{display:flex;justify-content:space-between;align-items:center;gap:2cqi;font-size:3.4cqi;color:#98a0ad;margin-bottom:2.6cqi;white-space:nowrap}
+.gl-hd b{color:#e7e9ee;font-weight:700}
+.gl-r{display:flex;align-items:center;gap:2.6cqi;padding:1.6cqi 0;white-space:nowrap}
+.gl-r+.gl-r{border-top:1px solid rgba(255,255,255,.06)}
+.gl-ic{flex:none;width:6cqi;height:6cqi;border-radius:1.6cqi;background:var(--c,#ac93ff);opacity:.9}
+.gl-m{color:#98a0ad;font-size:3.4cqi}
+.gl-in{animation:gl-in 8s calc(var(--i,0)*.45s) infinite both}
+@keyframes gl-in{0%{opacity:0;transform:translateY(3cqi)}8%,78%{opacity:1;transform:none}88%,100%{opacity:0;transform:none}}
+.gl-chip{margin-left:auto;padding:.3em .8em;border-radius:10cqi;background:rgba(172,147,255,.16);color:#ac93ff;font-size:3.2cqi;font-weight:600}
+/* a doubt, and the better answer overtaking */
+.gl-ans{display:grid}
+.gl-ans>.gl-r{background:#171a20}
+.gl-up{position:relative;z-index:1;animation:gl-up 8s infinite}.gl-dn{animation:gl-dn 8s infinite}
+.gl-v{display:grid;margin-left:auto;text-align:right;color:#98a0ad;font-variant-numeric:tabular-nums}
+.gl-v>span{grid-area:1/1}
+.gl-v1{animation:gl-v1 8s infinite}.gl-v2{color:#ac93ff;opacity:0;animation:gl-v2 8s infinite}
+@keyframes gl-up{0%,40%{transform:none}52%,88%{transform:translateY(-100%)}96%,100%{transform:none}}
+@keyframes gl-dn{0%,40%{transform:none}52%,88%{transform:translateY(100%)}96%,100%{transform:none}}
+@keyframes gl-v1{0%,30%{opacity:1}34%,90%{opacity:0}96%{opacity:1}}
+@keyframes gl-v2{0%,30%{opacity:0}34%,90%{opacity:1}96%{opacity:0}}
+/* offline */
+.gl-wifi{position:relative;width:6cqi;height:6cqi}
+.gl-wifi svg{width:100%;height:100%;display:block}
+.gl-wifi::after{content:"";position:absolute;left:-10%;top:48%;width:120%;height:2px;background:#e5484d;transform:rotate(-45deg) scaleX(0);animation:gl-cut 8s infinite}
+.gl-sk{height:2.6cqi;margin-top:2.4cqi;border-radius:2cqi;background:rgba(231,233,238,.2)}
+.gl-sk:nth-of-type(2){width:84%}
+.gl-saved{opacity:0;animation:gl-saved 8s infinite}
+@keyframes gl-cut{0%,20%{transform:rotate(-45deg) scaleX(0)}28%,88%{transform:rotate(-45deg) scaleX(1)}96%,100%{transform:rotate(-45deg) scaleX(0)}}
+@keyframes gl-saved{0%,28%{opacity:0}34%,88%{opacity:1}96%,100%{opacity:0}}
+/* past papers, fanned */
+.gl-fan{position:relative;width:46cqi;height:40cqi}
+.gl-pp{position:absolute;inset:0;padding:4cqi;background:#171a20;border:1px solid rgba(255,255,255,.1);border-radius:2.4cqi;font-size:3.6cqi;animation:gl-fan 8s cubic-bezier(.3,.7,.2,1) infinite}
+.gl-pp b{display:block;font-size:4.4cqi}
+.gl-pp i{display:block;height:1.8cqi;margin-top:2.6cqi;border-radius:2cqi;background:rgba(231,233,238,.14);font-style:normal}
+@keyframes gl-fan{0%,10%,90%,100%{transform:none}30%,72%{transform:translateX(var(--x)) rotate(var(--r))}}
+/* chat */
+.gl-b{max-width:78%;width:fit-content;margin-top:2cqi;padding:1.6cqi 3cqi;border-radius:3cqi;background:#232733;font-size:3.8cqi}
+.gl-b.me{margin-left:auto;background:#ac93ff;color:#0b0d13}
+/* notice board */
+.gl-pin{position:absolute;right:6cqi;top:-2.4cqi;width:5cqi;height:5cqi;border-radius:50%;background:#e5484d;animation:gl-pin 8s cubic-bezier(.3,1.6,.5,1) infinite}
+@keyframes gl-pin{0%,6%{opacity:0;transform:translateY(-6cqi)}14%,88%{opacity:1;transform:none}96%,100%{opacity:0}}
+/* campus events: the soonest chip breathes */
+.gl-d{flex:none;width:9cqi;text-align:center;font-size:2.8cqi;line-height:1.1;color:#98a0ad}
+.gl-d b{display:block;font-size:4.6cqi;color:#e7e9ee}
+.gl-soon{animation:gl-soon 1.6s ease-in-out infinite alternate}
+@keyframes gl-soon{from{background:rgba(172,147,255,.12)}to{background:rgba(172,147,255,.34)}}
+/* clubs */
+.gl-clubs{display:grid;grid-template-columns:repeat(3,1fr);gap:3cqi;width:74cqi}
+.gl-club{display:grid;place-items:center;gap:1.4cqi;font-size:3.2cqi;color:#c3c8d2;animation:gl-pop 8s calc(var(--i)*.3s) infinite both}
+.gl-club b{display:grid;place-items:center;width:13cqi;height:13cqi;border-radius:50%;background:var(--c);color:#0b0d13;font-size:4.2cqi}
+@keyframes gl-pop{0%{opacity:0;transform:scale(.6)}8%,80%{opacity:1;transform:none}90%,100%{opacity:0;transform:scale(.9)}}
+/* the map */
+.gl-map{width:88cqi;height:auto;display:block;overflow:visible}
+.gl-route{stroke-dasharray:300;animation:gl-route 8s linear infinite}
+.gl-mk{animation:gl-mk 8s infinite;transform-box:fill-box;transform-origin:50% 100%}
+@keyframes gl-route{0%,6%{stroke-dashoffset:300;opacity:1}55%,88%{stroke-dashoffset:0;opacity:1}96%,100%{stroke-dashoffset:0;opacity:0}}
+@keyframes gl-mk{0%,52%{opacity:0;transform:translateY(-8px)}58%{opacity:1;transform:none}62%{transform:translateY(-3px)}66%,88%{opacity:1;transform:none}96%,100%{opacity:0}}
+/* feed ticker */
+.gl-feed{height:46cqi;overflow:hidden}
+.gl-feed .gl-list{animation:gl-feed 8s cubic-bezier(.5,0,.2,1) infinite}
+.gl-feed .gl-r{height:13cqi}
+@keyframes gl-feed{0%,22%{transform:none}30%,52%{transform:translateY(-13cqi)}60%,82%{transform:translateY(-26cqi)}92%,100%{transform:none}}
+/* confessions: the name never makes it */
+.gl-who{display:grid;font-size:3.4cqi;font-weight:600}
+.gl-who>span{grid-area:1/1}
+.gl-nm{color:#e7e9ee;animation:gl-nm 8s infinite}
+.gl-anon{color:#ac93ff;opacity:0;animation:gl-anon 8s infinite}
+@keyframes gl-nm{0%,22%{opacity:1;filter:none}34%,90%{opacity:0;filter:blur(2cqi)}98%,100%{opacity:1;filter:none}}
+@keyframes gl-anon{0%,28%{opacity:0}36%,90%{opacity:1}98%,100%{opacity:0}}
+/* standings */
+.gl-bar{flex:1;height:2.6cqi;border-radius:2cqi;background:rgba(255,255,255,.06);overflow:hidden}
+.gl-bar>span{display:block;height:100%;width:var(--w);border-radius:2cqi;background:#ac93ff;transform-origin:left;animation:gl-grow 8s calc(var(--i)*.25s) cubic-bezier(.3,.7,.2,1) infinite both}
+.gl-nmw{width:16cqi}
+@keyframes gl-grow{0%{transform:scaleX(0)}25%,85%{transform:scaleX(1)}95%,100%{transform:scaleX(0)}}
+@media (prefers-reduced-motion:reduce){.gl *,.gl *::after{animation:none!important}
+  .gl-v1,.gl-nm{opacity:0}.gl-v2,.gl-anon,.gl-saved{opacity:1}.gl-wifi::after{transform:rotate(-45deg)}}
 </style>
 <main>__BODY__</main>
 """
@@ -11433,7 +11674,8 @@ JOIN_BODY = r"""<div class="land">
       <div class="hr-meta">Today's notes</div>
       <div class="hr-line hr-h">Limits and derivatives<span class="hr-cover hr-c1"></span></div>
       <div class="hr-li hr-line">The limit is the basis of the derivative<span class="hr-cover hr-c2"></span></div>
-      <div class="hr-li hr-line">Power rule: d/dx x<span class="hr-sup">n</span> = n·x<span class="hr-sup">n−1</span><span class="hr-cover hr-c3"></span></div>
+      <div class="hr-li hr-line"><span class="hr-mark">Power rule</span>: d/dx x<span class="hr-sup">n</span> = n·x<span class="hr-sup">n−1</span><span class="hr-cover hr-c3"></span></div>
+      <div class="hr-extra"><span class="hr-pill hr-p1">Explain</span><span class="hr-pill hr-p2">12 practice questions</span><span class="hr-pill hr-p3">Revision sheet</span></div>
     </div>
   </div>
 </div>
@@ -11512,6 +11754,61 @@ JOIN_BODY = r"""<div class="land">
 
   <div class="row">
     <div>
+      <h3>Highlight anything, ask why</h3>
+      <p>Select a line in the notes you don&rsquo;t get and tap Explain. The
+      answer lands right under it, in plain words.</p>
+    </div>
+    <figure class="shot" id="shot-explain">
+<div class="ex" aria-hidden="true">
+  <div class="ex-stage">
+    <div class="ex-card">
+      <div class="ex-meta fx-m">MC1101 · Lecture 12 notes</div>
+      <div class="ex-p">To differentiate a function inside a function, use the
+        <span class="ex-mark">chain rule<span class="ex-pop"><span class="ex-btn">Explain</span><span class="fx-ripple"></span><span class="fx-tap"></span></span></span>:
+        outside first, then multiply by the inside.</div>
+      <div class="ex-ans">
+        <div class="ex-h">Explain</div>
+        <div class="ex-l ex-l1">Peel it like an onion: <span class="ex-code">(sin x²)′ = cos x² · 2x</span></div>
+        <div class="ex-l ex-l2">Outside&rsquo;s derivative, times the inside&rsquo;s.</div>
+      </div>
+    </div>
+  </div>
+</div>
+    <figcaption>Preview: a phrase highlighted in the notes and
+      explained.</figcaption>
+    </figure>
+  </div>
+
+  <div class="row flip">
+    <div>
+      <h3>A revision sheet the night before</h3>
+      <p>Every lecture in a subject, boiled down to one page. What matters,
+      in the order it was taught.</p>
+    </div>
+    <figure class="shot" id="shot-revise">
+<div class="rv" aria-hidden="true">
+  <div class="rv-stage">
+    <div class="rv-card">
+      <div class="rv-head"><span class="rv-t">Revision · Maths 1</span>
+        <span class="rv-st fx-m"><span class="rv-s1">Reading 12 lectures…</span><span class="rv-s2">Ready</span></span></div>
+      <div class="rv-prog"><span class="rv-fill"></span></div>
+      <div class="rv-sec rv-sec1"><div class="rv-h"><span class="rv-n">1</span>Limits</div>
+        <div class="rv-li">Left and right limits must agree</div></div>
+      <div class="rv-sec rv-sec2"><div class="rv-h"><span class="rv-n">2</span>Derivatives</div>
+        <div class="rv-li">Power, product and chain rule</div></div>
+      <div class="rv-sec rv-sec3"><div class="rv-h"><span class="rv-n">3</span>Applications</div>
+        <div class="rv-li">Maxima, minima, rate of change</div></div>
+    </div>
+    <div class="rv-note">one page. sorted.</div>
+  </div>
+</div>
+    <figcaption>Preview: a subject&rsquo;s lectures turning into one
+      revision sheet.</figcaption>
+    </figure>
+  </div>
+
+  <div class="row">
+    <div>
       <h3>Your 75%, per subject</h3>
       <p>Mark attendance in one tap. It tells you exactly how many classes you
       can miss, and never rounds you up.</p>
@@ -11550,23 +11847,79 @@ JOIN_BODY = r"""<div class="land">
     </figure>
   </div>
 
+  <div class="row flip">
+    <div>
+      <h3>1 am doubt? Ask AI</h3>
+      <p>Post it under the lecture. If nobody&rsquo;s awake, one tap gets an
+      answer from the notes, marked as AI so you know.</p>
+    </div>
+    <figure class="shot" id="shot-doubt">
+<div class="dq" aria-hidden="true">
+  <div class="dq-stage">
+    <div class="dq-card">
+      <div class="dq-who"><span class="dq-av">S</span><span>Sneha</span><span class="fx-m">· MC1101 · 1:12 am</span></div>
+      <div class="dq-q">Why isn&rsquo;t |x| differentiable at 0?</div>
+      <div class="dq-foot"><span class="dq-cnt fx-m"><span class="dq-c0">No answers yet</span><span class="dq-c1">1 answer</span></span>
+        <span class="dq-bw"><span class="dq-btn"><span class="dq-face dq-ask">Ask AI</span><span class="dq-face dq-think">Thinking…</span></span><span class="fx-ripple"></span><span class="fx-tap"></span></span></div>
+      <div class="dq-a">
+        <div class="dq-ah"><span class="dq-ai">AI</span><span class="fx-m">from Lecture 12</span><span class="dq-up">▲ 3 helpful</span></div>
+        <div class="dq-l dq-l1">The slope is −1 from the left and +1 from the right.</div>
+        <div class="dq-l dq-l2">They disagree at 0, so there is no single tangent.</div>
+      </div>
+    </div>
+  </div>
+</div>
+    <figcaption>Preview: a late-night doubt answered by Ask AI.</figcaption>
+    </figure>
+  </div>
+
+  <div class="row">
+    <div>
+      <h3>Your day, before you ask</h3>
+      <p>Open the app and it already knows: the class you&rsquo;re in, the
+      next one, what got cancelled, and how many days in a row you&rsquo;ve
+      shown up.</p>
+    </div>
+    <figure class="shot" id="shot-home">
+<div class="hm" aria-hidden="true">
+  <div class="hm-stage">
+    <div class="hm-top">
+      <div><div class="hm-hi">Good morning, Riya</div><div class="hm-date fx-m">Tuesday, 29 September</div></div>
+      <div class="hm-streak"><span class="hm-flame"></span><span class="hm-roll"><span class="hm-col">6<span class="hm-next">7</span></span></span>-day streak</div>
+    </div>
+    <div class="hm-chips"><span>Record</span><span>Your day</span><span>Catch up</span><span>Saved</span></div>
+    <div class="hm-grid">
+      <div class="hm-card hm-now"><div class="hm-tag">Now</div><div class="hm-t">Mathematics 1</div>
+        <div class="hm-m fx-m">9:00–9:55 · MC1101</div>
+        <div class="hm-ends">ends in <b>32 min</b></div><div class="hm-bar"><span></span></div></div>
+      <div class="hm-card hm-nx"><div class="hm-tag">Next</div><div class="hm-t">Physics</div>
+        <div class="hm-m fx-m">10:00 · L-7</div><div class="hm-ends">in <b>1 h 5 min</b></div></div>
+    </div>
+    <div class="hm-card hm-x"><span class="hm-strike">Chemistry Lab · 2:00</span><span class="hm-off">cancelled</span></div>
+  </div>
+</div>
+    <figcaption>Preview: Home, with the class on now and the one
+      next.</figcaption>
+    </figure>
+  </div>
+
   <div class="three">
-    <div><h3>Everything in one place, per subject</h3><p>Everyone&rsquo;s notes,
+    <div><div class="gl" aria-hidden="true"><div class="gl-c"><div class="gl-hd"><b>MC1101 · Maths</b><span>34 files</span></div><div class="gl-r gl-in" style="--i:0"><span class="gl-ic"></span>Notes · Lecture 12</div><div class="gl-r gl-in" style="--i:1"><span class="gl-ic" style="--c:#20c4a8"></span>Slides · limits.pdf</div><div class="gl-r gl-in" style="--i:2"><span class="gl-ic" style="--c:#ff8a4c"></span>Board photo · Tue</div></div></div><h3>Everything in one place, per subject</h3><p>Everyone&rsquo;s notes,
       slides and photos of the board, not scattered across five WhatsApp
       groups and Teams.</p></div>
-    <div><h3>Somewhere to ask</h3><p>Stuck at 1&nbsp;am? Post a doubt under the
+    <div><div class="gl" aria-hidden="true"><div class="gl-c"><div class="gl-hd"><b>Why is 0! = 1?</b><span>2 answers</span></div><div class="gl-ans"><div class="gl-r gl-dn"><span class="gl-m">Just a convention…</span><span class="gl-v">▲ 1</span></div><div class="gl-r gl-up">Empty product = 1<span class="gl-v"><span class="gl-v1">▲ 1</span><span class="gl-v2">▲ 6</span></span></div></div></div></div><h3>Somewhere to ask</h3><p>Stuck at 1&nbsp;am? Post a doubt under the
       lecture. Classmates answer, the best answer rises.</p></div>
-    <div><h3>Readable with no signal</h3><p>Anything you&rsquo;ve opened stays
+    <div><div class="gl" aria-hidden="true"><div class="gl-c"><div class="gl-hd"><b>Lecture 12</b><span class="gl-wifi"><svg viewBox="0 0 24 24" fill="none" stroke="#e7e9ee" stroke-width="2" stroke-linecap="round"><path d="M2 8.5a15 15 0 0 1 20 0"/><path d="M5.5 12a10 10 0 0 1 13 0"/><path d="M9 15.5a5 5 0 0 1 6 0"/><circle cx="12" cy="19" r="1" fill="#e7e9ee"/></svg></span></div><div class="gl-sk"></div><div class="gl-sk"></div><div class="gl-sk" style="width:60%"></div><div class="gl-r gl-saved" style="padding-bottom:0"><span class="gl-chip" style="margin:0">Saved on this phone</span></div></div></div><h3>Readable with no signal</h3><p>Anything you&rsquo;ve opened stays
       readable in a dead corridor. Built for phones and bad wifi.</p></div>
   </div>
   <div class="three">
-    <div><h3>Past papers</h3><p>Previous years&rsquo; mid-sems and end-sems,
+    <div><div class="gl" aria-hidden="true"><div class="gl-fan"><div class="gl-pp" style="--x:-18cqi;--r:-9deg"><b>End-sem</b><span class="gl-m">2024</span><i></i><i style="width:70%"></i></div><div class="gl-pp" style="--x:18cqi;--r:9deg"><b>Mid-sem</b><span class="gl-m">2024</span><i></i><i style="width:60%"></i></div><div class="gl-pp" style="--x:0;--r:0deg"><b>Mid-sem</b><span class="gl-m">2025 · Maths</span><i></i><i style="width:80%"></i></div></div></div><h3>Past papers</h3><p>Previous years&rsquo; mid-sems and end-sems,
       filed under the subject they belong to, the night before you need
       them.</p></div>
-    <div><h3>A chat per subject</h3><p>One room for Maths, one for Physics.
+    <div><div class="gl" aria-hidden="true"><div class="gl-c"><div class="gl-hd"><b># Physics</b><span>41 here</span></div><div class="gl-b gl-in" style="--i:0">is tomorrow&rsquo;s tutorial in L-7?</div><div class="gl-b me gl-in" style="--i:2">yes, 9 am</div><div class="gl-b gl-in" style="--i:4">thank you!</div></div></div><h3>A chat per subject</h3><p>One room for Maths, one for Physics.
       The question about tomorrow&rsquo;s tutorial goes where the people who
       know are.</p></div>
-    <div><h3>The notice board</h3><p>Announcements from your CR, pinned at the
+    <div><div class="gl" aria-hidden="true"><div class="gl-c" style="position:relative"><span class="gl-pin"></span><div class="gl-hd"><b>Pinned</b><span>CR · today</span></div><div>Mid-sem timetable is out. Maths is first, on the 14th.</div></div></div><h3>The notice board</h3><p>Announcements from your CR, pinned at the
       top, not forty messages up in a group you muted.</p></div>
   </div>
 </section>
@@ -11576,19 +11929,19 @@ JOIN_BODY = r"""<div class="land">
   <p>The same app carries the rest of first year, because the rest of first
   year is also scattered across eleven group chats.</p>
   <div class="three">
-    <div><h3>Coming up on campus</h3><p>Every fest, talk, audition and deadline
+    <div><div class="gl" aria-hidden="true"><div class="gl-c"><div class="gl-r gl-in" style="--i:0"><span class="gl-d"><b>3</b>OCT</span>Hackathon<span class="gl-chip gl-soon">in 2 days</span></div><div class="gl-r gl-in" style="--i:1"><span class="gl-d"><b>9</b>OCT</span>Drama auditions</div><div class="gl-r gl-in" style="--i:2"><span class="gl-d"><b>18</b>OCT</span>Cultural fest</div></div></div><h3>Coming up on campus</h3><p>Every fest, talk, audition and deadline
       on one list, with the date it actually happens on.</p></div>
-    <div><h3>Clubs and societies</h3><p>Who runs what, what they do, and where
+    <div><div class="gl" aria-hidden="true"><div class="gl-clubs"><div class="gl-club" style="--i:0;--c:#ac93ff"><b>R</b>Robotics</div><div class="gl-club" style="--i:1;--c:#20c4a8"><b>E</b>E-Cell</div><div class="gl-club" style="--i:2;--c:#ff8a4c"><b>D</b>Drama</div><div class="gl-club" style="--i:3;--c:#ffd166"><b>M</b>Music</div><div class="gl-club" style="--i:4;--c:#7ab8ff"><b>Q</b>Quiz</div><div class="gl-club" style="--i:5;--c:#ff7aa8"><b>A</b>Art</div></div></div><h3>Clubs and societies</h3><p>Who runs what, what they do, and where
       to find them when recruitment opens.</p></div>
-    <div><h3>Finding your way</h3><p>The campus map. Which building the lab is
+    <div><div class="gl" aria-hidden="true"><svg class="gl-map" viewBox="0 0 200 110" fill="none"><rect x="8" y="8" width="44" height="30" rx="5" fill="#232733"/><rect x="70" y="4" width="56" height="26" rx="5" fill="#232733"/><rect x="146" y="10" width="46" height="40" rx="5" fill="#232733"/><rect x="10" y="62" width="50" height="40" rx="5" fill="#232733"/><rect x="80" y="70" width="40" height="32" rx="5" fill="#232733"/><rect x="140" y="66" width="52" height="36" rx="5" fill="#2e2647"/><text x="35" y="88" fill="#98a0ad" font-size="9" text-anchor="middle" font-family="Figtree">Hostel</text><text x="166" y="90" fill="#ac93ff" font-size="9" text-anchor="middle" font-family="Figtree" font-weight="700">L-7</text><path class="gl-route" d="M35 60 C 40 48, 60 50, 68 52 S 120 54, 130 58 S 160 60, 166 72" stroke="#ac93ff" stroke-width="2.4" stroke-linecap="round"/><path class="gl-mk" d="M166 71c-3.5-4-6-6.6-6-9.4a6 6 0 0 1 12 0c0 2.8-2.5 5.4-6 9.4z" fill="#e5484d"/></svg></div><h3>Finding your way</h3><p>The campus map. Which building the lab is
       in, where the department sits, what the canteen is called.</p></div>
   </div>
   <div class="three">
-    <div><h3>The feed</h3><p>Your section, talking. Lost keys, a change of room,
+    <div><div class="gl" aria-hidden="true"><div class="gl-c gl-feed"><div class="gl-list"><div class="gl-r"><span class="gl-ic"></span>Lost keys near the canteen?</div><div class="gl-r"><span class="gl-ic" style="--c:#20c4a8"></span>Physics moved to L-9 today</div><div class="gl-r"><span class="gl-ic" style="--c:#ff8a4c"></span>Selling a drafter, ₹150</div><div class="gl-r"><span class="gl-ic" style="--c:#ffd166"></span>Anyone up for badminton?</div><div class="gl-r"><span class="gl-ic" style="--c:#7ab8ff"></span>Notes for Chem lab 3?</div></div></div></div><h3>The feed</h3><p>Your section, talking. Lost keys, a change of room,
       somebody selling a drafter.</p></div>
-    <div><h3>Confessions</h3><p>Anonymous, and anonymous properly: no
+    <div><div class="gl" aria-hidden="true"><div class="gl-c"><div class="gl-hd"><span class="gl-who"><span class="gl-nm">Aarav S.</span><span class="gl-anon">Anonymous</span></span><span>2 h</span></div><div>I went to the wrong tutorial for three weeks and nobody noticed.</div></div></div><h3>Confessions</h3><p>Anonymous, and anonymous properly: no
       name is stored against it, so nobody can be shown one later.</p></div>
-    <div><h3>Who has contributed</h3><p>Standings for the people who record and
+    <div><div class="gl" aria-hidden="true"><div class="gl-c"><div class="gl-hd"><b>This month</b><span>recordings</span></div><div class="gl-r"><span class="gl-nmw">Priya</span><span class="gl-bar"><span style="--w:92%;--i:0"></span></span></div><div class="gl-r"><span class="gl-nmw">Kabir</span><span class="gl-bar"><span style="--w:70%;--i:1"></span></span></div><div class="gl-r"><span class="gl-nmw">Riya</span><span class="gl-bar"><span style="--w:48%;--i:2"></span></span></div></div></div><h3>Who has contributed</h3><p>Standings for the people who record and
       upload, because somebody has to and it should be seen.</p></div>
   </div>
 </section>
@@ -11723,7 +12076,7 @@ LOGIN_BODY = r"""<div class="land">
   <!-- The institute address is the door. Username and password are for the
        few accounts an admin hands out by hand, so they sit folded away. -->
   <details class="try">
-    <summary>Not a MANIT student but wanna try?</summary>
+    <summary>Not a MANIT student? Click here to sign in with a username and password</summary>
     <form id="f">
       <label for="roll">Username</label>
       <input id="roll" required autocomplete="username" autocapitalize="none"
