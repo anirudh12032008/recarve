@@ -342,7 +342,7 @@ def server(tmp_path_factory):
                       "profiles"):
             conn.execute(f"delete from {table}")
         for name, role in (("Asha", "admin"), ("Bilal", "trusted"),
-                           ("Chan", "student"), ("Dia", "student")):
+                           ("Qasim", "student"), ("Dia", "student")):
             uid = make_user(conn)
             conn.execute(
                 "insert into profiles (id, name, roll_no, status, role, password) "
@@ -391,11 +391,11 @@ def wall(port, cookie, kind="feed"):
 
 def test_any_approved_member_posts_to_the_feed(server):
     port, _, who = server
-    status, body, _ = post(port, who["Chan"], kind="feed",
+    status, body, _ = post(port, who["Qasim"], kind="feed",
                            body="Anybody found a black umbrella?")
     assert status == 200, body
     assert [(p["by"], p["body"]) for p in json.loads(body)["posts"]] == [
-        ("Chan", "Anybody found a black umbrella?")]
+        ("Qasim", "Anybody found a black umbrella?")]
 
 
 def test_a_second_member_learns_nothing_about_a_confession(server):
@@ -403,7 +403,7 @@ def test_a_second_member_learns_nothing_about_a_confession(server):
     of their own, asks everything this server answers and looks for the
     author's name and id in the bytes that come back."""
     port, ids, who = server
-    status, body, _ = post(port, who["Chan"], kind="confession",
+    status, body, _ = post(port, who["Qasim"], kind="confession",
                            body="I sleep through every 8am.")
     assert status == 200, body
     [c] = json.loads(body)["posts"]
@@ -412,20 +412,20 @@ def test_a_second_member_learns_nothing_about_a_confession(server):
                  "/campus", "/standings", f"/doubts?subject=CY1107",
                  f"/confession-author?id={c['id']}"):
         status, seen, _ = call(port, "GET", path, cookie=who["Dia"])
-        assert ids["Chan"] not in seen, f"{path} leaked the author's id"
-        assert "Chan" not in seen, f"{path} leaked the author's name"
+        assert ids["Qasim"] not in seen, f"{path} leaked the author's id"
+        assert "Qasim" not in seen, f"{path} leaked the author's name"
 
     # And the write paths, which answer with the wall as well.
     for payload in ({"post": c["id"], "on": True}, {"post": c["id"], "on": False}):
         _, seen, _ = call(port, "POST", "/vote", payload, cookie=who["Dia"])
-        assert ids["Chan"] not in seen and "Chan" not in seen
+        assert ids["Qasim"] not in seen and "Qasim" not in seen
     _, seen, _ = post(port, who["Dia"], kind="confession", body="me too")
-    assert ids["Chan"] not in seen and "Chan" not in seen
+    assert ids["Qasim"] not in seen and "Qasim" not in seen
 
 
 def test_a_member_asking_who_wrote_it_is_refused_by_the_route(server):
     port, _, who = server
-    _, body, _ = post(port, who["Chan"], kind="confession", body="secret")
+    _, body, _ = post(port, who["Qasim"], kind="confession", body="secret")
     cid = json.loads(body)["posts"][0]["id"]
     for name in ("Dia", "Bilal"):
         status, seen, _ = call(port, "GET", f"/confession-author?id={cid}",
@@ -437,20 +437,20 @@ def test_an_admin_can_find_out_who_wrote_one(server):
     """Because somebody will post something vile, and an admin has to be able
     to deal with the person and not only the row."""
     port, _, who = server
-    _, body, _ = post(port, who["Chan"], kind="confession", body="something vile")
+    _, body, _ = post(port, who["Qasim"], kind="confession", body="something vile")
     cid = json.loads(body)["posts"][0]["id"]
     status, seen, _ = call(port, "GET", f"/confession-author?id={cid}",
                            cookie=who["Asha"])
-    assert status == 200 and json.loads(seen)["by"] == "Chan", seen
+    assert status == 200 and json.loads(seen)["by"] == "Qasim", seen
 
 
 def test_the_wall_itself_never_tells_the_admin_either(server):
     """Only the deliberate route. An admin reading the screen everybody reads
     sees what everybody sees, so a shoulder in a corridor learns nothing."""
     port, ids, who = server
-    post(port, who["Chan"], kind="confession", body="quiet words")
+    post(port, who["Qasim"], kind="confession", body="quiet words")
     _, seen, _ = call(port, "GET", "/posts?kind=confession", cookie=who["Asha"])
-    assert "Chan" not in seen and ids["Chan"] not in seen
+    assert "Qasim" not in seen and ids["Qasim"] not in seen
 
 
 def test_a_fourth_confession_today_is_refused_over_http(server):
@@ -464,7 +464,7 @@ def test_a_fourth_confession_today_is_refused_over_http(server):
 
 def test_an_admin_takes_a_confession_down_over_http(server):
     port, _, who = server
-    _, body, _ = post(port, who["Chan"], kind="confession", body="take me down")
+    _, body, _ = post(port, who["Qasim"], kind="confession", body="take me down")
     cid = json.loads(body)["posts"][0]["id"]
     status, body, _ = post(port, who["Asha"], kind="confession", id=cid, delete=True)
     assert status == 200 and json.loads(body)["posts"] == [], body
@@ -472,7 +472,7 @@ def test_an_admin_takes_a_confession_down_over_http(server):
 
 def test_a_bystander_cannot_take_a_post_down_over_http(server):
     port, _, who = server
-    _, body, _ = post(port, who["Chan"], kind="feed", body="not yours")
+    _, body, _ = post(port, who["Qasim"], kind="feed", body="not yours")
     pid = json.loads(body)["posts"][0]["id"]
     status, _, _ = post(port, who["Dia"], kind="feed", id=pid, delete=True)
     assert status == 400

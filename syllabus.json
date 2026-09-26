@@ -1,0 +1,73 @@
+{
+  "MC1101": [
+    {"unit": "Calculus", "topics": ["Sequences and series", "Convergence of sequences and series", "Limit and continuity", "Partial differentiation", "Total differentiation", "Taylor's series", "Maxima and minima of functions of two or more variables", "Lagrange's method of undetermined multipliers"]},
+    {"unit": "Multiple Integral", "topics": ["Double integrals", "Triple integrals", "Change of order of integration", "Length of curves", "Area", "Volume of solids of revolution"]},
+    {"unit": "Vector Calculus", "topics": ["Vector differentiation", "Gradient", "Directional derivative", "Divergence and curl of a vector point function", "Line integral", "Surface integral", "Gauss divergence theorem", "Stokes' theorem", "Green's theorem"]},
+    {"unit": "Ordinary Differential Equations", "topics": ["Formation of ODEs", "Existence and uniqueness of first order ODEs", "First order first degree equations", "Exact ODEs", "Integrating factor", "Cauchy-Euler equations", "Simultaneous differential equations", "Higher order ODEs with constant coefficients", "Variation of parameters"]}
+  ],
+  "PY1102": [
+    {"unit": "Wave Optics", "topics": ["Interference", "Diffraction", "Michelson's interferometer"]},
+    {"unit": "Solid State and Semiconductor Physics", "topics": ["Energy bands in solids", "Electron and hole mobility", "Hall effect", "PN junction transistor", "Transistor parameters", "Photo cell and solar cell"]},
+    {"unit": "Quantum Mechanics", "topics": ["Schrodinger wave equation", "Particle in a box", "Harmonic oscillator", "Tunnel effect"]},
+    {"unit": "Nuclear Physics", "topics": ["Nuclear properties", "Nuclear models", "Particle accelerators", "Fission and fusion", "Chain reaction", "Nuclear reactor", "Particle detectors"]},
+    {"unit": "Laser and Fiber Optics", "topics": ["Laser phenomena", "Ruby and He-Ne lasers and applications", "Laser holography", "Types of optical fibers", "Attenuation and fiber losses", "Fiber optic communication"]},
+    {"unit": "Theory of Relativity", "topics": ["Transformation equations", "Time dilation", "Mass-energy equation"]},
+    {"unit": "Electron Ballistics", "topics": ["Motion of charged particles in electric and magnetic fields", "Electron microscope", "Mass spectrographs"]}
+  ],
+  "CE1103": [
+    {"unit": "Force and Equilibrium", "topics": ["Vector representation of forces and moments", "Vector operations", "Planar force systems", "Composition of concurrent forces in a plane", "Free body diagrams", "Reduction of a force system to a force and a couple", "Equilibrium of rigid bodies in two and three dimensions"]},
+    {"unit": "Analysis of Trusses", "topics": ["Classification of force systems", "Combination of forces and moments", "Method of joints", "Method of sections", "Method of tension coefficients", "Graphical approach"]},
+    {"unit": "Centroid and Moment of Inertia", "topics": ["Centroid of areas", "Moment of inertia of areas", "Principal moments of inertia", "Parallel axis theorem", "Perpendicular axis theorem", "Moment of inertia of composite areas"]}
+  ],
+  "ME1104": [
+    {"unit": "Basic Concepts", "topics": ["Introduction to engineering drawing", "Types of lines, dimensioning and title block", "Basic CAD tools and commands", "Theory of projections and reference planes", "Types of projection methods", "Orthographic projection", "Projection of points"]},
+    {"unit": "Lines and Planes", "topics": ["Projection of straight lines", "Projection of planes", "Auxiliary plane method"]},
+    {"unit": "Projection of Solids", "topics": ["Projection of polyhedrons", "Prisms and pyramids", "Solids of revolution in different positions"]},
+    {"unit": "Section of Solids", "topics": ["Cutting planes", "Auxiliary planes", "Frustum and truncated solids"]},
+    {"unit": "Development of Solids", "topics": ["Principle of development", "Parallel line method", "Radial line method"]}
+  ],
+  "CS1105": [
+    {"unit": "Computers and Problem Solving", "topics": ["Introduction to computers and their organization", "Flowcharts", "Algorithms"]},
+    {"unit": "Programming in C", "topics": ["Developing and running C programs", "Conditions", "Loops", "Arrays", "Functions", "Pointers", "Structures"]},
+    {"unit": "IoT", "topics": ["Introduction to IoT using Arduino"]}
+  ],
+  "HS1106": [
+    {"unit": "Communication", "topics": ["Significance of communication", "Communication process", "Barriers to communication", "Verbal and non-verbal communication", "Body language"]},
+    {"unit": "Oral and Written Communication", "topics": ["Oral presentations", "Multimedia presentations", "Communication styles", "Voice modulation", "Group discussion", "Paragraph writing", "Letter writing", "Report writing"]},
+    {"unit": "Soft Skills", "topics": ["Emotional and social skills", "Critical thinking and problem solving", "Positive attitude", "Time management", "Leadership", "SWOT analysis", "Stress management"]},
+    {"unit": "Developing Other Skills", "topics": ["Reading styles and strategies", "Vocabulary", "Idioms and phrases", "Functional grammar and common errors"]}
+  ],
+  "CY1107": [
+    {"unit": "Lubricants", "topics": ["Role and effects of friction", "Functions of lubricants", "Mechanisms of lubrication: thick layer, thin layer, extreme pressure", "Liquid, solid and semi-solid lubricants", "Physical and chemical properties of lubricants and their testing", "Lubricating emulsions and cutting fluids", "Selection of lubricants for light and heavy machinery"]},
+    {"unit": "Fuels", "topics": ["Calorific value and characteristics of a good fuel", "Comparison of solid, liquid and gaseous fuels", "Gross and net calorific value by bomb calorimeter", "Classification and selection of coal", "Proximate analysis of coal", "Ultimate analysis of coal", "Pulverized coal", "Classification of petroleum", "Types of cracking", "Knocking, octane and cetane number", "Numericals on calorific value and ultimate analysis"]},
+    {"unit": "Water", "topics": ["Sources and specifications of drinking water", "Purification of water step by step", "Disinfection vs sterilization", "Hardness: classification and disadvantages", "Caustic embrittlement", "Boiler corrosion", "Priming and foaming", "Scale and sludge: internal and external treatment", "Lime-soda process (hot and cold)", "Zeolite process", "Ion-exchange process", "Numericals on water purification"]},
+    {"unit": "Materials", "topics": ["Types of polymerization", "Addition and coordination polymerization mechanisms", "Molecular weight of polymers", "Thermosetting vs thermoplastic polymers", "Moulding of plastics", "Thermoplastic and thermosetting resins", "Synthetic rubbers and vulcanization", "Polymer composites and biomedical polymers", "Manufacture of Portland cement (wet and dry)", "Composition, setting and hardening of cement", "Lime saturation factor and silica modulus", "Special cements", "Concrete and RCC"]},
+    {"unit": "Corrosion and its Control", "topics": ["Chemical and electrochemical corrosion", "Galvanic and concentration cell corrosion", "Passivity", "Soil, pitting, intergranular, waterline and stress corrosion", "Galvanic series", "Factors influencing corrosion", "Protection against corrosion", "Protective coatings: anodic and cathodic"]}
+  ],
+  "EE1108": [
+    {"unit": "DC Circuits", "topics": ["KCL and KVL", "Loop and nodal equations", "Network theorems", "Star-delta transformation", "Series and parallel circuits"]},
+    {"unit": "AC Circuits", "topics": ["Waveforms and RMS value", "Phase and phase difference", "Power and power factor", "Series AC circuits", "Resonance"]},
+    {"unit": "Electrical Machines", "topics": ["Faraday's law of electromagnetic induction", "Transformer construction and principle", "Transformer phasor diagrams and equivalent circuit", "Tests on transformers", "Transformer losses and efficiency", "Introduction to DC machines"]},
+    {"unit": "Semiconductor Devices", "topics": ["PN junction diode characteristics", "Zener effect and Zener diode", "Half wave and full wave rectifiers", "Ripple factor and efficiency"]},
+    {"unit": "Bipolar Junction Transistor", "topics": ["Principle of operation of a BJT", "CB configuration characteristics", "CE configuration characteristics", "CC configuration characteristics"]}
+  ],
+  "ME1109": [
+    {"unit": "Fitting Shop", "topics": ["Classification of metals", "Clamping tools, vices and V-blocks", "Marking and measuring tools", "Files, chisels, hacksaw, punches and hammers", "Calipers and dividers", "Drills and taps", "Vernier caliper: principle, least count, reading", "Micrometer principle", "Vernier depth and height gauges", "Fitting processes: marking, chipping, sawing, filing"]},
+    {"unit": "Welding Shop", "topics": ["Classification of welding processes", "Concept of a weld", "Electric arc welding principle", "Arc blow", "Arc welding equipment", "AC vs DC for welding", "Electrodes and their selection"]},
+    {"unit": "Carpentry Shop", "topics": ["Carpentry tools and their use", "Types of wood and applications", "Carpentry hardware", "Carpentry operations", "Safety in the carpentry shop"]},
+    {"unit": "Foundry Shop", "topics": ["Foundry tools and equipment", "Patterns and pattern making", "Types of patterns", "Pattern allowances", "Moulding sands", "Types of moulds", "Steps in making a mould", "Moulding processes"]}
+  ],
+  "CY1110": [
+    {"unit": "Natural Resources", "topics": ["Renewable and non-renewable resources", "Forest resources", "Water resources", "Mineral resources", "Food resources", "Energy resources", "Land resources"]},
+    {"unit": "Air Pollution", "topics": ["Spheres of the atmosphere", "Photochemical smog", "Sources and effects of air pollutants", "Ozone depletion", "Control of gaseous and particulate pollutants"]},
+    {"unit": "Water Pollution", "topics": ["Hydrosphere and its importance", "Point and non-point sources", "Classification and effects of water pollutants", "Prevention and control of water pollution", "Wastewater treatment: preliminary, primary, secondary", "Water quality tests"]},
+    {"unit": "Auxiliary Pollutions", "topics": ["Soil pollution", "Noise pollution", "Thermal pollution", "Radioactive pollution", "Solid waste management"]},
+    {"unit": "Environmental Management", "topics": ["Carbon footprint", "Life cycle assessment", "Environmental impact assessment", "Important environmental laws", "Green chemistry", "Sustainability and its ten commandments"]}
+  ],
+  "BS1111": [
+    {"unit": "Cell Biology", "topics": ["Cell theory", "Cell organelles: structure and function", "Cell types", "Cell growth and division", "Biomolecules and associated disorders"]},
+    {"unit": "Human Physiology", "topics": ["Digestive system", "Respiratory system", "Excretory system", "Skeletal system", "Cardiovascular system", "Nervous system", "Engineering aspects of physiology"]},
+    {"unit": "Genetic Engineering", "topics": ["Recombinant DNA technology and cloning", "Gene therapy", "Cell therapy", "Biochips", "Vaccines and antibodies", "Transgenic plants and animals"]},
+    {"unit": "Biology in Industry", "topics": ["Biofuels", "Tissue engineering", "Artificial limbs, joints and body parts", "Bioprinting", "Bioremediation", "Industrial biomolecules"]}
+  ]
+}
