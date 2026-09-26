@@ -127,6 +127,15 @@ SUBJECTS = {
     "SA1142": ("Physical-Education", ["phe", "sa1142"]),
 }
 
+# The institute's Semester I syllabus (Scheme and Syllabus 2025-26), unit by
+# unit, as {code: [{"unit": ..., "topics": [...]}]}. Beside this file rather
+# than in it; a deploy that forgot to copy it loses the syllabus, not the app.
+try:
+    import json as _json
+    SYLLABUS = _json.loads((Path(__file__).resolve().parent / "syllabus.json").read_text())
+except (OSError, ValueError):
+    SYLLABUS = {}
+
 
 def resolve_subject(name):
     """Match a user-typed subject to a code. Accepts a code or any alias."""
@@ -954,6 +963,16 @@ body.drawered #drawer{transform:none;visibility:visible}
 .blank+.sect{padding-top:8px}
 .card+.sect,.cal+.sect,.mine+.sect{padding-top:16px}
 .rows{padding:4px 4px 0}
+/* The syllabus: a unit per fold, a checkbox per topic, picked for revision. */
+.syl{padding:4px 16px 0}
+.syl details{border-bottom:1px solid var(--line)}
+.syl summary{display:flex;align-items:center;gap:10px;min-height:var(--tap);cursor:pointer;
+  font-weight:600;font-size:16px}
+.syl summary small{margin-left:auto;font-weight:400;font-size:13px;color:var(--mut)}
+.syl label{display:flex;align-items:flex-start;gap:10px;padding:6px 0 6px 28px;font-size:16px;
+  line-height:1.35}
+.syl input{width:18px;height:18px;flex:none;margin:0;accent-color:var(--accent)}
+.syl label input{margin-top:1px}
 /* The subjects, as tiles. Two across on a phone, as many as fit on a wide
    screen; the subject's colour is one short bar, not a bar and a badge. */
 .sj-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));
@@ -2189,7 +2208,8 @@ const MOVED = {
   'campus/new': 'home/new',
 };
 const subjectOf = code => DATA.find(s => s.code === code);
-const lecturesOf = s => s.notes.filter(n => n.kind !== 'revision');
+const lecturesOf = s => s.notes.filter(n => n.kind === 'lecture');
+const topicNotesOf = s => s.notes.filter(n => n.kind === 'topics');
 const revisionOf = s => s.notes.find(n => n.kind === 'revision');
 const plural = (n, word) => n + ' ' + word + (n === 1 ? '' : 's');
 
@@ -5225,6 +5245,96 @@ function renderSubjects() {
   }));
 }
 
+// The syllabus, a unit per fold. Tick a whole unit or single topics, across
+// units, and one button turns the picks into revision notes. The picks live
+// here, per subject, so a refresh redrawing the screen keeps them.
+const sylPicks = {};
+function syllabusSection(s) {
+  if (!s.syllabus || !s.syllabus.length) return;
+  const picks = sylPicks[s.code] = sylPicks[s.code] || new Set();
+  heading('Syllabus');
+  const wrap = document.createElement('div');
+  wrap.className = 'syl';
+  let make = null;
+  const say = () => {
+    if (!make) return;
+    make.querySelector('small').textContent = picks.size
+      ? plural(picks.size, 'topic') + ' picked' : 'Tick a unit or a few topics above';
+  };
+  for (const u of s.syllabus) {
+    const d = document.createElement('details');
+    const sum = document.createElement('summary');
+    const all = document.createElement('input');
+    all.type = 'checkbox';
+    all.setAttribute('aria-label', 'All of ' + u.unit);
+    const name = document.createElement('span');
+    name.textContent = u.unit;
+    const n = document.createElement('small');
+    sum.append(all, name, n);
+    d.appendChild(sum);
+    const boxes = u.topics.map(t => {
+      const l = document.createElement('label');
+      const c = document.createElement('input');
+      c.type = 'checkbox';
+      c.checked = picks.has(t);
+      c.onchange = () => { c.checked ? picks.add(t) : picks.delete(t); sync(); };
+      l.append(c, document.createTextNode(t));
+      d.appendChild(l);
+      return c;
+    });
+    const sync = () => {
+      const k = u.topics.filter(t => picks.has(t)).length;
+      all.checked = k === u.topics.length;
+      all.indeterminate = k > 0 && !all.checked;
+      n.textContent = k ? k + ' of ' + u.topics.length : plural(u.topics.length, 'topic');
+      say();
+    };
+    // A tap on the box picks the unit; a tap anywhere else on the line opens it.
+    all.onclick = e => e.stopPropagation();
+    all.onchange = () => {
+      u.topics.forEach((t, i) => { all.checked ? picks.add(t) : picks.delete(t);
+                                   boxes[i].checked = all.checked; });
+      sync();
+    };
+    sync();
+    wrap.appendChild(d);
+  }
+  nav.appendChild(wrap);
+  // Only for those who may spend the AI budget; everybody else still reads.
+  if (!atLeast('trusted')) return;
+  make = line('Make revision notes', '', document.createElement('button'), hue(s.code));
+  make.classList.add('w');
+  make.onclick = () => makeTopicNotes(s, [...picks], make);
+  say();
+  const row = document.createElement('div');
+  row.className = 'rows';
+  row.appendChild(make);
+  nav.appendChild(row);
+}
+
+async function makeTopicNotes(s, topics, btn) {
+  if (!topics.length) return busyDone('Tick a unit or some topics first');
+  btn.disabled = true;
+  busy('Writing revision notes on ' + plural(topics.length, 'topic')
+       + '. This takes up to a minute.', true);
+  try {
+    const r = await fetch('/topics', {
+      method: 'POST', headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify({subject: s.code, topics: topics}),
+    });
+    const d = await r.json().catch(() => ({}));
+    if (!r.ok) throw new Error(d.error || 'could not write those notes');
+    sylPicks[s.code].clear();
+    await refresh();
+    busyDone('Revision notes ready');
+    go('classes', s.code, d.title);
+  } catch (e) {
+    oops('Revision notes failed', e);
+  } finally {
+    btn.disabled = false;
+  }
+}
+
 // LEVEL 2: one subject, grouped.
 function renderSubject(s) {
   // Where you stand in THIS subject, at the top, because 75% is per subject
@@ -5255,6 +5365,8 @@ function renderSubject(s) {
   papersSection(s);
   const rev = revisionOf(s);
   block('Revision sheet', rev ? [noteRow(rev, s)] : []);
+  syllabusSection(s);
+  block('Revision notes by topic', topicNotesOf(s).map(n => noteRow(n, s)));
   roomSection(s);
   if (!s.notes.length && !s.uploads.length) {
     saying('Nothing in ' + s.code + ' yet.',
@@ -6303,7 +6415,7 @@ function openNote(n, s) {
   mast.hidden = false;
   rtitle.textContent = n.title;
   const day = noteDay(n);
-  rmeta.textContent = [n.kind === 'revision' ? 'Revision sheet' : 'Lecture',
+  rmeta.textContent = [{revision: 'Revision sheet', topics: 'Revision notes'}[n.kind] || 'Lecture',
                        day ? (+day.slice(8)) + ' ' + MONTHS[+day.slice(5, 7) - 1] : null,
                        questionsOf(n).length
                          ? plural(questionsOf(n).length, 'question') + ' to practise' : null,
@@ -7908,6 +8020,13 @@ def build_data(library, relative_to):
             notes.append({"title": "Revision sheet", "kind": "revision", "md": text,
                           "at": mtime(rev),
                           "questions": parse_questions(text)})
+        # Revision notes somebody made from syllabus topics. Named by a hash of
+        # the selection, titled by their own first line.
+        for md in sorted((folder / "topics").glob("*.md"), key=mtime, reverse=True):
+            head, _, text = md.read_text().partition("\n")
+            notes.append({"title": head.lstrip("# ").strip(), "kind": "topics",
+                          "md": text.strip(), "at": mtime(md),
+                          "questions": parse_questions(text)})
         for md in sorted((folder / "lectures").glob("*.md")):
             text = md.read_text()
             notes.append({"title": md.stem, "kind": "lecture", "md": text,
@@ -7918,7 +8037,8 @@ def build_data(library, relative_to):
                 uploads.append({"name": f.name, "at": mtime(f),
                                 "path": os.path.relpath(f, relative_to)})
         data.append({"code": code, "name": name.replace("-", " "),
-                     "notes": notes, "uploads": uploads})
+                     "notes": notes, "uploads": uploads,
+                     "syllabus": SYLLABUS.get(code, [])})
     return data
 
 
@@ -8026,6 +8146,96 @@ def revise(args):
     print(f"  {msg.usage.input_tokens} in / {msg.usage.output_tokens} out (~${cost:.3f})",
           file=sys.stderr)
     log(f"-> {out}", "written", 1)
+
+
+TOPICS_PROMPT = """You write revision notes for a first-year B.Tech student at MANIT Bhopal
+who has a mini test, quiz or mid-sem coming up. You are given a course and the syllabus topics
+the student picked. Cover exactly those topics, in the order given, as the syllabus means them,
+whether or not a lecture has reached them yet.
+
+For each topic, a "## <topic>" heading, then:
+- The idea in two or three plain sentences, the way you would explain it to a friend.
+- Definitions, laws and formulas worth memorising, each formula as LaTeX with its symbols named.
+- Only if this topic is examined with numericals: one short worked example, steps shown.
+- Only if a diagram is expected in answers: what to draw, in words (axes, labels, parts).
+- One line starting "Watch out:" with the mistake students usually make.
+
+Then "## Quick check": 8-12 short questions of the kind set in a 20-minute class test, spread
+over the chosen topics. Each question is a numbered line of its own, and its answer follows
+in a block whose summary is the single word Answer, exactly like this:
+
+1. What causes temporary hardness?
+
+<details><summary>Answer</summary>
+
+Bicarbonates of calcium and magnesium.
+
+</details>
+
+Rules:
+- No title heading and no preamble; start at the first "## ".
+- Maths as LaTeX: $...$ inline, $$...$$ display.
+- Tight: bullets over paragraphs, nothing a student would skip when revising. No em dashes.
+- Standard first-year textbook content for this course. Accuracy beats coverage: check every
+  formula, reaction and answer, and leave out anything you are unsure of rather than guess."""
+
+
+def topic_notes(code, picked, model, cache):
+    """Revision notes for syllabus topics of one subject, written under
+    <library>/<code>-<name>/topics/ and returned as (title, markdown).
+
+    `picked` must come from SYLLABUS: the phone sends names, and anything not
+    on the syllabus is refused here rather than spent on. The same selection
+    by two classmates is one file and one API call.
+    """
+    units = SYLLABUS.get(code, [])
+    known = [t for u in units for t in u["topics"]]
+    want = set(picked)
+    if not want or not want <= set(known):
+        raise ValueError("pick topics from this subject's syllabus")
+    if len(want) > 30:
+        raise ValueError("that is too many topics for one sheet, 30 at most")
+    ordered = [t for t in known if t in want]
+    key = hashlib.sha256("\n".join([code, *ordered]).encode()).hexdigest()[:16]
+    out = cache / f"{key}.md"
+    if out.is_file():
+        head, _, text = out.read_text().partition("\n")
+        return head.lstrip("# ").strip(), text.strip()
+
+    # A whole unit is named by the unit; a few topics by the topics.
+    names = []
+    for u in units:
+        got = [t for t in u["topics"] if t in want]
+        if got:
+            names += [u["unit"]] if len(got) == len(u["topics"]) else got
+    title = ", ".join(names)
+    if len(title) > 70:
+        title = title[:67].rsplit(", ", 1)[0] + " and more"
+
+    lines = []
+    for u in units:
+        got = [t for t in u["topics"] if t in want]
+        if got:
+            lines.append(f"Unit: {u['unit']}\n" + "\n".join(f"- {t}" for t in got))
+    # Claude, not Groq: gpt-oss wrote lime-soda reactions that lose marks.
+    import anthropic
+
+    msg = anthropic.Anthropic().messages.create(
+        model=model, max_tokens=12000, system=TOPICS_PROMPT,
+        messages=[{"role": "user", "content":
+                   f"Course: {code} {SUBJECTS[code][0].replace('-', ' ')}\n\n"
+                   + "\n\n".join(lines)}])
+    if msg.stop_reason == "refusal":
+        raise RuntimeError("Claude declined to write these notes")
+    text = "".join(b.text for b in msg.content if b.type == "text").strip()
+    text = text.replace(" \u2014 ", ", ").replace("\u2014", ", ")   # the prompt asks; it forgets
+    rate_in, rate_out = price_of(model)
+    log(f"{msg.usage.input_tokens} in / {msg.usage.output_tokens} out (~$"
+        f"{msg.usage.input_tokens / 1e6 * rate_in + msg.usage.output_tokens / 1e6 * rate_out:.3f})",
+        "topics", 1)
+    cache.mkdir(parents=True, exist_ok=True)
+    out.write_text(f"# {title}\n{text}\n")
+    return title, text
 
 
 class Jobs:
@@ -8217,6 +8427,7 @@ ROLE_REQUIRED = {
     "/explain": "trusted",     # this is the AI spend
     "/upload": "trusted",
     "/revise": "trusted",      # this is the AI spend too
+    "/topics": "trusted",      # and so is this
     "/admin": "admin",
     "/pending": "admin",
     "/approve": "admin",
@@ -8757,7 +8968,8 @@ def library_data(library, relative_to):
     try:
         key = tuple(sorted(
             (str(p), st.st_mtime_ns, st.st_size)
-            for pattern in ("*/revision.md", "*/lectures/*.md", "*/uploads/*")
+            for pattern in ("*/revision.md", "*/lectures/*.md", "*/topics/*.md",
+                            "*/uploads/*")
             for p in lib.glob(pattern) for st in (p.stat(),)))
     except OSError:
         # Listed then gone -- an upload's .part renamed mid-listing. Read it
@@ -14121,6 +14333,8 @@ def build_server(args):
                 return self.do_read()
             if self.path == "/revise":
                 return self.do_revise()
+            if self.path == "/topics":
+                return self.do_topics()
             if self.path != "/explain":
                 return self.send_error(404)
             try:
@@ -15602,6 +15816,24 @@ def build_server(args):
                 return self.reply(400, {"error": str(e)})
             except Exception as e:
                 return self.reply(500, {"error": f"{type(e).__name__}: {e}"})
+
+        def do_topics(self):
+            req = self.body(8000)
+            if req is None:
+                return
+            code = req.get("subject", "")
+            if code not in SUBJECTS:
+                return self.reply(400, {"error": "no such subject"})
+            picked = [t for t in req.get("topics") or [] if isinstance(t, str)]
+            folder = Path(args.library) / f"{code}-{SUBJECTS[code][0]}" / "topics"
+            try:
+                title, _ = topic_notes(code, picked, args.notes_model, folder)
+            except ValueError as e:
+                return self.reply(400, {"error": str(e)})
+            except Exception as e:
+                return self.reply(500, {"error": f"{type(e).__name__}: {e}"})
+            log(f"{code}: {title}", "topics", 1)
+            return self.reply(200, {"title": title})
 
         def body(self, cap):
             """The request's JSON body, or None once a 413 has been sent.

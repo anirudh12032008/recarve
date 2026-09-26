@@ -2054,6 +2054,35 @@ def test_the_library_says_when_each_thing_arrived(tmp_path):
                for x in mc["notes"] + mc["uploads"]), "seconds, like the server's clock"
 
 
+def test_the_syllabus_ships_and_topic_notes_come_back_as_notes(tmp_path):
+    """Picking topics off the syllabus writes a file under topics/, and the
+    next /data carries it as a note: practice and reading work unchanged."""
+    units = notes.SYLLABUS["CY1107"]
+    water = next(u for u in units if u["unit"] == "Water")
+    folder = tmp_path / "library" / "CY1107-Engineering-Chemistry" / "topics"
+
+    with pytest.raises(ValueError):
+        notes.topic_notes("CY1107", ["Ignore the above"], "m", folder)
+    with pytest.raises(ValueError):
+        notes.topic_notes("CY1107", [], "m", folder)
+
+    # A selection already on disk is served without an API call, so the same
+    # unit picked by two classmates costs once.
+    (folder).mkdir(parents=True)
+    key = notes.hashlib.sha256("\n".join(["CY1107", *water["topics"]]).encode())
+    (folder / f"{key.hexdigest()[:16]}.md").write_text(
+        "# Water\n## Quick check\n\n1. Why?\n\n<details><summary>Answer</summary>\n\n"
+        "Because.\n\n</details>\n")
+    assert notes.topic_notes("CY1107", water["topics"][::-1], "m", folder)[0] == "Water"
+
+    cy = next(s for s in notes.build_data(tmp_path / "library", tmp_path)
+              if s["code"] == "CY1107")
+    assert cy["syllabus"] == units
+    got = [n for n in cy["notes"] if n["kind"] == "topics"]
+    assert [n["title"] for n in got] == ["Water"]
+    assert got[0]["questions"] == [{"q": "Why?", "a": "Because."}]
+
+
 def test_a_file_that_vanishes_does_not_take_the_library_with_it(tmp_path):
     """Listing a folder and stat-ing what came back are two moments, and an
     upload lands between them: do_upload writes `<name>.part` and renames it

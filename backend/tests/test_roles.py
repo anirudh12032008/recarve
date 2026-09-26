@@ -398,6 +398,7 @@ MATRIX = [
     ("POST", "/vote", {"id": "nope"}, "student"),
     ("POST", "/explain", {"text": "x" * 40}, "trusted"),
     ("POST", "/revise", {"subject": ""}, "trusted"),
+    ("POST", "/topics", {"subject": ""}, "trusted"),
     ("POST", "/upload", None, "trusted"),
     ("GET", "/admin", None, "admin"),
     ("GET", "/pending", None, "admin"),
