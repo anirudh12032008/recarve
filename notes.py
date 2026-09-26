@@ -38,6 +38,10 @@ Output GitHub-flavored Markdown with these sections:
 
 ## Key Points
 The substantive content, as nested bullets. Include every formula, definition, derivation step, named example, and worked problem. This is the section the student studies from, so favour completeness over brevity.
+Where the professor stated something that is wrong, keep what they said and put the right version straight under it as `> **Correction:** ...`. Exams are often marked against what the professor taught, so the student needs both.
+
+## Beyond the lecture
+What a student needs to actually understand this topic that the lecture left out: a definition it assumed, the standard name of a result, a step it skipped, a common exam trap. Only what matters for this lecture's topic, not the rest of the course. Skip this section if the lecture was complete.
 
 ## Terms
 Any Hindi word or phrase the professor used for a technical idea, with its English meaning. Skip this section if there are none.
@@ -60,7 +64,8 @@ Rules:
 - Write the notes in {notes_lang}.
 - Preserve technical terms in English exactly as a textbook would write them.
 - Where the transcript is clearly a mis-transcription of a known technical term, silently correct it.
-- Never invent content that is not in the transcript. If the lecture was thin, the notes are short.
+- Summary, Key Points, Terms and Questions come from the lecture; if it was thin, they are short. Everything you add from your own knowledge goes under a Correction or Beyond the lecture, so the student can always tell what the professor said from what you added.
+- Correct the professor only when you are sure the standard textbook statement differs. If you cannot tell a real mistake from a garbled transcript, put it under Flagged instead.
 """
 
 # $ per million tokens, (input, output). Used for the spend readout and the
@@ -208,8 +213,9 @@ Use it to:
 - Fill a gap where the audio was unclear but the material makes the intended point obvious.
 - Under Flagged, note anywhere the lecture and the material genuinely disagree.
 
-Do NOT pull in topics the material covers but this lecture did not. These are notes for one
-class, not a summary of the course. If the lecture only reached slide 4, the notes stop there.
+Key Points stay with what this lecture covered: if it only reached slide 4, they stop there.
+Something from the material a student needs to follow this lecture (a definition it assumed,
+the correct form of a formula it misstated) goes under Beyond the lecture or a Correction.
 """
 
 
@@ -7967,12 +7973,15 @@ explicitly called important. Answers in collapsible blocks:
 </details>
 
 ## Gaps
-Topics the syllabus implies but no lecture covered, and anything the notes flagged as unclear.
+Topics the syllabus implies but no lecture covered, each with a short explanation so the student
+can learn it, and anything the notes flagged as unclear.
 
 Rules:
 - Start at "## Covered". No title heading.
 - Maths as LaTeX: $...$ inline, $$...$$ display.
-- Use only what is in these notes. Never add material from outside them.
+- Build Covered, Formulas, Threads and Likely questions from these notes. What you add from your
+  own knowledge goes under Gaps, marked as not from the lectures.
+- Keep every Correction the notes carry, next to what the professor said.
 - Where two lectures disagree, say so rather than silently picking one."""
 
 
