@@ -3031,7 +3031,7 @@ function renderCalendar() {
   const inst = ((ATT && ATT.calendar) || [])
     .filter(c => c.date <= last && c.ends >= first)
     .map(c => ({...c, what: 'academic'}));
-  const evs = ((CAMPUS && CAMPUS.events) || [])
+  const evs = [...((CAMPUS && CAMPUS.past) || []), ...((CAMPUS && CAMPUS.events) || [])]
     .filter(e => !e.deleted && e.date <= last && e.ends >= first)
     .map(e => ({...e, what: 'campus',
                 where: [e.society, e.venue].filter(Boolean).join(' · ')}));
@@ -10105,18 +10105,24 @@ def _event_date(raw, what):
         raise ValueError(f"{what} is not a date")
 
 
-def db_events(conn, user_id=None, ahead=None):
+def db_events(conn, user_id=None, ahead=None, past=False):
     """What is still coming, soonest first.
 
     Past events fall off here rather than by anybody tidying up: the filter is
     on the day it ends, so a three-day fest stays on the list through its last
     day and is gone the morning after. Nothing is deleted for it.
+
+    `past` asks for the other side of that line instead: what finished within
+    the last year, for the month view to step back into.
     """
+    where = ("coalesce(ends_on, starts_on) < current_date "
+             "and starts_on >= current_date - 365" if past
+             else "coalesce(ends_on, starts_on) >= current_date")
     rows = conn.execute(
         "select id, title, society, starts_on, ends_on, venue, blurb, "
         "       deleted_at is not null, added_by "
         "  from events "
-        " where coalesce(ends_on, starts_on) >= current_date "
+        " where " + where +
         " order by starts_on, title")
     out = []
     for eid, title, society, starts, ends, venue, blurb, gone, by in rows:
@@ -13939,6 +13945,8 @@ def build_server(args):
                     return self.reply(200, {
                         "clubs": db_clubs(conn),
                         "events": db_events(conn, self.me["id"]),
+                        # Only the month view reads these; Campus is what is on.
+                        "past": db_events(conn, self.me["id"], past=True),
                         "places": db_places(conn),
                         # Null key and null provider is the honest state, not
                         # an error: the places list below the map is useful

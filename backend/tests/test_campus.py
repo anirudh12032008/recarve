@@ -158,9 +158,12 @@ def test_an_event_that_has_finished_falls_off_by_itself(db):
     an_event(db, trusted, "Last week", GONE)
     an_event(db, trusted, "Still on", GONE, TODAY.isoformat())
     assert [e["title"] for e in notes.db_events(db, trusted)] == ["Still on"]
+    # The month view steps back into what finished: a year of it, not forever.
+    an_event(db, trusted, "Two years back", (TODAY - datetime.timedelta(days=730)).isoformat())
+    assert [e["title"] for e in notes.db_events(db, trusted, past=True)] == ["Last week"]
 
     as_admin_connection(db)
-    assert db.execute("select count(*) from events").fetchone()[0] == 2, \
+    assert db.execute("select count(*) from events").fetchone()[0] == 3, \
         "falling off the list is not a delete"
 
 
