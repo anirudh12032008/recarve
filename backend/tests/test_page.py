@@ -1754,10 +1754,13 @@ ATT.calendar = [
   {date: '2026-10-27', ends: '2026-11-03', title: 'Mid-term examinations', kind: 'exam',
    teaching: false, notable: true}];
 CAMPUS = {events: [{id: 'e1', title: 'Robotics fest', society: 'Robotics', venue: 'OAT',
-                    date: '2026-09-21', ends: '2026-09-21', deleted: false}]};
+                    date: '2026-09-21', ends: '2026-09-21', deleted: false}],
+          past: [{id: 'e0', title: 'Freshers night', society: '', venue: 'SAC',
+                  date: '2026-09-03', ends: '2026-09-03', deleted: false}]};
 location.hash = '#classes/calendar'; writes = []; route();
 assert.ok(says('Calendar') && says('September 2026') && says('This month'));
 assert.ok(says('Ganesh Chaturthi') && says('Robotics fest'), 'both calendars, together');
+assert.ok(says('Freshers night'), 'and what already happened this month, not only what is coming');
 assert.ok(wrote(['()', 'aria-label', 'Monday 14 September, Ganesh Chaturthi']),
           'a holiday from the whole-term list closes the day');
 assert.ok(wrote(['()', 'aria-label', 'Monday 21 September, 3 classes, Robotics fest']),
