@@ -620,7 +620,7 @@ PAGE = _themable(r"""<!doctype html>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="theme-color" id="tc" content="#faf9f4">
-<title>recarve · Section I</title>
+<title>recarve</title>
 <!-- The theme, settled before anything is drawn. It is four lines and it is
      inline and blocking on purpose: read from storage, stamped on <html>, and
      the whole page is painted once in the right colours. Deferred, or moved
@@ -1950,7 +1950,7 @@ body.visitor .vote{pointer-events:none}
 <div id="scrim"></div>
 <nav id="drawer" aria-label="Everywhere in recarve">
   <div class="dhead">
-    <span class="who"><b>recarve</b><small>Section I</small></span>
+    <span class="who"><b>recarve</b><small class="mysection"></small></span>
     <button id="dclose" aria-label="Close the menu">Close</button>
   </div>
   <div id="dnav"></div>
@@ -1973,7 +1973,7 @@ body.visitor .vote{pointer-events:none}
               aria-label="Open the menu"><svg viewBox="0 0 24 24" aria-hidden="true"
         fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"
         ><path d="M4 7h16M4 12h16M4 17h16"/></svg></button>
-      <div class="brand" id="brand"><b>recarve</b><span>Section I</span></div>
+      <div class="brand" id="brand"><b>recarve</b><span class="mysection"></span></div>
       <div class="shead" id="shead" hidden>
         <span class="code" id="scode"></span>
         <h2 id="sname"></h2>
@@ -5692,6 +5692,7 @@ async function renderMe() {
     const r = await fetch('/me');
     if (!r.ok) throw new Error();
     d = await r.json();
+    drawMySection(d.section);
   } catch (e) {
     failed(box, 'Your profile needs the server.',
            'Nothing answered. If this is the Mac that runs the class library, '
@@ -7099,10 +7100,19 @@ function drawMyFace(name) {
   paintDrawer();   // the rail's foot is the same face, under the same name
   if (view.tab === 'home' && !view.compose) render();   // the greeting names you
 }
+// The section under the wordmark is whichever one you are in. It was typed
+// into the page as "Section I", so every other section saw that one's name.
+function drawMySection(label) {
+  document.querySelectorAll('.mysection')
+          .forEach(el => { el.textContent = label || ''; });
+}
+let askedForMe = false;
 function needMyFace() {
-  if (myName) return;
+  if (askedForMe) return;
+  askedForMe = true;
   fetch('/me').then(r => r.ok ? r.json() : Promise.reject())
-              .then(d => drawMyFace(d.name)).catch(() => {});
+              .then(d => { drawMySection(d.section); drawMyFace(d.name); })
+              .catch(() => { askedForMe = false; });
 }
 
 document.getElementById('save').onclick = async (e) => {
@@ -7827,7 +7837,7 @@ q.oninput = render;
 // a second device showing it again ever annoys anyone.
 const TOUR = [
   [['home'], [], 'Welcome to recarve',
-   "Everything Section I needs, in one place. Here's a one-minute look around. Skip whenever you like."],
+   "Everything your section needs, in one place. Here's a one-minute look around. Skip whenever you like."],
   [['home'], ['#tabs [data-tab=home]', '#dnav a[href="#home"]'], 'Home',
    'Your next class with a countdown, the rest of today, and whatever just landed in the library. Open it before class.'],
   [['classes'], ['#tabs [data-tab=classes]', '#dnav a[href="#classes"]'], 'Classes',
@@ -8412,7 +8422,6 @@ PUBLIC_PATHS = {"/join", "/login", "/logout", "/auth/google", "/auth/google/call
 # gate below, in the handler's at_least(), and in role_rank() in 0045 on the
 # Postgres side. A fifth role is a word in this tuple and a rung in that
 # function, not an edit to every call site that ever cared.
-SECTION = "Section I"
 
 ROLES = ("student", "trusted", "cr", "admin")
 RANK = {r: i for i, r in enumerate(ROLES)}
@@ -9554,9 +9563,15 @@ def db_profile(conn, user_id):
         (row[1],),
     ).fetchone()
     branch, scholar = listed if listed else (None, None)
+    # Their own section, off their own row: the section policy lets a member
+    # read the one they are in and no other.
+    sec = conn.execute(
+        "select s.name from profiles p join sections s on s.id = p.section_id"
+        " where p.id = %s", (user_id,)).fetchone()
     return {"name": row[0], "roll_no": row[1], "phone": row[2],
             "role": row[3], "status": row[4], "branch": branch,
-            "scholar_no": scholar, "year": year_of_study(scholar)}
+            "scholar_no": scholar, "year": year_of_study(scholar),
+            "section": f"Section {sec[0]}" if sec else None}
 
 
 def db_edit_profile(conn, user_id, name, phone):
@@ -14121,7 +14136,6 @@ def build_server(args):
                     # the Me tab is opened between classes on mobile data like
                     # every other screen, and identity and points are one card.
                     out.update(db_profile(conn, self.me["id"]))
-                    out["section"] = SECTION
                     # The Me tab is also where the admin does the two admin
                     # things. Gated twice on purpose: here, and by the invites
                     # policy that gives a member no read at all.
