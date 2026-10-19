@@ -27,11 +27,29 @@ test that cannot bind in that sandbox).
   branch touches the worker.
 - `tutor/packs/CY1107.json` is whole (51 topics, checker clean); the halves
   are gone.
-- **The API key is dead.** `ANTHROPIC_API_KEY` in the Mac's `.env` and in
-  `~/app/.env` on the VM both answer `401 invalid x-api-key`, so no real
-  lesson has been read yet, nothing has been extracted, and the deploy
-  waits: a Tutor tab without a key errors on every lesson. Put a working key
-  in both `.env` files first; then steps 2, 3 and 4 below resume as written.
+- The old API key was dead (401 on the Mac and on the VM). Anirudh put a
+  new one in the Mac's `.env` and it was copied to `~/app/.env` on the VM
+  (the old file is `~/app/.env.pre-tutor-key`); both verified with a
+  one-token call.
+- Real lessons, read as a student: Cell theory on Standard (Sonnet, 264
+  words, importance as an estimate, the Hooke trap, one check; the MCQ
+  graded on tap; "Quiz me" gave one 3-mark written check; a half answer
+  was marked "partly right, about 1.5 out of 3" with the missing years
+  named; the meter went 0 to 2 on evidence; 4 cents for the lot) and
+  Hardness on Advanced in Hinglish (Opus, romanised Hindi with every term
+  in English, no Devanagari, the estimate said out loud, one check, 22 s,
+  9 cents).
+- Two tiers (Standard on Sonnet 5.5 medium, Advanced on Opus 5.5 high with
+  the unit's PYQs and the cross-subject learner notes), a third segmented
+  control on the subject page.
+- **Deployed 2026-10-19**: migration 0056 applied to live (backup
+  `~/backups/db-2026-10-19.sql.gz` first), `notes.py` (md5 4d7a6219),
+  `syllabus.json`, `tutor.py`, `tutor_pyq.py`, `web/tutor.{js,css}` and
+  `tutor/` copied to `~/app`, service restarted, home 200, `/tutor` 403 for
+  anonymous. Rollback: `~/app/notes.py.pre-70327a6` + restart (the tutor
+  tables can stay). Extraction of the 296 papers is running on the VM from
+  a copy of the branch at `~/app-tutor` (`pyq.log` there), `--max-cost 40`
+  each for extract and answer.
 - Everything the screen does without the model was driven for real instead,
   through `backend/dev/fake_tutor.py` (the server with `tutor.model_stream`
   swapped for a canned teacher) on a fresh `recarve_tutor` database with an
