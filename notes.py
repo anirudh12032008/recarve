@@ -2117,6 +2117,10 @@ __TUTOR_CSS__</style>
     stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"
     ><circle cx="9" cy="8.6" r="3.3"/><path d="M2.9 19.6c.7-3.4 3.1-5.4 6.1-5.4s5.4 2 6.1 5.4"/><path d="M16.1 5.7a3.3 3.3 0 0 1 0 5.8M17 14.6c2.1.6 3.4 2.4 3.8 5"/></svg
     ><span>Community</span></button>
+  <button data-tab="tutor"><svg viewBox="0 0 24 24" aria-hidden="true" fill="none"
+    stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"
+    ><path d="M2.8 9.4 12 5l9.2 4.4-9.2 4.4z"/><path d="M6.6 11.4v4.4c1.4 1.3 3.3 2 5.4 2s4-.7 5.4-2v-4.4"/><path d="M21.2 9.4v4.8"/></svg
+    ><span>Tutor</span></button>
 </nav>
 
 <script>
@@ -2184,9 +2188,9 @@ const hue = code => HUES[code.slice(0, 2)] ?? 220;
 // in the header instead, because your own profile is not somewhere you go
 // between classes the way the other four are. It stays a tab as far as the
 // router is concerned, which is what keeps every '#me' link ever sent working.
-const TABS = ['home', 'classes', 'campus', 'community', 'me'];
+const TABS = ['home', 'classes', 'campus', 'community', 'tutor', 'me'];
 const TAB_TITLE = {classes: 'Subjects', campus: 'Campus', community: 'Community',
-                   me: 'You'};
+                   tutor: 'Tutor', me: 'You'};
 // Levels that changed tabs when each thing was given exactly one home. A link
 // sent before the move still opens the screen it named: route() rewrites the
 // hash in place and runs again, which is what the pre-tabs note links below
@@ -5920,7 +5924,10 @@ function render() {
   shead.hidden = view.tab === 'home' && !view.compose;
   lback.hidden = !s && !view.att && !view.compose && !view.day
                  && !view.me && !view.papers && !view.cal;
-  scode.hidden = !s;
+  // The tutor's levels below its home climb back up too.
+  const tcode = view.tutor ? view.tutor.code : null;
+  if (tcode) lback.hidden = false;
+  scode.hidden = !s && !tcode;
   // Search is the subject list's own tool. It must not answer over Community,
   // and it must not answer over the three screens inside Classes that are not
   // lists of notes -- where a word left in the box hijacked the whole screen.
@@ -5932,7 +5939,8 @@ function render() {
   jobsBox.hidden = view.tab === 'home';
   // The one back button at this depth serves several levels now, so it has to
   // say which one it climbs to.
-  const up = view.compose && view.tab === 'community'
+  const up = tcode ? tutorUp()
+    : view.compose && view.tab === 'community'
       ? ['‹ Community', 'Back to the section']
     : view.compose && !COMPOSERS[view.compose] ? ['‹ Home', 'Back to the notice board']
     : view.compose ? ['‹ Campus', 'Back to Campus']
@@ -5940,9 +5948,9 @@ function render() {
     : ['‹ Subjects', 'Back to all subjects'];
   lback.textContent = up[0];
   lback.setAttribute('aria-label', up[1]);
-  if (s) {
-    scode.textContent = s.code;
-    scode.style.setProperty('--h', hue(s.code));
+  if (s || tcode) {
+    scode.textContent = s ? s.code : tcode;
+    scode.style.setProperty('--h', hue(s ? s.code : tcode));
   }
   sname.textContent = s ? s.name
     : view.papers ? 'Past papers'
@@ -5957,6 +5965,7 @@ function render() {
     : view.compose ? (view.compose === 'new' ? 'New notice' : 'Edit notice')
     : view.me === 'saved' ? 'Saved'
     : view.me === 'points' ? 'Your contributions'
+    : view.tutor ? tutorTitle()
     : TAB_TITLE[view.tab];
   tabBtns.forEach(b => {
     if (b.dataset.tab === view.tab) b.setAttribute('aria-current', 'page');
@@ -5972,6 +5981,7 @@ function render() {
   else if (view.tab === 'campus') renderCampus();
   else if (view.tab === 'community') renderCommunity();
   else if (view.tab === 'me') renderMe();
+  else if (view.tab === 'tutor') renderTutor();
   else if (s) renderSubject(s);
   else renderSubjects();
 }
@@ -6046,15 +6056,22 @@ function route() {
   // Which of your own screens: the profile, what you saved, or what you have
   // put in. One level under '#me', so '#me' on its own still lands somewhere.
   const me = tab === 'me' ? parts[1] || null : null;
+  // The tutor's own levels: '#tutor', '#tutor/CY1107', '#tutor/CY1107/s/<id>'
+  // and '#tutor/CY1107/pyq'. Kept out of view.code on purpose -- render()
+  // reads that as "draw the Classes subject screen".
+  const tutorv = tab === 'tutor' ? {code: parts[1] || null,
+    session: parts[2] === 's' ? parts[3] || null : null,
+    pyq: parts[2] === 'pyq'} : null;
   const was = view;
   view = {tab, code: s ? s.code : null, title: title || null, att, compose,
-          composeId, day: dayv, papers: papersv, cal: calv, me, sec};
+          composeId, day: dayv, papers: papersv, cal: calv, me, sec, tutor: tutorv};
   // Not every render, and not every keystroke inside one: only a step to a
   // different tab, a different subject or a different level of one.
   const moving = !was || was.tab !== view.tab || was.code !== view.code
     || was.title !== view.title || was.att !== view.att
     || was.day !== view.day || was.me !== view.me || was.compose !== view.compose
-    || was.papers !== view.papers || was.cal !== view.cal || was.sec !== view.sec;
+    || was.papers !== view.papers || was.cal !== view.cal || was.sec !== view.sec
+    || JSON.stringify(was.tutor || null) !== JSON.stringify(view.tutor);
   if (!att) attDate = null;     // and re-opening it starts on today, not last week
   if (!dayv) dayDate = null;    // today by default, every time it is opened
   if (!calv && !dayv) calMonth = null;   // this month, unless back from a day in it
@@ -6847,6 +6864,7 @@ const ICON = {
   shield:    '<path d="M12 3.6 19 6.2v5.3c0 4.2-2.8 7.2-7 8.7-4.2-1.5-7-4.5-7-8.7V6.2z"/>',
   sun:       '<circle cx="12" cy="12" r="4.1"/><path d="M12 2.9v2.3M12 18.8v2.3M4.9 4.9l1.6 1.6M17.5 17.5l1.6 1.6M2.9 12h2.3M18.8 12h2.3M4.9 19.1l1.6-1.6M17.5 6.5l1.6-1.6"/>',
   moon:      '<path d="M20.4 14.2A8.6 8.6 0 0 1 9.8 3.6 8.6 8.6 0 1 0 20.4 14.2z"/>',
+  tutor:     '<path d="M2.8 9.4 12 5l9.2 4.4-9.2 4.4z"/><path d="M6.6 11.4v4.4c1.4 1.3 3.3 2 5.4 2s4-.7 5.4-2v-4.4"/><path d="M21.2 9.4v4.8"/>',
 };
 // One <svg> from one path string, and nothing else in the app draws one.
 const icon = (name) => {
@@ -6874,6 +6892,7 @@ const DRAWER = [
     ['Calendar',                  ['classes', 'calendar']],
     ['Catching up',               ['classes', 'attendance']],
     ['Past papers',               ['classes', 'papers']],
+    ['Tutor',                     ['tutor']],
   ]],
   ['Campus',    'pin',    null, [
     ['Everything on campus',      ['campus']],
@@ -7863,6 +7882,8 @@ const TOUR = [
    "What's on, clubs and societies, and where things are. Any event can go straight into your calendar."],
   [['community'], ['#tabs [data-tab=community]', '#dnav a[href="#community"]'], 'Community',
    'The notice board, doubts on any lecture (Ask AI answers each one once, for everybody), and who has contributed.'],
+  [['tutor'], ['#tabs [data-tab=tutor]', '#dnav a[href="#tutor"]'], 'Tutor',
+   'A patient teacher for the whole syllabus. It teaches one topic at a time, checks you understood, and says what the exam asks, from past papers where it has them.'],
   [['home'], ['#fab'], 'Add to the library',
    'The + records a class, uploads notes or photos, or makes a revision sheet. Trusted members add; everyone reads.'],
   [['home'], ['#menubtn', '#dyou'], 'Everything else',

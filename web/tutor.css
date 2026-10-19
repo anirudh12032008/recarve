@@ -1,0 +1,291 @@
+/* ---- The tutor (web/tutor.css). Spliced into the page's SECOND <style>,
+   after Tailwind's sheet, so it is written in the token block's own words:
+   --bg --surface --fg --mut --line --edge --accent --accent-fg --warn --h,
+   the 7/11/14 corners, the 11/13/16/20/26 type steps and the 44px floor.
+   Two inks on one paper: the tutor writes in the page's ink, you write in
+   the accent. A check is a card on the paper; a past-paper question is set
+   the way a printed question paper is set. */
+
+/* Its own primary actions are on every tutor screen, so the + steps aside,
+   the same way it does under a composer. */
+body:has(.tutor) #fab{display:none}
+
+/* ---- Little instruments, shared by every screen ----------------------- */
+.tu-meter{display:inline-flex;align-items:center;gap:3px;flex:none;vertical-align:middle}
+.tu-meter i{width:9px;height:6px;border-radius:7px;background:var(--line)}
+.tu-meter i.on{background:var(--accent)}
+.tu-ring{position:relative;flex:none;display:inline-flex;align-items:center;
+  justify-content:center;width:52px;height:52px}
+.tu-ring svg{position:absolute;inset:0;width:100%;height:100%}
+.tu-ring .tu-track{fill:none;stroke:var(--line);stroke-width:5}
+.tu-ring .tu-arc{fill:none;stroke:var(--accent);stroke-width:5;stroke-linecap:round}
+.tu-ring b{position:relative;font-size:13px;font-weight:700;line-height:1;
+  font-variant-numeric:tabular-nums;color:var(--fg)}
+.tu-ring b small{font-size:11px;font-weight:600;color:var(--mut)}
+.tu-k{display:flex;align-items:baseline;gap:8px;margin:0 0 8px;font-size:11px;
+  font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--mut)}
+.tu-marks{margin-left:auto;letter-spacing:0;text-transform:none;font-weight:600;
+  font-variant-numeric:tabular-nums}
+.tu-note{margin:8px 0 0;font-size:13px;line-height:1.45;color:var(--mut)}
+.tu-btn{display:inline-flex;align-items:center;justify-content:center;min-height:var(--tap);
+  padding:0 16px;border-radius:11px;border:1px solid var(--edge);background:transparent;
+  color:var(--accent);font-size:13px;font-weight:600;white-space:nowrap}
+.tu-btn.primary{background:var(--accent);border-color:var(--accent);color:var(--accent-fg)}
+.tu-btn:active{background:var(--surface)}
+.tu-btn.primary:active{filter:brightness(.92)}
+.tu-btn[disabled]{background:var(--surface);border-color:transparent;color:var(--mut);cursor:default}
+.tutor .blank .tu-btn{margin-top:12px}
+.tutor .blank.bad{margin:12px 0}
+
+/* ---- Home ------------------------------------------------------------- */
+.tu-lead{padding:4px 16px 0}
+.tu-lead p{margin:0;max-width:60ch;font-size:16px;line-height:1.55;color:var(--fg)}
+.tu-lead .tu-spend{margin-top:4px;font-size:13px;color:var(--mut);font-variant-numeric:tabular-nums}
+.tu-plan .tu-meter{margin-left:auto}
+.tu-go{flex:none;min-width:44px;text-align:right;font-size:13px;font-weight:600;color:var(--accent)}
+.tu-sess .name small{display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;
+  overflow:hidden}
+.tu-sess .meta{display:flex;flex-direction:column;align-items:flex-end;gap:2px;text-align:right}
+.tu-open{font-size:11px;font-weight:700;letter-spacing:.04em;color:var(--accent)}
+.tu-subs{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:8px;
+  padding:4px 16px 0}
+.tu-sub{display:flex;align-items:center;gap:16px;min-width:0;min-height:84px;padding:12px 16px;
+  border-radius:14px;background:var(--surface);color:var(--fg);text-align:left}
+.tu-sub:active{transform:scale(.98)}
+@media (hover:hover){.tu-sub:hover{background:color-mix(in srgb,var(--fg) 5%,var(--surface))}}
+.tu-subt{display:flex;flex-direction:column;gap:2px;min-width:0}
+.tu-subt b{font-size:16px;font-weight:600;line-height:1.3;overflow-wrap:anywhere}
+.tu-subt small{font-size:13px;line-height:1.45;color:var(--mut)}
+
+/* ---- One subject ------------------------------------------------------- */
+.tu-summary{display:flex;align-items:center;gap:16px;margin:4px 16px 0;padding:16px;
+  border-radius:14px;background:var(--surface)}
+.tu-prefs{display:flex;flex-wrap:wrap;gap:12px 24px;padding:16px 16px 0}
+.tu-pref{display:flex;flex-direction:column;gap:4px}
+.tu-plabel{font-size:11px;font-weight:600;letter-spacing:.02em;color:var(--mut)}
+.tu-pref .seg button{min-height:38px}
+.tu-continue{display:flex;flex-direction:column;align-items:flex-start;gap:2px;
+  width:calc(100% - 32px);margin:16px 16px 0;padding:12px 16px;border-radius:14px;
+  text-align:left;color:var(--fg);
+  background:color-mix(in srgb,var(--accent) 10%,var(--bg))}
+.tu-continue .tu-k{margin:0;color:var(--accent)}
+.tu-continue b{font-size:16px;font-weight:600;line-height:1.35}
+.tu-continue small{font-size:13px;line-height:1.45;color:var(--mut);display:-webkit-box;
+  -webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.tu-continue:active{transform:scale(.99)}
+.tu-bankrow{padding-top:12px}
+.tu-tree{padding:0 16px}
+/* The page dresses every bare <details> as a note's answer box (a surface
+   card with an accent summary); a unit is a fold in a tree, not one of those,
+   so these selectors are written to outrank that rule rather than lean on it. */
+.tutor details.tu-unit{margin:0;border-radius:0;background:none;overflow:visible;
+  border-bottom:1px solid var(--line)}
+.tutor details.tu-unit>summary,.tutor details.tu-unit[open]>summary{display:flex;
+  align-items:center;gap:12px;min-height:60px;padding:8px 0;border-bottom:0;
+  color:var(--fg);font-size:16px;font-weight:400;list-style:none;cursor:pointer}
+.tutor details.tu-unit>summary:active{background:none}
+.tutor details.tu-unit>.tu-topics{padding:0 0 12px}
+.tu-unit>summary::-webkit-details-marker{display:none}
+.tu-unit>summary::after{content:'';flex:none;width:7px;height:7px;margin:0 6px 0 4px;
+  border-right:1.6px solid var(--mut);border-bottom:1.6px solid var(--mut);
+  transform:rotate(45deg) translate(-2px,-2px);transition:transform 140ms ease-out}
+.tu-unit[open]>summary::after{transform:rotate(225deg) translate(-2px,-2px)}
+.tu-uname{display:flex;flex-direction:column;flex:1;min-width:0}
+.tu-uname b{font-size:16px;font-weight:600;line-height:1.35}
+.tu-uname small{font-size:13px;line-height:1.45;color:var(--mut)}
+.tu-ubar{flex:none;width:56px;height:6px;border-radius:7px;background:var(--line);overflow:hidden}
+.tu-ubar i{display:block;height:100%;border-radius:7px;background:var(--accent)}
+.tu-topic{padding:12px 0;border-top:1px solid var(--line)}
+.tu-th{display:flex;align-items:flex-start;gap:12px}
+.tu-th .tu-meter{margin-top:10px}
+.tu-tname{display:flex;flex-direction:column;flex:1;min-width:0}
+.tu-tname b{font-size:16px;font-weight:600;line-height:1.4}
+.tu-tname small{font-size:13px;line-height:1.45;color:var(--mut)}
+/* The chip is small; the button round it is a thumb wide, and tapping it
+   says where the importance came from. The word is always on it, so the
+   colour is never carrying the meaning alone. */
+.tu-imp{flex:none;display:inline-flex;align-items:center;min-height:var(--tap);
+  margin:-6px -6px -6px 0;padding:0 6px;border-radius:11px}
+.tu-imp span{padding:3px 8px;border-radius:7px;font-size:11px;font-weight:700;
+  letter-spacing:.02em;white-space:nowrap;background:var(--surface);color:var(--mut)}
+.tu-imp.must span{background:var(--accent);color:var(--accent-fg)}
+.tu-imp.high span{background:color-mix(in srgb,var(--accent) 15%,var(--bg));color:var(--accent)}
+.tu-imp.medium span{background:var(--surface);color:var(--fg)}
+.tu-acts{display:flex;flex-wrap:wrap;gap:8px;margin-top:8px;padding-left:69px}
+.tu-check .tu-acts,.tu-pyq .tu-acts{padding-left:0}
+
+/* ---- The lesson -------------------------------------------------------- */
+/* The header's name steps down a place when it is a topic: a topic's name is
+   a sentence, and at 40px it pushed the lesson off a phone's first screen. */
+.shead h2:has(.tu-meter){font-size:26px;line-height:1.2;letter-spacing:-.022em}
+.shead h2 .tu-meter{margin-left:4px;vertical-align:.18em}
+.shead h2 .tu-meter i{width:12px;height:7px}
+.tu-lesson{display:flex;flex-direction:column;max-width:70ch;margin:0 auto;padding:0 16px}
+.tu-log{flex:1 0 auto}
+.tutor .tu-count{padding-left:16px}
+.tu-lesson .quiet{padding:12px 0 0}
+.tu-lmeta{display:flex;flex-wrap:wrap;align-items:center;gap:4px 12px;min-height:var(--tap);
+  padding:0 0 4px;font-size:13px;line-height:1.45;color:var(--mut);
+  border-bottom:1px solid var(--line)}
+.tu-link{margin-left:auto;min-height:var(--tap);padding:0 4px;font-size:13px;font-weight:600;
+  color:var(--accent)}
+.tu-done{margin-left:auto;font-weight:600}
+.tu-log{padding:4px 0 16px}
+/* The tutor: ink on the page, set for reading rather than for chat. */
+.tu-turn{padding:16px 0 4px;font-size:16px;line-height:1.7;color:var(--fg)}
+.tu-turn+.tu-turn{border-top:1px solid var(--line)}
+.tu-think{max-width:260px;padding:4px 0 8px}
+/* The nib: where the words are arriving. */
+.tu-pen{display:block;width:7px;height:7px;margin:4px 0 0;border-radius:7px;
+  background:var(--accent);animation:tu-nib 1.1s ease-in-out infinite}
+@keyframes tu-nib{0%,100%{opacity:.25}50%{opacity:1}}
+/* You: the accent's ink, on the right, in the same hand the room uses. */
+.tu-me{display:flex;flex-direction:column;align-items:flex-end;margin:16px 0 4px 12%}
+.tu-me .said{max-width:100%;padding:10px 14px;border-radius:14px 14px 7px 14px;
+  font-size:16px;line-height:1.55;color:var(--accent);
+  background:color-mix(in srgb,var(--accent) 9%,var(--bg))}
+.tu-me .tu-k{margin:0 4px 4px 0}
+.tu-asked{width:fit-content;max-width:80%;margin:16px 0 4px auto;padding:4px 12px;
+  border-radius:11px;font-size:13px;font-weight:600;color:var(--accent);
+  box-shadow:inset 0 0 0 1px color-mix(in srgb,var(--accent) 40%,transparent)}
+/* What the model writes. Tailwind's preflight takes every list marker and
+   heading size away, so they are put back on the type scale here. */
+.tu-md>:first-child{margin-top:0}
+.tu-md>:last-child{margin-bottom:0}
+.tu-md p{margin:0 0 12px}
+.tu-md h1,.tu-md h2{margin:24px 0 8px;font-size:20px;line-height:1.3;font-weight:700;
+  letter-spacing:-.015em}
+.tu-md h3,.tu-md h4,.tu-md h5{margin:20px 0 4px;font-size:16px;line-height:1.4;font-weight:700}
+.tu-md ul,.tu-md ol{margin:0 0 12px;padding-left:24px}
+.tu-md ul{list-style:disc}
+.tu-md ol{list-style:decimal}
+.tu-md li{margin:4px 0}
+.tu-md li::marker{color:var(--mut)}
+.tu-md strong{font-weight:700}
+.tu-md a{color:var(--accent);text-underline-offset:3px}
+.tu-md blockquote{margin:0 0 12px;padding:8px 12px;border-radius:0 11px 11px 0;
+  border-left:3px solid var(--accent);background:color-mix(in srgb,var(--accent) 6%,var(--bg))}
+.tu-md blockquote>:last-child{margin-bottom:0}
+.tu-md code{padding:2px 5px;border-radius:7px;background:var(--surface);font-size:13px}
+.tu-md pre{margin:0 0 12px;padding:12px;border-radius:11px;background:var(--surface);
+  overflow-x:auto;font-size:13px}
+.tu-md pre code{padding:0;background:none}
+.tu-md hr{margin:20px 0;border:0;border-top:1px solid var(--line)}
+.tu-md table{display:block;max-width:100%;margin:0 0 12px;overflow-x:auto;border-collapse:collapse;
+  font-size:13px}
+.tu-md th,.tu-md td{padding:6px 10px;border-bottom:1px solid var(--line);text-align:left;
+  vertical-align:top}
+.tu-md th{font-weight:700}
+.tu-md .katex-display{margin:8px 0 12px;padding:4px 0;overflow-x:auto;overflow-y:hidden}
+.tu-md img{max-width:100%;height:auto}
+.tu-inl{min-width:0}
+
+/* ---- Check cards -------------------------------------------------------- */
+.tu-check,.tu-pyq{margin:12px 0 16px;padding:16px;border-radius:14px;background:var(--surface);
+  font-size:16px;line-height:1.6}
+.tu-check>.tu-k{color:var(--accent)}
+.tu-check>.tu-md:not(.tu-why){font-weight:600}
+.tu-pending .tu-note{margin:0}
+.tu-opts{display:grid;gap:8px;margin-top:12px}
+.tu-opt{position:relative;display:flex;align-items:center;gap:12px;min-height:var(--tap);
+  padding:8px 12px;border-radius:11px;background:var(--bg);color:var(--fg);
+  font-size:16px;line-height:1.4;text-align:left}
+.tu-opt:active{transform:scale(.99)}
+@media (hover:hover){.tu-opt:not([disabled]):hover{
+  background:color-mix(in srgb,var(--accent) 8%,var(--bg))}}
+.tu-letter{flex:none;display:inline-flex;align-items:center;justify-content:center;
+  width:28px;height:28px;border-radius:7px;background:var(--surface);
+  font-size:13px;font-weight:700;color:var(--mut)}
+.tu-opt[disabled]{cursor:default;color:var(--mut)}
+.tu-opt.right,.tu-opt.wrong{color:var(--fg)}
+.tu-opt.right{box-shadow:inset 0 0 0 2px var(--accent);
+  background:color-mix(in srgb,var(--accent) 9%,var(--bg))}
+.tu-opt.right .tu-letter{background:var(--accent);color:var(--accent-fg)}
+.tu-opt.right::after{content:'\2713';margin-left:auto;padding-left:8px;font-weight:700;color:var(--accent)}
+/* Wrong is amber, not red: red is the app failing, and this is a fact about
+   one answer on the way to knowing the topic. */
+.tu-opt.wrong{box-shadow:inset 0 0 0 2px var(--warn);background:var(--warn-bg)}
+.tu-opt.wrong .tu-letter{background:var(--warn);color:var(--bg)}
+.tu-opt.wrong::after{content:'\2717';margin-left:auto;padding-left:8px;font-weight:700;color:var(--warn)}
+.tu-verdict{margin:12px 0 4px;font-size:16px;font-weight:700}
+.tu-verdict.right{color:var(--accent)}
+.tu-verdict.wrong{color:var(--warn)}
+.tu-why{font-weight:400}
+.tu-short{display:flex;flex-direction:column;align-items:flex-end;gap:8px;margin-top:12px}
+.tu-short textarea{width:100%;min-height:6em;padding:12px;border:1px solid var(--edge);
+  border-radius:11px;background:var(--bg);color:var(--fg);font:inherit;font-size:16px;
+  line-height:1.6;resize:vertical}
+.tu-short textarea::placeholder,.tu-compose textarea::placeholder{color:var(--mut)}
+.tu-mine{margin:12px 0 0;padding:10px 14px;border-radius:11px;background:var(--bg);
+  color:var(--accent)}
+
+/* ---- Past-paper questions: set like the paper they came from ---------- */
+.tu-pyq{position:relative;background:var(--bg);
+  box-shadow:inset 0 0 0 1px var(--edge),0 1px 0 var(--line)}
+.tu-pyq>.tu-md{font-family:"Iowan Old Style","Palatino Linotype",Palatino,"Book Antiqua",
+  Georgia,serif;font-size:16px;line-height:1.6}
+.tu-pyq>.tu-k{padding-bottom:8px;border-bottom:1px solid var(--line)}
+.tu-ans{margin-top:8px;border-top:1px solid var(--line)}
+.tu-ans>summary{display:flex;align-items:center;gap:8px;min-height:var(--tap);
+  font-size:13px;font-weight:600;color:var(--accent);list-style:none;cursor:pointer}
+.tu-ans>summary::-webkit-details-marker{display:none}
+.tu-ans>summary::after{content:'';width:6px;height:6px;margin-left:2px;
+  border-right:1.6px solid currentColor;border-bottom:1.6px solid currentColor;
+  transform:rotate(45deg) translate(-1px,-1px);transition:transform 140ms ease-out}
+.tu-ans[open]>summary::after{transform:rotate(225deg) translate(-1px,-1px)}
+.tu-ans>.tu-md,.tu-ans>.tu-note{padding:0 0 4px}
+.tu-pfoot{display:flex;flex-wrap:wrap;align-items:center;gap:8px 12px;margin-top:8px;
+  font-size:13px;line-height:1.45;color:var(--mut)}
+.tu-pfoot .tu-btn{margin-left:auto}
+.tu-where{font-weight:600;color:var(--fg)}
+.tu-src{color:var(--mut);text-decoration:underline;text-decoration-color:var(--edge);
+  text-underline-offset:3px}
+
+/* ---- The dock: what to do next, and a line to say it in --------------- */
+/* Pinned over the bottom bar on a phone, at the foot of the column on a wide
+   screen. The + is away on these screens, so the column only has to clear
+   the bar, not the 142px the + needs. */
+#nav:has(.tu-lesson){padding-bottom:calc(76px + env(safe-area-inset-bottom))}
+.tu-dock{position:sticky;z-index:4;bottom:calc(66px + env(safe-area-inset-bottom));
+  margin:0 -16px;padding:8px 16px;background:var(--bg);border-top:1px solid var(--line)}
+.tu-quick{display:flex;gap:8px;margin:0 -16px;padding:0 16px 8px;overflow-x:auto;
+  scrollbar-width:none;scroll-padding:0 16px;-webkit-overflow-scrolling:touch}
+.tu-quick::-webkit-scrollbar{display:none}
+.tu-chip{flex:none;min-height:var(--tap);padding:0 14px;border-radius:11px;
+  background:var(--surface);color:var(--fg);font-size:13px;font-weight:600;white-space:nowrap}
+.tu-chip:active{background:color-mix(in srgb,var(--accent) 14%,var(--surface))}
+@media (hover:hover){.tu-chip:not([disabled]):hover{color:var(--accent);
+  background:color-mix(in srgb,var(--accent) 10%,var(--surface))}}
+.tu-chip[disabled]{color:var(--mut);cursor:default}
+.tu-compose{display:flex;align-items:flex-end;gap:8px}
+.tu-compose textarea{flex:1;min-width:0;min-height:var(--tap);max-height:200px;
+  padding:9px 12px;border:1px solid var(--edge);border-radius:11px;background:var(--bg);
+  color:var(--fg);font:inherit;font-size:16px;line-height:1.5;resize:none}
+.tu-send{flex:none;min-height:var(--tap);padding:0 18px;border-radius:11px;
+  background:var(--accent);color:var(--accent-fg);font-size:16px;font-weight:600}
+.tu-send:active{filter:brightness(.92)}
+.tu-send[disabled]{background:var(--surface);color:var(--mut);cursor:default}
+
+/* ---- The past-paper bank ----------------------------------------------- */
+.tu-filters{display:flex;flex-direction:column;align-items:flex-start;gap:12px;padding:4px 16px 0}
+.tu-filters .seg button{min-height:38px}
+.tu-picks{display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:12px;
+  width:100%}
+.tu-pick{position:relative;display:flex;flex-direction:column;gap:4px;min-width:0}
+.tu-pick select{width:100%;min-height:var(--tap);padding:0 36px 0 12px;
+  border:1px solid var(--edge);border-radius:11px;background:var(--bg);color:var(--fg);
+  font:inherit;font-size:16px;appearance:none;-webkit-appearance:none;text-overflow:ellipsis}
+.tu-pick::after{content:'\203a';position:absolute;right:14px;bottom:11px;font-size:20px;
+  line-height:1;color:var(--mut);transform:rotate(90deg);pointer-events:none}
+.tu-bank{display:grid;gap:12px;padding:4px 16px 0}
+.tu-bank .tu-pyq{margin:0}
+
+@media (min-width:760px){
+  #nav:has(.tu-lesson){padding-bottom:0}
+  .tu-dock{bottom:0;padding-bottom:16px}
+  .tu-bank{grid-template-columns:repeat(auto-fill,minmax(420px,1fr));align-items:start}
+}
+/* A tree of fifty topics with a solid accent button on every one is a wall of
+   purple; down the tree, Teach is the accent thinned, and still the first. */
+.tu-topic .tu-btn.primary{background:color-mix(in srgb,var(--accent) 13%,var(--bg));
+  border-color:transparent;color:var(--accent)}
