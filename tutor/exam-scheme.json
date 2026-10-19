@@ -1,0 +1,28 @@
+{
+  "source": "NITB Freshers portal, 'Examination Scheme for B.Tech Ist Year' (UG Ordinance 2024, Annexure-2) and 'Academic Resources List', both August 2025",
+  "theory": {
+    "mini_test": {"marks": 10, "note": "during class hours; sometimes 20 marks; begins in the 1st or 2nd week of the month after the semester starts"},
+    "mid_term": {"marks": 20, "note": "1 hour exam; generally the month after the mini test"},
+    "end_term": {"marks": 40, "note": "2 hour exam; about a month after the mid term ends"},
+    "attendance": {"marks": 10},
+    "internal_assessment": {"marks": 30, "note": "assignments and class performance"}
+  },
+  "practical": {
+    "records_and_viva": {"marks": 30}, "mid_sem": {"marks": 20}, "end_sem": {"marks": 40}, "attendance": {"marks": 10}
+  },
+  "grading": "relative, across all sections of the subject",
+  "books": {
+    "MC1101": ["Engineering Mathematics by H.K. Dass", "Higher Engineering Mathematics by B.S. Grewal", "seniors: study from these once you have seen the PYQs; minor errors in the books do not matter"],
+    "PY1102": ["Engineering Physics by H.K. Malik (theory and numericals); otherwise the class notes"],
+    "CS1105": ["Let Us C", "seniors: looks easy, but the mid and end term questions catch people"],
+    "HS1106": ["Business Communication by Shalini Verma", "Effective Technical Communication by Ashraf Rizvi", "seniors: write clearly, no grammatical errors, no stories; the questions are easy"],
+    "ME1104": ["Engineering Drawing by Basant Agarwal and C.M. Agarwal", "seniors: relatively tough this semester; N.D. Bhatt is first-angle only and rarely matches the paper"],
+    "CE1103": ["R.K. Rajput (only)", "R.S. Khurmi for trusses", "seniors: calculation-heavy paper, use the calculator efficiently"],
+    "CY1107": ["Engineering Chemistry by Jain and Jain (preferred)", "Engineering Chemistry by Dara and Umare"],
+    "EE1108": ["R.K. Rajput (most preferred; about 90% of questions)", "B.L. Theraja only for DC circuits", "seniors: the end term is the hardest paper of the semester for derivations, theory and numericals"],
+    "CY1110": ["class notes and the shared slides only"],
+    "ME1109": ["Introduction to Manufacturing Processes and Workshop Technology", "the workshop manual, read properly"],
+    "BS1111": ["NCERT class XI and XII for the topics taught in class", "the slides provided"],
+    "HS1112": []
+  }
+}

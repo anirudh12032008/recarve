@@ -8,6 +8,16 @@ notes for a class that keeps missing class. one person records the lecture, ever
 - your week, from the institute timetable
 - a notice board, a wall, and doubts your section can answer 
 
+## the tutor
+a teacher in the app for the lecture nobody recorded. open the Tutor tab, pick a subject, pick a topic from the syllabus, and it teaches it: small steps, one question at a time, it grades what you answer and re-teaches what you got wrong, and it says out loud what the mini/mid/end term cares about. past-paper questions, once extracted, are the evidence; before that it says "estimate" and means it.
+
+- one person teaches with it (whoever holds `RECARVE_TUTOR_ROLE`, default admin); the people the section trusts can read every lesson, read-only
+- `claude-opus-5-5` by default, streamed, with the spend shown on the screen. set `RECARVE_TUTOR_MODEL` / `RECARVE_TUTOR_EFFORT` to change it
+- `tutor/packs/<code>.json` is what it teaches from first: per topic, the gist, formulas, traps and practice questions, written by hand and by agents, checked in and corrected like code
+- past papers become text with `python notes.py tutor pyq extract` (the API reads the PDFs in `library/archive/`), then `... pyq answer`, then they show up in the lessons and in the PYQ bank. or run the `pyq-extract` Claude Code skill on the machine that has the PDFs; same table either way
+
+design notes: `docs/specs/2026-10-19-ai-tutor-design.md`
+
 ## how it works
 
 audio → whisper → transcript → groq → markdown on disk. postgres holds who uploaded what.
@@ -31,6 +41,7 @@ python -m venv .venv && source .venv/bin/activate
 pip install -r requirements.txt
 createdb recarve_test && python backend/dev/migrate.py
 export GROQ_API_KEY=your_key_here
+export ANTHROPIC_API_KEY=your_key_here   # notes from uploads, and the tutor
 python notes.py serve --port 8000
 ```
 
