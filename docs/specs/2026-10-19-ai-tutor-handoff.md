@@ -34,7 +34,18 @@ test that cannot bind in that sandbox).
 
 ## Left to do, in order
 
-1. **Chemistry units 1-3.** If `tutor/packs/CY1107-a.json` exists, merge:
+1. **Chemistry units 1-3.** `tutor/packs/CY1107-a.json` is PARTIAL: all 7
+   Lubricants topics and the first 8 Fuels topics are written and pass the
+   rules; still missing are the last three Fuels topics ("Types of cracking",
+   "Knocking, octane and cetane number", "Numericals on calorific value and
+   ultimate analysis") and the whole Water unit (12 topics, names in
+   `syllabus.json`). Write those into the `-a` file in syllabus order (the
+   writer's prepared worked figures: hardness sample temporary 40 / permanent
+   30 / total 70 ppm; EDTA 250 total, 150 permanent, 100 temporary ppm;
+   lime-soda 222 mg/L lime and 318 mg/L soda, i.e. 2.22 kg and 3.18 kg per
+   10,000 L; zeolite regeneration 213.7 ppm NaCl; ion exchange 1460 g HCl;
+   Dulong for C 84%, H 5.5%, O 4%, S 1.5%: HCV 8545.8 and LCV 8255.2
+   kcal/kg), run the checker, then merge:
    ```bash
    python - <<'EOF'
    import json
@@ -46,10 +57,8 @@ test that cannot bind in that sandbox).
    EOF
    python backend/dev/check_pack.py tutor/packs/CY1107.json && git rm -q tutor/packs/CY1107-a.json tutor/packs/CY1107-b.json
    ```
-   If it does not exist, write it (units Lubricants 7, Fuels 11, Water 12,
-   exact names from `syllabus.json`; rules in `tutor/packs/README.md`), then
-   merge as above. `tutor.py` only reads `<code>.json`, so until the merge
-   the chemistry pack is invisible to the tutor.
+   `tutor.py` only reads `<code>.json`, so until the merge the chemistry
+   pack is invisible to the tutor.
 2. **Run it for real** (see above) and fix what the first real lesson
    shows. Likely candidates: the tutor writing the check question in prose
    as well as in the card; `<state>` JSON with unescaped LaTeX (parse_turn
