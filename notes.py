@@ -73,6 +73,9 @@ Rules:
 # guess never under-reports what a run cost.
 PRICES = {
     "claude-haiku-4-5": (1.0, 5.0),
+    "claude-haiku-5-5": (0.1, 0.5),
+    "claude-sonnet-5-5": (2.0, 10.0),
+    "claude-opus-5-5": (4.0, 20.0),
     "claude-sonnet-5": (2.0, 10.0),
     "claude-opus-5": (5.0, 25.0),
     "claude-opus-4-8": (5.0, 25.0),
@@ -613,6 +616,17 @@ def _themable(page: str) -> str:
     return page.replace("__PALETTES__",
                         ':root[data-theme="light"]{\n' + light + "\n}\n"
                         ':root[data-theme="dark"]{\n' + dark + "\n}")
+
+
+def _web_file(name):
+    """One file from web/, or nothing: the tutor's script and sheet are spliced
+    into PAGE from their own files so the screen can be written and read apart
+    from the sixteen thousand lines around it. A checkout without them still
+    serves the page; it just has no Tutor tab."""
+    try:
+        return (Path(__file__).parent / "web" / name).read_text()
+    except OSError:
+        return ""
 
 
 # Raw string: this is JavaScript, and its backslash escapes are not Python's.
@@ -1940,7 +1954,8 @@ body.visitor .vote{pointer-events:none}
 <!-- Tailwind's compiled sheet, inlined. It comes AFTER the token block above
      because these utilities are written in terms of those variables, and
      because the token block has to stay the page's first <style>. -->
-<style>__CSS__</style>
+<style>__CSS__
+__TUTOR_CSS__</style>
 
 <!-- The map. One element, two shapes: a drawer over the page on a phone and a
      rail beside it on a wide screen. It is first in the document so that a
@@ -7926,10 +7941,12 @@ function seedHistory() {
     history.pushState(null, '', '#' + deep.slice(0, k).join('/'));
   history.pushState(null, '', here);
 }
+__TUTOR_JS__
 seedHistory();
 route();
 </script>
 """.replace("__CSS__", (Path(__file__).parent / "web/app.css").read_text())\
+     .replace("__TUTOR_CSS__", _web_file("tutor.css")).replace("__TUTOR_JS__", _web_file("tutor.js"))\
      .replace("__AUDIO_MB__", str(MAX_AUDIO_BYTES // 1048576)).replace("__DOC_MB__", str(MAX_DOC_BYTES // 1048576)))
 
 
@@ -8468,6 +8485,21 @@ ROLE_REQUIRED = {
     "/place": "admin",
     "/event": "trusted",
 }
+
+# The tutor. Reading what it taught is for the people the section trusts;
+# making it teach is the one spend in this app that is meant to be large, so
+# it is behind RECARVE_TUTOR_ROLE (default: admin, the person running this).
+# GET and POST paths are disjoint on purpose: the gate keys on the path alone.
+TUTOR_ROLE = os.environ.get("RECARVE_TUTOR_ROLE", "admin").strip() or "admin"
+if TUTOR_ROLE not in ROLES:
+    TUTOR_ROLE = "admin"
+TUTOR_READ_PATHS = ("/tutor", "/tutor/subject", "/tutor/session", "/tutor/pyq")
+TUTOR_WRITE_PATHS = ("/tutor/start", "/tutor/say", "/tutor/mark", "/tutor/mastery",
+                     "/tutor/settings", "/tutor/session/close",
+                     "/tutor/session/delete", "/tutor/pyq/import")
+ROLE_REQUIRED.update({p: "trusted" for p in TUTOR_READ_PATHS})
+ROLE_REQUIRED.update({p: TUTOR_ROLE for p in TUTOR_WRITE_PATHS})
+ROLE_REQUIRED["/tutor/pyq/import"] = "admin"
 
 # Passwords are stored as typed. The one thing that goes with that decision is
 # on the screens where somebody picks one -- the join form and
@@ -14070,6 +14102,8 @@ def build_server(args):
                 return self.do_google_callback()
             if self.path.split("?")[0] == "/login":
                 return self.send_html(GATE_PAGE.replace("__BODY__", with_google(LOGIN_BODY)))
+            if where == "/tutor" or where.startswith("/tutor/"):
+                return self.do_tutor()
             if self.path == "/data":
                 subjects = library_data(args.library, args.out.parent)
                 # `now` is this machine's clock, and the mtimes in `subjects`
@@ -14297,6 +14331,8 @@ def build_server(args):
                     f"{SESSION_COOKIE}=; Path=/; HttpOnly; SameSite=Lax; Max-Age=0"))
             if self.path == "/password":
                 return self.do_password()
+            if where == "/tutor" or where.startswith("/tutor/"):
+                return self.do_tutor()
             if self.path == "/reset":
                 return self.do_reset()
             if self.path == "/approve":
@@ -15815,6 +15851,23 @@ def build_server(args):
                 return self.reply(500, {"error": f"{type(e).__name__}: {e}"})
             return self.reply(200, {"ok": True})
 
+        def do_tutor(self):
+            """Everything under /tutor, GET and POST, lives in tutor.py.
+
+            Imported here rather than at the top: the tutor needs the anthropic
+            package and a server without it should still open the library.
+            The handler is passed whole so tutor.py can stream through wfile;
+            `args` and `budget` are the serve() flags and the shared AI
+            budget, the latter deliberately NOT spent by the tutor.
+            """
+            if not self.me:
+                return self.reply(404, {"error": "this server is running with --no-auth"})
+            try:
+                import tutor
+            except ImportError as e:
+                return self.reply(500, {"error": f"tutor unavailable: {e}"})
+            return tutor.handle(self, args)
+
         def do_revise(self):
             import json as _json
             from argparse import Namespace
@@ -16544,6 +16597,11 @@ def main():
     tt.set_defaults(func=import_timetable)
 
     sub.add_parser("selftest").set_defaults(func=lambda _: selftest())
+
+    tu = sub.add_parser("tutor", help="the AI tutor's housekeeping: PYQ extraction and import")
+    tu.add_argument("rest", nargs=argparse.REMAINDER,
+                    help="pyq extract|answer|import|status ... (see tutor_pyq.py)")
+    tu.set_defaults(func=lambda a: __import__("tutor_pyq").cli(a.rest, a.library))
 
     # Bare `notes.py lecture.m4a` means transcribe.
     argv = sys.argv[1:]
