@@ -18,6 +18,57 @@ file below was built against.
 Full suite on the cloud box: 1032 passed, 1 deselected (a worker network
 test that cannot bind in that sandbox).
 
+## Done on the Mac, 2026-10-19 (second session)
+
+- Baseline: 1031 passed, 2 failed, both in `test_worker.py`
+  (`test_a_blip_while_reporting_is_not_a_lecture_failure`,
+  `test_jobs_says_when_the_worker_was_last_heard_from`). Both are timing
+  flakes that fail on master too and pass in isolation; nothing on this
+  branch touches the worker.
+- `tutor/packs/CY1107.json` is whole (51 topics, checker clean); the halves
+  are gone.
+- **The API key is dead.** `ANTHROPIC_API_KEY` in the Mac's `.env` and in
+  `~/app/.env` on the VM both answer `401 invalid x-api-key`, so no real
+  lesson has been read yet, nothing has been extracted, and the deploy
+  waits: a Tutor tab without a key errors on every lesson. Put a working key
+  in both `.env` files first; then steps 2, 3 and 4 below resume as written.
+- Everything the screen does without the model was driven for real instead,
+  through `backend/dev/fake_tutor.py` (the server with `tutor.model_stream`
+  swapped for a canned teacher) on a fresh `recarve_tutor` database with an
+  admin and a trusted account: streamed turns with KaTeX, the MCQ card
+  grading on tap and `/tutor/mark` moving attempts, a short-answer card
+  going round trip, the meter following `<state>`, spend summing per lesson,
+  Hinglish and depth saved through `/tutor/settings`, every quick action, a
+  trusted reader on the phone over the LAN URL seeing the lesson read-only
+  with no dock, `POST /tutor/start` refused for that reader (403).
+- `tutor/pyq/EE1108.json`: one real paper (Section I mid term, Oct 2025)
+  transcribed by eye and imported. With it the EE1108 chips read "from 10
+  past-paper questions", the subject page shows "4 PYQs, 2 marks" style
+  counts, `<pyq/>` cards render inside a lesson with the answer under
+  `Answer`, and the bank page filters and offers "Teach me this".
+- One fix from that: a `<pyq/>` whose id the archive does not have used to
+  sit on "Fetching this question from the archive…" for ever; it now says
+  "This past-paper question is not in the archive." once the lesson is in
+  hand (`web/tutor.js`, `tuSegNode`).
+- Migration 0056 rehearsed on a restore of live (116 profiles): applies
+  clean, five tables with RLS, 19 policies.
+- Known, left alone: a lesson whose first turn failed (bad key, model error)
+  stays as an open session with 0 turns and shows in Recent; "Send again"
+  on it works, so it is kept for the retry.
+
+## Deploying, when the key works
+
+The server's `~/app` has `web/` and `supabase/` already but none of the
+tutor files. Besides `notes.py` and `syllabus.json` this deploy copies
+`tutor.py`, `tutor_pyq.py`, `web/tutor.js`, `web/tutor.css`, `tutor/`
+(packs, `exam-scheme.json`, `pyq/`), then
+`psql -d recarve -f supabase/migrations/0056_the_tutor.sql`, then the key
+into `~/app/.env`, then `sudo systemctl restart recarve`. Back up first
+(`bash ~/backups/backup.sh`) and md5-check live against the commit you
+think is there, as the state memory says. Run `notes.py tutor pyq import
+tutor/pyq/EE1108.json` there too; the extraction and answering go on the
+server because that is where the 295 PDFs are.
+
 ## What has NOT been verified
 
 1. **No real call to the model has been made.** Every test stubs

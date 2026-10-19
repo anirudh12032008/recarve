@@ -838,7 +838,7 @@ function tuFill(el, text, ctx, live) {
   for (let k = i; k < have.length; k++) have[k].node.remove();
   have.length = i;
   for (; i < segs.length; i++) {
-    const node = tuSegNode(segs[i], ctx);
+    const node = tuSegNode(segs[i], ctx, live);
     el.appendChild(node);
     have.push({sig: segs[i].sig, node});
   }
@@ -850,15 +850,21 @@ function tuFill(el, text, ctx, live) {
   }
 }
 
-function tuSegNode(seg, ctx) {
+function tuSegNode(seg, ctx, live) {
   if (seg.k === 'md') return tuMd(seg.s);
   if (seg.k === 'check') return tuCheck(seg, ctx);
   if (seg.k === 'pyq') {
     const p = ctx.pyqs[seg.id];
     if (p) return tuPyqCard(p, ctx, false);
-    const c = tuEl('div', 'tu-pyq tu-pending');
+    // Not in hand yet: fetching while the turn is still being written or the
+    // lesson is being re-read; otherwise the tutor named an id the archive
+    // does not have, and a card that says so beats one that waits forever.
+    const url = tuU.sess(ctx.sid);
+    const soon = live || TU_ASKING.has(url) || TU_STALE.has(url);
+    const c = tuEl('div', 'tu-pyq' + (soon ? ' tu-pending' : ' tu-missing'));
     c.appendChild(tuEl('p', 'tu-k', 'Past paper'));
-    c.appendChild(tuEl('p', 'tu-note', 'Fetching this question from the archive…'));
+    c.appendChild(tuEl('p', 'tu-note', soon ? 'Fetching this question from the archive…'
+                                           : 'This past-paper question is not in the archive.'));
     return c;
   }
   if (seg.k === 'wait') {
