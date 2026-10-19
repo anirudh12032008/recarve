@@ -178,3 +178,60 @@ python notes.py serve --port 8000       # then open the Tutor tab
 - Spend is computed from `PRICES` plus cache rates (write 1.25×, read
   0.1×); Opus 5.5 cache reads are actually cheaper, so the readout
   slightly over-reports, by design.
+
+## Past papers, checked on 2026-10-19 (extraction still running)
+
+Checked from the Mac over ssh while `pyq extract --max-cost 40` was still
+going on the VM (`~/app-tutor/pyq.log`); the `answer` pass had not started.
+
+| subject | papers | extracted | questions | mapped to a topic |
+|---|---|---|---|---|
+| BS1111 | 18 | 17 | 145 | 137 |
+| CE1103 | 35 | 35 | 220 | 152 |
+| CS1105 | 22 | 22 | 216 | 214 |
+| CY1107 | 30 | 30 | 353 | 343 |
+| CY1110 | 21 | 20 | 271 | 248 |
+| EE1108 | 35 | 34 | 250 | 245 |
+| HS1106 | 21 | 6 | 43 | 42 |
+| MC1101, ME1104, ME1109, PY1102, SA1141 | 114 | 0 | 0 | 0 |
+| **total** | 296 | 164 | 1498 | 1381 |
+
+Spend so far $4.18 for 164 papers, so the whole archive should come in
+near $8, far under the cap; the answer pass is the bigger bill.
+
+What the tutor derives from it, on the live database: CY1107 has 44 of 51
+topics on past-paper importance (7 still estimates), BS1111 20 of 24,
+EE1108 21 of 24; MC1101 still all estimates because its papers are not
+reached yet. The plan reads "Cell organelles: 14 past-paper questions
+(3 end, 3 mid, 8 mini), not started yet"; "Network theorems: 40".
+
+The rows: a 15-row sample across BS1111 was faithful (question text, qno,
+OR-choices, the MCQ options kept inline). No question appears twice within
+one paper; the same question across years is kept as separate rows on
+purpose (Lami's theorem four times, beam classification four times).
+Problems to fix, none blocking:
+
+1. **Section totals read as marks** on a few papers. CE1103 mid 2025 Q1 is
+   stored with 30 marks and CE1103 mid 2024 Q1-3 with 35: the extractor
+   took the section total printed beside a group of parts. Papers whose
+   parts sum past the paper (CE1103 mids summing to 100, CY1107/CY1110
+   2021-23 end terms summing to 90-102) deserve a look; the pre-2023 end
+   terms may genuinely have been 70-100 mark papers under the old scheme.
+   A cheap guard in `tutor_pyq.py`: when a paper's parts sum to more than
+   twice its exam's total, null the marks on the parts above 10.
+2. **117 unmapped rows (8%)**, two kinds: CE1103 shear force and bending
+   moment (57 rows with no unit at all) and CY1110 biogeochemical cycles
+   (21), which the papers ask every year but `syllabus.json` has no topic
+   for; and a handful placed on a unit but no topic (CY1107 Materials 7,
+   EE1108 Electrical Machines 4). The first kind is a syllabus gap, not an
+   extraction bug: add the topics to `syllabus.json` and the packs, then
+   re-run `extract` (the fingerprint makes it idempotent) or update the
+   rows' unit/topic by hand.
+3. **20 CY1110 mini-test rows have no year** because their
+   `archive_documents` row has none ("Mini Test" folder without a year in
+   the title). They count towards importance but not towards "asked in N
+   of the last M"; set `year` on those documents and the rows inherit it
+   on the next import.
+4. 186 rows (12%) have null marks, nearly all MCQ parts of end-term Q1
+   where the paper prints one total for the block. Expected; the chip
+   counts questions, not marks, when marks are missing.
