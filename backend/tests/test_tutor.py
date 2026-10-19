@@ -555,7 +555,7 @@ def test_the_overview(server, model):
     assert status == 200
     assert home["owner"] is True and home["model"] == "claude-sonnet-5-5"
     assert home["tiers"]["advanced"]["model"] == "claude-opus-5-5"
-    assert home["tiers"]["advanced"]["effort"] == "high"
+    assert home["tiers"]["advanced"]["effort"] == "medium"
     assert home["tiers"]["standard"]["price_in"] < home["tiers"]["advanced"]["price_in"]
     assert home["role_needed"] == notes.TUTOR_ROLE
     bio = next(s for s in home["subjects"] if s["code"] == "BS1111")
@@ -638,7 +638,7 @@ def test_the_advanced_tier_is_the_best_model_with_the_whole_unit_in_view(server,
     session = lines[0]["session"]
     assert session["tier"] == "advanced" and session["model"] == "claude-opus-5-5"
     asked = model.calls[-1]
-    assert asked["model"] == "claude-opus-5-5" and asked["effort"] == "high"
+    assert asked["model"] == "claude-opus-5-5" and asked["effort"] == "medium"
     system = asked["system"]
     assert "Tier: advanced" in system[3]["text"] and "diagnostic" in system[3]["text"]
     assert "LEARNS-BY-DRAWING" in system[3]["text"], "how they learn elsewhere comes along"

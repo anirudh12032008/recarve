@@ -148,7 +148,7 @@ server because that is where the 295 PDFs are.
    (default `admin`), `RECARVE_TUTOR_MODEL` / `RECARVE_TUTOR_EFFORT` for the
    Standard tier (defaults `claude-sonnet-5-5`, `medium`) and
    `RECARVE_TUTOR_MODEL_ADVANCED` / `RECARVE_TUTOR_EFFORT_ADVANCED` for
-   Advanced (defaults `claude-opus-5-5`, `high`).
+   Advanced (defaults `claude-opus-5-5`, `medium`).
 
 ## Running locally
 

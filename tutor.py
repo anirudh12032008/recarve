@@ -32,11 +32,13 @@ SCHEME_PATH = HERE / "tutor" / "exam-scheme.json"
 
 EFFORTS = ("low", "medium", "high", "xhigh", "max")
 # Two teachers. Standard is the everyday one; advanced is the best model
-# thinking harder, with the whole unit's past papers and the student's
-# picture from every subject in front of it, at several times the spend.
+# with the whole unit's past papers and the student's picture from every
+# subject in front of it, at a few times the spend. Both think at medium
+# effort: high effort on Opus roughly doubled the bill for no visible gain
+# in the lessons read on 2026-10-19.
 TIERS = ("standard", "advanced")
 TIER_DEFAULTS = {"standard": ("claude-sonnet-5-5", "medium"),
-                 "advanced": ("claude-opus-5-5", "high")}
+                 "advanced": ("claude-opus-5-5", "medium")}
 TIER_ENV = {"standard": ("RECARVE_TUTOR_MODEL", "RECARVE_TUTOR_EFFORT"),
             "advanced": ("RECARVE_TUTOR_MODEL_ADVANCED", "RECARVE_TUTOR_EFFORT_ADVANCED")}
 DEFAULT_MODEL = TIER_DEFAULTS["standard"][0]

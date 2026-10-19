@@ -315,7 +315,7 @@ function tuTierNote(tier) {
   const other = (home.tiers || {})[tier === 'advanced' ? 'standard' : 'advanced'] || {};
   const times = t.price_in && other.price_in ? Math.round(t.price_in / other.price_in) : 0;
   if (tier === 'advanced') {
-    return 'The best model, thinking harder, with the whole unit\u2019s past papers and how you '
+    return 'The best model, with the whole unit\u2019s past papers and how you '
       + 'learn in every subject in front of it' + (t.model ? ' (' + t.model + ')' : '')
       + (times > 1 ? ', about ' + times + '\u00d7 the spend.' : '.');
   }
