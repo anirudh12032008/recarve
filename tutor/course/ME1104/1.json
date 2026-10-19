@@ -1,0 +1,2161 @@
+{
+ "code": "ME1104",
+ "unit": "Basic Concepts",
+ "written": "2026-10-19",
+ "by": "claude-sonnet-5-5, in a Claude Code session",
+ "topics": [
+  {
+   "topic": "Introduction to engineering drawing",
+   "subtopics": [
+    {
+     "id": "scales",
+     "title": "Scales: RF, plain and diagonal",
+     "theory_md": "**Representative fraction** $RF=\\dfrac{\\text{length on drawing}}{\\text{actual length}}$ (same units). Full size 1:1, reduction 1:2, 1:5, 1:10, enlargement 2:1, 5:1.\n\n**Length of scale** $=RF\\times$ maximum length to be measured.\n\nA **plain scale** reads two units (e.g. m and dm); a **diagonal scale** reads three (m, dm, cm) because the diagonals split each small division into 10 more parts.\n\nDiagonal scale: draw the length, divide into main divisions, sub-divide the left one into 10, erect a rectangle 10 divisions high, join the diagonals. Least count $=$ smallest division $/10$.",
+     "basics_md": "A scale is a ruler drawn smaller (or bigger) than the real thing. RF just says how many times smaller: 1/40 means the drawing is 40 times smaller.",
+     "key_points": [
+      "RF = drawing length / actual length, both in the same unit",
+      "Length of scale = RF x maximum length",
+      "Plain scale reads two units, diagonal scale three",
+      "Diagonal scale: left division split into 10, 10 horizontals, diagonals give the third unit"
+     ],
+     "questions": [
+      {
+       "id": "sc1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "1 cm on a map stands for 5 m on the ground. The RF is",
+       "options": [
+        "1/5",
+        "1/50",
+        "1/500",
+        "1/5000"
+       ],
+       "answer_index": 2,
+       "why": "5 m = 500 cm, so RF = 1 cm / 500 cm = 1/500."
+      },
+      {
+       "id": "sc2",
+       "kind": "mcq",
+       "level": 1,
+       "q": "A diagonal scale can read",
+       "options": [
+        "one unit",
+        "two units",
+        "three units",
+        "only whole units"
+       ],
+       "answer_index": 2,
+       "why": "Main divisions, sub-divisions and the diagonal give three successive units (m, dm, cm)."
+      },
+      {
+       "id": "sc3",
+       "kind": "numerical",
+       "level": 2,
+       "marks": 3,
+       "q": "On a map 1 cm represents 2 km. Find the RF and the length of a plain scale needed to measure up to 12 km.",
+       "model_answer_md": "$RF=\\dfrac{1\\ \\text{cm}}{2\\ \\text{km}}=\\dfrac{1}{2\\times10^{5}}=\\dfrac{1}{200000}$\n\nLength of scale $=RF\\times 12\\ \\text{km}=\\dfrac{12\\times10^{5}\\ \\text{cm}}{200000}=6$ cm.\n\nDraw a 6 cm line, divide it into 6 parts of 1 cm (2 km each).",
+       "points": [
+        "RF = 1/200000",
+        "Length = RF x max length",
+        "6 cm, divided into 6 equal parts"
+       ]
+      },
+      {
+       "id": "sc4",
+       "kind": "short",
+       "level": 3,
+       "marks": 3,
+       "q": "Explain why the diagonals of a diagonal scale read the third unit.",
+       "model_answer_md": "The left main division (1 m) is split into 10 equal parts (dm) at the top and bottom. The height is split into 10 equal horizontal lines. The diagonal joins 0 at the bottom to the first dm mark at the top.\n\nBy **similar triangles**, on the $n$th horizontal line the diagonal has moved $n/10$ of one dm division. So each horizontal line adds one more cm (1/10 dm).",
+       "points": [
+        "Left division and height both divided into 10",
+        "Similar triangles: the diagonal shifts 1/10 of a division per horizontal",
+        "So each horizontal line adds 1 cm"
+       ]
+      },
+      {
+       "id": "sc5",
+       "pyq": "7247f0e2c5b6dd49",
+       "level": 3,
+       "points": [
+        "RF = 2.5 cm / 100 cm = 1/40",
+        "Length of scale = 6 m x 1/40 = 15 cm, six divisions of 2.5 cm",
+        "Left division split into 10 (dm), rectangle with 10 horizontals, diagonals",
+        "4.56 m = 4 m + 5 dm + 6 cm shown on the 6th horizontal line"
+       ]
+      }
+     ]
+    },
+    {
+     "id": "constructions",
+     "title": "Geometric constructions: polygons and tangent arcs",
+     "theory_md": "**Regular hexagon** of side $a$: side $=$ circumradius. Draw a circle of radius $a$ and step the radius round it six times; join the points. Across corners $=2a$, across flats $=2a\\cos30^\\circ=0.866\\times2a$. Or use a 30-60 set square with the circle of diameter $2a$.\n\n**Tangent arcs** (blending): an arc of radius $R$ touching\n- two lines: centre at the intersection of lines drawn parallel at distance $R$ (fillet);\n- a circle $r$ externally: centre at distance $R+r$ from its centre;\n- a circle $r$ internally: centre at distance $R-r$.\n\nThe tangent point lies on the line joining the two centres.",
+     "basics_md": "A hexagon fits exactly six times round its own circle because each side equals the radius. For blends, the new arc's centre must sit a fixed distance from each thing it touches.",
+     "key_points": [
+      "Hexagon side = radius of the circumscribing circle",
+      "Across corners = 2a, across flats = 1.732a",
+      "External tangency: centre distance = R + r; internal: R - r",
+      "Tangent point lies on the line of centres"
+     ],
+     "questions": [
+      {
+       "id": "co1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "A regular hexagon has circumradius 40 mm. Its side is",
+       "options": [
+        "20 mm",
+        "40 mm",
+        "46.2 mm",
+        "80 mm"
+       ],
+       "answer_index": 1,
+       "why": "In a regular hexagon the side equals the circumradius."
+      },
+      {
+       "id": "co2",
+       "kind": "mcq",
+       "level": 1,
+       "q": "An arc of radius R touches a circle of radius r externally. The distance between their centres is",
+       "options": [
+        "R - r",
+        "R + r",
+        "R x r",
+        "sqrt(R^2 + r^2)"
+       ],
+       "answer_index": 1,
+       "why": "External contact: the radii add along the line of centres."
+      },
+      {
+       "id": "co3",
+       "kind": "numerical",
+       "level": 2,
+       "marks": 2,
+       "q": "A regular hexagon has side 30 mm. Find its width across corners and across flats.",
+       "model_answer_md": "Across corners $=2a=2\\times30=60$ mm.\n\nAcross flats $=2a\\cos30^\\circ=2\\times30\\times0.866=51.96\\approx52.0$ mm.",
+       "points": [
+        "Across corners = 60 mm",
+        "Across flats = 2a cos 30 = 52.0 mm"
+       ]
+      },
+      {
+       "id": "co4",
+       "kind": "short",
+       "level": 2,
+       "marks": 3,
+       "q": "Two lines meet at 90 degrees. Describe how to draw a fillet of radius 20 mm between them.",
+       "model_answer_md": "1. Draw lines at $90^\\circ$ meeting at $O$.\n2. Draw a line parallel to each, $20$ mm inside the angle; they meet at $C$.\n3. Drop perpendiculars from $C$ to each line: the feet $T_1$, $T_2$ are the tangent points.\n4. With centre $C$ and radius $20$ draw the arc $T_1T_2$.",
+       "points": [
+        "Parallels at distance R (20 mm) give the centre C",
+        "Perpendiculars from C give tangent points",
+        "Arc of radius 20 about C between the tangent points"
+       ]
+      },
+      {
+       "id": "co5",
+       "pyq": "e82e57a68f4c4d75",
+       "level": 2,
+       "points": [
+        "Circle of radius 50 mm (side = radius)",
+        "Step the 50 mm radius six times round the circle (60 degrees apart)",
+        "Join in order: six sides of 50 mm, interior angles 120 degrees"
+       ]
+      },
+      {
+       "id": "co6",
+       "pyq": "210e203ae85b363b",
+       "level": 3,
+       "points": [
+        "Locate the three centres from the given 110, 80, 77, 55 and draw the bosses R40, R30, R27.5 and the holes",
+        "Concave R65 touching externally: arcs of radius 40+65 and 30+65 from the centres meet at its centre",
+        "Convex R210 enclosing internally: arcs of radius 210-30 and 210-27.5 give its centre",
+        "Common tangent between R40 and R27.5 on the lower left",
+        "Mark tangent points on the lines of centres; thick outline, thin centre lines"
+       ]
+      }
+     ]
+    },
+    {
+     "id": "ellipse",
+     "title": "Conics and the ellipse",
+     "theory_md": "A **conic** is the locus of a point whose distance from a **focus** bears a constant ratio (eccentricity $e$) to its distance from a **directrix**: ellipse $e<1$, parabola $e=1$, hyperbola $e>1$.\n\n**Ellipse (foci definition):** $PF_1+PF_2=$ major axis $=2a$. With foci $2c$ apart, minor axis $=2\\sqrt{a^2-c^2}$.\n\nMethods: foci and arcs, concentric circles, rectangle (oblong), eccentricity.\n\n**Tangent** at $P$: bisector of the external angle between $PF_1$ and $PF_2$. **Normal**: perpendicular to it at $P$ (bisects $\\angle F_1PF_2$).",
+     "basics_md": "Pin two nails, tie a loop of string, pull it tight with a pencil and move round: that is an ellipse. The string length is the major axis.",
+     "key_points": [
+      "Ellipse: sum of distances from the two foci is constant, equal to the major axis",
+      "Minor axis = 2 sqrt(a^2 - c^2)",
+      "e < 1 ellipse, e = 1 parabola, e > 1 hyperbola",
+      "Tangent bisects the external angle of the focal lines; normal is perpendicular to it"
+     ],
+     "questions": [
+      {
+       "id": "el1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "For a parabola the eccentricity is",
+       "options": [
+        "less than 1",
+        "equal to 1",
+        "greater than 1",
+        "zero"
+       ],
+       "answer_index": 1,
+       "why": "e < 1 ellipse, e = 1 parabola, e > 1 hyperbola."
+      },
+      {
+       "id": "el2",
+       "kind": "mcq",
+       "level": 1,
+       "q": "The sum of the distances of any point of an ellipse from its two foci equals",
+       "options": [
+        "the minor axis",
+        "the major axis",
+        "the focal distance",
+        "twice the eccentricity"
+       ],
+       "answer_index": 1,
+       "why": "PF1 + PF2 = 2a, the major axis."
+      },
+      {
+       "id": "el3",
+       "kind": "numerical",
+       "level": 2,
+       "marks": 3,
+       "q": "The foci of an ellipse are 50 mm apart and the major axis is 70 mm. Find the minor axis.",
+       "model_answer_md": "$2a=70\\Rightarrow a=35$ mm; $2c=50\\Rightarrow c=25$ mm.\n\nMinor axis $=2\\sqrt{a^2-c^2}=2\\sqrt{35^2-25^2}=2\\sqrt{600}=48.99\\approx49.0$ mm.",
+       "points": [
+        "a = 35, c = 25",
+        "Minor axis = 2 sqrt(a^2 - c^2)",
+        "= 49.0 mm"
+       ]
+      },
+      {
+       "id": "el4",
+       "kind": "short",
+       "level": 2,
+       "marks": 3,
+       "q": "How are the tangent and normal drawn at a point P on an ellipse?",
+       "model_answer_md": "1. Join $P$ to the foci $F_1$ and $F_2$.\n2. Extend $F_1P$ beyond $P$. The bisector of the angle between $PF_2$ and this extension is the **tangent** at $P$.\n3. The perpendicular to the tangent at $P$ (the bisector of $\\angle F_1PF_2$) is the **normal**.",
+       "points": [
+        "Join P to both foci",
+        "Bisector of the external angle is the tangent",
+        "Perpendicular to it at P is the normal"
+       ]
+      },
+      {
+       "id": "el5",
+       "pyq": "859d6a136de8caf5",
+       "level": 3,
+       "points": [
+        "A and B are foci; AP + BP = 70 + 10 = 80 mm constant, so the curve is an ellipse",
+        "Major axis 80 mm, c = 30, minor axis 2 sqrt(40^2 - 30^2) = 52.9 mm",
+        "Foci-and-arcs construction: points 1, 2, 3 on AB, arcs of radius V1-1 and V2-1 from A and B",
+        "Tangent: bisector of the external angle at P; normal: perpendicular to it"
+       ]
+      }
+     ]
+    },
+    {
+     "id": "cycloids",
+     "title": "Cycloid, epicycloid and hypocycloid",
+     "theory_md": "A **cycloid** is the locus of a point on a circle rolling without slipping along a straight line. For one turn the base length is $\\pi d$.\n\nAn **epicycloid** is traced when the circle rolls on the *outside* of a directing circle (radius $R$), a **hypocycloid** when it rolls on the *inside*. For one turn of the rolling circle (radius $r$) the centre moves through\n$\\theta=360^\\circ\\times\\dfrac{r}{R}$.\n\nConstruction: divide the generating circle into 12; divide the path of its centre into 12; cut with radius $r$ from each centre.\n\n**Normal** at a point: join it to the instantaneous contact point. **Tangent**: perpendicular to the normal.",
+     "basics_md": "Paint a dot on a wheel and roll it along the floor: the dot draws a cycloid. Roll the wheel round the outside of a drum and it is an epicycloid; round the inside, a hypocycloid.",
+     "key_points": [
+      "Cycloid: rolls on a straight line, base length = pi d",
+      "Epicycloid outside, hypocycloid inside the directing circle",
+      "Angle for one turn: theta = 360 r / R",
+      "Normal passes through the contact point; tangent is perpendicular to it"
+     ],
+     "questions": [
+      {
+       "id": "cy1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "A circle rolling inside a larger circle without slipping generates a",
+       "options": [
+        "cycloid",
+        "epicycloid",
+        "hypocycloid",
+        "involute"
+       ],
+       "answer_index": 2,
+       "why": "Rolling on the inside gives a hypocycloid; outside, an epicycloid."
+      },
+      {
+       "id": "cy2",
+       "kind": "mcq",
+       "level": 1,
+       "q": "A circle of diameter 40 mm rolls one full turn on a straight line. The base length of the cycloid is",
+       "options": [
+        "40 mm",
+        "62.8 mm",
+        "125.7 mm",
+        "251.3 mm"
+       ],
+       "answer_index": 2,
+       "why": "pi x 40 = 125.7 mm."
+      },
+      {
+       "id": "cy3",
+       "kind": "numerical",
+       "level": 2,
+       "marks": 3,
+       "q": "A circle of radius 30 mm rolls on the outside of a directing circle of radius 120 mm. Name the curve and find the angle subtended at the centre for one turn.",
+       "model_answer_md": "Rolling on the outside gives an **epicycloid**.\n\n$\\theta=360^\\circ\\times\\dfrac{r}{R}=360^\\circ\\times\\dfrac{30}{120}=90^\\circ$.",
+       "points": [
+        "Epicycloid (outside)",
+        "theta = 360 r / R",
+        "90 degrees"
+       ]
+      },
+      {
+       "id": "cy4",
+       "kind": "short",
+       "level": 2,
+       "marks": 3,
+       "q": "Distinguish a cycloid, an epicycloid and a hypocycloid.",
+       "model_answer_md": "- **Cycloid:** generating circle rolls on a straight line.\n- **Epicycloid:** it rolls on the outside of a directing circle.\n- **Hypocycloid:** it rolls on the inside of a directing circle.\nAll are traced by a point on the circumference of the generating circle.",
+       "points": [
+        "Cycloid: straight line",
+        "Epicycloid: outside of the circle",
+        "Hypocycloid: inside of the circle"
+       ]
+      },
+      {
+       "id": "cy5",
+       "pyq": "10083c93dbe19a56",
+       "level": 3,
+       "points": [
+        "Globe 4 m is the directing circle (R = 200 cm), wheel 80 cm so r = 40 cm, rolling inside: hypocycloid",
+        "Angle for one turn = 360 x 40/200 = 72 degrees",
+        "Divide the generating circle and the arc of centres (radius R - r) into 12; cut with radius r to get the points",
+        "Normal: point to the contact point; tangent perpendicular to it"
+       ]
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "topic": "Types of lines, dimensioning and title block",
+   "subtopics": [
+    {
+     "id": "line-types",
+     "title": "Types of lines and lettering",
+     "theory_md": "Line types (IS 10714) and uses:\n- **Continuous thick:** visible outlines and edges.\n- **Continuous thin:** dimension, extension, projection and leader lines, hatching, construction lines.\n- **Dashed (thin or medium):** hidden outlines and edges.\n- **Chain thin:** centre lines, pitch circles.\n- **Chain thin with thick ends and bends:** cutting planes.\n- **Chain thin double-dashed:** adjacent parts, alternate positions.\n- **Thin freehand or zigzag:** short or long break lines.\n\nWhen lines coincide, the order is visible, hidden, centre.\n\n**Lettering:** single-stroke capitals, vertical or inclined at $75^\\circ$; heights 2.5, 3.5, 5, 7, 10 mm.",
+     "basics_md": "Different lines tell the reader different things: thick means you can see it, dashed means it is hidden behind, chain means axis or centre.",
+     "key_points": [
+      "Visible edges: continuous thick; hidden edges: dashed",
+      "Centre lines: chain thin; cutting plane: chain thin, thick at ends",
+      "Dimension, extension and hatching lines are continuous thin",
+      "Priority when lines coincide: visible, then hidden, then centre",
+      "Lettering: single-stroke, vertical or 75 degrees"
+     ],
+     "questions": [
+      {
+       "id": "ln1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "Hidden edges of an object are drawn as",
+       "options": [
+        "continuous thick lines",
+        "dashed lines",
+        "chain thin lines",
+        "zigzag lines"
+       ],
+       "answer_index": 1,
+       "why": "Dashed lines show edges that cannot be seen."
+      },
+      {
+       "id": "ln2",
+       "kind": "mcq",
+       "level": 1,
+       "q": "Centre lines are drawn as",
+       "options": [
+        "continuous thin lines",
+        "dashed thick lines",
+        "chain thin lines",
+        "continuous thick lines"
+       ],
+       "answer_index": 2,
+       "why": "Long-short-long chain thin lines mark axes and centres."
+      },
+      {
+       "id": "ln3",
+       "kind": "short",
+       "level": 2,
+       "marks": 4,
+       "q": "Name four types of lines used in engineering drawing and give one use of each.",
+       "model_answer_md": "1. **Continuous thick:** visible outlines.\n2. **Continuous thin:** dimension and extension lines, hatching.\n3. **Dashed:** hidden edges.\n4. **Chain thin:** centre lines.\n(Also: chain thin with thick ends for cutting planes; freehand wavy line for break.)",
+       "points": [
+        "Continuous thick: visible outline",
+        "Continuous thin: dimension or extension lines",
+        "Dashed: hidden edges",
+        "Chain thin: centre lines"
+       ]
+      },
+      {
+       "id": "ln4",
+       "kind": "mcq",
+       "level": 2,
+       "q": "A hidden line falls exactly on a visible edge in a view. Which is drawn?",
+       "options": [
+        "the hidden line",
+        "the visible line",
+        "both side by side",
+        "the centre line"
+       ],
+       "answer_index": 1,
+       "why": "Visible has priority over hidden, then centre."
+      }
+     ]
+    },
+    {
+     "id": "dimensioning",
+     "title": "Dimensioning rules and systems",
+     "theory_md": "A dimension has **extension lines**, a **dimension line** with **arrowheads**, and the **figure** (in mm, no unit written). All are thin continuous lines; the figure is above the dimension line.\n\nRules:\n- Extension lines start about 1 mm off the outline and go 2-3 mm beyond the dimension line.\n- Never use an outline or centre line as a dimension line; do not repeat a dimension.\n- Keep dimensions outside the view, smaller ones nearer the object.\n- Arrowhead length about 3 times its width.\n- Symbols: $\\varnothing$ diameter, $R$ radius, $\\square$ square.\n\nSystems: **aligned** (text parallel to the line) and **unidirectional** (all text horizontal). Arrangements: chain, parallel, combined, coordinate.",
+     "basics_md": "Dimensions answer 'how big' and 'where': size dimensions give the sizes of features and location dimensions place them. Each should appear once, where the shape is clearest.",
+     "key_points": [
+      "Thin continuous dimension and extension lines, arrowheads at ends",
+      "Figure in mm above the dimension line, no repeats",
+      "Extension lines 1 mm off the outline, 2-3 mm beyond the dimension line",
+      "Aligned and unidirectional systems; chain, parallel, combined, coordinate"
+     ],
+     "questions": [
+      {
+       "id": "di1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "Dimension lines are drawn as",
+       "options": [
+        "continuous thick",
+        "continuous thin",
+        "dashed",
+        "chain thin"
+       ],
+       "answer_index": 1,
+       "why": "Dimension and extension lines are thin continuous."
+      },
+      {
+       "id": "di2",
+       "kind": "mcq",
+       "level": 1,
+       "q": "In the unidirectional system the dimension figures are",
+       "options": [
+        "parallel to the dimension line",
+        "all horizontal",
+        "all vertical",
+        "inclined at 45 degrees"
+       ],
+       "answer_index": 1,
+       "why": "Unidirectional: every figure reads horizontally."
+      },
+      {
+       "id": "di3",
+       "kind": "short",
+       "level": 2,
+       "marks": 5,
+       "q": "Name the elements of a dimension and state any four rules of dimensioning.",
+       "model_answer_md": "**Elements:** extension lines, dimension line, arrowheads, dimension figure (and leader lines for notes).\n\n**Rules**\n1. Dimension and extension lines are thin continuous.\n2. Extension lines begin about 1 mm from the outline and extend 2-3 mm past the dimension line.\n3. Do not use outlines or centre lines as dimension lines; avoid crossing lines.\n4. Do not repeat a dimension; place it outside the view in mm without unit.",
+       "points": [
+        "Elements: extension line, dimension line, arrowhead, figure",
+        "Thin continuous lines",
+        "Extension line gap and overshoot",
+        "No repetition; outside the view, in mm"
+       ]
+      },
+      {
+       "id": "di4",
+       "kind": "short",
+       "level": 2,
+       "marks": 3,
+       "q": "Show how a hole of 20 mm diameter whose centre is 30 mm from the left edge and 25 mm from the bottom is dimensioned.",
+       "model_answer_md": "Mark the diameter as $\\varnothing20$ with a leader or across the circle. Locate the centre with two dimensions from the edges: $30$ from the left edge and $25$ from the bottom edge, extension lines taken from the **centre lines** (chain thin) and from the edges.",
+       "points": [
+        "Diameter with the symbol",
+        "Two location dimensions from the edges (30, 25)",
+        "Centre lines extended as extension lines"
+       ]
+      },
+      {
+       "id": "di5",
+       "pyq": "4df01a0177ee193d",
+       "level": 2,
+       "points": [
+        "Grid 10 mm: transfer corner points by counting squares, scale 1:1",
+        "Thick continuous outline; arcs drawn about the marked centres, tangent to the edges",
+        "Circle with chain thin centre lines",
+        "Dimension: overall size, diameter, radii, circle centre by two linear dimensions",
+        "Thin dimension lines with arrowheads, figures outside, no repeats"
+       ]
+      },
+      {
+       "id": "di6",
+       "pyq": "d11856426f40a2e5",
+       "level": 3,
+       "points": [
+        "Grid 10 mm: copy the base, left vertical edge, 60 degree chamfer, flat top, 30 degree slope and right edge",
+        "Thick outline, thin dimension lines, chain thin centre line for the circle",
+        "Dimension overall length and height, circle centre from the left edge and base, the diameter",
+        "Angles 60 and 30 dimensioned with arc-shaped dimension lines",
+        "Arrowheads touching the extension lines, units in mm, no repeated dimension"
+       ]
+      }
+     ]
+    },
+    {
+     "id": "sheet-title-block",
+     "title": "Drawing sheets, border and title block",
+     "theory_md": "Sheet sizes follow the A-series: each size is the previous one halved across its longer side, and sides are in the ratio $1:\\sqrt2$. A0 is $841\\times1189$ mm (area about $1\\ \\text{m}^2$); A1 $594\\times841$; A2 $420\\times594$; A3 $297\\times420$; A4 $210\\times297$.\n\nA **border** (working area) is drawn in thick continuous lines inside the trimmed sheet. The **title block** sits at the bottom right corner, its bottom and right sides on the border. It carries drawing title, name, roll number, scale, projection symbol, date, sheet number, section/institute.",
+     "basics_md": "Every sheet is the same shape: cut A0 in half and you get two A1, cut A1 and you get A2. The title block is the label saying whose drawing it is.",
+     "key_points": [
+      "A-series: A0 = 841 x 1189 mm, each size halves the longer side",
+      "Border in thick continuous lines; title block at bottom right corner",
+      "Title block: title, name, roll no, scale, projection symbol, date, sheet no",
+      "Everything is drawn inside the border"
+     ],
+     "questions": [
+      {
+       "id": "sh1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "The size of an A4 sheet is",
+       "options": [
+        "148 x 210 mm",
+        "210 x 297 mm",
+        "297 x 420 mm",
+        "420 x 594 mm"
+       ],
+       "answer_index": 1,
+       "why": "A4 = 210 x 297 mm."
+      },
+      {
+       "id": "sh2",
+       "kind": "mcq",
+       "level": 1,
+       "q": "The title block of a drawing sheet is placed at the",
+       "options": [
+        "top left corner",
+        "top right corner",
+        "bottom right corner",
+        "centre"
+       ],
+       "answer_index": 2,
+       "why": "Bottom right corner, so it shows when the sheet is folded."
+      },
+      {
+       "id": "sh3",
+       "kind": "short",
+       "level": 2,
+       "marks": 2,
+       "q": "Two A3 sheets are placed together to make one larger sheet. Which size is it, and why?",
+       "model_answer_md": "**A2 ($420\\times594$ mm).** Each A-series size is the previous size halved across its longer side, so two A3 ($297\\times420$) side by side along 420 give $420\\times594$.",
+       "points": [
+        "A2, 420 x 594 mm",
+        "Each size is half of the previous across its longer side"
+       ]
+      },
+      {
+       "id": "sh4",
+       "pyq": "7adef911590efe9a",
+       "level": 2,
+       "points": [
+        "Border rectangle 600 x 400 mm in thick continuous lines",
+        "Title block 150 x 50 mm at the bottom right corner, sides on the border",
+        "Four horizontal lines 10 mm apart give 5 rows of 10 mm; vertical division for labels",
+        "Name, roll number, exam, section and date filled in single-stroke capitals",
+        "Thick outline, thin internal lines; all later drawings inside the working area"
+       ]
+      },
+      {
+       "id": "sh5",
+       "pyq": "685eca7377843b86",
+       "level": 2,
+       "points": [
+        "Border rectangle 600 x 400 mm in thick continuous lines",
+        "Title block 150 x 50 mm at the bottom right corner on the border",
+        "5 rows of 10 mm with thin lines, label and value columns",
+        "Name, roll no, exam, section, date in single-stroke lettering",
+        "Solutions drawn inside the working area only"
+       ]
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "topic": "Basic CAD tools and commands",
+   "subtopics": [
+    {
+     "id": "cad-interface",
+     "title": "CAD screen and coordinate entry",
+     "theory_md": "A CAD (e.g. AutoCAD) screen has the **drawing area** (model space with the UCS icon), the **ribbon/menus**, the **command line** and the **status bar** (grid, snap, ortho, polar, osnap toggles) plus model/layout tabs.\n\nPoints are entered by:\n- **Absolute:** `x,y` from the origin;\n- **Relative:** `@dx,dy` from the last point;\n- **Polar:** `@distance<angle`, angle measured anticlockwise from the $+X$ axis;\n- **Direct distance:** point the cursor with ORTHO or POLAR on and type the length.\n\nEnter or Space ends a command; Esc cancels it.",
+     "basics_md": "Typing a point is just giving an address. Absolute is the address from the origin; relative is 'so many units further from where I am'.",
+     "key_points": [
+      "Drawing area, command line, ribbon and status bar",
+      "Absolute x,y; relative @dx,dy; polar @d<angle",
+      "Angle is anticlockwise from the positive X axis",
+      "Direct distance entry uses ORTHO or POLAR"
+     ],
+     "questions": [
+      {
+       "id": "ci1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "In CAD the entry @40<60 means",
+       "options": [
+        "absolute point 40,60",
+        "40 units at 60 degrees from the last point",
+        "40 units in X and 60 in Y",
+        "radius 40, diameter 60"
+       ],
+       "answer_index": 1,
+       "why": "@ is relative and < introduces the angle: polar entry."
+      },
+      {
+       "id": "ci2",
+       "kind": "mcq",
+       "level": 1,
+       "q": "The coordinate entry @30,0 moves the cursor",
+       "options": [
+        "30 units right of the last point",
+        "30 units above the last point",
+        "to the point 30,0 from the origin",
+        "30 units at 0 degrees from the origin"
+       ],
+       "answer_index": 0,
+       "why": "@dx,dy is relative: 30 in X, 0 in Y from the last point."
+      },
+      {
+       "id": "ci3",
+       "kind": "short",
+       "level": 2,
+       "marks": 3,
+       "q": "Write the LINE command entries to draw a rectangle 60 x 40 starting from 20,20.",
+       "model_answer_md": "`LINE` then\n1. `20,20` (absolute start)\n2. `@60,0`\n3. `@0,40`\n4. `@-60,0`\n5. `C` to close (back to 20,20).",
+       "points": [
+        "Absolute start 20,20",
+        "Relative entries @60,0 and @0,40",
+        "@-60,0 then Close"
+       ]
+      },
+      {
+       "id": "ci4",
+       "kind": "numerical",
+       "level": 3,
+       "marks": 3,
+       "q": "From the point 10,10 a line of length 50 is drawn at 30 degrees to the X axis. Give the entry and the end point.",
+       "model_answer_md": "Entry: `@50<30`.\n\nEnd point: $x=10+50\\cos30^\\circ=10+43.30=53.30$; $y=10+50\\sin30^\\circ=10+25=35.00$.\n\nEnd point $=(53.30,\\ 35.00)$.",
+       "points": [
+        "Polar entry @50<30",
+        "x = 10 + 50 cos 30 = 53.30",
+        "y = 10 + 50 sin 30 = 35.00"
+       ]
+      }
+     ]
+    },
+    {
+     "id": "draw-modify",
+     "title": "Draw and modify commands",
+     "theory_md": "**Draw:** LINE (L), CIRCLE (C: centre-radius, centre-diameter, 2P, 3P, TTR), ARC (A), RECTANGLE (REC), POLYGON (POL), ELLIPSE (EL), POLYLINE (PL), HATCH (H), TEXT.\n\n**Modify:** ERASE (E), MOVE (M), COPY (CO), ROTATE (RO), SCALE (SC), MIRROR (MI), OFFSET (O: parallel copy at a distance), TRIM (TR), EXTEND (EX), FILLET (F: round a corner with radius), CHAMFER (CHA), ARRAY (AR), STRETCH (S), EXPLODE (X).\n\nTRIM cuts objects back to a cutting edge; EXTEND lengthens them up to a boundary. FILLET with radius 0 makes a sharp corner.",
+     "basics_md": "Draw commands make new objects; modify commands change what is already there. OFFSET is the quickest way to get parallel lines.",
+     "key_points": [
+      "LINE, CIRCLE, ARC, RECTANGLE, POLYGON are the basic draw commands",
+      "OFFSET makes a parallel copy at a given distance",
+      "TRIM cuts back to an edge, EXTEND lengthens to a boundary",
+      "FILLET rounds a corner with a radius, CHAMFER cuts it with a distance"
+     ],
+     "questions": [
+      {
+       "id": "dm1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "Which command creates a parallel copy of a line at a given distance?",
+       "options": [
+        "MIRROR",
+        "OFFSET",
+        "ARRAY",
+        "STRETCH"
+       ],
+       "answer_index": 1,
+       "why": "OFFSET copies at a set distance."
+      },
+      {
+       "id": "dm2",
+       "kind": "mcq",
+       "level": 1,
+       "q": "FILLET is used to",
+       "options": [
+        "cut a corner flat",
+        "round a corner with a radius",
+        "copy an object",
+        "extend a line"
+       ],
+       "answer_index": 1,
+       "why": "FILLET rounds; CHAMFER cuts the corner flat."
+      },
+      {
+       "id": "dm3",
+       "kind": "short",
+       "level": 2,
+       "marks": 4,
+       "q": "Give the command sequence to draw a plate 100 x 60 with 10 mm rounded corners and a 20 mm diameter hole at its centre.",
+       "model_answer_md": "1. `RECTANGLE`, first corner `0,0`, other corner `100,60`.\n2. `EXPLODE` it (or use the Fillet option of RECTANGLE).\n3. `FILLET`, radius `R` = `10`, pick each pair of adjacent sides in turn.\n4. `CIRCLE`, centre `50,30` (use osnap or the coordinates), `D`, diameter `20`.\n5. Add centre lines on a separate layer.",
+       "points": [
+        "RECTANGLE 0,0 to 100,60",
+        "FILLET with radius 10 at all four corners",
+        "CIRCLE centre 50,30 diameter 20"
+       ]
+      },
+      {
+       "id": "dm4",
+       "kind": "short",
+       "level": 2,
+       "marks": 3,
+       "q": "Differentiate between TRIM and EXTEND, and between FILLET and CHAMFER.",
+       "model_answer_md": "- **TRIM** removes the part of an object beyond a cutting edge; **EXTEND** lengthens an object up to a boundary edge.\n- **FILLET** joins two lines with an arc of given radius; **CHAMFER** joins them with a straight line cut at given distances.",
+       "points": [
+        "TRIM removes, EXTEND lengthens",
+        "FILLET: arc with radius",
+        "CHAMFER: straight cut with distances"
+       ]
+      }
+     ]
+    },
+    {
+     "id": "aids-layers",
+     "title": "Drafting aids, layers and dimension styles",
+     "theory_md": "Status-bar aids and keys: **GRID** (F7) shows dots, **SNAP** (F9) forces the cursor to grid steps, **ORTHO** (F8) locks to horizontal/vertical, **POLAR** (F10) locks to set angles, **OSNAP** (F3) picks exact points (endpoint, midpoint, centre, intersection, quadrant, tangent, perpendicular).\n\n**Layers** group objects by colour, linetype and lineweight: e.g. Visible (continuous thick), Hidden (dashed), Centre (chain), Dimension (thin). **LTSCALE** adjusts dash length. **DIMSTYLE** sets arrow size, text height and units; **HATCH** fills sections with thin 45 degree lines.",
+     "basics_md": "Aids stop you clicking 'nearly' on a point: OSNAP makes the click exact. Layers let you switch lines on and off together.",
+     "key_points": [
+      "OSNAP picks exact geometry points (F3); ORTHO locks to 0/90 (F8)",
+      "SNAP/GRID set cursor steps (F9/F7); POLAR locks angles (F10)",
+      "Layers carry colour, linetype and lineweight per type of line",
+      "DIMSTYLE controls arrows, text and units of dimensions"
+     ],
+     "questions": [
+      {
+       "id": "ad1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "The function key that toggles ORTHO is",
+       "options": [
+        "F3",
+        "F7",
+        "F8",
+        "F10"
+       ],
+       "answer_index": 2,
+       "why": "F8 = ORTHO, F3 = OSNAP, F7 = GRID, F9 = SNAP, F10 = POLAR."
+      },
+      {
+       "id": "ad2",
+       "kind": "mcq",
+       "level": 1,
+       "q": "OSNAP is used to",
+       "options": [
+        "lock the cursor to horizontal and vertical",
+        "pick exact points like endpoint and centre",
+        "show the grid",
+        "set text height"
+       ],
+       "answer_index": 1,
+       "why": "OSNAP snaps to geometric points of existing objects."
+      },
+      {
+       "id": "ad3",
+       "kind": "short",
+       "level": 2,
+       "marks": 3,
+       "q": "What are layers and why are they used in an engineering drawing? Name three layers with their linetypes.",
+       "model_answer_md": "A **layer** is a named set of objects that share colour, linetype and lineweight and can be switched on, off or locked together.\n\nThey keep a drawing organised and make line conventions automatic:\n- **Visible:** continuous thick\n- **Hidden:** dashed\n- **Centre:** chain thin\n- (**Dimension:** continuous thin)",
+       "points": [
+        "Layer = named group with colour, linetype, lineweight",
+        "Can be switched off or locked together",
+        "Visible continuous, hidden dashed, centre chain"
+       ]
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "topic": "Theory of projections and reference planes",
+   "subtopics": [
+    {
+     "id": "projection-basics",
+     "title": "Projection: elements and properties",
+     "theory_md": "**Projection** is the image of an object formed on a plane by lines (**projectors**) drawn from its points. Four elements: the **object**, the **centre of projection** (station point or viewer), the **projectors**, and the **plane of projection**.\n\nIn **orthographic** projection the projectors are parallel to each other and perpendicular to the plane, which gives true shape and size where a face is parallel to the plane.\n\n- A line or face parallel to the plane shows true length or true shape.\n- Inclined to the plane: foreshortened.\n- Perpendicular to the plane: a line shows as a point, a face as a line.",
+     "basics_md": "A shadow cast by the sun straight down on the ground is a projection. If the face is flat to the ground the shadow is its exact shape.",
+     "key_points": [
+      "Elements: object, centre of projection, projectors, plane",
+      "Orthographic: parallel projectors perpendicular to the plane",
+      "Parallel to the plane: true size; inclined: shortened; perpendicular: point or line"
+     ],
+     "questions": [
+      {
+       "id": "pb1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "In orthographic projection the projectors are",
+       "options": [
+        "converging to a point",
+        "parallel and perpendicular to the plane",
+        "parallel and inclined to the plane",
+        "curved"
+       ],
+       "answer_index": 1,
+       "why": "Parallel to each other and at right angles to the plane."
+      },
+      {
+       "id": "pb2",
+       "kind": "mcq",
+       "level": 1,
+       "q": "A straight line perpendicular to the plane of projection projects as",
+       "options": [
+        "a line of true length",
+        "a shorter line",
+        "a point",
+        "a curve"
+       ],
+       "answer_index": 2,
+       "why": "All its projectors coincide, giving a point."
+      },
+      {
+       "id": "pb3",
+       "kind": "short",
+       "level": 2,
+       "marks": 3,
+       "q": "Define projection and name its four elements. Why is orthographic projection used for working drawings?",
+       "model_answer_md": "**Projection** is the image of an object on a plane obtained by projectors from its points.\n\n**Elements:** object, centre of projection (viewer), projectors, plane of projection.\n\nOrthographic projection is used because faces parallel to the plane keep their **true shape and size**, so dimensions can be read exactly.",
+       "points": [
+        "Definition: image on a plane by projectors",
+        "Object, centre of projection, projectors, plane",
+        "True shape and size, so exact dimensions"
+       ]
+      }
+     ]
+    },
+    {
+     "id": "reference-planes",
+     "title": "Reference planes and quadrants",
+     "theory_md": "Two mutually perpendicular planes: the **Horizontal Plane (HP)** and **Vertical Plane (VP)**; their line of intersection is **XY**. A third, the **Profile Plane (PP)**, is perpendicular to both. HP and VP divide space into four **quadrants**: I (above HP, in front of VP), II (above, behind), III (below, behind), IV (below, in front).\n\nThe **front view** (elevation) is on the VP, the **top view** (plan) on the HP, the **side view** on the PP. To get both on one sheet, the HP is rotated $90^\\circ$ **clockwise** about XY until it is in line with the VP.\n\nOnly the **first and third quadrants** are used, because in the second and fourth the two views overlap after rotation.",
+     "basics_md": "Imagine standing in the corner of a room: the floor is the HP, the wall facing you is the VP. The space in front of the wall and above the floor is the first quadrant.",
+     "key_points": [
+      "HP, VP and PP are mutually perpendicular; HP and VP meet in XY",
+      "Four quadrants; FV on VP, TV on HP, SV on PP",
+      "HP is rotated 90 degrees clockwise about XY",
+      "Only 1st and 3rd quadrants are used: views overlap in the 2nd and 4th"
+     ],
+     "questions": [
+      {
+       "id": "rp1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "A point lies above the HP and behind the VP. It is in the",
+       "options": [
+        "first quadrant",
+        "second quadrant",
+        "third quadrant",
+        "fourth quadrant"
+       ],
+       "answer_index": 1,
+       "why": "Above HP and behind VP is the second quadrant."
+      },
+      {
+       "id": "rp2",
+       "kind": "mcq",
+       "level": 2,
+       "q": "For an object in the third quadrant, the front view lies",
+       "options": [
+        "above XY and the top view below XY",
+        "below XY and the top view above XY",
+        "both above XY",
+        "both below XY"
+       ],
+       "answer_index": 1,
+       "why": "Third quadrant: below HP so FV below XY, behind VP so TV above XY."
+      },
+      {
+       "id": "rp3",
+       "kind": "short",
+       "level": 2,
+       "marks": 3,
+       "q": "Explain how the front view and top view are shown on one flat sheet.",
+       "model_answer_md": "The object is placed in the first quadrant. Its front view is projected on the **VP** and its top view on the **HP**.\n\nThe HP is then rotated **$90^\\circ$ clockwise** about XY until it lies in the plane of the VP. The top view now falls **below XY** and the front view **above XY**, on the same projectors perpendicular to XY.",
+       "points": [
+        "FV on VP, TV on HP",
+        "HP rotated 90 degrees clockwise about XY",
+        "TV below XY, FV above XY on the same projector"
+       ]
+      },
+      {
+       "id": "rp4",
+       "kind": "short",
+       "level": 3,
+       "marks": 2,
+       "q": "Why are the second and fourth quadrants not used?",
+       "model_answer_md": "In the second and fourth quadrants, after the HP is rotated both views fall on the **same side of XY** and overlap, which makes the drawing confusing. The first and third quadrants keep the views on opposite sides of XY, hence **first-angle** and **third-angle** projection.",
+       "points": [
+        "Views overlap on the same side of XY",
+        "Only first and third angle projection are used"
+       ]
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "topic": "Types of projection methods",
+   "subtopics": [
+    {
+     "id": "classification",
+     "title": "Central, parallel and pictorial methods",
+     "theory_md": "**Central (perspective)** projection: projectors meet at a point, the station point. Objects look realistic, nearer things appear larger and parallel lines converge at **vanishing points**; true dimensions are lost.\n\n**Parallel** projection: the centre is at infinity, so the projectors are parallel. If the projectors are inclined to the plane it is **oblique**; if perpendicular it is **orthographic**.\n\nOrthographic projection is *multiview* (two or more views on perpendicular planes) or *axonometric* (a single pictorial view: isometric, dimetric, trimetric).",
+     "basics_md": "Perspective is how a camera or eye sees (far things smaller). Parallel projection is as if the viewer were infinitely far away, so size does not shrink.",
+     "key_points": [
+      "Perspective: projectors converge, realistic, vanishing points",
+      "Parallel: oblique (inclined) or orthographic (perpendicular)",
+      "Orthographic: multiview, or axonometric single pictorial view"
+     ],
+     "questions": [
+      {
+       "id": "cl1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "In perspective projection the projectors",
+       "options": [
+        "are parallel and perpendicular to the plane",
+        "are parallel and oblique to the plane",
+        "converge at the station point",
+        "are curved"
+       ],
+       "answer_index": 2,
+       "why": "Central projection: projectors meet at the station point."
+      },
+      {
+       "id": "cl2",
+       "kind": "mcq",
+       "level": 1,
+       "q": "Which of the following is a pictorial projection?",
+       "options": [
+        "first angle projection",
+        "isometric projection",
+        "third angle projection",
+        "plan"
+       ],
+       "answer_index": 1,
+       "why": "Isometric is axonometric, a single pictorial view."
+      },
+      {
+       "id": "cl3",
+       "kind": "short",
+       "level": 2,
+       "marks": 4,
+       "q": "Differentiate perspective, oblique and orthographic projections.",
+       "model_answer_md": "- **Perspective:** projectors converge to a station point; realistic with vanishing points, but dimensions are not true.\n- **Oblique:** parallel projectors inclined to the plane; the face parallel to the plane keeps true shape (e.g. cavalier, cabinet).\n- **Orthographic:** parallel projectors perpendicular to the plane; gives true shapes and is used for working drawings (multiview).",
+       "points": [
+        "Perspective: converging projectors, vanishing points",
+        "Oblique: parallel but inclined projectors",
+        "Orthographic: parallel and perpendicular, true shape"
+       ]
+      }
+     ]
+    },
+    {
+     "id": "isometric-oblique",
+     "title": "Isometric and oblique views",
+     "theory_md": "**Axonometric** projection shows the object tilted so that three faces appear: **isometric** (all three axes equally foreshortened, axes $120^\\circ$ apart, one vertical), **dimetric** (two equal), **trimetric** (none equal).\n\n**Isometric scale** $=\\sqrt{2/3}=0.816$, so isometric projection is $0.816$ times the true length; an **isometric drawing** uses true lengths and looks $1/0.816=1.225$ times larger. Circles become ellipses.\n\n**Oblique** projection: the front face is true shape, the depth axis is drawn at $30^\\circ$ to $45^\\circ$. **Cavalier:** depth full size. **Cabinet:** depth half size.",
+     "basics_md": "Isometric draws a cube with equal looking edges and a 120 degree star of axes. Oblique keeps the front face flat and just slides the depth back at an angle.",
+     "key_points": [
+      "Isometric axes 120 degrees apart; isometric scale 0.816",
+      "Isometric drawing uses true lengths (1.225 times larger)",
+      "Dimetric: two angles equal; trimetric: none",
+      "Oblique: front face true shape; cavalier full depth, cabinet half depth"
+     ],
+     "questions": [
+      {
+       "id": "io1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "The isometric scale factor is",
+       "options": [
+        "0.5",
+        "0.707",
+        "0.816",
+        "1.225"
+       ],
+       "answer_index": 2,
+       "why": "sqrt(2/3) = 0.816."
+      },
+      {
+       "id": "io2",
+       "kind": "mcq",
+       "level": 1,
+       "q": "In cabinet oblique projection the receding edges are drawn",
+       "options": [
+        "full size",
+        "half size",
+        "twice size",
+        "not at all"
+       ],
+       "answer_index": 1,
+       "why": "Cavalier: full size; cabinet: half."
+      },
+      {
+       "id": "io3",
+       "kind": "numerical",
+       "level": 2,
+       "marks": 2,
+       "q": "Find the length of each edge of a 50 mm cube in isometric projection, and the factor between isometric drawing and projection.",
+       "model_answer_md": "Isometric projection edge $=50\\times0.816=40.8$ mm.\n\nIsometric drawing uses 50 mm, so the ratio is $50/40.8=1/0.816=1.225$.",
+       "points": [
+        "50 x 0.816 = 40.8 mm",
+        "Drawing/projection = 1.225"
+       ]
+      },
+      {
+       "id": "io4",
+       "kind": "numerical",
+       "level": 3,
+       "marks": 3,
+       "q": "A block 80 x 60 x 40 mm is drawn in isometric projection. Give the lengths of its three edge directions, and the angle between the axes.",
+       "model_answer_md": "Edges $=0.816\\times$ true length:\n- $80\\to65.3$ mm\n- $60\\to49.0$ mm\n- $40\\to32.7$ mm\n\nThe three axes are $120^\\circ$ apart (one vertical, two at $30^\\circ$ to the horizontal).",
+       "points": [
+        "65.3, 49.0 and 32.7 mm",
+        "Scale factor 0.816",
+        "Axes 120 degrees apart"
+       ]
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "topic": "Orthographic projection",
+   "subtopics": [
+    {
+     "id": "first-angle",
+     "title": "First-angle layout and line conventions",
+     "theory_md": "**First angle:** the object lies between the observer and the plane (observer, object, plane). The **front view** is on top; the **top view** is **below** it; the **left-hand side view** goes to the **right** of the front view and the **right-hand side view** to the **left**. Symbol: truncated cone with its end view on the right.\n\n**Third angle:** plane between observer and object; top view above, left view on the left.\n\nAlignment: height is common to front and side views; width to front and top; depth to top and side (use a $45^\\circ$ mitre line). Choose the front view that shows the most shape with fewest hidden lines.\n\nHidden edges dashed, axes chain thin; visible over hidden over centre.",
+     "basics_md": "In first angle the object sits in front of the wall; you look from the front, and every other view is thrown to the opposite side of the object.",
+     "key_points": [
+      "First angle: observer, object, plane; TV below FV",
+      "LHSV to the right of FV, RHSV to the left",
+      "Third angle: TV above FV, LHSV on the left",
+      "Heights common FV-SV, widths FV-TV, depths TV-SV by 45 degree mitre"
+     ],
+     "questions": [
+      {
+       "id": "fa1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "In first angle projection the top view is placed",
+       "options": [
+        "above the front view",
+        "below the front view",
+        "to the left",
+        "to the right"
+       ],
+       "answer_index": 1,
+       "why": "First angle: TV below FV."
+      },
+      {
+       "id": "fa2",
+       "kind": "mcq",
+       "level": 1,
+       "q": "In first angle projection the left-hand side view is drawn",
+       "options": [
+        "to the left of the front view",
+        "to the right of the front view",
+        "above the front view",
+        "below the top view"
+       ],
+       "answer_index": 1,
+       "why": "The left view is thrown to the opposite side: right of the FV."
+      },
+      {
+       "id": "fa3",
+       "kind": "short",
+       "level": 2,
+       "marks": 4,
+       "q": "Differentiate first angle and third angle projection.",
+       "model_answer_md": "| | First angle | Third angle |\n|---|---|---|\n| Position | object between observer and plane | plane between observer and object |\n| Top view | below FV | above FV |\n| Left view | right of FV | left of FV |\n| Plane | opaque | transparent |\n| Symbol | cone, end view on right | cone, end view on left |",
+       "points": [
+        "Order: observer-object-plane vs observer-plane-object",
+        "Top view below vs above FV",
+        "Left view right of vs left of FV",
+        "Symbols differ"
+       ]
+      },
+      {
+       "id": "fa4",
+       "kind": "mcq",
+       "level": 2,
+       "q": "A visible edge and a hidden edge coincide in a view. The line drawn is",
+       "options": [
+        "dashed",
+        "continuous thick",
+        "chain thin",
+        "both"
+       ],
+       "answer_index": 1,
+       "why": "Visible has priority over hidden."
+      },
+      {
+       "id": "fa5",
+       "kind": "mcq",
+       "level": 2,
+       "q": "In the left-hand side view of first angle projection the front of the object appears on",
+       "options": [
+        "the left of the view",
+        "the right of the view",
+        "the top of the view",
+        "the bottom of the view"
+       ],
+       "answer_index": 1,
+       "why": "Looking from the left, the front of the object is on your right."
+      }
+     ]
+    },
+    {
+     "id": "stepped-blocks",
+     "title": "Stepped blocks, notches and slots",
+     "theory_md": "Method for a stepped block:\n1. Fix the front view from the arrow; draw the **overall outline** of each view first from the overall length, height and depth.\n2. Cut in the steps, notches and slots one by one, projecting every vertical edge from the FV down to the TV, and every horizontal edge across to the SV.\n3. Depths come from the TV through a $45^\\circ$ mitre line.\n4. An edge that cannot be seen in a view is **dashed**; a step in the top face shows as a line in the FV and TV.\n\nCheck that each step shows in all three views.",
+     "basics_md": "Build the outline of a plain box first, then cut each step off it. A step shows as a line wherever you see its edge.",
+     "key_points": [
+      "Overall outline in all views first, then add steps and slots",
+      "Project vertical edges FV to TV and horizontal edges FV to SV",
+      "Depths from TV by 45 degree mitre",
+      "Hidden edges dashed; every step must show in each view"
+     ],
+     "questions": [
+      {
+       "id": "sb1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "Heights in the side view are taken from the",
+       "options": [
+        "top view",
+        "front view",
+        "title block",
+        "section"
+       ],
+       "answer_index": 1,
+       "why": "Height is common to FV and SV."
+      },
+      {
+       "id": "sb2",
+       "kind": "short",
+       "level": 2,
+       "marks": 5,
+       "q": "A block 60 long, 40 wide and 30 high has a step 20 wide and 15 deep cut along its full length at the top front edge. Draw its three views in first angle (describe them).",
+       "model_answer_md": "**Front view:** rectangle $60\\times30$ with a horizontal visible line at height $15$ across the full length (the step edge).\n\n**Top view** (below): rectangle $60\\times40$ with a line parallel to the front edge, $20$ from it, across the full length.\n\n**Left-hand side view** (right of FV): L-shaped outline, $40$ wide and $30$ high; the step $20\\times15$ is cut from the **front (right)** top corner.\n\nAll views aligned; no hidden lines because the step is open.",
+       "points": [
+        "FV 60 x 30 with line at 15",
+        "TV 60 x 40 with line 20 from front edge",
+        "SV L-shaped with 20 x 15 notch at front top corner",
+        "Views aligned, outlines thick"
+       ]
+      },
+      {
+       "id": "sb3",
+       "kind": "mcq",
+       "level": 2,
+       "q": "A slot cut in the top of a block along its full length, seen in the front view as a notch, appears in the top view as",
+       "options": [
+        "a circle",
+        "two parallel lines",
+        "a point",
+        "a triangle"
+       ],
+       "answer_index": 1,
+       "why": "The slot walls show as two parallel lines in the top view."
+      },
+      {
+       "id": "sb4",
+       "pyq": "e41c2ef289feeb49",
+       "level": 2,
+       "points": [
+        "First angle layout: front view in the arrow direction, top view directly below it, left-hand side view to the right of the front view",
+        "FV: overall outline with the two raised blocks and the steps as marked (15, 20, 25, 30, 40)",
+        "TV: block widths and steps projected down from the FV",
+        "SV (left hand): heights from the FV, depths from the TV with a mitre line",
+        "Views aligned: heights from the front view, widths from the top view, depths transferred by 45 degree mitre or arcs",
+        "Hidden lines dashed, centre lines chain thin, outlines thick; stated assumptions for missing dimensions"
+       ]
+      },
+      {
+       "id": "sb5",
+       "pyq": "d9c29167b4f9217e",
+       "level": 2,
+       "points": [
+        "First angle layout: front view in the arrow direction, top view directly below it, left-hand side view to the right of the front view",
+        "Base 80 x 40 x 10, middle step 40 x 20, stepped heights 20 and 40 drawn in the elevation",
+        "Plan 80 x 40 with the step edges at the dimensioned depths",
+        "Left-hand side view on the right of the elevation with heights 10, 20, 40",
+        "Views aligned: heights from the front view, widths from the top view, depths transferred by 45 degree mitre or arcs",
+        "Hidden lines dashed, centre lines chain thin, outlines thick; stated assumptions for missing dimensions"
+       ]
+      },
+      {
+       "id": "sb6",
+       "pyq": "3242d7feb9fd6faf",
+       "level": 2,
+       "points": [
+        "First angle layout: front view in the arrow direction, top view directly below it, right-hand side view to the left of the front view",
+        "Block 40 x 30 x 25 with base height 10 and the step/slot widths 10, 20, 10, 15",
+        "Plan shows the slot edges as lines across the depth 30",
+        "Right-hand side view placed on the left of the elevation",
+        "Views aligned: heights from the front view, widths from the top view, depths transferred by 45 degree mitre or arcs",
+        "Hidden lines dashed, centre lines chain thin, outlines thick; stated assumptions for missing dimensions"
+       ]
+      },
+      {
+       "id": "sb7",
+       "pyq": "b47342706d88d9f6",
+       "level": 3,
+       "points": [
+        "First angle layout: front view in the arrow direction, top view directly below it, left-hand side view to the right of the front view",
+        "Overall 80 wide, 90 deep, 60 high; steps of heights 30 and 60 and the base notch 15, 12, 15",
+        "TV: rectangle 80 x 90 with step lines at 20, 35 and 35 and the slot",
+        "SV: profile with heights 60, 30, 20; hidden lines for the slot",
+        "Views aligned: heights from the front view, widths from the top view, depths transferred by 45 degree mitre or arcs",
+        "Hidden lines dashed, centre lines chain thin, outlines thick; stated assumptions for missing dimensions"
+       ]
+      },
+      {
+       "id": "sb8",
+       "pyq": "3740e8084d0f7bb8",
+       "level": 3,
+       "points": [
+        "First angle layout: front view in the arrow direction, top view directly below it, left-hand side view to the right of the front view",
+        "Block 120 x 60 x 35; left wall 15, top recess 10 deep, right posts and 30 wide slot 20 deep",
+        "Two vertical holes dia 20 shown as circles in the TV and dashed lines in FV and SV",
+        "Underside step 10 high, 60 long shown dashed where hidden",
+        "Views aligned: heights from the front view, widths from the top view, depths transferred by 45 degree mitre or arcs",
+        "Hidden lines dashed, centre lines chain thin, outlines thick; stated assumptions for missing dimensions"
+       ]
+      }
+     ]
+    },
+    {
+     "id": "holes-round",
+     "title": "Holes, bosses and round features",
+     "theory_md": "A **hole** shows as a **circle** in the view looking along its axis and as **two dashed lines** (its generators) in the views across it, with a **chain thin centre line** in each. A **counterbore** or spot-face shows as two concentric circles, and two dashed rectangles beside.\n\nA rounded end (radius $R$) is an arc in the view along its axis; in the other views it is a rectangle with a tangent line where the arc meets the flat. Boss and lug heights come from the FV, the circle centre sits on the common centre line.\n\nDraw centre lines first, then the circles and arcs.",
+     "basics_md": "A hole is a tube: from the end you see a circle, from the side you see a pair of lines you cannot see through, so they are dashed.",
+     "key_points": [
+      "Hole: circle along its axis, two dashed lines across it",
+      "Centre lines in every view of a hole or round boss",
+      "Counterbore: concentric circles, stepped dashed lines",
+      "Rounded end: arc in one view, rectangle in the others"
+     ],
+     "questions": [
+      {
+       "id": "hr1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "A through hole whose axis is vertical appears in the front view as",
+       "options": [
+        "a circle",
+        "two dashed lines",
+        "two continuous thick lines",
+        "a point"
+       ],
+       "answer_index": 1,
+       "why": "Across its axis the hole is hidden: two dashed lines."
+      },
+      {
+       "id": "hr2",
+       "kind": "short",
+       "level": 2,
+       "marks": 4,
+       "q": "A plate 80 x 50 x 20 has a vertical through hole of diameter 30 at its centre. Describe the three views in first angle.",
+       "model_answer_md": "**Top view:** rectangle $80\\times50$ with a circle $\\varnothing30$ at its centre and chain thin centre lines.\n\n**Front view:** rectangle $80\\times20$ with **two dashed vertical lines** $30$ apart, symmetrical about the centre line.\n\n**Left-hand side view:** rectangle $50\\times20$ (on the right of the FV) with two dashed lines $30$ apart.\n\nCentre lines in all views.",
+       "points": [
+        "TV: circle dia 30 with centre lines",
+        "FV: two dashed lines 30 apart",
+        "SV: two dashed lines 30 apart",
+        "Centre lines shown"
+       ]
+      },
+      {
+       "id": "hr3",
+       "kind": "mcq",
+       "level": 2,
+       "q": "A counterbored hole seen from the end appears as",
+       "options": [
+        "one circle",
+        "two concentric circles",
+        "a rectangle",
+        "a point"
+       ],
+       "answer_index": 1,
+       "why": "The counterbore and the through hole make two concentric circles."
+      },
+      {
+       "id": "hr4",
+       "kind": "short",
+       "level": 3,
+       "marks": 5,
+       "q": "A plate 20 thick has a hole dia 12 counterbored to dia 22 and 6 deep from the top. Describe the front view and top view.",
+       "model_answer_md": "**Top view:** two concentric circles $\\varnothing12$ and $\\varnothing22$ with centre lines.\n\n**Front view** (hidden detail): a stepped pair of dashed lines: $22$ apart for the top $6$ mm, then $12$ apart for the remaining $14$ mm, with the centre line.\n\nIf the front view is a section the same profile is seen as full lines.",
+       "points": [
+        "TV: concentric circles dia 12 and 22",
+        "FV: dashed lines 22 apart for 6 deep",
+        "Then dashed lines 12 apart for 14 deep",
+        "Centre line"
+       ]
+      },
+      {
+       "id": "hr5",
+       "pyq": "b6cfbb18704c42ca",
+       "level": 3,
+       "points": [
+        "First angle layout: front view in the arrow direction, top view directly below it, right-hand side view to the left of the front view",
+        "Front view with the R30 rounded end and the dia 30 hole as a circle, outline and slot depth lines",
+        "TV: widths from the FV, depths 60, 70, 40; hidden lines for hole and pocket",
+        "Right end view on the left of the FV: R30 round top, steps 15, 15, 15, slot width, centre lines",
+        "Views aligned: heights from the front view, widths from the top view, depths transferred by 45 degree mitre or arcs",
+        "Hidden lines dashed, centre lines chain thin, outlines thick; stated assumptions for missing dimensions"
+       ]
+      },
+      {
+       "id": "hr6",
+       "pyq": "c59f84cdc4c89d3f",
+       "level": 3,
+       "points": [
+        "First angle layout: front view in the arrow direction, top view directly below it, left-hand side view to the right of the front view",
+        "Left block 50 high with the R25 round end and dia 20 hole, lower step 30, 12 slot, sloping rib",
+        "TV: semicircle R25 with the dia 20 hole as a full circle with centre lines",
+        "Use base measures 25, 12, 15, 13 along XY",
+        "Views aligned: heights from the front view, widths from the top view, depths transferred by 45 degree mitre or arcs",
+        "Hidden lines dashed, centre lines chain thin, outlines thick; stated assumptions for missing dimensions"
+       ]
+      },
+      {
+       "id": "hr7",
+       "pyq": "7763d25a6d32dcb1",
+       "level": 3,
+       "points": [
+        "First angle layout: front view in the arrow direction, top view directly below it, left-hand side view to the right of the front view",
+        "Base block with two spot-faced holes (dia 15, dia 30 x 5 deep counterbore) shown as concentric circles in TV and stepped dashed lines in FV",
+        "Curved web R15, R50 rising to a lug with boss dia 15 and hole dia 10",
+        "Assumed dimensions stated where the scan is illegible",
+        "Views aligned: heights from the front view, widths from the top view, depths transferred by 45 degree mitre or arcs",
+        "Hidden lines dashed, centre lines chain thin, outlines thick; stated assumptions for missing dimensions"
+       ]
+      },
+      {
+       "id": "hr8",
+       "pyq": "0db40a319076fd9d",
+       "level": 3,
+       "points": [
+        "First angle layout: front view in the arrow direction, top view directly below it, left-hand side view to the right of the front view",
+        "Base block, upright plate with semicircular top and the R20 tunnel, half-cylinder in front",
+        "Triangular rib 15 thick on the centre line",
+        "FV shows the arch and circle R20; TV the rectangles; SV the profile with rib and hidden lines",
+        "Views aligned: heights from the front view, widths from the top view, depths transferred by 45 degree mitre or arcs",
+        "Hidden lines dashed, centre lines chain thin, outlines thick; stated assumptions for missing dimensions"
+       ]
+      },
+      {
+       "id": "hr9",
+       "pyq": "f763a6a32124897b",
+       "level": 2,
+       "points": [
+        "First angle layout: front view in the arrow direction, top view directly below it, left-hand side view to the right of the front view",
+        "Block 100 x 90 x 70 with cylinder dia 72 on top (circle in TV, rectangle in FV and SV)",
+        "Rectangular slot or legs below (15, 40, 20, 20) and the circular hole with dashed lines and centre lines",
+        "Views aligned: heights from the front view, widths from the top view, depths transferred by 45 degree mitre or arcs",
+        "Hidden lines dashed, centre lines chain thin, outlines thick; stated assumptions for missing dimensions"
+       ]
+      },
+      {
+       "id": "hr10",
+       "pyq": "c7682e7df7321204",
+       "level": 2,
+       "points": [
+        "First angle layout: front view in the arrow direction, top view directly below it, right-hand side view to the left of the front view",
+        "Base 45 + 30 + 45 = 120 long, 10 high with central notch 30 wide, depth 50",
+        "Two lugs with R10 round tops, heights 50 and 58, holes dia 20 and 25 at height 32 as circles in the FV",
+        "TV: base 120 x 50, lugs as thin rectangles, holes hidden; SV: base 10, tall lug 58",
+        "Views aligned: heights from the front view, widths from the top view, depths transferred by 45 degree mitre or arcs",
+        "Hidden lines dashed, centre lines chain thin, outlines thick; stated assumptions for missing dimensions"
+       ]
+      },
+      {
+       "id": "hr11",
+       "pyq": "e303ceb8733edd1c",
+       "level": 3,
+       "points": [
+        "First angle layout: front view in the arrow direction, top view directly below it, left-hand side view to the right of the front view",
+        "Base plate 75 x 63 x 15 with a 12 x 5 notch at the front edge and two holes dia 12",
+        "Inclined rib (28, 45, 12) to a vertical boss: outer dia 36, bore dia 22, height 25",
+        "TV: concentric circles for the boss and holes with centre lines; FV: rib as a slanted line, hidden bore dashed",
+        "Views aligned: heights from the front view, widths from the top view, depths transferred by 45 degree mitre or arcs",
+        "Hidden lines dashed, centre lines chain thin, outlines thick; stated assumptions for missing dimensions"
+       ]
+      },
+      {
+       "id": "hr12",
+       "pyq": "0caf6570a0b0086a",
+       "level": 3,
+       "points": [
+        "First angle layout: front view in the arrow direction, top view directly below it, right-hand side view to the left of the front view",
+        "FV: vertical lug with R20 rounded top and the dia 20 hole concentric with the arc, base thickness line",
+        "TV: base plate rectangle with the chamfer at its free end, lug as a thin rectangle with hidden hole lines",
+        "Right side view on the left of the FV with lug and base profile",
+        "Views aligned: heights from the front view, widths from the top view, depths transferred by 45 degree mitre or arcs",
+        "Hidden lines dashed, centre lines chain thin, outlines thick; stated assumptions for missing dimensions"
+       ]
+      },
+      {
+       "id": "hr13",
+       "pyq": "39829a52e3aaf626",
+       "level": 3,
+       "points": [
+        "First angle layout: front view in the arrow direction, top view directly below it, right-hand side view to the left of the front view",
+        "Half-round hump R30 appears as a semicircle in the FV, rectangle 50 long in the TV",
+        "Slot of width 10 and angled rib shown as lines; rectangular notch 30 wide at the foot",
+        "Lug with hole: concentric circles R15 and R17 in the TV, height 15 in the FV",
+        "Views aligned: heights from the front view, widths from the top view, depths transferred by 45 degree mitre or arcs",
+        "Hidden lines dashed, centre lines chain thin, outlines thick; stated assumptions for missing dimensions"
+       ]
+      },
+      {
+       "id": "hr14",
+       "pyq": "5a40196abfed4bf4",
+       "level": 3,
+       "points": [
+        "First angle layout: front view in the arrow direction, top view directly below it, left-hand side view to the right of the front view",
+        "Base plate 100 x 50 x 10 with an upright 40 wide (x 30 to 70) with R20 top, dia 20 hole at 15 above the plate",
+        "Rectangular hole 10 x 15 in the right 30 mm portion, assumed centred",
+        "FV shows the arch and hole circle; TV the rectangles with hidden hole lines; one side view",
+        "Views aligned: heights from the front view, widths from the top view, depths transferred by 45 degree mitre or arcs",
+        "Hidden lines dashed, centre lines chain thin, outlines thick; stated assumptions for missing dimensions"
+       ]
+      }
+     ]
+    },
+    {
+     "id": "inclined-faces",
+     "title": "Inclined faces, ribs and chamfers",
+     "theory_md": "An **inclined face** is seen **edge-on** (a slanted line) in the view perpendicular to its slope direction, and as a **foreshortened surface** in the others. Its **true shape** appears only in a view perpendicular to it.\n\n- A face perpendicular to the VP and inclined to the HP: slanted line in the FV, a rectangle in the TV and SV.\n- A **rib** (web) is not hatched in a view; it shows as a triangle in the view across it.\n- A **chamfer** at $45^\\circ$ adds a line in the views where its edges are seen.\n\nProject the two ends of every slanted edge from view to view; the line joining them gives the edge.",
+     "basics_md": "A slope is a tilted face. Look at it from the side and it is a slanted line; look from above and it is a plain rectangle (a bit shorter than its real length).",
+     "key_points": [
+      "Inclined face: slanted line in the view where it is edge-on",
+      "Foreshortened in other views; true shape only when viewed perpendicular",
+      "Project both ends of each slanted edge across the views",
+      "Rib shows as a triangle across it; chamfer adds an edge line"
+     ],
+     "questions": [
+      {
+       "id": "if1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "A face perpendicular to the VP and inclined to the HP appears in the front view as",
+       "options": [
+        "its true shape",
+        "a slanted line",
+        "a point",
+        "a circle"
+       ],
+       "answer_index": 1,
+       "why": "Perpendicular to the VP means edge-on in the FV: a slanted line."
+      },
+      {
+       "id": "if2",
+       "kind": "short",
+       "level": 2,
+       "marks": 5,
+       "q": "A wedge has a 60 x 40 base. Its height is 30 at the left end and 10 at the right end, with the top sloping uniformly. Describe its views in first angle.",
+       "model_answer_md": "**Front view:** trapezium, $60$ long, $30$ high at the left and $10$ high at the right; the top is a slanted line.\n\n**Top view** (below): rectangle $60\\times40$ with no inner line (the slope fills it).\n\n**Left-hand side view** (right of FV): rectangle $40\\times30$ (the tall left end), with a **dashed line at height 10** for the lower right end behind it.",
+       "points": [
+        "FV trapezium 30 and 10 high",
+        "TV plain rectangle 60 x 40",
+        "SV rectangle 40 x 30",
+        "Dashed line at height 10 in the SV"
+       ]
+      },
+      {
+       "id": "if3",
+       "kind": "mcq",
+       "level": 2,
+       "q": "In a front view, a rib that stands across the view is shown",
+       "options": [
+        "hatched",
+        "as a triangle (outline), not hatched",
+        "dashed always",
+        "omitted"
+       ],
+       "answer_index": 1,
+       "why": "Ribs are drawn as their outline and are not hatched in a normal view."
+      },
+      {
+       "id": "if4",
+       "pyq": "e299b63420e19140",
+       "level": 2,
+       "points": [
+        "First angle layout: front view in the arrow direction, top view directly below it, left-hand side view to the right of the front view",
+        "Overall 80 x 50 x 65, base 15 thick, L-shaped; slot width 20",
+        "V-notch (20, 5, 10) at the top of the tall limb: two slanted lines in the FV, a rectangle in the TV",
+        "SV with the slot and the notch hidden lines",
+        "Views aligned: heights from the front view, widths from the top view, depths transferred by 45 degree mitre or arcs",
+        "Hidden lines dashed, centre lines chain thin, outlines thick; stated assumptions for missing dimensions"
+       ]
+      },
+      {
+       "id": "if5",
+       "pyq": "47253023a8ba8a7d",
+       "level": 2,
+       "points": [
+        "First angle layout: front view in the arrow direction, top view directly below it, left-hand side view to the right of the front view",
+        "Base slab 75 x 50 x 12 with a 25 x 12 notch at the front",
+        "Upper block on the back half 25 high, flat top 20 long and a sloping face down to the slab: slanted line in the FV and SV",
+        "TV: rectangles with the slope start and end edges",
+        "Views aligned: heights from the front view, widths from the top view, depths transferred by 45 degree mitre or arcs",
+        "Hidden lines dashed, centre lines chain thin, outlines thick; stated assumptions for missing dimensions"
+       ]
+      },
+      {
+       "id": "if6",
+       "pyq": "a73a8a1a5516acc9",
+       "level": 3,
+       "points": [
+        "First angle layout: front view in the arrow direction, top view directly below it, left-hand side view to the right of the front view",
+        "Sloping top face is a slanted line in the FV; the step with edge AB is a vertical line",
+        "TV: overall rectangle with the notch as an interior rectangle and a line where the slope meets the step",
+        "Left side view on the right of the FV, assuming dimensions",
+        "Views aligned: heights from the front view, widths from the top view, depths transferred by 45 degree mitre or arcs",
+        "Hidden lines dashed, centre lines chain thin, outlines thick; stated assumptions for missing dimensions"
+       ]
+      },
+      {
+       "id": "if7",
+       "pyq": "ce59d6865b81e076",
+       "level": 3,
+       "points": [
+        "First angle layout: front view in the arrow direction, top view directly below it, right-hand side view to the left of the front view",
+        "Base 90 x 50 x 15 with chamfered front right corner (75 front, 30 on the right)",
+        "Upright block 35 long, 30 high with a slot 15 wide, 20 deep",
+        "Triangular rib 15 thick at the back; chamfer shows as a slanted line in the TV",
+        "Views aligned: heights from the front view, widths from the top view, depths transferred by 45 degree mitre or arcs",
+        "Hidden lines dashed, centre lines chain thin, outlines thick; stated assumptions for missing dimensions"
+       ]
+      },
+      {
+       "id": "if8",
+       "pyq": "3ebd863c6b2c2638",
+       "level": 3,
+       "points": [
+        "First angle layout: front view in the arrow direction, top view directly below it, left-hand side view to the right of the front view",
+        "Base 100 long, 25 high; inclined plate with a dia hole 45 above the base, supported by the 25 end block",
+        "TV: base 100 x 40 with the 60 gap and the footprint of the inclined plate",
+        "Hole shown as dashed lines because the plate is inclined to the planes",
+        "Views aligned: heights from the front view, widths from the top view, depths transferred by 45 degree mitre or arcs",
+        "Hidden lines dashed, centre lines chain thin, outlines thick; stated assumptions for missing dimensions"
+       ]
+      },
+      {
+       "id": "if9",
+       "pyq": "10e9c7f3b71626b0",
+       "level": 3,
+       "points": [
+        "First angle layout: front view in the arrow direction, top view directly below it, left-hand side view to the right of the front view",
+        "Base 60 x 60 x 20, raised portion 40 high with an upper step 20 x 20",
+        "Sloping triangular rib from the raised portion to the base: slanted line in the FV",
+        "TV below, left-hand side view to the right of the FV",
+        "Views aligned: heights from the front view, widths from the top view, depths transferred by 45 degree mitre or arcs",
+        "Hidden lines dashed, centre lines chain thin, outlines thick; stated assumptions for missing dimensions"
+       ]
+      },
+      {
+       "id": "if10",
+       "pyq": "4b6d6dedf99f5582",
+       "level": 3,
+       "points": [
+        "First angle layout: front view in the arrow direction, top view directly below it, right-hand side view to the left of the front view",
+        "Base slab 90 x 50 x 15, tall U-shaped bracket 30 high, lower portion 20",
+        "Sloping rib 15 as a slanted line in the FV; chamfers 30 in the TV",
+        "Right end view on the left of the FV",
+        "Views aligned: heights from the front view, widths from the top view, depths transferred by 45 degree mitre or arcs",
+        "Hidden lines dashed, centre lines chain thin, outlines thick; stated assumptions for missing dimensions"
+       ]
+      },
+      {
+       "id": "if11",
+       "pyq": "d6116b2b731934c9",
+       "level": 3,
+       "points": [
+        "First angle layout: front view in the arrow direction, top view directly below it, right-hand side view to the left of the front view",
+        "L-block 100 x 50, tall part 60 high (x 0 to 30), low part 20 high",
+        "Semicircular recess R15 in the tall part, sloping rib 10 thick from the top of the tall part to the right end",
+        "45 degree chamfer and 30 wide bottom notch, hidden lines dashed",
+        "Views aligned: heights from the front view, widths from the top view, depths transferred by 45 degree mitre or arcs",
+        "Hidden lines dashed, centre lines chain thin, outlines thick; stated assumptions for missing dimensions"
+       ]
+      },
+      {
+       "id": "if12",
+       "pyq": "435ee8224e1f2747",
+       "level": 3,
+       "points": [
+        "First angle layout: front view in the arrow direction, top view directly below it, left-hand side view to the right of the front view",
+        "Overall height 50, length 25 + 12 + 15 + 13 = 65, half-round boss R25 with dia 20 hole",
+        "Stepped block 30 high; inclined slot or rib 12 wide as a slanted line in the FV",
+        "TV: boss as semicircle R25, hole circle with centre lines; LHSV heights 50 and 30",
+        "Views aligned: heights from the front view, widths from the top view, depths transferred by 45 degree mitre or arcs",
+        "Hidden lines dashed, centre lines chain thin, outlines thick; stated assumptions for missing dimensions"
+       ]
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "topic": "Projection of points",
+   "subtopics": [
+    {
+     "id": "quadrants-notation",
+     "title": "Notation and position from the views",
+     "theory_md": "Notation: actual point $A$, front view $a'$, top view $a$; both lie on one **projector** perpendicular to XY.\n\n- Distance of $a'$ from XY $=$ distance of the point from the **HP**.\n- Distance of $a$ from XY $=$ distance of the point from the **VP**.\n\n| Quadrant | Position | $a'$ | $a$ |\n|---|---|---|---|\n| I | above HP, in front of VP | above XY | below XY |\n| II | above HP, behind VP | above | above |\n| III | below HP, behind VP | below | above |\n| IV | below HP, in front of VP | below | below |\n\nTo read a position: front view above XY means above HP; top view below XY means in front of VP.",
+     "basics_md": "XY is the floor line of the wall. The front view tells you the height above or below the floor; the top view tells you how far in front of or behind the wall.",
+     "key_points": [
+      "a' gives distance from HP, a gives distance from VP",
+      "FV above XY: above HP; TV below XY: in front of VP",
+      "Q1 opposite sides, Q2 both above, Q3 opposite sides, Q4 both below",
+      "Both views on one projector perpendicular to XY"
+     ],
+     "questions": [
+      {
+       "id": "qn1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "A point has its top view 30 mm above XY and its front view 20 mm above XY. It lies",
+       "options": [
+        "20 mm above HP, 30 mm in front of VP",
+        "20 mm above HP, 30 mm behind VP",
+        "30 mm above HP, 20 mm behind VP",
+        "20 mm below HP, 30 mm behind VP"
+       ],
+       "answer_index": 1,
+       "why": "FV above XY: above HP by 20; TV above XY: behind VP by 30 (second quadrant)."
+      },
+      {
+       "id": "qn2",
+       "kind": "mcq",
+       "level": 1,
+       "q": "A point in the fourth quadrant has both views",
+       "options": [
+        "above XY",
+        "below XY",
+        "above and below XY respectively",
+        "on XY"
+       ],
+       "answer_index": 1,
+       "why": "Below HP puts the FV below XY; in front of VP puts the TV below XY."
+      },
+      {
+       "id": "qn3",
+       "kind": "short",
+       "level": 2,
+       "marks": 3,
+       "q": "The front view of a point P is 25 mm below XY and its top view is 35 mm above XY. State the position of P.",
+       "model_answer_md": "FV $p'$ **below XY**: the point is **25 mm below the HP**.\n\nTV $p$ **above XY**: the point is **35 mm behind the VP**.\n\nSo P is in the **third quadrant**.",
+       "points": [
+        "25 mm below HP",
+        "35 mm behind VP",
+        "Third quadrant"
+       ]
+      },
+      {
+       "id": "qn4",
+       "pyq": "539d2c9235602005",
+       "level": 2,
+       "points": [
+        "A: a' 20 above XY, a 25 above XY: 20 mm above HP, 25 mm behind VP (second quadrant)",
+        "B: b' 25 below, b 20 above: 25 mm below HP, 20 mm behind VP (third quadrant)",
+        "C: c' 20 below, c 30 below: 20 mm below HP, 30 mm in front of VP (fourth quadrant)",
+        "D: d' 20 above, d 25 below: 20 mm above HP, 25 mm in front of VP (first quadrant)",
+        "E: in HP, 25 mm behind VP; F: 30 mm above HP, in VP"
+       ]
+      },
+      {
+       "id": "qn5",
+       "pyq": "c63fce51c753d453",
+       "level": 2,
+       "points": [
+        "Top view a is above xy: point is behind the VP",
+        "Front view a' is below xy: point is below the HP",
+        "Hence A is in the third quadrant, 35 mm behind VP"
+       ]
+      }
+     ]
+    },
+    {
+     "id": "point-in-quadrant",
+     "title": "Projections of a point in a quadrant",
+     "theory_md": "Steps for a point given by its height $h$ and distance $d$:\n1. Draw XY and a projector perpendicular to it (projectors are spaced as the question says).\n2. **Front view $a'$:** $h$ above XY if above HP, below XY if below HP.\n3. **Top view $a$:** $d$ **below** XY if in front of VP, **above** XY if behind VP.\n4. Join $a$ and $a'$ by a thin projector; label correctly.\n\nMnemonic: *front view is height, top view is depth*. Quadrant I: $a'$ above, $a$ below. Quadrant II: both above. Quadrant III: $a'$ below, $a$ above. Quadrant IV: both below.",
+     "basics_md": "Height goes in the front view, depth goes in the top view. Above or below the line tells you which side of the plane.",
+     "key_points": [
+      "Front view = height from XY; top view = distance from XY",
+      "In front of VP: TV below XY; behind VP: TV above XY",
+      "Above HP: FV above XY; below HP: FV below XY",
+      "Join the two views by a projector perpendicular to XY",
+      "Several points: projectors spaced as given"
+     ],
+     "questions": [
+      {
+       "id": "pq1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "A point is 40 mm above the HP and 25 mm in front of the VP. Its top view is",
+       "options": [
+        "25 mm above XY",
+        "25 mm below XY",
+        "40 mm above XY",
+        "40 mm below XY"
+       ],
+       "answer_index": 1,
+       "why": "In front of VP means the TV is below XY by 25 mm."
+      },
+      {
+       "id": "pq2",
+       "kind": "short",
+       "level": 2,
+       "marks": 3,
+       "q": "Draw the projections of a point P which is 30 mm below the HP and 40 mm behind the VP and state its quadrant.",
+       "model_answer_md": "1. Draw XY and a projector.\n2. **Front view** $p'$: $30$ mm **below** XY (below HP).\n3. **Top view** $p$: $40$ mm **above** XY (behind VP).\n4. Join $pp'$ by the projector.\n\nP is in the **third quadrant** (views on opposite sides of XY).",
+       "points": [
+        "p' 30 mm below XY",
+        "p 40 mm above XY",
+        "Third quadrant"
+       ]
+      },
+      {
+       "id": "pq3",
+       "kind": "mcq",
+       "level": 2,
+       "q": "A point has its two views 20 mm and 30 mm below XY. It lies in the",
+       "options": [
+        "first quadrant",
+        "second quadrant",
+        "third quadrant",
+        "fourth quadrant"
+       ],
+       "answer_index": 3,
+       "why": "Both below XY: fourth quadrant (below HP, in front of VP)."
+      },
+      {
+       "id": "pq-461245",
+       "pyq": "46124562e73a7426",
+       "level": 2,
+       "points": [
+        "B' (front view) is 30 mm above XY",
+        "B (top view) is 20 mm above XY",
+        "Both views on one projector perpendicular to XY",
+        "Position: 30 mm above HP, 20 mm behind VP (second quadrant)"
+       ]
+      },
+      {
+       "id": "pq-ec6d63",
+       "pyq": "ec6d6377e2df1b68",
+       "level": 2,
+       "points": [
+        "C' (front view) is 15 mm below XY",
+        "C (top view) is 25 mm above XY",
+        "Both views on one projector perpendicular to XY",
+        "Position: 15 mm below HP, 25 mm behind VP (third quadrant)"
+       ]
+      },
+      {
+       "id": "pq-fcdcc7",
+       "pyq": "fcdcc76cfd1a13c2",
+       "level": 2,
+       "points": [
+        "A' (front view) is 20 mm below XY",
+        "A (top view) is 50 mm below XY",
+        "Both views on one projector perpendicular to XY, spaced 30 mm from the previous point's projector",
+        "Position: 20 mm below HP, 50 mm in front of VP (fourth quadrant)"
+       ]
+      },
+      {
+       "id": "pq-2f7b5a",
+       "pyq": "2f7b5a6c7047a6e3",
+       "level": 2,
+       "points": [
+        "D' (front view) is 50 mm above XY",
+        "D (top view) is 30 mm above XY",
+        "Both views on one projector perpendicular to XY, spaced 30 mm from the previous point's projector",
+        "Position: 50 mm above HP, 30 mm behind VP (second quadrant)"
+       ]
+      },
+      {
+       "id": "pq-b76b85",
+       "pyq": "b76b856b1f34c79b",
+       "level": 2,
+       "points": [
+        "E' (front view) is 20 mm below XY",
+        "E (top view) is 50 mm above XY",
+        "Both views on one projector perpendicular to XY, spaced 30 mm from the previous point's projector",
+        "Position: 20 mm below HP, 50 mm behind VP (third quadrant)"
+       ]
+      },
+      {
+       "id": "pq-a27e21",
+       "pyq": "a27e21dcd3515494",
+       "level": 2,
+       "points": [
+        "Q' (front view) is 15 mm above XY",
+        "Q (top view) is 25 mm above XY",
+        "Both views on one projector perpendicular to XY",
+        "Position: 15 mm above HP, 25 mm behind VP (second quadrant)"
+       ]
+      },
+      {
+       "id": "pq-375a38",
+       "pyq": "375a388ba95a12cc",
+       "level": 2,
+       "points": [
+        "R' (front view) is 10 mm below XY",
+        "R (top view) is 20 mm above XY",
+        "Both views on one projector perpendicular to XY",
+        "Position: 10 mm below HP, 20 mm behind VP (third quadrant)"
+       ]
+      },
+      {
+       "id": "pq-8bed81",
+       "pyq": "8bed81c815322149",
+       "level": 2,
+       "points": [
+        "A' (front view) is 30 mm above XY",
+        "A (top view) is 50 mm below XY",
+        "Both views on one projector perpendicular to XY, spaced 25 mm from the previous point's projector",
+        "Position: 30 mm above HP, 50 mm in front of VP (first quadrant)"
+       ]
+      },
+      {
+       "id": "pq-af8d3c",
+       "pyq": "af8d3ce11f3df5b8",
+       "level": 2,
+       "points": [
+        "D' (front view) is 20 mm above XY",
+        "D (top view) is 50 mm above XY",
+        "Both views on one projector perpendicular to XY, spaced 25 mm from the previous point's projector",
+        "Position: 20 mm above HP, 50 mm behind VP (second quadrant)"
+       ]
+      },
+      {
+       "id": "pq-828d41",
+       "pyq": "828d412b4482728a",
+       "level": 2,
+       "points": [
+        "E' (front view) is 30 mm below XY",
+        "E (top view) is 40 mm above XY",
+        "Both views on one projector perpendicular to XY, spaced 25 mm from the previous point's projector",
+        "Position: 30 mm below HP, 40 mm behind VP (third quadrant)"
+       ]
+      },
+      {
+       "id": "pq-c9d856",
+       "pyq": "c9d856f3c98c4ba9",
+       "level": 2,
+       "points": [
+        "D' (front view) is 40 mm below XY",
+        "D (top view) is 25 mm below XY",
+        "Both views on one projector perpendicular to XY",
+        "Position: 40 mm below HP, 25 mm in front of VP (fourth quadrant)"
+       ]
+      },
+      {
+       "id": "pq-30d40c",
+       "pyq": "30d40ce6c8c3f325",
+       "level": 2,
+       "points": [
+        "B' (front view) is 40 mm above XY",
+        "B (top view) is 25 mm below XY",
+        "Both views on one projector perpendicular to XY, spaced 25 mm from the previous point's projector",
+        "Position: 40 mm above HP, 25 mm in front of VP (first quadrant)"
+       ]
+      },
+      {
+       "id": "pq-b2e862",
+       "pyq": "b2e8629383e87828",
+       "level": 2,
+       "points": [
+        "C' (front view) is 50 mm below XY",
+        "C (top view) is 15 mm above XY",
+        "Both views on one projector perpendicular to XY, spaced 25 mm from the previous point's projector",
+        "Position: 50 mm below HP, 15 mm behind VP (third quadrant)"
+       ]
+      },
+      {
+       "id": "pq-b3f66a",
+       "pyq": "b3f66a34900be7d1",
+       "level": 2,
+       "points": [
+        "D' (front view) is 25 mm below XY",
+        "D (top view) is 45 mm below XY",
+        "Both views on one projector perpendicular to XY",
+        "Position: 25 mm below HP, 45 mm in front of VP (fourth quadrant)"
+       ]
+      },
+      {
+       "id": "pq-7b0d20",
+       "pyq": "7b0d2069a424fe93",
+       "level": 2,
+       "points": [
+        "E' (front view) is 20 mm above XY",
+        "E (top view) is 50 mm above XY",
+        "Both views on one projector perpendicular to XY, spaced 30 mm from the previous point's projector",
+        "Position: 20 mm above HP, 50 mm behind VP (second quadrant)"
+       ]
+      }
+     ]
+    },
+    {
+     "id": "point-in-plane",
+     "title": "Points in the HP, in the VP or in both",
+     "theory_md": "A point **in the HP** has height $0$, so its **front view lies on XY** and its top view is at its distance from the VP.\n\nA point **in the VP** has distance $0$, so its **top view lies on XY** and its front view is at its height.\n\nA point in **both** planes lies on XY itself and both views coincide with it.\n\nSuch points sit on the boundary of two quadrants: in HP in front of VP (between I and IV), in HP behind VP (II and III), in VP above HP (I and II), in VP below HP (III and IV).",
+     "basics_md": "If a point lies on the floor its height is zero, so its front view sits right on XY. If it lies on the wall its distance is zero, so its top view sits on XY.",
+     "key_points": [
+      "In HP: front view on XY",
+      "In VP: top view on XY",
+      "In both: both views on XY",
+      "Boundary points lie between two quadrants"
+     ],
+     "questions": [
+      {
+       "id": "pl1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "A point in the HP and 30 mm in front of the VP has its",
+       "options": [
+        "FV on XY, TV 30 mm below XY",
+        "FV 30 mm above XY, TV on XY",
+        "FV on XY, TV 30 mm above XY",
+        "both views on XY"
+       ],
+       "answer_index": 0,
+       "why": "In HP: FV on XY; in front of VP: TV below XY."
+      },
+      {
+       "id": "pl2",
+       "kind": "mcq",
+       "level": 1,
+       "q": "A point in the VP and 40 mm below the HP lies between the",
+       "options": [
+        "first and second quadrants",
+        "second and third quadrants",
+        "third and fourth quadrants",
+        "fourth and first quadrants"
+       ],
+       "answer_index": 2,
+       "why": "In VP and below HP: the boundary of quadrants III and IV."
+      },
+      {
+       "id": "pl3",
+       "kind": "short",
+       "level": 2,
+       "marks": 2,
+       "q": "Draw the projections of a point K in the VP and 45 mm above the HP.",
+       "model_answer_md": "In the VP: distance from VP is 0, so the top view $k$ lies **on XY**. Above the HP: the front view $k'$ is **45 mm above XY** on the same projector.",
+       "points": [
+        "Top view k on XY",
+        "Front view k' 45 mm above XY"
+       ]
+      },
+      {
+       "id": "pl-003533",
+       "pyq": "003533a460331db9",
+       "level": 2,
+       "points": [
+        "A' (front view) is 35 mm above XY",
+        "A (top view) lies on XY (point is in the VP)",
+        "Both views on one projector perpendicular to XY",
+        "Position: 35 mm above HP, in VP (on a boundary plane)"
+       ]
+      },
+      {
+       "id": "pl-953aff",
+       "pyq": "953aff5cc81c65a5",
+       "level": 2,
+       "points": [
+        "B' (front view) lies on XY (point is in the HP)",
+        "B (top view) is 40 mm above XY",
+        "Both views on one projector perpendicular to XY, spaced 30 mm from the previous point's projector",
+        "Position: in HP, 40 mm behind VP (on a boundary plane)"
+       ]
+      },
+      {
+       "id": "pl-1bfbd4",
+       "pyq": "1bfbd4c1e3fb8f20",
+       "level": 2,
+       "points": [
+        "C' (front view) lies on XY (point is in the HP)",
+        "C (top view) is 30 mm below XY",
+        "Both views on one projector perpendicular to XY, spaced 30 mm from the previous point's projector",
+        "Position: in HP, 30 mm in front of VP (on a boundary plane)"
+       ]
+      },
+      {
+       "id": "pl-db0a19",
+       "pyq": "db0a19f80e4d3f0c",
+       "level": 2,
+       "points": [
+        "F' (front view) is 50 mm below XY",
+        "F (top view) lies on XY (point is in the VP)",
+        "Both views on one projector perpendicular to XY, spaced 30 mm from the previous point's projector",
+        "Position: 50 mm below HP, in VP (on a boundary plane)"
+       ]
+      },
+      {
+       "id": "pl-05c34e",
+       "pyq": "05c34e7f486ceed5",
+       "level": 1,
+       "points": [
+        "P' (front view) lies on XY (point is in the HP)",
+        "P (top view) is 35 mm below XY",
+        "Both views on one projector perpendicular to XY",
+        "Position: in HP, 35 mm in front of VP (on a boundary plane)"
+       ]
+      },
+      {
+       "id": "pl-d813f6",
+       "pyq": "d813f6b041601b03",
+       "level": 1,
+       "points": [
+        "B' (front view) lies on XY (point is in the HP)",
+        "B (top view) is 40 mm below XY",
+        "Both views on one projector perpendicular to XY, spaced 25 mm from the previous point's projector",
+        "Position: in HP, 40 mm in front of VP (on a boundary plane)"
+       ]
+      },
+      {
+       "id": "pl-4a8abb",
+       "pyq": "4a8abb2d27bc6536",
+       "level": 2,
+       "points": [
+        "C' (front view) is 50 mm below XY",
+        "C (top view) lies on XY (point is in the VP)",
+        "Both views on one projector perpendicular to XY, spaced 25 mm from the previous point's projector",
+        "Position: 50 mm below HP, in VP (on a boundary plane)"
+       ]
+      },
+      {
+       "id": "pl-2abeb7",
+       "pyq": "2abeb7486bc85dcf",
+       "level": 2,
+       "points": [
+        "A' (front view) lies on XY (point is in the HP)",
+        "A (top view) is 30 mm above XY",
+        "Both views on one projector perpendicular to XY, spaced 25 mm from the previous point's projector",
+        "Position: in HP, 30 mm behind VP (on a boundary plane)"
+       ]
+      },
+      {
+       "id": "pl-0d7256",
+       "pyq": "0d725685b354c484",
+       "level": 2,
+       "points": [
+        "F' (front view) is 40 mm below XY",
+        "F (top view) lies on XY (point is in the VP)",
+        "Both views on one projector perpendicular to XY, spaced 30 mm from the previous point's projector",
+        "Position: 40 mm below HP, in VP (on a boundary plane)"
+       ]
+      }
+     ]
+    },
+    {
+     "id": "point-distances",
+     "title": "True distance between points and the room problems",
+     "theory_md": "For two points whose projectors are $\\Delta x$ apart, with difference in height $\\Delta z$ and difference in distance from the VP $\\Delta y$, the true distance is\n$$PQ=\\sqrt{\\Delta x^2+\\Delta y^2+\\Delta z^2}.$$\nIf one point is above the HP and the other below, **add** the heights (and add the distances if one is in front of and the other behind the VP).\n\nGraphically: the top-view length gives $\\Delta x,\\Delta y$; rotate it parallel to XY and join with the height difference to get the true length.\n\nFor a room, treat each object and corner as a point: the walls are the planes, the floor is the HP, the end wall the VP.",
+     "basics_md": "It is just the 3-D Pythagoras: how far across, how far along, how far up, combined.",
+     "key_points": [
+      "PQ = sqrt(dx^2 + dy^2 + dz^2)",
+      "Add distances when points lie on opposite sides of HP or VP",
+      "Treat objects as points; scale 1 m = 1 cm and so on",
+      "Different quadrants: views on both sides of XY"
+     ],
+     "questions": [
+      {
+       "id": "pd1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "If one point is 20 mm above the HP and another 15 mm below it, the difference in heights is",
+       "options": [
+        "5 mm",
+        "35 mm",
+        "300 mm",
+        "17.5 mm"
+       ],
+       "answer_index": 1,
+       "why": "Opposite sides: add, 20 + 15 = 35 mm."
+      },
+      {
+       "id": "pd1b",
+       "kind": "mcq",
+       "level": 2,
+       "q": "Two points have projectors 30 mm apart, equal heights, and distances 40 mm from the VP on the same side. The true distance between them is",
+       "options": [
+        "10 mm",
+        "30 mm",
+        "50 mm",
+        "70 mm"
+       ],
+       "answer_index": 1,
+       "why": "dy = 0, dz = 0 so only the projector spacing counts: 30 mm. (Equal distances from the VP means dy = 0.)"
+      },
+      {
+       "id": "pd2",
+       "kind": "numerical",
+       "level": 2,
+       "marks": 3,
+       "q": "P is 40 mm above the HP and 20 mm in front of the VP; Q is 10 mm above the HP and 60 mm in front of the VP. The projectors are 30 mm apart. Find the true distance PQ.",
+       "model_answer_md": "$\\Delta x=30$, $\\Delta z=40-10=30$, $\\Delta y=60-20=40$.\n\n$PQ=\\sqrt{30^2+40^2+30^2}=\\sqrt{3400}=58.3$ mm.",
+       "points": [
+        "dx = 30, dy = 40, dz = 30",
+        "PQ = sqrt(dx^2 + dy^2 + dz^2)",
+        "58.3 mm"
+       ]
+      },
+      {
+       "id": "pd3",
+       "pyq": "7b6502d7a503bcf4",
+       "level": 2,
+       "points": [
+        "Projectors 40 mm apart; p' 40 above XY and p 25 below; q' 25 above XY and q 40 below",
+        "dx = 40, dz = 40 - 25 = 15, dy = 40 - 25 = 15",
+        "PQ = sqrt(1600 + 225 + 225) = sqrt(2050) = 45.3 mm",
+        "Join p'q' and pq"
+       ]
+      },
+      {
+       "id": "pd4",
+       "pyq": "d50dbf331f51cd38",
+       "level": 3,
+       "points": [
+        "Object: 4 m from the end wall, 3 m from the side wall, 1.2 m above the floor",
+        "Ceiling corner: heights 4 m, so dz = 4 - 1.2 = 2.8 m",
+        "Scale 1 m = 1 cm: plan 8 x 6 cm, elevation height 4 cm",
+        "True length = sqrt(4^2 + 3^2 + 2.8^2) = sqrt(32.84) = 5.73 m",
+        "Draw plan and elevation of both points and find the true length of the line"
+       ]
+      },
+      {
+       "id": "pd5",
+       "pyq": "069c96ea269bc6fc",
+       "level": 2,
+       "points": [
+        "Ball A: 30 behind VP, 50 below HP: third quadrant; a is 30 above XY, a' is 50 below XY",
+        "Ball B: 30 in front of VP, 50 above HP: first quadrant; b is 30 below XY, b' is 50 above XY",
+        "Draw each as a circle about its centre point",
+        "Top views on opposite sides of XY: ab = 30 + 30 = 60 m"
+       ]
+      }
+     ]
+    }
+   ]
+  }
+ ]
+}

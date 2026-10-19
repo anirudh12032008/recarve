@@ -1,0 +1,1383 @@
+{
+ "code": "MC1101",
+ "unit": "Vector Calculus",
+ "written": "2026-10-19",
+ "by": "claude-sonnet-5-5, in a Claude Code session",
+ "topics": [
+  {
+   "topic": "Vector differentiation",
+   "subtopics": [
+    {
+     "id": "velocity-acceleration",
+     "title": "Velocity, acceleration and components",
+     "theory_md": "Differentiate a vector function component by component: $\\vec r=x\\hat i+y\\hat j+z\\hat k$ gives $\\dfrac{d\\vec r}{dt}=\\dot x\\hat i+\\dot y\\hat j+\\dot z\\hat k$.\n\n- Velocity $\\vec v=\\dfrac{d\\vec r}{dt}$, speed $|\\vec v|$, acceleration $\\vec a=\\dfrac{d^2\\vec r}{dt^2}$.\n- **Component along** $\\vec b$ is $\\vec v\\cdot\\hat b=\\dfrac{\\vec v\\cdot\\vec b}{|\\vec b|}$ (divide by $|\\vec b|$).\n- Unit tangent $\\hat T=\\dfrac{d\\vec r/dt}{|d\\vec r/dt|}$.\n\nDifferentiate first, then put in the value of $t$.",
+     "basics_md": "A moving particle has a position at each instant. How fast the position changes is the velocity; how fast the velocity changes is the acceleration. Each of $x,y,z$ is differentiated on its own.",
+     "key_points": [
+      "Differentiate each component separately, then substitute $t$",
+      "$\\vec v=d\\vec r/dt$, $\\vec a=d^2\\vec r/dt^2$, speed is $|\\vec v|$",
+      "Component along $\\vec b$: dot with the unit vector $\\vec b/|\\vec b|$",
+      "Unit tangent is $\\vec v/|\\vec v|$"
+     ],
+     "questions": [
+      {
+       "id": "va-q1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "For $\\vec r=t^2\\hat i+t\\hat j$, the velocity at $t=1$ is",
+       "options": [
+        "$\\hat i+\\hat j$",
+        "$2\\hat i+\\hat j$",
+        "$2\\hat i$",
+        "$\\hat i+2\\hat j$"
+       ],
+       "answer_index": 1,
+       "why": "$\\vec v=2t\\hat i+\\hat j$, which is $2\\hat i+\\hat j$ at $t=1$."
+      },
+      {
+       "id": "va-q2",
+       "kind": "mcq",
+       "level": 1,
+       "q": "The component of $\\vec v$ along $\\vec b$ is",
+       "options": [
+        "$\\vec v\\cdot\\vec b$",
+        "$\\vec v\\times\\vec b$",
+        "$\\vec v\\cdot\\vec b/|\\vec b|$",
+        "$|\\vec v|\\,|\\vec b|$"
+       ],
+       "answer_index": 2,
+       "why": "Dot with the unit vector $\\hat b$, so divide by $|\\vec b|$."
+      },
+      {
+       "id": "va-q3",
+       "kind": "numerical",
+       "level": 2,
+       "marks": 3,
+       "q": "A particle moves along $\\vec r=e^{-t}\\hat i+2\\cos3t\\,\\hat j+2\\sin3t\\,\\hat k$. Find the magnitudes of its velocity and acceleration at $t=0$.",
+       "model_answer_md": "$\\vec v=-e^{-t}\\hat i-6\\sin3t\\,\\hat j+6\\cos3t\\,\\hat k$; at $t=0$: $\\vec v=-\\hat i+6\\hat k$, so $|\\vec v|=\\sqrt{1+36}=\\sqrt{37}$.\n\n$\\vec a=e^{-t}\\hat i-18\\cos3t\\,\\hat j-18\\sin3t\\,\\hat k$; at $t=0$: $\\vec a=\\hat i-18\\hat j$, so $|\\vec a|=\\sqrt{1+324}=\\sqrt{325}=5\\sqrt{13}$.",
+       "points": [
+        "$\\vec v$ found by differentiating each component",
+        "$|\\vec v|=\\sqrt{37}$",
+        "$\\vec a$ found by differentiating again",
+        "$|\\vec a|=\\sqrt{325}=5\\sqrt{13}$"
+       ]
+      },
+      {
+       "id": "va-q4",
+       "kind": "long",
+       "level": 3,
+       "marks": 5,
+       "q": "A particle moves along $x=2t^2$, $y=t^2-4t$, $z=3t-5$. Find the components of its velocity and acceleration at $t=1$ in the direction $\\hat i-3\\hat j+2\\hat k$.",
+       "model_answer_md": "$\\vec v=4t\\hat i+(2t-4)\\hat j+3\\hat k$; at $t=1$: $\\vec v=4\\hat i-2\\hat j+3\\hat k$.\n$\\vec a=4\\hat i+2\\hat j$.\n\nUnit vector: $\\hat b=\\dfrac{\\hat i-3\\hat j+2\\hat k}{\\sqrt{14}}$.\n\nComponent of velocity $=\\dfrac{4+6+6}{\\sqrt{14}}=\\dfrac{16}{\\sqrt{14}}=\\dfrac{8\\sqrt{14}}{7}$.\nComponent of acceleration $=\\dfrac{4-6+0}{\\sqrt{14}}=-\\dfrac{2}{\\sqrt{14}}=-\\dfrac{\\sqrt{14}}{7}$.",
+       "points": [
+        "$\\vec v$ and $\\vec a$ at $t=1$ correct",
+        "Unit vector with $|\\vec b|=\\sqrt{14}$",
+        "Velocity component $16/\\sqrt{14}$",
+        "Acceleration component $-2/\\sqrt{14}$"
+       ]
+      },
+      {
+       "id": "va-q5",
+       "kind": "numerical",
+       "level": 2,
+       "marks": 3,
+       "q": "Find the unit tangent vector to the curve $x=t^2+1$, $y=4t-3$, $z=2t^2-6t$ at $t=2$.",
+       "model_answer_md": "$\\dfrac{d\\vec r}{dt}=2t\\hat i+4\\hat j+(4t-6)\\hat k$; at $t=2$: $4\\hat i+4\\hat j+2\\hat k$, magnitude $\\sqrt{16+16+4}=6$.\n\n$\\hat T=\\dfrac{4\\hat i+4\\hat j+2\\hat k}{6}=\\dfrac{2\\hat i+2\\hat j+\\hat k}{3}$.",
+       "points": [
+        "$d\\vec r/dt$ at $t=2$ is $4\\hat i+4\\hat j+2\\hat k$",
+        "Magnitude 6",
+        "$\\hat T=(2\\hat i+2\\hat j+\\hat k)/3$"
+       ]
+      }
+     ]
+    },
+    {
+     "id": "derivative-rules",
+     "title": "Product rules and constant magnitude",
+     "theory_md": "Product rules look like ordinary calculus, but **keep the order in a cross product**:\n$$\\frac{d}{dt}(\\vec A\\cdot\\vec B)=\\vec A'\\cdot\\vec B+\\vec A\\cdot\\vec B',\\qquad \\frac{d}{dt}(\\vec A\\times\\vec B)=\\vec A'\\times\\vec B+\\vec A\\times\\vec B'.$$\n\n- Constant magnitude: differentiate $\\vec r\\cdot\\vec r=c^2$ to get $\\vec r\\cdot\\vec r'=0$, so $\\vec r\\perp\\vec r'$.\n- $\\vec r'\\times\\vec r'=\\vec 0$, so $\\dfrac{d}{dt}(\\vec r\\times\\vec r')=\\vec r\\times\\vec r''$.\n- Constant direction means $\\vec r\\times\\vec r'=\\vec 0$.",
+     "basics_md": "A vector that only turns, never stretches, moves at right angles to itself: think of a stone on a string. That is why $\\vec r\\cdot\\vec r'=0$.",
+     "key_points": [
+      "Dot and cross product rules mirror ordinary product rule",
+      "Order in the cross product must be kept",
+      "Constant $|\\vec r|$ gives $\\vec r\\cdot\\vec r'=0$",
+      "$\\vec r'\\times\\vec r'=\\vec 0$ is the step that simplifies"
+     ],
+     "questions": [
+      {
+       "id": "dr-q1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "If $\\vec r(t)$ has constant magnitude, then",
+       "options": [
+        "$\\vec r\\times\\frac{d\\vec r}{dt}=\\vec 0$",
+        "$\\vec r\\cdot\\frac{d\\vec r}{dt}=0$",
+        "$\\frac{d\\vec r}{dt}=\\vec 0$",
+        "$\\vec r=\\frac{d\\vec r}{dt}$"
+       ],
+       "answer_index": 1,
+       "why": "Differentiate $\\vec r\\cdot\\vec r=c^2$: $2\\vec r\\cdot\\vec r'=0$. The cross-product option is the constant-direction condition."
+      },
+      {
+       "id": "dr-q2",
+       "kind": "short",
+       "level": 2,
+       "marks": 2,
+       "q": "Show that $\\dfrac{d}{dt}\\left(\\vec r\\times\\dfrac{d\\vec r}{dt}\\right)=\\vec r\\times\\dfrac{d^2\\vec r}{dt^2}$.",
+       "model_answer_md": "By the product rule, $\\dfrac{d}{dt}(\\vec r\\times\\vec r')=\\vec r'\\times\\vec r'+\\vec r\\times\\vec r''$.\nSince a vector crossed with itself is $\\vec 0$, this equals $\\vec r\\times\\vec r''$.",
+       "points": [
+        "Product rule for cross product with order kept",
+        "$\\vec r'\\times\\vec r'=\\vec 0$",
+        "Result $\\vec r\\times\\vec r''$"
+       ]
+      },
+      {
+       "id": "dr-q3",
+       "kind": "short",
+       "level": 3,
+       "marks": 4,
+       "q": "If $\\vec r=\\vec a\\cos\\omega t+\\vec b\\sin\\omega t$, where $\\vec a,\\vec b$ are constant vectors, show that $\\vec r\\times\\dfrac{d\\vec r}{dt}=\\omega\\,\\vec a\\times\\vec b$ and $\\dfrac{d^2\\vec r}{dt^2}=-\\omega^2\\vec r$.",
+       "model_answer_md": "$\\vec r'=\\omega(-\\vec a\\sin\\omega t+\\vec b\\cos\\omega t)$.\n\n$\\vec r\\times\\vec r'=\\omega\\left[\\cos^2\\omega t\\,(\\vec a\\times\\vec b)-\\sin^2\\omega t\\,(\\vec b\\times\\vec a)\\right]$, using $\\vec a\\times\\vec a=\\vec b\\times\\vec b=\\vec 0$.\nSince $\\vec b\\times\\vec a=-\\vec a\\times\\vec b$, this is $\\omega(\\cos^2\\omega t+\\sin^2\\omega t)\\,\\vec a\\times\\vec b=\\omega\\,\\vec a\\times\\vec b$.\n\n$\\vec r''=-\\omega^2(\\vec a\\cos\\omega t+\\vec b\\sin\\omega t)=-\\omega^2\\vec r$.",
+       "points": [
+        "$\\vec r'$ found correctly",
+        "Self cross products vanish and $\\vec b\\times\\vec a=-\\vec a\\times\\vec b$",
+        "$\\cos^2+\\sin^2=1$ gives $\\omega\\,\\vec a\\times\\vec b$",
+        "$\\vec r''=-\\omega^2\\vec r$"
+       ]
+      },
+      {
+       "id": "dr-q4",
+       "kind": "mcq",
+       "level": 2,
+       "q": "$\\dfrac{d}{dt}(\\vec A\\times\\vec B)$ equals",
+       "options": [
+        "$\\vec A'\\times\\vec B+\\vec A\\times\\vec B'$",
+        "$\\vec A'\\times\\vec B+\\vec B'\\times\\vec A$",
+        "$\\vec A'\\cdot\\vec B+\\vec A\\cdot\\vec B'$",
+        "$\\vec A\\times\\vec B'-\\vec A'\\times\\vec B$"
+       ],
+       "answer_index": 0,
+       "why": "Product rule with the order $\\vec A$ then $\\vec B$ kept in each term; option 2 swaps the second term."
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "topic": "Gradient",
+   "subtopics": [
+    {
+     "id": "gradient-normal",
+     "title": "Gradient and the normal to a surface",
+     "theory_md": "$\\nabla=\\hat i\\dfrac{\\partial}{\\partial x}+\\hat j\\dfrac{\\partial}{\\partial y}+\\hat k\\dfrac{\\partial}{\\partial z}$, so $\\nabla\\phi=\\phi_x\\hat i+\\phi_y\\hat j+\\phi_z\\hat k$ (a vector from a scalar).\n\n$\\nabla\\phi$ is **normal to the level surface** $\\phi=c$. So:\n- unit normal $\\hat n=\\dfrac{\\nabla\\phi}{|\\nabla\\phi|}$ at the point;\n- tangent plane at $(x_0,y_0,z_0)$: $\\nabla\\phi\\cdot(\\vec r-\\vec r_0)=0$.\n\nWrite the surface as $\\phi(x,y,z)=0$ first, then substitute the point.",
+     "basics_md": "A surface $\\phi=c$ is a contour of the scalar $\\phi$. The gradient points in the direction in which $\\phi$ rises fastest, which is straight off the surface, so it is the normal.",
+     "key_points": [
+      "$\\nabla\\phi=(\\phi_x,\\phi_y,\\phi_z)$ is a vector",
+      "$\\nabla\\phi$ is normal to the surface $\\phi=c$",
+      "Unit normal is $\\nabla\\phi/|\\nabla\\phi|$ at the point",
+      "Tangent plane is $\\nabla\\phi\\cdot(\\vec r-\\vec r_0)=0$"
+     ],
+     "questions": [
+      {
+       "id": "gn-q1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "The vector normal to the surface $\\phi(x,y,z)=c$ is",
+       "options": [
+        "$\\nabla\\cdot\\phi$",
+        "$\\nabla\\phi$",
+        "$\\nabla\\times\\phi$",
+        "$\\partial\\phi/\\partial t$"
+       ],
+       "answer_index": 1,
+       "why": "The gradient is perpendicular to level surfaces."
+      },
+      {
+       "id": "gn-q2",
+       "kind": "numerical",
+       "level": 2,
+       "marks": 3,
+       "q": "Find the unit normal and the tangent plane to the surface $z=x^2+y^2$ at the point $(1,2,5)$.",
+       "model_answer_md": "Take $\\phi=x^2+y^2-z$. Then $\\nabla\\phi=2x\\hat i+2y\\hat j-\\hat k$, which at $(1,2,5)$ is $2\\hat i+4\\hat j-\\hat k$ with $|\\nabla\\phi|=\\sqrt{21}$.\n\nUnit normal: $\\hat n=\\dfrac{2\\hat i+4\\hat j-\\hat k}{\\sqrt{21}}$.\n\nTangent plane: $2(x-1)+4(y-2)-(z-5)=0$, that is $2x+4y-z=5$.",
+       "points": [
+        "$\\phi=x^2+y^2-z$ and $\\nabla\\phi$ at the point $(2,4,-1)$",
+        "$|\\nabla\\phi|=\\sqrt{21}$ and unit normal",
+        "Tangent plane $2x+4y-z=5$"
+       ]
+      },
+      {
+       "id": "gn-q3",
+       "kind": "short",
+       "level": 2,
+       "marks": 2,
+       "q": "Find $\\nabla\\phi$ at $(1,-2,-1)$ for $\\phi=3x^2y-y^3z^2$.",
+       "model_answer_md": "$\\nabla\\phi=6xy\\,\\hat i+(3x^2-3y^2z^2)\\hat j-2y^3z\\,\\hat k$.\n\nAt $(1,-2,-1)$: $6(1)(-2)=-12$; $3-3(4)(1)=-9$; $-2(-8)(-1)=-16$.\n\n$\\nabla\\phi=-12\\hat i-9\\hat j-16\\hat k$.",
+       "points": [
+        "Partial derivatives found correctly",
+        "Substituted the point",
+        "$\\nabla\\phi=-12\\hat i-9\\hat j-16\\hat k$"
+       ]
+      }
+     ]
+    },
+    {
+     "id": "angle-surfaces",
+     "title": "Angle between two surfaces",
+     "theory_md": "The angle between two surfaces at a common point is the angle between their **normals**:\n$$\\cos\\theta=\\frac{\\nabla\\phi_1\\cdot\\nabla\\phi_2}{|\\nabla\\phi_1|\\,|\\nabla\\phi_2|}.$$\n\n- First check the point lies on both surfaces.\n- The surfaces cut **orthogonally** when $\\nabla\\phi_1\\cdot\\nabla\\phi_2=0$.\n- Write each surface as $\\phi=0$ before taking the gradient.",
+     "basics_md": "Two surfaces meet along a curve. At a point of it, each has a flat tangent plane, and the angle between the planes is the angle between their normals.",
+     "key_points": [
+      "Angle between surfaces is the angle between normals",
+      "Use $\\cos\\theta=\\dfrac{\\nabla\\phi_1\\cdot\\nabla\\phi_2}{|\\nabla\\phi_1||\\nabla\\phi_2|}$",
+      "Orthogonal when the dot product is zero",
+      "Verify the point satisfies both surfaces"
+     ],
+     "questions": [
+      {
+       "id": "as-q1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "Two surfaces cut orthogonally at a point when",
+       "options": [
+        "$\\nabla\\phi_1\\times\\nabla\\phi_2=\\vec 0$",
+        "$\\nabla\\phi_1\\cdot\\nabla\\phi_2=0$",
+        "$\\nabla\\phi_1=\\nabla\\phi_2$",
+        "$|\\nabla\\phi_1|=|\\nabla\\phi_2|$"
+       ],
+       "answer_index": 1,
+       "why": "Orthogonal surfaces have perpendicular normals. The cross product being zero means the surfaces touch."
+      },
+      {
+       "id": "as-q2",
+       "kind": "numerical",
+       "level": 2,
+       "marks": 4,
+       "q": "Find the angle between the surfaces $x^2+y^2+z^2=9$ and $z=x^2+y^2-3$ at the point $(2,-1,2)$.",
+       "model_answer_md": "Check: $4+1+4=9$ and $4+1-3=2$, so the point lies on both.\n\n$\\phi_1=x^2+y^2+z^2-9$: $\\nabla\\phi_1=(2x,2y,2z)=(4,-2,4)$, $|\\nabla\\phi_1|=6$.\n$\\phi_2=x^2+y^2-z-3$: $\\nabla\\phi_2=(2x,2y,-1)=(4,-2,-1)$, $|\\nabla\\phi_2|=\\sqrt{21}$.\n\n$\\nabla\\phi_1\\cdot\\nabla\\phi_2=16+4-4=16$.\n\n$\\cos\\theta=\\dfrac{16}{6\\sqrt{21}}=\\dfrac{8}{3\\sqrt{21}}$, so $\\theta=\\cos^{-1}\\dfrac{8}{3\\sqrt{21}}\\approx 54.4^\\circ$.",
+       "points": [
+        "Both normals $(4,-2,4)$ and $(4,-2,-1)$",
+        "Dot product 16, magnitudes $6$ and $\\sqrt{21}$",
+        "$\\cos\\theta=8/(3\\sqrt{21})$"
+       ]
+      },
+      {
+       "id": "as-q3",
+       "kind": "numerical",
+       "level": 3,
+       "marks": 4,
+       "q": "Find the constant $a$ so that the surfaces $ax^2-yz=(a+2)x$ and $4x^2y+z^3=4$ cut orthogonally at $(1,-1,2)$.",
+       "model_answer_md": "$\\phi_1=ax^2-yz-(a+2)x$: $\\nabla\\phi_1=(2ax-(a+2),\\,-z,\\,-y)$, at the point $(a-2,\\,-2,\\,1)$.\n$\\phi_2=4x^2y+z^3-4$: $\\nabla\\phi_2=(8xy,\\,4x^2,\\,3z^2)$, at the point $(-8,\\,4,\\,12)$.\n\nOrthogonal: $-8(a-2)-8+12=0\\Rightarrow 20-8a=0\\Rightarrow a=\\dfrac52$.",
+       "points": [
+        "Both gradients at the point",
+        "Dot product set to zero",
+        "$a=5/2$"
+       ]
+      }
+     ]
+    },
+    {
+     "id": "grad-of-r",
+     "title": "Gradient of functions of r",
+     "theory_md": "With $r=|\\vec r|=\\sqrt{x^2+y^2+z^2}$, $\\dfrac{\\partial r}{\\partial x}=\\dfrac{x}{r}$, so $\\nabla r=\\dfrac{\\vec r}{r}=\\hat r$.\n\n- $\\nabla f(r)=f'(r)\\,\\dfrac{\\vec r}{r}$\n- $\\nabla r^n=n\\,r^{n-2}\\,\\vec r$, so $\\nabla\\dfrac1r=-\\dfrac{\\vec r}{r^3}$\n- $\\nabla(\\vec a\\cdot\\vec r)=\\vec a$ for a constant vector $\\vec a$.",
+     "basics_md": "$r$ is the distance from the origin; it grows fastest straight away from the origin, so its gradient is the outward unit vector.",
+     "key_points": [
+      "$\\nabla r=\\vec r/r$",
+      "$\\nabla f(r)=f'(r)\\,\\vec r/r$",
+      "$\\nabla r^n=n r^{n-2}\\vec r$",
+      "$\\nabla(\\vec a\\cdot\\vec r)=\\vec a$"
+     ],
+     "questions": [
+      {
+       "id": "gr-q1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "$\\nabla\\left(\\dfrac1r\\right)$ equals",
+       "options": [
+        "$\\dfrac{\\vec r}{r^3}$",
+        "$-\\dfrac{\\vec r}{r^3}$",
+        "$-\\dfrac{\\vec r}{r^2}$",
+        "$\\dfrac{1}{r^2}$"
+       ],
+       "answer_index": 1,
+       "why": "$n=-1$ in $nr^{n-2}\\vec r$ gives $-r^{-3}\\vec r$."
+      },
+      {
+       "id": "gr-q2",
+       "kind": "short",
+       "level": 2,
+       "marks": 2,
+       "q": "Prove that $\\nabla r^n=n\\,r^{n-2}\\,\\vec r$.",
+       "model_answer_md": "$\\dfrac{\\partial}{\\partial x}r^n=nr^{n-1}\\dfrac{\\partial r}{\\partial x}=nr^{n-1}\\dfrac{x}{r}=nr^{n-2}x$, and similarly for $y,z$.\n\nSo $\\nabla r^n=nr^{n-2}(x\\hat i+y\\hat j+z\\hat k)=nr^{n-2}\\vec r$.",
+       "points": [
+        "Chain rule with $\\partial r/\\partial x=x/r$",
+        "Same for $y$ and $z$",
+        "Result $nr^{n-2}\\vec r$"
+       ]
+      },
+      {
+       "id": "gr-q3",
+       "kind": "short",
+       "level": 2,
+       "marks": 2,
+       "q": "If $\\vec a$ is a constant vector, show that $\\nabla(\\vec a\\cdot\\vec r)=\\vec a$.",
+       "model_answer_md": "$\\vec a\\cdot\\vec r=a_1x+a_2y+a_3z$.\n\n$\\nabla(\\vec a\\cdot\\vec r)=a_1\\hat i+a_2\\hat j+a_3\\hat k=\\vec a$.",
+       "points": [
+        "Expand $\\vec a\\cdot\\vec r$",
+        "Differentiate each coordinate",
+        "Result $\\vec a$"
+       ]
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "topic": "Directional derivative",
+   "subtopics": [
+    {
+     "id": "dd-compute",
+     "title": "Directional derivative at a point",
+     "theory_md": "The rate of change of $\\phi$ at a point along a unit vector $\\hat u$ is\n$$D_{\\hat u}\\phi=\\nabla\\phi\\cdot\\hat u.$$\n\n1. Find $\\nabla\\phi$ and put in the point.\n2. Convert the direction to a **unit** vector (a direction \"towards a point $Q$\" is $\\overrightarrow{PQ}$).\n3. Dot them.\n\nA negative answer means $\\phi$ decreases that way.",
+     "basics_md": "The gradient says how steeply $\\phi$ changes in each coordinate direction. Dotting with a unit direction picks out the share of it along that direction.",
+     "key_points": [
+      "$D_{\\hat u}\\phi=\\nabla\\phi\\cdot\\hat u$",
+      "Direction must be made a unit vector",
+      "Direction towards $Q$ from $P$ is $\\overrightarrow{PQ}$",
+      "Sign shows whether $\\phi$ increases or decreases"
+     ],
+     "questions": [
+      {
+       "id": "dc-q1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "The directional derivative of $\\phi$ along a unit vector $\\hat u$ is",
+       "options": [
+        "$\\nabla\\phi\\times\\hat u$",
+        "$\\nabla\\phi\\cdot\\hat u$",
+        "$\\nabla\\cdot(\\phi\\hat u)$",
+        "$|\\nabla\\phi|\\hat u$"
+       ],
+       "answer_index": 1,
+       "why": "It is the dot product of the gradient with the unit direction."
+      },
+      {
+       "id": "dc-q2",
+       "kind": "numerical",
+       "level": 2,
+       "marks": 4,
+       "q": "Find the directional derivative of $\\phi=x^2yz+4xz^2$ at $(1,-2,-1)$ in the direction $2\\hat i-\\hat j-2\\hat k$.",
+       "model_answer_md": "$\\nabla\\phi=(2xyz+4z^2)\\hat i+x^2z\\,\\hat j+(x^2y+8xz)\\hat k$.\nAt $(1,-2,-1)$: $\\nabla\\phi=8\\hat i-\\hat j-10\\hat k$.\n\n$\\hat u=\\dfrac{2\\hat i-\\hat j-2\\hat k}{3}$.\n\n$D_{\\hat u}\\phi=\\dfrac{16+1+20}{3}=\\dfrac{37}{3}$.",
+       "points": [
+        "$\\nabla\\phi=8\\hat i-\\hat j-10\\hat k$ at the point",
+        "Unit vector with magnitude 3",
+        "$37/3$"
+       ]
+      },
+      {
+       "id": "dc-q3",
+       "kind": "numerical",
+       "level": 3,
+       "marks": 4,
+       "q": "Find the directional derivative of $\\phi=x^2-y^2+2z^2$ at $P(1,2,3)$ in the direction of the line $PQ$, where $Q=(5,0,4)$. Also find its maximum rate of change at $P$.",
+       "model_answer_md": "$\\nabla\\phi=2x\\hat i-2y\\hat j+4z\\hat k=2\\hat i-4\\hat j+12\\hat k$ at $P$.\n\n$\\overrightarrow{PQ}=4\\hat i-2\\hat j+\\hat k$, $|PQ|=\\sqrt{21}$.\n\n$D=\\dfrac{8+8+12}{\\sqrt{21}}=\\dfrac{28}{\\sqrt{21}}=\\dfrac{4\\sqrt{21}}{3}$.\n\nMaximum rate $=|\\nabla\\phi|=\\sqrt{4+16+144}=\\sqrt{164}=2\\sqrt{41}$.",
+       "points": [
+        "$\\nabla\\phi$ at $P$",
+        "$\\overrightarrow{PQ}$ made a unit vector",
+        "$D=28/\\sqrt{21}$",
+        "Maximum $=2\\sqrt{41}$"
+       ]
+      },
+      {
+       "id": "dc-q4",
+       "kind": "numerical",
+       "level": 2,
+       "marks": 3,
+       "q": "Find the directional derivative of $\\phi=xy^2+yz^3$ at $(2,-1,1)$ towards the point $(1,1,2)$.",
+       "model_answer_md": "$\\nabla\\phi=y^2\\hat i+(2xy+z^3)\\hat j+3yz^2\\hat k=\\hat i-3\\hat j-3\\hat k$ at $(2,-1,1)$.\n\nDirection $=(1-2,\\ 1+1,\\ 2-1)=(-1,2,1)$, magnitude $\\sqrt6$.\n\n$D=\\dfrac{-1-6-3}{\\sqrt6}=-\\dfrac{10}{\\sqrt6}$. The negative sign means $\\phi$ decreases in that direction.",
+       "points": [
+        "$\\nabla\\phi=(1,-3,-3)$",
+        "Direction $(-1,2,1)$ made a unit vector",
+        "$-10/\\sqrt6$"
+       ]
+      }
+     ]
+    },
+    {
+     "id": "dd-maximum",
+     "title": "Maximum rate and finding constants",
+     "theory_md": "- $\\phi$ increases fastest along $\\nabla\\phi$, and the **maximum value of the directional derivative is $|\\nabla\\phi|$**.\n- Along $-\\nabla\\phi$ it is $-|\\nabla\\phi|$ (fastest decrease); along any tangent to the level surface it is $0$.\n- \"Maximum in a direction parallel to an axis\" means $\\nabla\\phi$ points along that axis: the other two components are $0$ and the remaining one has magnitude equal to the given maximum.\n\nUnknown constants then come from these equations.",
+     "basics_md": "Standing on a hill, the steepest way up is the gradient direction and its steepness is $|\\nabla\\phi|$. Walking along a contour line, the height does not change.",
+     "key_points": [
+      "Max directional derivative $=|\\nabla\\phi|$ along $\\nabla\\phi$",
+      "Zero along directions tangent to the surface",
+      "Parallel to an axis means the other two components of $\\nabla\\phi$ are $0$",
+      "Use the given magnitude for the last equation"
+     ],
+     "questions": [
+      {
+       "id": "dm-q1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "The maximum value of the directional derivative of $\\phi$ at a point is",
+       "options": [
+        "$\\nabla\\phi$",
+        "$|\\nabla\\phi|$",
+        "$\\nabla\\phi\\cdot\\hat k$",
+        "$\\nabla^2\\phi$"
+       ],
+       "answer_index": 1,
+       "why": "It equals the magnitude of the gradient, attained along the gradient."
+      },
+      {
+       "id": "dm-q2",
+       "kind": "numerical",
+       "level": 2,
+       "marks": 3,
+       "q": "Find the greatest rate of increase of $\\phi=x^2yz^3$ at $(2,1,-1)$ and the direction in which it occurs.",
+       "model_answer_md": "$\\nabla\\phi=2xyz^3\\,\\hat i+x^2z^3\\,\\hat j+3x^2yz^2\\,\\hat k$; at $(2,1,-1)$: $-4\\hat i-4\\hat j+12\\hat k$.\n\nGreatest rate $=|\\nabla\\phi|=\\sqrt{16+16+144}=\\sqrt{176}=4\\sqrt{11}$, along $-4\\hat i-4\\hat j+12\\hat k$, i.e. $\\dfrac{-\\hat i-\\hat j+3\\hat k}{\\sqrt{11}}$.",
+       "points": [
+        "$\\nabla\\phi=(-4,-4,12)$",
+        "Maximum $=4\\sqrt{11}$",
+        "Direction along $\\nabla\\phi$"
+       ]
+      },
+      {
+       "id": "dm-q3",
+       "kind": "numerical",
+       "level": 2,
+       "marks": 4,
+       "q": "Find $a,b,c$ so that the directional derivative of $\\phi=axy+byz+czx$ at $(1,1,1)$ has maximum magnitude $4$ in a direction parallel to the $x$-axis (take $+\\hat i$).",
+       "model_answer_md": "$\\nabla\\phi=(ay+cz)\\hat i+(ax+bz)\\hat j+(by+cx)\\hat k=(a+c)\\hat i+(a+b)\\hat j+(b+c)\\hat k$ at $(1,1,1)$.\n\nParallel to $x$-axis: $a+b=0$ and $b+c=0$. Magnitude 4 along $+\\hat i$: $a+c=4$.\n\nSo $b=-a$, $c=a$, $2a=4$: $a=2,\\ b=-2,\\ c=2$.",
+       "points": [
+        "$\\nabla\\phi$ at the point",
+        "$\\hat j,\\hat k$ components set to zero",
+        "$\\hat i$ component equals 4",
+        "$a=2,b=-2,c=2$"
+       ]
+      },
+      {
+       "id": "dm-p1",
+       "pyq": "9ffedd9379f95c68",
+       "level": 3,
+       "points": [
+        "$\\nabla\\phi=(4a+3c)\\hat i+(4a-b)\\hat j+(2b-2c)\\hat k$ at $(1,2,-1)$",
+        "Maximum directional derivative is $|\\nabla\\phi|$ along $\\nabla\\phi$",
+        "Parallel to $z$-axis: $4a+3c=0$ and $4a-b=0$",
+        "$\\nabla\\phi=\\frac{32a}{3}\\hat k$ and $|\\nabla\\phi|=64$ gives $a=\\pm6$",
+        "$a=6,\\ b=24,\\ c=-8$ (or the sign-reversed set for $-\\hat k$)"
+       ]
+      },
+      {
+       "id": "dm-p2",
+       "pyq": "5373b9ea917334c0",
+       "level": 3,
+       "points": [
+        "$\\phi_x=4a+3c,\\ \\phi_y=4a-b,\\ \\phi_z=2b-2c$ at the point",
+        "Maximum value is $|\\nabla\\phi|$, so $\\phi_x=\\phi_y=0$",
+        "$b=4a,\\ c=-4a/3$ and $\\phi_z=32a/3$",
+        "$|32a/3|=64$ gives $a=\\pm6$",
+        "$a=6,\\ b=24,\\ c=-8$"
+       ]
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "topic": "Divergence and curl of a vector point function",
+   "subtopics": [
+    {
+     "id": "div-curl-compute",
+     "title": "Divergence and curl",
+     "theory_md": "For $\\vec F=P\\hat i+Q\\hat j+R\\hat k$:\n$$\\nabla\\cdot\\vec F=P_x+Q_y+R_z\\ \\ (\\text{scalar}),\\qquad \\nabla\\times\\vec F=\\begin{vmatrix}\\hat i&\\hat j&\\hat k\\\\ \\partial_x&\\partial_y&\\partial_z\\\\ P&Q&R\\end{vmatrix}\\ \\ (\\text{vector}).$$\n\nExpanded curl: $(R_y-Q_z)\\hat i+(P_z-R_x)\\hat j+(Q_x-P_y)\\hat k$. Differentiate first, substitute the point at the end. Divergence measures net outflow per unit volume; curl measures rotation.",
+     "basics_md": "Divergence asks \"is more flowing out of this point than in?\" Curl asks 'does a tiny paddle wheel placed here spin?'",
+     "key_points": [
+      "Divergence is a scalar: $P_x+Q_y+R_z$",
+      "Curl is a vector from the determinant",
+      "Differentiate first, then substitute the point",
+      "$\\nabla\\cdot\\vec r=3$ and $\\nabla\\times\\vec r=\\vec 0$"
+     ],
+     "questions": [
+      {
+       "id": "dv-q1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "Divergence of a vector field is a",
+       "options": [
+        "vector",
+        "scalar",
+        "tensor",
+        "unit vector"
+       ],
+       "answer_index": 1,
+       "why": "$\\nabla\\cdot\\vec F=P_x+Q_y+R_z$ is a number at each point; the curl is the vector."
+      },
+      {
+       "id": "dv-q2",
+       "kind": "numerical",
+       "level": 2,
+       "marks": 4,
+       "q": "Find $\\nabla\\cdot\\vec F$ and $\\nabla\\times\\vec F$ at $(1,-1,1)$ for $\\vec F=xy^2\\hat i+2x^2yz\\,\\hat j-3yz^2\\hat k$.",
+       "model_answer_md": "**Divergence:** $\\nabla\\cdot\\vec F=y^2+2x^2z-6yz$. At $(1,-1,1)$: $1+2+6=9$.\n\n**Curl:**\n- $\\hat i$: $R_y-Q_z=-3z^2-2x^2y=-3+2=-1$\n- $\\hat j$: $P_z-R_x=0-0=0$\n- $\\hat k$: $Q_x-P_y=4xyz-2xy=-4+2=-2$\n\n$\\nabla\\times\\vec F=-\\hat i-2\\hat k$.",
+       "points": [
+        "$\\nabla\\cdot\\vec F=9$",
+        "$\\hat i$ component $-1$",
+        "$\\hat j$ component $0$",
+        "$\\hat k$ component $-2$"
+       ]
+      },
+      {
+       "id": "dv-q3",
+       "kind": "short",
+       "level": 3,
+       "marks": 4,
+       "q": "Find $\\nabla\\cdot\\vec F$ and $\\nabla\\times\\vec F$ for $\\vec F=\\nabla(x^3+y^3+z^3-3xyz)$.",
+       "model_answer_md": "$\\vec F=3(x^2-yz)\\hat i+3(y^2-zx)\\hat j+3(z^2-xy)\\hat k$.\n\n$\\nabla\\cdot\\vec F=6x+6y+6z=6(x+y+z)$.\n\nCurl: $\\hat i$: $R_y-Q_z=-3x+3x=0$; similarly $\\hat j$ and $\\hat k$ components are $0$. So $\\nabla\\times\\vec F=\\vec 0$ (the curl of a gradient is zero).",
+       "points": [
+        "$\\vec F$ found by taking the gradient",
+        "$\\nabla\\cdot\\vec F=6(x+y+z)$",
+        "$\\nabla\\times\\vec F=\\vec 0$"
+       ]
+      }
+     ]
+    },
+    {
+     "id": "irrotational-solenoidal",
+     "title": "Irrotational, solenoidal and potential",
+     "theory_md": "- **Irrotational** (conservative): $\\nabla\\times\\vec F=\\vec 0$. Then $\\vec F=\\nabla f$ for a scalar potential $f$.\n- **Solenoidal**: $\\nabla\\cdot\\vec F=0$.\n\nTo find unknown constants, put the curl components (or the divergence) equal to zero. To find $f$, integrate $f_x=P$ with respect to $x$, add an unknown function $g(y,z)$, then match $f_y=Q$ and $f_z=R$.",
+     "basics_md": "Irrotational: no spinning anywhere. Solenoidal: nothing is created or destroyed, so whatever flows in flows out.",
+     "key_points": [
+      "Irrotational means curl $=\\vec 0$",
+      "Solenoidal means divergence $=0$",
+      "Irrotational gives $\\vec F=\\nabla f$",
+      "Integrate $f_x=P$, then fix the leftover function using $Q$ and $R$"
+     ],
+     "questions": [
+      {
+       "id": "is-q1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "A field with $\\nabla\\times\\vec F=\\vec 0$ is called",
+       "options": [
+        "solenoidal",
+        "irrotational",
+        "incompressible",
+        "harmonic"
+       ],
+       "answer_index": 1,
+       "why": "Zero curl is irrotational; zero divergence is solenoidal."
+      },
+      {
+       "id": "is-q2",
+       "kind": "numerical",
+       "level": 2,
+       "marks": 4,
+       "q": "Show that $\\vec F=(y+z)\\hat i+(z+x)\\hat j+(x+y)\\hat k$ is irrotational and find $f$ with $\\vec F=\\nabla f$.",
+       "model_answer_md": "Curl: $\\hat i$: $R_y-Q_z=1-1=0$; $\\hat j$: $P_z-R_x=1-1=0$; $\\hat k$: $Q_x-P_y=1-1=0$. So $\\nabla\\times\\vec F=\\vec 0$.\n\n$f_x=y+z\\Rightarrow f=xy+xz+g(y,z)$. $f_y=x+g_y=z+x\\Rightarrow g=yz+h(z)$. $f_z=x+y+h'=x+y\\Rightarrow h=C$.\n\n$f=xy+yz+zx+C$.",
+       "points": [
+        "Curl shown to be zero",
+        "Integration of $f_x$ and matching $f_y,f_z$",
+        "$f=xy+yz+zx+C$"
+       ]
+      },
+      {
+       "id": "is-q3",
+       "kind": "short",
+       "level": 2,
+       "marks": 2,
+       "q": "Find $a$ so that $\\vec F=(x+3y)\\hat i+(y-2z)\\hat j+(x+az)\\hat k$ is solenoidal.",
+       "model_answer_md": "$\\nabla\\cdot\\vec F=1+1+a=0$, so $a=-2$.",
+       "points": [
+        "Solenoidal means $\\nabla\\cdot\\vec F=0$",
+        "$2+a=0$",
+        "$a=-2$"
+       ]
+      },
+      {
+       "id": "is-p1",
+       "pyq": "2bb62ee446306227",
+       "level": 3,
+       "points": [
+        "Curl $=(c+1)\\hat i+(a-4)\\hat j+(b-2)\\hat k=\\vec 0$",
+        "$c=-1,\\ a=4,\\ b=2$",
+        "$f_x=x+2y+4z$ integrated: $f=\\frac{x^2}{2}+2xy+4xz+g(y,z)$",
+        "Matching $f_y$ and $f_z$ gives $g$ and $h$",
+        "$f=\\frac{x^2}{2}+2xy+4xz-\\frac{3y^2}{2}-yz+z^2+C$"
+       ]
+      }
+     ]
+    },
+    {
+     "id": "vector-identities",
+     "title": "Standard identities",
+     "theory_md": "- $\\nabla\\times(\\nabla\\phi)=\\vec 0$ (gradient fields are irrotational).\n- $\\nabla\\cdot(\\nabla\\times\\vec F)=0$ (curl fields are solenoidal).\n- $\\nabla^2\\phi=\\nabla\\cdot\\nabla\\phi=\\phi_{xx}+\\phi_{yy}+\\phi_{zz}$ (Laplacian).\n- $\\nabla\\cdot(r^n\\vec r)=(n+3)r^n$, so it is solenoidal for $n=-3$.\n- $\\nabla^2 r^n=n(n+1)r^{n-2}$, so $\\nabla^2\\dfrac1r=0$.\n- $\\nabla\\times(r^n\\vec r)=\\vec 0$.",
+     "basics_md": "The order of mixed partial derivatives does not matter. That single fact is why the curl of a gradient and the divergence of a curl cancel to zero.",
+     "key_points": [
+      "$\\nabla\\times\\nabla\\phi=\\vec 0$ and $\\nabla\\cdot(\\nabla\\times\\vec F)=0$",
+      "$\\nabla\\cdot(r^n\\vec r)=(n+3)r^n$",
+      "$\\nabla^2 r^n=n(n+1)r^{n-2}$",
+      "$1/r$ is harmonic: $\\nabla^2(1/r)=0$"
+     ],
+     "questions": [
+      {
+       "id": "vi-q1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "$\\nabla\\cdot(\\nabla\\times\\vec F)$ equals",
+       "options": [
+        "$\\vec F$",
+        "$\\vec 0$",
+        "$0$",
+        "$\\nabla^2\\vec F$"
+       ],
+       "answer_index": 2,
+       "why": "It is a scalar and is always zero. Option 2 is a zero vector, which is the wrong type."
+      },
+      {
+       "id": "vi-q2",
+       "kind": "short",
+       "level": 2,
+       "marks": 3,
+       "q": "Show that $\\nabla\\cdot(r^n\\vec r)=(n+3)r^n$. For which $n$ is $r^n\\vec r$ solenoidal?",
+       "model_answer_md": "$\\nabla\\cdot(r^n\\vec r)=\\nabla r^n\\cdot\\vec r+r^n(\\nabla\\cdot\\vec r)$.\n$\\nabla r^n=nr^{n-2}\\vec r$, so the first term is $nr^{n-2}(\\vec r\\cdot\\vec r)=nr^n$. And $\\nabla\\cdot\\vec r=3$.\n\nSum $=nr^n+3r^n=(n+3)r^n$. It is solenoidal when $n=-3$.",
+       "points": [
+        "Product rule for divergence",
+        "$\\nabla r^n\\cdot\\vec r=nr^n$ and $\\nabla\\cdot\\vec r=3$",
+        "$(n+3)r^n$; $n=-3$"
+       ]
+      },
+      {
+       "id": "vi-q3",
+       "kind": "short",
+       "level": 3,
+       "marks": 4,
+       "q": "Show that $\\nabla^2 r^n=n(n+1)r^{n-2}$ and deduce $\\nabla^2(1/r)=0$.",
+       "model_answer_md": "$\\nabla^2r^n=\\nabla\\cdot(nr^{n-2}\\vec r)=n(n-2+3)r^{n-2}=n(n+1)r^{n-2}$, using $\\nabla\\cdot(r^m\\vec r)=(m+3)r^m$ with $m=n-2$.\n\nFor $n=-1$: $(-1)(0)r^{-3}=0$, so $\\nabla^2(1/r)=0$.",
+       "points": [
+        "$\\nabla r^n=nr^{n-2}\\vec r$ used",
+        "$n(n+1)r^{n-2}$ obtained",
+        "$n=-1$ gives zero"
+       ]
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "topic": "Line integral",
+   "subtopics": [
+    {
+     "id": "line-work",
+     "title": "Line integral and work done",
+     "theory_md": "Work done by $\\vec F$ along a curve $C$ is $\\displaystyle W=\\int_C\\vec F\\cdot d\\vec r=\\int_C(P\\,dx+Q\\,dy+R\\,dz)$.\n\n1. Parametrise $C$: $x(t),y(t),z(t)$ (or $y=f(x)$).\n2. Write $d\\vec r=(x'\\hat i+y'\\hat j+z'\\hat k)\\,dt$ and put $\\vec F$ in terms of $t$.\n3. Integrate the dot product between the limits.\n\nReversing the direction of $C$ changes the sign. For a closed curve use $\\oint$.",
+     "basics_md": "Adding up force times small displacement along the path gives work. Writing the path as a function of one variable turns it into an ordinary integral.",
+     "key_points": [
+      "$W=\\int_C\\vec F\\cdot d\\vec r$",
+      "Parametrise and substitute everything in $t$",
+      "Limits are the parameter values at the end points",
+      "Reversing direction reverses the sign"
+     ],
+     "questions": [
+      {
+       "id": "lw-q1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "The work done by a force $\\vec F$ along a curve $C$ is",
+       "options": [
+        "$\\int_C\\vec F\\times d\\vec r$",
+        "$\\int_C\\vec F\\cdot d\\vec r$",
+        "$\\int_C|\\vec F|\\,ds$",
+        "$\\int_C\\nabla\\cdot\\vec F\\,dV$"
+       ],
+       "answer_index": 1,
+       "why": "Work is force dotted with displacement."
+      },
+      {
+       "id": "lw-q2",
+       "kind": "numerical",
+       "level": 2,
+       "marks": 3,
+       "q": "Evaluate $\\int_C\\vec F\\cdot d\\vec r$ for $\\vec F=x^2\\hat i+xy\\,\\hat j$ along $y=x^2$ from $(0,0)$ to $(1,1)$.",
+       "model_answer_md": "On $y=x^2$: $dy=2x\\,dx$.\n\n$\\vec F\\cdot d\\vec r=x^2\\,dx+x\\,y\\,dy=x^2\\,dx+x(x^2)(2x\\,dx)=(x^2+2x^4)\\,dx$.\n\n$\\displaystyle\\int_0^1(x^2+2x^4)\\,dx=\\frac13+\\frac25=\\frac{11}{15}$.",
+       "points": [
+        "$dy=2x\\,dx$ and everything in $x$",
+        "Integrand $x^2+2x^4$",
+        "$11/15$"
+       ]
+      },
+      {
+       "id": "lw-q3",
+       "kind": "numerical",
+       "level": 3,
+       "marks": 5,
+       "q": "Find the work done by $\\vec F=3xy\\,\\hat i-5z\\,\\hat j+10x\\,\\hat k$ along the curve $x=t^2+1$, $y=2t^2$, $z=t^3$ from $t=1$ to $t=2$.",
+       "model_answer_md": "$d\\vec r=(2t\\,\\hat i+4t\\,\\hat j+3t^2\\hat k)\\,dt$, and $\\vec F=3(t^2+1)(2t^2)\\hat i-5t^3\\hat j+10(t^2+1)\\hat k$.\n\n$\\vec F\\cdot d\\vec r=\\left[12t^3(t^2+1)-20t^4+30t^2(t^2+1)\\right]dt=(12t^5+12t^3-20t^4+30t^4+30t^2)\\,dt=(12t^5+10t^4+12t^3+30t^2)\\,dt$.\n\n$W=\\displaystyle\\int_1^2\\left(12t^5+10t^4+12t^3+30t^2\\right)dt=\\left[2t^6+2t^5+3t^4+10t^3\\right]_1^2=303$ units.",
+       "points": [
+        "$d\\vec r$ and $\\vec F$ in terms of $t$",
+        "Integrand simplified",
+        "Limits $1$ to $2$",
+        "$W=303$"
+       ]
+      }
+     ]
+    },
+    {
+     "id": "conservative-field",
+     "title": "Conservative fields and path independence",
+     "theory_md": "If $\\nabla\\times\\vec F=\\vec 0$ (in a simply connected region), $\\vec F=\\nabla\\phi$ and the line integral is **independent of the path**:\n$$\\int_A^B\\vec F\\cdot d\\vec r=\\phi(B)-\\phi(A),\\qquad \\oint_C\\vec F\\cdot d\\vec r=0.$$\n\nTest the curl, find the potential $\\phi$ by integrating, then evaluate at the end points. No parametrisation is needed.",
+     "basics_md": "Walking up a hill, the height gained depends only on where you start and end, not on the winding path. A conservative field behaves like that.",
+     "key_points": [
+      "Conservative if curl $=\\vec 0$",
+      "Then $\\vec F=\\nabla\\phi$",
+      "$\\int_A^B\\vec F\\cdot d\\vec r=\\phi(B)-\\phi(A)$",
+      "Closed path integral is $0$"
+     ],
+     "questions": [
+      {
+       "id": "cf-q1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "For a conservative field, $\\oint_C\\vec F\\cdot d\\vec r$ over a closed curve is",
+       "options": [
+        "$2\\pi$",
+        "$1$",
+        "$0$",
+        "the area enclosed"
+       ],
+       "answer_index": 2,
+       "why": "Potential at the end point equals potential at the start point."
+      },
+      {
+       "id": "cf-q2",
+       "kind": "numerical",
+       "level": 2,
+       "marks": 5,
+       "q": "Show that $\\vec F=(2xy+z^3)\\hat i+x^2\\hat j+3xz^2\\hat k$ is conservative. Find its potential and the work done from $(1,-2,1)$ to $(3,1,4)$.",
+       "model_answer_md": "**Curl:** $R_y-Q_z=0-0$, $P_z-R_x=3z^2-3z^2=0$, $Q_x-P_y=2x-2x=0$. So $\\nabla\\times\\vec F=\\vec 0$ and $\\vec F$ is conservative.\n\n**Potential:** $\\phi_x=2xy+z^3\\Rightarrow\\phi=x^2y+xz^3+g(y,z)$; $\\phi_y=x^2$ gives $g_y=0$; $\\phi_z=3xz^2$ gives $g_z=0$. So $\\phi=x^2y+xz^3$.\n\n**Work:** $W=\\phi(3,1,4)-\\phi(1,-2,1)=(9+192)-(-2+1)=201+1=202$ units.",
+       "points": [
+        "Curl shown zero",
+        "$\\phi=x^2y+xz^3$",
+        "End-point values $201$ and $-1$",
+        "$W=202$"
+       ]
+      },
+      {
+       "id": "cf-q3",
+       "kind": "short",
+       "level": 2,
+       "marks": 2,
+       "q": "State the condition for a line integral $\\int_A^B\\vec F\\cdot d\\vec r$ to be independent of the path, and what it equals.",
+       "model_answer_md": "The path-independence condition is $\\nabla\\times\\vec F=\\vec 0$ (so $\\vec F=\\nabla\\phi$). The integral then equals $\\phi(B)-\\phi(A)$, and is $0$ around any closed curve.",
+       "points": [
+        "Condition: curl $=\\vec 0$",
+        "$\\vec F=\\nabla\\phi$",
+        "Value $\\phi(B)-\\phi(A)$, zero on a closed path"
+       ]
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "topic": "Surface integral",
+   "subtopics": [
+    {
+     "id": "flux-surface",
+     "title": "Flux through a surface",
+     "theory_md": "Flux of $\\vec F$ through $S$ is $\\displaystyle\\iint_S\\vec F\\cdot\\hat n\\,dS$.\n\nFor a surface $\\phi(x,y,z)=0$, $\\hat n=\\dfrac{\\nabla\\phi}{|\\nabla\\phi|}$. Project on a coordinate plane (say $xy$):\n$$\\iint_S\\vec F\\cdot\\hat n\\,dS=\\iint_R\\frac{\\vec F\\cdot\\hat n}{|\\hat n\\cdot\\hat k|}\\,dx\\,dy.$$\n\nPut $z$ from the surface equation into $\\vec F$, and take the projected region $R$ from the boundaries of $S$. For a cylinder use $x=a\\cos\\theta,\\ y=a\\sin\\theta$, $dS=a\\,d\\theta\\,dz$.",
+     "basics_md": "Flux counts how much of the field passes through a surface, like water through a net. Only the part of $\\vec F$ along the normal passes through.",
+     "key_points": [
+      "Flux $=\\iint\\vec F\\cdot\\hat n\\,dS$",
+      "$\\hat n=\\nabla\\phi/|\\nabla\\phi|$",
+      "$dS=dx\\,dy/|\\hat n\\cdot\\hat k|$ for projection on $xy$-plane",
+      "Limits come from the projected region"
+     ],
+     "questions": [
+      {
+       "id": "fs-q1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "For a surface $\\phi=0$, projected on the $xy$-plane, $dS$ equals",
+       "options": [
+        "$dx\\,dy$",
+        "$\\dfrac{dx\\,dy}{|\\hat n\\cdot\\hat k|}$",
+        "$|\\hat n\\cdot\\hat k|\\,dx\\,dy$",
+        "$\\dfrac{dx\\,dy}{|\\hat n\\cdot\\hat i|}$"
+       ],
+       "answer_index": 1,
+       "why": "The tilted area is larger than its shadow by the factor $1/|\\hat n\\cdot\\hat k|$."
+      },
+      {
+       "id": "fs-q2",
+       "kind": "numerical",
+       "level": 2,
+       "marks": 5,
+       "q": "Evaluate $\\iint_S\\vec F\\cdot\\hat n\\,dS$ for $\\vec F=(x+y^2)\\hat i-2x\\hat j+2yz\\,\\hat k$ over the part of the plane $2x+y+2z=6$ in the first octant.",
+       "model_answer_md": "$\\phi=2x+y+2z-6$, $\\nabla\\phi=2\\hat i+\\hat j+2\\hat k$, $|\\nabla\\phi|=3$, $\\hat n\\cdot\\hat k=\\dfrac23$.\n\nProjection on the $xy$-plane: triangle $0\\le x\\le3$, $0\\le y\\le6-2x$, with $z=\\dfrac{6-2x-y}{2}$.\n\nUsing $\\vec n'=(2,1,2)$: $\\vec F\\cdot\\vec n'=2(x+y^2)-2x+4yz=2y^2+4yz$. With $4yz=2y(6-2x-y)$ this is $12y-4xy$.\n\n$\\vec F\\cdot\\hat n\\,dS=\\dfrac{\\vec F\\cdot\\vec n'}{n'_z}\\,dx\\,dy=(6y-2xy)\\,dx\\,dy$.\n\n$\\displaystyle\\iint=\\int_0^3\\int_0^{6-2x}(6y-2xy)\\,dy\\,dx=\\int_0^3(3-x)(6-2x)^2\\,dx=\\int_0^3 4(3-x)^3\\,dx=81.$\n\nFlux $=81$ units.",
+       "points": [
+        "Unit normal $(2,1,2)/3$ and $\\hat n\\cdot\\hat k=2/3$",
+        "Projection region and $z$ substituted",
+        "Integrand $\\vec F\\cdot\\hat n/|\\hat n\\cdot\\hat k|$",
+        "Flux $=81$"
+       ]
+      },
+      {
+       "id": "fs-q3",
+       "kind": "numerical",
+       "level": 3,
+       "marks": 5,
+       "q": "Evaluate $\\iint_S\\vec F\\cdot\\hat n\\,dS$ for $\\vec F=z\\,\\hat i+x\\,\\hat j-3y^2z\\,\\hat k$ over the part of the cylinder $x^2+y^2=16$ in the first octant between $z=0$ and $z=5$.",
+       "model_answer_md": "On the cylinder $\\hat n=\\dfrac{x\\hat i+y\\hat j}{4}$. Take $x=4\\cos\\theta,\\ y=4\\sin\\theta$, $dS=4\\,d\\theta\\,dz$, with $0\\le\\theta\\le\\frac\\pi2$, $0\\le z\\le5$.\n\n$\\vec F\\cdot\\hat n=\\dfrac{zx+xy}{4}$, so $\\vec F\\cdot\\hat n\\,dS=(zx+xy)\\,d\\theta\\,dz=(4z\\cos\\theta+16\\sin\\theta\\cos\\theta)\\,d\\theta\\,dz$.\n\n$\\displaystyle\\int_0^5\\!\\!\\int_0^{\\pi/2}=4\\cdot\\frac{25}{2}\\cdot1+16\\cdot\\frac12\\cdot5=50+40=90$ units.",
+       "points": [
+        "$\\hat n=(x\\hat i+y\\hat j)/4$ (no $\\hat k$ part)",
+        "Parametrisation and $dS=4\\,d\\theta\\,dz$",
+        "Integrand and limits",
+        "Flux $=90$"
+       ]
+      }
+     ]
+    },
+    {
+     "id": "surface-area",
+     "title": "Scalar surface integrals and area",
+     "theory_md": "For a scalar $f$: $\\displaystyle\\iint_S f\\,dS=\\iint_R f\\,\\frac{dx\\,dy}{|\\hat n\\cdot\\hat k|}$, and the area of $S$ is the case $f=1$.\n\n- Plane $x+y+z=1$ in the first octant: $\\hat n=\\dfrac{(1,1,1)}{\\sqrt3}$, so $dS=\\sqrt3\\,dx\\,dy$.\n- Sphere of radius $a$, upper half: $z=\\sqrt{a^2-x^2-y^2}$ and $dS=\\dfrac{a}{z}\\,dx\\,dy$.",
+     "basics_md": "A tilted patch has more area than its shadow. The factor $1/|\\hat n\\cdot\\hat k|$ corrects the shadow back into the true area.",
+     "key_points": [
+      "$dS=dx\\,dy/|\\hat n\\cdot\\hat k|$",
+      "Area $=\\iint dS$",
+      "Plane $x+y+z=1$: $dS=\\sqrt3\\,dx\\,dy$",
+      "Upper hemisphere: $dS=(a/z)\\,dx\\,dy$"
+     ],
+     "questions": [
+      {
+       "id": "sa-q1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "The surface area of $S$ is given by",
+       "options": [
+        "$\\iint_S\\hat n\\,dS$",
+        "$\\iint_S dS$",
+        "$\\iint_S\\vec F\\cdot\\hat n\\,dS$",
+        "$\\iiint dV$"
+       ],
+       "answer_index": 1,
+       "why": "Take $f=1$ in the scalar surface integral."
+      },
+      {
+       "id": "sa-q2",
+       "kind": "short",
+       "level": 2,
+       "marks": 3,
+       "q": "Find the area of the part of the plane $x+y+z=1$ in the first octant.",
+       "model_answer_md": "$\\hat n=\\dfrac{\\hat i+\\hat j+\\hat k}{\\sqrt3}$, so $\\hat n\\cdot\\hat k=\\dfrac1{\\sqrt3}$ and $dS=\\sqrt3\\,dx\\,dy$.\n\nProjection is the triangle with area $\\dfrac12$.\n\nArea $=\\sqrt3\\cdot\\dfrac12=\\dfrac{\\sqrt3}{2}$ square units.",
+       "points": [
+        "$\\hat n\\cdot\\hat k=1/\\sqrt3$",
+        "$dS=\\sqrt3\\,dx\\,dy$",
+        "Area $=\\sqrt3/2$"
+       ]
+      },
+      {
+       "id": "sa-q3",
+       "kind": "short",
+       "level": 3,
+       "marks": 4,
+       "q": "Evaluate $\\iint_S z\\,dS$ over the upper hemisphere $x^2+y^2+z^2=a^2$, $z\\ge0$.",
+       "model_answer_md": "$dS=\\dfrac{a}{z}\\,dx\\,dy$, so $z\\,dS=a\\,dx\\,dy$.\n\n$\\displaystyle\\iint_S z\\,dS=a\\iint_{x^2+y^2\\le a^2}dx\\,dy=a\\cdot\\pi a^2=\\pi a^3$.",
+       "points": [
+        "$dS=(a/z)\\,dx\\,dy$",
+        "Integrand reduces to $a$",
+        "Area of disc $\\pi a^2$, result $\\pi a^3$"
+       ]
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "topic": "Gauss divergence theorem",
+   "subtopics": [
+    {
+     "id": "gauss-evaluate",
+     "title": "Evaluating a flux by the divergence theorem",
+     "theory_md": "For a **closed** surface $S$ enclosing volume $V$, with outward normal,\n$$\\iint_S\\vec F\\cdot\\hat n\\,dS=\\iiint_V\\nabla\\cdot\\vec F\\,dV.$$\n\nUse it to avoid summing over several faces: find $\\nabla\\cdot\\vec F$, then integrate over $V$ (Cartesian for a box, cylindrical for a cylinder, find the base region first for a region between two surfaces). If $\\nabla\\cdot\\vec F$ is a constant $k$, the answer is $k\\times$ volume.",
+     "basics_md": "What leaves through the boundary equals what is created inside. Divergence is the creation rate at each point, and we add it up over the volume.",
+     "key_points": [
+      "Closed surface, outward normal",
+      "Flux $=\\iiint\\nabla\\cdot\\vec F\\,dV$",
+      "Compute $\\nabla\\cdot\\vec F$ first",
+      "If $\\nabla\\cdot\\vec F$ is constant, answer is constant times volume"
+     ],
+     "questions": [
+      {
+       "id": "ge-q1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "The divergence theorem converts a surface integral of $\\vec F\\cdot\\hat n$ over a closed surface into",
+       "options": [
+        "$\\iiint\\nabla\\times\\vec F\\,dV$",
+        "$\\iiint\\nabla\\cdot\\vec F\\,dV$",
+        "$\\oint\\vec F\\cdot d\\vec r$",
+        "$\\iiint\\nabla\\phi\\,dV$"
+       ],
+       "answer_index": 1,
+       "why": "Gauss: flux out equals the volume integral of the divergence."
+      },
+      {
+       "id": "ge-q2",
+       "kind": "numerical",
+       "level": 2,
+       "marks": 4,
+       "q": "Use the divergence theorem to evaluate $\\iint_S\\vec F\\cdot\\hat n\\,dS$ for $\\vec F=x^3\\hat i+y^3\\hat j+z^3\\hat k$ over the sphere $x^2+y^2+z^2=a^2$.",
+       "model_answer_md": "$\\nabla\\cdot\\vec F=3x^2+3y^2+3z^2=3r^2$.\n\n$\\displaystyle\\iiint_V3r^2\\,dV=\\int_0^a3r^2\\cdot4\\pi r^2\\,dr=12\\pi\\cdot\\frac{a^5}{5}=\\frac{12\\pi a^5}{5}$.",
+       "points": [
+        "$\\nabla\\cdot\\vec F=3r^2$",
+        "Shell volume $4\\pi r^2\\,dr$",
+        "$12\\pi a^5/5$"
+       ]
+      },
+      {
+       "id": "ge-q3",
+       "kind": "numerical",
+       "level": 3,
+       "marks": 5,
+       "q": "Evaluate $\\iint_S\\vec F\\cdot\\hat n\\,dS$ for $\\vec F=4x\\hat i-2y^2\\hat j+z^2\\hat k$ over the closed surface bounded by $x^2+y^2=4$, $z=0$, $z=3$.",
+       "model_answer_md": "$\\nabla\\cdot\\vec F=4-4y+2z$.\n\nCylindrical: $x=r\\cos\\theta,\\ y=r\\sin\\theta$, $0\\le r\\le2$, $0\\le\\theta\\le2\\pi$, $0\\le z\\le3$.\n\n$\\displaystyle\\iiint(4-4y+2z)\\,dV=4V-4\\iiint y\\,dV+2\\iiint z\\,dV$.\n$V=\\pi(2)^2(3)=12\\pi$; $\\iiint y\\,dV=0$ by symmetry; $\\iiint z\\,dV=\\dfrac92\\cdot4\\pi=18\\pi$.\n\nFlux $=48\\pi-0+36\\pi=84\\pi$.",
+       "points": [
+        "$\\nabla\\cdot\\vec F=4-4y+2z$",
+        "Cylindrical limits",
+        "$V=12\\pi$, $\\iiint y=0$, $\\iiint z=18\\pi$",
+        "$84\\pi$"
+       ]
+      },
+      {
+       "id": "ge-p1",
+       "pyq": "0e73f6de9cea693e",
+       "level": 2,
+       "points": [
+        "Gauss: $\\iint\\vec F\\cdot\\vec n\\,dS=\\iiint\\nabla\\cdot\\vec F\\,dV$",
+        "$\\nabla\\cdot\\vec F=4z-2y+y=4z-y$",
+        "$\\iiint4z\\,dV=32$ over the cube $0$ to $2$",
+        "$\\iiint y\\,dV=8$",
+        "Answer $32-8=24$"
+       ]
+      },
+      {
+       "id": "ge-p2",
+       "pyq": "8b2bfe6f745c7f84",
+       "level": 3,
+       "points": [
+        "$\\nabla\\cdot\\mathbf V=2xz+1-2xz=1$",
+        "Flux equals the volume of the region",
+        "Surfaces meet on $x^2+(y-2)^2=4$",
+        "Volume $=\\iint(4y-x^2-y^2)\\,dA=\\int_0^{2\\pi}\\!\\int_0^2(4-r^2)r\\,dr\\,d\\theta$ with $y=2+r\\sin\\theta$",
+        "Answer $8\\pi$"
+       ]
+      }
+     ]
+    },
+    {
+     "id": "gauss-verify",
+     "title": "Verifying the divergence theorem",
+     "theory_md": "To **verify**, compute both sides and show they are equal.\n\n- **Volume side:** $\\iiint\\nabla\\cdot\\vec F\\,dV$.\n- **Surface side:** flux through *every* face of the closed surface, each with its **outward** normal, then add. For a cube, faces $x=0$ and $x=1$ have $\\hat n=\\mp\\hat i$, and so on. For a sphere of radius $a$, $\\hat n=\\vec r/a$ and $dS$ totals $4\\pi a^2$.\n\nState \"both equal ..., hence verified\".",
+     "basics_md": "A check that two different routes to the same quantity agree. Work out the left side, work out the right side, compare.",
+     "key_points": [
+      "Evaluate $\\iiint\\nabla\\cdot\\vec F\\,dV$",
+      "Evaluate the flux on every face with outward normal",
+      "Add the faces",
+      "Conclude both sides are equal"
+     ],
+     "questions": [
+      {
+       "id": "gv-q1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "To verify the divergence theorem for a cube you must compute",
+       "options": [
+        "only the volume integral",
+        "only the flux through one face",
+        "the volume integral and the total flux through all six faces",
+        "the curl on each face"
+       ],
+       "answer_index": 2,
+       "why": "Verification needs both sides, and the surface side includes all faces."
+      },
+      {
+       "id": "gv-q2",
+       "kind": "short",
+       "level": 2,
+       "marks": 4,
+       "q": "Verify the divergence theorem for $\\vec F=x\\hat i+y\\hat j+z\\hat k$ over the unit cube $0\\le x,y,z\\le1$.",
+       "model_answer_md": "**Volume:** $\\nabla\\cdot\\vec F=3$, so $\\iiint3\\,dV=3(1)=3$.\n\n**Surface:** on $x=1$: $\\vec F\\cdot\\hat i=1$, flux $=1$; on $x=0$: $-x=0$, flux $0$. Likewise $y=1$ gives $1$, $z=1$ gives $1$, and $y=0$, $z=0$ give $0$.\n\nTotal $=3$. Both sides equal $3$, so the theorem is verified.",
+       "points": [
+        "$\\nabla\\cdot\\vec F=3$, volume integral 3",
+        "Face fluxes $1,1,1$ and $0,0,0$",
+        "Sum 3, conclusion"
+       ]
+      },
+      {
+       "id": "gv-q3",
+       "kind": "short",
+       "level": 2,
+       "marks": 4,
+       "q": "Verify the divergence theorem for $\\vec F=x^2\\hat i+y^2\\hat j+z^2\\hat k$ over the unit cube $0\\le x,y,z\\le1$.",
+       "model_answer_md": "**Volume:** $\\nabla\\cdot\\vec F=2(x+y+z)$, $\\displaystyle\\iiint=2\\left(\\tfrac12+\\tfrac12+\\tfrac12\\right)=3$.\n\n**Surface:** on $x=1$: $F_x=1$, flux $1$; on $x=0$: $0$. Same for $y$ and $z$. Total $=3$.\n\nBoth sides equal $3$: verified.",
+       "points": [
+        "$\\nabla\\cdot\\vec F=2(x+y+z)$ and volume integral 3",
+        "Three faces with flux 1, three with 0",
+        "Both sides equal"
+       ]
+      },
+      {
+       "id": "gv-p1",
+       "pyq": "645a0a1566fcac08",
+       "level": 2,
+       "points": [
+        "$\\nabla\\cdot\\mathbf F=4z-y$ and $\\iiint=\\frac32$",
+        "Face $x=1$: $2$; $x=0$: $0$",
+        "Face $y=1$: $-1$; $y=0$: $0$",
+        "Face $z=1$: $\\frac12$; $z=0$: $0$",
+        "Total $\\frac32$, equal to volume side: verified"
+       ]
+      },
+      {
+       "id": "gv-p2",
+       "pyq": "c46436de77f262ad",
+       "level": 2,
+       "points": [
+        "$\\nabla\\cdot\\vec v=3$, volume integral $3\\cdot\\frac43\\pi a^3=4\\pi a^3$",
+        "Outward normal $\\hat n=\\vec r/a$",
+        "$\\vec v\\cdot\\hat n=a$ on the sphere",
+        "Surface integral $a\\cdot4\\pi a^2=4\\pi a^3$",
+        "Both equal: verified"
+       ]
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "topic": "Stokes' theorem",
+   "subtopics": [
+    {
+     "id": "stokes-evaluate",
+     "title": "Evaluating a line integral by Stokes' theorem",
+     "theory_md": "For a closed curve $C$ bounding a surface $S$ (orientation by the right-hand rule):\n$$\\oint_C\\vec F\\cdot d\\vec r=\\iint_S(\\nabla\\times\\vec F)\\cdot\\hat n\\,dS.$$\n\n1. Find $\\nabla\\times\\vec F$.\n2. Choose the simplest $S$ with boundary $C$ (for a triangle, the plane through it).\n3. For a plane $z=f(x,y)$ with upward normal, $\\hat n\\,dS=(-f_x,-f_y,1)\\,dx\\,dy$; integrate over the projected region.",
+     "basics_md": "Adding up the tiny spins over a surface gives the circulation round its edge. The inner circulations cancel and only the boundary is left.",
+     "key_points": [
+      "Stokes: $\\oint\\vec F\\cdot d\\vec r=\\iint(\\nabla\\times\\vec F)\\cdot\\hat n\\,dS$",
+      "Orientation by the right-hand rule",
+      "Pick the simplest surface on the curve",
+      "Use the projection for a plane: $\\hat n\\,dS=(-f_x,-f_y,1)\\,dx\\,dy$"
+     ],
+     "questions": [
+      {
+       "id": "se-q1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "Stokes' theorem relates a line integral around $C$ to",
+       "options": [
+        "$\\iint_S\\nabla\\cdot\\vec F\\,dS$",
+        "$\\iint_S(\\nabla\\times\\vec F)\\cdot\\hat n\\,dS$",
+        "$\\iiint\\nabla\\cdot\\vec F\\,dV$",
+        "$\\iint(Q_x-P_y)\\,dA$ only for a plane"
+       ],
+       "answer_index": 1,
+       "why": "The surface integral of the curl. Option 4 is Green's theorem, the plane special case."
+      },
+      {
+       "id": "se-q2",
+       "kind": "numerical",
+       "level": 2,
+       "marks": 5,
+       "q": "Use Stokes' theorem to evaluate $\\oint_C\\vec F\\cdot d\\vec r$ for $\\vec F=y^2\\hat i+x^2\\hat j-(x+z)\\hat k$, where $C$ is the boundary of the triangle with vertices $(0,0,0)$, $(1,0,0)$, $(1,1,0)$.",
+       "model_answer_md": "$\\nabla\\times\\vec F=(0-0)\\hat i+(0+1)\\hat j+(2x-2y)\\hat k=\\hat j+2(x-y)\\hat k$.\n\nThe triangle lies in the plane $z=0$, so $\\hat n=\\hat k$ and $dS=dx\\,dy$; the region is $0\\le y\\le x\\le1$.\n\n$\\displaystyle\\iint2(x-y)\\,dy\\,dx=\\int_0^1\\left[2xy-y^2\\right]_0^x dx=\\int_0^1x^2\\,dx=\\frac13$.",
+       "points": [
+        "Curl $=\\hat j+2(x-y)\\hat k$",
+        "$\\hat n=\\hat k$, region $0\\le y\\le x\\le1$",
+        "Result $\\frac13$"
+       ]
+      },
+      {
+       "id": "se-q3",
+       "kind": "numerical",
+       "level": 3,
+       "marks": 5,
+       "q": "Evaluate $\\oint_C(y\\,dx+z\\,dy+x\\,dz)$, where $C$ is the circle $x^2+y^2+z^2=a^2$, $x+y+z=0$, taken so that its normal is $\\dfrac{\\hat i+\\hat j+\\hat k}{\\sqrt3}$.",
+       "model_answer_md": "$\\vec F=y\\hat i+z\\hat j+x\\hat k$, $\\nabla\\times\\vec F=-\\hat i-\\hat j-\\hat k$.\n\nTake $S$ as the flat disc in the plane $x+y+z=0$ bounded by $C$; $\\hat n=\\dfrac{\\hat i+\\hat j+\\hat k}{\\sqrt3}$.\n\n$(\\nabla\\times\\vec F)\\cdot\\hat n=-\\dfrac{3}{\\sqrt3}=-\\sqrt3$.\n\nThe plane passes through the origin, so $C$ is a great circle of radius $a$ with disc area $\\pi a^2$.\n\n$\\oint_C=-\\sqrt3\\,\\pi a^2$.",
+       "points": [
+        "Curl $=(-1,-1,-1)$",
+        "Flat disc as the surface, $\\hat n=(1,1,1)/\\sqrt3$",
+        "Great circle, area $\\pi a^2$",
+        "Result $-\\sqrt3\\,\\pi a^2$"
+       ]
+      },
+      {
+       "id": "se-p1",
+       "pyq": "46aecedc6fb52d79",
+       "level": 2,
+       "points": [
+        "$\\nabla\\times\\vec F=2\\hat i-\\hat k$",
+        "Plane $3x+2y+z=6$, $\\hat n\\,dS=(3,2,1)\\,dx\\,dy$",
+        "$(\\nabla\\times\\vec F)\\cdot(3,2,1)=5$",
+        "Projected triangle has area $3$",
+        "Answer $5\\times3=15$"
+       ]
+      }
+     ]
+    },
+    {
+     "id": "stokes-verify",
+     "title": "Verifying Stokes' theorem",
+     "theory_md": "To **verify**, evaluate both sides.\n\n- **Line side:** parametrise the boundary $C$ (for a hemisphere $x^2+y^2+z^2=a^2$, $z\\ge0$, it is the circle $x^2+y^2=a^2$, $z=0$: $x=a\\cos t,\\ y=a\\sin t$, anticlockwise from above) and integrate $\\vec F\\cdot d\\vec r$.\n- **Surface side:** $\\nabla\\times\\vec F$, then $\\iint(\\nabla\\times\\vec F)\\cdot\\hat n\\,dS$. If the curl is $c\\,\\hat k$, the integral is $c\\times$ area of the projection on the $xy$-plane.\n\nShow the two are equal.",
+     "basics_md": "Stokes' theorem says the answer depends only on the edge of the surface. So the hemisphere and the flat disc under it give the same number.",
+     "key_points": [
+      "Boundary of the upper hemisphere is the circle in $z=0$",
+      "Line integral by parametrising the circle",
+      "Surface integral by curl and projection",
+      "State that both sides are equal"
+     ],
+     "questions": [
+      {
+       "id": "sv-q1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "The boundary of the surface $x^2+y^2+z^2=16$, $z\\ge0$ is",
+       "options": [
+        "the sphere itself",
+        "the circle $x^2+y^2=16$, $z=0$",
+        "the point $(0,0,4)$",
+        "the disc $x^2+y^2\\le16$"
+       ],
+       "answer_index": 1,
+       "why": "A hemisphere's edge is the circle where it meets the plane $z=0$."
+      },
+      {
+       "id": "sv-q2",
+       "kind": "mcq",
+       "level": 2,
+       "q": "Stokes' theorem gives the same value for the hemisphere and for the flat disc under it because",
+       "options": [
+        "their areas are equal",
+        "they have the same boundary curve",
+        "the curl is zero",
+        "both are closed surfaces"
+       ],
+       "answer_index": 1,
+       "why": "The theorem's value depends only on the boundary and the field."
+      },
+      {
+       "id": "sv-q3",
+       "kind": "short",
+       "level": 2,
+       "marks": 4,
+       "q": "Verify Stokes' theorem for $\\vec F=-y\\hat i+x\\hat j$ over the disc $x^2+y^2\\le1$, $z=0$.",
+       "model_answer_md": "**Line integral:** $x=\\cos t,\\ y=\\sin t$: $\\oint(-y\\,dx+x\\,dy)=\\int_0^{2\\pi}(\\sin^2t+\\cos^2t)\\,dt=2\\pi$.\n\n**Surface integral:** $\\nabla\\times\\vec F=(1+1)\\hat k=2\\hat k$, $\\hat n=\\hat k$: $\\iint2\\,dA=2\\pi$.\n\nBoth equal $2\\pi$: verified.",
+       "points": [
+        "Line integral $2\\pi$",
+        "Curl $=2\\hat k$, surface integral $2\\pi$",
+        "Both equal, conclusion"
+       ]
+      },
+      {
+       "id": "sv-p1",
+       "pyq": "6a8ed80b5138848d",
+       "level": 2,
+       "points": [
+        "Boundary: circle $x^2+y^2=16$, $z=0$; $\\vec v\\cdot d\\vec r=(3x-y)\\,dx$ with $x=4\\cos t,\\ y=4\\sin t$",
+        "Line integral $\\int_0^{2\\pi}(-48\\sin t\\cos t+16\\sin^2t)\\,dt=16\\pi$",
+        "$\\nabla\\times\\vec v=\\hat k$",
+        "Surface integral $=$ projected area $\\pi\\cdot4^2=16\\pi$",
+        "Both equal $16\\pi$: verified"
+       ]
+      },
+      {
+       "id": "sv-p2",
+       "pyq": "20ea166103923600",
+       "level": 2,
+       "points": [
+        "Boundary circle $x^2+y^2=16$, $z=0$",
+        "Curl: $\\mathbf i$ and $\\mathbf j$ components $0$, $\\mathbf k$ component $1$",
+        "Surface integral $=\\iint dx\\,dy=16\\pi$",
+        "Line integral $\\int_0^{2\\pi}(12\\cos t-4\\sin t)(-4\\sin t)\\,dt=16\\pi$",
+        "Both sides equal: verified"
+       ]
+      },
+      {
+       "id": "sv-p3",
+       "pyq": "db3f4fd886b1a235",
+       "level": 2,
+       "points": [
+        "Boundary circle $x^2+y^2=9$, $z=0$ anticlockwise: $x=3\\cos t,\\ y=3\\sin t$",
+        "$\\oint y\\,dx-x\\,dy=\\int_0^{2\\pi}(-9)\\,dt=-18\\pi$",
+        "$\\nabla\\times\\vec v=-2\\hat k$",
+        "Surface integral $-2\\cdot9\\pi=-18\\pi$",
+        "Both equal $-18\\pi$: verified"
+       ]
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "topic": "Green's theorem",
+   "subtopics": [
+    {
+     "id": "green-evaluate",
+     "title": "Evaluating a line integral by Green's theorem",
+     "theory_md": "For a closed curve $C$ in the plane, taken **anticlockwise**, bounding region $R$:\n$$\\oint_C(P\\,dx+Q\\,dy)=\\iint_R\\left(\\frac{\\partial Q}{\\partial x}-\\frac{\\partial P}{\\partial y}\\right)dx\\,dy.$$\n\n- Sketch $R$ from the given curves and fix limits (polar for circles and sectors).\n- Work done by $\\vec F=P\\hat i+Q\\hat j$ around $C$ is this same integral.\n- **Area** $=\\dfrac12\\oint(x\\,dy-y\\,dx)$.\n- Green's theorem is Stokes' theorem in the $xy$-plane.",
+     "basics_md": "Add up the small spins ($Q_x-P_y$) over the region, and what remains is the circulation round its edge.",
+     "key_points": [
+      "Green: $\\oint P\\,dx+Q\\,dy=\\iint(Q_x-P_y)\\,dA$",
+      "Anticlockwise orientation",
+      "Sketch the region and set the limits",
+      "Area $=\\frac12\\oint(x\\,dy-y\\,dx)$"
+     ],
+     "questions": [
+      {
+       "id": "gr-e1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "In Green's theorem the integrand of the double integral is",
+       "options": [
+        "$P_x+Q_y$",
+        "$Q_x-P_y$",
+        "$P_y-Q_x$",
+        "$P_y+Q_x$"
+       ],
+       "answer_index": 1,
+       "why": "It is the $\\hat k$ component of the curl. $P_x+Q_y$ is the divergence."
+      },
+      {
+       "id": "gr-e2",
+       "kind": "numerical",
+       "level": 2,
+       "marks": 4,
+       "q": "Use Green's theorem to evaluate $\\oint_C(3x-8y^2)\\,dx+(4y-6xy)\\,dy$ where $C$ is the boundary of the triangle with vertices $(0,0)$, $(1,0)$, $(0,1)$.",
+       "model_answer_md": "$Q_x-P_y=-6y+16y=10y$.\n\nRegion: $0\\le x\\le1$, $0\\le y\\le1-x$.\n\n$\\displaystyle\\iint10y\\,dy\\,dx=\\int_0^1 5(1-x)^2\\,dx=\\frac53$.",
+       "points": [
+        "$Q_x-P_y=10y$",
+        "Limits $0\\le y\\le1-x$",
+        "$\\frac53$"
+       ]
+      },
+      {
+       "id": "gr-e3",
+       "kind": "short",
+       "level": 2,
+       "marks": 3,
+       "q": "Using the area formula from Green's theorem, find the area of the ellipse $\\dfrac{x^2}{a^2}+\\dfrac{y^2}{b^2}=1$.",
+       "model_answer_md": "Area $=\\dfrac12\\oint(x\\,dy-y\\,dx)$. With $x=a\\cos t,\\ y=b\\sin t$: $x\\,dy-y\\,dx=ab(\\cos^2t+\\sin^2t)\\,dt=ab\\,dt$.\n\nArea $=\\dfrac12\\int_0^{2\\pi}ab\\,dt=\\pi ab$.",
+       "points": [
+        "Area formula",
+        "Parametrisation and $x\\,dy-y\\,dx=ab\\,dt$",
+        "$\\pi ab$"
+       ]
+      },
+      {
+       "id": "gr-e4",
+       "kind": "numerical",
+       "level": 3,
+       "marks": 5,
+       "q": "Evaluate $\\oint_C(y-\\sin x)\\,dx+\\cos x\\,dy$, where $C$ is the triangle with vertices $(0,0)$, $(\\pi/2,0)$, $(\\pi/2,1)$.",
+       "model_answer_md": "$P=y-\\sin x$, $Q=\\cos x$: $Q_x-P_y=-\\sin x-1$.\n\nRegion: $0\\le x\\le\\frac\\pi2$, $0\\le y\\le\\frac{2x}{\\pi}$.\n\n$\\displaystyle\\iint=\\int_0^{\\pi/2}(-\\sin x-1)\\frac{2x}{\\pi}\\,dx=-\\frac2\\pi\\int_0^{\\pi/2}x\\sin x\\,dx-\\frac2\\pi\\cdot\\frac{\\pi^2}{8}$.\n$\\int_0^{\\pi/2}x\\sin x\\,dx=1$.\n\nResult $=-\\dfrac2\\pi-\\dfrac\\pi4$.",
+       "points": [
+        "$Q_x-P_y=-\\sin x-1$",
+        "Limits $y$ from $0$ to $2x/\\pi$",
+        "$\\int x\\sin x=1$",
+        "$-\\frac2\\pi-\\frac\\pi4$"
+       ]
+      },
+      {
+       "id": "gr-p1",
+       "pyq": "5cd6f91ae35e2a71",
+       "level": 2,
+       "points": [
+        "$P=x^2+y^2,\\ Q=y+2x$; $Q_x-P_y=2-2y$",
+        "Curves meet at $(0,0)$ and $(1,1)$; $x^2\\le y\\le\\sqrt x$",
+        "$\\int_0^1(2\\sqrt x-x-2x^2+x^4)\\,dx=\\frac43-\\frac12-\\frac23+\\frac15$",
+        "Answer $\\frac{11}{30}$"
+       ]
+      },
+      {
+       "id": "gr-p2",
+       "pyq": "e4962a6c144b1247",
+       "level": 3,
+       "points": [
+        "Region is the sector $0\\le r\\le4$, $-\\frac\\pi4\\le\\theta\\le\\frac\\pi4$",
+        "Work $=\\oint P\\,dx+Q\\,dy$; Green's theorem gives $\\iint(1+3y^2)\\,dA$",
+        "$\\iint dA=4\\pi$",
+        "$\\iint3y^2\\,dA=192\\left(\\frac\\pi4-\\frac12\\right)=48\\pi-96$",
+        "Work $=52\\pi-96\\approx67.4$ units"
+       ]
+      }
+     ]
+    },
+    {
+     "id": "green-verify",
+     "title": "Verifying Green's theorem",
+     "theory_md": "To verify, compute both sides and show they agree.\n\n- **Double integral side:** $\\iint_R(Q_x-P_y)\\,dA$ over the region.\n- **Line side:** $\\oint_C$ taken **anticlockwise**, as the sum over the sides or arcs of $C$; on a side with $y$ fixed, $dy=0$, on a side with $x$ fixed, $dx=0$. A side traversed downward or leftward has its limits reversed.",
+     "basics_md": "Same idea as every verification: two different routes to one number. Take care with the direction of each side.",
+     "key_points": [
+      "Evaluate the double integral of $Q_x-P_y$",
+      "Evaluate $\\oint$ side by side, anticlockwise",
+      "On a horizontal side $dy=0$; on a vertical side $dx=0$",
+      "Both sides equal"
+     ],
+     "questions": [
+      {
+       "id": "gr-v1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "On a side of $C$ where $x$ is constant, which term of $\\oint P\\,dx+Q\\,dy$ vanishes?",
+       "options": [
+        "$P\\,dx$",
+        "$Q\\,dy$",
+        "both",
+        "neither"
+       ],
+       "answer_index": 0,
+       "why": "$dx=0$ on a vertical side, so only $Q\\,dy$ remains."
+      },
+      {
+       "id": "gr-v2",
+       "kind": "mcq",
+       "level": 2,
+       "q": "Going round a rectangle anticlockwise, along its top side the variable $x$ goes",
+       "options": [
+        "from left to right",
+        "from right to left",
+        "from bottom to top",
+        "is constant"
+       ],
+       "answer_index": 1,
+       "why": "Anticlockwise: right along the bottom, up the right side, left along the top, down the left side."
+      },
+      {
+       "id": "gr-v3",
+       "kind": "short",
+       "level": 2,
+       "marks": 5,
+       "q": "Verify Green's theorem for $\\oint_C(xy+y^2)\\,dx+x^2\\,dy$, where $C$ is bounded by $y=x$ and $y=x^2$.",
+       "model_answer_md": "$P=xy+y^2$, $Q=x^2$: $Q_x-P_y=2x-(x+2y)=x-2y$.\n\n**Double integral:** region $x^2\\le y\\le x$, $0\\le x\\le1$:\n$\\displaystyle\\int_0^1\\left[xy-y^2\\right]_{x^2}^{x}dx=\\int_0^1(-x^3+x^4)\\,dx=-\\frac14+\\frac15=-\\frac1{20}$.\n\n**Line integral (anticlockwise):**\n- Along $y=x^2$, $(0,0)\\to(1,1)$: $\\int_0^1(x^3+x^4+2x^3)\\,dx=\\frac34+\\frac15=\\frac{19}{20}$.\n- Along $y=x$, $(1,1)\\to(0,0)$: $\\int_1^0(2x^2+x^2)\\,dx=-1$.\n\nSum $=\\frac{19}{20}-1=-\\frac1{20}$. Both sides equal, so verified.",
+       "points": [
+        "$Q_x-P_y=x-2y$ and double integral $-\\frac1{20}$",
+        "Line integral along $y=x^2$: $\\frac{19}{20}$",
+        "Line integral along $y=x$ (reversed): $-1$",
+        "Sum $-\\frac1{20}$, conclusion"
+       ]
+      },
+      {
+       "id": "gr-p3",
+       "pyq": "6d520a97ce3efad0",
+       "level": 2,
+       "points": [
+        "RHS: $g_x-f_y=-2e^{-x}\\cos y$",
+        "$\\iint=-2(1-e^{-\\pi/2})(1)=-2+2e^{-\\pi/2}$",
+        "LHS side by side: bottom $0$, right $e^{-\\pi/2}$, top $e^{-\\pi/2}-1$, left $-1$",
+        "Sum $-2+2e^{-\\pi/2}$",
+        "LHS equals RHS: verified"
+       ]
+      }
+     ]
+    }
+   ]
+  }
+ ]
+}

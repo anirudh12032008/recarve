@@ -1,0 +1,1745 @@
+{
+ "code": "ME1109",
+ "unit": "Foundry Shop",
+ "written": "2026-10-19",
+ "by": "claude-sonnet-5-5, in a Claude Code session",
+ "topics": [
+  {
+   "topic": "Foundry tools and equipment",
+   "subtopics": [
+    {
+     "id": "hand-tools",
+     "title": "Hand moulding tools",
+     "theory_md": "**Shovel** mixes and moves sand. **Riddle** is a wire-mesh sieve that removes lumps. **Rammer**: **peen** (wedge) end packs sand near the pattern and in corners, **butt** (flat) end rams the top. **Strike-off bar** levels sand with the box top. **Sprue pin** and riser pin form the sprue and riser. **Vent wire** pierces vents for gas. **Draw spike** and rapping plate loosen and lift the pattern. **Lifter** cleans deep pockets and the bottom. **Trowel and slick** finish and repair surfaces. **Gate cutter** cuts the runner and ingate. **Swab** wets the edges before the pattern is drawn. **Bellows** blows out loose sand. **Gaggers** support hanging sand in the cope.",
+     "basics_md": "Think of making a sandcastle in a bucket: you sieve the sand, press it in, scrape the top flat, poke air holes and lift the shape out. Each foundry tool does one of these jobs.",
+     "key_points": [
+      "Riddle sieves sand; shovel mixes it; rammer has a peen end (near pattern) and a butt end (top)",
+      "Strike-off bar levels the sand; sprue pin and riser pin form the sprue and riser",
+      "Vent wire makes vent holes; draw spike and rapping plate loosen and withdraw the pattern",
+      "Lifter, trowel and slick finish the cavity; gate cutter cuts runner and ingate",
+      "Swab wets the edges; bellows blows out loose sand"
+     ],
+     "questions": [
+      {
+       "id": "ht-q1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "The tool used to level the rammed sand flush with the top of the flask is the",
+       "options": [
+        "Lifter",
+        "Strike-off bar",
+        "Riddle",
+        "Swab"
+       ],
+       "answer_index": 1,
+       "why": "The strike-off bar is drawn across the box edge to scrape off the excess sand."
+      },
+      {
+       "id": "ht-q2",
+       "kind": "mcq",
+       "level": 1,
+       "q": "A vent wire is used to",
+       "options": [
+        "Rap the pattern",
+        "Sieve the sand",
+        "Make small holes through the sand so gases can escape",
+        "Cut the ingate"
+       ],
+       "answer_index": 2,
+       "why": "Vents let steam and gas out, preventing blowholes."
+      },
+      {
+       "id": "ht-q3",
+       "kind": "mcq",
+       "level": 2,
+       "q": "Which pair is correctly matched?",
+       "options": [
+        "Swab: blows loose sand out of the cavity",
+        "Bellows: moistens the sand round the pattern",
+        "Lifter: removes loose sand from deep narrow pockets",
+        "Riddle: rams the sand near the pattern"
+       ],
+       "answer_index": 2,
+       "why": "Swab moistens, bellows blows, riddle sieves, so only the lifter match is right."
+      },
+      {
+       "id": "ht-q4",
+       "kind": "short",
+       "level": 2,
+       "marks": 3,
+       "q": "Name and state the use of any six hand tools of the foundry shop.",
+       "model_answer_md": "1. **Riddle**: sieve that removes lumps and foreign matter from sand.\n2. **Rammer**: peen end packs sand near the pattern, butt end rams the top.\n3. **Strike-off bar**: levels the sand with the top of the flask.\n4. **Sprue pin**: tapered pin that forms the sprue.\n5. **Vent wire**: makes vent holes for gases.\n6. **Lifter**: removes loose sand from deep pockets.\n(Also draw spike, slick, trowel, gate cutter, swab, bellows.)",
+       "points": [
+        "Any six tools named correctly",
+        "A one-line use for each",
+        "Rammer: peen end near pattern, butt end on top"
+       ]
+      },
+      {
+       "id": "ht-p1",
+       "pyq": "0ff7c03c8ed81b3b",
+       "level": 2,
+       "points": [
+        "Shovel, riddle, rammers (peen and butt end), strike-off bar, sprue pin, vent wire",
+        "Draw spike, lifter, trowel and slick, gate cutter, swab, bellows, mallet",
+        "Flasks (cope and drag), moulding board; crucible, tongs and skimmer for pouring",
+        "Any 5 to 6 with a use each earns the marks"
+       ]
+      }
+     ]
+    },
+    {
+     "id": "flasks-and-shop",
+     "title": "Flasks, furnaces and what the foundry shop does",
+     "theory_md": "The **foundry shop** makes **castings**: metal is melted, poured into a mould cavity and solidifies in its shape. Complex shapes (engine blocks, machine beds, pipes, pulleys) and one-off or heavy parts are cheap to cast.\n\n**Flask (moulding box)**: wooden or metal frame. The top box is the **cope**, the bottom box the **drag**, a box between them the **cheek** (three-part mould). Pins and lugs align them. The **moulding board** carries the pattern and drag.\n\n**Melting**: **cupola** for cast iron, crucible or pit furnace for non-ferrous metals, electric furnace for steel. **Ladles**, crucibles and tongs carry and pour the metal.",
+     "basics_md": "A flask is like a sandwich: bread on top (cope), bread below (drag), and a filling box (cheek) if you need a thicker sandwich.",
+     "key_points": [
+      "Foundry shop makes castings: melt, pour into a mould, solidify, fettle",
+      "Cope = top box, drag = bottom box, cheek = intermediate box",
+      "Cupola melts cast iron; crucible or pit furnace melts non-ferrous metals",
+      "Moulding board supports the pattern and drag during ramming"
+     ],
+     "questions": [
+      {
+       "id": "fs-q1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "In a two-part flask the lower box is called the",
+       "options": [
+        "Cope",
+        "Cheek",
+        "Drag",
+        "Riser"
+       ],
+       "answer_index": 2,
+       "why": "Drag is lower, cope is upper, cheek is in between."
+      },
+      {
+       "id": "fs-q2",
+       "kind": "mcq",
+       "level": 1,
+       "q": "Cast iron is usually melted in a",
+       "options": [
+        "Crucible furnace",
+        "Cupola",
+        "Muffle furnace",
+        "Blast stove only"
+       ],
+       "answer_index": 1,
+       "why": "The cupola is the standard cast iron melting furnace of the foundry."
+      },
+      {
+       "id": "fs-q3",
+       "kind": "short",
+       "level": 2,
+       "marks": 2,
+       "q": "What are cope, drag and cheek? Why are pins and lugs fitted on the flask?",
+       "model_answer_md": "A **flask** is the box that holds the mould sand. The **cope** is the upper box, the **drag** the lower box, and the **cheek** an intermediate box used when a three-part mould is needed for a tall or complex pattern.\n\n**Pins and lugs** align the boxes so that the two halves of the cavity match and the mould does not shift.",
+       "points": [
+        "Cope top, drag bottom, cheek in between",
+        "Cheek used in three-part moulds",
+        "Pins and lugs align the boxes, prevent mould shift"
+       ]
+      },
+      {
+       "id": "fs-p1",
+       "pyq": "df60f9661b4a576c",
+       "level": 1,
+       "points": [
+        "Foundry shop is meant for making castings: melting metal and pouring it into a mould cavity",
+        "Uses: pattern and mould making, sand and core preparation, melting and pouring, fettling and inspection",
+        "Gives complex shapes (engine blocks, machine beds, pipes, pulleys) cheaply, good for one-off and large parts"
+       ]
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "topic": "Patterns and pattern making",
+   "subtopics": [
+    {
+     "id": "pattern-basics",
+     "title": "Pattern, core print and colour code",
+     "theory_md": "A **pattern** is a replica of the object to be cast; it forms the mould cavity. It is **not identical to the casting**: it is larger by the **allowances**, carries **core prints**, may be split or have loose pieces, and cored holes are not shown.\n\n**Core print**: a projection on the pattern that leaves a seat in the mould to locate and support the core.\n\n**Colour code** (common convention): unmachined (as cast) surfaces **black**; surfaces to be machined **red**; core prints **yellow**; loose-piece seats **red stripes on yellow**; stop-offs **black stripes on yellow**.\n\nCasting weight from a solid pattern: $W_c \\approx W_p\\,\\rho_{metal}/\\rho_{pattern}$.",
+     "basics_md": "A pattern is the cookie cutter. You press it into sand to leave a hole of the same shape, then fill the hole with metal. The cutter must be slightly bigger because the metal shrinks.",
+     "key_points": [
+      "Pattern = replica of the casting used to make the mould cavity, larger by allowances",
+      "Pattern differs from casting: allowances, core prints, split or loose pieces, no cored holes",
+      "Core print locates and supports the core",
+      "Colour code: black unmachined, red machined, yellow core prints",
+      "Casting weight = pattern weight x (density of metal / density of pattern material)"
+     ],
+     "questions": [
+      {
+       "id": "pb-q1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "According to the common colour code, surfaces to be machined are painted",
+       "options": [
+        "Black",
+        "Yellow",
+        "Red",
+        "Blue"
+       ],
+       "answer_index": 2,
+       "why": "Red is for machined surfaces, black for as-cast surfaces and yellow for core prints."
+      },
+      {
+       "id": "pb-q2",
+       "kind": "mcq",
+       "level": 2,
+       "q": "A pattern differs from the casting because the pattern",
+       "options": [
+        "Has the same size but is painted",
+        "Is larger by allowances and carries core prints",
+        "Always has all the holes of the casting",
+        "Is always made of metal"
+       ],
+       "answer_index": 1,
+       "why": "Allowances enlarge it and core prints are added; cored holes are left out."
+      },
+      {
+       "id": "pb-q3",
+       "kind": "short",
+       "level": 2,
+       "marks": 4,
+       "q": "State the differences between a pattern and the casting made from it.",
+       "model_answer_md": "1. **Size**: pattern is larger by shrinkage, machining and other allowances.\n2. **Core prints**: the pattern has them; the casting has none.\n3. **Holes**: cored holes are not on the pattern; cores make them.\n4. **Construction**: pattern may be split or have loose pieces; casting is one piece.\n5. **Draft**: pattern faces are tapered for withdrawal.\n6. **Material and finish**: wood, metal or plastic painted to the colour code, against cast metal.",
+       "points": [
+        "Pattern larger by allowances",
+        "Core prints on pattern only",
+        "Cored holes absent on pattern",
+        "Split or loose pieces, draft, material and colour code"
+       ]
+      },
+      {
+       "id": "pb-q4",
+       "kind": "numerical",
+       "level": 2,
+       "marks": 3,
+       "q": "A brass pattern weighs 0.8 kg. Estimate the weight of the casting of the same shape in aluminium. (Brass 8.5 g/cc, aluminium 2.7 g/cc; ignore allowances.)",
+       "model_answer_md": "Same volume, so weight scales with density.\n\n$W_c = W_p\\,\\dfrac{\\rho_{Al}}{\\rho_{brass}} = 0.8 \\times \\dfrac{2.7}{8.5} = 0.254\\ \\text{kg}$\n\nCheck on the reverse: a pine pattern of 1.5 kg (0.5 g/cc) gives a cast iron (7.2 g/cc) casting of $1.5\\times 7.2/0.5 = 21.6$ kg.",
+       "points": [
+        "Volume of casting = volume of pattern",
+        "$W_c = W_p \\rho_{casting}/\\rho_{pattern}$",
+        "Substitution 0.8 x 2.7/8.5",
+        "Answer 0.254 kg with unit"
+       ]
+      },
+      {
+       "id": "pb-q5",
+       "kind": "numerical",
+       "level": 3,
+       "marks": 3,
+       "q": "A pine pattern weighs 1.5 kg. Estimate the cast iron casting weight, and say why the real casting is lighter. (Pine 0.5 g/cc, cast iron 7.2 g/cc.)",
+       "model_answer_md": "$W_c \\approx 1.5\\times\\dfrac{7.2}{0.5} = 1.5 \\times 14.4 = 21.6\\ \\text{kg}$\n\nThe real casting is lighter than this because the pattern is oversize by the allowances, and cored holes (not on the pattern) remove metal.",
+       "points": [
+        "Formula $W_c = W_p \\rho_{CI}/\\rho_{pine}$",
+        "21.6 kg",
+        "Pattern oversize by allowances and cored holes make the casting lighter"
+       ]
+      }
+     ]
+    },
+    {
+     "id": "pattern-materials",
+     "title": "Pattern materials and selection",
+     "theory_md": "**Wood** (pine, deodar, teak, mahogany): cheap, light, easy to shape and repair; absorbs moisture, warps and wears. For few castings and large patterns.\n**Metals** (aluminium, brass, cast iron, steel): accurate, durable, smooth, dimensionally stable; costly and heavier. For mass production and machine moulding.\n**Plastics** (epoxy, polyurethane): light, smooth, moisture-proof.\n**Plaster of Paris**: intricate small patterns, brittle.\n**Wax**: investment casting; **polystyrene**: lost foam; both are melted or vaporised, not withdrawn.\n\n**Selection criteria**: number of castings, size and complexity, accuracy and finish, strength and wear, dimensional stability, weight, ease of working and repair, cost, moulding method.",
+     "basics_md": "If you need one birthday cake, a cardboard cutter is fine. If you need a million biscuits, you buy a steel cutter. Pattern material follows the number of castings you need.",
+     "key_points": [
+      "Wood: cheap, easy, warps and wears; for small runs and large patterns",
+      "Metal (Al, brass, CI, steel): durable, accurate; for mass production and machine moulding",
+      "Plastic, plaster of Paris, wax (investment), polystyrene (lost foam)",
+      "Selection: quantity, size and complexity, accuracy, finish, cost, workability, repair, moulding method"
+     ],
+     "questions": [
+      {
+       "id": "pm-q1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "For mass production of small castings on moulding machines the preferred pattern material is",
+       "options": [
+        "Pine wood",
+        "Wax",
+        "Aluminium or cast iron",
+        "Plaster of Paris"
+       ],
+       "answer_index": 2,
+       "why": "Metal patterns are accurate, durable and do not warp."
+      },
+      {
+       "id": "pm-q2",
+       "kind": "mcq",
+       "level": 1,
+       "q": "Wax patterns are used in",
+       "options": [
+        "Sand casting",
+        "Shell moulding",
+        "Investment casting",
+        "Die casting"
+       ],
+       "answer_index": 2,
+       "why": "The wax pattern is melted out of the ceramic shell."
+      },
+      {
+       "id": "pm-q3",
+       "kind": "mcq",
+       "level": 2,
+       "q": "The main disadvantage of wooden patterns is that they",
+       "options": [
+        "Cost too much",
+        "Absorb moisture, warp and wear",
+        "Cannot be shaped",
+        "Are too accurate"
+       ],
+       "answer_index": 1,
+       "why": "Wood swells and warps with moisture and wears under repeated use."
+      },
+      {
+       "id": "pm-q4",
+       "kind": "long",
+       "level": 2,
+       "marks": 5,
+       "q": "Discuss wood and metal as pattern materials with their merits and demerits, and the factors for selecting a pattern material.",
+       "model_answer_md": "**Wood** (pine, teak, deodar, mahogany)\n- Merits: cheap, light, easy to shape and repair, suits small runs and large patterns.\n- Demerits: absorbs moisture, warps, wears quickly, short life.\n\n**Metal** (aluminium, brass, cast iron, steel)\n- Merits: accurate, durable, smooth, no moisture problem, suits machine moulding.\n- Demerits: costly, heavy (except aluminium), hard to repair or alter.\n\n**Selection factors**: number of castings, size and complexity, accuracy and finish, cost, ease of working and repair, wear resistance, moulding method.",
+       "points": [
+        "Wood merits: cheap, light, easily shaped",
+        "Wood demerits: moisture, warping, wear",
+        "Metal merits: accurate, durable, mass production",
+        "Metal demerits: cost, weight, hard to repair",
+        "Selection factors listed (quantity first)"
+       ]
+      }
+     ]
+    },
+    {
+     "id": "pattern-making-steps",
+     "title": "Making a pattern: soap case and crankshaft",
+     "theory_md": "**Sequence for any pattern**: (1) study the drawing; (2) choose the **parting line** and the pattern type; (3) choose the material (wood for few castings, aluminium or metal for production); (4) add **allowances** (shrinkage, machining, draft, and so on); (5) mark out, saw, plane and shape; (6) provide **core prints** and a **core box** if the casting is hollow; (7) join halves with **dowel pins**; (8) fillet corners, sand smooth, apply **shellac** and paint to the colour code.\n\n**Soap case**: an open, hollow box; a solid pattern of the outer shape with the parting plane through the open face and the hollow made by a core.\n**Crankshaft**: long and with webs, so a **split pattern** with the parting along the axis.",
+     "basics_md": "Making a pattern is just carpentry with a plan: decide where it will be split, make it slightly larger, mark the places that will be machined, and paint it so the moulder reads it at a glance.",
+     "key_points": [
+      "Study drawing, choose parting line and pattern type, choose material",
+      "Add allowances: shrinkage, machining, draft; round corners with fillets",
+      "Core prints and core box for hollow parts; dowel pins join split halves",
+      "Smooth, shellac, paint to colour code; draw the pattern, core box and mould section",
+      "Crankshaft: split pattern, aluminium for production; soap case: solid pattern plus core"
+     ],
+     "questions": [
+      {
+       "id": "pms-q1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "The halves of a split pattern are aligned by",
+       "options": [
+        "Glue",
+        "Dowel pins",
+        "Nails",
+        "Loose pieces"
+       ],
+       "answer_index": 1,
+       "why": "Dowel pins in one half fit holes in the other."
+      },
+      {
+       "id": "pms-q2",
+       "kind": "mcq",
+       "level": 2,
+       "q": "A hollow soap case is cast with its inside cavity formed by a",
+       "options": [
+        "Chaplet",
+        "Core made in a core box and seated in core prints",
+        "Riser",
+        "Chill"
+       ],
+       "answer_index": 1,
+       "why": "The hollow is a core located by the core prints on the pattern."
+      },
+      {
+       "id": "pms-q3",
+       "kind": "long",
+       "level": 2,
+       "marks": 5,
+       "q": "Outline the steps in making a wooden pattern for a soap case. Draw the sketches you would give.",
+       "model_answer_md": "**Steps**\n1. Study the drawing; take the parting plane through the open face.\n2. Choose seasoned pine or deodar.\n3. Add allowances: shrinkage, machining on the rim, draft on the side walls.\n4. Mark out and cut the boards, plane to size, build the outer box (glued and screwed).\n5. Round corners with fillets.\n6. Make a core box for the hollow, and add core prints to the pattern.\n7. Sand, shellac, paint: red for machined, black for unmachined, yellow for core prints.\n\n**Sketches**: pattern in top and front view with draft; core box; sectional mould showing cope, drag, core, sprue and riser.",
+       "points": [
+        "Parting plane and material chosen",
+        "Allowances added: shrinkage, machining, draft",
+        "Cutting, planing, fillets",
+        "Core box and core prints",
+        "Shellac and colour code, sketches"
+       ]
+      },
+      {
+       "id": "pms-p1",
+       "pyq": "13c8ef24a4a228b9",
+       "level": 2,
+       "points": [
+        "Pattern materials: wood, metals, plastics, plaster of Paris, wax, rubber",
+        "Selection criteria: quantity, size, accuracy, finish, cost, workability, wear, weight",
+        "Crankshaft: split pattern along the shaft axis, aluminium or metal for production",
+        "Allowances: shrinkage, machining on journals and pins, draft; dowels join halves",
+        "Core prints and fillets at web junctions; shellac and colour code",
+        "Labelled sketch of the split pattern with dowels"
+       ]
+      },
+      {
+       "id": "pms-p2",
+       "pyq": "95697a9d551c603f",
+       "level": 3,
+       "points": [
+        "Table of materials: wood, metals, plastics, wax, plaster of Paris with properties and use",
+        "Pattern with shrinkage, machining, draft and distortion allowances; split with dowels",
+        "Make cores, prepare green sand",
+        "Ram drag, turn over, set cope with sprue and riser pins, ram, parting sand",
+        "Remove pins, cut basin and gates, draw pattern, vent, set cores",
+        "Close and clamp, melt, pour, cool, shake out",
+        "Fettling, heat treatment, inspection, machining; sketch of the mould"
+       ]
+      },
+      {
+       "id": "pms-p3",
+       "pyq": "d10e193bb2d26e66",
+       "level": 3,
+       "points": [
+        "Materials: wood, metals, plastics, wax, plaster, rubber",
+        "Selection criteria: number of castings, size, accuracy, cost, durability, weight",
+        "Allowances: shrinkage, machining, draft, shake, distortion",
+        "Soap case steps: drawing, parting line, seasoned wood, allowances, marking, shaping",
+        "Core box and core prints, dowel pins, fillets, shellac, colour code",
+        "Sketches: pattern halves, core and core prints"
+       ]
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "topic": "Types of patterns",
+   "subtopics": [
+    {
+     "id": "common-patterns",
+     "title": "Solid, split, loose-piece and match-plate patterns",
+     "theory_md": "**Solid (single-piece)**: one piece, no joint; simple shapes with one flat face, few castings (spanner, block, bracket, handwheel).\n**Split (two-piece)**: cut along the parting line into two halves joined by **dowel pins**; one half in the drag, one in the cope. For complex shapes with cavities on both sides: pipe fittings, cylinders, valve bodies, pulleys.\n**Loose-piece**: a projection or boss is fixed with a **wooden pin** and drawn sideways after the main body.\n**Match-plate**: cope and drag halves mounted on the two sides of a metal plate, often with gating; **mass production of small castings** on machines.\n**Cope-and-drag**: halves on separate plates, for large castings.",
+     "basics_md": "Moulding must let the pattern slide out of the sand. Simple shapes slide out whole. Awkward shapes are cut in two or have detachable bits so each part can leave on its own.",
+     "key_points": [
+      "Solid: one piece, simple shape, small numbers (spanner, block)",
+      "Split: two halves joined by dowel pins, cope and drag halves; pipes, cylinders, valve bodies",
+      "Loose-piece: projections held by pins and drawn out after the main body",
+      "Match-plate: both halves on one plate for mass production of small castings",
+      "Cope-and-drag: separate plates for large castings"
+     ],
+     "questions": [
+      {
+       "id": "cp-q1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "Match-plate patterns are mainly used for",
+       "options": [
+        "A single large casting",
+        "Mass production of small castings on moulding machines",
+        "Pipes only",
+        "Sweep moulding"
+       ],
+       "answer_index": 1,
+       "why": "Both halves on one plate allow fast, accurate machine moulding."
+      },
+      {
+       "id": "cp-q2",
+       "kind": "mcq",
+       "level": 1,
+       "q": "A pattern for a pipe bend or pulley that is cut into two halves along the parting line is a",
+       "options": [
+        "Solid pattern",
+        "Split pattern",
+        "Sweep pattern",
+        "Skeleton pattern"
+       ],
+       "answer_index": 1,
+       "why": "Complex shapes with cavities on both sides need a split pattern."
+      },
+      {
+       "id": "cp-q3",
+       "kind": "mcq",
+       "level": 2,
+       "q": "A casting with a projecting boss that blocks withdrawal of the pattern calls for a",
+       "options": [
+        "Gated pattern",
+        "Loose-piece pattern",
+        "Segmental pattern",
+        "Follow-board pattern"
+       ],
+       "answer_index": 1,
+       "why": "The boss is a loose piece, drawn out sideways after the main body."
+      },
+      {
+       "id": "cp-q4",
+       "kind": "short",
+       "level": 2,
+       "marks": 3,
+       "q": "Distinguish a solid pattern from a split pattern with examples.",
+       "model_answer_md": "| Point | Solid | Split |\n|---|---|---|\n| Parts | One piece | Two or more halves joined by dowel pins |\n| Shape | Simple, one flat face | Complex, cavities on both sides |\n| Cost | Low | Higher |\n| Moulding | Parting found by moulder, needs skill | Easy and accurate |\n| Example | Spanner, block, bracket | Pipe fitting, cylinder, pulley |",
+       "points": [
+        "Number of pieces differs",
+        "Shape suitability differs",
+        "Cost or moulding ease",
+        "Examples for both"
+       ]
+      },
+      {
+       "id": "cp-p1",
+       "pyq": "464f3065323584b6",
+       "level": 2,
+       "points": [
+        "Solid pattern: one piece, simple shape, one flat face on the parting plane, cheap for small numbers",
+        "Examples of solid: spanner, block, gear blank, handwheel",
+        "Split pattern: two halves joined by dowel pins, one in cope and one in drag, parting at the maximum section",
+        "Examples of split: pipe fittings, cylinders, valve bodies, pulleys, bearing housing",
+        "Neat sketches of both, with dowel pins marked"
+       ]
+      }
+     ]
+    },
+    {
+     "id": "large-job-patterns",
+     "title": "Sweep, skeleton, segmental and other patterns",
+     "theory_md": "**Sweep**: a board cut to the profile, rotated about a spindle to sweep out the mould cavity; large **axisymmetric** castings (bells, kettles, large pulleys).\n**Skeleton**: a wooden framework of ribs, filled with sand or loam and strickled; large castings in small numbers (water pipes, bends, turbine casings).\n**Segmental**: a segment of the shape rotated about a centre and indexed to form a circular mould (large gears, rings).\n**Gated**: several patterns joined by gates and runners, many small castings in one mould.\n**Follow-board**: a board shaped to support a thin or weak pattern during ramming.\n\nThe common point of sweep, skeleton and segmental patterns: they save the cost of a full solid pattern for big jobs.",
+     "basics_md": "Imagine spinning a template round a post to scrape out a round hole in sand. That is a sweep. A skeleton is the same idea but built as a ribbed frame, like the bones of the shape.",
+     "key_points": [
+      "Sweep: profile board rotated on a spindle, for large symmetric castings like bells",
+      "Skeleton: ribbed frame filled with sand or loam, large castings in small numbers",
+      "Segmental: a segment indexed round a centre, large rings and gears",
+      "Gated: several patterns with gates, multiple small castings per mould",
+      "Follow board supports a weak pattern while ramming"
+     ],
+     "questions": [
+      {
+       "id": "lj-q1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "A sweep pattern is used for",
+       "options": [
+        "Mass production of small castings",
+        "Large castings symmetrical about an axis, such as bells",
+        "Castings with bosses",
+        "Very thin castings"
+       ],
+       "answer_index": 1,
+       "why": "A profile board rotated about a spindle sweeps out an axisymmetric cavity."
+      },
+      {
+       "id": "lj-q2",
+       "kind": "mcq",
+       "level": 2,
+       "q": "A large water-pipe bend needed in small numbers is best moulded with a",
+       "options": [
+        "Match-plate pattern",
+        "Skeleton pattern",
+        "Gated pattern",
+        "Solid pattern"
+       ],
+       "answer_index": 1,
+       "why": "A ribbed skeleton saves material and cost for large castings in small numbers."
+      },
+      {
+       "id": "lj-q3",
+       "kind": "mcq",
+       "level": 2,
+       "q": "Which pair is wrongly matched?",
+       "options": [
+        "Sweep : bell",
+        "Match plate : mass production of small parts",
+        "Segmental : large ring or gear",
+        "Gated : one large single casting"
+       ],
+       "answer_index": 3,
+       "why": "A gated pattern makes several small castings together, not one large one."
+      },
+      {
+       "id": "lj-q4",
+       "kind": "short",
+       "level": 2,
+       "marks": 4,
+       "q": "Write short notes on sweep and skeleton patterns, with the casting each suits.",
+       "model_answer_md": "**Sweep pattern**: a wooden board shaped to the profile of the casting, fixed to a vertical spindle and rotated to scrape the cavity in the sand. No full pattern is needed. Suited to large circular castings: bells, kettles, large pulleys.\n\n**Skeleton pattern**: a wooden framework of ribs outlining the shape. It is bedded in sand or loam and the spaces are filled and shaped by a strickle board. Cheap for large castings needed in small numbers: water pipes, bends, turbine casings.",
+       "points": [
+        "Sweep: profile board on a spindle",
+        "Sweep suits axisymmetric castings such as bells",
+        "Skeleton: ribbed frame filled and strickled",
+        "Skeleton suits large castings in small numbers"
+       ]
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "topic": "Pattern allowances",
+   "subtopics": [
+    {
+     "id": "shrinkage",
+     "title": "Shrinkage allowance, shrink rule and the three shrinkages",
+     "theory_md": "Metal contracts in three stages: **liquid shrinkage** (pouring to freezing temperature), **solidification shrinkage** (liquid to solid) and **solid shrinkage** (freezing temperature to room temperature).\n\nThe **riser** (and chills) feed the first two. The **shrinkage allowance** on the pattern covers only **solid shrinkage**: the pattern is made larger, $L_p = L_c(1+s)$.\n\nTypical values: grey cast iron about **10 mm/m**, steel about **20 mm/m**, aluminium about 13 mm/m, brass about 15 mm/m.\n\nA **shrink rule** has graduations longer than standard by the shrinkage, so the pattern maker reads the casting size directly.",
+     "basics_md": "A cooling metal bar gets shorter, like a balloon losing air. To end with a 1 m casting you must start with a mould slightly longer than 1 m, so the pattern is made a little bigger.",
+     "key_points": [
+      "Three shrinkages: liquid, solidification, solid",
+      "Risers feed liquid and solidification shrinkage; allowance covers solid shrinkage only",
+      "Pattern larger by s: CI about 10 mm/m, steel about 20 mm/m",
+      "Shrink rule is longer than a standard rule by the shrinkage"
+     ],
+     "questions": [
+      {
+       "id": "sh-q1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "The shrinkage allowance on a pattern compensates for",
+       "options": [
+        "Liquid shrinkage only",
+        "Solidification shrinkage only",
+        "Solid contraction from freezing to room temperature",
+        "All three shrinkages"
+       ],
+       "answer_index": 2,
+       "why": "Liquid and solidification shrinkage are fed by risers."
+      },
+      {
+       "id": "sh-q2",
+       "kind": "mcq",
+       "level": 1,
+       "q": "Which metal needs the largest shrinkage allowance of these?",
+       "options": [
+        "Grey cast iron",
+        "Steel",
+        "Zinc die",
+        "Lead"
+       ],
+       "answer_index": 1,
+       "why": "Steel is about 20 mm/m, twice grey cast iron, which expands slightly through graphite."
+      },
+      {
+       "id": "sh-q3",
+       "kind": "short",
+       "level": 2,
+       "marks": 3,
+       "q": "How many types of shrinkage occur in casting, and how is each taken care of?",
+       "model_answer_md": "Three types:\n1. **Liquid shrinkage**: contraction from pouring temperature to freezing point; fed by the **riser**.\n2. **Solidification shrinkage**: contraction as liquid turns solid; fed by the **riser** (with chills for directional solidification).\n3. **Solid shrinkage**: contraction from freezing temperature to room temperature; allowed for by the **shrinkage allowance** on the pattern (shrink rule).",
+       "points": [
+        "Three types named",
+        "Liquid and solidification shrinkage fed by riser",
+        "Solid shrinkage by pattern allowance"
+       ]
+      },
+      {
+       "id": "sh-q4",
+       "kind": "numerical",
+       "level": 2,
+       "marks": 3,
+       "q": "A steel casting is to be 500 mm long. The shrinkage allowance is 20 mm/m. Find the pattern length and say what a shrink rule is.",
+       "model_answer_md": "$L_p = L_c(1+s) = 500\\,(1 + 0.020) = 510\\ \\text{mm}$\n\nA **shrink rule** is a pattern maker's rule whose graduations are longer than standard by the shrinkage of a given metal (a 1 m steel shrink rule is 1020 mm long), so casting dimensions are read directly.",
+       "points": [
+        "$L_p = L_c(1+s)$",
+        "510 mm",
+        "Shrink rule has graduations enlarged by the shrinkage"
+       ]
+      },
+      {
+       "id": "sh-q5",
+       "kind": "numerical",
+       "level": 3,
+       "marks": 4,
+       "q": "An aluminium casting 300 mm long is to be machined by 2.5 mm on each end face. Shrinkage allowance is 13 mm/m. Find the pattern length.",
+       "model_answer_md": "Add machining first, then shrinkage on that size:\n\n$L_p = (300 + 2\\times 2.5)(1 + 0.013) = 305 \\times 1.013 = 308.97\\ \\text{mm}$\n\nPattern length is about **308.97 mm**.",
+       "points": [
+        "Machining allowance added on both faces",
+        "Shrinkage applied to (finished size + machining)",
+        "$305 \\times 1.013$",
+        "308.97 mm"
+       ]
+      }
+     ]
+    },
+    {
+     "id": "machining-draft",
+     "title": "Machining and draft allowance, with a worked pattern size",
+     "theory_md": "**Machining (finish) allowance**: extra metal on surfaces to be machined, because cast surfaces are rough and scaled. Roughly 2 to 6 mm for cast iron, more for steel, 1.5 to 3 mm for non-ferrous. It is **added** to external faces and **subtracted** from holes.\n\n**Draft (taper) allowance**: a taper of **1 to 3 degrees** on faces parallel to the withdrawal direction, so the pattern lifts without breaking the sand. Internal faces need more. Offset $x = h\\tan\\theta$.\n\nOrder of working: finished size, add machining (subtract for holes), then apply $(1+s)$.",
+     "basics_md": "A cast surface comes out rough, like a baked loaf crust. Machining shaves it off, so you start with extra thickness. Draft is the slope that lets a cup slide out of its mould.",
+     "key_points": [
+      "Machining allowance: added on external faces, subtracted for holes",
+      "Draft: 1 to 3 degrees on faces along the withdrawal direction, more on internal faces",
+      "Draft offset $x = h\\tan\\theta$",
+      "Pattern size = (finished size + machining) x (1 + s)"
+     ],
+     "questions": [
+      {
+       "id": "md-q1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "Draft allowance is provided so that",
+       "options": [
+        "The casting shrinks freely",
+        "The pattern can be withdrawn from the mould without breaking the sand",
+        "Surfaces can be machined",
+        "The pattern does not warp"
+       ],
+       "answer_index": 1,
+       "why": "A taper on vertical faces lets the pattern lift cleanly."
+      },
+      {
+       "id": "md-q2",
+       "kind": "mcq",
+       "level": 2,
+       "q": "For a hole to be machined to a final diameter, the cast hole (core) diameter is made",
+       "options": [
+        "Larger by the machining allowance",
+        "Smaller by the machining allowance",
+        "Equal to finished size",
+        "Larger by shake allowance"
+       ],
+       "answer_index": 1,
+       "why": "Machining enlarges the hole, so the cast hole starts smaller."
+      },
+      {
+       "id": "md-q3",
+       "kind": "numerical",
+       "level": 2,
+       "marks": 4,
+       "q": "A grey cast iron block of finished size 200 x 100 x 50 mm is machined on all faces. Machining allowance is 3 mm per face and shrinkage 10 mm/m. Find the pattern dimensions (neglect draft and shake).",
+       "model_answer_md": "$s = 0.01$. Add machining on both faces of each dimension, then shrinkage:\n\nLength: $(200 + 6)(1.01) = 208.06$ mm\nWidth: $(100 + 6)(1.01) = 107.06$ mm\nThickness: $(50 + 6)(1.01) = 56.56$ mm\n\n**Pattern: 208.06 x 107.06 x 56.56 mm.**",
+       "points": [
+        "Machining added on both faces (6 mm)",
+        "Shrinkage factor 1.01",
+        "208.06 mm",
+        "107.06 mm",
+        "56.56 mm"
+       ]
+      },
+      {
+       "id": "md-q4",
+       "kind": "numerical",
+       "level": 3,
+       "marks": 5,
+       "q": "A cast iron flange has finished OD 200 mm, bore 80 mm, thickness 30 mm, all machined. Machining allowance is 3 mm per surface, shrinkage 10 mm/m, draft 1 degree on the outer vertical face. Find the pattern OD, core diameter, thickness and draft offset.",
+       "model_answer_md": "$s = 0.01$, $m = 3$ mm.\n\n**OD** (external, add): $(200 + 6)(1.01) = 208.06$ mm\n**Bore** (internal, subtract): $(80 - 6)(1.01) = 74.74$ mm, the core diameter\n**Thickness**: $(30 + 6)(1.01) = 36.36$ mm\n**Draft offset** on the outer face: $x = h\\tan 1^\\circ = 36.36 \\times 0.01746 = 0.63$ mm per side, added as extra material towards the parting face.",
+       "points": [
+        "OD 208.06 mm (machining added)",
+        "Bore 74.74 mm (machining subtracted)",
+        "Thickness 36.36 mm",
+        "Draft offset $h\\tan\\theta$ = 0.63 mm"
+       ]
+      }
+     ]
+    },
+    {
+     "id": "distortion-shake",
+     "title": "Distortion, shake and the full list of allowances",
+     "theory_md": "**Distortion (camber) allowance**: long flat plates and U or V shapes warp on cooling because thin and thick parts contract unevenly. The pattern is bent in the **opposite direction** by the expected amount.\n\n**Shake (rapping) allowance**: the pattern is rapped to loosen it, which **enlarges** the cavity, so the pattern is made slightly **smaller**. It is the only **negative** allowance.\n\n**All five allowances**: shrinkage, machining, draft, distortion, shake. Shrinkage, machining and draft are positive (pattern bigger); distortion is a reverse bend; shake is negative.",
+     "basics_md": "Rapping a stuck pattern to free it widens the hole a bit, like wiggling a cork out of a bottle. So you make the pattern a little small to cancel that.",
+     "key_points": [
+      "Five allowances: shrinkage, machining, draft, distortion, shake",
+      "Distortion: pattern bent opposite to the expected warp (U, V shapes, long plates)",
+      "Shake: rapping enlarges the cavity, so the allowance is negative",
+      "Only shake allowance is negative"
+     ],
+     "questions": [
+      {
+       "id": "ds-q1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "Which pattern allowance is negative?",
+       "options": [
+        "Shrinkage",
+        "Machining",
+        "Draft",
+        "Shake (rapping)"
+       ],
+       "answer_index": 3,
+       "why": "Rapping enlarges the cavity so the pattern is made slightly smaller."
+      },
+      {
+       "id": "ds-q2",
+       "kind": "mcq",
+       "level": 2,
+       "q": "A U-shaped casting that tends to close on cooling is given a pattern with",
+       "options": [
+        "Extra machining allowance",
+        "Reverse bend (distortion allowance)",
+        "Larger draft only",
+        "No allowance"
+       ],
+       "answer_index": 1,
+       "why": "The pattern is bent opposite to the warping."
+      },
+      {
+       "id": "ds-q3",
+       "kind": "short",
+       "level": 2,
+       "marks": 3,
+       "q": "What is shake allowance and why is it negative? Name the other four allowances.",
+       "model_answer_md": "**Shake (rapping) allowance**: before withdrawal the pattern is rapped to loosen it from the sand, which makes the cavity slightly larger than the pattern. The pattern is therefore made **slightly smaller**, so the allowance is negative.\n\nOthers: **shrinkage**, **machining**, **draft** and **distortion**.",
+       "points": [
+        "Rapping enlarges the cavity",
+        "Pattern made smaller, so negative",
+        "Other four allowances named"
+       ]
+      },
+      {
+       "id": "ds-p1",
+       "pyq": "7080dffc9902c99e",
+       "level": 2,
+       "points": [
+        "Pattern materials: wood (pine, teak, deodar, mahogany), metals (Al, brass, CI, steel), plastics, wax, plaster, rubber",
+        "Selection criteria: number of castings, size and accuracy, durability, weight, workability, cost, moulding method",
+        "Allowances: shrinkage, machining, draft, rapping (shake), distortion",
+        "Typical values: CI about 10 mm/m shrinkage, machining 2 to 6 mm, draft 1 to 3 degrees"
+       ]
+      },
+      {
+       "id": "ds-p2",
+       "pyq": "713b040bcdceadf1",
+       "level": 3,
+       "points": [
+        "Pattern materials with their use (wood small runs, metal large runs, plastic, wax, plaster)",
+        "Selection criteria listed",
+        "Five allowances: shrinkage, machining, draft, rapping, distortion",
+        "Soap case steps: drawing, parting plane, allowances, shaping, core box and prints, shellac and colour code",
+        "Sketches of the pattern, core box and mould section"
+       ]
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "topic": "Moulding sands",
+   "subtopics": [
+    {
+     "id": "sand-composition",
+     "title": "Green sand composition and types of sand",
+     "theory_md": "**Green moulding sand**: silica sand (SiO$_2$) 75 to 85% (refractory grains); clay 10 to 15% (bentonite or fireclay, binder); water 2 to 8% (activates the clay, commonly 4 to 6%); additives a few % (sea coal for finish, cereal or dextrin for strength, wood flour for collapsibility).\n\n**Types of sand by use**: **facing sand** (fresh, fine, next to the pattern), **backing or floor sand** (used sand that fills the box), **system sand** (machine moulding), **parting sand** (dry, clay-free silica, stops cope and drag sticking), **loam sand** (about 50% clay, large castings), **core sand** (sand with oil or resin binder).",
+     "basics_md": "Sand alone does not stick. Add clay and water and it behaves like wet beach sand that holds a shape. That is green sand: 'green' means moist, not green coloured.",
+     "key_points": [
+      "Silica 75 to 85%, clay 10 to 15%, water 2 to 8%, additives a few %",
+      "Silica gives refractoriness, clay is the binder, water activates clay",
+      "Facing, backing, system, parting, loam and core sand",
+      "Parting sand is dry silica with no clay; green means moist"
+     ],
+     "questions": [
+      {
+       "id": "sc-q1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "The binder in green sand is",
+       "options": [
+        "Silica",
+        "Clay (bentonite)",
+        "Sea coal",
+        "Sawdust"
+       ],
+       "answer_index": 1,
+       "why": "Clay, activated by water, binds the silica grains."
+      },
+      {
+       "id": "sc-q2",
+       "kind": "mcq",
+       "level": 1,
+       "q": "Sand sprinkled on the parting surface to stop cope and drag sticking is",
+       "options": [
+        "Facing sand",
+        "Backing sand",
+        "Parting sand",
+        "Loam sand"
+       ],
+       "answer_index": 2,
+       "why": "Parting sand has no clay, so it does not bind."
+      },
+      {
+       "id": "sc-q3",
+       "kind": "short",
+       "level": 2,
+       "marks": 3,
+       "q": "Give the typical composition of green sand and the role of each constituent.",
+       "model_answer_md": "| Constituent | Typical % | Role |\n|---|---|---|\n| Silica sand | 75 to 85 | Refractory grains, form the body |\n| Clay (bentonite, fireclay) | 10 to 15 | Binder: strength and plasticity |\n| Water | 2 to 8 | Activates the clay, gives bond |\n| Additives | a few | Sea coal for finish, cereal for strength, wood flour for collapsibility |",
+       "points": [
+        "Silica 75 to 85% as refractory grains",
+        "Clay 10 to 15% as binder",
+        "Water 2 to 8% activates clay",
+        "Additives and their purpose"
+       ]
+      },
+      {
+       "id": "sc-q4",
+       "kind": "numerical",
+       "level": 2,
+       "marks": 3,
+       "q": "Find the quantities of each constituent in a 50 kg batch of green sand containing 80% silica, 12% clay, 5% water and 3% additives.",
+       "model_answer_md": "Silica: $0.80\\times 50 = 40$ kg\nClay: $0.12\\times 50 = 6$ kg\nWater: $0.05\\times 50 = 2.5$ kg\nAdditives: $0.03\\times 50 = 1.5$ kg\n\nCheck: $40 + 6 + 2.5 + 1.5 = 50$ kg.",
+       "points": [
+        "Percent x batch mass for each",
+        "40, 6, 2.5, 1.5 kg",
+        "Total checks to 50 kg"
+       ]
+      }
+     ]
+    },
+    {
+     "id": "sand-properties",
+     "title": "Properties of moulding sand and additives",
+     "theory_md": "**Refractoriness**: does not fuse at pouring temperature. **Permeability**: lets steam and gas escape (low gives blowholes). **Cohesiveness**: grains stick to each other. **Adhesiveness**: sand sticks to the flask walls. **Strength**: green, dry and hot strength. **Flowability (plasticity)**: packs round the pattern. **Collapsibility**: gives way to the shrinking casting (low gives hot tears). Also fineness for finish, reusability, low cost.\n\n**Additives**: **sea coal** (coal dust) for surface finish and to stop metal sticking; **cereal or dextrin** for dry strength; **wood flour or sawdust** for collapsibility and permeability; **molasses, pitch** for strength; **bentonite, fireclay** as binders; **silica flour** for hot strength.",
+     "basics_md": "Every property answers one problem: gas must escape, the mould must hold its shape, survive heat, and then crumble away so the cooling casting is not squeezed.",
+     "key_points": [
+      "Refractoriness, permeability, cohesiveness, adhesiveness, strength, flowability, collapsibility",
+      "Low permeability gives blowholes; low collapsibility gives hot tears",
+      "Silica is common: refractory, cheap, plentiful, reusable",
+      "Sea coal gives finish, cereal gives strength, wood flour gives collapsibility"
+     ],
+     "questions": [
+      {
+       "id": "sp-q1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "The property of moulding sand that lets gases and steam escape is",
+       "options": [
+        "Cohesiveness",
+        "Permeability",
+        "Refractoriness",
+        "Adhesiveness"
+       ],
+       "answer_index": 1,
+       "why": "Permeability (porosity) lets gas pass through the rammed sand."
+      },
+      {
+       "id": "sp-q2",
+       "kind": "mcq",
+       "level": 2,
+       "q": "Cohesiveness differs from adhesiveness because cohesiveness is the",
+       "options": [
+        "Sticking of sand to the flask walls",
+        "Sticking of sand grains to each other",
+        "Ability to resist heat",
+        "Ability to let gas out"
+       ],
+       "answer_index": 1,
+       "why": "Cohesion is grain to grain; adhesion is sand to flask or other bodies."
+      },
+      {
+       "id": "sp-q3",
+       "kind": "mcq",
+       "level": 2,
+       "q": "Wood flour is added to moulding sand mainly to improve",
+       "options": [
+        "Refractoriness",
+        "Collapsibility and permeability",
+        "Adhesiveness",
+        "Hot strength"
+       ],
+       "answer_index": 1,
+       "why": "It burns out, leaving gaps that make the sand crumble and let gas through."
+      },
+      {
+       "id": "sp-p1",
+       "pyq": "e3508c9196df7e61",
+       "level": 2,
+       "points": [
+        "Properties: refractoriness, permeability, cohesiveness, adhesiveness, green and dry strength, flowability, collapsibility",
+        "Silica is most common: refractory, cheap, plentiful, reusable",
+        "Additives: sea coal for finish, cereal or dextrin for strength, wood flour for collapsibility and permeability",
+        "Binders: bentonite, fireclay, with water; molasses or pitch for strength"
+       ]
+      },
+      {
+       "id": "sp-q4",
+       "kind": "long",
+       "level": 2,
+       "marks": 5,
+       "q": "List the important properties of moulding sand with the defect caused when each is poor.",
+       "model_answer_md": "| Property | Meaning | If poor |\n|---|---|---|\n| Refractoriness | Resists fusing at pouring temperature | Burn-on, fusion |\n| Permeability | Gas and steam escape | Blowholes, pinholes |\n| Cohesiveness and strength | Holds shape, resists erosion | Washes, mould collapse |\n| Flowability | Packs round pattern | Soft spots, swells |\n| Collapsibility | Yields to contraction | Hot tears, hard knock-out |\n| Adhesiveness | Sticks to flask walls | Sand falls out of cope |",
+       "points": [
+        "At least five properties named",
+        "Meaning of each",
+        "Defect linked to poor value",
+        "Permeability to blowholes, collapsibility to hot tears"
+       ]
+      }
+     ]
+    },
+    {
+     "id": "permeability-number",
+     "title": "Permeability number calculation",
+     "theory_md": "**Permeability number** $P = \\dfrac{V\\,H}{p\\,A\\,t}$ with $V$ volume of air (cc), $H$ height of specimen (cm), $p$ air pressure (g/cm$^2$), $A$ cross-section area (cm$^2$), $t$ time (min).\n\nStandard specimen: 50.8 mm diameter x 50.8 mm high ($H = 5.08$ cm, $A = 20.268$ cm$^2$), air volume $V = 2000$ cc. Then $P = \\dfrac{501.28}{p\\,t}$.\n\nA higher $P$ means gas escapes more easily. Too high gives rough surface and metal penetration; too low gives blowholes.",
+     "basics_md": "Blow air through a sand plug and time it. The faster the air gets through, the more open the sand is, and the higher its permeability number.",
+     "key_points": [
+      "$P = VH/(pAt)$ with t in minutes and p in g/cm$^2$",
+      "Standard specimen 50.8 mm x 50.8 mm, 2000 cc air: $P = 501.28/(pt)$",
+      "High P gives rough finish, low P gives blowholes"
+     ],
+     "questions": [
+      {
+       "id": "pn-q1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "In the permeability formula the time is taken in",
+       "options": [
+        "Seconds",
+        "Minutes",
+        "Hours",
+        "Milliseconds"
+       ],
+       "answer_index": 1,
+       "why": "The constant 501.28 uses time in minutes and pressure in g/cm$^2$."
+      },
+      {
+       "id": "pn-q2",
+       "kind": "mcq",
+       "level": 2,
+       "q": "Compared with the same test on a coarser sand, a finer, harder rammed sand takes more time for 2000 cc of air, so its permeability number is",
+       "options": [
+        "Higher",
+        "Lower",
+        "The same",
+        "Cannot be said"
+       ],
+       "answer_index": 1,
+       "why": "More time $t$ in the denominator gives a lower $P$."
+      },
+      {
+       "id": "pn-q3",
+       "kind": "numerical",
+       "level": 2,
+       "marks": 3,
+       "q": "In a permeability test on a standard specimen (50.8 mm dia x 50.8 mm high), 2000 cc of air passed in 1.2 min at 5 g/cm$^2$. Find the permeability number.",
+       "model_answer_md": "$A = \\pi(5.08)^2/4 = 20.268$ cm$^2$, $H = 5.08$ cm\n\n$P = \\dfrac{VH}{pAt} = \\dfrac{2000\\times 5.08}{5\\times 20.268\\times 1.2} = \\dfrac{10160}{121.61} = 83.5$\n\nCheck: $501.28/(5\\times1.2) = 83.5$.",
+       "points": [
+        "Correct formula",
+        "Substitution with H 5.08 cm and A 20.268 cm$^2$",
+        "P about 83.5"
+       ]
+      },
+      {
+       "id": "pn-q4",
+       "kind": "numerical",
+       "level": 3,
+       "marks": 3,
+       "q": "A standard specimen passes 2000 cc of air in 1.5 min at a pressure of 8 g/cm$^2$. Find P, and say how it compares with the 83.5 sand above.",
+       "model_answer_md": "$P = \\dfrac{501.28}{p\\,t} = \\dfrac{501.28}{8\\times 1.5} = \\dfrac{501.28}{12} = 41.8$\n\nIt is about half of 83.5, so this sand is less permeable (more blowhole risk).",
+       "points": [
+        "Uses $501.28/(pt)$",
+        "P about 41.8",
+        "Lower permeability than 83.5"
+       ]
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "topic": "Types of moulds",
+   "subtopics": [
+    {
+     "id": "sand-moulds",
+     "title": "Green, dry, skin-dried, loam and core sand moulds",
+     "theory_md": "| Mould | Sand and treatment | Use | Size |\n|---|---|---|---|\n| **Green sand** | Moist silica and clay, poured without drying | Most common, cheap, quick | Small to medium |\n| **Dry sand** | Organic binder, baked 150 to 350 C | Heavy, accurate castings; stronger, better finish | Medium to large |\n| **Skin-dried** | Green sand with only the face (15 to 25 mm) dried by torch | Better surface than green, cheaper than dry | Medium to large |\n| **Loam** | Loam (about 50% clay) on brick framework, sweep or skeleton pattern | One-off huge castings (bells, pipes) | Very large |\n| **Core sand** | Sand with oil or resin binder | Hollow and accurate parts | Small to medium |\n\nGreen sand limits: moisture can cause blowholes.",
+     "basics_md": "The more the mould is dried and strengthened, the bigger and more accurate the casting it can hold, but the longer and costlier it is to make.",
+     "key_points": [
+      "Green sand: moist, cheapest, most common; moisture risk",
+      "Dry sand: baked, stronger and more accurate, for large castings",
+      "Skin-dried: only the face dried, a compromise",
+      "Loam: about 50% clay, very large one-off castings without a full pattern"
+     ],
+     "questions": [
+      {
+       "id": "sm-q1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "The word 'green' in green sand means",
+       "options": [
+        "Green in colour",
+        "Moist, used without baking",
+        "New unused sand",
+        "Eco-friendly"
+       ],
+       "answer_index": 1,
+       "why": "Green sand holds moisture and is poured undried."
+      },
+      {
+       "id": "sm-q2",
+       "kind": "mcq",
+       "level": 2,
+       "q": "A mould whose face alone is dried by a torch is a",
+       "options": [
+        "Dry sand mould",
+        "Skin-dried mould",
+        "Loam mould",
+        "Green sand mould"
+       ],
+       "answer_index": 1,
+       "why": "Only 15 to 25 mm of the face is dried."
+      },
+      {
+       "id": "sm-q3",
+       "kind": "mcq",
+       "level": 2,
+       "q": "A very large one-off bell casting is usually made in a",
+       "options": [
+        "Green sand mould",
+        "Shell mould",
+        "Loam mould",
+        "Metal mould"
+       ],
+       "answer_index": 2,
+       "why": "Loam moulds on brick frames suit very large castings with sweep patterns."
+      },
+      {
+       "id": "sm-q4",
+       "kind": "short",
+       "level": 2,
+       "marks": 3,
+       "q": "Differentiate green sand and dry sand moulds.",
+       "model_answer_md": "| Point | Green sand | Dry sand |\n|---|---|---|\n| Moisture | Poured moist | Baked at 150 to 350 C to remove moisture |\n| Strength and finish | Lower | Higher, better finish and accuracy |\n| Cost and time | Cheap, quick | Costlier, slower |\n| Casting size | Small to medium | Medium to large |\n| Defect risk | Blowholes from moisture | Fewer gas defects |",
+       "points": [
+        "Moisture state",
+        "Strength and finish",
+        "Cost or time",
+        "Casting size"
+       ]
+      },
+      {
+       "id": "sm-p1",
+       "pyq": "edbd8ac240aed68d",
+       "level": 2,
+       "points": [
+        "Table for green, dry, skin-dried, loam, core sand, CO2, shell, pit and floor moulds",
+        "Sand used: green sand moist silica and clay; dry sand baked with binder; loam with bricks",
+        "Application and advantages of each (green cheap and reusable, dry strong and accurate, loam huge castings without pattern)",
+        "Size of casting: green small to medium, dry medium to large, loam very large"
+       ]
+      }
+     ]
+    },
+    {
+     "id": "expendable-permanent",
+     "title": "Expendable and permanent moulds",
+     "theory_md": "**Expendable moulds** are destroyed to remove the casting: sand (green, dry, skin-dried, loam, core sand), **CO$_2$**, **shell**, **investment (lost wax)**, plaster and cement-bonded moulds.\n\n**Permanent moulds** are metal (cast iron or steel) dies reused for thousands of castings: gravity die casting, pressure die casting, centrifugal casting; mostly for non-ferrous metals.\n\nBy position in the shop: **bench**, **floor**, **pit** and **machine** moulds (details under Moulding processes).\n\nExpendable moulds allow complex shapes and any metal; permanent moulds give a better finish and faster production but cost more for tooling.",
+     "basics_md": "A sand mould is broken every time you want the casting out, like cracking an egg. A metal die opens like a waffle iron and is used again and again.",
+     "key_points": [
+      "Expendable: sand, CO2, shell, investment, plaster; destroyed after one casting",
+      "Permanent: metal dies reused many times (die, centrifugal casting)",
+      "By position: bench, floor, pit, machine",
+      "Metal moulds are not expendable"
+     ],
+     "questions": [
+      {
+       "id": "ep-q1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "A permanent mould is made of",
+       "options": [
+        "Sand and clay",
+        "Cast iron or steel",
+        "Wax",
+        "Plaster of Paris"
+       ],
+       "answer_index": 1,
+       "why": "Metal dies are reused for thousands of castings."
+      },
+      {
+       "id": "ep-q2",
+       "kind": "mcq",
+       "level": 2,
+       "q": "Which is NOT an expendable mould?",
+       "options": [
+        "Shell mould",
+        "Investment mould",
+        "Gravity die",
+        "Loam mould"
+       ],
+       "answer_index": 2,
+       "why": "A gravity die is metal and reused."
+      },
+      {
+       "id": "ep-q3",
+       "kind": "short",
+       "level": 2,
+       "marks": 3,
+       "q": "Classify moulds used in a foundry.",
+       "model_answer_md": "**By material**\n- Expendable: green sand, dry sand, skin-dried, loam, core sand, CO$_2$, shell, investment, plaster, cement-bonded.\n- Permanent (metal): gravity die, pressure die, centrifugal.\n\n**By position or method**: bench, floor, pit, machine moulds.",
+       "points": [
+        "Expendable and permanent groups",
+        "Examples under each",
+        "Bench, floor, pit and machine moulds"
+       ]
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "topic": "Steps in making a mould",
+   "subtopics": [
+    {
+     "id": "mould-steps",
+     "title": "Making a two-box green sand mould",
+     "theory_md": "**Drag**: pattern half flat on the **moulding board**, drag box upside down round it; sprinkle **parting sand**; riddle 20 to 30 mm of **facing sand**; fill **backing sand** and **ram** (peen end near the pattern, butt end on top); **strike off**; **vent**; **roll over**.\n\n**Cope**: set the cope pattern half on the dowels; parting sand; cope box; **sprue pin** and **riser pin**; riddle, fill, ram, strike off, vent; pull the pins; cut the pouring basin.\n\n**Finish**: lift cope, **swab** edges, **rap and draw** the pattern, cut **runner and ingate**, repair, set the **core**, close the mould, clamp or weight the cope, **pour**.\n\nToo soft ramming gives swells; too hard gives blowholes.",
+     "basics_md": "Press the pattern into sand in two halves, like making a hollow chocolate from two moulds, then lift the pattern out, join the halves and pour.",
+     "key_points": [
+      "Drag first, upside down on the moulding board, then rolled over",
+      "Parting sand between halves; facing sand next to the pattern, backing sand behind",
+      "Sprue and riser pins in the cope; pins removed, basin cut",
+      "Swab, rap and draw pattern, cut gates, set core, close, weight, pour",
+      "Soft ramming gives swell, hard ramming gives blowholes"
+     ],
+     "questions": [
+      {
+       "id": "ms-q1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "In two-box moulding with a split pattern, the first box rammed is the",
+       "options": [
+        "Cope",
+        "Drag",
+        "Cheek",
+        "Either"
+       ],
+       "answer_index": 1,
+       "why": "The drag is rammed first, then rolled over to receive the cope."
+      },
+      {
+       "id": "ms-q2",
+       "kind": "mcq",
+       "level": 2,
+       "q": "Excessively hard ramming mainly causes",
+       "options": [
+        "Swells",
+        "Blowholes through low permeability",
+        "Misrun",
+        "Core shift"
+       ],
+       "answer_index": 1,
+       "why": "Over-ramming shuts the pores so gas is trapped."
+      },
+      {
+       "id": "ms-q3",
+       "kind": "long",
+       "level": 2,
+       "marks": 5,
+       "q": "Describe the steps of making a green sand mould with a split pattern.",
+       "model_answer_md": "**Drag**\n1. Place the drag half of the pattern on the moulding board, drag box upside down round it.\n2. Sprinkle parting sand; riddle facing sand over the pattern.\n3. Fill backing sand in layers and ram.\n4. Strike off, vent, roll the drag over.\n\n**Cope**\n5. Fit the cope pattern half on the dowels; parting sand; place the cope box with sprue and riser pins.\n6. Fill, ram, strike off, vent; pull pins and cut the pouring basin.\n\n**Finishing**\n7. Lift the cope, swab, rap and draw both pattern halves.\n8. Cut the runner and ingate; repair and clean the cavity; set the core.\n9. Close the mould, clamp or weight the cope, and pour.",
+       "points": [
+        "Drag first on moulding board with parting and facing sand",
+        "Ram, strike off, vent, roll over",
+        "Cope with sprue and riser pins",
+        "Swab, rap and draw the pattern",
+        "Gates cut, core set, closed, weighted, poured"
+       ]
+      },
+      {
+       "id": "ms-q4",
+       "kind": "numerical",
+       "level": 2,
+       "marks": 3,
+       "q": "Why are weights placed on the cope before pouring? Find the lifting force for a parting area of 0.04 m$^2$ with 0.15 m of cast iron (7000 kg/m$^3$) above it.",
+       "model_answer_md": "Molten metal presses up on the cope over the parting area; if the force exceeds the cope's weight, the cope lifts and metal runs out at the parting line.\n\n$F = \\rho g h A = 7000\\times 9.81\\times 0.15\\times 0.04 = 412\\ \\text{N}$ (about 42 kgf)\n\nThe cope plus weights must exceed this, with a margin.",
+       "points": [
+        "Metallostatic pressure lifts the cope",
+        "$F = \\rho g h A$",
+        "412 N",
+        "Cope plus weight must exceed it"
+       ]
+      }
+     ]
+    },
+    {
+     "id": "casting-process",
+     "title": "The casting process, mould parts and fettling",
+     "theory_md": "**Casting**: pour molten metal into a cavity, let it solidify, remove and clean it.\n**Sequence**: pattern making, moulding (with cores), melting, pouring, solidification, shake-out, fettling, inspection.\n\n**Elements of a sand mould**: cope, drag, (cheek), parting line, pouring basin, sprue, runner, gate (ingate), riser, cavity, core and core prints, vents, chaplets, chills.\n\n**Post-casting**: knock out; cut off gates and risers; clean by shot or sand blasting; fettle (grind fins); inspect (visual, dye penetrant, X-ray); heat treat; repair; machine.\n\n**Classification of manufacturing processes**: casting; forming (forging, rolling, extrusion, drawing); machining; joining (welding, brazing, riveting); finishing; powder metallurgy and plastic moulding.",
+     "basics_md": "Casting is like making an ice cube: shape a hole, fill it with liquid, wait, pop it out and trim the rough edges.",
+     "key_points": [
+      "Steps: pattern, mould, melt, pour, solidify, shake-out, fettle, inspect",
+      "Mould elements: cope, drag, parting line, basin, sprue, runner, gate, riser, cavity, core, vents",
+      "Chaplets support cores; chills help directional solidification",
+      "Post-casting: gate and riser removal, blasting, fettling, inspection, heat treatment",
+      "Casting is one class of manufacturing, with forming, machining, joining and finishing"
+     ],
+     "questions": [
+      {
+       "id": "cpr-q1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "Removal of runners, gates, fins and sand from a casting is called",
+       "options": [
+        "Pouring",
+        "Fettling",
+        "Moulding",
+        "Inspection"
+       ],
+       "answer_index": 1,
+       "why": "Fettling is the cleaning and finishing of the raw casting."
+      },
+      {
+       "id": "cpr-q2",
+       "kind": "mcq",
+       "level": 1,
+       "q": "Chaplets are used to",
+       "options": [
+        "Feed the casting",
+        "Support a core inside the cavity",
+        "Vent the mould",
+        "Lift the pattern"
+       ],
+       "answer_index": 1,
+       "why": "Chaplets are metal supports that hold cores against sagging or floating."
+      },
+      {
+       "id": "cpr-q3",
+       "kind": "mcq",
+       "level": 2,
+       "q": "Which is NOT a part of the gating system?",
+       "options": [
+        "Pouring basin",
+        "Runner",
+        "Ingate",
+        "Core print"
+       ],
+       "answer_index": 3,
+       "why": "A core print is a feature of the pattern, not of the gating."
+      },
+      {
+       "id": "cpr-q4",
+       "kind": "long",
+       "level": 2,
+       "marks": 5,
+       "q": "Explain the metal casting process with the steps and the post-casting treatments.",
+       "model_answer_md": "**Steps**\n1. Pattern with allowances from the drawing.\n2. Moulding: ram sand in cope and drag, withdraw pattern, cut gates, place cores.\n3. Assemble and clamp or weight the mould.\n4. Melt the metal in a cupola or furnace.\n5. Pour through the basin and sprue.\n6. Solidification and cooling.\n7. Shake-out and fettling.\n\n**Post-casting treatments**: removal of gates and risers; shot or sand blasting; fettling and grinding; inspection (visual, dye penetrant, X-ray); heat treatment (annealing, stress relief); repair by welding; machining and painting.\n\n[Sketch: sectional mould with cope, drag, parting line, basin, sprue, runner, gate, riser, cavity, core.]",
+       "points": [
+        "Pattern and moulding steps",
+        "Melting and pouring",
+        "Solidification and shake-out",
+        "Post-casting treatments listed",
+        "Labelled mould sketch"
+       ]
+      },
+      {
+       "id": "cpr-p1",
+       "pyq": "d31088a22782be3f",
+       "level": 3,
+       "points": [
+        "Steps with sketches: pattern, moulding (drag, cope, remove pattern, gates, cores), assembly, melting, pouring, solidification, shake-out and fettling",
+        "Types of moulds: green, dry, skin-dried, loam, CO2, shell, investment, permanent",
+        "Gating system: basin, tapered sprue, sprue well, runner, ingates, with riser; quiet filling, slag trapping",
+        "Post-casting: shake-out, gate and riser removal, blasting, fettling, inspection, heat treatment, repair, machining"
+       ]
+      }
+     ]
+    },
+    {
+     "id": "gating",
+     "title": "Gating: tapered sprue, runner, ingate",
+     "theory_md": "**Gating system**: pouring basin, **sprue**, sprue well, **runner**, **ingates**, cavity.\n- **Sprue**: the vertical channel from the basin down to the runner.\n- **Runner**: the horizontal channel in the parting plane that carries metal from the sprue base to the ingates and round the cavity.\n\n**Why the sprue is tapered**: falling metal speeds up, $v=\\sqrt{2gh}$, and by continuity $A_1v_1=A_2v_2$ so the area must shrink: $A_1/A_2=\\sqrt{h_2/h_1}$. A straight sprue cannot run full; the stream pulls away from the wall and sucks air in (**aspiration**), causing **air entrapment, gas porosity, oxide inclusions and sand erosion**. The taper keeps it full.",
+     "basics_md": "Water from a tap thins as it falls. A sprue that narrows downwards matches the thinning stream, so it stays full and does not drag air in with it.",
+     "key_points": [
+      "Sprue vertical, runner horizontal; metal goes basin, sprue, well, runner, ingate, cavity",
+      "Taper from continuity: area falls as velocity $\\sqrt{2gh}$ rises",
+      "Cylindrical sprue causes aspiration: air entrapment, porosity, oxide inclusions, erosion",
+      "Gating must fill quietly and trap slag"
+     ],
+     "questions": [
+      {
+       "id": "g-q1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "The horizontal channel in the parting plane that distributes metal to the ingates is the",
+       "options": [
+        "Sprue",
+        "Runner",
+        "Riser",
+        "Basin"
+       ],
+       "answer_index": 1,
+       "why": "The sprue is vertical, the runner is horizontal."
+      },
+      {
+       "id": "g-q2",
+       "kind": "mcq",
+       "level": 2,
+       "q": "A straight (cylindrical) sprue mainly causes",
+       "options": [
+        "Shrinkage cavity",
+        "Air aspiration and gas porosity",
+        "Hot tears",
+        "Core shift"
+       ],
+       "answer_index": 1,
+       "why": "The falling stream thins and draws air through the mould wall."
+      },
+      {
+       "id": "g-q3",
+       "kind": "numerical",
+       "level": 3,
+       "marks": 4,
+       "q": "Metal in a tapered sprue enters at 0.05 m head below the basin surface and the sprue is 0.25 m long. Find the velocity at the sprue bottom and the ratio of top to bottom area. If the top diameter is 30 mm, find the bottom diameter.",
+       "model_answer_md": "Head at the bottom $h_2 = 0.05 + 0.25 = 0.30$ m, at the top $h_1 = 0.05$ m.\n\n$v_2 = \\sqrt{2gh_2} = \\sqrt{2\\times 9.81\\times 0.30} = 2.43$ m/s\n\n$\\dfrac{A_1}{A_2} = \\dfrac{v_2}{v_1} = \\sqrt{\\dfrac{h_2}{h_1}} = \\sqrt{6} = 2.45$\n\n$\\dfrac{d_1}{d_2} = 6^{1/4} = 1.565$, so $d_2 = 30/1.565 = 19.2$ mm.",
+       "points": [
+        "$v=\\sqrt{2gh}$ with h = 0.30 m, 2.43 m/s",
+        "Continuity $A_1/A_2=\\sqrt{h_2/h_1}$",
+        "Area ratio 2.45",
+        "Bottom diameter 19.2 mm"
+       ]
+      },
+      {
+       "id": "g-p1",
+       "pyq": "1aa6ba7ffac7dbc1",
+       "level": 2,
+       "points": [
+        "Tapered sprue: stream accelerates and thins, taper keeps the sprue full, no air drawn in, no turbulence or erosion",
+        "Sprue is the vertical passage from basin; runner is the horizontal passage carrying metal to the gates",
+        "Three shrinkages: liquid, solidification, solid",
+        "Liquid and solidification shrinkage fed by risers (and chills); solid shrinkage by shrinkage allowance on the pattern"
+       ]
+      },
+      {
+       "id": "g-p2",
+       "pyq": "d3de2c39c81a06b1",
+       "level": 2,
+       "points": [
+        "Cylindrical sprue: sprue cannot run full, air is aspirated, turbulence",
+        "Defects: air entrapment, gas porosity or blowholes, oxide inclusions, sand erosion",
+        "Sprue vertical channel versus runner horizontal channel to the ingates",
+        "Three shrinkages: liquid, solidification, solid",
+        "Riser and chills feed the first two; shrinkage allowance on the pattern takes the third"
+       ]
+      }
+     ]
+    },
+    {
+     "id": "riser",
+     "title": "Riser: purpose, size, shape and location",
+     "theory_md": "A **riser** (feeder head) is a reservoir of molten metal that feeds the casting as it shrinks, so the shrinkage cavity forms in the riser, not the casting. It also lets gas and slag escape and shows the mould is full.\n\n**Size**: Chvorinov's rule, $t = B\\,(V/A)^2$. The riser must freeze **after** the casting, so $(V/A)_{riser}\\ge 1.2\\,(V/A)_{casting}$ and it must hold enough metal for the shrinkage.\n**Shape**: cylindrical, $H/D$ about 1 to 1.5, best $V/A$; open or blind.\n**Location**: on or beside the **heaviest section** (last to freeze), usually the cope, with directional solidification towards the riser; short thick neck.",
+     "basics_md": "The riser is a spare tank of hot metal sitting on the thickest part. As the casting shrinks it drinks from the tank, and the tank must stay liquid longer than the casting.",
+     "key_points": [
+      "Riser feeds shrinkage so the cavity forms in the riser",
+      "Chvorinov: $t=B(V/A)^2$; riser must freeze later than the casting",
+      "Riser $V/A$ at least 1.2 x casting $V/A$",
+      "Cylindrical, H/D about 1 to 1.5; open or blind",
+      "Placed on the heaviest section; top (cope) so gravity helps"
+     ],
+     "questions": [
+      {
+       "id": "r-q1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "The main function of a riser is to",
+       "options": [
+        "Admit metal into the cavity",
+        "Feed molten metal to the casting as it shrinks",
+        "Hold the core",
+        "Support the cope"
+       ],
+       "answer_index": 1,
+       "why": "The riser is a reservoir that compensates liquid and solidification shrinkage."
+      },
+      {
+       "id": "r-q2",
+       "kind": "mcq",
+       "level": 2,
+       "q": "According to Chvorinov's rule, solidification time is proportional to",
+       "options": [
+        "V/A",
+        "(V/A)$^2$",
+        "A/V",
+        "V x A"
+       ],
+       "answer_index": 1,
+       "why": "$t = B(V/A)^2$: a higher modulus freezes later."
+      },
+      {
+       "id": "r-q3",
+       "kind": "numerical",
+       "level": 3,
+       "marks": 5,
+       "q": "A cubic casting of side 100 mm is fed by a cylindrical riser with H = D that cools from all surfaces. Find the casting V/A, and the minimum riser diameter using a factor 1.2. Also find the ratio of riser to casting solidification times.",
+       "model_answer_md": "Cube: $V/A = a^3/6a^2 = a/6 = 100/6 = 16.67$ mm.\n\nRiser must have $V/A \\ge 1.2\\times16.67 = 20$ mm.\n\nCylinder with $H=D$ and all surfaces cooling: $V=\\pi D^3/4$, $A=\\pi D^2/2+\\pi D^2=1.5\\pi D^2$, so $V/A = D/6$.\n\n$D/6 = 20$ gives **$D = 120$ mm** (H = 120 mm).\n\nTime ratio $= (1.2)^2 = 1.44$, so the riser freezes 44% later than the casting.",
+       "points": [
+        "Cube V/A = a/6 = 16.67 mm",
+        "Required riser V/A = 20 mm",
+        "Cylinder V/A = D/6",
+        "D = 120 mm",
+        "Time ratio 1.44"
+       ]
+      },
+      {
+       "id": "r-q4",
+       "kind": "numerical",
+       "level": 3,
+       "marks": 4,
+       "q": "A cube-shaped casting of side 10 cm has Chvorinov constant B = 2 min/cm$^2$. Find its solidification time.",
+       "model_answer_md": "$V/A = 10/6 = 1.667$ cm\n\n$t = B(V/A)^2 = 2\\times(1.667)^2 = 2 \\times 2.778 = 5.56$ min.",
+       "points": [
+        "$V/A=a/6$ = 1.667 cm",
+        "$t=B(V/A)^2$",
+        "5.56 min"
+       ]
+      },
+      {
+       "id": "r-p1",
+       "pyq": "6bb4bb0156c377f7",
+       "level": 3,
+       "points": [
+        "Classification: casting, forming, machining, joining, finishing, powder metallurgy and plastics",
+        "Casting process: pattern, mould with gating and cores, melt, pour, solidify, shake-out, fettle",
+        "Riser purpose: feed shrinkage, cavity forms in riser, vents gas and slag",
+        "Size by Chvorinov, riser freezes after casting, V/A about 1.2 times the casting",
+        "Shape cylindrical with H/D 1 to 1.5; location over the heaviest section, top of mould"
+       ]
+      },
+      {
+       "id": "r-p2",
+       "pyq": "e14ead91e1e9dcbe",
+       "level": 3,
+       "points": [
+        "Casting process steps: pattern, mould, melt, pour, solidify, shake-out, fettle",
+        "Elements of sand mould: flask, cope, drag, parting line, basin, sprue, runner, gate, riser, cavity, core, vents, chaplets, chills",
+        "Tapered sprue: $v=\\sqrt{2gh}$ and continuity, taper keeps it full, avoids aspiration",
+        "Riser: size by Chvorinov (V/A at least 1.2 times), shape cylindrical, location on the heaviest section",
+        "Types of moulds: green, dry, skin-dried, loam, CO2, shell, plaster, investment, permanent; bench, floor, pit, machine",
+        "Labelled sketch of the mould"
+       ]
+      },
+      {
+       "id": "r-p3",
+       "pyq": "6efbbc7372a8a827",
+       "level": 3,
+       "points": [
+        "Casting process: pattern, mould, melt, pour, solidify, shake-out, fettle",
+        "Elements of sand mould: flask, cope, drag, parting line, basin, sprue, runner, gate, riser, cavity, core, vents",
+        "Tapered sprue prevents aspiration and keeps the stream full",
+        "Riser size by Chvorinov (1.2 times V/A), cylindrical shape, location on heaviest section",
+        "Types of moulds listed"
+       ]
+      },
+      {
+       "id": "r-p4",
+       "pyq": "53263e55eab46419",
+       "level": 3,
+       "points": [
+        "Casting process: pattern, mould, cores, melt, pour, solidify, shake-out, fettle, inspect",
+        "Elements of a sand mould with sketch: cope, drag, cheek, parting line, cavity, core, sprue, runner, gate, riser, vents, chaplets, chills",
+        "Tapered sprue matches the thinning stream, avoids aspiration, turbulence and erosion",
+        "Riser: reservoir feeding shrinkage; size by Chvorinov, shape cylindrical H/D 1 to 1.5, location at heaviest section",
+        "Types of moulds: green, dry, skin-dried, loam, core sand, cement-bonded, CO2, shell, investment, permanent; pit, bench, floor"
+       ]
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "topic": "Moulding processes",
+   "subtopics": [
+    {
+     "id": "moulding-methods",
+     "title": "Bench, floor, pit and machine moulding",
+     "theory_md": "**By where and how the mould is made**\n- **Bench moulding**: small flasks on a bench; small castings.\n- **Floor moulding**: medium to large moulds on the foundry floor; the floor may serve as the drag.\n- **Pit moulding**: very large castings in a pit; the pit is the drag, with a cope on top.\n- **Machine moulding**: mass production. **Jolt**: sand densest near the pattern. **Squeeze**: densest at the top. **Jolt-squeeze**: uniform. **Sand slinger**: throws sand at high speed for large moulds.\n\nBy sand or mould type the moulds are green, dry, skin-dried, loam and core sand; special processes follow in the next subtopic.",
+     "basics_md": "Small mould: do it on the bench. Bigger: on the floor. Giant: dig a pit. Thousands of them: let a machine ram the sand.",
+     "key_points": [
+      "Bench: small castings; floor: medium; pit: very large; machine: mass production",
+      "In pit moulding the pit acts as the drag",
+      "Jolt gives hard sand near pattern, squeeze hard at the top, jolt-squeeze uniform",
+      "Sand slinger for large moulds"
+     ],
+     "questions": [
+      {
+       "id": "mm-q1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "Very large castings that cannot fit in flasks are made by",
+       "options": [
+        "Bench moulding",
+        "Pit moulding",
+        "Machine moulding",
+        "Shell moulding"
+       ],
+       "answer_index": 1,
+       "why": "The pit in the foundry floor serves as the drag."
+      },
+      {
+       "id": "mm-q2",
+       "kind": "mcq",
+       "level": 2,
+       "q": "In squeeze moulding the sand is hardest",
+       "options": [
+        "Near the pattern",
+        "At the top, away from the pattern",
+        "Uniformly throughout",
+        "Only at the edges"
+       ],
+       "answer_index": 1,
+       "why": "Squeezing from the top packs the top most; jolting packs near the pattern."
+      },
+      {
+       "id": "mm-p1",
+       "pyq": "ea4c040fd234bfb0",
+       "level": 1,
+       "points": [
+        "By method: bench (small), floor (medium), pit (large), machine (mass production: squeeze, jolt, sand slinger)",
+        "By sand or mould type: green, dry, skin-dried, loam, core sand",
+        "Special processes: shell, CO2, investment"
+       ]
+      },
+      {
+       "id": "mm-q3",
+       "kind": "short",
+       "level": 2,
+       "marks": 3,
+       "q": "Differentiate jolt moulding from squeeze moulding.",
+       "model_answer_md": "| Point | Jolt | Squeeze |\n|---|---|---|\n| Action | Table is lifted and dropped, sand packs by inertia | Platen presses the sand from the top |\n| Hardness | Hardest near the pattern, soft at the top | Hardest at the top, soft near the pattern |\n| Suited to | Deep patterns | Shallow patterns |\n\nJolt-squeeze combines both for uniform density.",
+       "points": [
+        "Mechanism of each",
+        "Hardness distribution reversed",
+        "Jolt-squeeze combines for uniform density"
+       ]
+      }
+     ]
+    },
+    {
+     "id": "special-processes",
+     "title": "CO2, shell, investment and lost-foam moulding",
+     "theory_md": "**CO$_2$ moulding**: sand with 3 to 6% **sodium silicate**, hardened in seconds by CO$_2$ gas: $\\mathrm{Na_2SiO_3 + CO_2 \\rightarrow Na_2CO_3 + SiO_2}$ (gel). Quick and strong; poor collapsibility.\n\n**Shell moulding (Croning)**: sand with 3 to 8% **phenolic resin** falls on a metal pattern heated to about 200 to 250 C and forms a 5 to 10 mm shell; two shells are clamped. Good finish and accuracy, mass production.\n\n**Investment (lost wax)**: wax pattern, ceramic coating, wax melted out, shell fired, metal poured; intricate precise parts (turbine blades, jewellery).\n\n**Lost foam**: polystyrene pattern vaporised by the metal.",
+     "basics_md": "In each special process the sand is made stiffer or finer than usual: set by gas, baked as a thin resin shell, or replaced by a ceramic coating over a wax model.",
+     "key_points": [
+      "CO2: sodium silicate sand hardened by CO2 gas",
+      "Shell: resin-coated sand on a heated metal pattern forms a thin shell",
+      "Investment: wax pattern melted out of ceramic shell; intricate parts",
+      "Lost foam: polystyrene pattern vaporised by molten metal"
+     ],
+     "questions": [
+      {
+       "id": "sp2-q1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "In the CO$_2$ moulding process the binder is",
+       "options": [
+        "Bentonite",
+        "Sodium silicate",
+        "Phenolic resin",
+        "Linseed oil"
+       ],
+       "answer_index": 1,
+       "why": "Sodium silicate reacts with CO$_2$ to give a silica gel."
+      },
+      {
+       "id": "sp2-q2",
+       "kind": "mcq",
+       "level": 1,
+       "q": "Lost-wax process is another name for",
+       "options": [
+        "Shell moulding",
+        "Investment casting",
+        "CO$_2$ moulding",
+        "Die casting"
+       ],
+       "answer_index": 1,
+       "why": "The wax pattern is melted out of the ceramic shell."
+      },
+      {
+       "id": "sp2-q3",
+       "kind": "mcq",
+       "level": 2,
+       "q": "Shell moulding uses a",
+       "options": [
+        "Wooden pattern at room temperature",
+        "Heated metal pattern and resin-coated sand",
+        "Wax pattern",
+        "Polystyrene pattern"
+       ],
+       "answer_index": 1,
+       "why": "Resin sand cures into a shell on a pattern at 200 to 250 C."
+      },
+      {
+       "id": "sp2-q4",
+       "kind": "long",
+       "level": 2,
+       "marks": 5,
+       "q": "Write short notes on shell moulding and CO$_2$ moulding.",
+       "model_answer_md": "**Shell moulding**\n1. Metal pattern heated to about 200 to 250 C.\n2. Sand with 3 to 8% phenolic resin is dropped on it; a 5 to 10 mm shell cures.\n3. The shell is stripped, two halves are clamped and poured.\nAdvantages: good finish and accuracy, mass production. Limits: costly pattern and resin.\n\n**CO$_2$ moulding**\n1. Sand mixed with 3 to 6% sodium silicate is rammed round the pattern.\n2. CO$_2$ is passed through it; $\\mathrm{Na_2SiO_3 + CO_2 \\rightarrow Na_2CO_3 + SiO_2}$ gel hardens it in seconds.\nAdvantages: fast, strong, accurate. Limit: poor collapsibility.",
+       "points": [
+        "Shell: heated metal pattern and resin sand",
+        "Shell advantages",
+        "CO2: sodium silicate sand and CO2 gas",
+        "Reaction giving silica gel",
+        "CO2 advantages and limit"
+       ]
+      }
+     ]
+    },
+    {
+     "id": "casting-defects",
+     "title": "Casting defects: cause and remedy",
+     "theory_md": "| Defect | Cause | Remedy |\n|---|---|---|\n| **Blowholes** (smooth gas cavities) | Moisture, low permeability, hard ramming, poor venting | Control moisture, vent, ram evenly |\n| **Shrinkage cavity** (rough, at heavy section) | Poor feeding | Proper riser, chills |\n| **Misrun** (cavity not filled) | Cold metal, slow pouring | Hotter, faster pour, better gating |\n| **Cold shut** (two streams do not fuse) | Same | Same |\n| **Hot tear** | Restrained contraction | Collapsible sand, fillets |\n| **Mould or core shift** | Misaligned flasks or cores | Good pins, core prints, chaplets |\n| **Swell** | Soft ramming | Ram uniformly |\n| **Scab, rat tail, buckle** | Sand expansion on the face | Wood flour, softer ramming |",
+     "basics_md": "Every defect has a story: gas that cannot leave, metal that cannot reach, metal that cannot shrink freely, or a mould that moved. Name the story and the cure follows.",
+     "key_points": [
+      "Blowholes: gas, from moisture, low permeability, hard ramming",
+      "Shrinkage cavity: poor feeding, cure by riser and chills",
+      "Misrun and cold shut: low temperature or slow pouring",
+      "Hot tear: restrained contraction; shift: misalignment; swell: soft ramming"
+     ],
+     "questions": [
+      {
+       "id": "cd-q1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "Blowholes in a casting are mainly caused by",
+       "options": [
+        "High permeability",
+        "Excess moisture and low permeability of sand",
+        "Low pouring temperature",
+        "Misaligned flasks"
+       ],
+       "answer_index": 1,
+       "why": "Trapped steam and gas make smooth-walled cavities."
+      },
+      {
+       "id": "cd-q2",
+       "kind": "mcq",
+       "level": 2,
+       "q": "A defect where two metal streams meet but do not fuse is a",
+       "options": [
+        "Misrun",
+        "Cold shut",
+        "Hot tear",
+        "Swell"
+       ],
+       "answer_index": 1,
+       "why": "Misrun is incomplete filling; cold shut is a seam."
+      },
+      {
+       "id": "cd-q3",
+       "kind": "mcq",
+       "level": 2,
+       "q": "Holes with rough, dendritic walls at the heaviest section indicate",
+       "options": [
+        "Blowholes",
+        "Shrinkage cavity",
+        "Pinholes",
+        "Scab"
+       ],
+       "answer_index": 1,
+       "why": "Poor feeding leaves a rough shrinkage cavity; blowholes are smooth."
+      },
+      {
+       "id": "cd-q4",
+       "kind": "long",
+       "level": 2,
+       "marks": 5,
+       "q": "Explain any five casting defects with causes and remedies.",
+       "model_answer_md": "1. **Blowholes**: gas pockets from moisture, low permeability or hard ramming. Remedy: control moisture, vent well, ram evenly.\n2. **Shrinkage cavity**: poor feeding at the heaviest section. Remedy: properly sized riser and chills.\n3. **Misrun**: metal solidifies before filling the cavity. Remedy: higher pouring temperature, faster pouring, better gating.\n4. **Hot tear**: restrained contraction cracks the casting. Remedy: collapsible sand, fillets, uniform sections.\n5. **Mould shift**: cope and drag misaligned. Remedy: good pins and clamping.\n6. **Swell**: soft ramming bulges the mould. Remedy: uniform ramming.",
+       "points": [
+        "Five defects named",
+        "Cause for each",
+        "Remedy for each",
+        "Blowhole versus shrinkage cavity distinguished"
+       ]
+      }
+     ]
+    }
+   ]
+  }
+ ]
+}

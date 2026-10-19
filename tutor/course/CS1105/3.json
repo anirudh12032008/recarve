@@ -1,0 +1,269 @@
+{
+ "code": "CS1105",
+ "unit": "IoT",
+ "written": "2026-10-19",
+ "by": "claude-sonnet-5-5, in a Claude Code session",
+ "topics": [
+  {
+   "topic": "Introduction to IoT using Arduino",
+   "subtopics": [
+    {
+     "id": "iot-arduino-board",
+     "title": "IoT and the Arduino board",
+     "theory_md": "**IoT** is a network of physical objects (things) with sensors, actuators and connectivity that collect and exchange data over the Internet with little human help. Layers: **sensing** (sensors), **processing** (microcontroller), **communication** (Wi-Fi, Bluetooth, Ethernet), **cloud/application**. Examples: smart home, smart agriculture, wearables.\n\n**Arduino** is an open-source board built around a microcontroller (Uno: **ATmega328P**, 16 MHz, 5 V). Uno has **14 digital pins** (D0-D13, 6 of them PWM), **6 analog inputs** (A0-A5), 32 KB flash, 2 KB SRAM, USB port, power jack, reset button. Programs are called **sketches**, written in the **Arduino IDE** (C/C++) and uploaded through USB using the bootloader.",
+     "basics_md": "A thing becomes 'smart' when it can sense something, think a little, and talk to the Internet. Arduino is the small cheap computer that does the sensing and thinking.",
+     "key_points": [
+      "IoT = sensors + microcontroller + connectivity + cloud, objects exchanging data over the Internet",
+      "Arduino Uno: ATmega328P, 14 digital pins (6 PWM), 6 analog inputs, 5 V, 16 MHz",
+      "Program is a sketch written in Arduino IDE and uploaded via USB",
+      "Open-source hardware and software"
+     ],
+     "figures": [],
+     "questions": [
+      {
+       "id": "a-q1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "The microcontroller on the Arduino Uno is",
+       "options": [
+        "ATmega328P",
+        "8051",
+        "Raspberry Pi RP2040",
+        "ESP8266"
+       ],
+       "answer_index": 0,
+       "why": "The Uno uses the 8-bit AVR ATmega328P."
+      },
+      {
+       "id": "a-q2",
+       "kind": "mcq",
+       "level": 1,
+       "q": "How many analog input pins does the Arduino Uno have?",
+       "options": [
+        "14",
+        "6",
+        "8",
+        "2"
+       ],
+       "answer_index": 1,
+       "why": "A0 to A5; 14 is the number of digital pins."
+      },
+      {
+       "id": "a-q3",
+       "kind": "short",
+       "level": 2,
+       "marks": 3,
+       "q": "What is IoT? Name its main building blocks.",
+       "model_answer_md": "**IoT** is a network of physical objects embedded with sensors, software and connectivity that collect and exchange data over the Internet.\n\n**Building blocks**\n1. Sensors and actuators (sense and act)\n2. Microcontroller such as Arduino (processing)\n3. Communication (Wi-Fi, Bluetooth, Ethernet)\n4. Cloud and application (storage, analysis, user interface)",
+       "points": [
+        "Definition: interconnected physical objects exchanging data over the Internet",
+        "Sensors and actuators",
+        "Microcontroller for processing",
+        "Communication link",
+        "Cloud/application layer"
+       ]
+      },
+      {
+       "id": "a-q4",
+       "kind": "short",
+       "level": 2,
+       "marks": 4,
+       "q": "Describe the Arduino Uno board: its microcontroller, pins, memory and how a program is loaded.",
+       "model_answer_md": "1. **Microcontroller:** ATmega328P, 8-bit, 16 MHz, operating at 5 V.\n2. **Pins:** 14 digital I/O (D0-D13), of which 6 give PWM (3, 5, 6, 9, 10, 11); 6 analog inputs (A0-A5).\n3. **Memory:** 32 KB flash (program), 2 KB SRAM, 1 KB EEPROM.\n4. **Loading:** the sketch is written in the Arduino IDE, compiled, and uploaded through the USB port using the bootloader. USB also powers the board.",
+       "points": [
+        "ATmega328P, 16 MHz, 5 V",
+        "14 digital pins with 6 PWM, 6 analog inputs",
+        "32 KB flash, 2 KB SRAM",
+        "Sketch uploaded from Arduino IDE over USB"
+       ]
+      },
+      {
+       "id": "a-q5",
+       "kind": "mcq",
+       "level": 2,
+       "q": "An Arduino program is called a",
+       "options": [
+        "sketch",
+        "script",
+        "packet",
+        "firmware image only"
+       ],
+       "answer_index": 0,
+       "why": "Arduino programs are called sketches."
+      }
+     ]
+    },
+    {
+     "id": "sketch-structure",
+     "title": "Sketch structure and digital I/O",
+     "theory_md": "Every sketch has two functions:\n- **`setup()`** runs **once** at power-on or reset: set pin modes, start serial.\n- **`loop()`** runs **repeatedly** forever.\n\nPin functions: `pinMode(pin, INPUT/OUTPUT/INPUT_PULLUP)`, `digitalWrite(pin, HIGH/LOW)`, `digitalRead(pin)`, `delay(ms)`. HIGH = 5 V, LOW = 0 V.\n\n**Blink:**\n```\nvoid setup(){ pinMode(13, OUTPUT); }\nvoid loop(){\n  digitalWrite(13, HIGH); delay(1000);\n  digitalWrite(13, LOW);  delay(1000);\n}\n```\nAn external LED needs a **series resistor**: $R=(V_{supply}-V_{LED})/I$.",
+     "basics_md": "setup is the 'get ready' step done once; loop is the 'keep doing this' step. A pin must be told whether it will send a signal out or read one in.",
+     "key_points": [
+      "setup() runs once, loop() runs forever",
+      "pinMode sets INPUT or OUTPUT before use",
+      "digitalWrite sets HIGH (5 V) or LOW (0 V); digitalRead returns HIGH or LOW",
+      "delay(ms) pauses in milliseconds",
+      "LED needs a series resistor, R = (Vs - VLED)/I"
+     ],
+     "figures": [],
+     "questions": [
+      {
+       "id": "s-q1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "Which function runs repeatedly in an Arduino sketch?",
+       "options": [
+        "setup()",
+        "loop()",
+        "main() only",
+        "begin()"
+       ],
+       "answer_index": 1,
+       "why": "setup() runs once; loop() repeats."
+      },
+      {
+       "id": "s-q2",
+       "kind": "mcq",
+       "level": 1,
+       "q": "delay(2000) pauses the program for",
+       "options": [
+        "2 microseconds",
+        "2 milliseconds",
+        "2 seconds",
+        "20 seconds"
+       ],
+       "answer_index": 2,
+       "why": "delay takes milliseconds, so 2000 ms = 2 s."
+      },
+      {
+       "id": "s-q3",
+       "kind": "long",
+       "level": 2,
+       "marks": 5,
+       "q": "Write an Arduino sketch to blink an LED on pin 13 with 1 s ON and 1 s OFF. Explain setup() and loop().",
+       "model_answer_md": "```\nvoid setup() {\n  pinMode(13, OUTPUT);   // pin 13 as output\n}\nvoid loop() {\n  digitalWrite(13, HIGH); // LED on\n  delay(1000);            // 1000 ms = 1 s\n  digitalWrite(13, LOW);  // LED off\n  delay(1000);\n}\n```\n- **setup()** executes once at start/reset; used for pinMode and serial begin.\n- **loop()** executes again and again as long as power is on.\n- Pin 13 has the on-board LED, so no external part is needed.",
+       "points": [
+        "setup() with pinMode(13, OUTPUT)",
+        "loop() with digitalWrite HIGH then LOW",
+        "delay(1000) after each, in ms",
+        "Explains setup runs once, loop repeats"
+       ]
+      },
+      {
+       "id": "s-q4",
+       "kind": "numerical",
+       "level": 2,
+       "marks": 3,
+       "q": "A red LED (forward voltage 2 V, 20 mA) is driven from a 5 V Arduino pin. Find the series resistor.",
+       "model_answer_md": "$R=\\dfrac{V_s-V_{LED}}{I}=\\dfrac{5-2}{0.020}=150\\ \\Omega$\n\nUse the next standard value, 150 or 220 $\\Omega$.",
+       "points": [
+        "Formula R = (Vs - VLED)/I",
+        "Converts 20 mA to 0.020 A",
+        "R = 150 ohm"
+       ]
+      },
+      {
+       "id": "s-q5",
+       "kind": "short",
+       "level": 3,
+       "marks": 4,
+       "q": "A push button is wired from pin 2 to GND. Write setup() and loop() so that LED on pin 13 is ON while the button is pressed. Why INPUT_PULLUP?",
+       "model_answer_md": "```\nvoid setup() {\n  pinMode(2, INPUT_PULLUP);\n  pinMode(13, OUTPUT);\n}\nvoid loop() {\n  if (digitalRead(2) == LOW)  // pressed pulls pin to GND\n    digitalWrite(13, HIGH);\n  else\n    digitalWrite(13, LOW);\n}\n```\n**INPUT_PULLUP** enables an internal resistor to 5 V, so the pin reads HIGH when open and never floats; pressing connects it to GND, giving LOW.",
+       "points": [
+        "pinMode(2, INPUT_PULLUP) and pinMode(13, OUTPUT)",
+        "digitalRead in loop with if/else",
+        "Pressed reads LOW with pull-up",
+        "Pull-up avoids a floating input"
+       ]
+      }
+     ]
+    },
+    {
+     "id": "analog-pwm-serial",
+     "title": "Analog input, PWM and Serial",
+     "theory_md": "**analogRead(A0)** uses the Uno's **10-bit ADC**: 0 to 5 V maps to 0-1023, so $V=\\text{reading}\\times 5/1023$ and resolution is $5/1023\\approx4.89$ mV.\n\n**analogWrite(pin, 0-255)** gives **PWM** on pins 3, 5, 6, 9, 10, 11 (8-bit). Duty cycle $=\\text{value}/255$, average voltage $=5\\times\\text{duty}$. It controls LED brightness or motor speed.\n\n**Serial:** `Serial.begin(9600)` in setup (baud rate), `Serial.println(x)` prints to the Serial Monitor over USB.\n\nTypical sensors: LDR and thermistor (analog), DHT11 temperature/humidity (digital), PIR motion, ultrasonic HC-SR04 (distance). Actuators: LED, buzzer, servo, relay.",
+     "basics_md": "Digital pins know only on or off. Analog input measures a voltage as a number. PWM fakes an in-between voltage by switching on and off very fast.",
+     "key_points": [
+      "analogRead: 10-bit ADC, 0-1023 for 0-5 V",
+      "analogWrite: PWM, 0-255, only on ~ pins (3,5,6,9,10,11)",
+      "Duty cycle = value/255; average V = 5 x duty",
+      "Serial.begin(9600) and Serial.println for the monitor",
+      "Sensors give input, actuators act on output"
+     ],
+     "figures": [],
+     "questions": [
+      {
+       "id": "p-q1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "analogRead() on an Arduino Uno returns values in the range",
+       "options": [
+        "0-255",
+        "0-1023",
+        "0-4095",
+        "0-5"
+       ],
+       "answer_index": 1,
+       "why": "The ADC is 10-bit, so 0 to 1023. 0-255 is the analogWrite range."
+      },
+      {
+       "id": "p-q2",
+       "kind": "mcq",
+       "level": 1,
+       "q": "analogWrite() can be used on which pins of the Uno?",
+       "options": [
+        "Any digital pin",
+        "Only A0-A5",
+        "Only PWM pins 3, 5, 6, 9, 10, 11",
+        "Only pin 13"
+       ],
+       "answer_index": 2,
+       "why": "Only pins marked with ~ support PWM."
+      },
+      {
+       "id": "p-q3",
+       "kind": "numerical",
+       "level": 2,
+       "marks": 3,
+       "q": "An LDR circuit gives analogRead(A0) = 512 on a 5 V Arduino. Find the input voltage. Also find the ADC resolution.",
+       "model_answer_md": "$V=\\dfrac{512}{1023}\\times5=2.50\\ \\text{V}$\n\nResolution $=\\dfrac{5}{1023}=4.89\\ \\text{mV}$ per step.",
+       "points": [
+        "V = reading x 5/1023",
+        "V = 2.50 V",
+        "Resolution = 4.89 mV"
+       ]
+      },
+      {
+       "id": "p-q4",
+       "kind": "numerical",
+       "level": 2,
+       "marks": 3,
+       "q": "What is the duty cycle and average output voltage for analogWrite(9, 128)?",
+       "model_answer_md": "Duty $=\\dfrac{128}{255}\\times100=50.2\\%$\n\nAverage voltage $=5\\times\\dfrac{128}{255}=2.51\\ \\text{V}$ (about half of 5 V, so the LED is at half brightness).",
+       "points": [
+        "Duty = 128/255",
+        "50.2 percent",
+        "Average voltage 2.51 V"
+       ]
+      },
+      {
+       "id": "p-q5",
+       "kind": "long",
+       "level": 3,
+       "marks": 5,
+       "q": "Write a sketch that reads a light sensor on A0 every 500 ms, prints the value on the Serial Monitor at 9600 baud, and dims an LED on pin 9 as the light increases.",
+       "model_answer_md": "```\nvoid setup() {\n  Serial.begin(9600);\n  pinMode(9, OUTPUT);\n}\nvoid loop() {\n  int v = analogRead(A0);          // 0-1023\n  Serial.println(v);               // show on monitor\n  int pwm = 255 - v / 4;           // scale 0-1023 to 0-255, inverted\n  analogWrite(9, pwm);\n  delay(500);\n}\n```\n- `v/4` scales the 10-bit reading to the 8-bit PWM range.\n- Pin 9 supports PWM.\n- Serial Monitor must be set to 9600 baud.",
+       "points": [
+        "Serial.begin(9600) in setup",
+        "analogRead(A0) in loop",
+        "Scales 0-1023 to 0-255 (divide by 4)",
+        "analogWrite on PWM pin 9",
+        "delay(500)"
+       ]
+      }
+     ]
+    }
+   ]
+  }
+ ]
+}

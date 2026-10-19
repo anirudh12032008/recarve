@@ -1,0 +1,1466 @@
+{
+ "code": "ME1104",
+ "unit": "Lines and Planes",
+ "written": "2026-10-19",
+ "by": "claude-sonnet-5-5, in a Claude Code session",
+ "topics": [
+  {
+   "topic": "Projection of straight lines",
+   "subtopics": [
+    {
+     "id": "line-special",
+     "title": "Line parallel to a plane, or in a plane",
+     "theory_md": "First angle: FV above xy, TV below xy; a point $x$ above HP and $y$ in front of VP gives $a'$ at $x$ above and $a$ at $y$ below xy.\n\n- Line **parallel to HP**: FV $\\parallel xy$; TV is the **true length** and shows the true $\\phi$ to VP.\n- Line **parallel to VP**: TV $\\parallel xy$; FV is the true length and shows the true $\\theta$ to HP.\n- Parallel to both: both views $\\parallel xy$, true length.\n- **Traces**: HT is where the line meets HP, VT where it meets VP. A line parallel to HP has **no HT**; parallel to VP has **no VT**.\n- To find a trace, extend one view to xy and project to the other view.",
+     "basics_md": "A view is true length when the line is parallel to the plane that view is drawn on. The FV is the picture on the VP, the TV the picture on the HP. If the line is flat to the HP, the TV is its honest size.",
+     "key_points": [
+      "Parallel to HP: FV $\\parallel xy$, TV = true length at $\\phi$",
+      "Parallel to VP: TV $\\parallel xy$, FV = true length at $\\theta$",
+      "No HT if parallel to HP; no VT if parallel to VP",
+      "Trace: extend a view to xy, project to the other view"
+     ],
+     "questions": [
+      {
+       "id": "ls-1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "A line parallel to the HP and inclined to the VP shows its true length in the",
+       "options": [
+        "front view",
+        "top view",
+        "both views",
+        "neither view"
+       ],
+       "answer_index": 1,
+       "why": "Parallel to HP means the TV (on the HP) is true length, and it shows the true angle $\\phi$."
+      },
+      {
+       "id": "ls-2",
+       "kind": "mcq",
+       "level": 1,
+       "q": "If the H.T. of a line does not exist, the line is",
+       "options": [
+        "parallel to the VP",
+        "parallel to the HP",
+        "perpendicular to the HP",
+        "in the VP"
+       ],
+       "answer_index": 1,
+       "why": "A line parallel to the HP never meets it, so there is no horizontal trace."
+      },
+      {
+       "id": "ls-3",
+       "kind": "numerical",
+       "level": 2,
+       "marks": 5,
+       "q": "A 50 mm line PQ is parallel to the HP and inclined at $30^\\circ$ to the VP. End P is 15 mm above the HP and 20 mm in front of the VP. Draw the projections and find the traces.",
+       "model_answer_md": "**Data.** Parallel to HP so TV = 50 mm true length at $\\phi=30^\\circ$; FV $\\parallel xy$.\n\n1. Mark $p'$ 15 mm above xy, $p$ 20 mm below xy on one projector.\n2. Draw $pq = 50$ mm at $30^\\circ$ to xy (away from xy).\n3. FV: $p'q'$ is $\\parallel xy$, 15 mm above, length $50\\cos30^\\circ = 43.30$ mm.\n4. Q is $20 + 50\\sin30^\\circ = 45$ mm in front of VP.\n5. **HT:** does not exist.\n6. **VT:** extend $qp$ to xy; the point is $20/25 = 0.8$ of the way, so $v'$ is 15 mm above xy, $0.8\\times43.30 = 34.64$ mm from $p'$ on the side away from Q.",
+       "points": [
+        "FV parallel to xy, TV true length 50 mm at $30^\\circ$",
+        "FV length 43.30 mm",
+        "Q is 45 mm in front of VP",
+        "HT does not exist",
+        "VT located by extending TV to xy and projecting up to the FV line at 15 mm"
+       ]
+      },
+      {
+       "id": "ls-4",
+       "kind": "numerical",
+       "level": 3,
+       "marks": 6,
+       "q": "A 60 mm line AB is parallel to the VP and inclined at $40^\\circ$ to the HP. End A is 20 mm above the HP and 15 mm in front of the VP. Draw the projections and locate the traces.",
+       "model_answer_md": "**Data.** Parallel to VP so FV = 60 mm at $\\theta=40^\\circ$; TV $\\parallel xy$.\n\n1. $a'$ 20 mm above xy, $a$ 15 mm below.\n2. FV $a'b' = 60$ mm at $40^\\circ$; $b'$ is $60\\sin40^\\circ = 38.57$ mm higher, so 58.57 mm above xy.\n3. TV $ab \\parallel xy$, 15 mm below xy, length $60\\cos40^\\circ = 45.96$ mm.\n4. **VT:** does not exist (parallel to VP).\n5. **HT:** extend $b'a'$ to xy, $20/\\tan40^\\circ = 23.84$ mm from $a'$; project down to the line of $ab$: HT is **15 mm in front of VP**.",
+       "points": [
+        "FV true length 60 mm at $40^\\circ$, TV parallel to xy",
+        "TV length 45.96 mm; B is 58.57 mm above HP",
+        "VT does not exist",
+        "HT 15 mm in front of VP, 23.84 mm from $a'$ horizontally"
+       ]
+      },
+      {
+       "id": "ls-p1",
+       "pyq": "48c545f704f96e1a",
+       "level": 1,
+       "points": [
+        "Parallel to VP: FV true length 40 mm at $30^\\circ$ to xy, $a'$ 10 mm above xy",
+        "TV parallel to xy, 15 mm below xy, length $40\\cos30^\\circ=34.64$ mm",
+        "B is $40\\sin30^\\circ=20$ mm higher: 30 mm above HP",
+        "VT does not exist; HT 15 mm below xy, $10/\\tan30^\\circ=17.32$ mm from $a'$"
+       ]
+      },
+      {
+       "id": "ls-p2",
+       "pyq": "b2f3decee0688acc",
+       "level": 1,
+       "points": [
+        "Line lies in HP: FV on xy (60 mm); TV 60 mm at $30^\\circ$ to xy with $p$ 20 mm below xy",
+        "Q is $20+60\\sin30^\\circ=50$ mm in front of VP",
+        "HT: the line itself lies in the HP (HT is the whole line, at P and Q)",
+        "VT: extend TV to xy, $20/\\sin30^\\circ=40$ mm along the line, $34.64$ mm horizontally from $p$; $v'$ on xy"
+       ]
+      },
+      {
+       "id": "ls-p3",
+       "pyq": "92ffc5391a776349",
+       "level": 2,
+       "points": [
+        "Parallel to HP: TV true length 75 mm at $45^\\circ$ to xy; $p$ 40 mm above xy (behind VP)",
+        "FV $\\parallel xy$, 20 mm above, length $75\\cos45^\\circ=53.03$ mm",
+        "Q is $40+53.03=93.03$ mm behind VP",
+        "HT does not exist; VT 20 mm above xy, 40 mm from $p'$ horizontally (extend TV to xy)"
+       ]
+      },
+      {
+       "id": "ls-p4",
+       "pyq": "f6b158a7bc933a1d",
+       "level": 1,
+       "points": [
+        "Parallel to HP: TV 70 mm true length at $40^\\circ$ to xy, $p$ 30 mm below xy",
+        "FV $\\parallel xy$, 20 mm above xy, length $70\\cos40^\\circ=53.62$ mm",
+        "Q is $30+70\\sin40^\\circ=75$ mm in front of VP"
+       ]
+      },
+      {
+       "id": "ls-p5",
+       "pyq": "2ccac2f79c8c8a3b",
+       "level": 2,
+       "points": [
+        "HT does not exist so the line is parallel to HP, 25 mm above it (VT is 25 mm above xy)",
+        "TV is true length 60 mm at $45^\\circ$ to xy with one end 10 mm below xy",
+        "FV $\\parallel xy$ at 25 mm, length $60\\cos45^\\circ=42.43$ mm",
+        "Q is 52.43 mm in front of VP; VT 25 mm above xy"
+       ]
+      },
+      {
+       "id": "ls-p6",
+       "pyq": "d48507152c28e57c",
+       "level": 2,
+       "points": [
+        "FV parallel to xy so line is parallel to HP, 20 mm above; TV is true length 80 mm",
+        "Projector gap 50 mm: $\\Delta y=\\sqrt{80^2-50^2}=62.45$ mm",
+        "$\\phi=\\sin^{-1}(62.45/80)=51.32^\\circ$",
+        "HT does not exist; VT 20 mm above xy at $15\\times50/62.45=12.01$ mm from $m'$"
+       ]
+      }
+     ]
+    },
+    {
+     "id": "line-angles",
+     "title": "Line inclined to both planes: true angles given",
+     "theory_md": "For a line of length $L$ at true inclinations $\\theta$ (HP) and $\\phi$ (VP):\n\n- **TV $=L\\cos\\theta$**, **FV $=L\\cos\\phi$**.\n- Height difference $=L\\sin\\theta$; difference in distance from VP $=L\\sin\\phi$.\n- Always $\\theta+\\phi\\le90^\\circ$.\n\n**Steps (rotating line):** (1) draw the line parallel to VP at $\\theta$: FV $a'b_1'=L$, TV $ab_1=L\\cos\\theta$; (2) rotate $ab_1$ about $a$ through $\\phi$ to $ab$ (arc to the locus of $b$); (3) project $b$ up to the horizontal locus of $b_1'$ to get $b'$.\n\nTraces then as before.",
+     "basics_md": "Draw the line first as if it only tilts up (HP angle). Then spin the plan view about its end until the VP angle is right. Spinning changes where B sits sideways but not its height.",
+     "key_points": [
+      "TV $=L\\cos\\theta$, FV $=L\\cos\\phi$",
+      "Rise $=L\\sin\\theta$, depth change $=L\\sin\\phi$",
+      "$\\theta+\\phi\\le90^\\circ$ or data are impossible",
+      "Rotate TV about the fixed end; height is unchanged by this rotation"
+     ],
+     "questions": [
+      {
+       "id": "la-1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "A line of length $L$ has true inclination $\\theta$ to the HP. Its top view length is",
+       "options": [
+        "$L\\sin\\theta$",
+        "$L\\cos\\theta$",
+        "$L\\tan\\theta$",
+        "$L/\\cos\\theta$"
+       ],
+       "answer_index": 1,
+       "why": "TV is the projection on the HP, so $L\\cos\\theta$."
+      },
+      {
+       "id": "la-2",
+       "kind": "mcq",
+       "level": 2,
+       "q": "A line is said to be inclined at $60^\\circ$ to the HP and $45^\\circ$ to the VP (true angles). This is",
+       "options": [
+        "possible",
+        "impossible, because $\\theta+\\phi$ exceeds $90^\\circ$",
+        "possible only in the third quadrant",
+        "possible if the length is large"
+       ],
+       "answer_index": 1,
+       "why": "$60+45=105^\\circ>90^\\circ$ is geometrically impossible; the data must mean apparent angles."
+      },
+      {
+       "id": "la-3",
+       "kind": "numerical",
+       "level": 2,
+       "marks": 6,
+       "q": "A line AB, 80 mm long, is inclined at $30^\\circ$ to the HP and $45^\\circ$ to the VP. End A is 10 mm above the HP and 15 mm in front of the VP. Find the lengths of the views and the position of B.",
+       "model_answer_md": "**Computation** ($\\theta=30^\\circ$, $\\phi=45^\\circ$, $\\theta+\\phi=75^\\circ$ is valid)\n\n- TV $=80\\cos30^\\circ=69.28$ mm; FV $=80\\cos45^\\circ=56.57$ mm\n- Rise $=80\\sin30^\\circ=40$ mm, so B is 50 mm above HP\n- Depth change $=80\\sin45^\\circ=56.57$ mm, so B is 71.57 mm in front of VP\n- Horizontal gap between projectors $=\\sqrt{80^2-40^2-56.57^2}=40$ mm\n\n**Construction:** $a'$ 10 above, $a$ 15 below xy. Draw $a'b_1'=80$ at $30^\\circ$, $ab_1=69.28$ parallel to xy, rotate to $ab$ with $b$ on the locus 71.57 below xy, project up to the locus 50 above xy.",
+       "points": [
+        "TV 69.28 mm and FV 56.57 mm",
+        "B is 50 mm above HP",
+        "B is 71.57 mm in front of VP",
+        "Projector gap 40 mm",
+        "Method: rotate TV about $a$, project up to the height locus"
+       ]
+      },
+      {
+       "id": "la-4",
+       "kind": "numerical",
+       "level": 3,
+       "marks": 6,
+       "q": "For the line in the previous question find the apparent inclinations $\\alpha$ (FV with xy) and $\\beta$ (TV with xy).",
+       "model_answer_md": "The FV has horizontal run 40 mm and rise 40 mm, so $\\tan\\alpha=40/40$, **$\\alpha=45^\\circ$**.\n\nThe TV has run 40 mm and depth change 56.57 mm, so $\\tan\\beta=56.57/40$, **$\\beta=54.74^\\circ$**.\n\nNote $\\alpha>\\theta$ and $\\beta>\\phi$: an apparent angle is always larger than the true angle.",
+       "points": [
+        "Run between projectors = 40 mm",
+        "$\\alpha=\\tan^{-1}(40/40)=45^\\circ$",
+        "$\\beta=\\tan^{-1}(56.57/40)=54.74^\\circ$",
+        "Apparent angle is greater than the true angle"
+       ]
+      },
+      {
+       "id": "la-p1",
+       "pyq": "a82153e176e43c0b",
+       "level": 1,
+       "points": [
+        "TV $=50\\cos45^\\circ=35.36$ mm, FV $=50\\cos30^\\circ=43.30$ mm",
+        "Rise $=35.36$ mm: B is 50.36 mm above HP; depth change $=25$ mm: B is 35 mm in front of VP",
+        "Draw $a'$ 15 above, $a$ 10 below xy; rotate TV about $a$, project up",
+        "Joined $a'b'$ and $ab$ with the final answer lengths marked"
+       ]
+      },
+      {
+       "id": "la-p2",
+       "pyq": "845e0e3a4dc48667",
+       "level": 3,
+       "points": [
+        "Data check: $60^\\circ+45^\\circ>90^\\circ$, so these cannot be true angles; read as apparent angles $\\alpha=60^\\circ$, $\\beta=45^\\circ$",
+        "With gap $p$: $80^2=p^2+(p\\tan60^\\circ)^2+p^2$, so $p=35.78$ mm",
+        "FV 71.55 mm, TV 50.60 mm; true $\\theta=50.77^\\circ$, $\\phi=26.57^\\circ$",
+        "B is in HP so HT coincides with $b$ (35 mm in front); VT by extending $cb$ to xy and projecting up"
+       ]
+      },
+      {
+       "id": "la-p3",
+       "pyq": "bfdf77f9dfa64946",
+       "level": 2,
+       "points": [
+        "TV $=75\\cos30^\\circ=64.95$ mm, FV $=75\\cos45^\\circ=53.03$ mm",
+        "B is 20 mm below HP, 40 mm in front; A in 2nd quadrant: above HP, behind VP",
+        "A is $75\\sin30^\\circ=37.5$ mm higher: 17.5 mm above HP; A is $75\\sin45^\\circ=53.03$ mm further back: 13.03 mm behind VP",
+        "Draw with rotation method; HT and VT both located (line crosses HP and VP)"
+       ]
+      },
+      {
+       "id": "la-p4",
+       "pyq": "03c2ccda1171513f",
+       "level": 2,
+       "points": [
+        "$\\theta=40^\\circ$, $\\phi=30^\\circ$ (sum less than $90^\\circ$): TV $=45.96$ mm, FV $=51.96$ mm",
+        "Rise $=38.57$ mm: other end 58.57 mm above HP; depth change 30 mm: 60 mm in front",
+        "Projections by rotation method",
+        "HT: extend FV to xy and project to TV; VT: extend TV to xy and project to FV"
+       ]
+      },
+      {
+       "id": "la-p5",
+       "pyq": "42648564c4b60d1c",
+       "level": 2,
+       "points": [
+        "FV $=100\\cos30^\\circ=86.60$ mm; TV $=100\\cos45^\\circ=70.71$ mm",
+        "Distance of B from HP $=100\\sin45^\\circ=70.71$ mm (taking A on both planes)",
+        "Distance of B from VP $=100\\sin30^\\circ=50$ mm",
+        "Projections drawn by rotating-line method"
+       ]
+      },
+      {
+       "id": "la-p6",
+       "pyq": "b49ee80f0baa65ce",
+       "level": 2,
+       "points": [
+        "$\\theta=45^\\circ$, $\\phi=30^\\circ$: TV $=80\\cos45^\\circ=56.57$ mm, FV $=80\\cos30^\\circ=69.28$ mm",
+        "P in HP, 40 mm in front: $p'$ on xy, $p$ 40 mm below xy; Q is 56.57 mm above HP and 80 mm in front",
+        "HT is at P itself (P lies in the HP), 40 mm in front of VP"
+       ]
+      },
+      {
+       "id": "la-p7",
+       "pyq": "0113e490bf18ac49",
+       "level": 2,
+       "points": [
+        "TV $=70\\cos45^\\circ=49.50$ mm, FV $=70\\cos30^\\circ=60.62$ mm; Q is 69.50 mm above HP and 65 mm in front",
+        "P is 20 mm above HP, 30 mm in front",
+        "HT: height 20 mm, so $20/\\sin45^\\circ=28.28$ mm back along the line: HT is 15.86 mm in front of VP",
+        "VT: depth 30 mm, so 60 mm back along the line: VT is 22.43 mm below HP"
+       ]
+      },
+      {
+       "id": "la-p8",
+       "pyq": "d7d366ef9055dc39",
+       "level": 2,
+       "points": [
+        "Same data as the 70 mm line at $45^\\circ$, $30^\\circ$: TV 49.50 mm, FV 60.62 mm",
+        "Q in the first quadrant: 69.50 mm above HP, 65 mm in front of VP",
+        "HT 15.86 mm in front of VP; VT 22.43 mm below HP (extend the views to xy)"
+       ]
+      },
+      {
+       "id": "la-p9",
+       "pyq": "a50c29b6ea08f7ae",
+       "level": 2,
+       "points": [
+        "TV $=90\\cos30^\\circ=77.94$ mm, FV $=90\\cos45^\\circ=63.64$ mm",
+        "P is 20 mm below HP, 45 mm in front; Q in 4th quadrant: $90\\sin30^\\circ=45$ mm lower (65 mm below HP) and $63.64$ mm further front (108.64 mm)",
+        "Rotation method, FV below xy, TV below xy",
+        "HT 16.72 mm in front of VP; VT 11.82 mm above HP (line extended back)"
+       ]
+      },
+      {
+       "id": "la-p10",
+       "pyq": "0350f92758bf7955",
+       "level": 3,
+       "points": [
+        "A at the intersection of xy: $a$ and $a'$ both on xy",
+        "TV $=70\\cos45^\\circ=49.50$ mm, FV $=70\\cos30^\\circ=60.62$ mm; rise 49.50 mm, depth 35 mm",
+        "Run along xy $=\\sqrt{70^2-49.5^2-35^2}=35$ mm",
+        "$\\alpha=\\tan^{-1}(49.5/35)=54.74^\\circ$; $\\beta=\\tan^{-1}(35/35)=45^\\circ$"
+       ]
+      }
+     ]
+    },
+    {
+     "id": "line-points",
+     "title": "Line given by end positions or by view lengths",
+     "theory_md": "**Ends given** (heights, distances, projector gap $x$): plot both views directly. True length by rotation or the trapezoid method:\n$$TL=\\sqrt{x^2+\\Delta h^2+\\Delta d^2},\\quad \\sin\\theta=\\Delta h/TL,\\quad \\sin\\phi=\\Delta d/TL$$\n**Views given** (FV and TV lengths): $\\cos\\theta=TV/L$, $\\cos\\phi=FV/L$; with a point and one angle use $FV=L\\cos\\phi$ or $TV=L\\cos\\theta$.\n\n**Traces** by similar triangles: HT lies where height reaches 0, i.e. a fraction $h_A/\\Delta h$ back from A; VT where distance reaches 0, a fraction $d_A/\\Delta d$ back. Project: extend FV to xy for HT, extend TV to xy for VT.",
+     "basics_md": "The data are a coordinate dot-to-dot: three differences (along, up, in/out) describe the line completely. The true length is just 3-D Pythagoras.",
+     "key_points": [
+      "$TL=\\sqrt{x^2+\\Delta h^2+\\Delta d^2}$; $\\sin\\theta=\\Delta h/TL$, $\\sin\\phi=\\Delta d/TL$",
+      "If views are given: $\\cos\\theta=TV/L$, $\\cos\\phi=FV/L$",
+      "HT: extend FV to xy, drop to TV; VT: extend TV to xy, rise to FV",
+      "State HT as distance in front or behind VP, VT as distance above or below HP"
+     ],
+     "questions": [
+      {
+       "id": "lp-1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "A line has a top view of 70 mm and a true length of 80 mm. Its inclination with the HP is",
+       "options": [
+        "$\\cos^{-1}(70/80)$",
+        "$\\sin^{-1}(70/80)$",
+        "$\\tan^{-1}(70/80)$",
+        "$\\cos^{-1}(80/70)$"
+       ],
+       "answer_index": 0,
+       "why": "TV $=L\\cos\\theta$, so $\\theta=\\cos^{-1}(TV/L)$. Students often use the FV by mistake."
+      },
+      {
+       "id": "lp-2",
+       "kind": "mcq",
+       "level": 2,
+       "q": "To locate the V.T. of a line you",
+       "options": [
+        "extend the front view to xy and project down",
+        "extend the top view to xy and project up to the front view",
+        "rotate the top view parallel to xy",
+        "draw a perpendicular to the true length"
+       ],
+       "answer_index": 1,
+       "why": "The VT lies in the VP, so the TV reaches xy there; project up to the extended FV."
+      },
+      {
+       "id": "lp-3",
+       "kind": "numerical",
+       "level": 2,
+       "marks": 8,
+       "q": "A line AB has A 20 mm above HP and 15 mm in front of VP, B 50 mm above HP and 60 mm in front of VP. The projectors are 40 mm apart. Find true length, inclinations and the traces.",
+       "model_answer_md": "**Differences:** $x=40$, $\\Delta h=30$, $\\Delta d=45$ mm.\n\n**True length:** $TL=\\sqrt{40^2+30^2+45^2}=\\sqrt{4525}=67.27$ mm\n\n**Inclinations:** $\\theta=\\sin^{-1}(30/67.27)=26.49^\\circ$, $\\phi=\\sin^{-1}(45/67.27)=41.99^\\circ$\n\n**Construction:** draw $a'b'$ and $ab$ from the coordinates; rotate $ab$ parallel to xy and project to get TL and $\\theta$; rotate $a'b'$ for $\\phi$.\n\n**HT:** height 20 reaches 0 at $20/30=2/3$ back from A: $26.67$ mm along xy from $a'$, depth $15-45\\times\\frac23=-15$, so **15 mm behind VP**.\n\n**VT:** depth 15 reaches 0 at $15/45=1/3$ back: $13.33$ mm from $a'$, height $20-30/3=10$, so **10 mm above HP**.",
+       "points": [
+        "TL $=67.27$ mm",
+        "$\\theta=26.49^\\circ$, $\\phi=41.99^\\circ$",
+        "HT: 15 mm behind VP",
+        "VT: 10 mm above HP",
+        "Both views drawn from the given coordinates with the projector gap 40 mm"
+       ]
+      },
+      {
+       "id": "lp-4",
+       "kind": "numerical",
+       "level": 3,
+       "marks": 6,
+       "q": "A line of length 80 mm has a front view of 60 mm and a top view of 70 mm. Find its true inclinations and the difference in heights and distances of its ends.",
+       "model_answer_md": "$\\cos\\theta=TV/L=70/80\\Rightarrow\\theta=28.96^\\circ$\n$\\cos\\phi=FV/L=60/80\\Rightarrow\\phi=41.41^\\circ$\n\nCheck: $\\sin^2\\theta+\\sin^2\\phi=0.234+0.438<1$, so the data are valid.\n\nHeight difference $=80\\sin28.96^\\circ=38.73$ mm. Distance difference $=80\\sin41.41^\\circ=52.92$ mm.",
+       "points": [
+        "$\\theta=\\cos^{-1}(70/80)=28.96^\\circ$ (TV with HP)",
+        "$\\phi=\\cos^{-1}(60/80)=41.41^\\circ$ (FV with VP)",
+        "Height difference 38.73 mm",
+        "Distance difference 52.92 mm",
+        "Validity check $\\sin^2\\theta+\\sin^2\\phi<1$"
+       ]
+      },
+      {
+       "id": "lp-p1",
+       "pyq": "a24617dfe8a14663",
+       "level": 2,
+       "points": [
+        "A: 50 above HP, 12 behind VP; B: 15 below HP, 40 behind VP; gap 50 mm. Plot $a'$ 50 above, $a$ 12 above xy; $b'$ 15 below, $b$ 40 above xy",
+        "$\\Delta h=65$, $\\Delta d=28$: $TL=\\sqrt{50^2+65^2+28^2}=86.65$ mm",
+        "$\\theta=48.60^\\circ$, $\\phi=18.85^\\circ$",
+        "HT: 38.46 mm from A's projector, 33.54 mm behind VP; VT: extend $ba$ to xy and project up"
+       ]
+      },
+      {
+       "id": "lp-p2",
+       "pyq": "e1ed9130cc2d6067",
+       "level": 3,
+       "points": [
+        "$TL=80/\\cos25^\\circ=88.27$ mm",
+        "Rise $=88.27\\sin25^\\circ=37.30$ mm: D is 61.30 mm above HP and (equidistant) 61.30 mm from VP",
+        "Distance difference 37.30 mm: $\\sin\\phi=37.30/88.27$, $\\phi=25^\\circ$",
+        "HT and VT coincide on xy (both ends rise and recede equally)"
+       ]
+      },
+      {
+       "id": "lp-p3",
+       "pyq": "e5ace0e28ed114ac",
+       "level": 2,
+       "points": [
+        "$\\cos\\theta=60/75$, $\\theta=36.87^\\circ$; $\\cos\\phi=50/75$, $\\phi=48.19^\\circ$",
+        "Height difference 45 mm, distance difference 55.9 mm",
+        "Draw loci: $p'$ 35 above, $p$ 15 below; cut FV 50 mm and TV 60 mm",
+        "HT 28.5 mm behind VP; VT 22.9 mm above HP"
+       ]
+      },
+      {
+       "id": "lp-p4",
+       "pyq": "3c81546617303723",
+       "level": 2,
+       "points": [
+        "$\\theta=\\cos^{-1}(TV/L)=\\cos^{-1}(60/75)=36.87^\\circ$",
+        "$\\phi=\\cos^{-1}(FV/L)=\\cos^{-1}(50/75)=48.19^\\circ$",
+        "P 35 mm above HP, 15 mm in front: projections by loci of $q'$ and $q$",
+        "HT 28.5 mm behind VP; VT 22.9 mm above HP"
+       ]
+      },
+      {
+       "id": "lp-p5",
+       "pyq": "4443377b1001dbcc",
+       "level": 3,
+       "points": [
+        "TV $=90\\cos30^\\circ=77.94$ mm; rise 45 mm so B is 57 mm above HP",
+        "FV given 65 mm: $\\cos\\phi=65/90$, $\\phi=43.8^\\circ$",
+        "Cut the height locus (57 mm) with 65 mm radius from $a'$; project to TV with $a$ as centre 77.94 mm",
+        "HT about 3.4 mm in front of VP; VT about 2.5 mm below HP"
+       ]
+      },
+      {
+       "id": "lp-p6",
+       "pyq": "175a02aaa9cde991",
+       "level": 2,
+       "points": [
+        "$\\Delta h=20$, $\\Delta d=40$; run $=\\sqrt{65^2-20^2-40^2}=47.17$ mm",
+        "FV length $=\\sqrt{47.17^2+20^2}=51.24$ mm; TV $=\\sqrt{47.17^2+40^2}=61.84$ mm",
+        "Apparent inclinations $\\alpha=\\tan^{-1}(20/47.17)=23.0^\\circ$, $\\beta=\\tan^{-1}(40/47.17)=40.3^\\circ$",
+        "HT and VT by extending the views to xy"
+       ]
+      },
+      {
+       "id": "lp-p7",
+       "pyq": "54165b0f5d6c4599",
+       "level": 2,
+       "points": [
+        "P: 20 above, 40 in front; Q: 60 above, 10 in front: $\\Delta h=40$, $\\Delta d=30$",
+        "$\\sin\\theta=40/70$, $\\theta=34.85^\\circ$; $\\sin\\phi=30/70$, $\\phi=25.38^\\circ$",
+        "Projector gap $=\\sqrt{70^2-40^2-30^2}=48.99$ mm",
+        "Q nearer to VP than P: TV runs toward xy; draw both views and join"
+       ]
+      },
+      {
+       "id": "lp-p8",
+       "pyq": "2012338659f9673b",
+       "level": 2,
+       "points": [
+        "$x=60$, $\\Delta h=50$, $\\Delta d=40$",
+        "$TL=\\sqrt{60^2+50^2+40^2}=87.75$ mm",
+        "$\\theta=\\sin^{-1}(50/87.75)=34.7^\\circ$, $\\phi=\\sin^{-1}(40/87.75)=27.1^\\circ$",
+        "Both views plotted with end projectors 60 mm apart"
+       ]
+      },
+      {
+       "id": "lp-p9",
+       "pyq": "198a18517bf78846",
+       "level": 3,
+       "points": [
+        "Equal inclinations so FV and TV are equal in length; $\\Delta h=60$ (20 above to 40 below), $x=60$",
+        "The point in VP, 10 mm below HP is the VT; it is midway horizontally so $\\Delta d=60$: A is 30 mm in front, B 30 mm behind VP",
+        "$TL=\\sqrt{60^2+60^2+60^2}=103.92$ mm",
+        "$\\theta=\\phi=\\sin^{-1}(60/103.92)=35.26^\\circ$"
+       ]
+      },
+      {
+       "id": "lp-p10",
+       "pyq": "51322edbb09bf3ba",
+       "level": 2,
+       "points": [
+        "$\\Delta h=30$, $\\Delta d=45$, $TL=70$: gap $=\\sqrt{70^2-30^2-45^2}=44.44$ mm",
+        "$\\theta=\\sin^{-1}(30/70)=25.38^\\circ$, $\\phi=\\sin^{-1}(45/70)=40.0^\\circ$",
+        "HT: 15 mm behind VP, 29.63 mm from $p'$ horizontally",
+        "VT: 10 mm above HP, 14.81 mm from $p'$ horizontally"
+       ]
+      },
+      {
+       "id": "lp-p11",
+       "pyq": "25ed2d9ba7dbb5b3",
+       "level": 2,
+       "points": [
+        "C: 20 below, 30 behind; D: 45 below, 50 behind; gap 60. $\\Delta h=25$, $\\Delta d=20$",
+        "$TL=\\sqrt{60^2+25^2+20^2}=68.01$ mm",
+        "$\\theta=\\sin^{-1}(25/68.01)=21.57^\\circ$, $\\phi=\\sin^{-1}(20/68.01)=17.1^\\circ$",
+        "HT 14 mm behind VP; VT 17.5 mm above HP (line extended backward)"
+       ]
+      }
+     ]
+    },
+    {
+     "id": "line-space",
+     "title": "True length in rooms, cubes and shortest distances",
+     "theory_md": "Real-life points are located as ($x$ along, $y$ from the wall = distance from VP, $z$ above floor = height above HP). The shortest distance between two points is the **true length** of the line joining them.\n\nSpace diagonal of a room $a\\times b\\times c$ or cube: $\\sqrt{a^2+b^2+c^2}$ ($s\\sqrt3$ for a cube).\n\nGraphically: the TV of the diagonal is the floor diagonal; the FV is the elevation. Rotate the TV parallel to xy and project up, or build a right triangle on the TV with the height difference ($\\Delta h$) as the other leg; the hypotenuse is the TL. Use a scale, e.g. 1 cm = 1 m.",
+     "basics_md": "A room is a box with a floor (HP) and a back wall (VP). The straight distance between two spots is the length of a string pulled tight; the views are its shadows on the floor and wall.",
+     "key_points": [
+      "Locate each point as ($x$, distance from VP, height)",
+      "TV of a space diagonal is the floor diagonal",
+      "TL by right triangle: base = TV, height = $\\Delta h$",
+      "Cube diagonal $=s\\sqrt3$; check by formula"
+     ],
+     "questions": [
+      {
+       "id": "lr-1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "The true length of the solid diagonal of a cube of side $s$ is",
+       "options": [
+        "$s\\sqrt2$",
+        "$s\\sqrt3$",
+        "$2s$",
+        "$3s$"
+       ],
+       "answer_index": 1,
+       "why": "$\\sqrt{s^2+s^2+s^2}=s\\sqrt3$; $s\\sqrt2$ is a face diagonal."
+      },
+      {
+       "id": "lr-2",
+       "kind": "mcq",
+       "level": 2,
+       "q": "In the top view of a line joining a top corner to the opposite bottom corner of a room, the line appears as",
+       "options": [
+        "a point",
+        "the diagonal of the floor",
+        "a vertical line",
+        "the diagonal of the ceiling's height"
+       ],
+       "answer_index": 1,
+       "why": "The two corners are above diagonally opposite floor corners, so the TV is the floor diagonal."
+      },
+      {
+       "id": "lr-3",
+       "kind": "numerical",
+       "level": 2,
+       "marks": 6,
+       "q": "A room is 6 m x 5 m x 4 m high. Find graphically the distance between a top corner and the diagonally opposite bottom corner. Check by calculation.",
+       "model_answer_md": "**Scale** 1 cm = 1 m.\n\n1. Draw the plan $6\\times5$ below xy; its diagonal $ab$ is the TV (length $\\sqrt{6^2+5^2}=7.81$ m).\n2. Draw the elevation $6\\times4$ above xy; $a'$ is 4 m above xy, $b'$ on xy.\n3. Rotate $ab$ parallel to xy and project to the height of $a'$; the joining line is the TL.\n\n**Check:** $TL=\\sqrt{6^2+5^2+4^2}=\\sqrt{77}=8.77$ m.",
+       "points": [
+        "TV is the floor diagonal 7.81 m",
+        "Height difference 4 m",
+        "TL by rotation or right triangle",
+        "$TL=8.77$ m with unit"
+       ]
+      },
+      {
+       "id": "lr-p1",
+       "pyq": "07efb41a107b45a8",
+       "level": 2,
+       "points": [
+        "TV $ab=\\sqrt{4.8^2+4.2^2}=6.38$ m (floor diagonal)",
+        "FV: $a'$ 3.6 m above xy, $b'$ on xy",
+        "TL by rotation or right triangle (base 6.38 m, height 3.6 m)",
+        "$TL=\\sqrt{4.8^2+4.2^2+3.6^2}=7.32$ m"
+       ]
+      },
+      {
+       "id": "lr-p2",
+       "pyq": "37428123286cdedf",
+       "level": 3,
+       "points": [
+        "B: 3 m along the longer wall, 0.5 m from it, 3 m above floor; S: centre of adjacent wall, 2.5 m from the longer wall, 1.25 m above floor",
+        "Plot FV and TV of B and S, join $bs$, $b's'$",
+        "Shortest distance = TL of BS by trapezoid or rotation: height difference 1.75 m",
+        "$BS=\\sqrt{3^2+2^2+1.75^2}\\approx4.0$ m"
+       ]
+      },
+      {
+       "id": "lr-p3",
+       "pyq": "161c85e839b1b4eb",
+       "level": 1,
+       "points": [
+        "Draw the cube 50 mm in plan and elevation; take the diagonal from a top corner to the opposite bottom corner",
+        "TV is the face diagonal of the base ($50\\sqrt2=70.71$ mm), height difference 50 mm",
+        "TL by rotation: $50\\sqrt3=86.60$ mm"
+       ]
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "topic": "Projection of planes",
+   "subtopics": [
+    {
+     "id": "plane-perp",
+     "title": "Plane perpendicular to one plane, inclined to the other",
+     "theory_md": "A plane **perpendicular to HP and inclined $\\phi$ to VP**: its TV is a **line** inclined $\\phi$ to xy (true width), the FV is the shape with widths cut by $\\cos\\phi$ and heights true.\n\nA plane **perpendicular to VP and inclined $\\theta$ to HP**: FV is a line at $\\theta$ (true height), TV has depths cut by $\\cos\\theta$.\n\n**Two stages.** (1) Plane parallel to the plane where its true shape is drawn; the other view is a line parallel to xy. (2) Tilt that line to the given angle about the edge or point on xy; project the other view.\n\nA plane $\\perp$ VP resting on an edge has that edge $\\perp$ VP. Traces: the FV line is the VT; HT is $\\perp$ xy through where the VT meets xy.",
+     "basics_md": "Stand a card upright (perpendicular to the floor): from above you see it as a line. Turn it about its vertical edge: the line turns, and from the front the card looks narrower by the cosine of the turn.",
+     "key_points": [
+      "Perpendicular to HP: TV is a line at $\\phi$ to xy; perpendicular to VP: FV is a line at $\\theta$",
+      "Stage 1: true shape in one view; stage 2: tilt the line view, project",
+      "Widths shorten by $\\cos$ of the angle, heights stay true",
+      "Plane $\\perp$ VP: VT is the FV line, HT is $\\perp$ xy"
+     ],
+     "questions": [
+      {
+       "id": "pp-1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "A plane perpendicular to the HP and inclined at $30^\\circ$ to the VP has a top view that is",
+       "options": [
+        "a true shape",
+        "a line inclined at $30^\\circ$ to xy",
+        "a line parallel to xy",
+        "an ellipse"
+       ],
+       "answer_index": 1,
+       "why": "Perpendicular to HP means its TV is a straight line, and it shows the true angle to VP."
+      },
+      {
+       "id": "pp-2",
+       "kind": "mcq",
+       "level": 2,
+       "q": "For a plane perpendicular to the VP and inclined $\\theta$ to the HP, its true shape appears in neither view. The width of its top view is the true width multiplied by",
+       "options": [
+        "$\\sin\\theta$",
+        "$\\cos\\theta$",
+        "$\\tan\\theta$",
+        "$1/\\cos\\theta$"
+       ],
+       "answer_index": 1,
+       "why": "Dimensions along the tilt direction are foreshortened by $\\cos\\theta$ in the plan."
+      },
+      {
+       "id": "pp-3",
+       "kind": "numerical",
+       "level": 2,
+       "marks": 6,
+       "q": "A square plate of 40 mm side is perpendicular to the HP and inclined at $30^\\circ$ to the VP. One edge is perpendicular to the HP. Draw the projections and state the width in the front view.",
+       "model_answer_md": "**Stage 1:** plate parallel to VP. FV is the true square 40 x 40 with one side vertical; TV is a line 40 mm long parallel to xy.\n\n**Stage 2:** rotate the TV line through $30^\\circ$ to xy about the end of the vertical edge. The TV is a line 40 mm long at $30^\\circ$.\n\n**FV:** project up from the new TV; heights stay 40 mm; the width becomes $40\\cos30^\\circ=34.64$ mm. The front view is a rectangle 34.64 x 40 mm.",
+       "points": [
+        "Stage 1 true square in FV, TV a line 40 mm parallel to xy",
+        "TV line rotated to $30^\\circ$ with xy",
+        "FV is a rectangle 34.64 mm wide",
+        "FV height 40 mm unchanged"
+       ]
+      },
+      {
+       "id": "pp-4",
+       "kind": "numerical",
+       "level": 3,
+       "marks": 6,
+       "q": "A circular plate of 50 mm diameter is perpendicular to the VP and inclined at $60^\\circ$ to the HP. Describe and size its projections.",
+       "model_answer_md": "- **FV:** a straight line 50 mm long at $60^\\circ$ to xy.\n- **TV:** an ellipse. Major axis $=50$ mm (the horizontal diameter, parallel to xy); minor axis $=50\\cos60^\\circ=25$ mm.\n- Method: draw the circle in the TV in stage 1 and divide into 12 points; the FV line is tilted $60^\\circ$; project each point across to get the ellipse.",
+       "points": [
+        "FV line 50 mm at $60^\\circ$",
+        "TV ellipse, major 50 mm",
+        "Minor axis $50\\cos60^\\circ=25$ mm",
+        "Points plotted from 12 divisions"
+       ]
+      },
+      {
+       "id": "pp-p1",
+       "pyq": "587631ec7dcaa6cf",
+       "level": 2,
+       "points": [
+        "Pentagon height $=1.539\\times45=69.25$ mm; FV is a line 69.25 mm at $45^\\circ$ to xy, resting side is a point on xy",
+        "Stage 1: TV true pentagon with resting side $\\perp$ xy and the 40 mm circular hole in the centre",
+        "TV depth of pentagon $=69.25\\cos45^\\circ=48.96$ mm",
+        "Hole: line 40 mm along the FV line; in TV an ellipse with axes 40 mm and $40\\cos45^\\circ=28.28$ mm"
+       ]
+      },
+      {
+       "id": "pp-p2",
+       "pyq": "d0f06e881eeeb934",
+       "level": 2,
+       "points": [
+        "Pentagon side 25 mm on the ground, plane $45^\\circ$ to HP, perpendicular to VP: FV a line at $45^\\circ$, length $1.539\\times25=38.47$ mm",
+        "Resting side is $\\perp$ VP, so its FV is a point on xy",
+        "Stage 1: TV true pentagon with that side $\\perp$ xy; stage 2: project TV (depth $38.47\\cos45^\\circ=27.20$ mm)",
+        "Traces: VT is the FV line; HT is $\\perp$ xy through where the FV line meets xy"
+       ]
+      },
+      {
+       "id": "pp-p3",
+       "pyq": "2a850c67bda5369e",
+       "level": 2,
+       "points": [
+        "Stage 1: plane $\\perp$ HP, parallel to VP: FV true pentagon with AB vertical; TV a line parallel to xy of width $1.618\\times50=80.9$ mm",
+        "Stage 2: rotate the TV line $50^\\circ$ to xy about the plan of AB (a point $a(b)$)",
+        "Final FV: heights as stage 1, widths $\\times\\cos50^\\circ$",
+        "TV is a straight line 80.9 mm at $50^\\circ$ to xy"
+       ]
+      },
+      {
+       "id": "pp-p4",
+       "pyq": "baec497bd296aed4",
+       "level": 1,
+       "points": [
+        "Stage 1: FV true pentagon (side 30 mm) with AB vertical; TV a line parallel to xy, length $1.618\\times30=48.54$ mm",
+        "Stage 2: rotate TV $45^\\circ$ to xy about $a(b)$",
+        "FV: same heights ($1.539\\times30=46.17$ mm), widths $\\times\\cos45^\\circ$",
+        "TV is a line 48.54 mm at $45^\\circ$ to xy"
+       ]
+      }
+     ]
+    },
+    {
+     "id": "plane-edge-hp",
+     "title": "Edge on the HP: surface inclined to HP, edge inclined to VP",
+     "theory_md": "Standard three-stage problem: a lamina has an edge in the HP, its surface at $\\theta$ to HP and that edge at $\\phi$ to VP.\n\n1. **Stage 1:** lamina flat on HP, edge on xy (or $\\parallel$ xy). TV = true shape; FV = line on xy.\n2. **Stage 2:** tilt the FV about the resting edge to $\\theta$. Project the TV (depths $\\times\\cos\\theta$).\n3. **Stage 3:** redraw the stage-2 TV with the edge at $\\phi$ to xy. Project the FV: **heights stay as in stage 2**.\n\nIf instead the line from the edge mid-point (a perpendicular) is given in TV, rotate until that line makes the angle. Holes: plot by 8 to 12 points, they become ellipses. Heights stay, angles with HP stay.",
+     "basics_md": "Lay a card flat on the table, lift it along one edge to the slope. Then, without changing the slope, spin the whole card on the table so the resting edge points the way you want.",
+     "key_points": [
+      "Stage 1 flat: TV true shape, FV a line",
+      "Stage 2 tilt FV to $\\theta$ about resting edge, project TV",
+      "Stage 3 rotate TV to $\\phi$; heights from stage 2 give the final FV",
+      "Rotation never changes the shape of the view or the angle with HP"
+     ],
+     "questions": [
+      {
+       "id": "pe-1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "In stage 3 of a plane resting on an edge in the HP, the top view is",
+       "options": [
+        "redrawn the same shape, rotated",
+        "redrawn with a new shape",
+        "a straight line",
+        "not needed"
+       ],
+       "answer_index": 0,
+       "why": "Rotation about a line perpendicular to the HP leaves the TV unchanged in shape and size; only its direction changes."
+      },
+      {
+       "id": "pe-2",
+       "kind": "mcq",
+       "level": 2,
+       "q": "A regular hexagon of 20 mm side rests on an edge in the HP with its surface at $40^\\circ$ to HP. The greatest height of the lamina above HP is",
+       "options": [
+        "$20\\sin40^\\circ=12.86$ mm",
+        "$34.64\\sin40^\\circ=22.27$ mm",
+        "$40\\sin40^\\circ=25.71$ mm",
+        "$34.64\\cos40^\\circ=26.54$ mm"
+       ],
+       "answer_index": 1,
+       "why": "Across flats $=20\\sqrt3=34.64$ mm is the dimension perpendicular to the resting edge; height $=34.64\\sin40^\\circ$."
+      },
+      {
+       "id": "pe-3",
+       "kind": "numerical",
+       "level": 2,
+       "marks": 10,
+       "q": "A regular hexagonal lamina of 20 mm side rests on one edge in the HP. Its surface is inclined at $40^\\circ$ to the HP and the resting edge is inclined at $30^\\circ$ to the VP. Draw the projections.",
+       "model_answer_md": "**Dimensions.** Across corners 40 mm; across flats $20\\sqrt3=34.64$ mm.\n\n**Stage 1:** TV true hexagon with the resting edge on xy; FV a line on xy 34.64 mm long.\n\n**Stage 2:** tilt the FV about the edge to $40^\\circ$; greatest height $34.64\\sin40^\\circ=22.27$ mm. Project the TV: depth $34.64\\cos40^\\circ=26.54$ mm.\n\n**Stage 3:** redraw the stage-2 TV with the resting edge at $30^\\circ$ to xy. Project the FV: each point at its stage-2 height.\n\nMark hidden lines dashed and label $a,b,c...$ and $a',b',c'...$",
+       "points": [
+        "True hexagon in TV first (side 20 mm)",
+        "Stage 2 FV line at $40^\\circ$, height 22.27 mm",
+        "TV depth reduced to 26.54 mm",
+        "Stage 3 TV rotated so edge at $30^\\circ$ to xy",
+        "Final FV from same heights as stage 2"
+       ]
+      },
+      {
+       "id": "pe-4",
+       "kind": "numerical",
+       "level": 3,
+       "marks": 8,
+       "q": "A regular pentagonal plate of 30 mm side rests on an edge in the HP with its surface at $45^\\circ$ to the HP. The resting edge is at $30^\\circ$ to the VP. Find the greatest height of the plate and the depth of its top view before the last rotation.",
+       "model_answer_md": "Pentagon height (edge to opposite corner) $=1.539\\times30=46.17$ mm.\n\n- Greatest height above HP $=46.17\\sin45^\\circ=32.65$ mm.\n- Stage 2 TV depth $=46.17\\cos45^\\circ=32.65$ mm.\n\nStages: flat pentagon with resting edge $\\parallel$ xy; tilt FV $45^\\circ$; project TV; rotate TV so the edge is $30^\\circ$ to xy; project FV using stage-2 heights.",
+       "points": [
+        "Pentagon height $1.539\\times30=46.17$ mm",
+        "Greatest height 32.65 mm",
+        "Stage 2 TV depth 32.65 mm",
+        "Stage 3 rotation of TV; FV from heights"
+       ]
+      },
+      {
+       "id": "pe-p1",
+       "pyq": "b311055f642a085a",
+       "level": 2,
+       "points": [
+        "Side parallel to HP (taken at the xy position) and inclined $30^\\circ$ to VP, surface $45^\\circ$ to HP",
+        "Stage 1: pentagon flat, side $\\parallel$ xy; stage 2: tilt about that side to $45^\\circ$, TV depth $46.17\\cos45^\\circ=32.65$ mm",
+        "Stage 3: rotate TV so the side is at $30^\\circ$ to xy",
+        "FV from stage-2 heights (greatest height 32.65 mm)"
+       ]
+      },
+      {
+       "id": "pe-p2",
+       "pyq": "cf8edb5666f0d9cb",
+       "level": 2,
+       "points": [
+        "Hexagon side 20 mm, resting side $45^\\circ$ to VP, surface $30^\\circ$ to HP",
+        "Across flats $34.64$ mm: height $34.64\\sin30^\\circ=17.32$ mm, TV depth $34.64\\cos30^\\circ=30$ mm",
+        "Stage 3: TV rotated so the resting side is at $45^\\circ$ to xy",
+        "FV from heights"
+       ]
+      },
+      {
+       "id": "pe-p3",
+       "pyq": "f21c9da6efb7f80a",
+       "level": 2,
+       "points": [
+        "Pentagon side 20 mm, resting side $45^\\circ$ to VP, surface $30^\\circ$ to HP",
+        "Pentagon height $30.78$ mm: max height $15.39$ mm, TV depth $26.65$ mm after tilt",
+        "Three stages: flat, tilt, rotate to $45^\\circ$",
+        "Plan and elevation with heights from stage 2"
+       ]
+      },
+      {
+       "id": "pe-p4",
+       "pyq": "bcfe9ad378d19211",
+       "level": 2,
+       "points": [
+        "Hexagon side 25 mm; side in HP at $60^\\circ$ to VP; surface $45^\\circ$ to HP",
+        "Stage 1 flat hexagon with side $\\parallel$ xy",
+        "Across flats $43.30$ mm: height $43.30\\sin45^\\circ=30.62$ mm; TV depth $30.62$ mm after tilt",
+        "Stage 3 rotate TV so the side is at $60^\\circ$; FV from stage-2 heights"
+       ]
+      },
+      {
+       "id": "pe-p5",
+       "pyq": "39106ea65de2a13d",
+       "level": 3,
+       "points": [
+        "Hexagon side 25 mm with a central hole 30 mm diameter; surface $50^\\circ$ to HP; a side at $30^\\circ$ to VP",
+        "Stage 1: TV hexagon with circular hole; FV a line",
+        "Stage 2 tilt $50^\\circ$: hole becomes an ellipse in TV (axes 30 and $30\\cos50^\\circ=19.28$ mm); plot hole by 8 or 12 points",
+        "Stage 3 rotate TV so a side is at $30^\\circ$ to xy; final FV (hole is an ellipse) from heights"
+       ]
+      },
+      {
+       "id": "pe-p6",
+       "pyq": "4ba4ac8150528375",
+       "level": 2,
+       "points": [
+        "Semicircle diameter 70 mm; straight edge in HP at $30^\\circ$ to VP; surface $45^\\circ$ to HP",
+        "Radius 35 mm: stage 1 TV semicircle with diameter $\\parallel$ xy; plot arc by 6 or more points (including mid-arc at 35 mm from diameter)",
+        "Stage 2: tilt FV $45^\\circ$; TV depth of arc points $\\times\\cos45^\\circ$; greatest height $35\\sin45^\\circ=24.75$ mm",
+        "Stage 3: rotate TV so the diameter is at $30^\\circ$ to xy; FV from heights"
+       ]
+      },
+      {
+       "id": "pe-p7",
+       "pyq": "bf1b28dabd36e7b7",
+       "level": 2,
+       "points": [
+        "Semicircular plane diameter 70 mm; diameter in HP at $30^\\circ$ to VP; surface $45^\\circ$ to HP",
+        "Three stages as above: flat, tilt $45^\\circ$ (greatest height 24.75 mm), rotate $30^\\circ$",
+        "Arc plotted by points; ellipse arc in the TV and FV"
+       ]
+      },
+      {
+       "id": "pe-p8",
+       "pyq": "d271927b31e796e5",
+       "level": 3,
+       "points": [
+        "Pentagon side 30 mm resting on an edge in HP, surface $45^\\circ$ to HP",
+        "The top view of the line from the mid-point of the resting edge to the opposite corner makes $30^\\circ$ with the VP",
+        "Stage 1 flat, stage 2 tilt to $45^\\circ$ (TV depth $46.17\\cos45^\\circ=32.65$ mm), stage 3 rotate TV until that line is at $30^\\circ$ to xy",
+        "FV from the stage-2 heights"
+       ]
+      }
+     ]
+    },
+    {
+     "id": "plane-corner",
+     "title": "Corner on the HP: diagonal and surface angles",
+     "theory_md": "A lamina resting on a **corner** in the HP, surface at $\\theta$ to HP: the tilt axis is the line through the corner parallel to xy, so the **diagonal through that corner** is the line of greatest slope and is itself at $\\theta$ to HP.\n\n1. **Stage 1:** TV true shape, the diagonal through the resting corner $\\perp$ xy; FV a line.\n2. **Stage 2:** tilt the FV about the corner; the diagonal (length $D$) now has TV $D\\cos\\theta$ and the far corner height $D\\sin\\theta$; the other diagonal stays parallel to HP.\n3. **Stage 3:** rotate the TV until the TV of the diagonal makes the given angle with xy; project the FV from stage-2 heights.\n\nIf the TV of the diagonal is already $\\perp$ VP, there is no stage 3.\nSquare diagonal $=1.414\\,s$; hexagon across corners $=2s$.",
+     "basics_md": "A corner touching the floor is the pivot. The card is raised until its surface is at the angle; the diagonal pointing up the slope is the steepest line on the card.",
+     "key_points": [
+      "Diagonal through resting corner is at the surface angle $\\theta$ (line of greatest slope)",
+      "TV of that diagonal $=D\\cos\\theta$; far corner height $=D\\sin\\theta$",
+      "Other diagonal stays parallel to HP, true length in TV",
+      "Stage 3 rotates the TV only; heights stay"
+     ],
+     "questions": [
+      {
+       "id": "pc-1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "A square lamina rests on a corner in the HP with its surface at $45^\\circ$. The diagonal through the resting corner is inclined to the HP at",
+       "options": [
+        "$0^\\circ$",
+        "$45^\\circ$",
+        "$90^\\circ$",
+        "$30^\\circ$"
+       ],
+       "answer_index": 1,
+       "why": "It is the line of greatest slope, so it makes the same angle as the surface."
+      },
+      {
+       "id": "pc-2",
+       "kind": "mcq",
+       "level": 2,
+       "q": "For the same square (side $s$), the other diagonal appears in the top view with length",
+       "options": [
+        "$s\\sqrt2\\cos45^\\circ$",
+        "$s\\sqrt2$, its true length",
+        "$s$",
+        "zero"
+       ],
+       "answer_index": 1,
+       "why": "It is parallel to the HP, so its TV is true length $s\\sqrt2$."
+      },
+      {
+       "id": "pc-3",
+       "kind": "numerical",
+       "level": 2,
+       "marks": 7,
+       "q": "A square lamina of 40 mm side rests on a corner in the HP with its surface at $45^\\circ$ to the HP. The top view of the diagonal through that corner makes $30^\\circ$ with the VP. Give the key dimensions and describe the projections.",
+       "model_answer_md": "**Dimensions.** Diagonal $D=40\\sqrt2=56.57$ mm.\n\n- Stage 2: TV of that diagonal $=56.57\\cos45^\\circ=40$ mm; far corner height $=56.57\\sin45^\\circ=40$ mm.\n- Other diagonal: 56.57 mm in TV, at height 20 mm, parallel to xy in stage 2.\n\n**Construction:** stage 1 square TV with the diagonal $\\perp$ xy; stage 2 tilt FV $45^\\circ$, project TV (a rhombus 40 x 56.57); stage 3 rotate the TV so the 40 mm diagonal is at $30^\\circ$ to xy; project FV from heights 0, 20, 20, 40 mm.",
+       "points": [
+        "Diagonal 56.57 mm",
+        "TV of diagonal 40 mm",
+        "Far corner height 40 mm; side corners 20 mm",
+        "Stage 3 rotation to $30^\\circ$ with xy"
+       ]
+      },
+      {
+       "id": "pc-4",
+       "kind": "numerical",
+       "level": 3,
+       "marks": 6,
+       "q": "A regular hexagon of 30 mm side rests on a corner in the HP, surface at $30^\\circ$ to the HP, and the TV of the diagonal through the resting corner is perpendicular to the VP. Find the TV length of that diagonal and the greatest height.",
+       "model_answer_md": "Diagonal (across corners) $=60$ mm.\n\n- TV of diagonal $=60\\cos30^\\circ=51.96$ mm, $\\perp$ xy.\n- Greatest height $=60\\sin30^\\circ=30$ mm.\n\nThe TV of the diagonal is already $\\perp$ xy, so after stage 2 no stage 3 is needed.",
+       "points": [
+        "Diagonal 60 mm",
+        "TV 51.96 mm perpendicular to xy",
+        "Greatest height 30 mm",
+        "No rotation needed"
+       ]
+      },
+      {
+       "id": "pc-p1",
+       "pyq": "8ec8176867da9dd2",
+       "level": 3,
+       "points": [
+        "Hexagon side 30 mm, across corners 60 mm; corner in HP, surface $45^\\circ$ to HP and $\\perp$ VP",
+        "Stage 1: TV true hexagon; stage 2: tilt FV $45^\\circ$ about the corner, TV of diagonal $60\\cos45^\\circ=42.43$ mm, height 42.43 mm",
+        "Stage 3: rotate the TV so that the given diagonal views at the stated angle (wording of the question is unclear; state the reading)",
+        "Project FV from stage-2 heights; dashed hidden lines"
+       ]
+      },
+      {
+       "id": "pc-p2",
+       "pyq": "8e734f1994509bd6",
+       "level": 3,
+       "points": [
+        "Sides through the corner equally inclined to HP: diagonal AC is the line of greatest slope, at $45^\\circ$, diagonal $=70.71$ mm",
+        "TV of AC $=50$ mm, C height 50 mm; BD (70.71 mm) parallel to HP at height 25 mm",
+        "AC at $30^\\circ$ to VP: C is $70.71\\sin30^\\circ=35.36$ mm further from VP than A",
+        "Plan is a rhombus with $ac=50$ mm at $45^\\circ$ to xy; elevation $a'c'=61.24$ mm at $54.74^\\circ$"
+       ]
+      },
+      {
+       "id": "pc-p3",
+       "pyq": "69b7c55420da1c38",
+       "level": 2,
+       "points": [
+        "Hexagon side 30 mm, across corners 60 mm; corner on HP, surface $45^\\circ$ to HP",
+        "TV of the diagonal is $\\perp$ VP: stage 1 with that diagonal $\\perp$ xy, so no stage 3",
+        "TV of diagonal $=60\\cos45^\\circ=42.43$ mm; greatest height 42.43 mm",
+        "FV from stage-2 heights; both views drawn"
+       ]
+      },
+      {
+       "id": "pc-p4",
+       "pyq": "5cad554af284d7af",
+       "level": 2,
+       "points": [
+        "Square 40 mm, diagonal 56.57 mm; corner on HP; surface $45^\\circ$ to HP",
+        "Stage 2: TV diagonal 40 mm, far corner 40 mm high; other corners at 20 mm",
+        "Stage 3: rotate TV so the TV of the diagonal is $60^\\circ$ to VP",
+        "FV and TV; side view by projecting from FV and TV (heights from FV, distances from TV)"
+       ]
+      },
+      {
+       "id": "pc-p5",
+       "pyq": "a676bf07024c8570",
+       "level": 2,
+       "points": [
+        "Square 50 mm, diagonals 70.71 mm; corner on HP, surface $45^\\circ$ to HP",
+        "Diagonal through the corner has TV 50 mm; the other diagonal (BD) keeps 70.71 mm in TV and is the longest",
+        "BD at $30^\\circ$ to xy in TV: stage 3 rotation",
+        "Length of BD in FV $=70.71\\cos30^\\circ=61.24$ mm"
+       ]
+      }
+     ]
+    },
+    {
+     "id": "plane-vp",
+     "title": "Edge or corner in the VP: surface inclined to the VP",
+     "theory_md": "Mirror of the HP case: interchange HP/VP, TV/FV and $\\theta/\\phi$.\n\n1. **Stage 1:** lamina parallel to VP, FV = true shape, TV = line on xy.\n2. **Stage 2:** tilt the TV line to $\\phi$ (the surface angle to VP) about the edge or corner in the VP; project the FV (heights $\\times\\cos\\phi$).\n3. **Stage 3:** redraw the FV with the edge or diagonal making the given angle with xy; project the TV: **distances from VP stay as in stage 2**.\n\nIf an edge lies in the VP and its angle to HP is given, the surface angle follows from geometry: $\\sin\\phi=\\dfrac{\\text{distance of far corner from VP}}{\\text{distance of far corner from the edge}}$, e.g. pentagon height $1.539s$.",
+     "basics_md": "Same picture as the HP case but tipped on its side: the plate now leans on the wall (VP). Rotation in stage 3 is done on the front view, and the angle you are given there is an apparent angle in the FV.",
+     "key_points": [
+      "Stage 1 parallel to VP, stage 2 tilt TV line to $\\phi$, stage 3 rotate the FV",
+      "Heights shrink by $\\cos\\phi$ in stage 2; distances from VP stay in stage 3",
+      "The FV angle in stage 3 is an apparent angle for the diagonal or edge",
+      "$\\sin\\phi=$ (corner's distance from VP) / (corner's distance from the edge in VP)"
+     ],
+     "questions": [
+      {
+       "id": "pv-1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "A hexagonal plate has a corner in the VP and its surface inclined at $45^\\circ$ to the VP. In stage 1 the plate is placed",
+       "options": [
+        "parallel to the HP",
+        "parallel to the VP",
+        "perpendicular to xy",
+        "inclined $45^\\circ$ to the HP"
+       ],
+       "answer_index": 1,
+       "why": "Stage 1 puts the true shape in the FV (parallel to the VP) before tilting."
+      },
+      {
+       "id": "pv-2",
+       "kind": "mcq",
+       "level": 2,
+       "q": "In stage 3 of a VP-based problem, which quantity is unchanged by the rotation?",
+       "options": [
+        "Height of every corner",
+        "Distance of every corner from the VP",
+        "Shape of the top view",
+        "Position of the FV"
+       ],
+       "answer_index": 1,
+       "why": "Rotating the FV about a line perpendicular to the VP keeps distances from the VP (the stage-2 loci) for the TV."
+      },
+      {
+       "id": "pv-3",
+       "kind": "numerical",
+       "level": 2,
+       "marks": 7,
+       "q": "A pentagonal lamina of 40 mm side has an edge AB in the VP. The opposite corner D is 25 mm in front of the VP. Find the inclination of the surface with the VP.",
+       "model_answer_md": "Pentagon height from edge AB to the opposite corner D:\n$$h=\\frac{40}{2\\sin36^\\circ}+\\frac{40}{2\\tan36^\\circ}=34.03+27.53=61.55\\text{ mm}$$\nBecause AB is in the VP, the distance of D from the VP is $h\\sin\\phi$:\n$$\\sin\\phi=\\frac{25}{61.55}\\Rightarrow\\phi=23.96^\\circ$$",
+       "points": [
+        "Pentagon height $=1.539s=61.55$ mm",
+        "D's distance from VP $=h\\sin\\phi$",
+        "$\\sin\\phi=25/61.55$",
+        "$\\phi=23.96^\\circ$"
+       ]
+      },
+      {
+       "id": "pv-4",
+       "kind": "numerical",
+       "level": 3,
+       "marks": 6,
+       "q": "A regular hexagon of 30 mm side has a corner in the VP and its surface inclined at $45^\\circ$ to the VP. The diagonal through that corner is the line of greatest slope. Find its length in the FV and the greatest distance from the VP.",
+       "model_answer_md": "Diagonal $=60$ mm.\n\n- In stage 2 the diagonal tilts $45^\\circ$ to the VP: farthest corner is $60\\sin45^\\circ=42.43$ mm in front of the VP.\n- FV length of the diagonal $=60\\cos45^\\circ=42.43$ mm.",
+       "points": [
+        "Diagonal across corners 60 mm",
+        "Greatest distance from VP $=42.43$ mm",
+        "FV length of diagonal $=42.43$ mm"
+       ]
+      },
+      {
+       "id": "pv-p1",
+       "pyq": "b8962ebc6f8acbd8",
+       "level": 2,
+       "points": [
+        "Hexagon side 30 mm, edge in VP; surface $45^\\circ$ to VP; the edge is at $30^\\circ$ to HP",
+        "Stage 1: FV true hexagon with the edge $\\parallel$ xy; TV a line. Across flats $51.96$ mm",
+        "Stage 2: tilt TV line $45^\\circ$ about the edge: depth $51.96\\sin45^\\circ=36.74$ mm; FV heights $\\times\\cos45^\\circ$",
+        "Stage 3: rotate FV so the edge is at $30^\\circ$ to xy; TV from stage-2 distances"
+       ]
+      },
+      {
+       "id": "pv-p2",
+       "pyq": "127d83f11d75afe1",
+       "level": 2,
+       "points": [
+        "Regular hexagon side 30 mm, edge in VP, surface $45^\\circ$ to VP, edge at $30^\\circ$ to HP",
+        "Three stages: parallel to VP, tilt $45^\\circ$ (farthest distance 36.74 mm), rotate FV so the edge is at $30^\\circ$ to xy",
+        "TV distances from stage 2; label all corners"
+       ]
+      },
+      {
+       "id": "pv-p3",
+       "pyq": "18dbfad0b35a413f",
+       "level": 3,
+       "points": [
+        "Pentagon height $h=1.539\\times30=46.17$ mm",
+        "D is 30 mm in front of VP and AB is in VP: $\\sin\\phi=30/46.17$, $\\phi=40.53^\\circ$",
+        "Stage 1 FV true shape; stage 2 tilt TV to $40.53^\\circ$; stage 3 rotate FV so AB is $30^\\circ$ with B 15 mm above xy",
+        "Project TV with distances from stage 2"
+       ]
+      },
+      {
+       "id": "pv-p4",
+       "pyq": "835e31b554a0e366",
+       "level": 3,
+       "points": [
+        "Same as above: $h=46.17$ mm, $\\sin\\phi=30/46.17$, inclination with VP $=40.53^\\circ$",
+        "AB in VP at $30^\\circ$ to HP, B 15 mm above HP",
+        "Three-stage construction; FV rotated in stage 3; TV from stage-2 distances"
+       ]
+      },
+      {
+       "id": "pv-p5",
+       "pyq": "fb12a8767cf52e35",
+       "level": 3,
+       "points": [
+        "AB in VP, CD parallel to HP, D 30 mm in front of VP; pentagon height $h=1.539\\times35=53.86$ mm",
+        "$\\sin\\phi=30/53.86\\Rightarrow\\phi=33.85^\\circ$ with VP",
+        "Stage 2: tilt TV line to $33.85^\\circ$; stage 3: rotate FV until CD is parallel to xy (height assumed, e.g. 10 mm)",
+        "TV: $a,b$ on xy, C and E 18.54 mm, D 30 mm in front"
+       ]
+      },
+      {
+       "id": "pv-p6",
+       "pyq": "c4fd5267a4c22fad",
+       "level": 3,
+       "points": [
+        "Pentagon side 35 mm; AB in VP; CD parallel to HP; D 30 mm in front of VP",
+        "$h=53.86$ mm; $\\phi=\\sin^{-1}(30/53.86)=33.85^\\circ$",
+        "Three stages, FV rotated so that CD is parallel to xy; TV from stage-2 loci"
+       ]
+      },
+      {
+       "id": "pv-p7",
+       "pyq": "e9440d110e9b2e27",
+       "level": 2,
+       "points": [
+        "Hexagon side 30 mm, corner in VP, surface $45^\\circ$ to VP; FV of the diagonal through that corner at $30^\\circ$ to HP",
+        "Diagonal 60 mm: stage 1 FV true hexagon, diagonal vertical; stage 2 tilt TV $45^\\circ$ about the corner; FV diagonal $=60\\cos45^\\circ=42.43$ mm",
+        "Stage 3: rotate FV so the FV of the diagonal is at $30^\\circ$ to xy",
+        "Project TV with stage-2 distances (greatest 42.43 mm)"
+       ]
+      },
+      {
+       "id": "pv-p8",
+       "pyq": "9654edc19f5dfc1d",
+       "level": 2,
+       "points": [
+        "Hexagon side 30 mm, corner in VP, plane $45^\\circ$ to VP, FV of diagonal at $30^\\circ$ to HP",
+        "Stage 1 FV true shape, stage 2 tilt TV to $45^\\circ$, stage 3 rotate FV so the diagonal is at $30^\\circ$ to xy",
+        "Distances from VP preserved from stage 2 when projecting TV"
+       ]
+      },
+      {
+       "id": "pv-p9",
+       "pyq": "5d96c5dae0589886",
+       "level": 3,
+       "points": [
+        "Hexagon side 30 mm with a corner in the VP and the lamina on the HP; surface $30^\\circ$ to VP",
+        "Stage 1: FV true hexagon, TV a line; stage 2: tilt TV $30^\\circ$ about the corner; FV widths and heights $\\times\\cos30^\\circ$",
+        "Stage 3: rotate the FV so the diagonal through the corner is at $40^\\circ$ to xy (resting on HP: lowest corner on xy)",
+        "Project TV with stage-2 distances; hidden lines dashed"
+       ]
+      }
+     ]
+    },
+    {
+     "id": "plane-apparent",
+     "title": "True and apparent shapes: circle, rectangle, rhombus",
+     "theory_md": "When a plane is tilted by $\\theta$ about a line parallel to xy, dimensions **perpendicular to the tilt line** shorten by $\\cos\\theta$ and dimensions along it stay true. So:\n\n- A **circle** appears as an **ellipse**: major axis $=D$, minor axis $=D\\cos\\theta$.\n- Area of the view $=$ true area $\\times\\cos\\theta$.\n- To make a view of a given shape (e.g. a square from a rectangle or rhombus), equate the shortened dimension to the needed dimension and solve for $\\theta$.\n- The axis along which the dimension stays true is the one parallel to both HP and VP.\n\nThen draw stage 1 (flat), stage 2 (tilt), as usual.",
+     "basics_md": "Tilting a card only shrinks it in the direction it is tilting. The edge along the hinge keeps its length. So a shape can be turned into another shape by choosing the tilt.",
+     "key_points": [
+      "Dimension along the tilt line stays true; perpendicular dimension $\\times\\cos\\theta$",
+      "Circle $\\to$ ellipse with minor $=D\\cos\\theta$",
+      "Equate projected length to required length to find the angle",
+      "Draw: flat, then tilt, then project"
+     ],
+     "questions": [
+      {
+       "id": "pa-1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "A circular plate appears in the view as an ellipse with major axis 60 mm and minor axis 40 mm. The plate is inclined to the plane of the view at",
+       "options": [
+        "$\\sin^{-1}(40/60)$",
+        "$\\cos^{-1}(40/60)$",
+        "$\\tan^{-1}(40/60)$",
+        "$\\cos^{-1}(60/40)$"
+       ],
+       "answer_index": 1,
+       "why": "Minor axis $=D\\cos\\theta$ so $\\cos\\theta=40/60$, $\\theta=48.19^\\circ$."
+      },
+      {
+       "id": "pa-2",
+       "kind": "mcq",
+       "level": 2,
+       "q": "A rectangle 60 x 30 mm resting on its 30 mm edge is raised so that the top view is a square. The 60 mm edge makes with HP",
+       "options": [
+        "$30^\\circ$",
+        "$45^\\circ$",
+        "$60^\\circ$",
+        "$0^\\circ$"
+       ],
+       "answer_index": 2,
+       "why": "$60\\cos\\theta=30$, so $\\cos\\theta=0.5$, $\\theta=60^\\circ$."
+      },
+      {
+       "id": "pa-3",
+       "kind": "numerical",
+       "level": 2,
+       "marks": 7,
+       "q": "A rhombus with diagonals 100 mm and 50 mm rests on one corner. The plate is raised so that its top view is a square, with the short diagonal parallel to both HP and VP. Find the inclination of the plate with the HP.",
+       "model_answer_md": "The short diagonal (50 mm) is parallel to HP so it stays 50 mm. A square needs both diagonals equal, so the long diagonal's TV must be 50 mm:\n$$100\\cos\\theta=50\\Rightarrow\\theta=60^\\circ$$\nStage 1: TV rhombus with 100 mm diagonal $\\perp$ xy and the corner on xy. Stage 2: tilt the long diagonal to $60^\\circ$ (height $86.6$ mm); project the TV: a square with diagonal 50 mm (side 35.36 mm).",
+       "points": [
+        "Short diagonal true length 50 mm",
+        "$100\\cos\\theta=50$",
+        "$\\theta=60^\\circ$",
+        "Top view is a square of side 35.36 mm",
+        "Stage 1 and stage 2 described"
+       ]
+      },
+      {
+       "id": "pa-4",
+       "kind": "numerical",
+       "level": 3,
+       "marks": 6,
+       "q": "A circular plate of 70 mm diameter appears in the front view as an ellipse of major axis 70 mm and minor axis 50 mm. Find the inclination and the length of its top view.",
+       "model_answer_md": "Major axis equals the true diameter, so that diameter is parallel to xy. $\\cos\\phi=50/70\\Rightarrow\\phi=44.42^\\circ$ to the VP.\n\nThe plate is perpendicular to the HP, so the TV is a **line** 70 mm long inclined at $44.42^\\circ$ to xy.",
+       "points": [
+        "$\\cos\\phi=50/70$",
+        "$\\phi=44.42^\\circ$ to VP",
+        "TV is a line 70 mm long",
+        "The horizontal diameter stays true"
+       ]
+      },
+      {
+       "id": "pa-p1",
+       "pyq": "091600047acd7745",
+       "level": 2,
+       "points": [
+        "Major axis 60 mm is a true diameter parallel to both planes; minor axis $=60\\cos\\phi=40$ mm",
+        "$\\phi=\\cos^{-1}(40/60)=48.19^\\circ$ to the VP",
+        "Stage 1: true circle in the FV, TV a line 60 mm; stage 2: tilt the TV line to $48.19^\\circ$",
+        "FV: ellipse 60 x 40 mm; TV: line 60 mm at $48.19^\\circ$ to xy"
+       ]
+      },
+      {
+       "id": "pa-p2",
+       "pyq": "a852c44550e6a06a",
+       "level": 2,
+       "points": [
+        "Short diagonal 50 mm parallel to both HP and VP stays true; square TV needs both diagonals 50 mm",
+        "$100\\cos\\theta=50$, $\\theta=60^\\circ$ with the HP",
+        "Stage 1 TV rhombus with the long diagonal $\\perp$ xy; stage 2 tilt to $60^\\circ$; TV a square of side 35.36 mm",
+        "FV: tilted rhombus, long diagonal at $60^\\circ$, short diagonal 50 mm horizontal"
+       ]
+      },
+      {
+       "id": "pa-p3",
+       "pyq": "2efbb938c1919036",
+       "level": 2,
+       "points": [
+        "Raised edge (60 mm) parallel to both planes is shown true, so the resting edge is 30 mm and the TV is a square 30 x 30",
+        "$60\\cos\\theta=30$, so the plane is inclined at $60^\\circ$ to the HP",
+        "Stage 1: TV 30 x 60 flat; stage 2: tilt FV about the resting edge to $60^\\circ$",
+        "TV: square of side 30 mm; FV: line 60 mm at $60^\\circ$ with height 51.96 mm"
+       ]
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "topic": "Auxiliary plane method",
+   "subtopics": [
+    {
+     "id": "aux-principle",
+     "title": "Auxiliary planes: what they are and how a view is drawn",
+     "theory_md": "An **auxiliary plane** gives a new view of an object to show a true length or true shape.\n\n- **AVP** (auxiliary vertical plane): $\\perp$ HP, inclined to VP. New reference line $x_1y_1$ is drawn in the **TV**; the new view is an **auxiliary elevation**: its heights from $x_1y_1$ equal the heights in the FV.\n- **AIP** (auxiliary inclined plane): $\\perp$ VP, inclined to HP. $x_1y_1$ is drawn in the **FV**; the **auxiliary plan** has distances from $x_1y_1$ equal to the distances in the TV.\n\nRule: draw projectors from the given view perpendicular to $x_1y_1$ and set off the dimension carried from the **other** view. A second auxiliary plane $\\perp$ to the first gives a further view.",
+     "basics_md": "Walk around the object to a new standpoint. The new picture's up-and-down measurements are borrowed from the old picture that did not change direction.",
+     "key_points": [
+      "AVP is $\\perp$ HP: $x_1y_1$ in TV, heights from FV",
+      "AIP is $\\perp$ VP: $x_1y_1$ in FV, distances from VP taken from TV",
+      "Projectors are perpendicular to $x_1y_1$",
+      "The new reference line is drawn parallel to a line to get its true length"
+     ],
+     "questions": [
+      {
+       "id": "ap-1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "For an auxiliary elevation on an AVP, the new reference line $x_1y_1$ is drawn in the",
+       "options": [
+        "front view",
+        "top view",
+        "side view",
+        "either view"
+       ],
+       "answer_index": 1,
+       "why": "The AVP is perpendicular to the HP, so it is seen edge-on in the TV."
+      },
+      {
+       "id": "ap-2",
+       "kind": "mcq",
+       "level": 2,
+       "q": "In an auxiliary plan on an AIP, the distance of a point from $x_1y_1$ equals its",
+       "options": [
+        "height above HP in the FV",
+        "distance from the VP shown in the TV",
+        "distance from the AVP",
+        "distance from the xy line in the side view"
+       ],
+       "answer_index": 1,
+       "why": "An AIP is perpendicular to the VP, so distances from the VP carry over unchanged from the TV."
+      },
+      {
+       "id": "ap-3",
+       "kind": "short",
+       "level": 2,
+       "marks": 3,
+       "q": "State the rules for drawing an auxiliary elevation from the given FV and TV.",
+       "model_answer_md": "1. Choose the auxiliary vertical plane (AVP) and draw $x_1y_1$ in the **top view** in the required direction.\n2. Draw projectors from every point of the TV **perpendicular to $x_1y_1$**.\n3. On each projector set off the **height** of the point above xy measured in the **front view**, from $x_1y_1$.\n4. Join the points in order; this is the auxiliary elevation.",
+       "points": [
+        "$x_1y_1$ drawn in the TV",
+        "Projectors perpendicular to $x_1y_1$",
+        "Heights taken from the FV",
+        "Join points in order"
+       ]
+      }
+     ]
+    },
+    {
+     "id": "aux-lines",
+     "title": "True length and inclinations of a line by auxiliary planes",
+     "theory_md": "To find the **true length and $\\theta$**: draw $x_1y_1$ **parallel to the top view** $ab$ (any distance). Auxiliary elevation $a_1'b_1'$: projectors $\\perp x_1y_1$, heights from FV. Then $a_1'b_1'=TL$ and its angle with $x_1y_1$ is $\\theta$.\n\nTo find **TL and $\\phi$**: draw $x_1y_1$ **parallel to the front view** $a'b'$; auxiliary plan $a_1b_1=TL$, angle with $x_1y_1$ is $\\phi$.\n\nA second auxiliary plane $x_2y_2\\perp a_1'b_1'$ shows the line as a **point**. A line is true length in the view whose reference line is parallel to the other view of it.",
+     "basics_md": "If your viewing direction is square-on to the line, you see its true length. Drawing $x_1y_1$ parallel to a view of the line places the new viewpoint square-on to it.",
+     "key_points": [
+      "$x_1y_1\\parallel ab$ gives TL and $\\theta$; $x_1y_1\\parallel a'b'$ gives TL and $\\phi$",
+      "Projectors perpendicular to $x_1y_1$; heights or distances carried over",
+      "Second plane $x_2y_2\\perp$ TL gives the point view",
+      "Check TL by the formula"
+     ],
+     "questions": [
+      {
+       "id": "al-1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "To obtain the true length of a line and its inclination with the HP by an auxiliary plane, $x_1y_1$ is drawn",
+       "options": [
+        "parallel to the front view",
+        "parallel to the top view",
+        "perpendicular to the top view",
+        "through the end A"
+       ],
+       "answer_index": 1,
+       "why": "With $x_1y_1\\parallel ab$ the auxiliary elevation shows $a_1'b_1'=TL$ and $\\theta$."
+      },
+      {
+       "id": "al-2",
+       "kind": "mcq",
+       "level": 2,
+       "q": "A line appears as a point in an auxiliary view when the new reference line is drawn",
+       "options": [
+        "parallel to the true-length view",
+        "perpendicular to the true-length view",
+        "at $45^\\circ$ to it",
+        "parallel to xy"
+       ],
+       "answer_index": 1,
+       "why": "Looking along the line (reference perpendicular to its true-length view) gives the point view."
+      },
+      {
+       "id": "al-3",
+       "kind": "numerical",
+       "level": 2,
+       "marks": 6,
+       "q": "A line AB has A 10 mm above HP and 20 mm in front of VP; B is 40 mm above HP and 50 mm in front of VP. The projectors are 40 mm apart. Find the true length and $\\theta$ by an auxiliary plane.",
+       "model_answer_md": "**Draw** the FV $a'b'$ and TV $ab$ (TV length $\\sqrt{40^2+30^2}=50$ mm).\n\n1. Draw $x_1y_1\\parallel ab$.\n2. Projectors from $a$ and $b$ perpendicular to $x_1y_1$.\n3. Heights: $a_1'$ 10 mm and $b_1'$ 40 mm from $x_1y_1$ (as in the FV).\n4. $a_1'b_1'$ is the TL: $\\sqrt{50^2+30^2}=58.31$ mm; $\\theta=\\tan^{-1}(30/50)=30.96^\\circ$.",
+       "points": [
+        "$x_1y_1$ parallel to $ab$",
+        "Heights 10 mm and 40 mm taken from the FV",
+        "TL $=58.31$ mm",
+        "$\\theta=30.96^\\circ$"
+       ]
+      },
+      {
+       "id": "al-4",
+       "kind": "numerical",
+       "level": 3,
+       "marks": 6,
+       "q": "For the line in the previous question find the true length and $\\phi$ with an auxiliary inclined plane, and then show how to see the line as a point.",
+       "model_answer_md": "The FV $a'b'$ has length $\\sqrt{40^2+30^2}=50$ mm.\n\n1. Draw $x_1y_1\\parallel a'b'$.\n2. Projectors from $a'$, $b'$ perpendicular to $x_1y_1$.\n3. Set off distances from VP from the TV: 20 mm and 50 mm.\n4. $a_1b_1=\\sqrt{50^2+30^2}=58.31$ mm and $\\phi=\\tan^{-1}(30/50)=30.96^\\circ$.\n\n**Point view:** draw $x_2y_2\\perp a_1b_1$ and project: the line appears as a point.",
+       "points": [
+        "$x_1y_1\\parallel a'b'$",
+        "Distances from VP taken from the TV",
+        "TL 58.31 mm and $\\phi=30.96^\\circ$",
+        "$x_2y_2\\perp a_1b_1$ gives the point view"
+       ]
+      }
+     ]
+    },
+    {
+     "id": "aux-planes",
+     "title": "True shape of a plane by auxiliary planes",
+     "theory_md": "**Plane perpendicular to a reference plane** (a line in one view): draw $x_1y_1$ **parallel to that line** and project the other view across: the auxiliary view is the **true shape**.\n\n**Oblique plane** (inclined to both): needs **two** auxiliary planes. First draw $x_1y_1$ perpendicular to the projectors so that one view becomes a line (take a line of the plane parallel to a reference plane; its true length is perpendicular to the projectors). The plane is then seen edge-on (a line). Second, draw $x_2y_2$ **parallel to that edge view**; the next view is the **true shape**.\n\nEdge view first, then parallel: that is the entire method.",
+     "basics_md": "To see a card full face, you look straight at it, perpendicular to its surface. An edge view is a viewpoint in the plane of the card; turn 90 degrees from that and you face the card.",
+     "key_points": [
+      "Plane $\\perp$ HP or VP: $x_1y_1\\parallel$ its line view gives true shape",
+      "Oblique plane: first get an edge view, then $x_2y_2\\parallel$ edge view",
+      "Edge view uses a line of the plane parallel to a reference plane",
+      "Heights/distances are carried from the matching original view"
+     ],
+     "questions": [
+      {
+       "id": "as-1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "A plane perpendicular to the VP shows as a line in the FV. Its true shape is obtained by drawing $x_1y_1$",
+       "options": [
+        "perpendicular to the FV line",
+        "parallel to the FV line",
+        "at $45^\\circ$ to xy",
+        "parallel to xy"
+       ],
+       "answer_index": 1,
+       "why": "Parallel to the edge view means the new view looks square-on to the plane."
+      },
+      {
+       "id": "as-2",
+       "kind": "mcq",
+       "level": 2,
+       "q": "The number of auxiliary planes needed to obtain the true shape of an oblique plane is",
+       "options": [
+        "one",
+        "two",
+        "three",
+        "none"
+       ],
+       "answer_index": 1,
+       "why": "The first auxiliary view gives an edge view; the second, parallel to it, gives the true shape."
+      },
+      {
+       "id": "as-3",
+       "kind": "numerical",
+       "level": 3,
+       "marks": 6,
+       "q": "A square plate of 50 mm side is perpendicular to the VP and appears in the FV as a line 50 mm long at $30^\\circ$ to xy. Find the TV width and show how to get the true shape with an auxiliary plane.",
+       "model_answer_md": "The TV width is foreshortened: $50\\cos30^\\circ=43.30$ mm (the other dimension stays 50 mm), so the TV is a rectangle 50 x 43.30 mm.\n\n**True shape:** draw $x_1y_1$ parallel to the FV line; draw projectors perpendicular to $x_1y_1$ from the FV points; take distances from the VP from the TV and set them off from $x_1y_1$. The auxiliary plan is the true square 50 x 50 mm.",
+       "points": [
+        "TV width $50\\cos30^\\circ=43.30$ mm",
+        "$x_1y_1$ parallel to the FV line",
+        "Distances taken from the TV",
+        "True shape is a 50 mm square"
+       ]
+      }
+     ]
+    }
+   ]
+  }
+ ]
+}

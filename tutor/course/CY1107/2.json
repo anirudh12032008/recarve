@@ -1,0 +1,2692 @@
+{
+ "code": "CY1107",
+ "unit": "Fuels",
+ "written": "2026-10-19",
+ "by": "claude-sonnet-5-5, in a Claude Code session",
+ "topics": [
+  {
+   "topic": "Calorific value and characteristics of a good fuel",
+   "subtopics": [
+    {
+     "id": "fuel-cv",
+     "title": "Classification of fuels and calorific value",
+     "theory_md": "A **fuel** is a combustible substance that gives heat on burning. **Calorific value (CV)** is the heat liberated by complete combustion of unit mass (solids, liquids) or unit volume (gases) of the fuel.\n\n- Units: cal/g, kcal/kg, kJ/kg, BTU/lb; gases kcal/m$^3$. $1\\ \\mathrm{kcal/kg} = 1\\ \\mathrm{cal/g} = 1.8\\ \\mathrm{BTU/lb}$.\n- Classification: by state (solid, liquid, gas) and by origin: **primary** (natural: wood, coal, crude oil, natural gas) or **secondary** (derived: coke, petrol, producer gas, LPG).",
+     "basics_md": "Burning a fuel is a reaction that releases heat. CV is simply 'how much heat one kilogram gives', so a bigger CV means less fuel for the same job.",
+     "key_points": [
+      "CV = heat from complete combustion of unit mass (or volume) of fuel",
+      "Units: cal/g = kcal/kg; 1 kcal/kg = 1.8 BTU/lb; gases kcal/m$^3$",
+      "Primary fuels are natural; secondary fuels are derived from them",
+      "Classify by physical state and by origin"
+     ],
+     "questions": [
+      {
+       "id": "fuel-cv-m1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "Coke is classified as",
+       "options": [
+        "primary solid fuel",
+        "secondary (derived) solid fuel",
+        "primary liquid fuel",
+        "secondary gaseous fuel"
+       ],
+       "answer_index": 1,
+       "why": "Coke is made from coal, so it is a derived solid fuel."
+      },
+      {
+       "id": "fuel-cv-m2",
+       "kind": "mcq",
+       "level": 1,
+       "q": "A calorific value of 10000 kcal/kg equals how many BTU/lb?",
+       "options": [
+        "5556",
+        "10000",
+        "18000",
+        "41840"
+       ],
+       "answer_index": 2,
+       "why": "1 kcal/kg = 1.8 BTU/lb, so 10000 x 1.8 = 18000."
+      },
+      {
+       "id": "fuel-cv-w1",
+       "kind": "short",
+       "level": 2,
+       "marks": 3,
+       "q": "Define calorific value. Give its units and classify fuels with one example for each of the six classes (solid, liquid, gas; primary, secondary).",
+       "model_answer_md": "**Calorific value**: heat liberated when unit mass (or unit volume for gases) of a fuel is burnt completely.\n\n**Units**: cal/g, kcal/kg, kJ/kg, BTU/lb; for gases kcal/m$^3$.\n\n| State | Primary | Secondary |\n|---|---|---|\n| Solid | coal, wood | coke, charcoal |\n| Liquid | crude oil | petrol, diesel |\n| Gas | natural gas | producer gas, LPG |",
+       "points": [
+        "Definition with unit mass or volume and complete combustion",
+        "Units given",
+        "Solid, liquid, gas classes with examples",
+        "Primary and secondary distinction"
+       ]
+      },
+      {
+       "id": "fuel-cv-w2",
+       "kind": "numerical",
+       "level": 2,
+       "marks": 2,
+       "q": "Convert 8500 kcal/kg to kJ/kg and to BTU/lb (1 kcal = 4.184 kJ).",
+       "model_answer_md": "kJ/kg $= 8500 \\times 4.184 = 35564$ kJ/kg.\n\nBTU/lb $= 8500 \\times 1.8 = 15300$ BTU/lb.",
+       "points": [
+        "8500 x 4.184 = 35564 kJ/kg",
+        "8500 x 1.8 = 15300 BTU/lb"
+       ]
+      }
+     ]
+    },
+    {
+     "id": "gcv-ncv",
+     "title": "Gross and net calorific value",
+     "theory_md": "Hydrogen in a fuel burns to steam: $\\mathrm{H_2 + \\tfrac12 O_2 \\rightarrow H_2O}$, so 1 part H gives 9 parts water.\n\n- **GCV (HCV)**: products are cooled to room temperature, the steam condenses and its **latent heat is included**. The bomb calorimeter measures it.\n- **NCV (LCV)**: products escape hot, so the latent heat is **lost**. It is the practical value.\n\n$$\\mathrm{NCV} = \\mathrm{GCV} - 0.09\\,H \\times 587\\ \\text{cal/g}$$\n\n$H$ = % hydrogen. If H = 0, NCV = GCV.",
+     "basics_md": "When wood burns you see steam. If that steam is let out, the heat locked in it is wasted. NCV is the heat you really get; GCV adds back what the steam would give if you cooled it.",
+     "key_points": [
+      "GCV includes latent heat of condensed steam; NCV excludes it",
+      "NCV = GCV - 0.09 H x 587 (H in %, 587 cal/g latent heat)",
+      "1 part H gives 9 parts water, so water per g fuel = 0.09 H",
+      "GCV is measured (bomb); NCV is calculated"
+     ],
+     "questions": [
+      {
+       "id": "gcv-ncv-m1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "The relation between net and gross calorific value is",
+       "options": [
+        "NCV = GCV + 0.09 H x 587",
+        "NCV = GCV - 0.09 H x 587",
+        "NCV = GCV - 9 H x 587",
+        "NCV = GCV x 0.09 H"
+       ],
+       "answer_index": 1,
+       "why": "Water formed is 0.09 H g per g fuel; its latent heat 587 cal/g is subtracted."
+      },
+      {
+       "id": "gcv-ncv-m2",
+       "kind": "mcq",
+       "level": 2,
+       "q": "A fuel containing no hydrogen has",
+       "options": [
+        "NCV greater than GCV",
+        "NCV equal to GCV",
+        "NCV equal to zero",
+        "GCV equal to zero"
+       ],
+       "answer_index": 1,
+       "why": "No water forms, so there is no latent heat to lose."
+      },
+      {
+       "id": "gcv-ncv-w1",
+       "kind": "numerical",
+       "level": 2,
+       "marks": 3,
+       "q": "A fuel has GCV 9000 kcal/kg and contains 12% hydrogen. Find its NCV (latent heat of steam 587 cal/g).",
+       "model_answer_md": "Water formed per kg fuel $= 0.09 \\times 12 = 1.08$ kg.\n\nLatent heat lost $= 1.08 \\times 587 = 633.96$ kcal/kg.\n\n$$\\mathrm{NCV} = 9000 - 633.96 = 8366.04\\ \\text{kcal/kg}$$",
+       "points": [
+        "Formula NCV = GCV - 0.09 H x 587",
+        "0.09 x 12 x 587 = 633.96",
+        "NCV = 8366.04 kcal/kg"
+       ]
+      },
+      {
+       "id": "gcv-ncv-p1",
+       "pyq": "ab0072c32461cd97",
+       "level": 1,
+       "points": [
+        "GCV: heat with products cooled to room temperature, latent heat of steam included; bomb calorimeter",
+        "NCV: products escape uncondensed",
+        "NCV = GCV - 0.09 H x 587 kcal/kg",
+        "1 part H gives 9 parts water"
+       ]
+      },
+      {
+       "id": "gcv-ncv-p2",
+       "pyq": "105c4b8efd1df026",
+       "level": 2,
+       "points": [
+        "CV defined with units",
+        "HCV: products cooled to room temperature, steam condenses, latent heat included; measured by bomb calorimeter",
+        "LCV: products escape, latent heat lost",
+        "H2 + 1/2 O2 gives H2O, so 1 part H gives 9 parts water, water = 0.09 H",
+        "LCV = HCV - 0.09 H x 587",
+        "Comparison table or worked example (HCV 8000, 5% H gives 7735.85)"
+       ]
+      },
+      {
+       "id": "gcv-ncv-p3",
+       "pyq": "105a2e93ba08ded0",
+       "level": 2,
+       "points": [
+        "HCV: products cooled to room temperature, latent heat of condensation included",
+        "LCV: products escape, latent heat excluded",
+        "HCV always greater: LCV = HCV - 0.09 H x 587",
+        "HCV measured by bomb calorimeter; LCV calculated and is the practical value"
+       ]
+      }
+     ]
+    },
+    {
+     "id": "good-fuel",
+     "title": "Characteristics of a good fuel",
+     "theory_md": "A good fuel has:\n1. **High calorific value**: less fuel to buy, store and carry.\n2. **Moderate ignition temperature**: too low means fire hazard in storage; too high means hard to kindle.\n3. **Low moisture**: moisture adds weight without heat and wastes heat in evaporating.\n4. **Low ash** (non-combustible matter).\n5. Moderate, controllable rate of combustion.\n6. Harmless products (little $\\mathrm{SO_2}$, CO, smoke).\n7. Low cost, easy availability, easy storage and transport.",
+     "basics_md": "Ignition temperature is the lowest temperature a fuel must be heated to before it keeps burning on its own. Petrol catches at low temperature, wood needs much more.",
+     "key_points": [
+      "High CV, low moisture, low ash",
+      "Ignition temperature moderate: safe storage yet easy to light",
+      "Controllable combustion and harmless products",
+      "Low cost, easy storage and transport"
+     ],
+     "questions": [
+      {
+       "id": "good-fuel-m1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "Which is NOT a characteristic of a good fuel?",
+       "options": [
+        "High calorific value",
+        "Moderate ignition temperature",
+        "High moisture content",
+        "Low ash content"
+       ],
+       "answer_index": 2,
+       "why": "Moisture lowers CV and wastes heat."
+      },
+      {
+       "id": "good-fuel-m2",
+       "kind": "mcq",
+       "level": 2,
+       "q": "A fuel with a very low ignition temperature is undesirable mainly because",
+       "options": [
+        "it gives low heat",
+        "it is a fire hazard in storage and transport",
+        "it cannot be lit",
+        "it produces more ash"
+       ],
+       "answer_index": 1,
+       "why": "It may catch fire spontaneously or accidentally."
+      },
+      {
+       "id": "good-fuel-w1",
+       "kind": "short",
+       "level": 2,
+       "marks": 3,
+       "q": "Why should a good fuel have (a) low moisture and (b) low ash?",
+       "model_answer_md": "**(a) Moisture**: it adds weight but no heat, so CV per kg falls; heat is wasted in evaporating it, which lowers flame temperature; it makes ignition difficult and raises transport cost.\n\n**(b) Ash**: it is non-combustible so it lowers CV; hinders air flow; fuses into clinkers; costs handling and disposal.",
+       "points": [
+        "Moisture lowers CV and wastes heat of evaporation",
+        "Moisture delays ignition and adds transport cost",
+        "Ash lowers CV",
+        "Ash causes clinkers, blocks air, needs disposal"
+       ]
+      },
+      {
+       "id": "good-fuel-p1",
+       "pyq": "49c13f3c367a3b51",
+       "level": 2,
+       "points": [
+        "Classification: solid (wood, coal, coke), liquid (petrol, diesel), gas (natural gas, producer gas, LPG); primary and secondary",
+        "Criteria: high CV, moderate ignition temperature, low moisture, low ash, controllable combustion, harmless products, low cost, easy storage",
+        "One criterion elaborated: calorific value defined with units and why it matters, with an example"
+       ]
+      },
+      {
+       "id": "good-fuel-p2",
+       "pyq": "5d7331fd9c0ab4d0",
+       "level": 1,
+       "points": [
+        "Ignition temperature defined",
+        "Too low: fire hazard in storage and handling",
+        "Too high: difficult to kindle",
+        "So moderate is ideal"
+       ]
+      },
+      {
+       "id": "good-fuel-p3",
+       "pyq": "2e8f12b2f2451713",
+       "level": 1,
+       "points": [
+        "Ignition temperature defined",
+        "Too low: spontaneous fire, hazard",
+        "Too high: difficult to light, heat wasted",
+        "Moderate: safe and easy to ignite"
+       ]
+      },
+      {
+       "id": "good-fuel-p4",
+       "pyq": "761990a45dd964b1",
+       "level": 1,
+       "points": [
+        "False",
+        "Moisture lowers calorific value",
+        "Heat is wasted in evaporating it",
+        "It makes ignition difficult and raises transport cost"
+       ]
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "topic": "Comparison of solid, liquid and gaseous fuels",
+   "subtopics": [
+    {
+     "id": "sol-liq-gas",
+     "title": "Solid vs liquid vs gaseous fuels",
+     "theory_md": "Logic: the better a fuel mixes with air, the less excess air it needs and the cleaner it burns. Gases mix best, solids worst.\n\n| Point | Solid | Liquid | Gas |\n|---|---|---|---|\n| Examples | coal, coke | petrol, diesel | LPG, natural gas |\n| Ash | high | nil | nil |\n| Excess air | most | little | least |\n| Control of burning | difficult | easy | easiest |\n| Storage | easy, cheap | tanks | large leak-proof holders |\n| Fire hazard | low | moderate | highest |\n| Efficiency | lowest | high | highest |\n\nLiquids have the highest CV per kg and run IC engines.",
+     "basics_md": "A lump of coal touches air only on its surface; a gas mixes with air molecule by molecule. That is why gas burns most completely.",
+     "key_points": [
+      "Solids: cheap, easy storage, but ash, clinker, poor control, low efficiency",
+      "Liquids: high CV, no ash, easily controlled, piped, used in IC engines, but costlier and fire risk",
+      "Gases: least excess air, no ash or smoke, can be preheated, but explosion hazard and large storage",
+      "Excess air needed: solid > liquid > gas"
+     ],
+     "questions": [
+      {
+       "id": "sol-liq-gas-m1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "Which fuel needs the least excess air for complete combustion?",
+       "options": [
+        "Solid",
+        "Liquid",
+        "Gaseous",
+        "All equal"
+       ],
+       "answer_index": 2,
+       "why": "A gas mixes intimately with air."
+      },
+      {
+       "id": "sol-liq-gas-m2",
+       "kind": "mcq",
+       "level": 2,
+       "q": "Which fuel leaves no ash and can be stopped instantly with a valve, and is used in IC engines?",
+       "options": [
+        "Coal",
+        "Wood",
+        "Liquid fuel",
+        "Coke"
+       ],
+       "answer_index": 2,
+       "why": "Liquid fuels burn ash-free and are easily controlled."
+      },
+      {
+       "id": "sol-liq-gas-w1",
+       "kind": "long",
+       "level": 2,
+       "marks": 4,
+       "q": "Compare solid, liquid and gaseous fuels in a table (at least six points).",
+       "model_answer_md": "| Point | Solid | Liquid | Gaseous |\n|---|---|---|---|\n| Examples | coal, coke, wood | petrol, diesel | natural gas, LPG, producer gas |\n| Calorific value | lowest | high | moderate (kcal/m$^3$) |\n| Ash and clinker | high | nil | nil |\n| Excess air | large | small | smallest |\n| Control of combustion | difficult | easy | very easy |\n| Storage and transport | easy, cheap | closed tanks, pipes | large leak-proof holders, pipes |\n| Fire and explosion risk | low | moderate | high |\n| Thermal efficiency | low | high | highest |\n| Cost | cheapest | costlier | costlier |",
+       "points": [
+        "Table form with at least six points",
+        "Ash, excess air, control, storage, hazard, efficiency compared",
+        "Examples of each class"
+       ]
+      },
+      {
+       "id": "sol-liq-gas-p1",
+       "pyq": "5c76a325bc1145ae",
+       "level": 2,
+       "points": [
+        "Higher calorific value per unit mass",
+        "Burn with little excess air, complete combustion",
+        "No ash or clinker",
+        "Easily controlled, start/stop instantly",
+        "Can be piped; less storage space; used in IC engines",
+        "Drawbacks (optional): costlier, fire risk"
+       ]
+      }
+     ]
+    },
+    {
+     "id": "gas-fuels",
+     "title": "Producer gas and water gas",
+     "theory_md": "Both are made by passing a reactant over red-hot coke.\n\n**Producer gas**: air (a little steam) over coke at about 1100 $^\\circ$C. $\\mathrm{C + O_2 \\rightarrow CO_2}$, $\\mathrm{CO_2 + C \\rightarrow 2CO}$. Composition: CO 22-30%, $\\mathrm{N_2}$ 50-56%, $\\mathrm{H_2}$ 8-12%. CV about **1300 kcal/m$^3$**. Used for heating furnaces.\n\n**Water gas**: steam over coke at about 1000 $^\\circ$C. $\\mathrm{C + H_2O \\rightarrow CO + H_2}$ (endothermic, so air blows alternate). Composition: CO about 41%, $\\mathrm{H_2}$ about 51%, $\\mathrm{N_2}$ about 4%. CV about **2800 kcal/m$^3$**; also a source of $\\mathrm{H_2}$.",
+     "basics_md": "Producer gas is diluted by the nitrogen of the air used to make it; water gas is made with steam, so it has no such dilution.",
+     "key_points": [
+      "Producer gas: air over red-hot coke, CO + N2 (over 50% N2), CV about 1300 kcal/m3",
+      "Water gas: steam over red-hot coke, CO + H2 (about 92%), CV about 2800 kcal/m3",
+      "Water gas is superior because it has little non-combustible N2",
+      "Producer gas is cheaper, used for furnace heating"
+     ],
+     "questions": [
+      {
+       "id": "gas-fuels-m1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "Water gas is a mixture of mainly",
+       "options": [
+        "CO and N2",
+        "CO and H2",
+        "CH4 and H2",
+        "CO2 and H2"
+       ],
+       "answer_index": 1,
+       "why": "Steam over hot coke: C + H2O gives CO + H2."
+      },
+      {
+       "id": "gas-fuels-m2",
+       "kind": "mcq",
+       "level": 1,
+       "q": "The main reason for the low calorific value of producer gas is",
+       "options": [
+        "excess CO2",
+        "about half of it is non-combustible N2",
+        "it contains water vapour",
+        "it contains no CO"
+       ],
+       "answer_index": 1,
+       "why": "Air supplies N2 which only dilutes the gas."
+      },
+      {
+       "id": "gas-fuels-w1",
+       "kind": "short",
+       "level": 2,
+       "marks": 3,
+       "q": "Give the manufacture reactions of producer gas and of water gas.",
+       "model_answer_md": "**Producer gas** (air + a little steam over red-hot coke, about 1100 $^\\circ$C):\n$\\mathrm{C + O_2 \\rightarrow CO_2}$; $\\mathrm{CO_2 + C \\rightarrow 2CO}$; $\\mathrm{C + H_2O \\rightarrow CO + H_2}$.\n\n**Water gas** (steam over red-hot coke, about 1000 $^\\circ$C):\n$\\mathrm{C + H_2O \\rightarrow CO + H_2}$ (endothermic).",
+       "points": [
+        "Producer gas reactions with air over coke",
+        "CO2 + C gives 2CO",
+        "Water gas: C + H2O gives CO + H2",
+        "Temperatures about 1100 and 1000 C"
+       ]
+      },
+      {
+       "id": "gas-fuels-p1",
+       "pyq": "0332c27191431f73",
+       "level": 1,
+       "points": [
+        "Producer gas: CO 22-30%, N2 50-56%, H2 8-12%",
+        "Made by air with a little steam over red-hot coke at about 1100 C; reactions",
+        "Low CV, about 1300 kcal/m3, because of N2",
+        "Uses: heating furnaces, reducing atmosphere in metallurgy"
+       ]
+      },
+      {
+       "id": "gas-fuels-p2",
+       "pyq": "42b914063a99b7a8",
+       "level": 2,
+       "points": [
+        "Water gas is superior",
+        "Water gas CO + H2 about 92%; producer gas over 50% inert N2",
+        "CV water gas about 2800 vs producer gas about 1300 kcal/m3",
+        "Manufacture reactions of each",
+        "Water gas burns hotter and is a source of hydrogen"
+       ]
+      }
+     ]
+    },
+    {
+     "id": "biogas",
+     "title": "Biogas (gobar gas)",
+     "theory_md": "**Biogas** is made by **anaerobic digestion** (bacteria, no air) of cattle dung and plant or kitchen waste. Composition: $\\mathrm{CH_4}$ 55-65%, $\\mathrm{CO_2}$ 30-40%, traces of $\\mathrm{H_2}$, $\\mathrm{N_2}$, $\\mathrm{H_2S}$; CV about 5300 kcal/m$^3$.\n\n**Plant**: mixing tank, inlet pipe, underground **digester**, **gas holder** (floating drum or fixed dome), outlet pipe, slurry pit. Dung and water (1:1) stay 30-50 days at 30-40 $^\\circ$C, pH 6.8-7.5.\n\nThree stages: **hydrolysis**, **acid formation** (acetic acid, $\\mathrm{CO_2}$, $\\mathrm{H_2}$), **methane formation** by methanogens: $\\mathrm{CH_3COOH \\rightarrow CH_4 + CO_2}$.\n\nUses: cooking, lighting, engines; spent slurry is manure.",
+     "basics_md": "Bacteria eat the waste where there is no oxygen and breathe out methane, the same gas as in LPG-like cooking fuel.",
+     "key_points": [
+      "Biogas = anaerobic digestion of dung and organic waste, CH4 55-65%",
+      "Plant: mixing tank, digester, gas holder, outlet pipe, slurry pit",
+      "Stages: hydrolysis, acid formation, methane formation",
+      "Uses: cooking, lighting, engines; slurry is manure"
+     ],
+     "figures": [
+      {
+       "smiles": "C",
+       "caption": "Methane, the main component of biogas"
+      }
+     ],
+     "questions": [
+      {
+       "id": "biogas-m1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "The main combustible component of biogas is",
+       "options": [
+        "CO",
+        "H2",
+        "CH4",
+        "H2S"
+       ],
+       "answer_index": 2,
+       "why": "Methane forms 55-65%."
+      },
+      {
+       "id": "biogas-m2",
+       "kind": "mcq",
+       "level": 2,
+       "q": "Biogas is produced by digestion that is",
+       "options": [
+        "aerobic",
+        "anaerobic",
+        "photochemical",
+        "thermal at 1000 C"
+       ],
+       "answer_index": 1,
+       "why": "Bacteria act in the absence of air."
+      },
+      {
+       "id": "biogas-w1",
+       "kind": "short",
+       "level": 2,
+       "marks": 3,
+       "q": "Write the three stages of biogas formation and the key reaction of the last stage.",
+       "model_answer_md": "1. **Hydrolysis**: cellulose, proteins, fats give sugars, amino acids, fatty acids.\n2. **Acid formation**: these give acetic acid, $\\mathrm{CO_2}$, $\\mathrm{H_2}$ (acid-forming bacteria).\n3. **Methane formation** (methanogens): $\\mathrm{CH_3COOH \\rightarrow CH_4 + CO_2}$ and $\\mathrm{CO_2 + 4H_2 \\rightarrow CH_4 + 2H_2O}$.",
+       "points": [
+        "Hydrolysis",
+        "Acid formation",
+        "Methane formation by methanogens",
+        "Reaction CH3COOH gives CH4 + CO2"
+       ]
+      },
+      {
+       "id": "biogas-p1",
+       "pyq": "3185b75f7198ce2a",
+       "level": 2,
+       "points": [
+        "Gobar gas = biogas from anaerobic digestion of dung and waste; CH4 55-65%, CO2 30-40%",
+        "Plant parts: digester, gas holder, inlet and outlet, slurry pit",
+        "Conditions: slurry 1:1, 30-40 C, pH 6.8-7.5, 30-50 days",
+        "Three stages with reactions",
+        "Uses: cooking, lighting, engines, manure from slurry"
+       ]
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "topic": "Gross and net calorific value by bomb calorimeter",
+   "subtopics": [
+    {
+     "id": "bomb-build",
+     "title": "Construction and working of the bomb calorimeter",
+     "theory_md": "A known mass of fuel is burnt in excess $\\mathrm{O_2}$ in a closed bomb; heat is absorbed by water and calorimeter. Used for solid and non-volatile liquid fuels.\n\n**Parts**: stainless-steel **bomb** with screw cap, $\\mathrm{O_2}$ inlet valve and two electrodes; Ni/Pt **crucible** with fuel pellet; Mg **fuse wire**; copper **calorimeter** with water; **stirrer**; **Beckmann thermometer** (0.01 $^\\circ$C); **air jacket and water jacket** against heat loss; 6 V battery.\n\n**Working**: weigh 0.5-1 g pellet, fill bomb with $\\mathrm{O_2}$ at about **25 atm**, immerse, note $t_1$, ignite, note maximum $t_2$.",
+     "basics_md": "It is a strong closed steel pot. The fuel burns inside it in pure oxygen and every bit of heat goes into the surrounding water, whose temperature rise we read.",
+     "key_points": [
+      "Parts: steel bomb, crucible, fuse wire, calorimeter, stirrer, Beckmann thermometer, jackets",
+      "Bomb filled with O2 at about 25 atm; electric ignition by fuse wire",
+      "Heat of fuel absorbed by water + calorimeter; rise t2 - t1 noted",
+      "Measures GCV because steam condenses inside"
+     ],
+     "questions": [
+      {
+       "id": "bomb-build-m1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "The bomb in a bomb calorimeter is filled with oxygen at about",
+       "options": [
+        "1 atm",
+        "5 atm",
+        "25 atm",
+        "200 atm"
+       ],
+       "answer_index": 2,
+       "why": "About 25 atm ensures complete combustion."
+      },
+      {
+       "id": "bomb-build-m2",
+       "kind": "mcq",
+       "level": 1,
+       "q": "The thermometer used in a bomb calorimeter is a",
+       "options": [
+        "clinical thermometer",
+        "Beckmann thermometer",
+        "thermocouple only",
+        "mercury thermometer of 1 C accuracy"
+       ],
+       "answer_index": 1,
+       "why": "It reads to 0.01 C."
+      },
+      {
+       "id": "bomb-build-w1",
+       "kind": "long",
+       "level": 2,
+       "marks": 5,
+       "q": "Describe the construction and working of a bomb calorimeter with a labelled diagram.",
+       "model_answer_md": "**Diagram** (described): outer water jacket, then air jacket, then copper calorimeter holding water; the steel bomb stands in the water with crucible and fuse wire between two electrodes; $\\mathrm{O_2}$ valve on the lid; stirrer and Beckmann thermometer dip into the water; leads go to a 6 V battery.\n\n**Construction**\n1. Stainless-steel bomb with air-tight screw cap, $\\mathrm{O_2}$ inlet valve, two electrodes.\n2. Ni/Pt crucible on a ring holding the fuel pellet.\n3. Mg fuse wire touching the fuel.\n4. Copper calorimeter with known mass $W$ of water.\n5. Stirrer and Beckmann thermometer.\n6. Air and water jackets to stop heat loss.\n\n**Working**\n1. Weigh $x$ g (0.5-1 g) pellet in the crucible.\n2. Close the bomb, fill with $\\mathrm{O_2}$ at 25 atm.\n3. Immerse in water, stir, note $t_1$.\n4. Ignite electrically; fuel burns completely.\n5. Note the maximum temperature $t_2$.\n\n$$\\mathrm{GCV} = \\frac{(W+w)(t_2-t_1)}{x}$$",
+       "points": [
+        "Labelled diagram described",
+        "Parts: bomb, crucible, fuse wire, calorimeter, stirrer, thermometer, jackets",
+        "Working: pellet, O2 25 atm, ignition, t1 and t2",
+        "Formula with W, w, x"
+       ]
+      },
+      {
+       "id": "bomb-build-p1",
+       "pyq": "04897585f56e6aeb",
+       "level": 2,
+       "points": [
+        "Principle: heat of burning absorbed by water and calorimeter",
+        "Construction with parts and labelled diagram",
+        "Working steps: pellet, 25 atm O2, ignition, t1 and t2",
+        "GCV = (W + w)(t2 - t1)/x with corrections"
+       ]
+      },
+      {
+       "id": "bomb-build-p2",
+       "pyq": "07efb07903469bd5",
+       "level": 2,
+       "points": [
+        "Construction with parts",
+        "Working steps",
+        "Calculation GCV = [(W+w)(t2 - t1 + tc) - (tA + tF + tT)]/x",
+        "Corrections: fuse wire, acid, thread, cooling",
+        "NCV = GCV - 0.09 H x 587"
+       ]
+      },
+      {
+       "id": "bomb-build-p3",
+       "pyq": "7f669bb9285aa64c",
+       "level": 3,
+       "points": [
+        "Construction with labelled diagram",
+        "Working",
+        "GCV formula with all corrections",
+        "NCV from GCV: 0.09 H x 587",
+        "Definition of HCV and LCV"
+       ]
+      },
+      {
+       "id": "bomb-build-p4",
+       "pyq": "774bb14d7318413d",
+       "level": 2,
+       "points": [
+        "Construction with labelled diagram",
+        "Working for a solid fuel",
+        "HCV formula with corrections",
+        "LCV = HCV - 0.09 H x 587"
+       ]
+      }
+     ]
+    },
+    {
+     "id": "bomb-calc",
+     "title": "Corrections and the calculation",
+     "theory_md": "Heat from fuel = heat taken by water and calorimeter. $W$ = mass of water, $w$ = **water equivalent** of calorimeter (g), $x$ = mass of fuel.\n\nWith corrections:\n$$\\mathrm{GCV} = \\frac{(W+w)(t_2 - t_1 + t_c) - (t_A + t_F + t_T)}{x}$$\n- **Cooling correction** $t_c$: heat lost on the way, so it is **added** to the rise (in $^\\circ$C).\n- **Fuse wire** $t_F$, **acid** $t_A$ ($\\mathrm{H_2SO_4}$, $\\mathrm{HNO_3}$ formed from S and N), **thread** $t_T$: extra heat not from the fuel, so **subtracted** (in cal).\n\nThen $\\mathrm{NCV} = \\mathrm{GCV} - 0.09\\,H \\times 587$.",
+     "basics_md": "The thermometer reads the heat of everything that burned, not only the fuel. So we take away the heat of the fuse wire, thread and acid, and add back what leaked away.",
+     "key_points": [
+      "Heat gained by water + calorimeter = heat from fuel; (W + w) is the total heat capacity in g",
+      "Cooling correction is added to the temperature rise",
+      "Fuse wire, acid and thread corrections are subtracted from heat",
+      "Water equivalent w is the water mass with the same heat capacity as the calorimeter"
+     ],
+     "questions": [
+      {
+       "id": "bomb-calc-m1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "The cooling correction is",
+       "options": [
+        "subtracted from the heat",
+        "added to the temperature rise",
+        "ignored",
+        "multiplied by x"
+       ],
+       "answer_index": 1,
+       "why": "It restores the heat lost to the surroundings."
+      },
+      {
+       "id": "bomb-calc-m2",
+       "kind": "mcq",
+       "level": 2,
+       "q": "The acid correction in a bomb calorimeter arises because",
+       "options": [
+        "O2 is acidic",
+        "S and N burn to H2SO4 and HNO3, giving extra heat",
+        "water becomes acidic",
+        "the fuse wire is acidic"
+       ],
+       "answer_index": 1,
+       "why": "The extra heat is not from the fuel, so it is subtracted."
+      },
+      {
+       "id": "bomb-calc-w1",
+       "kind": "numerical",
+       "level": 2,
+       "marks": 4,
+       "q": "0.75 g of fuel with 6% H is burnt in a bomb calorimeter. Water taken 1000 g, water equivalent 400 g, rise in temperature 3.0 $^\\circ$C, cooling correction 0.03 $^\\circ$C, fuse wire correction 8 cal, acid correction 40 cal. Find GCV and NCV (latent heat 587 cal/g).",
+       "model_answer_md": "$$\\mathrm{GCV} = \\frac{(1000+400)(3.0+0.03) - (40+8)}{0.75} = \\frac{4242 - 48}{0.75} = \\frac{4194}{0.75} = 5592\\ \\text{cal/g}$$\n\n$$\\mathrm{NCV} = 5592 - 0.09 \\times 6 \\times 587 = 5592 - 316.98 = 5275.02\\ \\text{cal/g}$$",
+       "points": [
+        "Formula with cooling correction added and corrections subtracted",
+        "GCV = 5592 cal/g",
+        "0.09 x 6 x 587 = 316.98",
+        "NCV = 5275.02 cal/g"
+       ]
+      },
+      {
+       "id": "bomb-calc-w2",
+       "kind": "numerical",
+       "level": 1,
+       "marks": 2,
+       "q": "0.8 g of fuel raises 1500 g of water in a calorimeter of water equivalent 500 g by 2.0 $^\\circ$C. Find the GCV (no corrections).",
+       "model_answer_md": "$$\\mathrm{GCV} = \\frac{(1500+500)\\times 2.0}{0.8} = \\frac{4000}{0.8} = 5000\\ \\text{cal/g}$$",
+       "points": [
+        "Formula (W + w) x rise / x",
+        "GCV = 5000 cal/g"
+       ]
+      },
+      {
+       "id": "bomb-calc-p1",
+       "pyq": "718102f940809694",
+       "level": 3,
+       "points": [
+        "GCV = [(700+2000)(2.5 + 0.02) - (60 + 10)]/0.85 = 6734/0.85 = 7922.35 cal/g",
+        "NCV = 7922.35 - 0.09 x 8 x 587 = 7499.71 cal/g",
+        "Validity: NCV < GCV, GCV typical of bituminous coal; composition adds to only 97%, Dulong value higher, small water mass"
+       ]
+      },
+      {
+       "id": "bomb-calc-p2",
+       "pyq": "2711bb80c43d2206",
+       "level": 3,
+       "points": [
+        "GCV = [(2300+600)(3.5) - (60 + 20)]/1.2 = 8391.67 cal/g",
+        "NCV = 8391.67 - 0.09 x 7 x 587 = 8021.86 cal/g",
+        "Validity: composition adds to 100%, NCV < GCV, GCV in bituminous range; no cooling correction given"
+       ]
+      },
+      {
+       "id": "bomb-calc-p3",
+       "pyq": "6020e7dca314e39f",
+       "level": 3,
+       "points": [
+        "Total heat = x GCV + corrections = 30000 + 14 = 30014 J",
+        "Heat capacity (1000 + 250) x 4.18 = 5225 J/C",
+        "t2 - t1 + tc = 5.744 C so t2 - t1 = 5.694 C",
+        "Final temperature t2 = 30.19 C"
+       ]
+      }
+     ]
+    },
+    {
+     "id": "gcv-ncv-why",
+     "title": "Why NCV is less than GCV, and which is easier to find",
+     "theory_md": "In the bomb the products cool to room temperature, so the steam from the fuel's hydrogen **condenses** inside and gives up latent heat to the water. The bomb therefore measures **GCV** directly.\n\nIn furnaces, boilers and engines the flue gas leaves hot, so steam is never condensed and its latent heat (587 cal/g) is lost. The heat actually available is the **NCV**, so efficiencies are calculated on it.\n\nNCV cannot be measured easily (the steam would have to be kept uncondensed), so it is **calculated**: $\\mathrm{NCV} = \\mathrm{GCV} - 0.09\\,H \\times 587$, needing %H from ultimate analysis.",
+     "basics_md": "Think of a kettle: cooling the steam back to water gives out heat. GCV counts that heat, NCV does not.",
+     "key_points": [
+      "GCV includes latent heat of condensed steam; NCV does not",
+      "Bomb measures GCV because the steam condenses in it",
+      "NCV is calculated, needs %H",
+      "NCV is practically relevant because flue gases leave hot"
+     ],
+     "questions": [
+      {
+       "id": "gcv-ncv-why-m1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "The calorific value directly measured in a bomb calorimeter is",
+       "options": [
+        "NCV",
+        "GCV",
+        "LCV",
+        "dry CV"
+       ],
+       "answer_index": 1,
+       "why": "Steam condenses in the bomb."
+      },
+      {
+       "id": "gcv-ncv-why-m2",
+       "kind": "mcq",
+       "level": 2,
+       "q": "NCV is more relevant to engineers because",
+       "options": [
+        "it is larger",
+        "flue gases leave hot so steam's latent heat is not recovered",
+        "it needs no hydrogen data",
+        "it is measured directly"
+       ],
+       "answer_index": 1,
+       "why": "Furnaces and engines never condense the steam."
+      },
+      {
+       "id": "gcv-ncv-why-w1",
+       "kind": "short",
+       "level": 2,
+       "marks": 3,
+       "q": "Why is GCV easier to determine than NCV?",
+       "model_answer_md": "In the bomb (or Boys' gas) calorimeter the products cool to near room temperature, so the steam condenses and gives up its latent heat. The heat measured is directly GCV: $\\mathrm{GCV} = (W+w)(t_2-t_1)/x$.\n\nMeasuring NCV would need the steam kept uncondensed, which a simple calorimeter cannot do. So NCV is **calculated**: $\\mathrm{NCV} = \\mathrm{GCV} - 0.09\\,H \\times 587$ cal/g.",
+       "points": [
+        "Steam condenses in calorimeter so GCV is measured directly",
+        "NCV cannot be measured easily",
+        "NCV calculated from GCV and %H"
+       ]
+      },
+      {
+       "id": "gcv-ncv-why-p1",
+       "pyq": "067b47a0ad99c48b",
+       "level": 2,
+       "points": [
+        "GCV: products cooled, steam condensed, latent heat included",
+        "NCV: steam escapes; NCV = GCV - 0.09 H x 587",
+        "NCV more relevant because flue gases leave hot and latent heat is not recovered"
+       ]
+      },
+      {
+       "id": "gcv-ncv-why-p2",
+       "pyq": "0dab7b414e16413f",
+       "level": 1,
+       "points": [
+        "Higher CV: products cooled to room temperature, latent heat of steam included, measured in bomb",
+        "Lower CV: products escape, latent heat lost",
+        "LCV = HCV - 0.09 H x 587"
+       ]
+      },
+      {
+       "id": "gcv-ncv-why-p3",
+       "pyq": "df9ad606d5341a46",
+       "level": 2,
+       "points": [
+        "1 part H gives 9 parts water; HCV includes latent heat, LCV loses it",
+        "Bomb estimation steps: pellet, O2, immersion, ignition",
+        "HCV formula with corrections",
+        "LCV = HCV - 0.09 H x 587"
+       ]
+      },
+      {
+       "id": "gcv-ncv-why-p4",
+       "pyq": "090be4a824b3e1eb",
+       "level": 1,
+       "points": [
+        "GCV: cooled to room temperature, latent heat included; NCV: products escape, latent heat lost",
+        "GCV higher; NCV = GCV - 0.09 H x 587",
+        "GCV by bomb calorimeter; NCV calculated"
+       ]
+      },
+      {
+       "id": "gcv-ncv-why-p5",
+       "pyq": "ce4f00c6fc23c43f",
+       "level": 1,
+       "points": [
+        "H2 + 1/2 O2 gives H2O; 1 part H gives 9 parts water",
+        "GCV includes latent heat of condensed steam; NCV loses it",
+        "NCV = GCV - 0.09 H x 587"
+       ]
+      },
+      {
+       "id": "gcv-ncv-why-p6",
+       "pyq": "d31088c8565298c6",
+       "level": 2,
+       "points": [
+        "GCV is easier",
+        "Steam condenses in the bomb so the heat measured is GCV",
+        "NCV cannot be measured directly; calculated as GCV - 0.09 H x 587"
+       ]
+      },
+      {
+       "id": "gcv-ncv-why-p7",
+       "pyq": "96f61cd0bb781161",
+       "level": 1,
+       "points": [
+        "GCV: latent heat of steam included; NCV: not included",
+        "GCV measured by bomb; NCV calculated from GCV and %H",
+        "NCV = GCV - 0.09 H x 587"
+       ]
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "topic": "Classification and selection of coal",
+   "subtopics": [
+    {
+     "id": "coal-rank",
+     "title": "Rank of coal",
+     "theory_md": "Coal formed from buried plants by **coalification** (heat and pressure, no air). Rank order:\n\n**Wood, peat, lignite, sub-bituminous, bituminous, semi-anthracite, anthracite.**\n\nAs rank rises, carbon, calorific value and hardness **increase**; moisture, volatile matter, H, O, N **decrease**.\n\n| Coal | C % | CV (kcal/kg) |\n|---|---|---|\n| Peat | 50-60 | 4000-5400 |\n| Lignite | 60-70 | 6500-7100 |\n| Bituminous | 80-90 | 8000-8500 |\n| Anthracite | 90-98 | 8650-8700 |",
+     "basics_md": "Coal slowly 'cooks' underground. The longer and hotter it cooks, the more carbon it keeps and the less water and gas it holds.",
+     "key_points": [
+      "Rank order from wood to anthracite",
+      "C%, CV, hardness rise with rank; moisture, volatile matter fall",
+      "Peat lowest (C 50-60%), anthracite highest (C 90-98%)",
+      "Lignite burns with long smoky flame; anthracite short smokeless flame"
+     ],
+     "questions": [
+      {
+       "id": "coal-rank-m1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "The coal of highest rank is",
+       "options": [
+        "Peat",
+        "Lignite",
+        "Bituminous",
+        "Anthracite"
+       ],
+       "answer_index": 3,
+       "why": "Anthracite has the most carbon (90-98%)."
+      },
+      {
+       "id": "coal-rank-m2",
+       "kind": "mcq",
+       "level": 2,
+       "q": "With increasing rank of coal, volatile matter",
+       "options": [
+        "increases",
+        "decreases",
+        "remains constant",
+        "first increases then decreases"
+       ],
+       "answer_index": 1,
+       "why": "Moisture and volatile matter fall as carbon rises."
+      },
+      {
+       "id": "coal-rank-w1",
+       "kind": "short",
+       "level": 2,
+       "marks": 3,
+       "q": "Arrange wood, peat, lignite, bituminous coal and anthracite in order of rank and state how carbon content and calorific value change.",
+       "model_answer_md": "**Order (low to high rank)**: wood, peat, lignite, bituminous coal, anthracite.\n\nCarbon: 50% (wood), 50-60% (peat), 60-70% (lignite), 80-90% (bituminous), 90-98% (anthracite). Calorific value rises from about 4000-4500 to about 8700 kcal/kg. Moisture and volatile matter fall along the series.",
+       "points": [
+        "Correct rank order",
+        "Carbon rises with rank with values",
+        "CV rises with rank",
+        "Moisture and volatile matter fall"
+       ]
+      }
+     ]
+    },
+    {
+     "id": "coal-select",
+     "title": "Uses and selection of coal",
+     "theory_md": "Choose the coal by the job:\n- **Metallurgical coke**: low-ash, low-S, **caking bituminous** coal.\n- **Steam raising in boilers**: high CV, moderate volatile matter, low ash, non-caking.\n- **Domestic and smokeless use**: anthracite or semi-anthracite.\n- **Gas making**: high-volatile bituminous coal.\n- **Power plants** (pulverised firing): low-grade, high-ash coal can be used; lignite is used in plants such as Neyveli.\n\nSelection criteria: calorific value, ash, sulphur, volatile matter, caking property, moisture, cost. Indian coals are mostly high-ash bituminous.",
+     "basics_md": "Different jobs need different coal: a steel furnace needs coal that fuses into strong coke, a kitchen needs coal that does not smoke.",
+     "key_points": [
+      "Coke making: caking bituminous, low ash and sulphur",
+      "Boilers: high CV, low ash; domestic: smokeless anthracite",
+      "Selection criteria: CV, ash, S, volatile matter, caking, moisture, cost"
+     ],
+     "questions": [
+      {
+       "id": "coal-select-m1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "Which coal is used for making metallurgical coke?",
+       "options": [
+        "Peat",
+        "Lignite",
+        "Caking bituminous coal",
+        "Anthracite"
+       ],
+       "answer_index": 2,
+       "why": "Caking bituminous coal fuses to hard coke."
+      },
+      {
+       "id": "coal-select-m2",
+       "kind": "mcq",
+       "level": 2,
+       "q": "Anthracite is preferred for domestic use because it",
+       "options": [
+        "has high volatile matter",
+        "burns with a short smokeless flame",
+        "contains most moisture",
+        "is cheapest"
+       ],
+       "answer_index": 1,
+       "why": "Low volatile matter gives smokeless burning."
+      },
+      {
+       "id": "coal-select-w1",
+       "kind": "short",
+       "level": 2,
+       "marks": 3,
+       "q": "State the criteria for selecting a coal and name the coal for coke making and for domestic use.",
+       "model_answer_md": "**Criteria**: calorific value, ash content, sulphur, volatile matter, caking property, moisture, cost.\n\n**Coke making**: low-ash, low-sulphur, caking bituminous coal.\n\n**Domestic use**: anthracite or semi-anthracite, because of its smokeless short flame.",
+       "points": [
+        "Criteria listed (CV, ash, S, VM, caking, moisture)",
+        "Caking bituminous for coke",
+        "Anthracite for domestic use"
+       ]
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "topic": "Proximate analysis of coal",
+   "subtopics": [
+    {
+     "id": "prox-method",
+     "title": "Procedure of proximate analysis",
+     "theory_md": "Proximate analysis gives **moisture, volatile matter, ash and fixed carbon**, by heating and weighing only.\n\n1. **Moisture**: about 1 g in a silica crucible, oven at **105-110 $^\\circ$C for 1 h**. $\\%M = \\text{loss}/x \\times 100$.\n2. **Volatile matter**: dried residue, crucible **covered**, furnace **925 $\\pm$ 20 $^\\circ$C for 7 min**. $\\%VM = \\text{loss}/x \\times 100$.\n3. **Ash**: residue heated **uncovered** at **700-750 $^\\circ$C** to constant weight. $\\%\\text{Ash} = \\text{residue}/x \\times 100$.\n4. **Fixed carbon**: $100 - (\\%M + \\%VM + \\%\\text{Ash})$.\n\nAll percentages are on the **original** coal mass $x$.",
+     "basics_md": "Heat gently and water goes; heat hard with the lid on and gases go but carbon stays; heat open to air and carbon burns away, leaving ash.",
+     "key_points": [
+      "Moisture: 105-110 C for 1 h",
+      "Volatile matter: covered crucible, 925 +/- 20 C for 7 min",
+      "Ash: uncovered, 700-750 C; fixed carbon by difference",
+      "All percentages are on the original sample mass"
+     ],
+     "questions": [
+      {
+       "id": "prox-method-m1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "Volatile matter is determined by heating the dried coal at",
+       "options": [
+        "105 C uncovered",
+        "925 C in a covered crucible",
+        "925 C uncovered",
+        "700 C in a covered crucible"
+       ],
+       "answer_index": 1,
+       "why": "The lid prevents carbon from burning."
+      },
+      {
+       "id": "prox-method-m2",
+       "kind": "mcq",
+       "level": 1,
+       "q": "Fixed carbon is found by",
+       "options": [
+        "burning coal in O2",
+        "difference: 100 - (M + VM + ash)",
+        "Kjeldahl method",
+        "direct weighing"
+       ],
+       "answer_index": 1,
+       "why": "It is the balance left after moisture, VM and ash."
+      },
+      {
+       "id": "prox-method-w1",
+       "kind": "short",
+       "level": 2,
+       "marks": 3,
+       "q": "Why is the crucible covered while determining volatile matter, and uncovered for ash?",
+       "model_answer_md": "In the **volatile matter** step the lid keeps air out, so only the volatile gases escape and the fixed carbon does not burn. For **ash** the lid is removed (700-750 $^\\circ$C) so that all carbon burns away in air and only the mineral residue (ash) remains.",
+       "points": [
+        "Lid excludes air so carbon does not burn in VM step",
+        "Without lid carbon burns to leave ash"
+       ]
+      },
+      {
+       "id": "prox-method-p1",
+       "pyq": "7ca62c3bd8cb87bb",
+       "level": 2,
+       "points": [
+        "Proximate analysis gives moisture, VM, ash, fixed carbon",
+        "Moisture: 105-110 C, 1 h; formula",
+        "VM: covered, 925 +/- 20 C, 7 min; formula",
+        "Ash: uncovered, 700-750 C; formula",
+        "FC = 100 - (M + VM + ash)",
+        "Importance of each constituent"
+       ]
+      },
+      {
+       "id": "prox-method-p2",
+       "pyq": "e7eb8cbdefcf613b",
+       "level": 1,
+       "points": [
+        "Proximate analysis",
+        "Moisture, volatile matter, ash and fixed carbon are determined"
+       ]
+      }
+     ]
+    },
+    {
+     "id": "prox-num",
+     "title": "Numericals on proximate analysis",
+     "theory_md": "Work stepwise on the **original mass** $x$:\n\n$\\%M = \\dfrac{x - m_1}{x}\\times 100$, where $m_1$ is the mass after 110 $^\\circ$C.\n\n$\\%VM = \\dfrac{m_1 - m_2}{x}\\times 100$, where $m_2$ is the mass after the covered heating.\n\n$\\%\\text{Ash} = \\dfrac{m_3}{x}\\times 100$, where $m_3$ is the final residue.\n\n$\\%FC = 100 - (\\%M + \\%VM + \\%\\text{Ash})$.\n\nTrap: VM uses the **difference of two weighings** ($m_1 - m_2$), not $x - m_2$.",
+     "basics_md": "Each heating step removes one thing. The weight lost at each step, divided by the starting weight, is that percentage.",
+     "key_points": [
+      "Moisture = (x - m1)/x x 100",
+      "VM = (m1 - m2)/x x 100 (difference of consecutive weights)",
+      "Ash = final residue/x x 100",
+      "FC = 100 - (M + VM + ash); all on original x"
+     ],
+     "questions": [
+      {
+       "id": "prox-num-m1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "In proximate analysis, % ash equals",
+       "options": [
+        "(x - m3)/x x 100",
+        "m3/x x 100",
+        "(m1 - m3)/m1 x 100",
+        "m3/m2 x 100"
+       ],
+       "answer_index": 1,
+       "why": "Ash is the final residue over original mass."
+      },
+      {
+       "id": "prox-num-m2",
+       "kind": "mcq",
+       "level": 2,
+       "q": "A student calculates %VM as (x - m2)/x x 100. This is wrong because",
+       "options": [
+        "it includes moisture",
+        "it excludes ash",
+        "it uses the wrong unit",
+        "it is correct"
+       ],
+       "answer_index": 0,
+       "why": "x - m2 includes moisture lost earlier; use m1 - m2."
+      },
+      {
+       "id": "prox-num-w1",
+       "kind": "numerical",
+       "level": 2,
+       "marks": 3,
+       "q": "1.5 g of coal weighs 1.44 g after 1 h at 110 $^\\circ$C, 1.05 g after covered heating at 925 $^\\circ$C, and leaves 0.18 g ash. Find the proximate analysis.",
+       "model_answer_md": "$\\%M = \\dfrac{1.5-1.44}{1.5}\\times100 = 4.00\\%$\n\n$\\%VM = \\dfrac{1.44-1.05}{1.5}\\times100 = 26.00\\%$\n\n$\\%\\text{Ash} = \\dfrac{0.18}{1.5}\\times100 = 12.00\\%$\n\n$\\%FC = 100 - (4.00+26.00+12.00) = 58.00\\%$",
+       "points": [
+        "M = 4.00%",
+        "VM = 26.00%",
+        "Ash = 12.00%",
+        "FC = 58.00%"
+       ]
+      },
+      {
+       "id": "prox-num-p1",
+       "pyq": "8ccef914799138f8",
+       "level": 2,
+       "points": [
+        "Moisture = (2.5 - 2.415)/2.5 x 100 = 3.40%",
+        "VM = (2.415 - 1.528)/2.5 x 100 = 35.48%",
+        "Ash = 0.245/2.5 x 100 = 9.80%",
+        "FC = 100 - 48.68 = 51.32%"
+       ]
+      },
+      {
+       "id": "prox-num-p2",
+       "pyq": "e3ade1d88a958805",
+       "level": 2,
+       "points": [
+        "Moisture = 3.40%",
+        "VM = 35.48%",
+        "Ash = 9.80%",
+        "FC = 51.32%"
+       ]
+      },
+      {
+       "id": "prox-num-p3",
+       "pyq": "db5bc2ad8f924d6b",
+       "level": 2,
+       "points": [
+        "Moisture = 1.5%",
+        "VM = (0.985 - 0.800)/1.00 x 100 = 18.5%",
+        "Ash = 10.0%",
+        "FC = 70.0%",
+        "Comment: low moisture, high FC, good coal"
+       ]
+      },
+      {
+       "id": "prox-num-p4",
+       "pyq": "4541430ffb03d1df",
+       "level": 2,
+       "points": [
+        "Moisture = (2.00 - 1.975)/2.00 x 100 = 1.25%",
+        "VM = 32.35%",
+        "Ash = 10.25%",
+        "FC = 56.15%",
+        "Formulas stated"
+       ]
+      }
+     ]
+    },
+    {
+     "id": "prox-sig",
+     "title": "Significance of each constituent",
+     "theory_md": "| Constituent | Effect | Wanted |\n|---|---|---|\n| **Moisture** | lowers CV, wastes heat in evaporating, delays ignition, adds transport cost | low |\n| **Volatile matter** | long smoky flame, loses fuel unburnt, lowers CV; some helps easy ignition; high VM suits gas making | low to moderate |\n| **Ash** | lowers CV, hinders air flow, forms **clinkers**, disposal cost, fly ash | low |\n| **Fixed carbon** | higher FC means higher CV; burns as solid | high |\n\nA good coal: high fixed carbon, low moisture, ash and VM.",
+     "basics_md": "Moisture and ash are dead weight; fixed carbon is the part that actually gives heat.",
+     "key_points": [
+      "Moisture and ash lower CV: want them low",
+      "High VM gives smoky flame but easy ignition",
+      "Ash forms clinkers and hinders air flow",
+      "Higher fixed carbon means higher CV"
+     ],
+     "questions": [
+      {
+       "id": "prox-sig-m1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "Which constituent of coal is desirable in high amount?",
+       "options": [
+        "Moisture",
+        "Ash",
+        "Fixed carbon",
+        "Sulphur"
+       ],
+       "answer_index": 2,
+       "why": "Fixed carbon gives the heat."
+      },
+      {
+       "id": "prox-sig-m2",
+       "kind": "mcq",
+       "level": 2,
+       "q": "High ash content causes",
+       "options": [
+        "higher CV",
+        "clinker formation and poor air flow",
+        "smokeless flame",
+        "easier ignition"
+       ],
+       "answer_index": 1,
+       "why": "Ash fuses into clinkers blocking the grate."
+      },
+      {
+       "id": "prox-sig-w1",
+       "kind": "short",
+       "level": 2,
+       "marks": 3,
+       "q": "Why should ash and moisture be low in coal?",
+       "model_answer_md": "**Ash**: non-combustible, lowers CV, hinders air flow, forms clinkers, costs disposal, fly ash pollutes.\n\n**Moisture**: adds weight without heat, heat wasted in evaporation lowers flame temperature, delays ignition, raises transport cost.",
+       "points": [
+        "Ash lowers CV and forms clinkers",
+        "Ash disposal cost or air-flow hindrance",
+        "Moisture lowers CV and wastes heat of evaporation"
+       ]
+      },
+      {
+       "id": "prox-sig-p1",
+       "pyq": "9cbfaa03a8ff7f48",
+       "level": 2,
+       "points": [
+        "Moisture 1.25% is low, good",
+        "VM 32.35% fairly high: smoky flame but easy ignition",
+        "Ash 10.25% should be low: clinkers",
+        "FC 56.15%: higher gives higher CV",
+        "Moderately good bituminous-type coal"
+       ]
+      },
+      {
+       "id": "prox-sig-p2",
+       "pyq": "9c24e20cc24a5e93",
+       "level": 1,
+       "points": [
+        "Ash lowers calorific value",
+        "Hinders air flow, reduces heat transfer",
+        "Forms clinkers",
+        "Handling and disposal cost, fly ash"
+       ]
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "topic": "Ultimate analysis of coal",
+   "subtopics": [
+    {
+     "id": "prox-vs-ult",
+     "title": "Proximate vs ultimate analysis",
+     "theory_md": "| Point | Proximate | Ultimate |\n|---|---|---|\n| Finds | moisture, VM, ash, fixed carbon | C, H, N, S, ash, O |\n| Nature | empirical, commercial | elemental, scientific |\n| Method | heating and weighing | combustion tubes, Kjeldahl, $\\mathrm{BaSO_4}$ |\n| Use | grading coal, behaviour on burning | Dulong CV, air needed for combustion |\n\nUltimate analysis is longer, costlier and needs skilled work.",
+     "basics_md": "Proximate analysis asks 'what does the coal do when heated?'; ultimate analysis asks 'which elements is it made of?'.",
+     "key_points": [
+      "Proximate: M, VM, ash, FC; ultimate: C, H, N, S, ash, O",
+      "Proximate simple and empirical; ultimate elemental and exact",
+      "Ultimate data are used in Dulong's formula and air calculations"
+     ],
+     "questions": [
+      {
+       "id": "prox-vs-ult-m1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "Which is determined in ultimate analysis but not in proximate analysis?",
+       "options": [
+        "Moisture",
+        "Volatile matter",
+        "Nitrogen",
+        "Fixed carbon"
+       ],
+       "answer_index": 2,
+       "why": "Elements C, H, N, S, O are found in ultimate analysis."
+      },
+      {
+       "id": "prox-vs-ult-m2",
+       "kind": "mcq",
+       "level": 2,
+       "q": "Ultimate analysis data are used mainly for",
+       "options": [
+        "grading coal by price",
+        "Dulong's formula and combustion air calculations",
+        "finding moisture",
+        "estimating clinker"
+       ],
+       "answer_index": 1,
+       "why": "Elemental composition feeds calculations."
+      },
+      {
+       "id": "prox-vs-ult-w1",
+       "kind": "short",
+       "level": 2,
+       "marks": 3,
+       "q": "Differentiate proximate analysis from ultimate analysis (four points).",
+       "model_answer_md": "| Proximate | Ultimate |\n|---|---|\n| Moisture, VM, ash, FC | C, H, N, S, ash, O |\n| Empirical | Elemental, scientific |\n| Heating and weighing | Combustion, Kjeldahl, gravimetry |\n| Used for grading coal | Used in Dulong formula and air requirement |",
+       "points": [
+        "Constituents differ",
+        "Empirical vs scientific",
+        "Methods differ",
+        "Uses differ"
+       ]
+      },
+      {
+       "id": "prox-vs-ult-p1",
+       "pyq": "0e854d37424d8155",
+       "level": 2,
+       "points": [
+        "Table of differences: constituents, nature, method, use",
+        "Nitrogen by Kjeldahl: digestion, distillation with NaOH, absorption in excess standard H2SO4, back titration",
+        "%N = V x N x 1.4 / W with V the acid neutralised by NH3"
+       ]
+      }
+     ]
+    },
+    {
+     "id": "ult-chs",
+     "title": "Carbon, hydrogen, sulphur, ash and oxygen",
+     "theory_md": "**C and H**: 1-2 g coal burnt in dry $\\mathrm{O_2}$; $\\mathrm{CO_2}$ and $\\mathrm{H_2O}$ pass first through **anhydrous $\\mathrm{CaCl_2}$** (absorbs water) then **KOH** (absorbs $\\mathrm{CO_2}$).\n$$\\%C = \\frac{\\Delta m_{KOH}\\times 12\\times100}{44\\,W},\\quad \\%H = \\frac{\\Delta m_{CaCl_2}\\times 2\\times100}{18\\,W}$$\n\n**S**: burn in bomb, wash, add $\\mathrm{BaCl_2}$, weigh $\\mathrm{BaSO_4}$: $\\%S = \\dfrac{m_{BaSO_4}\\times32\\times100}{233\\,W}$.\n\n**Ash**: burn in open crucible at 700-750 $^\\circ$C.\n\n**O** by difference: $100 - (C+H+N+S+\\text{ash})$.",
+     "basics_md": "Burn the coal and weigh the CO2 and water it gives: carbon and hydrogen follow from their fractions in those molecules (12/44 and 2/18).",
+     "key_points": [
+      "C and H: combustion; CaCl2 tube takes H2O first, KOH tube takes CO2",
+      "%C = gain in KOH x 12 x 100/(44 W); %H = gain in CaCl2 x 2 x 100/(18 W)",
+      "S as BaSO4 (factor 32/233); ash by open burning",
+      "O is by difference"
+     ],
+     "questions": [
+      {
+       "id": "ult-chs-m1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "Oxygen in ultimate analysis of coal is found",
+       "options": [
+        "by direct combustion",
+        "by difference",
+        "by Kjeldahl method",
+        "by BaSO4 precipitation"
+       ],
+       "answer_index": 1,
+       "why": "O = 100 - (C + H + N + S + ash)."
+      },
+      {
+       "id": "ult-chs-m2",
+       "kind": "mcq",
+       "level": 2,
+       "q": "In the C and H determination, the gas stream passes through",
+       "options": [
+        "KOH first, then CaCl2",
+        "CaCl2 first, then KOH",
+        "only KOH",
+        "only CaCl2"
+       ],
+       "answer_index": 1,
+       "why": "KOH would also absorb water, so CaCl2 must come first."
+      },
+      {
+       "id": "ult-chs-w1",
+       "kind": "numerical",
+       "level": 2,
+       "marks": 3,
+       "q": "0.25 g of coal on combustion increases the KOH tube by 0.80 g and the CaCl$_2$ tube by 0.15 g. Find %C and %H.",
+       "model_answer_md": "$\\%C = \\dfrac{0.80\\times12\\times100}{44\\times0.25} = 87.27\\%$\n\n$\\%H = \\dfrac{0.15\\times2\\times100}{18\\times0.25} = 6.67\\%$",
+       "points": [
+        "%C formula with 12/44",
+        "%C = 87.27",
+        "%H formula with 2/18",
+        "%H = 6.67"
+       ]
+      },
+      {
+       "id": "ult-chs-p1",
+       "pyq": "b4e429a0fd1f39cc",
+       "level": 2,
+       "points": [
+        "C and H: combustion in O2, CaCl2 tube then KOH tube, formulas with 12/44 and 2/18",
+        "N by Kjeldahl; %N = V x N x 1.4/W",
+        "S as BaSO4: %S = wt x 32 x 100/(233 W)",
+        "Ash by open burning at 700-750 C",
+        "O by difference",
+        "Significance of results"
+       ]
+      }
+     ]
+    },
+    {
+     "id": "kjeldahl-n",
+     "title": "Nitrogen by Kjeldahl's method",
+     "theory_md": "1. **Digestion**: about 1 g coal + conc. $\\mathrm{H_2SO_4}$ + $\\mathrm{K_2SO_4}$ (raises boiling point) + $\\mathrm{CuSO_4}$ (catalyst); N becomes $\\mathrm{(NH_4)_2SO_4}$.\n2. **Distillation** with excess NaOH: $\\mathrm{(NH_4)_2SO_4 + 2NaOH \\rightarrow Na_2SO_4 + 2NH_3 + 2H_2O}$.\n3. **Absorption** of $\\mathrm{NH_3}$ in a known excess of standard $\\mathrm{H_2SO_4}$.\n4. **Back titration** of the unused acid with standard NaOH.\n$$\\%N = \\frac{V\\times N\\times1.4}{W}$$\n$V$ = mL of acid **neutralised by NH$_3$** (acid taken minus acid left), $N$ = normality, $W$ = coal mass in g.",
+     "basics_md": "Ammonia is a gas that escapes. So catch it in a known amount of acid, then measure how much acid is left over; the difference is the ammonia.",
+     "key_points": [
+      "Digestion with H2SO4, K2SO4, CuSO4 gives (NH4)2SO4",
+      "Distil with NaOH; NH3 absorbed in excess standard H2SO4",
+      "Back titrate unused acid with NaOH",
+      "%N = V x N x 1.4/W; V is acid used by NH3, not acid taken"
+     ],
+     "questions": [
+      {
+       "id": "kjeldahl-n-m1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "The catalyst used in Kjeldahl digestion is",
+       "options": [
+        "K2SO4",
+        "CuSO4",
+        "NaOH",
+        "BaCl2"
+       ],
+       "answer_index": 1,
+       "why": "K2SO4 raises the boiling point; CuSO4 is the catalyst."
+      },
+      {
+       "id": "kjeldahl-n-m2",
+       "kind": "mcq",
+       "level": 2,
+       "q": "In the formula %N = V x N x 1.4/W, V is",
+       "options": [
+        "the total acid taken",
+        "the NaOH used in back titration",
+        "the acid neutralised by NH3",
+        "the volume of coal"
+       ],
+       "answer_index": 2,
+       "why": "Using the total acid is the usual mistake."
+      },
+      {
+       "id": "kjeldahl-n-w1",
+       "kind": "numerical",
+       "level": 2,
+       "marks": 3,
+       "q": "1.2 g of coal is Kjeldahl-digested and the NH$_3$ absorbed in 40 mL of 0.1 N H$_2$SO$_4$. The unused acid needs 25 mL of 0.1 N NaOH. Find %N.",
+       "model_answer_md": "Acid used by $\\mathrm{NH_3}$ $= 40 - 25 = 15$ mL of 0.1 N.\n\n$\\%N = \\dfrac{15\\times0.1\\times1.4}{1.2} = 1.75\\%$",
+       "points": [
+        "Acid neutralised = 40 - 25 = 15 mL",
+        "Formula V x N x 1.4/W",
+        "%N = 1.75"
+       ]
+      },
+      {
+       "id": "kjeldahl-n-w2",
+       "kind": "short",
+       "level": 2,
+       "marks": 3,
+       "q": "Explain why a back titration is used in Kjeldahl's method.",
+       "model_answer_md": "$\\mathrm{NH_3}$ is a volatile gas and a weak base, so it cannot be titrated directly without loss. It is trapped in a known excess of standard acid and fixed as non-volatile $\\mathrm{(NH_4)_2SO_4}$. The leftover strong acid is titrated with strong base for a sharp end point. Acid used by $\\mathrm{NH_3}$ = acid taken - acid left.",
+       "points": [
+        "NH3 volatile and weak base",
+        "Trapped in excess acid, fixed as ammonium sulphate",
+        "Strong acid vs strong base gives sharp end point"
+       ]
+      },
+      {
+       "id": "kjeldahl-n-p1",
+       "pyq": "ea30f69618cc6d4a",
+       "level": 2,
+       "points": [
+        "Kjeldahl: N converted to ammonium sulphate by digestion",
+        "Distillation with NaOH, NH3 into excess standard H2SO4",
+        "Back titration of unused acid with NaOH",
+        "Why back titration: NH3 volatile weak base, sharp end point",
+        "%N = V x N x 1.4/W"
+       ]
+      },
+      {
+       "id": "kjeldahl-n-p2",
+       "pyq": "6d3111796a4d59fd",
+       "level": 1,
+       "points": [
+        "Yes, by Kjeldahl's method",
+        "Digestion to (NH4)2SO4, NaOH distillation, absorption in standard acid, back titration",
+        "%N = V x N x 1.4/W"
+       ]
+      },
+      {
+       "id": "kjeldahl-n-p3",
+       "pyq": "f70b0be139b51176",
+       "level": 2,
+       "points": [
+        "Yes, Kjeldahl's method",
+        "Digestion with H2SO4, K2SO4, CuSO4 to (NH4)2SO4",
+        "Distillation with NaOH: reaction",
+        "Absorption in excess standard H2SO4 and back titration",
+        "%N = V x N x 1.4/W with example"
+       ]
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "topic": "Pulverized coal",
+   "subtopics": [
+    {
+     "id": "pc-what",
+     "title": "What pulverized coal is",
+     "theory_md": "**Pulverized coal** is coal dried and ground to a fine powder (about 70-80% passes a **200-mesh** sieve) and blown with preheated air through burners into the furnace, where it burns in suspension almost like a gas.\n\nEach tiny particle exposes a large surface area to air, so combustion is **rapid and nearly complete**. It is the standard firing in large **thermal power stations** and cement rotary kilns.",
+     "basics_md": "A log burns slowly, sawdust burns in a flash. Pulverizing coal turns lumps into 'sawdust' so it burns quickly and fully.",
+     "key_points": [
+      "Coal ground to about 200 mesh, dried, blown with hot air into the furnace",
+      "Large surface area gives rapid, almost complete combustion",
+      "Used in thermal power stations and cement kilns"
+     ],
+     "questions": [
+      {
+       "id": "pc-what-m1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "Pulverized coal is ground to about",
+       "options": [
+        "10 mesh",
+        "200 mesh",
+        "2 mm lumps",
+        "50 mm"
+       ],
+       "answer_index": 1,
+       "why": "70-80% passes a 200-mesh sieve."
+      },
+      {
+       "id": "pc-what-m2",
+       "kind": "mcq",
+       "level": 2,
+       "q": "Pulverized coal burns more completely because",
+       "options": [
+        "it contains more carbon",
+        "of its large surface area exposed to air",
+        "it has more volatile matter",
+        "it needs a grate"
+       ],
+       "answer_index": 1,
+       "why": "Fine particles mix intimately with air."
+      },
+      {
+       "id": "pc-what-w1",
+       "kind": "short",
+       "level": 2,
+       "marks": 2,
+       "q": "What is pulverized coal and where is it used?",
+       "model_answer_md": "Coal dried and ground to a fine powder (about 200 mesh) and burnt in suspension by blowing it with preheated air into the furnace. It is used in thermal power stations and cement rotary kilns.",
+       "points": [
+        "Definition: fine powder blown with air",
+        "Burns in suspension",
+        "Uses: power stations, cement kilns"
+       ]
+      }
+     ]
+    },
+    {
+     "id": "pc-adv",
+     "title": "Advantages and disadvantages",
+     "theory_md": "**Advantages**\n1. Complete combustion with **little excess air**; high efficiency.\n2. **Low-grade, high-ash coal** can be used.\n3. Combustion easily **controlled**; quick start and shut-down.\n4. No grate, no clinker trouble, less labour.\n5. Preheated air can be used.\n\n**Disadvantages**\n1. Cost of grinding and drying equipment.\n2. Fine **fly ash** needs electrostatic precipitators.\n3. **Explosion** hazard of coal dust.\n4. Large furnace needed.",
+     "basics_md": "It is the same trade as any fine powder: it burns well but flies about and can explode.",
+     "key_points": [
+      "Advantages: efficiency, low-grade coal, control, no clinker",
+      "Disadvantages: grinding cost, fly ash, explosion risk, large furnace",
+      "Needs less excess air than lump coal"
+     ],
+     "questions": [
+      {
+       "id": "pc-adv-m1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "A disadvantage of pulverized coal firing is",
+       "options": [
+        "clinker formation",
+        "fly ash and explosion hazard",
+        "need of much excess air",
+        "poor control"
+       ],
+       "answer_index": 1,
+       "why": "Fine dust is carried away and can explode."
+      },
+      {
+       "id": "pc-adv-m2",
+       "kind": "mcq",
+       "level": 2,
+       "q": "Pulverized coal firing requires",
+       "options": [
+        "more excess air than lump coal",
+        "less excess air than lump coal",
+        "no air",
+        "pure O2"
+       ],
+       "answer_index": 1,
+       "why": "Intimate mixing means little excess air is needed."
+      },
+      {
+       "id": "pc-adv-w1",
+       "kind": "short",
+       "level": 2,
+       "marks": 3,
+       "q": "Give three advantages and two disadvantages of pulverized coal.",
+       "model_answer_md": "**Advantages**: (1) little excess air, high efficiency; (2) low-grade, high-ash coal can be burnt; (3) easy control and quick start/stop, no clinker.\n\n**Disadvantages**: (1) costly grinding and drying equipment; (2) fly ash and dust-explosion hazard.",
+       "points": [
+        "Three advantages",
+        "Two disadvantages"
+       ]
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "topic": "Classification of petroleum",
+   "subtopics": [
+    {
+     "id": "crude-base",
+     "title": "Classification by base",
+     "theory_md": "**Petroleum (crude oil)** is a mixture of hydrocarbons with small S, N, O compounds; C 80-85%, H 10-14%. By the hydrocarbons present:\n\n1. **Paraffinic base**: mainly straight-chain alkanes; residue **paraffin wax** (Pennsylvanian crude).\n2. **Asphaltic (naphthenic) base**: mainly cycloalkanes; residue **asphalt** (Californian crude).\n3. **Mixed base**: both; leaves wax and asphalt. Most crudes (Middle East, Indian) are mixed base.",
+     "basics_md": "Crude oil is a soup of many hydrocarbons. We name the soup by what is left at the bottom of the still: wax or asphalt.",
+     "key_points": [
+      "Paraffinic: alkanes, residue paraffin wax",
+      "Asphaltic (naphthenic): cycloalkanes, residue asphalt",
+      "Mixed base: both; most common",
+      "Crude: C 80-85%, H 10-14%"
+     ],
+     "questions": [
+      {
+       "id": "crude-base-m1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "Asphaltic base crude leaves a residue of",
+       "options": [
+        "paraffin wax",
+        "asphalt",
+        "coke only",
+        "no residue"
+       ],
+       "answer_index": 1,
+       "why": "Naphthenic crude leaves asphalt."
+      },
+      {
+       "id": "crude-base-m2",
+       "kind": "mcq",
+       "level": 2,
+       "q": "Most Indian crudes are",
+       "options": [
+        "paraffinic base",
+        "asphaltic base",
+        "mixed base",
+        "aromatic base"
+       ],
+       "answer_index": 2,
+       "why": "Mixed base crudes contain both types."
+      },
+      {
+       "id": "crude-base-w1",
+       "kind": "short",
+       "level": 2,
+       "marks": 3,
+       "q": "How is petroleum classified? Give the residue and one example of each class.",
+       "model_answer_md": "| Class | Hydrocarbons | Residue | Example |\n|---|---|---|---|\n| Paraffinic base | straight-chain alkanes | paraffin wax | Pennsylvanian |\n| Asphaltic (naphthenic) base | cycloalkanes | asphalt | Californian |\n| Mixed base | both | wax and asphalt | Middle East, Indian |",
+       "points": [
+        "Three classes",
+        "Residue of each",
+        "Example of each"
+       ]
+      }
+     ]
+    },
+    {
+     "id": "refining",
+     "title": "Refining: fractions of crude",
+     "theory_md": "Crude is freed of water (Cottrell's electrical dehydrator), salts and sulphur compounds, then **fractionally distilled**:\n\n| Fraction | Carbons | Boiling range |\n|---|---|---|\n| Gases | $\\mathrm{C_1}$-$\\mathrm{C_4}$ | below 30 $^\\circ$C |\n| Petrol (gasoline) | $\\mathrm{C_5}$-$\\mathrm{C_8}$ | 40-120 $^\\circ$C |\n| Kerosene | $\\mathrm{C_{10}}$-$\\mathrm{C_{16}}$ | 180-250 $^\\circ$C |\n| Diesel (gas oil) | $\\mathrm{C_{15}}$-$\\mathrm{C_{18}}$ | 250-320 $^\\circ$C |\n| Heavy oil, lubricating oil, residue | above $\\mathrm{C_{20}}$ | above 320 $^\\circ$C |\n\nStraight-run petrol is only about 20% of crude, hence **cracking**.",
+     "basics_md": "Lighter molecules boil off first and rise higher in the column; heavier ones stay lower.",
+     "key_points": [
+      "Crude purified, then fractionally distilled",
+      "Petrol C5-C8 (40-120 C), kerosene C10-C16, diesel C15-C18 (250-320 C)",
+      "Residue gives lubricating oil, wax, asphalt, coke",
+      "Straight-run petrol is only about 20% of crude"
+     ],
+     "questions": [
+      {
+       "id": "refining-m1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "Which fraction boils at 250-320 $^\\circ$C?",
+       "options": [
+        "Petrol",
+        "Kerosene",
+        "Diesel",
+        "Gases"
+       ],
+       "answer_index": 2,
+       "why": "Diesel is C15-C18 at 250-320 C."
+      },
+      {
+       "id": "refining-m2",
+       "kind": "mcq",
+       "level": 2,
+       "q": "Cracking is needed because",
+       "options": [
+        "crude has too much petrol",
+        "straight-run petrol is only about 20% of crude",
+        "diesel is not obtained",
+        "crude has no wax"
+       ],
+       "answer_index": 1,
+       "why": "Heavy oils are cracked to make more petrol."
+      },
+      {
+       "id": "refining-w1",
+       "kind": "short",
+       "level": 2,
+       "marks": 3,
+       "q": "Name the main fractions of petroleum with their carbon range and boiling range.",
+       "model_answer_md": "Gases C1-C4 (below 30 $^\\circ$C); petrol C5-C8 (40-120 $^\\circ$C); kerosene C10-C16 (180-250 $^\\circ$C); diesel C15-C18 (250-320 $^\\circ$C); heavy oil and lubricating oil; residue (wax, asphalt, coke).",
+       "points": [
+        "Gases, petrol, kerosene, diesel in order",
+        "Carbon ranges",
+        "Boiling ranges",
+        "Residue products"
+       ]
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "topic": "Types of cracking",
+   "subtopics": [
+    {
+     "id": "crack-thermal",
+     "title": "Cracking and thermal cracking",
+     "theory_md": "**Cracking** breaks large, high-boiling hydrocarbons into smaller, low-boiling ones (alkanes and alkenes): $\\mathrm{C_{10}H_{22} \\rightarrow C_5H_{12} + C_5H_{10}}$. It raises the **yield and quality of petrol** from heavy oil and gives olefins for petrochemicals.\n\n**Thermal cracking** uses heat only (free-radical mechanism):\n- **Liquid phase**: 475-530 $^\\circ$C, 30-100 kg/cm$^2$; petrol ON about 65-70.\n- **Vapour phase**: 600-650 $^\\circ$C, 10-20 kg/cm$^2$; more olefins and gum.",
+     "basics_md": "A long chain breaks into two shorter chains when shaken hard enough; heat is the shaking.",
+     "key_points": [
+      "Cracking: big molecules into small; alkanes plus alkenes",
+      "Importance: more petrol, higher octane, olefins",
+      "Liquid phase 475-530 C, 30-100 kg/cm2; vapour phase 600-650 C, 10-20 kg/cm2",
+      "Thermal cracking is free radical; petrol ON about 65-70"
+     ],
+     "figures": [
+      {
+       "smiles": "CCCCCCCCCC>>CCCCC.C=CCCC",
+       "caption": "Decane cracks to pentane and 1-pentene"
+      }
+     ],
+     "questions": [
+      {
+       "id": "crack-thermal-m1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "Cracking converts",
+       "options": [
+        "small molecules to large",
+        "large high-boiling molecules to small low-boiling ones",
+        "alkanes to alcohols",
+        "petrol to diesel"
+       ],
+       "answer_index": 1,
+       "why": "That is the definition."
+      },
+      {
+       "id": "crack-thermal-m2",
+       "kind": "mcq",
+       "level": 2,
+       "q": "Liquid-phase thermal cracking is carried out at",
+       "options": [
+        "300-450 C, 1-5 kg/cm2",
+        "475-530 C, 30-100 kg/cm2",
+        "600-650 C, 10-20 kg/cm2",
+        "100 C, 1 atm"
+       ],
+       "answer_index": 1,
+       "why": "High pressure keeps the oil liquid."
+      },
+      {
+       "id": "crack-thermal-w1",
+       "kind": "short",
+       "level": 2,
+       "marks": 3,
+       "q": "Define cracking, give an equation and state why it is important.",
+       "model_answer_md": "**Cracking**: decomposition of bigger, high-boiling hydrocarbons into smaller, low-boiling ones.\n$$\\mathrm{C_{10}H_{22} \\rightarrow C_5H_{12} + C_5H_{10}}$$\n**Importance**: straight-run petrol is only about 20% of crude, so cracking raises petrol yield, gives better octane number and supplies olefins for polymers.",
+       "points": [
+        "Definition",
+        "Equation",
+        "Increases petrol yield",
+        "Better octane / olefins"
+       ]
+      },
+      {
+       "id": "crack-thermal-p1",
+       "pyq": "1952c97501ded425",
+       "level": 1,
+       "points": [
+        "Cracking defined with example C10H22 gives C5H12 + C5H10",
+        "Increases yield and quality of petrol",
+        "Types: thermal (liquid and vapour phase with conditions) and catalytic (300-450 C, catalyst)"
+       ]
+      },
+      {
+       "id": "crack-thermal-p2",
+       "pyq": "c9a1acc96d688d43",
+       "level": 2,
+       "points": [
+        "They are different: thermal cracking is a refining process; knocking is a combustion property",
+        "Thermal cracking: heat and pressure break large molecules, increases petrol yield",
+        "Knocking: premature self-ignition in petrol engine, measured by octane number",
+        "Link: catalytic cracking gives branched products and less knocking"
+       ]
+      }
+     ]
+    },
+    {
+     "id": "crack-cat",
+     "title": "Catalytic cracking: fixed bed and fluidised bed",
+     "theory_md": "Heavy oil is cracked over a catalyst (**artificial clay, zeolite or alumina-silica**) at **300-450 $^\\circ$C**, **1-5 kg/cm$^2$**, through **carbocations**; chains rearrange to branched ones, so petrol has high octane number (about 80-90).\n\n- **Fixed bed**: preheated vapour (420-450 $^\\circ$C) passes over a stationary catalyst; carbon deposits, so after 8-10 h the bed is off-line and regenerated by burning off carbon. About 40% becomes petrol.\n- **Fluidised (moving) bed**: powdered catalyst carried with vapour into the reactor (about 500 $^\\circ$C), separated by a cyclone, sent to a **regenerator** where air burns the carbon, and recycled continuously.",
+     "basics_md": "Coke builds up on the catalyst and stops it working. Fixed bed pauses to clean it; fluidised bed cleans it continuously in a second vessel.",
+     "key_points": [
+      "Catalyst: clay, zeolite, alumina-silica; 300-450 C, 1-5 kg/cm2; carbocation mechanism",
+      "Fixed bed: stationary catalyst, regenerated every 8-10 h by burning carbon",
+      "Fluidised bed: powdered catalyst circulates between reactor and regenerator, continuous",
+      "Products: branched, high-octane petrol"
+     ],
+     "questions": [
+      {
+       "id": "crack-cat-m1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "Which is a catalyst for catalytic cracking?",
+       "options": [
+        "Pt on charcoal",
+        "Zeolite / alumina-silica",
+        "Raney nickel",
+        "V2O5"
+       ],
+       "answer_index": 1,
+       "why": "Artificial clay, zeolite or Al2O3 + SiO2."
+      },
+      {
+       "id": "crack-cat-m2",
+       "kind": "mcq",
+       "level": 2,
+       "q": "In fluidised-bed cracking the catalyst is regenerated",
+       "options": [
+        "by washing with water",
+        "in a separate regenerator by burning off carbon with air",
+        "not at all",
+        "by cooling"
+       ],
+       "answer_index": 1,
+       "why": "That makes the process continuous."
+      },
+      {
+       "id": "crack-cat-w1",
+       "kind": "short",
+       "level": 2,
+       "marks": 3,
+       "q": "Distinguish fixed-bed and fluidised-bed catalytic cracking.",
+       "model_answer_md": "| Fixed bed | Fluidised bed |\n|---|---|\n| Stationary catalyst, vapour at 420-450 $^\\circ$C | Powdered catalyst carried by oil vapour, about 500 $^\\circ$C |\n| Carbon deposits; stopped every 8-10 h and regenerated | Catalyst sent to regenerator, air burns carbon, recycled |\n| Intermittent | Continuous |",
+       "points": [
+        "Stationary vs powdered fluidised catalyst",
+        "Regeneration after 8-10 h vs continuous regenerator",
+        "Intermittent vs continuous"
+       ]
+      },
+      {
+       "id": "crack-cat-p1",
+       "pyq": "ee6c26a605ec1d37",
+       "level": 2,
+       "points": [
+        "Catalyst clay/zeolite/Al2O3-SiO2, 300-450 C, 1-5 kg/cm2",
+        "Carbocation mechanism, branched high-octane petrol",
+        "Reactions e.g. C10H22 gives C5H12 + C5H10",
+        "Fixed-bed and fluidised-bed types with regeneration",
+        "Advantages over thermal"
+       ]
+      },
+      {
+       "id": "crack-cat-p2",
+       "pyq": "baaa8fa9023269e7",
+       "level": 1,
+       "points": [
+        "Definition with catalyst and conditions",
+        "Carbocation mechanism, high octane petrol",
+        "Fixed-bed and fluidised-bed types",
+        "Advantages over thermal"
+       ]
+      }
+     ]
+    },
+    {
+     "id": "crack-compare",
+     "title": "Thermal vs catalytic cracking",
+     "theory_md": "| Point | Thermal | Catalytic |\n|---|---|---|\n| Catalyst | none | clay, zeolite, $\\mathrm{Al_2O_3 + SiO_2}$ |\n| Temperature | 475-650 $^\\circ$C | 300-450 $^\\circ$C |\n| Pressure | up to 100 kg/cm$^2$ | 1-5 kg/cm$^2$ |\n| Mechanism | free radical | carbocation |\n| Petrol ON | 65-70 | 80-90 |\n| Yield and control | lower, poor | higher, better |\n| Gum, gas, coke | more | less |\n| Sulphur | stays | removed as $\\mathrm{H_2S}$ |\n\nSo catalytic cracking is **superior**.",
+     "basics_md": "Think of the catalyst as a guide: it lets the molecule break at lower temperature and in a useful, branched way.",
+     "key_points": [
+      "Catalytic: lower T and P, higher yield, higher octane",
+      "Thermal: free radical; catalytic: carbocation",
+      "Catalytic gives less gum, coke and sulphur"
+     ],
+     "questions": [
+      {
+       "id": "crack-compare-m1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "Petrol from catalytic cracking has octane number about",
+       "options": [
+        "30-40",
+        "65-70",
+        "80-90",
+        "120"
+       ],
+       "answer_index": 2,
+       "why": "Branched products raise ON."
+      },
+      {
+       "id": "crack-compare-m2",
+       "kind": "mcq",
+       "level": 2,
+       "q": "Thermal cracking proceeds by",
+       "options": [
+        "carbocations",
+        "free radicals",
+        "carbanions",
+        "ions only"
+       ],
+       "answer_index": 1,
+       "why": "Heat gives radicals."
+      },
+      {
+       "id": "crack-compare-w1",
+       "kind": "short",
+       "level": 2,
+       "marks": 4,
+       "q": "State with reasons whether catalytic cracking is superior to thermal cracking.",
+       "model_answer_md": "**True.** Reasons: (1) petrol ON about 80-90 vs 65-70, since carbocations give branched, aromatic products; (2) higher yield and better control; (3) lower temperature 300-450 $^\\circ$C and pressure 1-5 kg/cm$^2$; (4) less gum, gas and coke; (5) sulphur removed as $\\mathrm{H_2S}$; (6) continuous fluidised-bed operation with heat reuse from regeneration.",
+       "points": [
+        "True",
+        "Higher octane and yield",
+        "Lower temperature and pressure",
+        "Less gum / coke, S removed"
+       ]
+      },
+      {
+       "id": "crack-compare-p1",
+       "pyq": "6d16fab9edcb26a5",
+       "level": 2,
+       "points": [
+        "Concept of cracking with equation",
+        "Importance: petrol yield, octane, olefins",
+        "Table: catalyst, temperature, pressure, mechanism, yield/octane, gum/coke, sulphur"
+       ]
+      },
+      {
+       "id": "crack-compare-p2",
+       "pyq": "2f419424ffb67fc0",
+       "level": 2,
+       "points": [
+        "True",
+        "Higher octane number and yield",
+        "Lower temperature and pressure",
+        "Less gum, gas, coke; S removed as H2S",
+        "Continuous fluidised-bed process"
+       ]
+      },
+      {
+       "id": "crack-compare-p3",
+       "pyq": "191291922ece8729",
+       "level": 1,
+       "points": [
+        "Higher yield and control",
+        "Higher octane number 80-90 vs 65-70",
+        "Lower temperature and pressure",
+        "Less gum, coke; lower sulphur"
+       ]
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "topic": "Knocking, octane and cetane number",
+   "subtopics": [
+    {
+     "id": "knock-mech",
+     "title": "Knocking in petrol and diesel engines",
+     "theory_md": "**Petrol (SI) knock**: spark ignites the charge; at high compression the unburnt **end gas** forms peroxides and **self-ignites before the flame reaches it**. Result: metallic knock, power loss, overheating. Straight-chain alkanes knock most: **n-alkanes > branched > olefins > cycloalkanes > aromatics**.\n\n**Diesel (CI) knock**: fuel injected into hot compressed air has an **ignition delay**; if the delay is long, fuel accumulates and burns at once. Fuels that ignite with difficulty (aromatics, branched) knock.\n\nSo petrol knock is **too early** ignition, diesel knock **too late** ignition.",
+     "basics_md": "Petrol should wait for the spark, but a bad petrol lights by itself too soon. Diesel should light itself quickly, but a bad diesel waits too long and then goes off all at once.",
+     "key_points": [
+      "Petrol knock: end gas self-ignites prematurely (peroxides)",
+      "Diesel knock: long ignition delay, accumulated fuel burns suddenly",
+      "Petrol knock tendency: n-alkanes > branched > olefins > cycloalkanes > aromatics",
+      "Effects: metallic sound, power loss, overheating"
+     ],
+     "questions": [
+      {
+       "id": "knock-mech-m1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "Knocking in a diesel engine is caused by",
+       "options": [
+        "premature ignition",
+        "long ignition delay",
+        "spark failure",
+        "too high octane"
+       ],
+       "answer_index": 1,
+       "why": "Fuel accumulates before it ignites."
+      },
+      {
+       "id": "knock-mech-m2",
+       "kind": "mcq",
+       "level": 2,
+       "q": "Which hydrocarbon has the highest knocking tendency in petrol?",
+       "options": [
+        "Aromatic",
+        "Cycloalkane",
+        "n-alkane",
+        "Branched alkane"
+       ],
+       "answer_index": 2,
+       "why": "Straight-chain alkanes knock most."
+      },
+      {
+       "id": "knock-mech-w1",
+       "kind": "short",
+       "level": 2,
+       "marks": 3,
+       "q": "Explain the difference in the cause of knocking in petrol and diesel engines.",
+       "model_answer_md": "**Petrol engine**: the end gas self-ignites too early through peroxides before the spark flame reaches it.\n\n**Diesel engine**: the ignition delay is long, fuel keeps accumulating and then burns all at once.\n\nPetrol knock is due to too early ignition; diesel knock to too late ignition.",
+       "points": [
+        "Petrol: premature end-gas ignition",
+        "Diesel: long ignition delay",
+        "Opposite nature of the two"
+       ]
+      },
+      {
+       "id": "knock-mech-p1",
+       "pyq": "6b43bf401974d7b5",
+       "level": 2,
+       "points": [
+        "Petrol: end gas, peroxides, self-ignition before flame front, metallic sound, power loss",
+        "Straight-chain alkanes knock most; remedy high octane, antiknock",
+        "Diesel: ignition delay, accumulated fuel burns at once",
+        "Petrol too early ignition, diesel too late"
+       ]
+      },
+      {
+       "id": "knock-mech-p2",
+       "pyq": "0487a009cad4e385",
+       "level": 1,
+       "points": [
+        "True",
+        "Order n-alkanes > branched > olefins > cycloalkanes > aromatics",
+        "Example n-heptane ON 0 vs iso-octane ON 100"
+       ]
+      }
+     ]
+    },
+    {
+     "id": "on-cn",
+     "title": "Octane number and cetane number",
+     "theory_md": "**Octane number (ON)**: % by volume of **iso-octane** in a blend with **n-heptane** that knocks like the petrol. Iso-octane = 100, n-heptane = 0.\n\n**Cetane number (CN)**: % by volume of **cetane** (n-hexadecane) in a blend with **$\\alpha$-methylnaphthalene** that has the same ignition delay as the diesel. Cetane = 100, $\\alpha$-methylnaphthalene = 0.\n\nHigh ON means good petrol; high CN means good diesel. Straight chains give high CN but low ON, so good petrol is poor diesel. ON 80 behaves like 80% iso-octane + 20% n-heptane.",
+     "basics_md": "These are just scales: iso-octane is the best anti-knock reference (100), n-heptane the worst (0). Cetane is the quick-lighting diesel reference.",
+     "key_points": [
+      "ON: % iso-octane (100) in iso-octane + n-heptane (0)",
+      "CN: % cetane (100) in cetane + alpha-methylnaphthalene (0)",
+      "Straight chains: high CN, low ON; branched/aromatic: high ON, low CN",
+      "ON for petrol (SI engines); CN for diesel (CI engines)"
+     ],
+     "figures": [
+      {
+       "smiles": "CC(C)CC(C)(C)C",
+       "caption": "Iso-octane (2,2,4-trimethylpentane), ON = 100"
+      },
+      {
+       "smiles": "CCCCCCC",
+       "caption": "n-Heptane, ON = 0"
+      },
+      {
+       "smiles": "Cc1cccc2ccccc12",
+       "caption": "alpha-Methylnaphthalene, CN = 0"
+      }
+     ],
+     "questions": [
+      {
+       "id": "on-cn-m1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "The zero of the octane scale is",
+       "options": [
+        "iso-octane",
+        "n-heptane",
+        "cetane",
+        "alpha-methylnaphthalene"
+       ],
+       "answer_index": 1,
+       "why": "n-Heptane knocks badly, ON = 0."
+      },
+      {
+       "id": "on-cn-m2",
+       "kind": "mcq",
+       "level": 2,
+       "q": "A fuel of high cetane number is",
+       "options": [
+        "a good petrol",
+        "a good diesel",
+        "a poor diesel",
+        "unsuitable for any engine"
+       ],
+       "answer_index": 1,
+       "why": "High CN means short ignition delay."
+      },
+      {
+       "id": "on-cn-w1",
+       "kind": "short",
+       "level": 2,
+       "marks": 3,
+       "q": "Define octane number and cetane number, naming the reference fuels with their values.",
+       "model_answer_md": "**Octane number**: % by volume of iso-octane (2,2,4-trimethylpentane, ON 100) in a mixture with n-heptane (ON 0) having the same knocking as the petrol.\n\n**Cetane number**: % by volume of cetane (n-hexadecane, CN 100) in a mixture with $\\alpha$-methylnaphthalene (CN 0) having the same ignition quality as the diesel.",
+       "points": [
+        "ON definition with iso-octane 100, n-heptane 0",
+        "CN definition with cetane 100, alpha-methylnaphthalene 0",
+        "Percentage by volume"
+       ]
+      },
+      {
+       "id": "on-cn-p1",
+       "pyq": "a25e3a59aceb9b04",
+       "level": 1,
+       "points": [
+        "ON: % iso-octane in iso-octane + n-heptane matching the petrol; iso-octane 100, n-heptane 0",
+        "CN: % cetane in cetane + alpha-methylnaphthalene matching diesel; cetane 100, alpha-methylnaphthalene 0",
+        "High ON good petrol; high CN good diesel"
+       ]
+      },
+      {
+       "id": "on-cn-p2",
+       "pyq": "f53b6f58e53f8844",
+       "level": 2,
+       "points": [
+        "Octane number definition and reference fuels",
+        "Knocking tendency order; branched/aromatic raise ON; antiknock agents",
+        "Cetane number definition and reference fuels",
+        "High CN, short delay; straight chains; cetane improvers",
+        "Good petrol is a bad diesel"
+       ]
+      },
+      {
+       "id": "on-cn-p3",
+       "pyq": "7c6cc26ee231b824",
+       "level": 3,
+       "points": [
+        "Scale (A) is octane number, scale (B) is cetane number",
+        "A: number rises toward slower, smoother burning (iso-octane 100)",
+        "B: number rises toward faster, easier ignition (cetane 100)",
+        "Scales run opposite because good petrol is poor diesel"
+       ]
+      },
+      {
+       "id": "on-cn-p4",
+       "pyq": "7856ed9cfb0da090",
+       "level": 2,
+       "points": [
+        "ON measures antiknock quality of petrol; higher ON allows higher compression ratio and power",
+        "CN measures ignition quality of diesel; high CN short delay, easy starting",
+        "Used for grading and blending; straight chains high CN low ON",
+        "Example: ON 87, CN 50"
+       ]
+      },
+      {
+       "id": "on-cn-p5",
+       "pyq": "5fa8fa2150ec3035",
+       "level": 1,
+       "points": [
+        "ON is antiknock quality of petrol, based on iso-octane and n-heptane",
+        "CN is ignition quality of diesel, based on cetane and alpha-methylnaphthalene",
+        "Used to grade and blend; good petrol is poor diesel"
+       ]
+      }
+     ]
+    },
+    {
+     "id": "petrol-diesel",
+     "title": "Petrol vs diesel engines and fuels",
+     "theory_md": "| Point | Petrol | Diesel |\n|---|---|---|\n| Fraction | C$_5$-C$_8$, 40-120 $^\\circ$C | C$_{15}$-C$_{18}$, 250-320 $^\\circ$C |\n| Engine | spark ignition | compression ignition |\n| Compression ratio | 6-10 | 14-22 |\n| Rating | octane number | cetane number |\n| Good fuel | branched, aromatic | straight-chain |\n| Knock cause | premature end-gas ignition | long ignition delay |\n| Improver | TEL, MTBE | ethyl nitrite, isoamyl nitrite |\n\nThe same additive **cannot** serve both: TEL delays ignition (good for petrol, worse for diesel); cetane improvers promote ignition (worse for petrol).",
+     "basics_md": "The two engines want opposite things from the fuel: petrol must resist lighting, diesel must light easily.",
+     "key_points": [
+      "Petrol: spark, ON, branched/aromatic; diesel: compression, CN, straight-chain",
+      "Petrol knock = early ignition; diesel knock = late ignition",
+      "Antiknock for petrol delays ignition; cetane improver hastens it",
+      "Same additive cannot be used for both"
+     ],
+     "questions": [
+      {
+       "id": "petrol-diesel-m1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "Compression ratio is higher in",
+       "options": [
+        "petrol engine",
+        "diesel engine",
+        "both equal",
+        "neither"
+       ],
+       "answer_index": 1,
+       "why": "Diesel runs at 14-22."
+      },
+      {
+       "id": "petrol-diesel-m2",
+       "kind": "mcq",
+       "level": 2,
+       "q": "Adding TEL to diesel would",
+       "options": [
+        "reduce knock",
+        "increase diesel knock",
+        "raise the cetane number",
+        "have no effect"
+       ],
+       "answer_index": 1,
+       "why": "TEL delays ignition, which worsens diesel knock."
+      },
+      {
+       "id": "petrol-diesel-w1",
+       "kind": "short",
+       "level": 2,
+       "marks": 4,
+       "q": "Can the same antiknock additive be used for petrol and diesel engines? Justify.",
+       "model_answer_md": "**No.** Petrol knock is due to premature ignition, so the additive (TEL, MTBE) must delay or suppress self-ignition by destroying peroxides and radicals. Diesel knock is due to delayed ignition, so the additive (ethyl nitrite, isoamyl nitrite) must promote ignition by giving radicals easily. TEL in diesel would lengthen the ignition delay; a cetane improver in petrol would promote early ignition. The needs are opposite.",
+       "points": [
+        "No",
+        "Petrol additive delays ignition",
+        "Diesel additive promotes ignition",
+        "Using wrongly worsens knock"
+       ]
+      },
+      {
+       "id": "petrol-diesel-p1",
+       "pyq": "830f5182471d6caa",
+       "level": 3,
+       "points": [
+        "Table: ignition, cause of knock, fuel that knocks, rating, remedy",
+        "Similarity: pressure rise, metallic sound, power loss",
+        "Same additive cannot be used: opposite nature",
+        "TEL delays ignition; cetane improvers promote it"
+       ]
+      },
+      {
+       "id": "petrol-diesel-p2",
+       "pyq": "e42d2b87f9cf432f",
+       "level": 2,
+       "points": [
+        "Fractions and carbon ranges: petrol C5-C8, diesel C15-C18",
+        "SI vs CI engine; compression ratio",
+        "Octane vs cetane number",
+        "Branched/aromatic vs straight-chain",
+        "Antiknock TEL/MTBE vs cetane improvers; knock causes"
+       ]
+      }
+     ]
+    },
+    {
+     "id": "antiknock",
+     "title": "Antiknocking agents: TEL and MTBE",
+     "theory_md": "**Antiknock agents** are added in small amounts to petrol to raise its octane number.\n\n**TEL**, $\\mathrm{Pb(C_2H_5)_4}$: breaks the radical chain.\n1. $\\mathrm{Pb(C_2H_5)_4 \\rightarrow Pb + 4\\,\\dot{C}_2H_5}$.\n2. Pb / PbO destroy peroxides and chain radicals, so combustion is smooth.\n\nPbO would deposit in the engine, so **ethylene dibromide** (or ethyl bromide) is added as **scavenger**: $\\mathrm{Pb + C_2H_4Br_2 \\rightarrow PbBr_2 + C_2H_4}$; volatile $\\mathrm{PbBr_2}$ leaves with the exhaust.\n\nLead is toxic and poisons catalytic converters, so **MTBE** is used in unleaded petrol.",
+     "basics_md": "TEL stops the chain that causes knocking. Its waste, lead, is cleared out by a bromine compound.",
+     "key_points": [
+      "TEL raises ON by destroying peroxides and radicals (chain breaker)",
+      "Ethylene dibromide / ethyl bromide: scavenger forming volatile PbBr2",
+      "Lead is toxic and poisons catalytic converters; MTBE replaces it"
+     ],
+     "figures": [
+      {
+       "smiles": "CC[Pb](CC)(CC)CC",
+       "caption": "Tetraethyl lead (TEL)"
+      },
+      {
+       "smiles": "COC(C)(C)C",
+       "caption": "MTBE"
+      }
+     ],
+     "questions": [
+      {
+       "id": "antiknock-m1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "Ethylene dibromide is added with TEL to",
+       "options": [
+        "raise octane number further",
+        "convert lead to volatile PbBr2",
+        "lower the cost",
+        "increase volatility of petrol"
+       ],
+       "answer_index": 1,
+       "why": "It prevents lead deposits."
+      },
+      {
+       "id": "antiknock-m2",
+       "kind": "mcq",
+       "level": 2,
+       "q": "Unleaded petrol uses which antiknock agent?",
+       "options": [
+        "TEL",
+        "MTBE",
+        "ethyl nitrite",
+        "benzene only"
+       ],
+       "answer_index": 1,
+       "why": "MTBE, CH3-O-C(CH3)3."
+      },
+      {
+       "id": "antiknock-w1",
+       "kind": "short",
+       "level": 2,
+       "marks": 3,
+       "q": "Why is TEL used in petrol? Why is ethyl bromide added with it?",
+       "model_answer_md": "TEL raises the octane number: it decomposes into Pb and ethyl radicals; Pb/PbO destroy peroxides and radicals, so the knocking chain stops.\n\nEthyl bromide acts as a scavenger: lead would deposit as PbO on plugs and cylinder, so it is converted into volatile $\\mathrm{PbBr_2}$ which leaves with exhaust gas: $\\mathrm{Pb + C_2H_4Br_2 \\rightarrow PbBr_2 + C_2H_4}$.",
+       "points": [
+        "TEL is antiknock, raises ON",
+        "Mechanism by destroying peroxides and radicals",
+        "Halide is scavenger forming volatile PbBr2"
+       ]
+      },
+      {
+       "id": "antiknock-p1",
+       "pyq": "0ce769df76dd6d62",
+       "level": 2,
+       "points": [
+        "Antiknock agents reduce knocking tendency, raise ON; examples TEL, MTBE",
+        "Mechanism: TEL gives Pb and radicals, Pb/PbO destroy peroxides and chain",
+        "Ethylene dibromide scavenger gives volatile PbBr2",
+        "Lead toxic; MTBE used in unleaded petrol"
+       ]
+      },
+      {
+       "id": "antiknock-p2",
+       "pyq": "dec7db3cbad656ca",
+       "level": 1,
+       "points": [
+        "TEL leaves Pb/PbO deposits on plugs and cylinder",
+        "Halide converts it to volatile PbBr2",
+        "Pb + C2H4Br2 gives PbBr2 + C2H4; lead leaves with exhaust"
+       ]
+      },
+      {
+       "id": "antiknock-p3",
+       "pyq": "50c2143b703abaa5",
+       "level": 2,
+       "points": [
+        "TEL is an antiknock agent, raises ON, allows higher compression ratio",
+        "Knocking explained: peroxides, self-ignition of end gas",
+        "Mechanism: Pb(C2H5)4 gives Pb + ethyl radicals; PbO destroys peroxides",
+        "Ethylene dibromide added; drawback toxicity, replaced by MTBE"
+       ]
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "topic": "Numericals on calorific value and ultimate analysis",
+   "subtopics": [
+    {
+     "id": "n-bomb",
+     "title": "GCV and NCV from bomb data",
+     "theory_md": "Steps:\n1. $\\mathrm{GCV} = \\dfrac{(W+w)(\\Delta t + t_c) - (t_A + t_F + t_T)}{x}$ (use only the corrections given).\n2. $\\mathrm{NCV} = \\mathrm{GCV} - 0.09\\,H \\times L$, with $H$ the % hydrogen and $L$ = 587 cal/g unless the question gives another value (580, 600).\n\nCheck units: masses in g, temperatures in $^\\circ$C, corrections in cal; the answer is cal/g = kcal/kg. Cooling correction is a **temperature** and is added to the rise.",
+     "basics_md": "Heat = total water-equivalent mass x temperature rise. Divide by the fuel mass; then subtract the latent heat of the steam.",
+     "key_points": [
+      "GCV = [(W + w)(rise + cooling) - (acid + fuse + thread)]/x",
+      "NCV = GCV - 0.09 H x L, L = 587 unless given",
+      "Cooling correction added to rise; heat corrections subtracted",
+      "Answer in cal/g = kcal/kg"
+     ],
+     "questions": [
+      {
+       "id": "n-bomb-m1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "In NCV = GCV - 0.09 H x 587, H stands for",
+       "options": [
+        "mass of hydrogen in g",
+        "percentage of hydrogen in fuel",
+        "moles of hydrogen",
+        "enthalpy"
+       ],
+       "answer_index": 1,
+       "why": "H is the % hydrogen."
+      },
+      {
+       "id": "n-bomb-m2",
+       "kind": "mcq",
+       "level": 2,
+       "q": "Fuse wire correction is",
+       "options": [
+        "added to rise in temperature",
+        "subtracted from the heat term",
+        "ignored",
+        "multiplied by x"
+       ],
+       "answer_index": 1,
+       "why": "It is extra heat not from the fuel."
+      },
+      {
+       "id": "n-bomb-w1",
+       "kind": "numerical",
+       "level": 2,
+       "marks": 4,
+       "q": "A fuel (0.98 g, 8% H) raises 1450 g water with calorimeter water equivalent 450 g by 1.8 $^\\circ$C. Latent heat 587 cal/g. Find GCV and NCV.",
+       "model_answer_md": "$\\mathrm{GCV} = \\dfrac{(1450+450)\\times1.8}{0.98} = \\dfrac{3420}{0.98} = 3489.80$ cal/g\n\n$\\mathrm{NCV} = 3489.80 - 0.09\\times8\\times587 = 3489.80 - 422.64 = 3067.16$ cal/g",
+       "points": [
+        "GCV formula",
+        "GCV = 3489.80",
+        "0.09 x 8 x 587 = 422.64",
+        "NCV = 3067.16"
+       ]
+      },
+      {
+       "id": "n-bomb-p1",
+       "pyq": "a5ff34fc70e00e95",
+       "level": 2,
+       "points": [
+        "GCV = [(550+2200)(2.42) - (50+10)]/0.92 = 7168.48 cal/g",
+        "0.09 x 6 x 580 = 313.20",
+        "NCV = 6855.28 cal/g"
+       ]
+      },
+      {
+       "id": "n-bomb-p2",
+       "pyq": "a19fbbdd4d678466",
+       "level": 2,
+       "points": [
+        "GCV = 7168.48 cal/g (same data: 0.92 g, 550 g, 2200 g, 2.42 C, corrections 60 cal)",
+        "NCV = 7168.48 - 0.09 x 6 x 580 = 6855.28 cal/g"
+       ]
+      },
+      {
+       "id": "n-bomb-p3",
+       "pyq": "8928b08ddd7ce31b",
+       "level": 2,
+       "points": [
+        "GCV = (1450+450)(1.8)/0.98 = 3489.80 cal/g",
+        "0.09 x 8 x 587 = 422.64",
+        "NCV = 3067.16 cal/g"
+       ]
+      },
+      {
+       "id": "n-bomb-p4",
+       "pyq": "b14af66abeac05c3",
+       "level": 2,
+       "points": [
+        "GCV = 3489.80 cal/g",
+        "Water per g = 0.72 g; heat lost 422.64 cal",
+        "NCV = 3067.16 cal/g"
+       ]
+      },
+      {
+       "id": "n-bomb-p5",
+       "pyq": "ec96f8774e42a610",
+       "level": 3,
+       "points": [
+        "GCV = [(700+2000)(2.48+0.02) - (60+10)]/0.95 = 7031.58 cal/g",
+        "0.09 x 5 x 587 = 264.15",
+        "NCV = 6767.43 cal/g"
+       ]
+      },
+      {
+       "id": "n-bomb-p6",
+       "pyq": "8d41287038f918e5",
+       "level": 2,
+       "points": [
+        "GCV = [(2500+440)(2.42+0.052) - 10]/0.9 = 8064.09 cal/g",
+        "0.09 x 6 x 600 = 324",
+        "NCV = 7740.09 cal/g"
+       ]
+      }
+     ]
+    },
+    {
+     "id": "n-validity",
+     "title": "Acid correction and validity of data",
+     "theory_md": "Some questions give GCV and ask for NCV and a **correction**. Rearrange:\n\n$t_A = (W+w)(\\Delta t + t_c) - t_F - t_T - x\\cdot\\mathrm{GCV}$.\n\nThen **comment on validity**:\n- $t_A$ must be **positive** and small (a few tens of cal).\n- Heat absorbed by the calorimeter must equal $x \\times \\mathrm{GCV}$ plus corrections.\n- NCV < GCV; composition adds to about 100%.\n\nIf these fail, the data are **inconsistent**.",
+     "basics_md": "If the water cannot have absorbed as much heat as the fuel should release, the numbers cannot all be true.",
+     "key_points": [
+      "t_A = (W + w)(rise + tc) - tF - tT - x GCV",
+      "Valid data: t_A small and positive, composition sums to about 100%",
+      "State clearly if the data are inconsistent and why"
+     ],
+     "questions": [
+      {
+       "id": "n-validity-m1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "A negative acid correction indicates",
+       "options": [
+        "valid data",
+        "inconsistent data",
+        "high sulphur",
+        "high ash"
+       ],
+       "answer_index": 1,
+       "why": "Acid correction is heat released, always positive."
+      },
+      {
+       "id": "n-validity-m2",
+       "kind": "mcq",
+       "level": 2,
+       "q": "Heat absorbed by calorimeter must equal",
+       "options": [
+        "x x GCV only",
+        "x x GCV plus corrections",
+        "W x rise only",
+        "zero"
+       ],
+       "answer_index": 1,
+       "why": "Fuel heat plus fuse, thread and acid heat."
+      },
+      {
+       "id": "n-validity-w1",
+       "kind": "numerical",
+       "level": 3,
+       "marks": 3,
+       "q": "A fuel of GCV 5000 cal/g, mass 0.8 g, burns in a calorimeter with W + w = 2000 g and rise 2.0 $^\\circ$C (no other corrections). Are the data valid?",
+       "model_answer_md": "Heat from fuel $= 0.8\\times5000 = 4000$ cal. Heat absorbed $= 2000\\times2.0 = 4000$ cal. So $t_A = 4000 - 4000 = 0$.\n\nThe data are consistent (acid correction nil, which is acceptable for a fuel without S and N).",
+       "points": [
+        "Heat from fuel = 4000 cal",
+        "Heat absorbed = 4000 cal",
+        "t_A = 0, consistent"
+       ]
+      },
+      {
+       "id": "n-validity-p1",
+       "pyq": "9b588e16082818ce",
+       "level": 3,
+       "points": [
+        "NCV = 6000 - 0.09 x 6 x 587 = 5683.02 cal/g",
+        "Heat absorbed = 3075 x 2.545 = 7825.875 cal; fuel heat = 2.209 x 6000 = 13254 cal",
+        "t_A = 7825.875 - 4.8 - 1.8 - 13254 = -5434.7 cal",
+        "Negative acid correction is impossible: data are inconsistent"
+       ]
+      }
+     ]
+    },
+    {
+     "id": "n-dulong",
+     "title": "Dulong's formula",
+     "theory_md": "When no calorimeter data are given, estimate GCV from the ultimate analysis:\n$$\\mathrm{GCV} = \\frac{1}{100}\\left[8080\\,C + 34500\\left(H - \\frac{O}{8}\\right) + 2240\\,S\\right]\\ \\text{kcal/kg}$$\nwith C, H, O, S in %. $O/8$ is the **available-hydrogen** correction: oxygen is already combined with hydrogen. N and ash give no heat. If %H is not given, take it **by difference** from 100. Then $\\mathrm{NCV} = \\mathrm{GCV} - 0.09\\,H\\times587$.",
+     "basics_md": "Each element gives its own heat: carbon 8080, free hydrogen 34500, sulphur 2240 kcal/kg. Hydrogen already tied up with oxygen gives no heat, hence O/8.",
+     "key_points": [
+      "Dulong: (8080 C + 34500 (H - O/8) + 2240 S)/100 kcal/kg",
+      "Available hydrogen = H - O/8",
+      "H by difference if not given: 100 - (C + O + N + S + ash)",
+      "NCV = GCV - 0.09 H x 587 with the full H"
+     ],
+     "questions": [
+      {
+       "id": "n-dulong-m1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "In Dulong's formula the term H - O/8 is called",
+       "options": [
+        "total hydrogen",
+        "available hydrogen",
+        "net hydrogen",
+        "free carbon"
+       ],
+       "answer_index": 1,
+       "why": "O/8 H is already combined with oxygen as water."
+      },
+      {
+       "id": "n-dulong-m2",
+       "kind": "mcq",
+       "level": 2,
+       "q": "Nitrogen and ash in Dulong's formula",
+       "options": [
+        "contribute heat",
+        "contribute no heat",
+        "are multiplied by 2240",
+        "are doubled"
+       ],
+       "answer_index": 1,
+       "why": "They are non-combustible."
+      },
+      {
+       "id": "n-dulong-w1",
+       "kind": "numerical",
+       "level": 2,
+       "marks": 4,
+       "q": "A coal has C 80%, H 5%, O 8%, S 1%, rest N and ash. Find GCV by Dulong's formula and the NCV.",
+       "model_answer_md": "$\\mathrm{GCV} = \\dfrac{1}{100}\\left[8080\\times80 + 34500\\left(5 - \\dfrac{8}{8}\\right) + 2240\\times1\\right]$\n$= \\dfrac{646400 + 138000 + 2240}{100} = 7866.4$ kcal/kg\n\n$\\mathrm{NCV} = 7866.4 - 0.09\\times5\\times587 = 7866.4 - 264.15 = 7602.25$ kcal/kg",
+       "points": [
+        "Formula with H - O/8",
+        "646400 + 138000 + 2240",
+        "GCV = 7866.4 kcal/kg",
+        "NCV = 7602.25 kcal/kg"
+       ]
+      },
+      {
+       "id": "n-dulong-p1",
+       "pyq": "7198f6409b26ee69",
+       "level": 2,
+       "points": [
+        "%H by difference = 100 - (90 + 3 + 0.5 + 0.5 + 2.5) = 3.5%",
+        "Dulong: 8080 x 90 = 727200; 34500 (3.5 - 3/8) = 107812.5; 2240 x 0.5 = 1120",
+        "GCV = 8361.33 kcal/kg"
+       ]
+      }
+     ]
+    },
+    {
+     "id": "n-air-mass",
+     "title": "Air required: solid or liquid fuel (by mass)",
+     "theory_md": "Air has **23% $\\mathrm{O_2}$ by mass** (21% by volume). Per kg of fuel:\n\n| Element | Reaction | $\\mathrm{O_2}$ needed |\n|---|---|---|\n| C | $\\mathrm{C + O_2 \\rightarrow CO_2}$ | $\\tfrac{32}{12}\\,C$ |\n| H | $\\mathrm{2H_2 + O_2 \\rightarrow 2H_2O}$ | $8\\,H$ |\n| S | $\\mathrm{S + O_2 \\rightarrow SO_2}$ | $S$ |\n\nSubtract the O already in the fuel. $\\text{Min air} = \\dfrac{100}{23}\\times(\\text{net } O_2)$. Excess air multiplies the air by $(1+e)$. **Dry products** = $\\mathrm{CO_2}$, $\\mathrm{SO_2}$, excess $\\mathrm{O_2}$ and $\\mathrm{N_2}$ (water excluded).",
+     "basics_md": "Work out how much oxygen each element needs, subtract the oxygen the fuel already has, and divide by the share of oxygen in air.",
+     "key_points": [
+      "O2 needed: 32/12 C + 8 H + S - O (per kg)",
+      "Minimum air = (100/23) x net O2 (by mass)",
+      "Excess air = min air x (1 + e); excess O2 = e x net O2",
+      "Dry products exclude water vapour; N2 = N in fuel + 77% of air"
+     ],
+     "questions": [
+      {
+       "id": "n-air-mass-m1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "Air contains oxygen by mass",
+       "options": [
+        "21%",
+        "23%",
+        "79%",
+        "77%"
+       ],
+       "answer_index": 1,
+       "why": "21% is by volume."
+      },
+      {
+       "id": "n-air-mass-m2",
+       "kind": "mcq",
+       "level": 2,
+       "q": "Oxygen needed to burn 1 kg of hydrogen is",
+       "options": [
+        "8 kg",
+        "16 kg",
+        "2.67 kg",
+        "32 kg"
+       ],
+       "answer_index": 0,
+       "why": "2H2 + O2: 4 kg H needs 32 kg O2."
+      },
+      {
+       "id": "n-air-mass-w1",
+       "kind": "numerical",
+       "level": 2,
+       "marks": 4,
+       "q": "Coal contains C 80%, H 6%, O 4%, S 1% (rest ash). Find the minimum air per kg and the air for 20% excess.",
+       "model_answer_md": "Per kg: C 0.80, H 0.06, O 0.04, S 0.01.\n\n$\\mathrm{O_2} = 0.80\\times\\tfrac{32}{12} + 0.06\\times8 + 0.01 - 0.04 = 2.1333 + 0.48 + 0.01 - 0.04 = 2.5833$ kg\n\nMinimum air $= 2.5833\\times\\dfrac{100}{23} = 11.23$ kg/kg\n\nAir with 20% excess $= 11.23\\times1.2 = 13.48$ kg/kg",
+       "points": [
+        "O2 for C, H, S and minus O in fuel",
+        "Net O2 = 2.5833 kg",
+        "Minimum air = 11.23 kg",
+        "20% excess air = 13.48 kg"
+       ]
+      },
+      {
+       "id": "n-air-mass-p1",
+       "pyq": "221816038529a15b",
+       "level": 3,
+       "points": [
+        "O2 needed: C 2.24, H 0.32, less O in coal 0.02 = 2.54 kg",
+        "Minimum air = 2.54 x 100/23 = 11.04 kg",
+        "Air with 20% excess = 13.25 kg",
+        "Dry products: CO2 22.32%, N2 74.00%, O2 3.68% by mass"
+       ]
+      }
+     ]
+    },
+    {
+     "id": "n-air-gas",
+     "title": "Air required: gaseous fuel (by volume)",
+     "theory_md": "For gases, equal volumes hold equal moles, so use **volume**. Air has **21% $\\mathrm{O_2}$ by volume**.\n\n| Gas | Reaction | $\\mathrm{O_2}$ per volume |\n|---|---|---|\n| $\\mathrm{CH_4}$ | $\\mathrm{CH_4 + 2O_2 \\rightarrow CO_2 + 2H_2O}$ | 2 |\n| CO | $\\mathrm{CO + \\tfrac12O_2 \\rightarrow CO_2}$ | 0.5 |\n| $\\mathrm{H_2}$ | $\\mathrm{H_2 + \\tfrac12O_2 \\rightarrow H_2O}$ | 0.5 |\n| $\\mathrm{H_2S}$ | $\\mathrm{H_2S + \\tfrac32O_2 \\rightarrow SO_2 + H_2O}$ | 1.5 |\n\n$\\mathrm{CO_2}$ and $\\mathrm{N_2}$ need no $\\mathrm{O_2}$. **If the composition is given by weight, first convert to volume (mole) %: divide each mass by its molar mass.** Min air $= \\dfrac{100}{21}\\times\\mathrm{O_2}$.",
+     "basics_md": "Gas volumes follow mole ratios, so the coefficients in the balanced equation are directly the litres of oxygen per litre of gas.",
+     "key_points": [
+      "Equal volumes = equal moles: O2 per volume from the balanced equation",
+      "Weight % must be converted to volume % by dividing by molar mass",
+      "Min air = (100/21) x O2; excess multiplies it",
+      "Dry products: CO2, SO2, excess O2, N2 (from gas and air)"
+     ],
+     "questions": [
+      {
+       "id": "n-air-gas-m1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "Oxygen required to burn 1 volume of CO is",
+       "options": [
+        "1",
+        "0.5",
+        "2",
+        "1.5"
+       ],
+       "answer_index": 1,
+       "why": "CO + 1/2 O2 gives CO2."
+      },
+      {
+       "id": "n-air-gas-m2",
+       "kind": "mcq",
+       "level": 2,
+       "q": "When gas composition is given by weight, the first step is to",
+       "options": [
+        "multiply by density",
+        "divide each mass by molar mass to get mole (volume) fractions",
+        "ignore it",
+        "add all masses"
+       ],
+       "answer_index": 1,
+       "why": "Volumes are proportional to moles, not masses."
+      },
+      {
+       "id": "n-air-gas-w1",
+       "kind": "numerical",
+       "level": 2,
+       "marks": 4,
+       "q": "1 m$^3$ of a gas has CH$_4$ 20%, H$_2$ 50%, CO 20%, CO$_2$ 10% by volume. Find the minimum air and the air with 25% excess.",
+       "model_answer_md": "$\\mathrm{O_2} = 2\\times0.20 + 0.5\\times0.50 + 0.5\\times0.20 = 0.40 + 0.25 + 0.10 = 0.75$ m$^3$ ($\\mathrm{CO_2}$ needs none)\n\nMinimum air $= 0.75\\times\\dfrac{100}{21} = 3.571$ m$^3$\n\nAir with 25% excess $= 3.571\\times1.25 = 4.464$ m$^3$",
+       "points": [
+        "O2 per component",
+        "O2 = 0.75 m3",
+        "Minimum air = 3.571 m3",
+        "With 25% excess 4.464 m3"
+       ]
+      },
+      {
+       "id": "n-air-gas-p1",
+       "pyq": "d21f7c3fc6a31bed",
+       "level": 3,
+       "points": [
+        "Convert wt % to mole %: CH4 4.000, CO 0.100, H2S 0.100, CO2 0.500, N2 0.279 mol per 100 g (total 4.979)",
+        "Volumes in 500 L: CH4 401.72, CO 10.04, H2S 10.04, CO2 50.22, N2 27.98",
+        "O2 = 803.44 + 5.02 + 15.06 = 823.53 L; min air = 3921.57 L",
+        "Air with 30% excess = 5098.04 L",
+        "Dry products: CO2 9.68%, SO2 0.21%, O2 5.17%, N2 84.94%"
+       ]
+      }
+     ]
+    }
+   ]
+  }
+ ]
+}

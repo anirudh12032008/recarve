@@ -1,0 +1,2086 @@
+{
+ "code": "CY1110",
+ "unit": "Air Pollution",
+ "written": "2026-10-19",
+ "by": "claude-sonnet-5-5, in a Claude Code session",
+ "topics": [
+  {
+   "topic": "Spheres of the atmosphere",
+   "subtopics": [
+    {
+     "id": "composition-segments",
+     "title": "Segments and composition of air",
+     "theory_md": "The environment has four segments: **atmosphere** (gases), **hydrosphere** (water), **lithosphere** (rock and soil) and **biosphere** (living things).\n\nDry air: $\\mathrm{N_2}$ 78.08%, $\\mathrm{O_2}$ 20.95%, Ar 0.93%, $\\mathrm{CO_2}$ about 0.04% (420 ppm), plus traces of Ne, He, $\\mathrm{CH_4}$ and variable water vapour.\n\n**Importance**: $\\mathrm{O_2}$ for respiration, $\\mathrm{CO_2}$ for photosynthesis, ozone absorbs UV, the greenhouse effect keeps the surface near 15 °C (about -18 °C without it), carries the water cycle and weather, burns up meteors.\n\n$\\mathrm{N_2}$ dominates because it is inert (N$\\equiv$N, 946 kJ/mol) and poorly soluble, so nothing removes it. $\\mathrm{H_2}$ and He are so light they escape gravity.",
+     "basics_md": "Air is a mixture, not one gas. Gases that react with rocks, water and living things get used up. A gas that hardly reacts, like nitrogen, just piles up over time. Very light gases drift off into space.",
+     "key_points": [
+      "Four segments: atmosphere, hydrosphere, lithosphere, biosphere",
+      "Dry air: N2 78%, O2 21%, Ar 0.93%, CO2 about 0.04%",
+      "N2 is high because it is inert (triple bond) and poorly soluble",
+      "H2 and He escape because of low molecular weight",
+      "Importance: respiration, photosynthesis, UV shield, greenhouse effect, climate"
+     ],
+     "figures": [],
+     "questions": [
+      {
+       "id": "cs-q1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "The percentage of oxygen in dry air by volume is about",
+       "options": [
+        "78%",
+        "21%",
+        "0.93%",
+        "0.04%"
+       ],
+       "answer_index": 1,
+       "why": "N2 is 78%, O2 about 21%, Ar 0.93%, CO2 0.04%."
+      },
+      {
+       "id": "cs-q2",
+       "kind": "mcq",
+       "level": 1,
+       "q": "Which segment of the environment consists of rocks and soil?",
+       "options": [
+        "Atmosphere",
+        "Hydrosphere",
+        "Lithosphere",
+        "Biosphere"
+       ],
+       "answer_index": 2,
+       "why": "Lithosphere is the solid crust of rock and soil."
+      },
+      {
+       "id": "cs-q3",
+       "kind": "short",
+       "level": 2,
+       "marks": 3,
+       "q": "State three reasons why the atmosphere is important for life.",
+       "model_answer_md": "1. **Respiration and photosynthesis**: it supplies $\\mathrm{O_2}$ for living things and $\\mathrm{CO_2}$ for plants.\n2. **UV shield**: stratospheric ozone absorbs harmful UV-B and UV-C.\n3. **Temperature control**: the greenhouse effect keeps the average surface temperature near 15 °C instead of about -18 °C.\n4. It carries the water cycle and weather, and burns up meteors.",
+       "points": [
+        "Supplies O2 and CO2 for respiration and photosynthesis",
+        "Ozone absorbs harmful UV",
+        "Greenhouse effect keeps the Earth warm (15 °C, not -18 °C)"
+       ]
+      },
+      {
+       "id": "cs-q4",
+       "kind": "numerical",
+       "level": 2,
+       "marks": 2,
+       "q": "The $\\mathrm{CO_2}$ content of air is 0.042% by volume. Express it in ppm.",
+       "model_answer_md": "1% = 10 000 ppm, so $0.042 \\times 10\\,000 = 420$ ppm.\n\nCheck: $0.042/100 = 4.2\\times10^{-4}$, and $4.2\\times10^{-4}\\times10^{6} = 420$ ppm.",
+       "points": [
+        "1% = 10 000 ppm",
+        "0.042% = 420 ppm"
+       ]
+      },
+      {
+       "id": "p-146262",
+       "pyq": "146262d229618c9a",
+       "level": 2,
+       "points": [
+        "Four segments: atmosphere, hydrosphere, lithosphere, biosphere, each with one line",
+        "Composition: N2 78.08%, O2 20.95%, Ar 0.93%, CO2 about 0.04%, traces",
+        "Structure: troposphere, stratosphere, mesosphere, thermosphere, exosphere with the temperature trend",
+        "Importance: O2, CO2, UV shield, greenhouse effect, weather"
+       ]
+      },
+      {
+       "id": "p-524630",
+       "pyq": "5246305ba58c5e21",
+       "level": 2,
+       "points": [
+        "N2 is chemically inert (N≡N triple bond, 946 kJ/mol)",
+        "Poorly soluble in water, not consumed by rocks or organisms unlike O2 and CO2",
+        "Volcanic outgassing and denitrification keep adding N2 over geological time"
+       ]
+      },
+      {
+       "id": "p-070c97",
+       "pyq": "070c972cd5ba8bdc",
+       "level": 1,
+       "points": [
+        "N2 is chemically inert because of the strong triple bond",
+        "Hardly removed by reactions with rocks, oceans or living things, so it accumulates"
+       ]
+      },
+      {
+       "id": "p-f6d72c",
+       "pyq": "f6d72c51e0a43cdc",
+       "level": 1,
+       "points": [
+        "D) Low molecular weight",
+        "H2 and He are the lightest gases and escape Earth's gravity to the exosphere"
+       ]
+      }
+     ]
+    },
+    {
+     "id": "layers",
+     "title": "Layers and temperature profile",
+     "theory_md": "Layers are defined by the **temperature trend** with height.\n\n| Layer | Height (km) | Trend | Why |\n|---|---|---|---|\n| Troposphere | 0-11 | falls 15 to -56 °C | heated from ground; weather |\n| Stratosphere | 11-50 | rises to -2 °C | ozone absorbs UV |\n| Mesosphere | 50-85 | falls to -90 °C | little ozone; coldest |\n| Thermosphere | 85-500 | rises to about 1200 °C | O$_2$, N$_2$ absorb X-rays and far UV |\n| Exosphere | above 500 | | H, He escape |\n\nBoundaries: tropopause, stratopause, mesopause (coldest point). The **thermosphere** is also called the **ionosphere** (O$_2^+$, NO$^+$, O$^+$, e$^-$), which reflects radio waves. Ozone layer: 15-35 km.",
+     "basics_md": "Each layer is warmed by whatever absorbs sunlight there. Near the ground it is the Earth's surface. Higher up it is ozone, then very thin gas that absorbs X-rays. Where nothing absorbs, temperature falls.",
+     "key_points": [
+      "Temperature alternates: falls, rises, falls, rises",
+      "Troposphere 0-11 km, 6.5 °C/km fall, holds weather and 75% of mass",
+      "Stratosphere warms because ozone absorbs UV",
+      "Mesopause is the coldest point (about -90 °C)",
+      "Thermosphere = ionosphere, heated by X-rays and far UV, reflects radio waves"
+     ],
+     "figures": [],
+     "questions": [
+      {
+       "id": "ly-q1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "The ozone layer lies in the",
+       "options": [
+        "troposphere",
+        "stratosphere",
+        "mesosphere",
+        "thermosphere"
+       ],
+       "answer_index": 1,
+       "why": "Ozone layer is at 15-35 km, inside the stratosphere."
+      },
+      {
+       "id": "ly-q2",
+       "kind": "mcq",
+       "level": 1,
+       "q": "The ionosphere is part of the",
+       "options": [
+        "troposphere",
+        "stratosphere",
+        "mesosphere",
+        "thermosphere"
+       ],
+       "answer_index": 3,
+       "why": "Ions and free electrons are found in the thermosphere, which reflects radio waves."
+      },
+      {
+       "id": "ly-q3",
+       "kind": "short",
+       "level": 2,
+       "marks": 2,
+       "q": "Why does temperature increase with height in the stratosphere?",
+       "model_answer_md": "Ozone in the stratosphere absorbs solar UV (200-320 nm): $\\mathrm{O_3 + h\\nu \\rightarrow O_2 + O}$, and the recombination $\\mathrm{O + O_2 + M \\rightarrow O_3 + M}$ releases heat. UV is strongest at the top, so heating, and temperature, rise with height from -56 °C to about -2 °C.",
+       "points": [
+        "Ozone absorbs UV",
+        "Absorbed energy released as heat (recombination)",
+        "Temperature rises from -56 to -2 °C"
+       ]
+      },
+      {
+       "id": "ly-q4",
+       "kind": "long",
+       "level": 3,
+       "marks": 5,
+       "q": "Describe the layers of the atmosphere with a labelled sketch of temperature against altitude.",
+       "model_answer_md": "**Sketch**: altitude (km) on the y-axis, temperature (°C) on the x-axis; a zig-zag curve with turning points at the tropopause (11 km, -56 °C), stratopause (50 km, -2 °C), mesopause (85 km, -90 °C), then rising steeply in the thermosphere. Mark the ozone layer at 15-35 km.\n\n1. **Troposphere (0-11 km)**: falls about 6.5 °C/km; weather, 75% of mass.\n2. **Stratosphere (11-50 km)**: rises because ozone absorbs UV.\n3. **Mesosphere (50-85 km)**: falls; coldest.\n4. **Thermosphere (85-500 km)**: rises to about 1200 °C; ionosphere.\n5. **Exosphere (above 500 km)**: H and He escape.",
+       "points": [
+        "Labelled diagram: axes with units, four layers and three boundaries",
+        "Troposphere falls, stratosphere rises (ozone), mesosphere falls, thermosphere rises",
+        "Altitude range of each layer",
+        "Ozone layer at 15-35 km, ionosphere in thermosphere"
+       ]
+      },
+      {
+       "id": "p-1990bf",
+       "pyq": "1990bfc35fcbaa0d",
+       "level": 2,
+       "points": [
+        "Thermosphere is also called the ionosphere",
+        "Gas there absorbs X-rays and far UV (O2, N2)",
+        "Very few molecules absorb the energy, so each gets very hot (up to about 1200 °C)"
+       ]
+      },
+      {
+       "id": "p-0ae43d",
+       "pyq": "0ae43d14c318525f",
+       "level": 2,
+       "points": [
+        "Thermosphere = ionosphere (ions O2+, O+, NO+ and electrons)",
+        "Temperature rises sharply because O2 and N2 absorb X-rays and far UV"
+       ]
+      },
+      {
+       "id": "p-f87e2c",
+       "pyq": "f87e2c0c6aa3f720",
+       "level": 2,
+       "points": [
+        "Troposphere: falls (ground heating); stratosphere: rises (ozone absorbs UV); mesosphere: falls; thermosphere: rises (X-rays absorbed)",
+        "Each layer's temperature depends on where solar energy is absorbed",
+        "Plot: altitude vs lapse rate, positive in troposphere and mesosphere, negative in stratosphere and thermosphere"
+       ]
+      },
+      {
+       "id": "p-9c6d69",
+       "pyq": "9c6d693996eca994",
+       "level": 2,
+       "points": [
+        "Altitude: troposphere 0-11 km, stratosphere 11-50 km",
+        "Temperature falls in troposphere, rises in stratosphere",
+        "Troposphere has weather, mixing and water vapour; stratosphere is stable with the ozone layer and no weather",
+        "Jets fly in the stratosphere"
+       ]
+      },
+      {
+       "id": "p-c1f9c3",
+       "pyq": "c1f9c32fe40eaedc",
+       "level": 1,
+       "points": [
+        "C) Boundary of mesosphere and thermosphere (mesopause, about -90 °C)",
+        "Tropopause is only about -56 °C"
+       ]
+      },
+      {
+       "id": "p-3a564e",
+       "pyq": "3a564e0b68c08c1e",
+       "level": 1,
+       "points": [
+        "B) Increases",
+        "Ozone absorbs UV and releases heat"
+       ]
+      },
+      {
+       "id": "p-5734f4",
+       "pyq": "5734f40b14c89568",
+       "level": 1,
+       "points": [
+        "A) Tropopause (about 11 km)"
+       ]
+      }
+     ]
+    },
+    {
+     "id": "lapse-stability",
+     "title": "Lapse rate, stability and mixing",
+     "theory_md": "**Lapse rate** $\\Gamma = -\\dfrac{dT}{dz}$, the fall of temperature per km. Positive when air cools with height, negative in an **inversion**.\n\n- **ELR** (environmental): actual, measured; about 6.5 °C/km on average.\n- **Dry ALR**: cooling of a rising parcel, $g/c_p = 9.8$ °C/km.\n\n**Stability** (compare ELR with 9.8):\n- ELR > 9.8: superadiabatic, **unstable**, strong mixing, looping plume.\n- ELR < 9.8: subadiabatic, **stable**.\n- ELR negative: inversion, **very stable**, pollutants trapped, fanning plume.\n\nTroposphere: heated from below, so mixing is strong and rain washes pollutants out: residence time days to weeks. Stratosphere: inversion, no rain, no mixing: years.",
+     "basics_md": "A rising bubble of air expands and cools. If the surrounding air is cooling faster than the bubble, the bubble stays warmer and keeps rising (unstable). If the surroundings are warmer above, the bubble sinks back (stable).",
+     "key_points": [
+      "Lapse rate = -dT/dz, average ELR 6.5 °C/km, dry ALR 9.8 °C/km",
+      "ELR > ALR unstable; ELR < ALR stable; negative ELR inversion",
+      "Inversion traps pollutants near the ground",
+      "Troposphere: mixing and rain give short residence time; stratosphere is stable so pollutants stay for years"
+     ],
+     "figures": [],
+     "questions": [
+      {
+       "id": "ls-q1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "The dry adiabatic lapse rate is about",
+       "options": [
+        "0.65 °C/km",
+        "6.5 °C/km",
+        "9.8 °C/km",
+        "98 °C/km"
+       ],
+       "answer_index": 2,
+       "why": "$g/c_p = 9.81/1005$, about 9.8 °C per km."
+      },
+      {
+       "id": "ls-q2",
+       "kind": "mcq",
+       "level": 2,
+       "q": "The temperature falls by 6 °C between the ground and 400 m. The atmosphere is",
+       "options": [
+        "stable",
+        "unstable",
+        "an inversion",
+        "neutral"
+       ],
+       "answer_index": 1,
+       "why": "ELR = 6/0.4 = 15 °C/km, above 9.8 °C/km, so superadiabatic and unstable."
+      },
+      {
+       "id": "ls-q3",
+       "kind": "numerical",
+       "level": 2,
+       "marks": 3,
+       "q": "At a place the ground temperature is 28 °C and at 400 m it is 22 °C. Find the lapse rate and state the stability and the plume shape.",
+       "model_answer_md": "$\\Delta T = 22 - 28 = -6$ °C over $\\Delta z = 0.4$ km.\n\nELR $= -\\Delta T/\\Delta z = 6/0.4 = 15$ °C/km.\n\nCompare with dry ALR 9.8 °C/km: $15 > 9.8$, so superadiabatic, **unstable**. Strong vertical mixing, **looping** plume, good dispersion.",
+       "points": [
+        "ELR = 6/0.4 = 15 °C/km",
+        "Compared with 9.8 °C/km: superadiabatic",
+        "Unstable, looping plume, good dispersion"
+       ]
+      },
+      {
+       "id": "ls-q4",
+       "kind": "numerical",
+       "level": 2,
+       "marks": 2,
+       "q": "The surface temperature is 30 °C. Using the normal lapse rate of 6.5 °C/km, find the temperature at 5 km.",
+       "model_answer_md": "$T = T_0 - \\Gamma z = 30 - 6.5\\times5 = 30 - 32.5 = -2.5$ °C.",
+       "points": [
+        "T = T0 - Γz",
+        "T = -2.5 °C"
+       ]
+      },
+      {
+       "id": "p-a718e6",
+       "pyq": "a718e62d88961001",
+       "level": 2,
+       "points": [
+        "Lapse rate = rate of fall of temperature with height; about 6.5 °C/km in troposphere",
+        "Troposphere: heated from the ground below, so temperature falls (positive lapse rate)",
+        "Stratosphere: ozone absorbs UV and heats the upper layers, so temperature rises (negative lapse rate)"
+       ]
+      },
+      {
+       "id": "p-5c285d",
+       "pyq": "5c285d646c21c54d",
+       "level": 2,
+       "points": [
+        "ELR: actual measured temperature gradient of still surrounding air, variable, about 6.5 °C/km",
+        "ALR: cooling of a rising parcel without heat exchange, constant 9.8 °C/km (dry)",
+        "Comparison of the two decides stability",
+        "ELR can be negative (inversion); ALR is always positive"
+       ]
+      },
+      {
+       "id": "p-0f208e",
+       "pyq": "0f208e98b6f69e32",
+       "level": 2,
+       "points": [
+        "Lapse rate defined; 6.5 °C/km ELR, 9.8 °C/km dry ALR",
+        "Climate change drivers: greenhouse gases (CO2, CH4, N2O, CFCs) trapping outgoing IR, deforestation, fossil fuels",
+        "Atmosphere's harmful role: rising GHGs, ozone depletion, acid rain, smog",
+        "Justification with effects: warming, sea-level rise, extreme weather"
+       ]
+      },
+      {
+       "id": "p-69704e",
+       "pyq": "69704ee7fc6ff9ab",
+       "level": 3,
+       "points": [
+        "Part a: ΔT/Δz = +10 °C/km, ELR = -10 °C/km: inversion, very stable, fanning plume, pollutants trapped",
+        "Part b: ELR = 40 °C/km > 9.8 °C/km: superadiabatic, unstable, looping plume, good dispersion",
+        "Method: compare ELR with dry ALR 9.8 °C/km",
+        "Units in °C/km"
+       ]
+      },
+      {
+       "id": "p-5ebf3a",
+       "pyq": "5ebf3a8595e7372c",
+       "level": 1,
+       "points": [
+        "A) Stable",
+        "Temperature increases with height (inversion), so no vertical mixing"
+       ]
+      },
+      {
+       "id": "p-c3f8a7",
+       "pyq": "c3f8a7821f4c4da5",
+       "level": 2,
+       "points": [
+        "Troposphere: strong vertical mixing and convection, rain washout and settling remove pollutants (days to weeks)",
+        "Stratosphere: temperature inversion, stable layers, no rain, no weather",
+        "Pollutants stay for years in the stratosphere"
+       ]
+      },
+      {
+       "id": "p-4db0b2",
+       "pyq": "4db0b210c280e9e0",
+       "level": 1,
+       "points": [
+        "A) Troposphere",
+        "Vertical mixing, turbulence and rain disperse pollutants"
+       ]
+      },
+      {
+       "id": "p-040eaf",
+       "pyq": "040eafe25afe1f15",
+       "level": 1,
+       "points": [
+        "C) Troposphere",
+        "Heated from below: convection and strong mixing"
+       ]
+      }
+     ]
+    },
+    {
+     "id": "atmospheric-photochemistry",
+     "title": "Photochemical reactions in the atmosphere",
+     "theory_md": "Sunlight drives most upper-air chemistry.\n\n- **Photodissociation**: $\\mathrm{O_2 + h\\nu\\ (\\lambda<242\\ nm) \\rightarrow 2O}$; $\\mathrm{O_3 + h\\nu \\rightarrow O_2 + O}$.\n- **Photoionisation** (thermosphere): $\\mathrm{O_2 + h\\nu \\rightarrow O_2^+ + e^-}$; $\\mathrm{NO + h\\nu \\rightarrow NO^+ + e^-}$.\n- **Ozone formation**: $\\mathrm{O + O_2 + M \\rightarrow O_3 + M}$ (M = $\\mathrm{N_2}$ or $\\mathrm{O_2}$ carries away energy).\n- **OH radical**: $\\mathrm{O_3 + h\\nu \\rightarrow O_2 + O(^1D)}$; $\\mathrm{O(^1D) + H_2O \\rightarrow 2\\,{}^\\bullet OH}$. OH oxidises $\\mathrm{NO_2}$, $\\mathrm{SO_2}$, hydrocarbons.\n- **Mesosphere**: O$_3$ forms little because O$_2$ molecules (and M) are too few.\n- **Stratosphere, $\\mathrm{N_2O}$** (inert below): $\\mathrm{N_2O + O(^1D) \\rightarrow 2NO}$; then $\\mathrm{NO + OH + M \\rightarrow HNO_2 + M}$ and $\\mathrm{NO_2 + OH + M \\rightarrow HNO_3 + M}$.",
+     "basics_md": "Light carries enough energy to break bonds. The broken pieces (O atoms, OH, NO) are very reactive and start chains of reactions. M is just a bystander molecule that takes away extra energy so the new molecule survives.",
+     "key_points": [
+      "Photodissociation and photoionisation by short-wavelength UV",
+      "O + O2 + M gives O3 (M third body)",
+      "O(1D) + H2O gives two OH radicals",
+      "O3 is scarce in mesosphere because O2 is scarce",
+      "N2O gives NO in stratosphere, then HNO2 and HNO3 via OH"
+     ],
+     "figures": [
+      {
+       "smiles": "[O-][O+]=O",
+       "caption": "Ozone, O3"
+      }
+     ],
+     "questions": [
+      {
+       "id": "ap-q1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "In $\\mathrm{O + O_2 + M \\rightarrow O_3 + M}$, M is",
+       "options": [
+        "a catalyst that is used up",
+        "a third body that carries away excess energy",
+        "an oxidising radical",
+        "a metal"
+       ],
+       "answer_index": 1,
+       "why": "M (N2 or O2) takes away the energy so that O3 does not fall apart again."
+      },
+      {
+       "id": "ap-q2",
+       "kind": "mcq",
+       "level": 2,
+       "q": "Which reaction produces hydroxyl radicals in the stratosphere?",
+       "options": [
+        "$\\mathrm{O_3 + NO \\rightarrow NO_2 + O_2}$",
+        "$\\mathrm{O(^1D) + H_2O \\rightarrow 2\\,{}^\\bullet OH}$",
+        "$\\mathrm{Cl + O_3 \\rightarrow ClO + O_2}$",
+        "$\\mathrm{NO_2 + OH \\rightarrow HNO_3}$"
+       ],
+       "answer_index": 1,
+       "why": "Excited O atoms react with water vapour to give two OH."
+      },
+      {
+       "id": "ap-q3",
+       "kind": "short",
+       "level": 2,
+       "marks": 3,
+       "q": "Write the photodissociation and photoionisation reactions of $\\mathrm{O_2}$ and say in which layers they matter.",
+       "model_answer_md": "- Photodissociation: $\\mathrm{O_2 + h\\nu\\ (\\lambda<242\\ nm) \\rightarrow 2O}$, in the stratosphere (starts ozone formation).\n- Photoionisation: $\\mathrm{O_2 + h\\nu \\rightarrow O_2^+ + e^-}$, in the thermosphere (forms the ionosphere).\n- Ozone formation: $\\mathrm{O + O_2 + M \\rightarrow O_3 + M}$.",
+       "points": [
+        "Photodissociation reaction with wavelength below 242 nm",
+        "Photoionisation reaction giving O2+ and e-",
+        "Layers: stratosphere and thermosphere"
+       ]
+      },
+      {
+       "id": "p-7b9ed9",
+       "pyq": "7b9ed996aac75833",
+       "level": 2,
+       "points": [
+        "Photodissociation and photoionisation of O2, N2, NO in the upper atmosphere with equations",
+        "Chapman reactions forming and destroying O3",
+        "Radical chemistry: O(1D) + H2O gives OH; OH oxidises NO2, SO2 and hydrocarbons",
+        "Tropospheric reactions: NO2 photolysis, O3 formation, smog (PAN)"
+       ]
+      },
+      {
+       "id": "p-5b5abf",
+       "pyq": "5b5abf98ae8c8005",
+       "level": 1,
+       "points": [
+        "C) Shortage of O2 molecules",
+        "O + O2 + M needs O2 and a third body; the mesosphere is too thin"
+       ]
+      },
+      {
+       "id": "p-280042",
+       "pyq": "2800425e6119e905",
+       "level": 2,
+       "points": [
+        "N2O is inert in the troposphere and reaches the stratosphere",
+        "N2O + O(1D) gives 2NO; NO + O3 gives NO2 + O2",
+        "H2O + O(1D) gives 2 OH",
+        "NO + OH + M gives HNO2; NO2 + OH + M gives HNO3 (also N2O5 + H2O gives 2HNO3)"
+       ]
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "topic": "Photochemical smog",
+   "subtopics": [
+    {
+     "id": "smog-types",
+     "title": "Smog and its two types",
+     "theory_md": "**Smog** = smoke + fog, a polluted haze that shows the air is stagnant and heavily polluted.\n\n| | Classical (London) | Photochemical (Los Angeles) |\n|---|---|---|\n| Made of | smoke, $\\mathrm{SO_2}$, fog | $\\mathrm{NO_x}$ + hydrocarbons + sunlight |\n| Nature | reducing | **oxidising** |\n| Weather | cold, humid, winter morning | warm, dry, sunny, calm, noon |\n| Source | coal burning | vehicle exhaust |\n| Contains | $\\mathrm{SO_2}$, soot, $\\mathrm{H_2SO_4}$ | $\\mathrm{O_3}$, PAN, aldehydes, $\\mathrm{NO_2}$ |\n| Effect | bronchitis | eye irritation, asthma, plant and rubber damage |\n\nPhotochemical smog is brown and made of **secondary** pollutants. It indicates heavy vehicular pollution.",
+     "basics_md": "Smog is not one thing. One kind comes from burning coal in cold fog. The other is a brown haze that sunlight cooks up out of car exhaust. They need opposite weather.",
+     "key_points": [
+      "Smog = smoke + fog",
+      "Classical: SO2 + smoke, reducing, cold humid; photochemical: NOx + HC + sunlight, oxidising, warm sunny",
+      "Photochemical smog contains O3, PAN, aldehydes, NO2 (secondary pollutants)",
+      "Indicates vehicular pollution"
+     ],
+     "figures": [
+      {
+       "smiles": "C=O",
+       "caption": "Formaldehyde, an aldehyde in smog"
+      }
+     ],
+     "questions": [
+      {
+       "id": "st-q1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "Photochemical smog is",
+       "options": [
+        "reducing",
+        "oxidising",
+        "neutral",
+        "acidic only"
+       ],
+       "answer_index": 1,
+       "why": "It contains oxidants O3 and PAN. London smog is the reducing one."
+      },
+      {
+       "id": "st-q2",
+       "kind": "mcq",
+       "level": 2,
+       "q": "Which condition favours photochemical smog?",
+       "options": [
+        "Cold, foggy winter morning",
+        "Warm, dry, sunny, calm afternoon",
+        "Heavy rain",
+        "Strong wind"
+       ],
+       "answer_index": 1,
+       "why": "It needs strong sunlight and stagnant air."
+      },
+      {
+       "id": "st-q3",
+       "kind": "short",
+       "level": 2,
+       "marks": 3,
+       "q": "Differentiate between classical (London) smog and photochemical (Los Angeles) smog. Give four points.",
+       "model_answer_md": "| Classical | Photochemical |\n|---|---|\n| Smoke + $\\mathrm{SO_2}$ + fog | $\\mathrm{NO_x}$ + hydrocarbons + sunlight |\n| Reducing | Oxidising |\n| Cold, humid, early morning | Warm, dry, sunny, noon |\n| Coal burning | Vehicle exhaust |\n| $\\mathrm{SO_2}$, soot | $\\mathrm{O_3}$, PAN, aldehydes |",
+       "points": [
+        "Composition: SO2 + smoke vs NOx + HC",
+        "Reducing vs oxidising",
+        "Weather: cold humid vs warm sunny",
+        "Source: coal vs vehicles"
+       ]
+      },
+      {
+       "id": "p-43e557",
+       "pyq": "43e557776751d6d2",
+       "level": 2,
+       "points": [
+        "What: smog is smoke + fog, a polluted haze; photochemical smog is a brown oxidising haze",
+        "Formation: sunlight acts on NOx and hydrocarbons from vehicle exhaust",
+        "Indicates: heavy vehicular pollution and stagnant air; harms eyes, lungs, plants"
+       ]
+      },
+      {
+       "id": "p-efb7d2",
+       "pyq": "efb7d2ec2ca09ca8",
+       "level": 1,
+       "points": [
+        "C) Aldehyde",
+        "SOx belongs to classical smog"
+       ]
+      }
+     ]
+    },
+    {
+     "id": "smog-chemistry",
+     "title": "Formation reactions and control",
+     "theory_md": "Photochemical smog forms in three steps.\n\n1. **NO**: $\\mathrm{N_2 + O_2 \\xrightarrow{\\text{high }T} 2NO}$ (engine); $\\mathrm{2NO + O_2 \\rightarrow 2NO_2}$.\n2. **Ozone**: $\\mathrm{NO_2 + h\\nu \\rightarrow NO + O}$; $\\mathrm{O + O_2 + M \\rightarrow O_3 + M}$. The null cycle $\\mathrm{O_3 + NO \\rightarrow NO_2 + O_2}$ would destroy it again.\n3. **Hydrocarbons break the null cycle**: $\\mathrm{RH + {}^\\bullet OH \\rightarrow R^\\bullet + H_2O}$; $\\mathrm{R^\\bullet + O_2 \\rightarrow RO_2^\\bullet}$; $\\mathrm{RO_2^\\bullet + NO \\rightarrow RO^\\bullet + NO_2}$ (NO removed without using O$_3$); $\\mathrm{RO^\\bullet + O_2 \\rightarrow R'CHO + HO_2^\\bullet}$. O$_3$ builds up; aldehydes and PAN form.\n\n**Prevention**: catalytic converters, CNG and BS-VI fuels, public transport, less evaporation of petrol, fewer vehicles.",
+     "basics_md": "Ozone is made and destroyed all the time. Hydrocarbons act like a switch: they remove NO without using up ozone, so ozone is left to pile up in the sunshine.",
+     "key_points": [
+      "N2 + O2 gives NO in engine; NO oxidised to NO2",
+      "NO2 + hv gives NO + O; O + O2 + M gives O3",
+      "Hydrocarbon radicals convert NO to NO2 without consuming O3, so O3 accumulates",
+      "Secondary products: O3, PAN, aldehydes",
+      "Prevention: catalytic converter, cleaner fuel, public transport"
+     ],
+     "figures": [],
+     "questions": [
+      {
+       "id": "sc-q1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "The primary photochemical step in smog formation is",
+       "options": [
+        "$\\mathrm{NO_2 + h\\nu \\rightarrow NO + O}$",
+        "$\\mathrm{O_3 + NO \\rightarrow NO_2 + O_2}$",
+        "$\\mathrm{N_2 + O_2 \\rightarrow 2NO}$",
+        "$\\mathrm{SO_2 + O \\rightarrow SO_3}$"
+       ],
+       "answer_index": 0,
+       "why": "Photolysis of NO2 gives the O atom that makes ozone."
+      },
+      {
+       "id": "sc-q2",
+       "kind": "mcq",
+       "level": 2,
+       "q": "Without hydrocarbons, ozone in a polluted atmosphere stays low because",
+       "options": [
+        "NO2 is not photolysed",
+        "O3 reacts with NO to give NO2 and O2",
+        "O2 is absent",
+        "PAN destroys it"
+       ],
+       "answer_index": 1,
+       "why": "The null cycle $\\mathrm{O_3 + NO \\rightarrow NO_2 + O_2}$ removes O3."
+      },
+      {
+       "id": "sc-q3",
+       "kind": "long",
+       "level": 2,
+       "marks": 5,
+       "q": "Explain the formation of photochemical smog with reactions. Give its effects and preventive measures.",
+       "model_answer_md": "**Formation**\n1. $\\mathrm{N_2 + O_2 \\rightarrow 2NO}$ (engine); $\\mathrm{2NO + O_2 \\rightarrow 2NO_2}$.\n2. $\\mathrm{NO_2 + h\\nu \\rightarrow NO + O}$.\n3. $\\mathrm{O + O_2 + M \\rightarrow O_3 + M}$.\n4. $\\mathrm{O_3 + NO \\rightarrow NO_2 + O_2}$ (null cycle).\n5. $\\mathrm{RH + OH^\\bullet \\rightarrow R^\\bullet + H_2O}$; $\\mathrm{R^\\bullet + O_2 \\rightarrow RO_2^\\bullet}$; $\\mathrm{RO_2^\\bullet + NO \\rightarrow RO^\\bullet + NO_2}$: NO is used up without consuming O$_3$, so O$_3$ accumulates.\n6. $\\mathrm{RO^\\bullet + O_2 \\rightarrow RCHO + HO_2^\\bullet}$: aldehydes; acyl peroxy radical + $\\mathrm{NO_2}$ gives PAN.\n\n**Effects**: eye irritation, asthma, lung damage, leaf bronzing, cracked rubber, poor visibility.\n\n**Prevention**: catalytic converters, CNG and BS-VI fuel, public transport, control of VOC evaporation.",
+       "points": [
+        "NO from engines oxidised to NO2",
+        "NO2 photolysis gives O, then O3",
+        "Hydrocarbon radicals convert NO to NO2 without using O3",
+        "Products: O3, PAN, aldehydes",
+        "Effects and prevention"
+       ]
+      },
+      {
+       "id": "p-46debf",
+       "pyq": "46debf7b2373b62e",
+       "level": 2,
+       "points": [
+        "Brown oxidising haze from NOx + hydrocarbons + sunlight in warm, dry, calm air",
+        "Reactions: NO2 + hv gives NO + O; O + O2 + M gives O3; hydrocarbon radicals convert NO to NO2; PAN and aldehydes form",
+        "Preventive: catalytic converters, cleaner fuels (CNG), public transport, reduce VOC emissions"
+       ]
+      },
+      {
+       "id": "p-d9b324",
+       "pyq": "d9b3245b6dcf4dad",
+       "level": 2,
+       "points": [
+        "Sunlight acts on NOx and hydrocarbons from vehicle exhaust",
+        "N2 + O2 gives 2NO; 2NO + O2 gives 2NO2; NO2 + hv gives NO + O; O + O2 + M gives O3",
+        "Hydrocarbon (RO2) radicals oxidise NO to NO2, O3 builds up, aldehydes and PAN form"
+       ]
+      }
+     ]
+    },
+    {
+     "id": "pan-diurnal",
+     "title": "PAN and the daily cycle",
+     "theory_md": "**PAN** (peroxyacetyl nitrate), $\\mathrm{CH_3C(O)OONO_2}$, is a secondary pollutant and strong eye irritant. From an aldehyde:\n\n$\\mathrm{RCHO + {}^\\bullet OH \\rightarrow R\\dot{C}O + H_2O}$\n$\\mathrm{R\\dot{C}O + O_2 \\rightarrow RC(O)OO^\\bullet}$\n$\\mathrm{RC(O)OO^\\bullet + NO_2 \\rightarrow RC(O)OONO_2}$\n\nOH comes from $\\mathrm{O(^1D) + H_2O \\rightarrow 2\\,{}^\\bullet OH}$.\n\n**Daily cycle** (ppm against 0-24 h): NO peaks first (6-9 h, morning traffic) and falls; $\\mathrm{NO_2}$ peaks next (8-10 h); $\\mathrm{O_3}$ (and PAN) peak last, at 12-15 h with strongest sunlight, and fall at night. $\\mathrm{O_2}$ stays constant (about 21%).",
+     "basics_md": "Traffic puts out NO in the morning. Over the next hours NO turns into NO2, and then sunlight turns NO2 into ozone. So the three peaks come one after another.",
+     "key_points": [
+      "PAN = CH3C(O)OONO2, secondary pollutant, eye irritant",
+      "Aldehyde + OH gives acyl radical, + O2 gives acylperoxy, + NO2 gives PAN",
+      "Peak order: NO, then NO2, then O3",
+      "O3 peaks around noon to early afternoon; O2 constant"
+     ],
+     "figures": [
+      {
+       "smiles": "CC(=O)OO[N+](=O)[O-]",
+       "caption": "PAN"
+      },
+      {
+       "smiles": "CC=O",
+       "caption": "Acetaldehyde"
+      }
+     ],
+     "questions": [
+      {
+       "id": "pd-q1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "PAN stands for",
+       "options": [
+        "polyaromatic nitrate",
+        "peroxyacetyl nitrate",
+        "phosphoryl acetyl nitrogen",
+        "peroxy ammonium nitrate"
+       ],
+       "answer_index": 1,
+       "why": "CH3C(O)OONO2, peroxyacetyl nitrate."
+      },
+      {
+       "id": "pd-q2",
+       "kind": "mcq",
+       "level": 2,
+       "q": "In the daily cycle of smog, the correct order of peak times is",
+       "options": [
+        "O3, NO2, NO",
+        "NO, NO2, O3",
+        "NO2, NO, O3",
+        "NO, O3, NO2"
+       ],
+       "answer_index": 1,
+       "why": "NO from morning traffic, then NO2 as it is oxidised, then O3 at noon."
+      },
+      {
+       "id": "pd-q3",
+       "kind": "short",
+       "level": 2,
+       "marks": 3,
+       "q": "Explain why NO peaks in the morning but ozone peaks in the afternoon.",
+       "model_answer_md": "Morning rush hour puts out NO, so NO peaks first. It is oxidised to $\\mathrm{NO_2}$ over the next 1-2 h. As sunlight grows, $\\mathrm{NO_2 + h\\nu \\rightarrow NO + O}$ and $\\mathrm{O + O_2 + M \\rightarrow O_3 + M}$. Hydrocarbon radicals keep removing NO without using $\\mathrm{O_3}$, so $\\mathrm{O_3}$ peaks at 12-15 h and falls after sunset.",
+       "points": [
+        "NO from morning traffic peaks first",
+        "NO2 next as NO is oxidised",
+        "O3 needs strong sunlight, peaks at noon to 3 pm"
+       ]
+      },
+      {
+       "id": "p-14cb8a",
+       "pyq": "14cb8a6ba1413ef8",
+       "level": 2,
+       "points": [
+        "PAN = CH3C(O)OONO2, formed from aldehydes",
+        "OH generated from sunlight: O(1D) + H2O gives 2OH",
+        "RCHO + OH gives acyl radical + H2O; acyl + O2 gives RC(O)OO radical",
+        "RC(O)OO + NO2 gives PAN; for acetaldehyde R = CH3"
+       ]
+      },
+      {
+       "id": "p-3c7746",
+       "pyq": "3c77461205571e9e",
+       "level": 2,
+       "points": [
+        "Diagram: x-axis time 0-24 h, y-axis concentration in ppm; NO peaks at 6-9 h, NO2 at 8-10 h, O3 at 12-15 h",
+        "Explanation: morning traffic emits NO; sunlight photolyses NO2, forming O3",
+        "O2 is constant (the third curve is really O3)"
+       ]
+      },
+      {
+       "id": "p-514e0c",
+       "pyq": "514e0cf97495aa21",
+       "level": 2,
+       "points": [
+        "Sketch with labelled axes (ppm against hours): NO first, NO2 second, O3 last at early afternoon",
+        "Reason: NO from traffic oxidised to NO2; sunlight photolyses NO2 to make O3",
+        "O2 stays constant at about 21%"
+       ]
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "topic": "Sources and effects of air pollutants",
+   "subtopics": [
+    {
+     "id": "gaseous-pollutants",
+     "title": "Pollutants, sources and health effects",
+     "theory_md": "**Air pollution**: contaminants (gases, particles) in the air in quantity and duration that harm humans, living things, property or the environment.\n\n**Primary** pollutants are emitted directly (CO, $\\mathrm{SO_2}$, NO, hydrocarbons, PM). **Secondary** form in the air ($\\mathrm{O_3}$, PAN, $\\mathrm{H_2SO_4}$, $\\mathrm{HNO_3}$). Sources: natural (volcanoes, fires, dust) and anthropogenic (vehicles, power plants, industry, burning, chulhas).\n\n- **CO**: binds Hb about 200 times more than $\\mathrm{O_2}$ (HbCO): headache, death.\n- **$\\mathrm{SO_2}$**: respiratory irritation, acid rain.\n- **$\\mathrm{NO_x}$** ($\\mathrm{NO}$ + $\\mathrm{NO_2}$, from $\\mathrm{N_2 + O_2}$ at high $T$): lung damage, smog, acid rain.\n- **$\\mathrm{H_2S}$**: rotten egg smell, paralyses olfactory nerve, blackens lead paint.\n- **VOCs**: evaporate easily (benzene, toluene, HCHO); smog, cancer.\n\n**Bhopal 1984**: methyl isocyanate leak, heavier than air, night inversion, dense population, failed safety systems.",
+     "basics_md": "Pollutants fall into two families: those that come straight out of a chimney or exhaust pipe (primary), and those that the sun and air make from them (secondary). Each gas harms the body in its own way, and examiners want one effect per pollutant.",
+     "key_points": [
+      "Air pollution: contaminant in harmful quantity and duration",
+      "Primary vs secondary pollutants with examples",
+      "CO forms carboxyhaemoglobin; SO2 and NOx cause respiratory disease and acid rain",
+      "VOC: high vapour pressure organics (benzene, HCHO)",
+      "Bhopal: MIC leak, 1984, heavier than air, inversion"
+     ],
+     "figures": [
+      {
+       "smiles": "O=S=O",
+       "caption": "Sulphur dioxide"
+      },
+      {
+       "smiles": "CN=C=O",
+       "caption": "Methyl isocyanate (MIC), the Bhopal gas"
+      }
+     ],
+     "questions": [
+      {
+       "id": "gp-q1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "Which of the following is a secondary pollutant?",
+       "options": [
+        "CO",
+        "SO2",
+        "PAN",
+        "Lead"
+       ],
+       "answer_index": 2,
+       "why": "PAN forms in the air from NO2 and radicals; the others are emitted directly."
+      },
+      {
+       "id": "gp-q2",
+       "kind": "mcq",
+       "level": 1,
+       "q": "The gas that caused the Bhopal tragedy was",
+       "options": [
+        "phosgene",
+        "methyl isocyanate",
+        "ammonia",
+        "methane"
+       ],
+       "answer_index": 1,
+       "why": "CH3NCO leaked from the Union Carbide plant on 2-3 December 1984."
+      },
+      {
+       "id": "gp-q3",
+       "kind": "short",
+       "level": 2,
+       "marks": 3,
+       "q": "Why is carbon monoxide poisonous? Give its source.",
+       "model_answer_md": "CO is formed by **incomplete combustion** (vehicles, chulhas, stoves in closed rooms). It binds haemoglobin about 200-250 times more strongly than $\\mathrm{O_2}$: $\\mathrm{Hb + CO \\rightleftharpoons HbCO}$. Carboxyhaemoglobin cannot carry oxygen, so the tissues starve: headache, dizziness, unconsciousness and death at high levels.",
+       "points": [
+        "Source: incomplete combustion",
+        "Forms carboxyhaemoglobin (HbCO), affinity 200-250 times O2",
+        "Blood cannot carry O2: headache, death"
+       ]
+      },
+      {
+       "id": "gp-q4",
+       "kind": "long",
+       "level": 3,
+       "marks": 5,
+       "q": "Define air pollution. Discuss the causes and effects on human health.",
+       "model_answer_md": "**Definition**: presence in the air of gases, particles or vapours in such quantity and for such duration that they harm humans, other organisms, property or the environment.\n\n**Causes**: natural (volcanoes, forest fires, dust storms) and man-made (vehicles, thermal power plants, industry, crop burning, chulhas, construction dust).\n\n**Health effects**\n- CO: HbCO, headache, death.\n- $\\mathrm{SO_2}$, $\\mathrm{NO_x}$: bronchitis, asthma, lung damage.\n- $\\mathrm{O_3}$, PAN: eye and lung irritation.\n- PM$_{2.5}$: deep lung, heart disease, cancer.\n- Lead: nerve damage; benzene: cancer.",
+       "points": [
+        "Definition",
+        "Natural and man-made causes with examples",
+        "Pollutant-wise health effects: CO, SO2, NOx, O3, PM, Pb"
+       ]
+      },
+      {
+       "id": "p-e34a40",
+       "pyq": "e34a40b0d59b58a1",
+       "level": 2,
+       "points": [
+        "Definition of air pollution",
+        "Causes: vehicles, industry, power plants, burning, natural sources",
+        "Health effects: CO (HbCO), SO2/NOx (respiratory), PM (lung, heart), Pb (nervous system)"
+       ]
+      },
+      {
+       "id": "p-88af52",
+       "pyq": "88af52b27e1bd61f",
+       "level": 2,
+       "points": [
+        "Primary pollutants (CO, SO2, NOx, H2S, PM) and secondary (O3, PAN, H2SO4)",
+        "H2S: foul smell, toxic, blackens paint, forms SO2 then acid rain",
+        "NOx: lung irritation, smog and acid rain",
+        "SO2: respiratory disease, acid rain, damage to plants and marble"
+       ]
+      },
+      {
+       "id": "p-30f3c7",
+       "pyq": "30f3c76501778fc8",
+       "level": 2,
+       "points": [
+        "NOx = NO + NO2, primary pollutants",
+        "Formed from N2 + O2 at high combustion temperature (vehicles, power plants)",
+        "Effects: lung irritation, acid rain, photochemical smog"
+       ]
+      },
+      {
+       "id": "p-3ffd53",
+       "pyq": "3ffd53a8d562f0de",
+       "level": 2,
+       "points": [
+        "Inorganic pollutants: CO, CO2, SO2, NOx, H2S, NH3, O3 and metals/halides",
+        "Source, key reaction and effect for each (e.g. SO2 to H2SO4, acid rain)",
+        "Primary or secondary"
+       ]
+      },
+      {
+       "id": "p-36c3a8",
+       "pyq": "36c3a8f0e38181a7",
+       "level": 2,
+       "points": [
+        "VOCs: organic compounds with high vapour pressure that evaporate at room temperature",
+        "Examples: benzene, toluene, xylene, formaldehyde",
+        "Sources: vehicles, solvents, paints, industry",
+        "Effects: smog (with NOx), eye and lung irritation, cancer"
+       ]
+      },
+      {
+       "id": "p-92e59e",
+       "pyq": "92e59e54d4f887a6",
+       "level": 1,
+       "points": [
+        "As per the bank answer: (a) poisoning from CN-",
+        "Bhopal was the 1984 leak of methyl isocyanate (MIC), whose breakdown gives HCN (cyanide-type poisoning)"
+       ]
+      }
+     ]
+    },
+    {
+     "id": "particulates",
+     "title": "Particulate matter",
+     "theory_md": "**PM**: fine solid or liquid particles in air, 0.001 to 500 $\\mu$m. Types: dust, smoke, fumes, mist, fog, fly ash, soot.\n\n**PM$_{10}$** stops in the nose and throat; **PM$_{2.5}$** reaches the alveoli and blood. Effects: asthma, heart disease, cancer; haze (scatters light, cuts visibility); particles act as **condensation nuclei** for rain.\n\n**Inorganic PM** (heat or combustion):\n- Pyrite coal: $\\mathrm{4FeS_2 + 11O_2 \\rightarrow 2Fe_2O_3 + 8SO_2}$ (fly ash).\n- Limestone in coal: $\\mathrm{CaCO_3 \\xrightarrow{\\Delta} CaO + CO_2}$.\n- Leaded petrol: $\\mathrm{2Pb(C_2H_5)_4 + 27O_2 \\rightarrow 2PbO + 16CO_2 + 20H_2O}$; with $\\mathrm{C_2H_4Br_2}$ gives volatile $\\mathrm{PbBr_2}$ particles.\n\n**Organic PM**: soot and **PAHs** (benzo[a]pyrene, carcinogens) from incomplete combustion; secondary organic aerosol from oxidised VOCs. **Soot** is a good carrier: huge porous surface adsorbs PAHs, metals, sulphates, and carries them deep into lungs.",
+     "basics_md": "Particles are tiny, and the smaller they are the deeper they go. A particle that has a big surface, like soot, is a bus: it carries toxic chemicals on it into the lungs.",
+     "key_points": [
+      "PM10 and PM2.5; smaller goes deeper into the lungs",
+      "Effects: respiratory and heart disease, cancer, reduced visibility",
+      "Acts as condensation nuclei",
+      "Inorganic PM equations: pyrite, limestone, tetraethyl lead",
+      "Organic PM: soot and PAHs from incomplete combustion; soot carries other pollutants"
+     ],
+     "figures": [],
+     "questions": [
+      {
+       "id": "pm-q1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "Which size class of particles reaches the alveoli?",
+       "options": [
+        "Above 100 µm",
+        "PM10 only",
+        "PM2.5",
+        "Above 10 µm"
+       ],
+       "answer_index": 2,
+       "why": "PM2.5 is fine enough to penetrate the deepest part of the lungs."
+      },
+      {
+       "id": "pm-q2",
+       "kind": "mcq",
+       "level": 2,
+       "q": "Coal containing pyrite gives fly-ash particles of",
+       "options": [
+        "FeS",
+        "Fe2O3",
+        "FeCl3",
+        "Fe(OH)2"
+       ],
+       "answer_index": 1,
+       "why": "$\\mathrm{4FeS_2 + 11O_2 \\rightarrow 2Fe_2O_3 + 8SO_2}$."
+      },
+      {
+       "id": "pm-q3",
+       "kind": "short",
+       "level": 2,
+       "marks": 3,
+       "q": "Why is soot called a carrier of other pollutants? Give three reasons.",
+       "model_answer_md": "1. **Large porous surface**: aggregates of 20-50 nm carbon spheres adsorb PAHs, heavy metals and sulphates.\n2. **Catalytic surface**: soot and metal oxides help $\\mathrm{SO_2 \\rightarrow SO_3 \\rightarrow H_2SO_4}$.\n3. **Small size**: inhaled deep into the lungs, it delivers the adsorbed toxins there.",
+       "points": [
+        "Large surface area adsorbs PAHs and metals",
+        "Catalyses SO2 oxidation",
+        "Fine size carries them deep into lungs"
+       ]
+      },
+      {
+       "id": "p-3e6e3b",
+       "pyq": "3e6e3bc5b39417c2",
+       "level": 2,
+       "points": [
+        "Fine solid or liquid particles suspended in air",
+        "PM10 lodges in the nose and throat; PM2.5 enters alveoli and blood",
+        "Causes asthma, heart disease, cancer, reduced visibility, soiling"
+       ]
+      },
+      {
+       "id": "p-0b7a8f",
+       "pyq": "0b7a8f2c35dcd3e0",
+       "level": 2,
+       "points": [
+        "(i) Pyrite, combustion: 4FeS2 + 11O2 gives 2Fe2O3 + 8SO2",
+        "(ii) Limestone, heat: CaCO3 gives CaO + CO2",
+        "(iii) Leaded gasoline, combustion: 2Pb(C2H5)4 + 27O2 gives 2PbO + 16CO2 + 20H2O; PbBr2 particles with scavenger",
+        "Process (heat or combustion) named for each"
+       ]
+      },
+      {
+       "id": "p-af839b",
+       "pyq": "af839b46af9f4d65",
+       "level": 2,
+       "points": [
+        "Combustion of coal containing pyrite",
+        "4FeS2 + 11O2 gives 2Fe2O3 + 8SO2 (fly ash and SO2)"
+       ]
+      },
+      {
+       "id": "p-dc7e67",
+       "pyq": "dc7e67d211543c09",
+       "level": 2,
+       "points": [
+        "Heating (calcination) of limestone in coal",
+        "CaCO3 gives CaO + CO2; CaO captures SO2 to give CaSO3/CaSO4 particles"
+       ]
+      },
+      {
+       "id": "p-b776a3",
+       "pyq": "b776a359711cbddb",
+       "level": 2,
+       "points": [
+        "Combustion of leaded gasoline in the engine",
+        "Pb(C2H5)4 burns to PbO; with C2H4Br2 scavenger forms PbBr2 fine particles"
+       ]
+      },
+      {
+       "id": "p-2b8a23",
+       "pyq": "2b8a2386d419c59d",
+       "level": 2,
+       "points": [
+        "Organic PM: carbon-based solid or liquid particles",
+        "Primary: soot with PAHs from incomplete combustion; secondary: from VOC oxidation",
+        "Health: PAHs carcinogenic, lung and heart disease"
+       ]
+      },
+      {
+       "id": "p-01fadc",
+       "pyq": "01fadc9ca081bc16",
+       "level": 2,
+       "points": [
+        "Formation: incomplete combustion (pyrosynthesis) gives soot and PAHs; VOC oxidation gives secondary organic aerosol",
+        "Health threat: fine particles enter lungs, PAHs (benzo[a]pyrene) are carcinogenic, cause asthma and heart disease"
+       ]
+      },
+      {
+       "id": "p-5f12f7",
+       "pyq": "5f12f7866abb233e",
+       "level": 3,
+       "points": [
+        "Yes, soot is a good carrier",
+        "Large porous surface area adsorbs PAHs, metals, sulphates",
+        "Catalytic surface for SO2 oxidation",
+        "Fine size carries them deep into lungs"
+       ]
+      },
+      {
+       "id": "p-7f92af",
+       "pyq": "7f92af2fc0ad4062",
+       "level": 2,
+       "points": [
+        "Definition: finely divided solids or liquids in air, 0.001 to 500 µm",
+        "Types: dust, smoke, fumes, mist, fog, fly ash",
+        "Sources and effects: health, visibility, soiling of materials, climate"
+       ]
+      },
+      {
+       "id": "p-32f0c7",
+       "pyq": "32f0c78bad5d67ad",
+       "level": 1,
+       "points": [
+        "B) Absorption and scattering of solar radiation by particulate matter",
+        "Particles of 0.1-1 µm are comparable to the wavelength of light"
+       ]
+      },
+      {
+       "id": "p-a42737",
+       "pyq": "a427377e9da17ab4",
+       "level": 1,
+       "points": [
+        "C) Act as nuclei of condensation",
+        "Water vapour condenses on particles to form droplets"
+       ]
+      }
+     ]
+    },
+    {
+     "id": "acid-rain",
+     "title": "Acid rain and its chemistry",
+     "theory_md": "**Acid rain**: precipitation of pH **below 5.6** (clean rain is about 5.6 from dissolved $\\mathrm{CO_2}$). Caused by $\\mathrm{SO_2}$ and $\\mathrm{NO_x}$ from fossil fuels.\n\n- $\\mathrm{S + O_2 \\rightarrow SO_2}$; $\\mathrm{2SO_2 + O_2 \\xrightarrow{\\text{catalyst or }h\\nu} 2SO_3}$; $\\mathrm{SO_3 + H_2O \\rightarrow H_2SO_4}$.\n- $\\mathrm{2NO + O_2 \\rightarrow 2NO_2}$; $\\mathrm{NO_2 + {}^\\bullet OH + M \\rightarrow HNO_3 + M}$ (or $\\mathrm{4NO_2 + O_2 + 2H_2O \\rightarrow 4HNO_3}$).\n- **OH** is the radical that makes both acids.\n- $\\mathrm{NO_x}$ (not O$_3$ or PAHs) catalyses $\\mathrm{SO_2 \\rightarrow SO_3}$ and is regenerated; O$_3$ is consumed.\n\n**Effects**: lakes and fish die, forest damage, $\\mathrm{CaCO_3 + H_2SO_4 \\rightarrow CaSO_4 + H_2O + CO_2}$ eats marble (**stone leprosy**, Taj Mahal), shells (CaCO$_3$) dissolve, metals corrode.",
+     "basics_md": "Rain is slightly acidic anyway because CO2 dissolves in it. Sulphur and nitrogen oxides turn into strong acids in the air and bring the pH lower. The acids attack anything made of carbonate, like marble and shells.",
+     "key_points": [
+      "Acid rain pH below 5.6, normal rain 5.6 (CO2)",
+      "SO2 to SO3 to H2SO4; NO2 + OH to HNO3",
+      "OH radical is common to both acids",
+      "Effects: aquatic life, forests, marble (stone leprosy), shells, metals",
+      "NOx is the catalyst for SO2 oxidation; O3 is consumed"
+     ],
+     "figures": [
+      {
+       "smiles": "O=C=O.O>>OC(O)=O",
+       "caption": "CO2 + H2O gives carbonic acid: why clean rain is pH 5.6"
+      }
+     ],
+     "questions": [
+      {
+       "id": "ar-q1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "Normal unpolluted rain has a pH of about",
+       "options": [
+        "7.0",
+        "5.6",
+        "4.0",
+        "8.2"
+       ],
+       "answer_index": 1,
+       "why": "Dissolved CO2 forms H2CO3."
+      },
+      {
+       "id": "ar-q2",
+       "kind": "mcq",
+       "level": 2,
+       "q": "Acid rain is caused mainly by",
+       "options": [
+        "CO and CO2",
+        "SO2 and NOx",
+        "CFCs and halons",
+        "CH4 and N2O"
+       ],
+       "answer_index": 1,
+       "why": "They form H2SO4 and HNO3."
+      },
+      {
+       "id": "ar-q3",
+       "kind": "short",
+       "level": 2,
+       "marks": 3,
+       "q": "Write the reactions converting $\\mathrm{NO}$ to $\\mathrm{HNO_3}$ and S to $\\mathrm{H_2SO_4}$ in the atmosphere.",
+       "model_answer_md": "**Nitric acid**: $\\mathrm{2NO + O_2 \\rightarrow 2NO_2}$; $\\mathrm{NO_2 + {}^\\bullet OH + M \\rightarrow HNO_3 + M}$.\n\n**Sulphuric acid**: $\\mathrm{S + O_2 \\rightarrow SO_2}$; $\\mathrm{2SO_2 + O_2 \\rightarrow 2SO_3}$ (catalyst) or $\\mathrm{SO_2 + OH + M \\rightarrow HSO_3 + M}$, $\\mathrm{HSO_3 + O_2 \\rightarrow HO_2 + SO_3}$; $\\mathrm{SO_3 + H_2O \\rightarrow H_2SO_4}$.",
+       "points": [
+        "NO to NO2 to HNO3 with OH",
+        "S to SO2 to SO3 to H2SO4",
+        "Balanced equations"
+       ]
+      },
+      {
+       "id": "ar-q4",
+       "kind": "long",
+       "level": 3,
+       "marks": 5,
+       "q": "What is acid rain? Explain its formation and effects with a labelled diagram (described).",
+       "model_answer_md": "**Acid rain**: rain, snow or fog of pH below 5.6.\n\n**Diagram**: left, factories, power plants and vehicles emitting $\\mathrm{SO_2}$ and $\\mathrm{NO_x}$; middle, clouds where they are oxidised by $\\mathrm{O_3}$, OH and water to $\\mathrm{H_2SO_4}$ and $\\mathrm{HNO_3}$ (arrows labelled); right, acid rain falling on lake, forest, buildings; also dry deposition.\n\n**Reactions**: $\\mathrm{2SO_2 + O_2 + 2H_2O \\rightarrow 2H_2SO_4}$; $\\mathrm{4NO_2 + O_2 + 2H_2O \\rightarrow 4HNO_3}$.\n\n**Effects**: fish and plankton die in acid lakes, forest damage, soil nutrients leached, $\\mathrm{CaCO_3}$ monuments eaten (Taj Mahal), corrosion of metal, human respiratory disease.",
+       "points": [
+        "Definition with pH 5.6",
+        "Diagram with sources, oxidation, deposition",
+        "Reactions of H2SO4 and HNO3",
+        "Effects on water, forests, buildings, humans"
+       ]
+      },
+      {
+       "id": "p-50995d",
+       "pyq": "50995d081e14e2da",
+       "level": 2,
+       "points": [
+        "Acid rain: pH below 5.6",
+        "SO2 and NOx oxidised to H2SO4 and HNO3",
+        "Effects: lakes, forests, buildings and marble"
+       ]
+      },
+      {
+       "id": "p-d1dd7f",
+       "pyq": "d1dd7f2333bd07d8",
+       "level": 3,
+       "points": [
+        "Definition: precipitation of pH below 5.6; normal 5.6 from CO2",
+        "Formation reactions for H2SO4 and HNO3",
+        "Effects on aquatic life, soil, forests, buildings, humans",
+        "Control: reduce SO2/NOx, scrubbers, catalytic converters, clean fuel"
+       ]
+      },
+      {
+       "id": "p-37ff8a",
+       "pyq": "37ff8abe803ecdfa",
+       "level": 2,
+       "points": [
+        "Definition with pH below 5.6",
+        "Diagram: emissions, oxidation in clouds, deposition on lake, forest, monuments",
+        "SO2 and NOx form H2SO4 and HNO3"
+       ]
+      },
+      {
+       "id": "p-aae803",
+       "pyq": "aae8039478515d2b",
+       "level": 2,
+       "points": [
+        "S + O2 gives SO2 (thermal, combustion)",
+        "2SO2 + O2 gives 2SO3 (catalytic, on Fe2O3/V2O5) or SO2 + OH route (photochemical)",
+        "SO3 + H2O gives H2SO4"
+       ]
+      },
+      {
+       "id": "p-ce4d6b",
+       "pyq": "ce4d6b3f01d213f2",
+       "level": 2,
+       "points": [
+        "NO to NO2: 2NO + O2 gives 2NO2",
+        "NO2 + OH + M gives HNO3 (or 4NO2 + O2 + 2H2O gives 4HNO3)",
+        "Acid rain consequence"
+       ]
+      },
+      {
+       "id": "p-da0b46",
+       "pyq": "da0b460093180774",
+       "level": 1,
+       "points": [
+        "C) OH",
+        "OH oxidises both NO2 (to HNO3) and SO2 (to H2SO4 via SO3)"
+       ]
+      },
+      {
+       "id": "p-aadfc1",
+       "pyq": "aadfc1bbe60cb248",
+       "level": 1,
+       "points": [
+        "B) Shell contains acid-soluble neutral salts",
+        "CaCO3 + 2H+ gives Ca2+ + H2O + CO2"
+       ]
+      },
+      {
+       "id": "p-247a4c",
+       "pyq": "247a4c0352d314be",
+       "level": 1,
+       "points": [
+        "A) Acid rain",
+        "Stone leprosy is corrosion of marble and limestone: CaCO3 + H2SO4 gives CaSO4 + H2O + CO2"
+       ]
+      },
+      {
+       "id": "p-f8f759",
+       "pyq": "f8f759a57cb02a7f",
+       "level": 3,
+       "points": [
+        "NOx acts as a catalyst for SO2 to SO3 (NO2 + SO2 gives NO + SO3; 2NO + O2 gives 2NO2)",
+        "O3 does not: it is consumed. PAHs do not: they are not regenerated",
+        "Bhopal deadlier: MIC extremely toxic, heavier than air, night inversion, dense population, safety systems failed, large storage"
+       ]
+      }
+     ]
+    },
+    {
+     "id": "greenhouse",
+     "title": "Greenhouse gases and global warming",
+     "theory_md": "**Greenhouse effect**: gases absorb outgoing infrared and re-emit it to the surface, warming it. **Global warming** is the enhanced effect.\n\n| GHG | Source | GWP (100 yr) |\n|---|---|---|\n| $\\mathrm{CO_2}$ | fossil fuels, deforestation | 1 |\n| $\\mathrm{CH_4}$ | paddy, cattle, landfills | about 28 |\n| $\\mathrm{N_2O}$ | fertilisers | about 265 |\n| CFCs | refrigerants | thousands |\n| $\\mathrm{O_3}$ (low) | smog | short-lived |\n\n$\\mathrm{CO_2}$ contributes most in total; CFCs per molecule most. **Paradox**: plants use $\\mathrm{CO_2}$ ($\\mathrm{6CO_2 + 6H_2O \\xrightarrow{h\\nu} C_6H_{12}O_6 + 6O_2}$) but fossil burning and deforestation add more than plants and oceans absorb. Deforestation removes a sink and releases stored carbon.\n\n**Effects**: sea-level rise, melting ice, extreme weather, crop loss, coral bleaching, spread of malaria and dengue. **Control**: renewables, afforestation, efficiency, methane capture.",
+     "basics_md": "Greenhouse gases are a blanket for infrared heat. Nature has a balance between CO2 emitted and absorbed. We emit faster than plants and oceans can take up, so the blanket thickens.",
+     "key_points": [
+      "GHGs trap outgoing IR; global warming = enhanced greenhouse effect",
+      "GWP: CO2 = 1, CH4 28, N2O 265, CFCs thousands",
+      "CO2 largest total effect, CFCs largest per molecule",
+      "Deforestation removes sink and releases CO2",
+      "Effects: sea-level rise, extreme weather, vector diseases; control: renewables, afforestation"
+     ],
+     "figures": [
+      {
+       "smiles": "O=C=O",
+       "caption": "Carbon dioxide"
+      },
+      {
+       "smiles": "C",
+       "caption": "Methane"
+      }
+     ],
+     "questions": [
+      {
+       "id": "gh-q1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "Which gas has the highest global warming potential per molecule among the options?",
+       "options": [
+        "CO2",
+        "CH4",
+        "N2O",
+        "CFC-12"
+       ],
+       "answer_index": 3,
+       "why": "CFC-12 GWP is about 10 000."
+      },
+      {
+       "id": "gh-q2",
+       "kind": "mcq",
+       "level": 2,
+       "q": "10 tonnes of $\\mathrm{CH_4}$ (GWP 28) are equal in warming to how many tonnes of $\\mathrm{CO_2}$?",
+       "options": [
+        "10 t",
+        "28 t",
+        "280 t",
+        "2800 t"
+       ],
+       "answer_index": 2,
+       "why": "$10\\times28 = 280$ t CO2-equivalent."
+      },
+      {
+       "id": "gh-q3",
+       "kind": "short",
+       "level": 2,
+       "marks": 3,
+       "q": "List the five greenhouse gases with one source each and arrange them by global warming potential.",
+       "model_answer_md": "$\\mathrm{CO_2}$ (fossil fuels, GWP 1), $\\mathrm{CH_4}$ (paddy fields, 28), $\\mathrm{N_2O}$ (fertilisers, 265), CFCs (refrigerants, thousands), tropospheric $\\mathrm{O_3}$ (smog, short-lived).\n\nPer molecule: CFCs > $\\mathrm{N_2O}$ > $\\mathrm{CH_4}$ > $\\mathrm{CO_2}$. In total effect $\\mathrm{CO_2}$ is the largest because of its quantity.",
+       "points": [
+        "Five gases with a source each",
+        "GWP values/order per molecule",
+        "CO2 largest in total effect"
+       ]
+      },
+      {
+       "id": "p-c4882a",
+       "pyq": "c4882aa6c7f1588f",
+       "level": 2,
+       "points": [
+        "Five GHGs (CO2, CH4, N2O, CFCs, O3) with sources and relative GWP",
+        "CO2 has the largest total effect, CFCs the highest per molecule",
+        "Consequences: sea-level rise, melting ice, extreme weather, crop and ecosystem loss, coral bleaching, vector-borne diseases"
+       ]
+      },
+      {
+       "id": "p-fc2ac9",
+       "pyq": "fc2ac96b844bb4fe",
+       "level": 3,
+       "points": [
+        "Global warming definition and mechanism",
+        "CO2 impact: largest share; causes: fossil fuels, deforestation",
+        "CH4 impact: GWP about 28; causes: paddy, cattle, landfills",
+        "Preventive measures: renewables, afforestation, efficiency, methane capture"
+       ]
+      },
+      {
+       "id": "p-2053d0",
+       "pyq": "2053d0ad20939433",
+       "level": 1,
+       "points": [
+        "Trees absorb CO2 by photosynthesis",
+        "Cutting and burning removes the sink and releases stored carbon as CO2, increasing greenhouse effect"
+       ]
+      },
+      {
+       "id": "p-426b28",
+       "pyq": "426b28e4b8b5fa79",
+       "level": 3,
+       "points": [
+        "Photosynthesis: 6CO2 + 6H2O gives C6H12O6 + 6O2, and respiration/decay returns CO2",
+        "Natural cycle balanced; human emissions (fossil fuels C + O2 gives CO2, deforestation) exceed absorption",
+        "CO2 absorbs IR, so rising concentration traps heat"
+       ]
+      },
+      {
+       "id": "p-d8c2b4",
+       "pyq": "d8c2b4cf545ac470",
+       "level": 1,
+       "points": [
+        "B) CFC",
+        "GWP of thousands vs CO2 = 1"
+       ]
+      },
+      {
+       "id": "p-db40a9",
+       "pyq": "db40a9a22124e211",
+       "level": 1,
+       "points": [
+        "D) Malaria",
+        "Warm, humid climate extends mosquito range; skin cancer is from ozone depletion"
+       ]
+      },
+      {
+       "id": "p-b00bc9",
+       "pyq": "b00bc9d81d2d58f0",
+       "level": 1,
+       "points": [
+        "D) All of the above",
+        "Photosynthesis, absorption in oceans (CO2 + H2O gives H2CO3), algae"
+       ]
+      }
+     ]
+    },
+    {
+     "id": "indoor-standards",
+     "title": "Indoor pollution and air quality standards",
+     "theory_md": "**Indoor air pollution**: contaminants inside homes and offices; often worse than outdoors since we spend about 90% of time indoors.\n\n| Source | Pollutant |\n|---|---|\n| Chulhas, wood, dung, kerosene | CO, PM, PAHs |\n| Tobacco smoke | PM, CO, nicotine, tar |\n| Paints, cleaners, furniture | VOCs, HCHO |\n| Building materials, soil | Radon, asbestos |\n| Mould, dust, pets | allergens |\n\n**Prevention**: LPG or electric cooking, chimneys, ventilation, no smoking indoors, low-VOC paints, air purifiers, plants.\n\n**Air quality standard**: legal maximum concentration of a pollutant in ambient air over a stated time. India: **NAAQS 2009** (CPCB), 12 pollutants.\n\n| Pollutant | Time | Limit |\n|---|---|---|\n| $\\mathrm{SO_2}$ | 24 h | 80 $\\mu$g/m$^3$ |\n| $\\mathrm{NO_2}$ | 24 h | 80 $\\mu$g/m$^3$ |\n| CO | 8 h | 2 mg/m$^3$ |\n\nppm to $\\mu$g/m$^3$ at 25 °C: $C=\\dfrac{\\text{ppm}\\times M\\times1000}{24.45}$.",
+     "basics_md": "Standards turn 'safe' into a number. The same gas can be quoted in ppm or in micrograms per cubic metre, so you must be able to convert. Smoke from a chulha in a closed kitchen is the standard Indian example of indoor pollution.",
+     "key_points": [
+      "Indoor sources: cooking fuel, tobacco, VOCs, radon, mould",
+      "Prevention: clean fuel, ventilation, no smoking, low-VOC products",
+      "NAAQS 2009 by CPCB for 12 pollutants",
+      "SO2 80 µg/m3 and NO2 80 µg/m3 (24 h), CO 2 mg/m3 (8 h)",
+      "Units: CO in mg/m3, others µg/m3"
+     ],
+     "figures": [],
+     "questions": [
+      {
+       "id": "is-q1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "The Indian NAAQS limit for CO (8-hour average) is",
+       "options": [
+        "2 µg/m³",
+        "2 mg/m³",
+        "80 µg/m³",
+        "80 mg/m³"
+       ],
+       "answer_index": 1,
+       "why": "CO is quoted in mg/m3."
+      },
+      {
+       "id": "is-q2",
+       "kind": "mcq",
+       "level": 1,
+       "q": "Radon in homes comes mainly from",
+       "options": [
+        "cooking gas",
+        "building materials and soil",
+        "paints",
+        "tobacco"
+       ],
+       "answer_index": 1,
+       "why": "It is a radioactive gas from uranium decay in soil and rock."
+      },
+      {
+       "id": "is-q3",
+       "kind": "numerical",
+       "level": 2,
+       "marks": 3,
+       "q": "An air sample has 0.05 ppm $\\mathrm{SO_2}$ at 25 °C and 1 atm. Convert to µg/m³ ($M=64.07$) and compare with the 24 h NAAQS of 80 µg/m³.",
+       "model_answer_md": "$C = \\dfrac{0.05\\times64.07\\times1000}{24.45} = 131$ µg/m³.\n\nThis is above the limit of 80 µg/m³ (about 1.6 times), so the standard is **violated**.",
+       "points": [
+        "Formula ppm × M × 1000 / 24.45",
+        "C = 131 µg/m3",
+        "Compared with 80: exceeds the standard"
+       ]
+      },
+      {
+       "id": "is-q4",
+       "kind": "numerical",
+       "level": 2,
+       "marks": 2,
+       "q": "The CO limit is 2 mg/m³ (8 h). Express it in ppm at 25 °C ($M=28.01$).",
+       "model_answer_md": "$\\text{ppm} = \\dfrac{C\\,(\\text{mg/m}^3)\\times24.45}{M} = \\dfrac{2\\times24.45}{28.01} = 1.75$ ppm.",
+       "points": [
+        "ppm = mg/m3 × 24.45 / M",
+        "1.75 ppm"
+       ]
+      },
+      {
+       "id": "p-d24b40",
+       "pyq": "d24b40302ef9977f",
+       "level": 2,
+       "points": [
+        "Indoor air pollution defined; people spend about 90% of time indoors",
+        "Sources: cooking fuel (CO, PM), tobacco, VOCs from paints, radon, mould, asbestos",
+        "Prevention: clean fuel, ventilation, chimneys, no smoking, low-VOC paints"
+       ]
+      },
+      {
+       "id": "p-990b3b",
+       "pyq": "990b3b0812d2fc82",
+       "level": 2,
+       "points": [
+        "Five indoor pollutants chosen: CO, PM, VOCs/HCHO, radon, tobacco smoke/mould",
+        "One source and one effect for each"
+       ]
+      },
+      {
+       "id": "p-0bd769",
+       "pyq": "0bd76954ed8931bd",
+       "level": 3,
+       "points": [
+        "Air quality standards: legal maximum permissible concentration in ambient air over an averaging time",
+        "NAAQS 2009 by CPCB, 12 pollutants",
+        "SO2 80 µg/m3 and NO2 80 µg/m3 (24 h; annual 50 and 40); CO 2 mg/m3 (8 h), 4 mg/m3 (1 h)"
+       ]
+      },
+      {
+       "id": "p-bd92a4",
+       "pyq": "bd92a4ff4f5f773d",
+       "level": 1,
+       "points": [
+        "Air quality standard: legally set maximum concentration of a pollutant in ambient air over a stated time that is safe for health",
+        "India: NAAQS 2009, CPCB"
+       ]
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "topic": "Ozone depletion",
+   "subtopics": [
+    {
+     "id": "ozone-layer",
+     "title": "The ozone layer and Chapman cycle",
+     "theory_md": "**Ozone layer**: stratospheric region at 15-35 km (peak 20-25 km), about 300 DU in total column (1 DU = 0.01 mm of pure O$_3$ at STP). It absorbs UV-B and UV-C.\n\n**Chapman cycle**\n- $\\mathrm{O_2 + h\\nu\\ (\\lambda<242\\ nm) \\rightarrow 2O}$\n- $\\mathrm{O + O_2 + M \\rightarrow O_3 + M}$\n- $\\mathrm{O_3 + h\\nu\\ (200\\text{-}320\\ nm) \\rightarrow O_2 + O}$\n- $\\mathrm{O + O_3 \\rightarrow 2O_2}$\n\n**Why at one height**: formation needs both short-wavelength UV and plenty of O$_2$. Above 35 km O$_2$ is too thin; below 15 km the UV has been absorbed already.\n\n**Good and bad ozone**: stratospheric O$_3$ shields life; tropospheric O$_3$ is a secondary pollutant of smog that irritates lungs, damages leaves and cracks rubber.\n\nWater vapour: $\\mathrm{O(^1D) + H_2O \\rightarrow 2\\,{}^\\bullet OH}$ quenches the O radical.",
+     "basics_md": "The sun makes ozone from oxygen and then ozone absorbs more sunlight. Ozone sits in a middle zone because it needs two things at once: strong UV from above and enough oxygen from below.",
+     "key_points": [
+      "Ozone layer at 15-35 km in the stratosphere; about 300 DU",
+      "Chapman cycle: four reactions",
+      "Present at a particular height: needs both UV and O2",
+      "Good ozone (stratosphere) vs bad ozone (troposphere smog)",
+      "O(1D) + H2O gives 2 OH"
+     ],
+     "figures": [
+      {
+       "smiles": "[O-][O+]=O",
+       "caption": "Ozone, O3"
+      }
+     ],
+     "questions": [
+      {
+       "id": "ol-q1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "The ozone layer is mainly at an altitude of",
+       "options": [
+        "0-5 km",
+        "15-35 km",
+        "50-80 km",
+        "100-200 km"
+       ],
+       "answer_index": 1,
+       "why": "Inside the stratosphere, peak near 20-25 km."
+      },
+      {
+       "id": "ol-q2",
+       "kind": "mcq",
+       "level": 2,
+       "q": "One Dobson unit (DU) is",
+       "options": [
+        "0.01 mm of pure O3 at STP",
+        "1 ppm of O3",
+        "1 mg/m3 of O3",
+        "0.01 g of O3"
+       ],
+       "answer_index": 0,
+       "why": "300 DU corresponds to a 3 mm layer of pure ozone at STP."
+      },
+      {
+       "id": "ol-q3",
+       "kind": "short",
+       "level": 2,
+       "marks": 3,
+       "q": "Write the Chapman cycle reactions.",
+       "model_answer_md": "1. $\\mathrm{O_2 + h\\nu\\ (\\lambda<242\\ nm) \\rightarrow 2O}$\n2. $\\mathrm{O + O_2 + M \\rightarrow O_3 + M}$\n3. $\\mathrm{O_3 + h\\nu \\rightarrow O_2 + O}$\n4. $\\mathrm{O + O_3 \\rightarrow 2O_2}$\n\nReactions 1-3 absorb UV and release heat; the net balance gives a steady ozone layer.",
+       "points": [
+        "Photolysis of O2 (below 242 nm)",
+        "O + O2 + M gives O3",
+        "Photolysis of O3 and O + O3 gives 2O2"
+       ]
+      },
+      {
+       "id": "p-307f99",
+       "pyq": "307f99fd204fd3ac",
+       "level": 2,
+       "points": [
+        "Ozone layer: stratospheric region at 15-35 km with high O3 (about 300 DU) absorbing UV-B and UV-C",
+        "Present at one height because formation needs both UV and enough O2: too little O2 above, too little UV below"
+       ]
+      },
+      {
+       "id": "p-22a6e0",
+       "pyq": "22a6e0089287febf",
+       "level": 2,
+       "points": [
+        "O2 + hv (λ<242 nm) gives 2O; O + O2 + M gives O3",
+        "Above 35 km O2 is too scarce; below 15 km short-wavelength UV is already absorbed",
+        "So the peak is in the stratosphere at 20-25 km"
+       ]
+      },
+      {
+       "id": "p-dba45a",
+       "pyq": "dba45a990a799147",
+       "level": 3,
+       "points": [
+        "Rescuer in the stratosphere: absorbs UV via Chapman cycle (equations)",
+        "Pollutant in troposphere: secondary pollutant of smog (NO2 + hv gives O; O + O2 gives O3)",
+        "Harm: eye and lung irritation, crop damage, rubber cracking"
+       ]
+      },
+      {
+       "id": "p-9c4968",
+       "pyq": "9c496870ade3c21e",
+       "level": 1,
+       "points": [
+        "A) O radical",
+        "O(1D) + H2O gives 2OH, quenching the excited O atom"
+       ]
+      }
+     ]
+    },
+    {
+     "id": "halogen-depletion",
+     "title": "CFCs and chlorine chain destruction",
+     "theory_md": "**Source gases**: CFCs ($\\mathrm{CF_2Cl_2}$, $\\mathrm{CFCl_3}$), halons (Br), $\\mathrm{CCl_4}$, $\\mathrm{CH_3CCl_3}$, HCFCs; natural $\\mathrm{CH_3Cl}$.\n\nThey are **inert in the troposphere** (UV below 220 nm is absorbed higher up), so they drift to the stratosphere and are split by UV:\n$\\mathrm{CF_2Cl_2 + h\\nu \\rightarrow CF_2Cl^\\bullet + Cl^\\bullet}$\n\n**Catalytic chain**\n- $\\mathrm{Cl^\\bullet + O_3 \\rightarrow ClO^\\bullet + O_2}$\n- $\\mathrm{ClO^\\bullet + O \\rightarrow Cl^\\bullet + O_2}$\n- Net: $\\mathrm{O_3 + O \\rightarrow 2O_2}$. One Cl destroys about $10^5$ O$_3$.\n\n**Reservoirs** (stop the chain): $\\mathrm{Cl + CH_4 \\rightarrow HCl + CH_3^\\bullet}$; $\\mathrm{ClO + NO_2 \\rightarrow ClONO_2}$. Cl abstracts H most readily from the weakest C-H (tertiary) bond.\n\n**Global warming vs ozone depletion**: GW is in the troposphere, caused by IR trapping (CO$_2$, CH$_4$); depletion is in the stratosphere, caused by Cl and Br, giving more UV-B (skin cancer, cataract). **Montreal Protocol** phases out CFCs.",
+     "basics_md": "CFCs are so unreactive that nothing in the lower air can break them. Only strong UV in the stratosphere can, and it frees chlorine atoms. A chlorine atom is a catalyst: it destroys ozone and comes back to do it again.",
+     "key_points": [
+      "CFCs, halons, CCl4 are inert in troposphere and reach the stratosphere",
+      "UV releases Cl: CF2Cl2 + hv gives CF2Cl + Cl",
+      "Cl + O3 gives ClO + O2; ClO + O gives Cl + O2; one Cl destroys about 10^5 O3",
+      "Reservoirs: HCl and ClONO2",
+      "Global warming (troposphere, IR) differs from ozone depletion (stratosphere, UV)"
+     ],
+     "figures": [
+      {
+       "smiles": "FC(F)(Cl)Cl",
+       "caption": "CFC-12, dichlorodifluoromethane"
+      },
+      {
+       "smiles": "ClC(Cl)(Cl)Cl",
+       "caption": "Carbon tetrachloride"
+      }
+     ],
+     "questions": [
+      {
+       "id": "hd-q1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "In the ozone-destroying cycle, Cl acts as a",
+       "options": [
+        "reactant that is consumed",
+        "catalyst",
+        "product",
+        "inhibitor of photolysis"
+       ],
+       "answer_index": 1,
+       "why": "Cl is regenerated in step 2."
+      },
+      {
+       "id": "hd-q2",
+       "kind": "mcq",
+       "level": 2,
+       "q": "A CFC molecule reaches the stratosphere mainly because it is",
+       "options": [
+        "very reactive with OH",
+        "inert in the troposphere",
+        "heavier than air",
+        "soluble in rain"
+       ],
+       "answer_index": 1,
+       "why": "It has no tropospheric sink, so it survives for 50-100 years."
+      },
+      {
+       "id": "hd-q3",
+       "kind": "short",
+       "level": 2,
+       "marks": 3,
+       "q": "Show how one chlorine atom can destroy thousands of ozone molecules.",
+       "model_answer_md": "$\\mathrm{Cl^\\bullet + O_3 \\rightarrow ClO^\\bullet + O_2}$\n\n$\\mathrm{ClO^\\bullet + O \\rightarrow Cl^\\bullet + O_2}$\n\nNet: $\\mathrm{O_3 + O \\rightarrow 2O_2}$. Cl is regenerated, so the cycle repeats until it is trapped as HCl or $\\mathrm{ClONO_2}$: about $10^5$ ozone molecules per Cl.",
+       "points": [
+        "Cl + O3 gives ClO + O2",
+        "ClO + O gives Cl + O2 (Cl regenerated)",
+        "Net reaction and about 10^5 O3 per Cl"
+       ]
+      },
+      {
+       "id": "p-5491d4",
+       "pyq": "5491d42382d1d2ef",
+       "level": 2,
+       "points": [
+        "Halogen source gases (CFCs, halons, CCl4, CH3CCl3) are inert in the troposphere and reach the stratosphere",
+        "UV releases Cl or Br: CF2Cl2 + hv gives CF2Cl + Cl",
+        "Cl + O3 gives ClO + O2; ClO + O gives Cl + O2; catalytic, Cl regenerated"
+       ]
+      },
+      {
+       "id": "p-2ec4e3",
+       "pyq": "2ec4e3afad8b0ce9",
+       "level": 2,
+       "points": [
+        "Sources: CFC-11, CFC-12, CCl4, CH3CCl3, HCFCs; natural CH3Cl",
+        "Radicals Cl and ClO; equations of the catalytic cycle",
+        "Reservoirs HCl and ClONO2"
+       ]
+      },
+      {
+       "id": "p-62ac2b",
+       "pyq": "62ac2b8ba4507c53",
+       "level": 1,
+       "points": [
+        "(c) A is true, R is false",
+        "CFCs are inert in the troposphere and release Cl only after UV in the stratosphere"
+       ]
+      },
+      {
+       "id": "p-73f2b6",
+       "pyq": "73f2b6b8da851798",
+       "level": 1,
+       "points": [
+        "(b) No",
+        "CFCs are split only by short-wavelength UV (below about 220 nm) which does not reach the troposphere"
+       ]
+      },
+      {
+       "id": "p-c51ccb",
+       "pyq": "c51ccba70a29fbab",
+       "level": 1,
+       "points": [
+        "(d) 2-methyl propane",
+        "Cl abstracts H from the weakest C-H (tertiary) bond, giving the most stable radical"
+       ]
+      },
+      {
+       "id": "p-0d84e5",
+       "pyq": "0d84e5521353b88c",
+       "level": 2,
+       "points": [
+        "Global warming: IR trapping by CO2, CH4, N2O, CFCs in the troposphere, rising temperature",
+        "Ozone depletion: Cl and Br destroy stratospheric ozone, more UV-B",
+        "Different layers and different causes; CFCs contribute to both"
+       ]
+      }
+     ]
+    },
+    {
+     "id": "ozone-hole",
+     "title": "The Antarctic ozone hole",
+     "theory_md": "**Ozone hole**: a region of the stratosphere over Antarctica, each September-October, where total ozone falls below **220 DU** (normal about 300 DU).\n\n**Why Antarctica**:\n1. **Polar vortex**: winter circumpolar winds isolate the air.\n2. **Extreme cold** (below -78 °C) forms **polar stratospheric clouds** (PSCs).\n3. PSC surfaces convert reservoirs to active Cl: $\\mathrm{HCl + ClONO_2 \\rightarrow Cl_2 + HNO_3}$; $\\mathrm{HNO_3}$ stays in the cloud, so no $\\mathrm{NO_2}$ remains to lock ClO.\n4. **Spring sunlight**: $\\mathrm{Cl_2 + h\\nu \\rightarrow 2Cl^\\bullet}$, and the ClO dimer cycle destroys ozone fast.\n5. In November-December the vortex breaks and the hole fills.\n\nThe Arctic is warmer, so PSCs and the hole are weaker. Depletion varies with latitude and season: most at the poles in spring, little in the tropics.\n\n**Effects of more UV-B**: skin cancer, cataract, damage to crops and phytoplankton.",
+     "basics_md": "Over the pole in winter the air is trapped in a spinning cold bucket. Ice clouds in it turn harmless chlorine compounds into active chlorine. When spring sunlight returns it switches the chlorine on, and ozone is eaten in weeks.",
+     "key_points": [
+      "Ozone hole: below 220 DU over Antarctica in Sept-Oct",
+      "Polar vortex isolates air; PSCs form below -78 °C",
+      "PSCs convert HCl and ClONO2 to Cl2; denitrification removes NO2",
+      "Spring sunlight releases Cl; ClO dimer cycle",
+      "Arctic is warmer so weaker; effects: skin cancer, cataract, crop damage"
+     ],
+     "figures": [],
+     "questions": [
+      {
+       "id": "oh-q1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "The ozone hole is defined as total ozone below",
+       "options": [
+        "300 DU",
+        "220 DU",
+        "100 DU",
+        "50 DU"
+       ],
+       "answer_index": 1,
+       "why": "220 DU is the standard threshold."
+      },
+      {
+       "id": "oh-q2",
+       "kind": "mcq",
+       "level": 2,
+       "q": "The ozone hole is largest in",
+       "options": [
+        "Antarctic spring",
+        "Antarctic autumn",
+        "tropical summer",
+        "Arctic winter"
+       ],
+       "answer_index": 0,
+       "why": "September-October, when sunlight returns to the cold vortex."
+      },
+      {
+       "id": "oh-q3",
+       "kind": "short",
+       "level": 3,
+       "marks": 4,
+       "q": "Why is the ozone hole concentrated over Antarctica and not over the tropics?",
+       "model_answer_md": "1. **Polar vortex** isolates the winter air over Antarctica.\n2. **Extreme cold** below -78 °C forms polar stratospheric clouds.\n3. On the PSCs, reservoirs are converted to active chlorine ($\\mathrm{HCl + ClONO_2 \\rightarrow Cl_2 + HNO_3}$).\n4. **Spring sunlight** frees Cl atoms ($\\mathrm{Cl_2 + h\\nu \\rightarrow 2Cl}$) which destroy $\\mathrm{O_3}$.\nTropics have no vortex, no PSCs and fast ozone production by strong UV, so the hole does not form there.",
+       "points": [
+        "Polar vortex",
+        "Cold PSCs",
+        "Reservoirs converted to Cl2; spring sunlight",
+        "Tropics: no vortex or PSCs"
+       ]
+      },
+      {
+       "id": "p-dfc51e",
+       "pyq": "dfc51e3d80917fca",
+       "level": 3,
+       "points": [
+        "Ozone hole defined (below 220 DU over Antarctica in spring)",
+        "CFC mechanism with Cl and ClO equations",
+        "Reasons for Antarctica: polar vortex, PSCs, chlorine activation on PSCs, spring sunlight",
+        "Hole fills in Nov-Dec"
+       ]
+      },
+      {
+       "id": "p-9c7886",
+       "pyq": "9c7886213cd2dc36",
+       "level": 3,
+       "points": [
+        "Depletion by CFCs: photolysis and Cl chain reactions",
+        "Varies by region: strongest over poles, weak in tropics; by season: Antarctic spring",
+        "Antarctica: vortex, PSCs, Cl activation, spring sunlight"
+       ]
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "topic": "Control of gaseous and particulate pollutants",
+   "subtopics": [
+    {
+     "id": "particulate-devices",
+     "title": "Dust collectors: ESP, cyclone, filters",
+     "theory_md": "Particulates are removed by devices fitted at the source.\n\n- **Settling chamber**: particles above 50 $\\mu$m settle by gravity.\n- **Cyclone**: gas enters tangentially, spins; centrifugal force throws particles above about 5-10 $\\mu$m to the wall; they fall into the hopper. 50-90%.\n- **Bag filter**: fabric bags, 99% for about 0.1 $\\mu$m.\n- **Electrostatic precipitator (ESP)**: thin wires at 30-100 kV negative DC give a **corona** (electrons ionise gas, negative ions form), particles are charged, move to earthed plates, are rapped into the hopper. Over 99%, particles to 0.1 $\\mu$m. Efficiency $\\eta = 1 - e^{-wA/Q}$.\n- **Wet scrubber** catches fines and soluble gases.\n\nDevices in series: $\\eta = 1 - (1-\\eta_1)(1-\\eta_2)$.\n\nDiagram labels for ESP: dirty gas inlet, discharge wires, collecting plates, HV supply, rapper, hopper, clean gas outlet.",
+     "basics_md": "Big particles fall, medium ones are flung outward, small ones need an electric charge or a filter to catch them. Pick the device by the size of the particle.",
+     "key_points": [
+      "Settling chamber > 50 µm; cyclone > 5-10 µm; ESP and bag filter to 0.1 µm",
+      "ESP: corona discharge charges particles, plates collect, rapping removes",
+      "ESP > 99% efficiency; low pressure drop",
+      "Cyclone: tangential entry, centrifugal force",
+      "Devices in series: η = 1 - (1-η1)(1-η2)"
+     ],
+     "figures": [],
+     "questions": [
+      {
+       "id": "pd2-q1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "A cyclone separator removes particles mainly by",
+       "options": [
+        "gravity",
+        "centrifugal force",
+        "electrical charge",
+        "adsorption"
+       ],
+       "answer_index": 1,
+       "why": "The spinning gas throws particles to the wall."
+      },
+      {
+       "id": "pd2-q2",
+       "kind": "mcq",
+       "level": 2,
+       "q": "The corona in an ESP forms",
+       "options": [
+        "around the earthed plates",
+        "around the thin discharge wires",
+        "in the hopper",
+        "in the clean gas outlet"
+       ],
+       "answer_index": 1,
+       "why": "The field is strongest near the thin wire."
+      },
+      {
+       "id": "pd2-q3",
+       "kind": "numerical",
+       "level": 2,
+       "marks": 3,
+       "q": "An ESP has plate area $A=500\\ \\mathrm{m^2}$, drift velocity $w=0.1$ m/s and gas flow $Q=50\\ \\mathrm{m^3/s}$. Find its efficiency.",
+       "model_answer_md": "$\\dfrac{wA}{Q} = \\dfrac{0.1\\times500}{50} = 1$\n\n$\\eta = 1 - e^{-1} = 1 - 0.368 = 0.632$, that is **63.2%**.",
+       "points": [
+        "Formula η = 1 - exp(-wA/Q)",
+        "wA/Q = 1",
+        "η = 63.2%"
+       ]
+      },
+      {
+       "id": "pd2-q4",
+       "kind": "numerical",
+       "level": 2,
+       "marks": 2,
+       "q": "A cyclone of 80% efficiency is followed by an ESP of 95% efficiency. Find the overall efficiency.",
+       "model_answer_md": "$\\eta = 1 - (1-0.80)(1-0.95) = 1 - 0.20\\times0.05 = 1 - 0.01 = 0.99$, that is **99%**.",
+       "points": [
+        "Series formula",
+        "η = 99%"
+       ]
+      },
+      {
+       "id": "p-e26bce",
+       "pyq": "e26bceaf8c69bf0f",
+       "level": 2,
+       "points": [
+        "Particles charged by corona discharge, then attracted to oppositely charged collecting plates",
+        "High voltage on thin wire ionises gas; negative ions charge dust; plates collect; rapping removes dust"
+       ]
+      },
+      {
+       "id": "p-9028f4",
+       "pyq": "9028f4e63a11e822",
+       "level": 3,
+       "points": [
+        "Principle: charging by corona and collection on earthed plates",
+        "Corona: strong field at thin wire at 30-100 kV, electron avalanche, ionised glow, negative ions attach to particles",
+        "Working steps, rapping, hopper",
+        "Efficiency over 99% for 0.1 µm"
+       ]
+      },
+      {
+       "id": "p-598fa5",
+       "pyq": "598fa5c0e54015ec",
+       "level": 3,
+       "points": [
+        "Air pollution defined",
+        "ESP: neat diagram with wires, plates, hopper, HV supply; corona, charging, collection",
+        "Cyclone: diagram with tangential inlet, vortex, outlet tube, hopper; centrifugal force, > 5-10 µm"
+       ]
+      },
+      {
+       "id": "p-c069a2",
+       "pyq": "c069a2463a47ba4a",
+       "level": 2,
+       "points": [
+        "Control devices fitted at the source (end of pipe)",
+        "Particulates: settling chamber, cyclone, bag filter, ESP, wet scrubber",
+        "Gases: absorption/scrubber, adsorption, incineration, catalytic converter"
+       ]
+      },
+      {
+       "id": "p-b1cd9d",
+       "pyq": "b1cd9d79e825a6bf",
+       "level": 1,
+       "points": [
+        "B) Wet scrubbers",
+        "Gravity settler removes only coarse particles; wet scrubber (venturi) removes down to about 0.5-1 µm"
+       ]
+      }
+     ]
+    },
+    {
+     "id": "scrubbers-adsorption",
+     "title": "Scrubbers and adsorption",
+     "theory_md": "**Wet scrubber**: gas meets liquid droplets (spray tower, **venturi**). Captures fine particles by impaction and soluble gases ($\\mathrm{SO_2}$, HCl) by absorption. Handles sticky, hot or explosive dust; drawback is sludge. Example: venturi scrubber in steel plants; limestone FGD ($\\mathrm{SO_2 + CaCO_3 \\rightarrow CaSO_3 + CO_2}$) in power plants.\n\n**Dry scrubber**: lime or bicarbonate sorbent injected, then caught in a bag filter. No wastewater, but needs dry gas. Example: lime injection at incinerators.\n\n**Adsorption**: gas held **on** the surface of a porous solid (activated carbon, silica gel, zeolite) by van der Waals forces; **absorption** is **into** a liquid. Fixed-bed with two columns: one adsorbs, the other is regenerated by steam; vapour condensed and recovered. Uses: solvent vapours, odours, Hg and dioxins.",
+     "basics_md": "A scrubber washes the gas. Adsorption makes pollutant molecules stick to a solid with a huge internal surface, like a sponge made of carbon.",
+     "key_points": [
+      "Wet scrubber: droplets capture fine particles and soluble gases; sludge drawback",
+      "Dry scrubber: sorbent injection plus bag filter, no wastewater",
+      "Absorption in liquid vs adsorption on solid surface",
+      "Adsorbents: activated carbon, silica gel, zeolite; regenerated with steam",
+      "Examples: venturi scrubber; limestone FGD; carbon adsorber for VOCs"
+     ],
+     "figures": [],
+     "questions": [
+      {
+       "id": "sa-q1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "Activated carbon removes VOC vapours by",
+       "options": [
+        "absorption",
+        "adsorption",
+        "combustion",
+        "settling"
+       ],
+       "answer_index": 1,
+       "why": "Molecules stick on the surface of the porous solid."
+      },
+      {
+       "id": "sa-q2",
+       "kind": "mcq",
+       "level": 2,
+       "q": "Which is a drawback of wet scrubbers?",
+       "options": [
+        "Cannot remove soluble gases",
+        "Sludge and wastewater",
+        "Fire risk with dust",
+        "Low efficiency for fine particles"
+       ],
+       "answer_index": 1,
+       "why": "The captured pollutant ends up in water."
+      },
+      {
+       "id": "sa-q3",
+       "kind": "short",
+       "level": 2,
+       "marks": 3,
+       "q": "Differentiate between absorption and adsorption and name one adsorbent.",
+       "model_answer_md": "| Absorption | Adsorption |\n|---|---|\n| Gas dissolves **into** a liquid | Gas is held **on** the surface of a solid |\n| Bulk phenomenon | Surface phenomenon |\n| Wet scrubber, spray tower | Activated carbon bed |\n\nAdsorbents: activated carbon (500-1500 m²/g), silica gel, zeolites.",
+       "points": [
+        "Absorption into liquid, adsorption on solid surface",
+        "Bulk vs surface",
+        "Adsorbent named"
+       ]
+      },
+      {
+       "id": "p-903d68",
+       "pyq": "903d6803288218a1",
+       "level": 2,
+       "points": [
+        "Wet scrubber is preferable for soot, dust and aerosol",
+        "Water droplets capture fine particles and soluble gases; no re-entrainment or fire risk",
+        "Examples: wet venturi scrubber in steel plants; dry: lime injection or cyclone/bag filter"
+       ]
+      },
+      {
+       "id": "p-b1e9e6",
+       "pyq": "b1e9e6bc62ca4ab4",
+       "level": 2,
+       "points": [
+        "Wet scrubbers are preferable",
+        "Capture by impaction on droplets, gas cooled, no fire risk",
+        "One example each: wet venturi, dry lime sorbent injection"
+       ]
+      },
+      {
+       "id": "p-7babd8",
+       "pyq": "7babd8009f3c8884",
+       "level": 1,
+       "points": [
+        "Scrubber: device where polluted gas contacts liquid (wet) or solid sorbent (dry)",
+        "Removes particles and soluble or acid gases like SO2, HCl"
+       ]
+      },
+      {
+       "id": "p-a07d73",
+       "pyq": "a07d735b6713ff2f",
+       "level": 3,
+       "points": [
+        "Adsorption definition: gas held on a porous solid surface (activated carbon)",
+        "Diagram of fixed-bed adsorber with two columns and regeneration",
+        "Working: adsorption, breakthrough, steam regeneration",
+        "Applications: solvent recovery, odour, VOC, mercury"
+       ]
+      }
+     ]
+    },
+    {
+     "id": "vehicle-control",
+     "title": "Catalytic converters and NO control",
+     "theory_md": "**Three-way catalytic converter** (exhaust line, before the silencer) converts CO, HC and $\\mathrm{NO_x}$ into $\\mathrm{CO_2}$, $\\mathrm{H_2O}$ and $\\mathrm{N_2}$.\n\n**Structure**: steel shell; ceramic (cordierite) honeycomb monolith; $\\mathrm{Al_2O_3}$ washcoat with $\\mathrm{CeO_2}$; Pt and Pd (oxidation), **Rh** (reduction); oxygen sensor.\n\n- $\\mathrm{2CO + O_2 \\rightarrow 2CO_2}$\n- $\\mathrm{C_xH_y + (x+y/4)O_2 \\rightarrow xCO_2 + (y/2)H_2O}$\n- $\\mathrm{2NO + 2CO \\rightarrow N_2 + 2CO_2}$\n\nWorks at 400-800 °C, air-fuel ratio about 14.7:1. **Two-way**: Pt/Pd, oxidises only CO and HC. **Use unleaded petrol**: lead poisons the catalyst.\n\n**Thermal NO** needs both high temperature and excess O$_2$, so reduce it by lowering flame temperature and limiting excess air (staged combustion, EGR).",
+     "basics_md": "The exhaust pipe holds a ceramic honeycomb covered with precious metals. The metals speed up reactions that turn poisonous gases into harmless ones as they pass through.",
+     "key_points": [
+      "Three-way converter removes CO, HC and NOx; two-way only CO and HC",
+      "Structure: honeycomb monolith, washcoat, Pt/Pd/Rh, O2 sensor",
+      "Reactions: 2CO + O2, HC oxidation, 2NO + 2CO gives N2 + 2CO2",
+      "Rh does reduction; AF ratio 14.7:1",
+      "Leaded petrol poisons catalyst; NO reduced by lower temperature and limited air"
+     ],
+     "figures": [],
+     "questions": [
+      {
+       "id": "vc-q1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "The metal in a catalytic converter that reduces NOx is",
+       "options": [
+        "Pt",
+        "Pd",
+        "Rh",
+        "Pb"
+       ],
+       "answer_index": 2,
+       "why": "Rhodium reduces NOx; Pt and Pd oxidise CO and HC."
+      },
+      {
+       "id": "vc-q2",
+       "kind": "mcq",
+       "level": 2,
+       "q": "A car with a catalytic converter must use",
+       "options": [
+        "leaded petrol",
+        "unleaded petrol",
+        "kerosene blend",
+        "any fuel"
+       ],
+       "answer_index": 1,
+       "why": "Lead deposits on the catalyst and poisons it."
+      },
+      {
+       "id": "vc-q3",
+       "kind": "short",
+       "level": 2,
+       "marks": 3,
+       "q": "Why is thermal NO not formed in a cool engine, and how can it be reduced?",
+       "model_answer_md": "$\\mathrm{N_2 + O_2 \\rightarrow 2NO}$ needs a very high temperature to break the $\\mathrm{N\\equiv N}$ bond. Reduce it by: (1) lowering the peak flame temperature (EGR, cooler combustion), (2) limiting excess air at high temperature (staged combustion), (3) a three-way converter after the engine.",
+       "points": [
+        "Needs high T to break N≡N",
+        "Lower flame temperature",
+        "Limit excess air"
+       ]
+      },
+      {
+       "id": "p-1a33ed",
+       "pyq": "1a33ed8364cee790",
+       "level": 3,
+       "points": [
+        "Function: converts CO, HC, NOx to CO2, H2O, N2",
+        "Structure with labels: shell, honeycomb monolith, washcoat, Pt/Pd/Rh, O2 sensor",
+        "Reactions of oxidation and reduction",
+        "Lead-free petrol required"
+       ]
+      },
+      {
+       "id": "p-3756dd",
+       "pyq": "3756ddd35999a5c0",
+       "level": 2,
+       "points": [
+        "Two-way: oxidation only, removes CO and HC, Pt/Pd",
+        "Three-way: also reduces NOx, Pt/Pd/Rh, 2NO + 2CO gives N2 + 2CO2",
+        "Three-way needs stoichiometric air-fuel (14.7:1) with O2 sensor"
+       ]
+      },
+      {
+       "id": "p-ea3a19",
+       "pyq": "ea3a19cbf2e7f2ed",
+       "level": 1,
+       "points": [
+        "C) Both a and b",
+        "Thermal NO forms at high T with excess O2: lower temperature and limited air reduce it"
+       ]
+      }
+     ]
+    }
+   ]
+  }
+ ]
+}

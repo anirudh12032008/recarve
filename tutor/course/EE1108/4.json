@@ -1,0 +1,1166 @@
+{
+ "code": "EE1108",
+ "unit": "Semiconductor Devices",
+ "written": "2026-10-19",
+ "by": "claude-sonnet-5-5, in a Claude Code session",
+ "topics": [
+  {
+   "topic": "PN junction diode characteristics",
+   "subtopics": [
+    {
+     "id": "junction",
+     "title": "PN junction, depletion layer and barrier potential",
+     "theory_md": "A **PN junction diode** is a p-type and an n-type semiconductor joined in one crystal: anode on the p side, cathode on the n side.\n\nHoles diffuse from p to n and electrons from n to p, and recombine near the junction. This uncovers **fixed negative acceptor ions on the p side and fixed positive donor ions on the n side**. That region has no mobile carriers and is the **depletion layer**.\n\nIts electric field opposes further diffusion. The potential across it is the **barrier potential**: about **0.7 V for Si and 0.3 V for Ge**.\n\nForward bias narrows the layer and current flows. Reverse bias widens it and only a tiny leakage flows, so the diode conducts in **one direction only**.",
+     "basics_md": "A semiconductor has two kinds of carriers: electrons (n-type) and holes (p-type). Put the two in contact and carriers near the boundary meet and cancel, like two crowds merging at a door. What is left behind is a thin strip of fixed charges, and that strip pushes back against more crowd crossing over.",
+     "key_points": [
+      "PN diode = p-type joined to n-type; anode on p, cathode on n",
+      "Diffusion of majority carriers, recombination, fixed ions left behind: depletion layer",
+      "Field of the ions gives the barrier potential: Si 0.7 V, Ge 0.3 V",
+      "Forward bias narrows the layer, reverse bias widens it",
+      "Conducts in one direction only"
+     ],
+     "figures": [],
+     "questions": [
+      {
+       "id": "j-q1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "The barrier potential of a germanium PN junction at room temperature is about",
+       "options": [
+        "0.7 V",
+        "0.3 V",
+        "1.1 V",
+        "0.026 V"
+       ],
+       "answer_index": 1,
+       "why": "Ge 0.3 V, Si 0.7 V. 1.1 eV is the band gap of Si and 0.026 V is the thermal voltage."
+      },
+      {
+       "id": "j-q2",
+       "kind": "mcq",
+       "level": 1,
+       "q": "The depletion layer of a PN junction contains",
+       "options": [
+        "free electrons only",
+        "immobile positive and negative ions",
+        "free holes only",
+        "equal numbers of free electrons and holes"
+       ],
+       "answer_index": 1,
+       "why": "Mobile carriers have recombined; only the fixed donor and acceptor ions remain."
+      },
+      {
+       "id": "j-q3",
+       "kind": "short",
+       "level": 2,
+       "marks": 3,
+       "q": "What is a PN junction diode? Explain how the depletion layer forms and what it does.",
+       "model_answer_md": "**PN junction diode:** a p-type and an n-type semiconductor joined in one crystal, with anode on the p side and cathode on the n side.\n\n**Formation of the depletion layer:**\n1. Holes diffuse from p to n, electrons from n to p, and recombine near the junction.\n2. This leaves fixed negative acceptor ions on the p side and fixed positive donor ions on the n side.\n3. This charged region, free of mobile carriers, is the **depletion layer**.\n\n**Effect:** its field opposes further diffusion and sets up the **barrier potential** (0.7 V Si, 0.3 V Ge). Forward bias narrows the layer and current flows; reverse bias widens it and the diode blocks, so it conducts one way only.",
+       "points": [
+        "Definition: p-type and n-type joined, anode and cathode",
+        "Diffusion and recombination leave fixed ions",
+        "Depletion layer has no mobile carriers",
+        "Barrier potential 0.7 V Si, 0.3 V Ge",
+        "One-way conduction"
+       ]
+      },
+      {
+       "id": "j-q4",
+       "kind": "mcq",
+       "level": 2,
+       "q": "When a PN junction is reverse biased, the depletion layer",
+       "options": [
+        "narrows and the barrier potential falls",
+        "widens and the barrier potential rises",
+        "widens and the barrier potential falls",
+        "stays the same"
+       ],
+       "answer_index": 1,
+       "why": "Reverse bias adds to the barrier, so the layer widens and almost no majority carriers cross."
+      },
+      {
+       "id": "j-p1",
+       "pyq": "df7a3057c9f7a740",
+       "level": 2,
+       "points": [
+        "PN diode: p-type and n-type semiconductor joined in one crystal, anode and cathode",
+        "Diffusion, recombination, fixed ions give the depletion layer and barrier potential (Si 0.7 V, Ge 0.3 V)",
+        "Forward bias: layer narrows, current flows once the barrier is overcome",
+        "Reverse bias: layer widens, only a small minority-carrier leakage current",
+        "One-way conduction, so it is used as a rectifier"
+       ]
+      },
+      {
+       "id": "j-p2",
+       "pyq": "922525c9dd8dfdcd",
+       "level": 2,
+       "points": [
+        "Neat diagram of PN junction with depletion layer, fixed ions and barrier potential",
+        "Forward bias: external source opposes the barrier, layer narrows, large current above the knee voltage",
+        "Reverse bias: source adds to the barrier, layer widens, only the reverse saturation current (nA to $\\mu$A)",
+        "Zener is always reverse biased because its useful action (constant voltage) occurs only in reverse breakdown",
+        "In forward bias a Zener acts as an ordinary diode with a drop of about 0.7 V, so it cannot regulate"
+       ]
+      }
+     ]
+    },
+    {
+     "id": "vi-characteristics",
+     "title": "Forward and reverse V-I characteristics, breakdown",
+     "theory_md": "**Forward bias** (anode to +): the source opposes the barrier and narrows the layer. Current is negligible until the **cut-in (knee) voltage** (Si 0.7 V, Ge 0.3 V), then rises steeply, limited only by the external resistance.\n\n**Reverse bias:** the layer widens. A tiny **reverse saturation current** $I_0$ (nA for Si, $\\mu$A for Ge) flows from **minority carriers**. It is nearly independent of voltage and doubles for every 10 °C.\n\nAt the **breakdown voltage** $V_{BR}$ the reverse current rises sharply (avalanche or Zener breakdown) and an ordinary diode is damaged unless the current is limited.\n\n**Sketch:** forward quadrant in mA, reverse quadrant in $\\mu$A, so the scales differ; mark $V_\\gamma$, $I_0$ and $V_{BR}$. Equation: $I=I_0(e^{V/\\eta V_T}-1)$.",
+     "basics_md": "Think of the junction as a one-way valve with a spring. In the forward direction you must push past the spring (the knee voltage) before water flows freely. In the reverse direction only a trickle leaks, until the pressure is so high that the valve bursts (breakdown).",
+     "key_points": [
+      "Forward: negligible current below the knee voltage, then exponential rise",
+      "Reverse: small saturation current from minority carriers, nearly constant",
+      "Breakdown at $V_{BR}$: sharp rise in reverse current",
+      "Different scales for forward (mA) and reverse ($\\mu$A) axes, labelled $V_\\gamma$, $I_0$, $V_{BR}$",
+      "Circuit: diode, series resistor, variable supply, meters"
+     ],
+     "figures": [],
+     "questions": [
+      {
+       "id": "v-q1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "The reverse saturation current of a PN diode is due to",
+       "options": [
+        "majority carriers",
+        "minority carriers",
+        "immobile ions",
+        "the barrier potential"
+       ],
+       "answer_index": 1,
+       "why": "Reverse bias blocks majority carriers but sweeps thermally generated minority carriers across."
+      },
+      {
+       "id": "v-q2",
+       "kind": "mcq",
+       "level": 1,
+       "q": "A silicon diode starts conducting appreciably in forward bias at about",
+       "options": [
+        "0.3 V",
+        "0.7 V",
+        "1.4 V",
+        "5 V"
+       ],
+       "answer_index": 1,
+       "why": "The cut-in voltage of Si is about 0.7 V; 0.3 V is Ge."
+      },
+      {
+       "id": "v-q3",
+       "kind": "mcq",
+       "level": 2,
+       "q": "As the reverse voltage is raised from zero to just below $V_{BR}$, the reverse current of a diode",
+       "options": [
+        "increases linearly with voltage",
+        "stays almost constant at $I_0$",
+        "falls to zero",
+        "rises exponentially"
+       ],
+       "answer_index": 1,
+       "why": "All the thermally generated minority carriers are already swept across, so the current saturates at $I_0$."
+      },
+      {
+       "id": "v-q4",
+       "kind": "short",
+       "level": 3,
+       "marks": 3,
+       "q": "Why does the reverse current of a diode roughly double for every 10 °C rise, yet stay almost independent of the reverse voltage?",
+       "model_answer_md": "**Cause of $I_0$:** minority carriers that are thermally generated near the junction and swept across by the barrier field.\n\n**Temperature:** a higher temperature generates more electron-hole pairs, so $I_0$ increases; it roughly doubles for every 10 °C, $I_0(T_2)=I_0(T_1)\\,2^{(T_2-T_1)/10}$.\n\n**Voltage:** the number of minority carriers available is fixed by temperature, not by voltage. A small reverse voltage already sweeps all of them across, so a larger voltage adds nothing until breakdown.",
+       "points": [
+        "Reverse current is due to thermally generated minority carriers",
+        "Higher temperature generates more pairs, $I_0$ doubles per 10 °C",
+        "Voltage only sweeps the carriers; all are already collected, so saturation"
+       ]
+      },
+      {
+       "id": "v-p1",
+       "pyq": "b7ea786dcb814223",
+       "level": 3,
+       "points": [
+        "Diagram of forward bias and reverse bias connections with the depletion layer width in each",
+        "Forward: layer narrows, current negligible below the knee (Si 0.7 V, Ge 0.3 V), then exponential rise",
+        "Reverse: layer widens, small saturation current $I_0$ from minority carriers, breakdown at $V_{BR}$",
+        "V-I characteristic with labelled axes, knee voltage, $I_0$, $V_{BR}$ and different scales (mA and $\\mu$A)",
+        "Equation $I=I_0(e^{V/\\eta V_T}-1)$ and one-way conduction"
+       ]
+      },
+      {
+       "id": "v-p2",
+       "pyq": "06fb59bfedbc112d",
+       "level": 2,
+       "points": [
+        "Forward bias: p to +, n to -, layer narrows, current flows above the knee voltage",
+        "Reverse bias: p to -, n to +, layer widens, only $I_0$ flows",
+        "V-I characteristic drawn with both quadrants, knee voltage and breakdown marked"
+       ]
+      },
+      {
+       "id": "v-p3",
+       "pyq": "ad8427b39d4d5d74",
+       "level": 2,
+       "points": [
+        "Circuit with diode, resistor, variable supply and meters",
+        "(i) Forward: nothing till the knee voltage (Si 0.7 V, Ge 0.3 V), then exponential current",
+        "(ii) Reverse: small constant $I_0$ from minority carriers, sharp rise at $V_{BR}$",
+        "Characteristic sketch with both quadrants on different scales"
+       ]
+      },
+      {
+       "id": "v-p4",
+       "pyq": "3e99457e3b26fc5d",
+       "level": 2,
+       "points": [
+        "Forward characteristic: knee voltage, exponential rise",
+        "Reverse characteristic: saturation current $I_0$, almost constant",
+        "Breakdown: avalanche (minority carriers collide and multiply, lightly doped, wide layer) and Zener (strong field pulls electrons from bonds, heavily doped, thin layer)",
+        "Current rises sharply at $V_{BR}$; limit it with a series resistor"
+       ]
+      }
+     ]
+    },
+    {
+     "id": "diode-equation",
+     "title": "Diode equation, resistance and temperature",
+     "theory_md": "**Diode equation:** $I=I_0\\left(e^{V/\\eta V_T}-1\\right)$ with $V_T=\\dfrac{kT}{q}=\\dfrac{T}{11600}\\approx 26$ mV at 300 K. Rajput takes $\\eta=1$ (Ge) and $2$ (Si); say which you assume. In forward bias $e^{V/\\eta V_T}\\gg1$, so $I\\approx I_0e^{V/\\eta V_T}$.\n\n**Static resistance** $R=V/I$ at the operating point. **Dynamic resistance** $r_d=\\dfrac{\\Delta V}{\\Delta I}=\\dfrac{\\eta V_T}{I}$, which falls as the current rises.\n\n**Temperature:** $I_0(T_2)=I_0(T_1)\\,2^{(T_2-T_1)/10}$.\n\n**Practical series circuit:** $I=\\dfrac{V_s-V_\\gamma}{R}$; reversed, the diode is open and drops all of $V_s$.",
+     "basics_md": "The diode equation just says current grows exponentially with voltage. Because the curve gets steeper as current rises, a small voltage change makes a big current change, so the diode's AC resistance gets smaller at higher current.",
+     "key_points": [
+      "$I=I_0(e^{V/\\eta V_T}-1)$, $V_T=26$ mV at 300 K",
+      "Static $R=V/I$; dynamic $r_d=\\eta V_T/I$",
+      "$I_0$ doubles per 10 °C",
+      "Series circuit: subtract $V_\\gamma$ before dividing by $R$"
+     ],
+     "figures": [],
+     "questions": [
+      {
+       "id": "d-q1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "A diode with $\\eta=1$ at 300 K carries 26 mA. Its dynamic resistance is about",
+       "options": [
+        "0.1 $\\Omega$",
+        "1 $\\Omega$",
+        "26 $\\Omega$",
+        "1 k$\\Omega$"
+       ],
+       "answer_index": 1,
+       "why": "$r_d=\\eta V_T/I=0.026/0.026=1\\ \\Omega$."
+      },
+      {
+       "id": "d-q2",
+       "kind": "numerical",
+       "level": 2,
+       "marks": 3,
+       "q": "A silicon diode has $I_0=10$ nA. Taking $\\eta=2$ and $V_T=26$ mV, find the forward current at 0.6 V and the dynamic resistance there.",
+       "model_answer_md": "$\\eta V_T=2\\times0.026=0.052$ V\n\n$\\dfrac{V}{\\eta V_T}=\\dfrac{0.6}{0.052}=11.54$, so $e^{11.54}=1.026\\times10^{5}$\n\n$I=I_0\\left(e^{V/\\eta V_T}-1\\right)=10\\times10^{-9}\\times(1.026\\times10^{5}-1)=1.03\\ \\text{mA}$\n\n$r_d=\\dfrac{\\eta V_T}{I}=\\dfrac{0.052}{1.026\\times10^{-3}}=50.7\\ \\Omega$",
+       "points": [
+        "$\\eta V_T=0.052$ V",
+        "$I=I_0(e^{V/\\eta V_T}-1)\\approx1.03$ mA",
+        "$r_d=\\eta V_T/I\\approx50.7\\ \\Omega$"
+       ]
+      },
+      {
+       "id": "d-q3",
+       "kind": "numerical",
+       "level": 2,
+       "marks": 2,
+       "q": "The reverse saturation current of a germanium diode is 5 $\\mu$A at 25 °C. Find it at 55 °C.",
+       "model_answer_md": "$I_0$ doubles for every 10 °C. The rise is $55-25=30$ °C, which is 3 doublings.\n\n$I_0(55^\\circ\\text{C})=5\\times2^{3}=40\\ \\mu\\text{A}$",
+       "points": [
+        "Doubles per 10 °C",
+        "30 °C rise is 3 doublings",
+        "40 $\\mu$A"
+       ]
+      },
+      {
+       "id": "d-q4",
+       "kind": "numerical",
+       "level": 2,
+       "marks": 3,
+       "q": "A silicon diode (cut-in 0.7 V, negligible $r_f$) is in series with 2.2 k$\\Omega$ across a 12 V DC source, forward biased. Find the current and the power in the diode. What happens when the diode is reversed?",
+       "model_answer_md": "$I=\\dfrac{V_s-V_\\gamma}{R}=\\dfrac{12-0.7}{2200}=5.14\\ \\text{mA}$\n\n$P_D=V_\\gamma I=0.7\\times5.136\\times10^{-3}=3.60\\ \\text{mW}$\n\nReversed, the diode is open: only $I_0$ (nA) flows, the full 12 V appears across the diode and almost none across the resistor.",
+       "points": [
+        "$I=(V_s-V_\\gamma)/R=5.14$ mA",
+        "$P_D=V_\\gamma I=3.60$ mW",
+        "Reversed: open circuit, full 12 V across the diode"
+       ]
+      },
+      {
+       "id": "d-q5",
+       "kind": "mcq",
+       "level": 2,
+       "q": "The reverse saturation current of a Si diode is 2 nA at 20 °C. At 50 °C it is about",
+       "options": [
+        "4 nA",
+        "6 nA",
+        "8 nA",
+        "16 nA"
+       ],
+       "answer_index": 3,
+       "why": "A 30 °C rise is 3 doublings: $2\\times2^3=16$ nA. Adding 2 nA per 10 °C (6 nA) is the common slip."
+      },
+      {
+       "id": "d-q6",
+       "kind": "short",
+       "level": 2,
+       "marks": 2,
+       "q": "Distinguish between static and dynamic resistance of a diode.",
+       "model_answer_md": "**Static (DC) resistance:** $R_{DC}=V/I$ at the operating point, the slope of the line from the origin to that point.\n\n**Dynamic (AC) resistance:** $r_d=\\Delta V/\\Delta I$, the reciprocal of the slope of the characteristic at the point, and $r_d=\\eta V_T/I$. It is small in forward bias and decreases as current rises; it applies to small AC signals.",
+       "points": [
+        "Static $=V/I$ at a point",
+        "Dynamic $=\\Delta V/\\Delta I=\\eta V_T/I$",
+        "Dynamic falls as current increases"
+       ]
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "topic": "Zener effect and Zener diode",
+   "subtopics": [
+    {
+     "id": "zener-breakdown",
+     "title": "Zener diode, Zener and avalanche breakdown",
+     "theory_md": "A **Zener diode** is a heavily doped silicon diode made to work in reverse **breakdown**. There its voltage stays nearly constant at $V_Z$ over a wide current range, so it is a voltage reference. It is always reverse biased (cathode to +); forward, it is an ordinary diode with a 0.7 V drop.\n\n**Zener breakdown:** heavy doping, thin depletion layer, intense field pulls electrons out of bonds (field emission), $V_Z$ below about 5 V, **negative** temperature coefficient.\n\n**Avalanche breakdown:** light doping, wide layer, minority carriers gain energy and knock out more carriers (impact ionisation), $V_Z$ above about 6 V, **positive** temperature coefficient.\n\nCharacteristic: sharp knee at $V_Z$, between $I_{Z,min}$ and $I_{Z,max}$.",
+     "basics_md": "Every diode eventually breaks down if the reverse voltage is high enough. A Zener is built so that this happens at a chosen, repeatable voltage and does no damage as long as a resistor limits the current. Above the breakdown point the voltage barely moves while the current changes a lot, which is what makes it a voltage reference.",
+     "key_points": [
+      "Zener: heavily doped diode used in reverse breakdown, current limited by a resistor",
+      "Zener breakdown: heavy doping, thin layer, field emission, low $V_Z$, negative temperature coefficient",
+      "Avalanche breakdown: light doping, wide layer, impact ionisation, higher $V_Z$, positive temperature coefficient",
+      "Characteristic: constant $V_Z$ between $I_{Z,min}$ and $I_{Z,max}$"
+     ],
+     "figures": [],
+     "questions": [
+      {
+       "id": "zb-q1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "A Zener diode is used for voltage reference by operating it in",
+       "options": [
+        "forward bias",
+        "reverse breakdown",
+        "reverse bias below breakdown",
+        "the cut-off region"
+       ],
+       "answer_index": 1,
+       "why": "Only in breakdown is the voltage nearly constant over a wide current range."
+      },
+      {
+       "id": "zb-q2",
+       "kind": "mcq",
+       "level": 1,
+       "q": "Breakdown in a lightly doped diode with a wide depletion layer is",
+       "options": [
+        "Zener breakdown",
+        "avalanche breakdown",
+        "thermal runaway",
+        "punch-through only"
+       ],
+       "answer_index": 1,
+       "why": "Wide layer and light doping give impact ionisation, which is avalanche."
+      },
+      {
+       "id": "zb-q3",
+       "kind": "short",
+       "level": 2,
+       "marks": 3,
+       "q": "Distinguish between Zener breakdown and avalanche breakdown.",
+       "model_answer_md": "| Zener breakdown | Avalanche breakdown |\n|---|---|\n| Heavily doped junction | Lightly doped junction |\n| Thin depletion layer | Wide depletion layer |\n| Strong field breaks covalent bonds directly (field emission) | Accelerated carriers knock out electrons by collision (impact ionisation) |\n| $V_Z$ below about 5 V | $V_Z$ above about 6 V |\n| Negative temperature coefficient | Positive temperature coefficient |",
+       "points": [
+        "Doping: heavy vs light",
+        "Depletion layer: thin vs wide",
+        "Mechanism: field emission vs impact ionisation",
+        "Voltage: low vs high",
+        "Temperature coefficient: negative vs positive"
+       ]
+      },
+      {
+       "id": "zb-q4",
+       "kind": "mcq",
+       "level": 2,
+       "q": "A 3.3 V Zener diode has a temperature coefficient that is",
+       "options": [
+        "positive",
+        "negative",
+        "zero",
+        "dependent only on the load"
+       ],
+       "answer_index": 1,
+       "why": "Below about 5 V the Zener mechanism dominates, which has a negative coefficient."
+      },
+      {
+       "id": "zb-q5",
+       "kind": "short",
+       "level": 3,
+       "marks": 4,
+       "q": "Draw and explain the V-I characteristic of a Zener diode. Why is it always used in reverse bias?",
+       "model_answer_md": "**Characteristic:** in forward bias it is an ordinary diode (knee about 0.7 V). In reverse bias a small leakage current flows until $V_Z$; there the current rises almost vertically, so the voltage stays near $V_Z$ for any current from $I_{Z,min}$ (knee) to $I_{Z,max}$ (power limit, $P_Z=V_ZI_Z$).\n\n**Why reverse biased:** its useful action, constant voltage at changing current, exists only in breakdown. In forward bias it just drops 0.7 V and cannot regulate. A series resistor is needed to limit the current in breakdown.",
+       "points": [
+        "Sketch: forward knee 0.7 V, reverse breakdown at $V_Z$ nearly vertical",
+        "Voltage constant between $I_{Z,min}$ and $I_{Z,max}$",
+        "Constant voltage action only in reverse breakdown",
+        "Series resistor limits the current"
+       ]
+      }
+     ]
+    },
+    {
+     "id": "zener-regulator",
+     "title": "Zener shunt voltage regulator",
+     "theory_md": "**Circuit:** unregulated $V_{in}$ feeds a series resistor $R_S$; the Zener (reverse biased) and the load $R_L$ are in parallel across the output, so $V_o=V_Z$.\n\n$$I_S=\\frac{V_{in}-V_Z}{R_S},\\quad I_L=\\frac{V_Z}{R_L},\\quad I_Z=I_S-I_L,\\quad P_Z=V_ZI_Z$$\n\n**Line regulation:** $V_{in}$ rises, $I_S$ rises, the extra current goes through the Zener and the extra drop is across $R_S$; $V_o$ stays $V_Z$.\n\n**Load regulation:** $R_L$ falls, $I_L$ rises and $I_Z$ falls by the same amount; $I_S$ is unchanged.\n\n**Limits:** $I_Z\\ge I_{Z,min}$, so $R_{L,min}=\\dfrac{V_Z}{I_S-I_{Z,min}}$; and $P_Z\\le P_{Z,max}$ at maximum $V_{in}$ and minimum load.",
+     "basics_md": "The Zener holds the output at a fixed voltage by acting as a current sponge. The resistor in series takes whatever voltage is left over, and the Zener soaks up whatever current the load does not use.",
+     "key_points": [
+      "Zener in parallel with the load, reverse biased, with a series resistor $R_S$",
+      "$I_S=(V_{in}-V_Z)/R_S$, $I_L=V_Z/R_L$, $I_Z=I_S-I_L$",
+      "Line and load regulation by the change in $I_Z$",
+      "Regulation lost if $I_Z$ falls to zero: $R_{L,min}$",
+      "$P_Z=V_ZI_Z$ must stay below the rating"
+     ],
+     "figures": [],
+     "questions": [
+      {
+       "id": "zr-q1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "In a Zener shunt regulator the Zener is connected",
+       "options": [
+        "in series with the load, forward biased",
+        "in parallel with the load, reverse biased",
+        "in parallel with the load, forward biased",
+        "in series with $R_S$, reverse biased"
+       ],
+       "answer_index": 1,
+       "why": "It sits across the load in breakdown, so the output equals $V_Z$."
+      },
+      {
+       "id": "zr-q2",
+       "kind": "numerical",
+       "level": 2,
+       "marks": 4,
+       "q": "A Zener regulator has $V_{in}=18$ V, $R_S=300\\ \\Omega$, $V_Z=12$ V and $R_L=1.2\\ \\text{k}\\Omega$. Find $I_S$, $I_L$, $I_Z$ and the Zener power. Then find $I_Z$ and the output voltage if $V_{in}$ rises to 24 V.",
+       "model_answer_md": "**Given:** $V_{in}=18$ V, $R_S=300\\ \\Omega$, $V_Z=12$ V, $R_L=1200\\ \\Omega$.\n\n$I_S=\\dfrac{18-12}{300}=20\\ \\text{mA}$\n\n$I_L=\\dfrac{12}{1200}=10\\ \\text{mA}$\n\n$I_Z=I_S-I_L=20-10=10\\ \\text{mA}$, $P_Z=12\\times0.010=120\\ \\text{mW}$\n\n**For $V_{in}=24$ V:** $I_S=\\dfrac{24-12}{300}=40$ mA, $I_L=10$ mA, so $I_Z=30$ mA ($P_Z=360$ mW). The output stays at **12 V**.",
+       "points": [
+        "$I_S=(V_{in}-V_Z)/R_S=20$ mA",
+        "$I_L=V_Z/R_L=10$ mA, $I_Z=10$ mA, $P_Z=120$ mW",
+        "At 24 V: $I_S=40$ mA, $I_Z=30$ mA, output still 12 V"
+       ]
+      },
+      {
+       "id": "zr-q3",
+       "kind": "mcq",
+       "level": 2,
+       "q": "A regulator has $V_{in}=20$ V, $V_Z=12$ V, $R_S=1\\ \\text{k}\\Omega$ and $R_L=2\\ \\text{k}\\Omega$. The Zener current is",
+       "options": [
+        "8 mA",
+        "6 mA",
+        "2 mA",
+        "14 mA"
+       ],
+       "answer_index": 2,
+       "why": "$I_S=8$ mA, $I_L=12/2000=6$ mA, so $I_Z=8-6=2$ mA. 8 mA is $I_S$ and 6 mA is $I_L$."
+      },
+      {
+       "id": "zr-q4",
+       "kind": "short",
+       "level": 2,
+       "marks": 4,
+       "q": "Explain with a circuit how a Zener diode regulates the output voltage against changes in input voltage and load.",
+       "model_answer_md": "**Circuit:** $V_{in}$, series resistor $R_S$, then the Zener (cathode to the positive side) in parallel with $R_L$; $V_o=V_Z$.\n\n**Input change:** if $V_{in}$ rises, $I_S$ rises; $I_L=V_Z/R_L$ is fixed, so the extra current flows through the Zener and the extra voltage drops across $R_S$. $V_o$ stays $V_Z$.\n\n**Load change:** if $R_L$ falls, $I_L$ rises and $I_Z$ falls by the same amount; $I_S$ and the drop across $R_S$ are unchanged, so $V_o$ is constant.\n\n**Limit:** $I_Z$ must remain above $I_{Z,min}$.",
+       "points": [
+        "Circuit: $R_S$ in series, Zener reverse biased in parallel with load",
+        "Input rise: extra current through Zener, extra drop across $R_S$",
+        "Load rise: $I_Z$ falls, $I_S$ constant",
+        "Needs $I_Z\\ge I_{Z,min}$"
+       ]
+      },
+      {
+       "id": "zr-q5",
+       "kind": "numerical",
+       "level": 3,
+       "marks": 3,
+       "q": "For the regulator of $V_{in}=18$ V, $R_S=300\\ \\Omega$, $V_Z=12$ V, find the smallest load resistance that keeps regulation if $I_{Z,min}=2$ mA.",
+       "model_answer_md": "$I_S=20$ mA is fixed.\n\nMaximum load current: $I_{L,max}=I_S-I_{Z,min}=20-2=18$ mA\n\n$R_{L,min}=\\dfrac{V_Z}{I_{L,max}}=\\dfrac{12}{0.018}=667\\ \\Omega$",
+       "points": [
+        "$I_{L,max}=I_S-I_{Z,min}=18$ mA",
+        "$R_{L,min}=V_Z/I_{L,max}=667\\ \\Omega$"
+       ]
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "topic": "Half wave and full wave rectifiers",
+   "subtopics": [
+    {
+     "id": "half-wave",
+     "title": "Half-wave rectifier",
+     "theory_md": "One diode in series with the load. It conducts in the positive half cycle only, so the output is one hump per cycle and $f_{out}=f$.\n\nWith $v=V_m\\sin\\omega t$ and $I_m=\\dfrac{V_m}{r_f+R_L}$:\n\n$$I_{dc}=\\frac{I_m}{\\pi},\\quad I_{rms}=\\frac{I_m}{2},\\quad V_{dc}=I_{dc}R_L$$\n\nFor an ideal diode $V_{dc}=V_m/\\pi$ and $V_{rms}=V_m/2$. **PIV $=V_m$**. Ripple factor 1.21 and maximum efficiency 40.6%; transformer utilisation factor 0.287. Disadvantages: high ripple, DC in the transformer secondary can saturate the core, poor utilisation.\n\nConvert first: $V_m=\\sqrt2\\,V_{rms}$.",
+     "basics_md": "The diode lets current through only one way, so during the negative half of the AC wave nothing reaches the load. Averaging one hump over a whole cycle (hump plus a flat gap) gives $V_m/\\pi$.",
+     "key_points": [
+      "One diode, conducts in the positive half cycle only",
+      "$I_{dc}=I_m/\\pi$, $I_{rms}=I_m/2$, $V_{dc}=V_m/\\pi$ (ideal)",
+      "PIV $=V_m$, ripple frequency $f$",
+      "$V_m=\\sqrt2\\,V_{rms}$ before using any formula"
+     ],
+     "figures": [],
+     "questions": [
+      {
+       "id": "h-q1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "For an ideal half-wave rectifier with peak input $V_m$, the average output voltage is",
+       "options": [
+        "$V_m/\\pi$",
+        "$2V_m/\\pi$",
+        "$V_m/2$",
+        "$V_m/\\sqrt2$"
+       ],
+       "answer_index": 0,
+       "why": "One hump per cycle averaged over $2\\pi$ gives $V_m/\\pi$. $2V_m/\\pi$ is full wave and $V_m/2$ is the RMS."
+      },
+      {
+       "id": "h-q2",
+       "kind": "mcq",
+       "level": 1,
+       "q": "The ripple frequency at the output of a half-wave rectifier fed from 50 Hz mains is",
+       "options": [
+        "25 Hz",
+        "50 Hz",
+        "100 Hz",
+        "200 Hz"
+       ],
+       "answer_index": 1,
+       "why": "One pulse per cycle, so $f_{out}=f=50$ Hz."
+      },
+      {
+       "id": "h-q3",
+       "kind": "numerical",
+       "level": 2,
+       "marks": 5,
+       "q": "A half-wave rectifier has a transformer secondary of 6 V rms. The diode resistance is 10 $\\Omega$ and the load is 190 $\\Omega$. Find $I_m$, $I_{dc}$, $I_{rms}$, $V_{dc}$, $P_{dc}$, $P_{ac}$ and the efficiency.",
+       "model_answer_md": "**Given:** $V_{rms}=6$ V, $r_f=10\\ \\Omega$, $R_L=190\\ \\Omega$, half wave.\n\n$V_m=\\sqrt2\\times6=8.485$ V\n\n$I_m=\\dfrac{V_m}{r_f+R_L}=\\dfrac{8.485}{200}=42.43\\ \\text{mA}$\n\n$I_{dc}=\\dfrac{I_m}{\\pi}=13.50\\ \\text{mA}$, $I_{rms}=\\dfrac{I_m}{2}=21.21\\ \\text{mA}$\n\n$V_{dc}=I_{dc}R_L=0.01350\\times190=2.57\\ \\text{V}$\n\n$P_{dc}=I_{dc}^2R_L=(0.01350)^2\\times190=34.7\\ \\text{mW}$\n\n$P_{ac}=I_{rms}^2(r_f+R_L)=(0.02121)^2\\times200=90.0\\ \\text{mW}$\n\n$\\eta=\\dfrac{34.65}{90.0}=38.5\\%$  (check: $\\dfrac{40.5}{1+10/190}=38.5\\%$)",
+       "points": [
+        "$V_m=\\sqrt2 V_{rms}=8.485$ V; $I_m=V_m/(r_f+R_L)=42.43$ mA",
+        "$I_{dc}=I_m/\\pi=13.50$ mA; $I_{rms}=I_m/2=21.21$ mA",
+        "$V_{dc}=I_{dc}R_L=2.57$ V",
+        "$P_{dc}=34.7$ mW; $P_{ac}=I_{rms}^2(r_f+R_L)=90.0$ mW",
+        "$\\eta=38.5\\%$"
+       ]
+      },
+      {
+       "id": "h-q4",
+       "kind": "mcq",
+       "level": 2,
+       "q": "A half-wave rectifier has a 12 V rms secondary and an ideal diode. The PIV is about",
+       "options": [
+        "12 V",
+        "17 V",
+        "24 V",
+        "34 V"
+       ],
+       "answer_index": 1,
+       "why": "$V_m=\\sqrt2\\times12=16.97$ V and PIV $=V_m$. 12 V forgets the $\\sqrt2$; 34 V is $2V_m$ (centre-tap)."
+      },
+      {
+       "id": "h-p1",
+       "pyq": "3eea209fbb0c0760",
+       "level": 2,
+       "points": [
+        "$V_m=20$ V, ideal diode",
+        "$V_{dc}=V_m/\\pi=20/\\pi=6.37$ V",
+        "$V_{rms}=V_m/2=10$ V",
+        "$\\gamma=\\sqrt{(10/6.366)^2-1}=1.21$"
+       ]
+      },
+      {
+       "id": "h-p2",
+       "pyq": "bf65d6a4322779a0",
+       "level": 2,
+       "points": [
+        "$I_{max}=60/(25+725)=80$ mA",
+        "$I_{dc}=I_{max}/\\pi=25.46$ mA; $I_{rms}=I_{max}/2=40$ mA",
+        "$P_{ac}=I_{rms}^2(r_f+R_L)=1.2$ W; $P_{dc}=I_{dc}^2R_L=0.470$ W",
+        "$V_{dc}=I_{dc}R_L=18.46$ V",
+        "$\\eta=0.470/1.2=39.2\\%$"
+       ]
+      },
+      {
+       "id": "h-p3",
+       "pyq": "e75f8593aec053ec",
+       "level": 3,
+       "points": [
+        "No $V_\\gamma$ given, so diode is $r_f$ only; $V_m=\\sqrt2\\times10=14.14$ V",
+        "$I_m=14.14/(0.5+15+300)=44.82$ mA",
+        "(i) $I_{dc}=I_m/\\pi=14.27$ mA; (ii) $V_{dc}=I_{dc}R_L=4.28$ V",
+        "(iii) $\\eta=0.406/[1+(R_s+r_f)/R_L]=0.406/(1+15.5/300)\\approx38.5\\%$",
+        "(iv) $\\gamma=1.21$ (fixed by the waveform, independent of the resistances)"
+       ]
+      }
+     ]
+    },
+    {
+     "id": "centre-tap",
+     "title": "Full-wave centre-tap rectifier",
+     "theory_md": "**Circuit:** transformer with a centre-tapped secondary; D1 at one end, D2 at the other, cathodes joined to $R_L$, whose other end goes to the centre tap. Each half supplies $V_m\\sin\\omega t$.\n\n**Working:** positive half cycle, D1 conducts and D2 is off; negative half cycle, D2 conducts and D1 is off. The load current has the **same direction** in both, so $f_{out}=2f$. The off diode sees the whole secondary: **PIV $=2V_m$**.\n\nWith $i=I_m|\\sin\\theta|$ (period $\\pi$), $I_m=\\dfrac{V_m}{r_f+R_L}$:\n\n$I_{dc}=\\dfrac{2I_m}{\\pi}$, $I_{rms}=\\dfrac{I_m}{\\sqrt2}$, $\\eta=\\dfrac{0.812}{1+r_f/R_L}$, $\\gamma=0.482$.\n\nWaveforms: input, $i_{D1}$, $i_{D2}$ and load, aligned in time.",
+     "basics_md": "A centre-tap transformer gives two equal AC voltages that are always opposite in sign. One diode catches the positive swing of the top half; the other catches the positive swing of the bottom half, so the load gets a hump every half cycle instead of every cycle.",
+     "key_points": [
+      "Two diodes, centre-tapped secondary, each half gives $V_m$",
+      "D1 conducts in the positive half cycle, D2 in the negative; load current same direction",
+      "$I_{dc}=2I_m/\\pi$, $I_{rms}=I_m/\\sqrt2$, $V_{dc}=2V_m/\\pi$",
+      "PIV $=2V_m$, $f_{out}=2f$",
+      "Efficiency $0.812/(1+r_f/R_L)$, ripple factor 0.482"
+     ],
+     "figures": [],
+     "questions": [
+      {
+       "id": "c-q1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "The PIV of each diode in a centre-tap full-wave rectifier (peak of each half of the secondary $=V_m$) is",
+       "options": [
+        "$V_m$",
+        "$V_m/2$",
+        "$2V_m$",
+        "$\\pi V_m$"
+       ],
+       "answer_index": 2,
+       "why": "The off diode has the whole secondary, $2V_m$, across it."
+      },
+      {
+       "id": "c-q2",
+       "kind": "mcq",
+       "level": 1,
+       "q": "The ripple frequency of a full-wave rectifier fed from 50 Hz mains is",
+       "options": [
+        "25 Hz",
+        "50 Hz",
+        "100 Hz",
+        "150 Hz"
+       ],
+       "answer_index": 2,
+       "why": "Two pulses per input cycle, $2f=100$ Hz."
+      },
+      {
+       "id": "c-q3",
+       "kind": "numerical",
+       "level": 2,
+       "marks": 4,
+       "q": "A centre-tap full-wave rectifier has a 12-0-12 V rms secondary (12 V rms on each half), ideal diodes and $R_L=100\\ \\Omega$. Find $V_{dc}$, $I_{dc}$ and the PIV.",
+       "model_answer_md": "**Given:** each half is 12 V rms, so $V_m=\\sqrt2\\times12=16.97$ V per half.\n\n$V_{dc}=\\dfrac{2V_m}{\\pi}=\\dfrac{2\\times16.97}{\\pi}=10.80\\ \\text{V}$\n\n$I_{dc}=\\dfrac{V_{dc}}{R_L}=\\dfrac{10.80}{100}=108\\ \\text{mA}$\n\n$\\text{PIV}=2V_m=2\\times16.97=33.9\\ \\text{V}$",
+       "points": [
+        "$V_m=\\sqrt2\\times12=16.97$ V per half",
+        "$V_{dc}=2V_m/\\pi=10.80$ V; $I_{dc}=108$ mA",
+        "PIV $=2V_m=33.9$ V"
+       ]
+      },
+      {
+       "id": "c-q4",
+       "kind": "mcq",
+       "level": 2,
+       "q": "In a centre-tap rectifier each half of the secondary has a peak of 20 V (ideal diodes). The DC output voltage is",
+       "options": [
+        "6.37 V",
+        "12.73 V",
+        "25.46 V",
+        "14.14 V"
+       ],
+       "answer_index": 1,
+       "why": "$2V_m/\\pi=40/\\pi=12.73$ V. 25.46 V wrongly uses the whole secondary (40 V) as $V_m$."
+      },
+      {
+       "id": "c-q5",
+       "kind": "short",
+       "level": 2,
+       "marks": 3,
+       "q": "Sketch and describe the waveforms of the input, the diode currents $i_{D1}$, $i_{D2}$ and the load current in a centre-tap full-wave rectifier.",
+       "model_answer_md": "Drawn one under another on a common time axis, period $T$:\n1. **Input:** sine wave $V_m\\sin\\omega t$.\n2. **$i_{D1}$:** half-sine humps only for $0$ to $T/2$.\n3. **$i_{D2}$:** half-sine humps only for $T/2$ to $T$.\n4. **Load current:** a hump in every half cycle (sum of the two), all in the same direction, frequency $2f$.",
+       "points": [
+        "Input sine",
+        "$i_{D1}$ in the first half cycle, $i_{D2}$ in the second",
+        "Load current is a hump every half cycle, same direction",
+        "Axes aligned in time"
+       ]
+      },
+      {
+       "id": "c-p1",
+       "pyq": "dd8fa5b4e1b845a3",
+       "level": 3,
+       "points": [
+        "Neat circuit: centre-tapped transformer, D1, D2, $R_L$ to the centre tap",
+        "Working: D1 in the positive half cycle, D2 in the negative; load current same direction",
+        "Waveforms of input, diode currents and load",
+        "$I_{dc}=2I_m/\\pi$, $I_{rms}=I_m/\\sqrt2$",
+        "Efficiency $\\eta=P_{dc}/P_{ac}=0.812/(1+r_f/R_L)$, max 81.2%",
+        "Ripple factor $\\gamma=\\sqrt{(I_{rms}/I_{dc})^2-1}=0.482$"
+       ]
+      },
+      {
+       "id": "c-p2",
+       "pyq": "9509df9d3940a0b8",
+       "level": 2,
+       "points": [
+        "Circuit and working of the full-wave rectifier with the two half cycles",
+        "Output voltage $V_{dc}=2V_m/\\pi$, $V_{rms}=V_m/\\sqrt2$",
+        "$P_{dc}=I_{dc}^2R_L$, $P_{ac}=I_{rms}^2(r_f+R_L)$",
+        "$\\eta=0.812/(1+r_f/R_L)$, maximum 81.2%"
+       ]
+      },
+      {
+       "id": "c-p3",
+       "pyq": "bb2c1a0ab6eb65d2",
+       "level": 2,
+       "points": [
+        "$i=I_m\\sin\\theta$, $I_m=V_m/(r_f+R_L)$ repeating every $\\pi$",
+        "$I_{dc}=2I_m/\\pi$, so $V_{dc}=2I_mR_L/\\pi\\approx2V_m/\\pi$",
+        "$I_{rms}=I_m/\\sqrt2$",
+        "$\\eta=P_{dc}/P_{ac}=0.812/(1+r_f/R_L)$, max 81.2%"
+       ]
+      },
+      {
+       "id": "c-p4",
+       "pyq": "eb3b79f4e6ba982b",
+       "level": 2,
+       "points": [
+        "Working of the centre-tap rectifier: D1 and D2 conduct in alternate half cycles, same direction through $R_L$",
+        "$I_{dc}=2I_m/\\pi$, $I_{rms}=I_m/\\sqrt2$",
+        "$\\eta=\\dfrac{(2I_m/\\pi)^2R_L}{(I_m/\\sqrt2)^2(r_f+R_L)}=\\dfrac{0.812}{1+r_f/R_L}$",
+        "Maximum efficiency 81.2% when $r_f\\ll R_L$"
+       ]
+      },
+      {
+       "id": "c-p5",
+       "pyq": "a0cf2a736117adff",
+       "level": 2,
+       "points": [
+        "Full-wave output $v=V_m|\\sin\\theta|$, period $\\pi$",
+        "Average $=\\dfrac{1}{\\pi}\\int_0^\\pi V_m\\sin\\theta\\,d\\theta=2V_m/\\pi=0.637V_m$",
+        "RMS $=\\sqrt{\\dfrac{1}{\\pi}\\int_0^\\pi V_m^2\\sin^2\\theta\\,d\\theta}=V_m/\\sqrt2=0.707V_m$"
+       ]
+      }
+     ]
+    },
+    {
+     "id": "bridge",
+     "title": "Bridge rectifier and why it is preferred",
+     "theory_md": "**Circuit:** four diodes D1 to D4. The AC secondary is across one diagonal and $R_L$ across the other; no centre tap.\n\n**Positive half cycle:** D1 and D3 conduct, D2 and D4 are off. **Negative half cycle:** D2 and D4 conduct. Current through $R_L$ is in the same direction both times, $f_{out}=2f$.\n\n$V_{dc}=\\dfrac{2V_m}{\\pi}$, $I_{rms}=\\dfrac{I_m}{\\sqrt2}$, **PIV $=V_m$**, TUF 0.812.\n\nWith practical diodes **two** conduct in series: $V_m'=V_m-2V_\\gamma$ and the diode resistance is $2r_f$.\n\n**Why preferred over centre-tap:** no centre-tapped transformer, PIV $V_m$ instead of $2V_m$, whole secondary used (twice the $V_{dc}$ for the same secondary voltage), better TUF. Cost: four diodes and two drops.",
+     "basics_md": "In a bridge, the four diodes steer current like a road junction with one-way streets: whichever way the AC pushes, the current is routed through the load in the same direction. This lets the whole secondary winding work on both half cycles, with no centre tap.",
+     "key_points": [
+      "Four diodes; D1, D3 conduct in the positive half cycle, D2, D4 in the negative",
+      "Load current same direction both times; $f_{out}=2f$",
+      "$V_{dc}=2V_m/\\pi$, PIV $=V_m$",
+      "Practical: two drops $2V_\\gamma$ and $2r_f$",
+      "Preferred: no centre tap, lower PIV, higher TUF (0.812)"
+     ],
+     "figures": [],
+     "questions": [
+      {
+       "id": "b-q1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "In a bridge rectifier the number of diodes conducting in each half cycle is",
+       "options": [
+        "1",
+        "2",
+        "3",
+        "4"
+       ],
+       "answer_index": 1,
+       "why": "Two diodes in series with the load conduct at a time (D1, D3 then D2, D4)."
+      },
+      {
+       "id": "b-q2",
+       "kind": "mcq",
+       "level": 1,
+       "q": "The PIV of each diode in a bridge rectifier with peak secondary $V_m$ is",
+       "options": [
+        "$V_m/2$",
+        "$V_m$",
+        "$2V_m$",
+        "$\\pi V_m$"
+       ],
+       "answer_index": 1,
+       "why": "The two diodes that are off together block $V_m$, so each sees $V_m$. $2V_m$ is the centre-tap value."
+      },
+      {
+       "id": "b-q3",
+       "kind": "numerical",
+       "level": 2,
+       "marks": 4,
+       "q": "A bridge rectifier is fed from a 12 V rms secondary and supplies $R_L=100\\ \\Omega$. Find $V_{dc}$, $I_{dc}$ and the PIV with ideal diodes. What is $V_{dc}$ with silicon diodes (0.7 V each)?",
+       "model_answer_md": "$V_m=\\sqrt2\\times12=16.97$ V\n\n**Ideal diodes:** $V_{dc}=\\dfrac{2V_m}{\\pi}=\\dfrac{2\\times16.97}{\\pi}=10.80\\ \\text{V}$, $I_{dc}=\\dfrac{10.80}{100}=108\\ \\text{mA}$, PIV $=V_m=16.97\\ \\text{V}$\n\n**Silicon diodes:** two conduct in series, so $V_m'=16.97-2\\times0.7=15.57$ V and\n\n$V_{dc}=\\dfrac{2\\times15.57}{\\pi}=9.91\\ \\text{V}$",
+       "points": [
+        "$V_m=\\sqrt2\\times12=16.97$ V",
+        "Ideal: $V_{dc}=10.80$ V, $I_{dc}=108$ mA, PIV $=16.97$ V",
+        "Si: $V_m'=V_m-2V_\\gamma=15.57$ V, $V_{dc}=9.91$ V"
+       ]
+      },
+      {
+       "id": "b-q4",
+       "kind": "mcq",
+       "level": 2,
+       "q": "A bridge rectifier with silicon diodes has a peak secondary of 17 V. The peak voltage across the load is about",
+       "options": [
+        "17 V",
+        "16.3 V",
+        "15.6 V",
+        "14.6 V"
+       ],
+       "answer_index": 2,
+       "why": "Two diodes conduct: $17-2\\times0.7=15.6$ V. Subtracting only one drop gives 16.3 V."
+      },
+      {
+       "id": "b-q5",
+       "kind": "short",
+       "level": 2,
+       "marks": 3,
+       "q": "Draw a bridge rectifier and mark the diodes that conduct and the current path in each half cycle.",
+       "model_answer_md": "**Circuit:** D1 to D4 form a bridge; the secondary is across A, B and $R_L$ across C, D.\n\n**Positive half cycle** (A positive): D1 and D3 on. Path: A, D1, C, $R_L$, D, D3, B. Current flows through $R_L$ from C to D.\n\n**Negative half cycle** (B positive): D2 and D4 on. Path: B, D2, C, $R_L$, D, D4, A. Again C to D through $R_L$.",
+       "points": [
+        "Bridge of four diodes with the AC and the load on the two diagonals",
+        "Positive half: D1, D3 conduct, with the path",
+        "Negative half: D2, D4 conduct, with the path",
+        "Same direction through $R_L$"
+       ]
+      },
+      {
+       "id": "b-p1",
+       "pyq": "e9b08660ff8e90f0",
+       "level": 1,
+       "points": [
+        "No centre-tapped transformer needed",
+        "PIV is $V_m$ instead of $2V_m$",
+        "Higher TUF (0.812 vs 0.693); twice the DC output for the same secondary voltage"
+       ]
+      },
+      {
+       "id": "b-p2",
+       "pyq": "43b96c5f08d3f833",
+       "level": 1,
+       "points": [
+        "No centre-tapped transformer needed",
+        "PIV is $V_m$ instead of $2V_m$",
+        "Higher TUF (0.812 vs 0.693); twice the DC output for the same secondary voltage"
+       ]
+      },
+      {
+       "id": "b-p3",
+       "pyq": "9cdf06a98793129b",
+       "level": 2,
+       "points": [
+        "Secondary $=5\\times50=250$ V rms, $V_m=\\sqrt2\\times250=353.55$ V",
+        "Bridge: $V_{dc}=2V_m/\\pi=225.08$ V",
+        "$V_{rms}=V_m/\\sqrt2=250$ V",
+        "PIV $=V_m=353.55$ V (for a centre-tap, 250 V across the whole secondary gives the same PIV $=2\\times176.78=353.55$ V)"
+       ]
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "topic": "Ripple factor and efficiency",
+   "subtopics": [
+    {
+     "id": "ripple-factor",
+     "title": "Ripple factor",
+     "theory_md": "**Ripple factor** is the ratio of the rms value of the AC component of the output to its DC value:\n\n$$\\gamma=\\frac{I_{ac}}{I_{dc}}=\\sqrt{\\left(\\frac{I_{rms}}{I_{dc}}\\right)^2-1}=\\sqrt{k_f^2-1}$$\n\nsince $I_{rms}^2=I_{dc}^2+I_{ac}^2$ and $k_f=I_{rms}/I_{dc}$ is the form factor. Smaller is better.\n\n- **Half wave:** $I_{dc}=I_m/\\pi$, $I_{rms}=I_m/2$, $k_f=1.57$, $\\gamma=1.21$.\n- **Full wave:** $I_{dc}=2I_m/\\pi$, $I_{rms}=I_m/\\sqrt2$, $k_f=1.11$, $\\gamma=0.482$.\n\nRipple voltage $V_{r,rms}=\\gamma V_{dc}$. Capacitor filter, full wave: $\\gamma\\approx\\dfrac{1}{4\\sqrt3\\,fCR_L}$ (half wave: $\\dfrac{1}{2\\sqrt3\\,fCR_L}$).",
+     "basics_md": "The output of a rectifier is a steady part (DC) plus a wobble (AC). The ripple factor says how big the wobble is compared with the steady part. A perfect battery has zero ripple.",
+     "key_points": [
+      "Definition: rms of AC component divided by DC value",
+      "$\\gamma=\\sqrt{(I_{rms}/I_{dc})^2-1}$",
+      "Half wave 1.21, full wave 0.482",
+      "$V_{r,rms}=\\gamma V_{dc}$",
+      "Ripple depends only on the waveform, not on $R_L$ or $r_f$"
+     ],
+     "figures": [],
+     "questions": [
+      {
+       "id": "rf-q1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "The ripple factor of an unfiltered half-wave rectifier is",
+       "options": [
+        "0.48",
+        "1.11",
+        "1.21",
+        "1.57"
+       ],
+       "answer_index": 2,
+       "why": "$\\sqrt{(\\pi/2)^2-1}=1.21$. 1.57 is its form factor; 0.48 is full wave; 1.11 is the full-wave form factor."
+      },
+      {
+       "id": "rf-q2",
+       "kind": "mcq",
+       "level": 1,
+       "q": "The form factor of a full-wave rectified sine is",
+       "options": [
+        "0.637",
+        "1.11",
+        "1.57",
+        "0.707"
+       ],
+       "answer_index": 1,
+       "why": "$k_f=V_{rms}/V_{avg}=(V_m/\\sqrt2)/(2V_m/\\pi)=1.11$."
+      },
+      {
+       "id": "rf-q3",
+       "kind": "short",
+       "level": 2,
+       "marks": 3,
+       "q": "Show that the ripple factor is $\\gamma=\\sqrt{(I_{rms}/I_{dc})^2-1}$ and evaluate it for a full-wave rectifier.",
+       "model_answer_md": "The output has a DC part and an AC part, so $I_{rms}^2=I_{dc}^2+I_{ac}^2$.\n\n$\\gamma=\\dfrac{I_{ac}}{I_{dc}}=\\dfrac{\\sqrt{I_{rms}^2-I_{dc}^2}}{I_{dc}}=\\sqrt{\\left(\\dfrac{I_{rms}}{I_{dc}}\\right)^2-1}$\n\nFull wave: $I_{rms}/I_{dc}=\\dfrac{I_m/\\sqrt2}{2I_m/\\pi}=\\dfrac{\\pi}{2\\sqrt2}=1.11$, so $\\gamma=\\sqrt{1.11^2-1}=0.482$.",
+       "points": [
+        "Define $\\gamma=I_{ac}/I_{dc}$",
+        "$I_{rms}^2=I_{dc}^2+I_{ac}^2$ gives the formula",
+        "FW: ratio 1.11, $\\gamma=0.482$"
+       ]
+      },
+      {
+       "id": "rf-q4",
+       "kind": "numerical",
+       "level": 2,
+       "marks": 2,
+       "q": "The DC output of an unfiltered full-wave rectifier is 20 V. Find the rms ripple voltage. What would it be for a half-wave rectifier with the same DC output?",
+       "model_answer_md": "$V_{r,rms}=\\gamma V_{dc}$\n\nFull wave: $0.482\\times20=9.6$ V (rms), at 100 Hz for a 50 Hz supply.\n\nHalf wave: $1.21\\times20=24.2$ V (rms), at 50 Hz.",
+       "points": [
+        "$V_r=\\gamma V_{dc}$",
+        "FW 9.6 V",
+        "HW 24.2 V"
+       ]
+      },
+      {
+       "id": "rf-q5",
+       "kind": "numerical",
+       "level": 3,
+       "marks": 3,
+       "q": "A full-wave rectifier with a capacitor filter of 1000 $\\mu$F feeds $R_L=500\\ \\Omega$ from 50 Hz mains. Find the ripple factor.",
+       "model_answer_md": "$\\gamma=\\dfrac{1}{4\\sqrt3\\,fCR_L}=\\dfrac{1}{4\\sqrt3\\times50\\times1000\\times10^{-6}\\times500}$\n\n$fCR_L=50\\times10^{-3}\\times500=25$, so $\\gamma=\\dfrac{1}{6.928\\times25}=0.00577\\approx0.58\\%$",
+       "points": [
+        "$\\gamma=1/(4\\sqrt3 fCR_L)$ for full wave",
+        "$fCR_L=25$, $\\gamma=0.0058$"
+       ]
+      },
+      {
+       "id": "rf-p1",
+       "pyq": "61e650af716be38e",
+       "level": 2,
+       "points": [
+        "Ripple factor: rms value of the AC component divided by the DC value of the output",
+        "$\\gamma=\\sqrt{(I_{rms}/I_{dc})^2-1}$, from $I_{rms}^2=I_{dc}^2+I_{ac}^2$",
+        "Half wave: $I_{dc}=I_m/\\pi$, $I_{rms}=I_m/2$, $\\gamma=1.21$",
+        "Full wave: $I_{dc}=2I_m/\\pi$, $I_{rms}=I_m/\\sqrt2$, $\\gamma=0.482$",
+        "Smaller $\\gamma$ means smoother DC"
+       ]
+      }
+     ]
+    },
+    {
+     "id": "rectification-efficiency",
+     "title": "Rectification efficiency and derivations",
+     "theory_md": "**Efficiency** $\\eta=\\dfrac{P_{dc}}{P_{ac}}$ with $P_{dc}=I_{dc}^2R_L$ and $P_{ac}=I_{rms}^2(r_f+R_L)$.\n\n**Script for any derivation:** write $i=I_m\\sin\\theta$ over the conduction interval, integrate for $I_{dc}$ and $I_{rms}$, substitute.\n\n- **Half wave:** $\\eta=\\dfrac{(I_m/\\pi)^2R_L}{(I_m/2)^2(r_f+R_L)}=\\dfrac{4}{\\pi^2}\\dfrac{1}{1+r_f/R_L}=\\dfrac{0.406}{1+r_f/R_L}$, maximum **40.6%**.\n- **Full wave (CT or bridge):** $\\eta=\\dfrac{(2I_m/\\pi)^2R_L}{(I_m/\\sqrt2)^2(r_f+R_L)}=\\dfrac{8}{\\pi^2}\\dfrac{1}{1+r_f/R_L}=\\dfrac{0.812}{1+r_f/R_L}$, maximum **81.2%** (when $r_f\\ll R_L$).\n- **Bridge:** two diodes conduct, so replace $r_f$ by $2r_f$.",
+     "basics_md": "Efficiency is simply the DC power delivered to the load divided by the AC power drawn in. Some AC power is wasted in the diode resistance, and part of the output is AC wobble that does no DC work, so even an ideal rectifier is not 100% efficient.",
+     "key_points": [
+      "$\\eta=P_{dc}/P_{ac}=I_{dc}^2R_L/[I_{rms}^2(r_f+R_L)]$",
+      "HW: $0.406/(1+r_f/R_L)$, max 40.6%",
+      "FW: $0.812/(1+r_f/R_L)$, max 81.2%",
+      "Bridge uses $2r_f$ (two diodes in series)",
+      "Derivation: integrate $I_{dc}$ and $I_{rms}$, then substitute"
+     ],
+     "figures": [],
+     "questions": [
+      {
+       "id": "e-q1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "The maximum rectification efficiency of a full-wave rectifier is",
+       "options": [
+        "40.6%",
+        "50%",
+        "81.2%",
+        "100%"
+       ],
+       "answer_index": 2,
+       "why": "$8/\\pi^2=0.812$, reached when $r_f\\ll R_L$; it is double the half-wave value of 40.6%."
+      },
+      {
+       "id": "e-q2",
+       "kind": "mcq",
+       "level": 2,
+       "q": "A half-wave rectifier has $r_f=50\\ \\Omega$ and $R_L=450\\ \\Omega$. Its efficiency is about",
+       "options": [
+        "40.6%",
+        "36.5%",
+        "45%",
+        "33%"
+       ],
+       "answer_index": 1,
+       "why": "$\\eta=0.405/(1+50/450)=36.5\\%$. 40.6% is only the maximum, with $r_f=0$."
+      },
+      {
+       "id": "e-q3",
+       "kind": "long",
+       "level": 2,
+       "marks": 5,
+       "q": "Derive the expression for the rectification efficiency of a half-wave rectifier and state its maximum value.",
+       "model_answer_md": "**Setup:** $v=V_m\\sin\\theta$, diode resistance $r_f$, load $R_L$. The current is $i=I_m\\sin\\theta$ for $0\\le\\theta\\le\\pi$ and zero for $\\pi\\le\\theta\\le2\\pi$, with $I_m=V_m/(r_f+R_L)$.\n\n**DC current:** $I_{dc}=\\dfrac{1}{2\\pi}\\int_0^\\pi I_m\\sin\\theta\\,d\\theta=\\dfrac{I_m}{\\pi}$\n\n**RMS current:** $I_{rms}^2=\\dfrac{1}{2\\pi}\\int_0^\\pi I_m^2\\sin^2\\theta\\,d\\theta=\\dfrac{I_m^2}{4}$, so $I_{rms}=\\dfrac{I_m}{2}$\n\n**Powers:** $P_{dc}=I_{dc}^2R_L=\\dfrac{I_m^2R_L}{\\pi^2}$, $P_{ac}=I_{rms}^2(r_f+R_L)=\\dfrac{I_m^2}{4}(r_f+R_L)$\n\n**Efficiency:** $\\eta=\\dfrac{P_{dc}}{P_{ac}}=\\dfrac{4}{\\pi^2}\\cdot\\dfrac{R_L}{r_f+R_L}=\\dfrac{0.406}{1+r_f/R_L}$\n\n**Maximum** ($r_f\\ll R_L$): **40.6%**.",
+       "points": [
+        "$i=I_m\\sin\\theta$ over $0$ to $\\pi$, $I_m=V_m/(r_f+R_L)$",
+        "$I_{dc}=I_m/\\pi$",
+        "$I_{rms}=I_m/2$",
+        "$P_{dc}=I_{dc}^2R_L$, $P_{ac}=I_{rms}^2(r_f+R_L)$",
+        "$\\eta=0.406/(1+r_f/R_L)$, maximum 40.6%"
+       ]
+      },
+      {
+       "id": "e-q4",
+       "kind": "numerical",
+       "level": 2,
+       "marks": 4,
+       "q": "A full-wave bridge rectifier has a peak secondary voltage of 30 V, diode resistance 10 $\\Omega$ each and $R_L=190\\ \\Omega$ (ideal otherwise). Find $I_{dc}$, $V_{dc}$ and the efficiency.",
+       "model_answer_md": "Two diodes conduct in series, so the resistance in the path is $2r_f+R_L=20+190=210\\ \\Omega$.\n\n$I_m=\\dfrac{30}{210}=142.9\\ \\text{mA}$\n\n$I_{dc}=\\dfrac{2I_m}{\\pi}=90.9\\ \\text{mA}$, $V_{dc}=I_{dc}R_L=17.3\\ \\text{V}$\n\n$\\eta=\\dfrac{0.8106}{1+2r_f/R_L}=\\dfrac{0.8106}{1+20/190}=73.3\\%$",
+       "points": [
+        "$I_m=V_m/(2r_f+R_L)=142.9$ mA",
+        "$I_{dc}=2I_m/\\pi=90.9$ mA; $V_{dc}=17.3$ V",
+        "$\\eta=0.8106/(1+2r_f/R_L)=73.3\\%$"
+       ]
+      },
+      {
+       "id": "e-p1",
+       "pyq": "f3a2c6dfc5cb3375",
+       "level": 2,
+       "points": [
+        "Bridge: two diodes conduct, so total resistance $2r_f+R_L$",
+        "$I_{dc}=2I_m/\\pi$, $I_{rms}=I_m/\\sqrt2$ with $I_m=V_m/(2r_f+R_L)$",
+        "$P_{dc}=I_{dc}^2R_L$, $P_{ac}=I_{rms}^2(2r_f+R_L)$",
+        "$\\eta=\\dfrac{8}{\\pi^2}\\cdot\\dfrac{R_L}{2r_f+R_L}=\\dfrac{0.812}{1+2r_f/R_L}$, maximum 81.2%"
+       ]
+      }
+     ]
+    },
+    {
+     "id": "practical-numericals",
+     "title": "Numericals with winding resistance, diode resistance and cut-in voltage",
+     "theory_md": "**Method** for the usual 5-mark numerical, with $n=1$ for half wave and centre-tap, $n=2$ for a bridge:\n\n1. $V_m=\\sqrt2\\,V_{rms}$ (for a centre-tap, per half of the secondary).\n2. $I_m=\\dfrac{V_m-nV_\\gamma}{R_s+n\\,r_f+R_L}$ ($V_\\gamma=0$ if not given).\n3. $I_{dc}=\\dfrac{I_m}{\\pi}$ (HW) or $\\dfrac{2I_m}{\\pi}$ (FW); $V_{dc}=I_{dc}R_L$.\n4. $P_{dc}=I_{dc}^2R_L$; $P_{ac}=I_{rms}^2(R_s+nr_f+R_L)+nV_\\gamma I_{dc}$; $\\eta=P_{dc}/P_{ac}$.\n5. $\\gamma=1.21$ (HW) or $0.482$ (FW): waveform only.\n6. Regulation: $\\%\\text{Reg}=\\dfrac{V_{NL}-V_{FL}}{V_{FL}}\\times100=\\dfrac{R_s+nr_f}{R_L}\\times100$.",
+     "basics_md": "Treat every resistance in the conducting path as one total series resistance, and every cut-in voltage as a battery that eats into the peak voltage. Then the current is just Ohm's law at the peak, and the averaging factors ($1/\\pi$ or $2/\\pi$) turn peak into DC.",
+     "key_points": [
+      "$V_m=\\sqrt2V_{rms}$; subtract $nV_\\gamma$; add $R_s$, $nr_f$ and $R_L$ for $I_m$",
+      "$I_{dc}=I_m/\\pi$ (HW) or $2I_m/\\pi$ (FW)",
+      "Efficiency from $P_{dc}$ and $P_{ac}$, including the $V_\\gamma I_{dc}$ loss when $V_\\gamma$ is given",
+      "Ripple factor is fixed by the waveform (1.21 or 0.482)",
+      "Bridge: $n=2$ drops and $2r_f$"
+     ],
+     "figures": [],
+     "questions": [
+      {
+       "id": "n-q1",
+       "kind": "mcq",
+       "level": 2,
+       "q": "A half-wave rectifier has $r_f=15\\ \\Omega$ and $R_L=300\\ \\Omega$. Its ripple factor is",
+       "options": [
+        "1.17",
+        "1.21",
+        "1.15",
+        "0.48"
+       ],
+       "answer_index": 1,
+       "why": "Ripple factor depends only on the waveform, so it is 1.21 whatever $r_f$ and $R_L$ are."
+      },
+      {
+       "id": "n-q2",
+       "kind": "mcq",
+       "level": 1,
+       "q": "In a bridge rectifier with silicon diodes, the voltage subtracted from the secondary peak is",
+       "options": [
+        "0.7 V",
+        "1.4 V",
+        "0.35 V",
+        "2.1 V"
+       ],
+       "answer_index": 1,
+       "why": "Two diodes conduct in series, so $2\\times0.7=1.4$ V."
+      },
+      {
+       "id": "n-q3",
+       "kind": "numerical",
+       "level": 3,
+       "marks": 5,
+       "q": "A half-wave rectifier has a secondary of 12 V rms with winding resistance 0.5 $\\Omega$. The silicon diode has $r_f=10\\ \\Omega$ and $V_\\gamma=0.7$ V. The load is 200 $\\Omega$. Find (i) $I_{dc}$, (ii) $V_{dc}$, (iii) efficiency, (iv) ripple factor, (v) voltage regulation.",
+       "model_answer_md": "**Given:** $V_{rms}=12$ V, $R_s=0.5\\ \\Omega$, $r_f=10\\ \\Omega$, $V_\\gamma=0.7$ V, $R_L=200\\ \\Omega$.\n\n$V_m=\\sqrt2\\times12=16.97$ V\n\n$I_m=\\dfrac{V_m-V_\\gamma}{R_s+r_f+R_L}=\\dfrac{16.97-0.7}{210.5}=77.29\\ \\text{mA}$\n\n**(i)** $I_{dc}=\\dfrac{I_m}{\\pi}=24.60\\ \\text{mA}$\n\n**(ii)** $V_{dc}=I_{dc}R_L=0.02460\\times200=4.92\\ \\text{V}$\n\n**(iii)** $P_{dc}=I_{dc}^2R_L=0.1211\\ \\text{W}$; $I_{rms}=I_m/2=38.65$ mA\n\n$P_{ac}=I_{rms}^2(210.5)+V_\\gamma I_{dc}=0.3144+0.0172=0.3316\\ \\text{W}$\n\n$\\eta=\\dfrac{0.1211}{0.3316}=36.5\\%$\n\n**(iv)** $\\gamma=\\sqrt{(\\pi/2)^2-1}=1.21$\n\n**(v)** $\\%\\text{Reg}=\\dfrac{R_s+r_f}{R_L}\\times100=\\dfrac{10.5}{200}\\times100=5.25\\%$",
+       "points": [
+        "$V_m=16.97$ V; $I_m=(V_m-V_\\gamma)/(R_s+r_f+R_L)=77.29$ mA",
+        "$I_{dc}=I_m/\\pi=24.60$ mA; $V_{dc}=4.92$ V",
+        "$P_{dc}=0.1211$ W; $P_{ac}=I_{rms}^2R_{total}+V_\\gamma I_{dc}=0.3316$ W; $\\eta=36.5\\%$",
+        "$\\gamma=1.21$",
+        "Regulation $=(R_s+r_f)/R_L=5.25\\%$"
+       ]
+      },
+      {
+       "id": "n-q4",
+       "kind": "short",
+       "level": 2,
+       "marks": 3,
+       "q": "Define voltage regulation of a rectifier. How does it come out as $(R_s+r_f)/R_L$?",
+       "model_answer_md": "**Voltage regulation** is the fall in DC output voltage from no load to full load, as a percentage of the full-load value:\n\n$\\%\\text{Reg}=\\dfrac{V_{NL}-V_{FL}}{V_{FL}}\\times100$\n\nIgnoring $V_\\gamma$: at no load there is no drop, so $V_{NL}=V_m/\\pi$ (half wave). On load the DC current flows through $R_s$ and $r_f$, so $V_{FL}=V_{NL}\\dfrac{R_L}{R_s+r_f+R_L}$. Then $\\dfrac{V_{NL}-V_{FL}}{V_{FL}}=\\dfrac{R_s+r_f}{R_L}$. A smaller value is better.",
+       "points": [
+        "Definition: (no-load minus full-load voltage) over full-load voltage, times 100",
+        "Drop only in $R_s$ and $r_f$ (divider with $R_L$)",
+        "Result $(R_s+r_f)/R_L\\times100$"
+       ]
+      },
+      {
+       "id": "n-p1",
+       "pyq": "202a44825ab67fa3",
+       "level": 3,
+       "points": [
+        "Centre-tap, $V_m=\\sqrt2\\times14.14=20$ V per half",
+        "$I_m=(V_m-V_\\gamma)/(R_s+r_f+R_L)=19.3/150.38=128.3$ mA",
+        "(i) $I_{dc}=2I_m/\\pi=81.7$ mA; (ii) $V_{dc}=I_{dc}R_L\\approx12.25$ V",
+        "(iii) Regulation $=(R_s+r_f)/R_L\\times100=0.38/150\\times100=0.253\\%$",
+        "(iv) $P_{dc}=1.00$ W, $P_{ac}=I_{rms}^2R_{total}+V_\\gamma I_{dc}=1.296$ W, $\\eta\\approx77.3\\%$",
+        "(v) $\\gamma=0.482$"
+       ]
+      },
+      {
+       "id": "n-p2",
+       "pyq": "e8c6d0aef865310b",
+       "level": 3,
+       "points": [
+        "Comparison table: centre-tap 2 diodes, centre-tapped transformer, PIV $2V_m$, TUF 0.693; bridge 4 diodes, no centre tap, PIV $V_m$, TUF 0.812; same $\\eta_{max}$ 81.2% and $\\gamma$ 0.482",
+        "Half wave: $I_m=(10-0.7)/(0.2+0.05+500)=18.59$ mA",
+        "(i) $I_{dc}=I_m/\\pi=5.92$ mA; (ii) $V_{dc}=2.96$ V",
+        "(iii) $P_{dc}=17.5$ mW, $P_{ac}=I_{rms}^2R_{total}+V_\\gamma I_{dc}=47.4$ mW, $\\eta\\approx37\\%$",
+        "(iv) $\\gamma=1.21$"
+       ]
+      },
+      {
+       "id": "n-p3",
+       "pyq": "b4d5bef1f36d283e",
+       "level": 2,
+       "points": [
+        "Bridge: $V_m=\\sqrt2\\times14.14=20$ V; two diodes in series so $2r_f=30\\ \\Omega$",
+        "$I_m=20/(0.3+30+200)=86.8$ mA",
+        "(i) $I_{dc}=2I_m/\\pi=55.3$ mA; (ii) $V_{dc}=I_{dc}R_L=11.06$ V",
+        "(iv) $\\eta=0.812/(1+30.3/200)\\approx70.4\\%$",
+        "(v) $\\gamma=0.482$"
+       ]
+      },
+      {
+       "id": "n-p4",
+       "pyq": "578fe9fcdd6d7902",
+       "level": 2,
+       "points": [
+        "Bridge: $V_m=\\sqrt2\\times14.14=20$ V; two diodes in series so $2r_f=30\\ \\Omega$",
+        "$I_m=20/(0.3+30+200)=86.8$ mA",
+        "(i) $I_{dc}=2I_m/\\pi=55.3$ mA; (ii) $V_{dc}=I_{dc}R_L=11.06$ V",
+        "(iv) $\\eta=0.812/(1+30.3/200)\\approx70.4\\%$",
+        "(v) $\\gamma=0.482$"
+       ]
+      }
+     ]
+    }
+   ]
+  }
+ ]
+}

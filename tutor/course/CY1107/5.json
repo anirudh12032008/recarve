@@ -1,0 +1,1944 @@
+{
+ "code": "CY1107",
+ "unit": "Corrosion and its Control",
+ "written": "2026-10-19",
+ "by": "claude-sonnet-5-5, in a Claude Code session",
+ "topics": [
+  {
+   "topic": "Chemical and electrochemical corrosion",
+   "subtopics": [
+    {
+     "id": "dry-oxide-film",
+     "title": "Dry corrosion and the oxide film",
+     "theory_md": "**Dry (chemical) corrosion** is direct attack by dry gases ($\\mathrm{O_2}$, $\\mathrm{Cl_2}$, $\\mathrm{H_2S}$, $\\mathrm{SO_2}$), mostly at high temperature, with no electrolyte. In **oxidation corrosion** the metal gives up electrons and the oxide forms on the surface: $\\mathrm{2M \\rightarrow 2M^{n+} + 2ne^-}$, $\\mathrm{\\tfrac{n}{2}O_2 + 2ne^- \\rightarrow nO^{2-}}$. Later growth needs $\\mathrm{M^{n+}}$ or $\\mathrm{O^{2-}}$ to diffuse through the film, so the **film decides the rate**:\n- **Stable** (fine, adherent, non-porous): protective, Al, Cr, Sn, Pb, Cu.\n- **Unstable**: oxide decomposes back to metal, Ag, Au, Pt.\n- **Volatile**: oxide evaporates, $\\mathrm{MoO_3}$.\n- **Porous**: oxygen reaches the metal, Na, K, Mg, Ca.",
+     "basics_md": "Rust-proofing by nature: a metal wrapped in a tight, unbroken coat of its own oxide is sealed from air. If the coat is cracked, flaky or evaporates, the metal underneath keeps burning away.",
+     "key_points": [
+      "Dry corrosion: gases, no electrolyte, usually high temperature",
+      "Oxidation: metal loses electrons, oxygen gains them, oxide film forms",
+      "Stable film protects; unstable film decomposes; volatile film evaporates; porous film lets oxygen through",
+      "Give an example metal for each film type"
+     ],
+     "questions": [
+      {
+       "id": "d1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "Which metal forms a volatile oxide film that exposes fresh metal continuously?",
+       "options": [
+        "Aluminium",
+        "Molybdenum",
+        "Gold",
+        "Chromium"
+       ],
+       "answer_index": 1,
+       "why": "$\\mathrm{MoO_3}$ evaporates as it forms, so the surface is never protected."
+      },
+      {
+       "id": "d2",
+       "kind": "mcq",
+       "level": 1,
+       "q": "The oxide film of silver and gold is",
+       "options": [
+        "stable and protective",
+        "unstable, decomposes back to metal",
+        "volatile",
+        "porous"
+       ],
+       "answer_index": 1,
+       "why": "Their oxides are unstable at ordinary temperature, so no lasting corrosion."
+      },
+      {
+       "id": "d3",
+       "kind": "short",
+       "level": 2,
+       "marks": 3,
+       "q": "Write the two half-reactions of oxidation corrosion of a metal M and name the four types of oxide film.",
+       "model_answer_md": "**Oxidation corrosion** (dry, no moisture):\n- Anodic: $\\mathrm{2M \\rightarrow 2M^{n+} + 2ne^-}$\n- Cathodic: $\\mathrm{\\tfrac{n}{2}O_2 + 2ne^- \\rightarrow nO^{2-}}$\n- Overall: $\\mathrm{2M + \\tfrac{n}{2}O_2 \\rightarrow M_2O_n}$\n\n**Film types:** stable (Al, Cr), unstable (Ag, Au, Pt), volatile ($\\mathrm{MoO_3}$), porous (Na, K, Mg, Ca).",
+       "points": [
+        "Anodic reaction $\\mathrm{2M \\rightarrow 2M^{n+} + 2ne^-}$",
+        "Cathodic reaction with $\\mathrm{O_2}$ giving $\\mathrm{O^{2-}}$",
+        "Four film types named",
+        "Example for each"
+       ]
+      },
+      {
+       "id": "d-p1",
+       "pyq": "5234643fdd33a919",
+       "level": 2,
+       "points": [
+        "Film nature decides the rate; further attack needs ion diffusion through the film",
+        "Stable: fine-grained, adherent, non-porous, protective (Al, Cr, Sn, Pb, Cu)",
+        "Unstable: decomposes to metal and $\\mathrm{O_2}$ (Ag, Au, Pt)",
+        "Volatile: evaporates, fresh metal exposed ($\\mathrm{MoO_3}$)",
+        "Porous: pores let oxygen in, corrosion continues (alkali and alkaline earth metals)",
+        "Pilling-Bedworth ratio may be mentioned"
+       ]
+      },
+      {
+       "id": "d-p2",
+       "pyq": "622f5759614c088d",
+       "level": 2,
+       "points": [
+        "Film nature decides the rate; further attack needs ion diffusion through the film",
+        "Stable: fine-grained, adherent, non-porous, protective (Al, Cr, Sn, Pb, Cu)",
+        "Unstable: decomposes to metal and $\\mathrm{O_2}$ (Ag, Au, Pt)",
+        "Volatile: evaporates, fresh metal exposed ($\\mathrm{MoO_3}$)",
+        "Porous: pores let oxygen in, corrosion continues (alkali and alkaline earth metals)"
+       ]
+      }
+     ]
+    },
+    {
+     "id": "pilling-bedworth",
+     "title": "Pilling-Bedworth rule",
+     "theory_md": "$\\mathrm{PBR} = \\dfrac{V_{oxide}}{V_{metal}} = \\dfrac{M_{oxide}\\,\\rho_{metal}}{n\\,M_{metal}\\,\\rho_{oxide}}$, where $n$ is the number of metal atoms in one oxide formula.\n- **PBR < 1**: oxide cannot cover the metal, so it is porous and non-protective (Na 0.58, Mg 0.81).\n- **PBR about 1 to 2**: compact, protective (Al 1.29).\n- **PBR much greater than 2**: film is strained, cracks and flakes off, non-protective (W about 3.4).",
+     "basics_md": "Think of laying tiles on a floor. Too few tiles leave gaps (PBR < 1). Just enough covers it (1 to 2). Too many buckle and lift (> 2).",
+     "key_points": [
+      "PBR = volume of oxide / volume of metal consumed",
+      "Below 1: porous, above about 2: cracks, between: protective",
+      "Formula with $n$, molar masses and densities",
+      "Examples Mg, Na (porous), Al (protective)"
+     ],
+     "questions": [
+      {
+       "id": "pb1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "A metal oxide with PBR = 0.58 (Na) forms a film that is",
+       "options": [
+        "protective",
+        "porous, non-protective",
+        "protective but brittle",
+        "volatile"
+       ],
+       "answer_index": 1,
+       "why": "PBR below 1 means the oxide cannot cover the metal surface."
+      },
+      {
+       "id": "pb2",
+       "kind": "mcq",
+       "level": 2,
+       "q": "Which PBR range is generally protective?",
+       "options": [
+        "below 1",
+        "about 1 to 2",
+        "3 to 4",
+        "above 10"
+       ],
+       "answer_index": 1,
+       "why": "The film then covers the metal without excessive stress."
+      },
+      {
+       "id": "pb3",
+       "kind": "numerical",
+       "level": 3,
+       "marks": 3,
+       "q": "Calculate the PBR of magnesium and predict whether MgO is protective. (Mg = 24.31 g/mol, $\\rho$ = 1.74 g/cm$^3$; MgO = 40.30 g/mol, $\\rho$ = 3.58 g/cm$^3$)",
+       "model_answer_md": "$\\mathrm{PBR} = \\dfrac{M_{oxide}\\,\\rho_{metal}}{n\\,M_{metal}\\,\\rho_{oxide}}$, with $n = 1$ Mg atom per MgO.\n\n$\\mathrm{PBR} = \\dfrac{40.30 \\times 1.74}{1 \\times 24.31 \\times 3.58} = \\dfrac{70.12}{87.03} = 0.81$\n\nSince 0.81 < 1, the oxide occupies less volume than the metal consumed, leaves gaps, is **porous and non-protective**.",
+       "points": [
+        "Formula with $n$",
+        "Substitution with units",
+        "PBR = 0.81",
+        "Less than 1 so porous, non-protective"
+       ]
+      },
+      {
+       "id": "pb4",
+       "kind": "numerical",
+       "level": 3,
+       "marks": 3,
+       "q": "Calculate the PBR of aluminium. (Al = 26.98 g/mol, $\\rho$ = 2.70 g/cm$^3$; $\\mathrm{Al_2O_3}$ = 101.96 g/mol, $\\rho$ = 3.95 g/cm$^3$)",
+       "model_answer_md": "$n = 2$ Al atoms per $\\mathrm{Al_2O_3}$.\n\n$\\mathrm{PBR} = \\dfrac{101.96 \\times 2.70}{2 \\times 26.98 \\times 3.95} = \\dfrac{275.3}{213.1} = 1.29$\n\n1 < 1.29 < 2, so the film is compact and **protective**.",
+       "points": [
+        "n = 2",
+        "PBR = 1.29",
+        "In range 1 to 2 so protective"
+       ]
+      },
+      {
+       "id": "pb-p1",
+       "pyq": "9dd57c30799d33e3",
+       "level": 2,
+       "points": [
+        "PBR = $V_{oxide}/V_{metal}$ with the molar-mass and density form",
+        "PBR < 1: porous, non-protective (Na, Mg)",
+        "PBR about 1 to 2: compact, protective (Al, Cu)",
+        "PBR >> 2: strained, cracks, spalls (W)",
+        "Types of oxide layers cited (stable, unstable, volatile, porous)"
+       ]
+      }
+     ]
+    },
+    {
+     "id": "wet-mechanism",
+     "title": "Wet corrosion: hydrogen evolution and oxygen absorption",
+     "theory_md": "**Wet corrosion** needs a conducting liquid and a complete galvanic cell on the metal: **anode**, **cathode**, **electrolyte**, **metallic contact**.\n- Anode: $\\mathrm{Fe \\rightarrow Fe^{2+} + 2e^-}$ (the metal dissolves).\n- Cathode, **acidic, de-aerated**: **hydrogen evolution**, $\\mathrm{2H^+ + 2e^- \\rightarrow H_2\\uparrow}$.\n- Cathode, **neutral or alkaline, aerated**: **oxygen absorption**, $\\mathrm{O_2 + 2H_2O + 4e^- \\rightarrow 4OH^-}$.\n- $\\mathrm{Fe^{2+} + 2OH^- \\rightarrow Fe(OH)_2}$; with excess $\\mathrm{O_2}$: $\\mathrm{4Fe(OH)_2 + O_2 + 2H_2O \\rightarrow 4Fe(OH)_3 \\rightarrow Fe_2O_3\\cdot xH_2O}$ (rust). Limited $\\mathrm{O_2}$ gives black $\\mathrm{Fe_3O_4}$.\nMetal is lost at the **anode**; rust deposits near the **cathode**.",
+     "basics_md": "A tiny battery forms on the metal surface. One spot gives up electrons and dissolves; another spot receives them and reacts with acid or dissolved oxygen. Water is the wire between them.",
+     "key_points": [
+      "Four conditions: anodic and cathodic areas, electrolyte, metallic contact, depolariser ($\\mathrm{H^+}$ or $\\mathrm{O_2}$)",
+      "Anode reaction is always oxidation of the metal",
+      "Hydrogen evolution in acid; oxygen absorption in neutral or alkaline aerated water",
+      "Rust is $\\mathrm{Fe_2O_3\\cdot xH_2O}$, formed from $\\mathrm{Fe(OH)_2}$",
+      "Corrosion at anode, rust near cathode; labelled diagram"
+     ],
+     "questions": [
+      {
+       "id": "w1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "In iron corroding in neutral aerated water, the cathodic reaction is",
+       "options": [
+        "$\\mathrm{Fe \\rightarrow Fe^{2+} + 2e^-}$",
+        "$\\mathrm{2H^+ + 2e^- \\rightarrow H_2}$",
+        "$\\mathrm{O_2 + 2H_2O + 4e^- \\rightarrow 4OH^-}$",
+        "$\\mathrm{Fe^{3+} + e^- \\rightarrow Fe^{2+}}$"
+       ],
+       "answer_index": 2,
+       "why": "$\\mathrm{H^+}$ is scarce in neutral water, so dissolved oxygen takes the electrons."
+      },
+      {
+       "id": "w2",
+       "kind": "mcq",
+       "level": 1,
+       "q": "Hydrogen evolution type corrosion occurs in",
+       "options": [
+        "neutral aerated water",
+        "acidic de-aerated medium",
+        "dry air",
+        "alkaline aerated water"
+       ],
+       "answer_index": 1,
+       "why": "It needs $\\mathrm{H^+}$ and no oxygen."
+      },
+      {
+       "id": "w3",
+       "kind": "mcq",
+       "level": 2,
+       "q": "Rust is deposited mainly",
+       "options": [
+        "at the anode",
+        "near the cathode, away from the point of metal loss",
+        "inside the metal",
+        "only in acid"
+       ],
+       "answer_index": 1,
+       "why": "$\\mathrm{Fe^{2+}}$ diffuses and meets $\\mathrm{OH^-}$ produced at the cathode."
+      },
+      {
+       "id": "w4",
+       "kind": "short",
+       "level": 2,
+       "marks": 4,
+       "q": "Explain the rusting of iron by the electrochemical theory, with reactions.",
+       "model_answer_md": "**Theory:** in moist air, iron develops anodic and cathodic areas (impurities, strain, differential aeration). Moisture with dissolved $\\mathrm{O_2}$ and $\\mathrm{CO_2}$ is the electrolyte, so tiny galvanic cells form.\n\n1. Anode: $\\mathrm{Fe \\rightarrow Fe^{2+} + 2e^-}$\n2. Electrons flow through the metal to the cathode.\n3. Cathode (neutral, aerated): $\\mathrm{O_2 + 2H_2O + 4e^- \\rightarrow 4OH^-}$ (acidic: $\\mathrm{2H^+ + 2e^- \\rightarrow H_2}$)\n4. $\\mathrm{Fe^{2+} + 2OH^- \\rightarrow Fe(OH)_2}$\n5. $\\mathrm{4Fe(OH)_2 + O_2 + 2H_2O \\rightarrow 4Fe(OH)_3 \\rightarrow Fe_2O_3\\cdot xH_2O}$ (rust)\n\nIron is eaten at the anode; rust deposits near the cathode.",
+       "points": [
+        "Anodic and cathodic areas, moisture electrolyte",
+        "Anode $\\mathrm{Fe \\rightarrow Fe^{2+} + 2e^-}$",
+        "Cathode oxygen absorption (and hydrogen evolution in acid)",
+        "$\\mathrm{Fe(OH)_2}$ oxidised to $\\mathrm{Fe_2O_3\\cdot xH_2O}$",
+        "Corrosion at anode, rust near cathode"
+       ]
+      },
+      {
+       "id": "w-p1",
+       "pyq": "e0b1c3f6f34fb9a2",
+       "level": 2,
+       "points": [
+        "Anodic and cathodic areas, moisture as electrolyte",
+        "Anode $\\mathrm{Fe \\rightarrow Fe^{2+} + 2e^-}$",
+        "Cathode $\\mathrm{O_2 + 2H_2O + 4e^- \\rightarrow 4OH^-}$ (or $\\mathrm{H^+}$ reduction in acid)",
+        "$\\mathrm{Fe^{2+} + 2OH^- \\rightarrow Fe(OH)_2}$, then oxidised to $\\mathrm{Fe_2O_3\\cdot xH_2O}$",
+        "Limited oxygen gives black $\\mathrm{Fe_3O_4}$"
+       ]
+      },
+      {
+       "id": "w-p2",
+       "pyq": "a43e774d76d7f676",
+       "level": 2,
+       "points": [
+        "Anode: metal dissolves $\\mathrm{M \\rightarrow M^{n+} + ne^-}$",
+        "Hydrogen evolution: acidic, de-aerated, $\\mathrm{2H^+ + 2e^- \\rightarrow H_2}$, figure with large anode and small cathode",
+        "Oxygen absorption: neutral or alkaline aerated, $\\mathrm{O_2 + 2H_2O + 4e^- \\rightarrow 4OH^-}$, figure with small anode (crack) and large cathode",
+        "$\\mathrm{Fe(OH)_2}$ to rust",
+        "Labelled figures for both"
+       ]
+      },
+      {
+       "id": "w-p3",
+       "pyq": "bb47a9b97f6fe210",
+       "level": 2,
+       "points": [
+        "Anodic and cathodic areas on the metal",
+        "Electrolyte in contact with both",
+        "Metallic contact between anode and cathode",
+        "Cathodic reactant ($\\mathrm{H^+}$ or dissolved $\\mathrm{O_2}$)",
+        "Reactions at anode and cathode"
+       ]
+      },
+      {
+       "id": "w-p4",
+       "pyq": "f9de6c80100131fa",
+       "level": 2,
+       "points": [
+        "Oxygen absorption occurs in neutral or alkaline aerated medium",
+        "Anode $\\mathrm{Fe \\rightarrow Fe^{2+} + 2e^-}$",
+        "Cathode $\\mathrm{O_2 + 2H_2O + 4e^- \\rightarrow 4OH^-}$",
+        "$\\mathrm{Fe(OH)_2}$ oxidised to rust $\\mathrm{Fe_2O_3\\cdot xH_2O}$"
+       ]
+      },
+      {
+       "id": "w-p5",
+       "pyq": "14cf811db323c223",
+       "level": 1,
+       "points": [
+        "Oxygen absorption occurs in neutral or alkaline aerated medium",
+        "Anode $\\mathrm{Fe \\rightarrow Fe^{2+} + 2e^-}$, cathode $\\mathrm{O_2 + 2H_2O + 4e^- \\rightarrow 4OH^-}$",
+        "$\\mathrm{Fe(OH)_2}$ then rust"
+       ]
+      },
+      {
+       "id": "w-p6",
+       "pyq": "31ace49af2c9ccb6",
+       "level": 3,
+       "points": [
+        "Diagram only, no explanation",
+        "Iron with small anodic area (scratch or crack) and large cathodic area",
+        "Labelled: aqueous electrolyte (NaCl or moisture film), $\\mathrm{O_2}$ from air",
+        "Anode $\\mathrm{Fe \\rightarrow Fe^{2+} + 2e^-}$, cathode $\\mathrm{O_2 + 2H_2O + 4e^- \\rightarrow 4OH^-}$",
+        "Electron flow arrow through the metal; $\\mathrm{Fe^{2+}}$ and $\\mathrm{OH^-}$ diffusing; rust formed between"
+       ]
+      }
+     ]
+    },
+    {
+     "id": "dry-vs-wet",
+     "title": "Dry versus wet corrosion",
+     "theory_md": "Both mechanisms in one answer.\n- **Dry (chemical)**: dry gases, **no electrolyte**, no separate anode and cathode, direct film formation, product at the site of attack, usually uniform; example: oxidation at high temperature.\n- **Wet (electrochemical)**: needs a **conducting liquid**, many tiny galvanic cells, separate anode and cathode, metal lost at the anode and product near the cathode, often **localised**; example: rusting in moist air.\nDry corrosion is explained by the oxidation (film growth) mechanism; wet corrosion by the electrochemical theory.",
+     "basics_md": "Dry: the metal and gas react directly, like iron burning in hot air. Wet: water turns the surface into a battery.",
+     "key_points": [
+      "Presence or absence of electrolyte is the main difference",
+      "Anode and cathode separate only in wet corrosion",
+      "Dry: uniform, product at site; wet: localised, product near cathode",
+      "Mechanism: oxidation versus electrochemical theory",
+      "Examples and a diagram for each"
+     ],
+     "questions": [
+      {
+       "id": "dw1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "Which statement about dry corrosion is correct?",
+       "options": [
+        "It needs a liquid electrolyte",
+        "It involves direct attack by gases",
+        "It forms many galvanic cells",
+        "Corrosion occurs at the anode"
+       ],
+       "answer_index": 1,
+       "why": "Dry corrosion is direct gas attack with no electrolyte."
+      },
+      {
+       "id": "dw2",
+       "kind": "mcq",
+       "level": 2,
+       "q": "The real difference between dry and wet corrosion is",
+       "options": [
+        "wet is always faster",
+        "presence of an electrolyte",
+        "wet occurs only in iron",
+        "dry forms rust"
+       ],
+       "answer_index": 1,
+       "why": "Speed is not the criterion; the electrolyte is."
+      },
+      {
+       "id": "dw3",
+       "kind": "short",
+       "level": 2,
+       "marks": 4,
+       "q": "Distinguish between chemical and electrochemical corrosion in four points.",
+       "model_answer_md": "| Chemical (dry) | Electrochemical (wet) |\n|---|---|\n| Dry gases attack directly | Conducting liquid (electrolyte) present |\n| No separate anode and cathode | Separate anodic and cathodic areas, galvanic cells |\n| Product forms at the place of attack | Corrosion at anode, product near cathode |\n| Uniform; film-growth mechanism | Often localised; electrochemical theory |\n\nExample: high-temperature oxidation of a metal versus rusting of iron in moist air.",
+       "points": [
+        "Electrolyte absent versus present",
+        "Separate electrodes absent versus present",
+        "Location of corrosion product",
+        "Mechanism and example"
+       ]
+      },
+      {
+       "id": "dw-p1",
+       "pyq": "7daa6d2cd2ffa65c",
+       "level": 2,
+       "points": [
+        "Dry corrosion: direct attack of gases, no liquid electrolyte, high temperature",
+        "Oxidation mechanism with film formation",
+        "Differences from wet corrosion (electrolyte, electrodes, location of product, localisation)",
+        "Illustration: oxide film on metal for dry, galvanic cell for wet"
+       ]
+      },
+      {
+       "id": "dw-p2",
+       "pyq": "5a208a197616db06",
+       "level": 2,
+       "points": [
+        "Dry corrosion: direct attack of gases, no liquid electrolyte, high temperature",
+        "Oxidation mechanism with film formation",
+        "Differences from wet corrosion (electrolyte, electrodes, location of product, localisation)",
+        "Illustration: oxide film on metal for dry, galvanic cell for wet"
+       ]
+      },
+      {
+       "id": "dw-p3",
+       "pyq": "d90d166ca4d0b35d",
+       "level": 2,
+       "points": [
+        "Point-wise table, at least four rows",
+        "Electrolyte absent versus present",
+        "No anode and cathode versus anode and cathode",
+        "Uniform versus localised, product location",
+        "Example for each"
+       ]
+      },
+      {
+       "id": "dw-p4",
+       "pyq": "6d762a833d5e00c7",
+       "level": 3,
+       "points": [
+        "Oxidation mechanism: $\\mathrm{2M \\rightarrow 2M^{n+} + 2ne^-}$, $\\mathrm{\\tfrac{n}{2}O_2 + 2ne^- \\rightarrow nO^{2-}}$, oxide film",
+        "Diagram of oxide film growth on metal surface",
+        "Electrochemical mechanism: anode, cathode, electrolyte, reactions",
+        "Hydrogen evolution and oxygen absorption",
+        "Diagram of galvanic cell on iron with labels"
+       ]
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "topic": "Galvanic and concentration cell corrosion",
+   "subtopics": [
+    {
+     "id": "galvanic-cell",
+     "title": "Galvanic corrosion",
+     "theory_md": "When **two different metals** are in electrical contact in an electrolyte, the **more active metal is the anode** and corrodes; the nobler one is the cathode and is protected. Driving force: $E^\\circ_{cell} = E^\\circ_{cathode} - E^\\circ_{anode}$. Zn-Cu: Zn dissolves, $\\mathrm{Zn \\rightarrow Zn^{2+} + 2e^-}$, and in aerated water the Cu surface takes electrons, $\\mathrm{O_2 + 2H_2O + 4e^- \\rightarrow 4OH^-}$.\nThe farther apart the two metals, the faster the anode corrodes. Rate $\\propto$ cathode area / anode area, so a **small anode with a large cathode** is dangerous (steel rivet in a copper plate).",
+     "basics_md": "Put two unequal metals in salty water and join them: the keener one gives up electrons and wears away to protect the other.",
+     "key_points": [
+      "Two dissimilar metals in contact with an electrolyte",
+      "More active metal is anode and corrodes",
+      "$E^\\circ_{cell} = E^\\circ_{cathode} - E^\\circ_{anode}$",
+      "Small anode and large cathode is worst",
+      "Examples: Zn-Cu, steel bolt in copper sheet"
+     ],
+     "questions": [
+      {
+       "id": "g1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "In a Fe-Cu couple in moist air, which metal corrodes?",
+       "options": [
+        "Cu",
+        "Fe",
+        "Both equally",
+        "Neither"
+       ],
+       "answer_index": 1,
+       "why": "Fe is more active (lower $E^\\circ$), so it is the anode."
+      },
+      {
+       "id": "g2",
+       "kind": "mcq",
+       "level": 2,
+       "q": "Corrosion of the anode is most severe when",
+       "options": [
+        "anode large, cathode small",
+        "anode small, cathode large",
+        "both equal",
+        "no electrolyte"
+       ],
+       "answer_index": 1,
+       "why": "Rate is proportional to cathode area / anode area."
+      },
+      {
+       "id": "g3",
+       "kind": "numerical",
+       "level": 2,
+       "marks": 3,
+       "q": "A Zn-Cu couple is in aerated water. Write the cell reactions and calculate $E^\\circ_{cell}$. ($E^\\circ_{Zn} = -0.76$ V, $E^\\circ_{Cu} = +0.34$ V)",
+       "model_answer_md": "Zn is more active, so it is the **anode**:\n- Anode: $\\mathrm{Zn \\rightarrow Zn^{2+} + 2e^-}$\n- Cathode (aerated): $\\mathrm{O_2 + 2H_2O + 4e^- \\rightarrow 4OH^-}$\n\n$E^\\circ_{cell} = E^\\circ_{cathode} - E^\\circ_{anode} = 0.34 - (-0.76) = 1.10\\ \\mathrm{V}$\n\nZn corrodes; Cu is protected.",
+       "points": [
+        "Zn is anode, Cu cathode",
+        "Both half-reactions",
+        "$E^\\circ_{cell} = 1.10$ V with units"
+       ]
+      }
+     ]
+    },
+    {
+     "id": "concentration-cell",
+     "title": "Concentration cell corrosion",
+     "theory_md": "On a **single metal**, parts in contact with electrolyte of different concentration or **aeration** form a cell.\n- **Differential aeration** (most common): the **less aerated** part is the **anode** and corrodes; the well-aerated part is the cathode. Anode: $\\mathrm{M \\rightarrow M^{n+} + ne^-}$; cathode: $\\mathrm{O_2 + 2H_2O + 4e^- \\rightarrow 4OH^-}$.\n- **Metal-ion concentration**: the part in the **more dilute** solution of its ions is the anode. $E = \\dfrac{0.0591}{n}\\log\\dfrac{C_2}{C_1}$ at 25 °C ($C_2 > C_1$).\nExamples: waterline corrosion, pitting under dirt, crevice corrosion, pipe passing through clay (less aerated) and sand.",
+     "basics_md": "The same metal, but one patch is starved of oxygen. That patch pays the price and dissolves; the oxygen-rich patch is protected.",
+     "key_points": [
+      "Single metal, different concentration or aeration",
+      "Less aerated part is anode",
+      "More dilute metal-ion part is anode",
+      "Nernst: $E = \\frac{0.0591}{n}\\log\\frac{C_2}{C_1}$",
+      "Examples: waterline, pitting, crevice, buried pipe"
+     ],
+     "questions": [
+      {
+       "id": "c1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "In differential aeration corrosion, the anode is the",
+       "options": [
+        "well-aerated part",
+        "less-aerated part",
+        "painted part",
+        "hotter part"
+       ],
+       "answer_index": 1,
+       "why": "The oxygen-poor region is anodic and corrodes."
+      },
+      {
+       "id": "c2",
+       "kind": "mcq",
+       "level": 2,
+       "q": "A pipe passes through clay and then sand. Which part corrodes?",
+       "options": [
+        "The part in sand",
+        "The part in clay (less aerated)",
+        "Neither",
+        "Both equally"
+       ],
+       "answer_index": 1,
+       "why": "Clay is less aerated, so it becomes the anode."
+      },
+      {
+       "id": "c3",
+       "kind": "numerical",
+       "level": 3,
+       "marks": 3,
+       "q": "A copper concentration cell has Cu electrodes in 0.1 M and 0.01 M $\\mathrm{Cu^{2+}}$ at 25 °C. Find the EMF and say which electrode corrodes.",
+       "model_answer_md": "$E = \\dfrac{0.0591}{n}\\log\\dfrac{C_2}{C_1} = \\dfrac{0.0591}{2}\\log\\dfrac{0.1}{0.01} = 0.02955 \\times 1 = 0.0296\\ \\mathrm{V}$ (about 30 mV).\n\nThe electrode in the **more dilute** solution (0.01 M) is the **anode** and corrodes: $\\mathrm{Cu \\rightarrow Cu^{2+} + 2e^-}$.",
+       "points": [
+        "Nernst expression with $n = 2$",
+        "Substitution",
+        "E = 0.0296 V with unit",
+        "Dilute side is anode"
+       ]
+      },
+      {
+       "id": "c-p1",
+       "pyq": "bf08a7ffc951c0fc",
+       "level": 2,
+       "points": [
+        "Single metal, different concentration or aeration",
+        "Differential aeration: less aerated part is anode, well-aerated is cathode",
+        "Anode and cathode reactions",
+        "Metal-ion concentration cell and Nernst expression",
+        "Illustration: Zn rod partly dipped in NaCl, labelled"
+       ]
+      },
+      {
+       "id": "c-p2",
+       "pyq": "881629c08ff1d5e3",
+       "level": 2,
+       "points": [
+        "Single metal, different concentration or aeration",
+        "Less aerated part anodic, more aerated cathodic",
+        "Reactions at anode and cathode",
+        "Examples: waterline, pitting, crevice"
+       ]
+      },
+      {
+       "id": "c-p3",
+       "pyq": "7b7b9cb326094bee",
+       "level": 2,
+       "points": [
+        "Single metal in electrolyte of different concentration or aeration",
+        "Potential difference arises",
+        "Less aerated or more dilute part is anode and corrodes",
+        "Cathode in well-aerated region, reactions"
+       ]
+      }
+     ]
+    },
+    {
+     "id": "galvanic-vs-concentration",
+     "title": "Galvanic versus concentration cells",
+     "theory_md": "| Basis | Galvanic | Concentration |\n|---|---|---|\n| Electrodes | two different metals | same metal |\n| Origin of EMF | difference in electrode potentials | difference in ion concentration or oxygen |\n| Anode | more active metal | dilute or less aerated region |\n| EMF | large (Zn-Cu 1.10 V) | small ($\\frac{0.0591}{n}\\log\\frac{C_2}{C_1}$) |\n| Example | Zn-Fe couple | waterline, pitting |\n**Uses of concentration cell**: explaining waterline, pitting, crevice and buried-pipe corrosion (so design avoids them); finding solubility product and unknown ion concentration; pH measurement; oxygen sensors.",
+     "basics_md": "One cell: two metals fighting. The other: one metal, two moods of the same water.",
+     "key_points": [
+      "Different metals versus single metal",
+      "EMF from $E^\\circ$ difference versus concentration difference",
+      "Galvanic EMF large, concentration EMF small",
+      "Applications: explain corrosion, solubility, pH, oxygen sensor"
+     ],
+     "questions": [
+      {
+       "id": "gc1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "A concentration cell has",
+       "options": [
+        "two different metals",
+        "the same metal in solutions of different concentration",
+        "no electrolyte",
+        "a salt bridge only"
+       ],
+       "answer_index": 1,
+       "why": "Same electrode in different concentrations."
+      },
+      {
+       "id": "gc2",
+       "kind": "mcq",
+       "level": 2,
+       "q": "Which gives the larger EMF in general?",
+       "options": [
+        "Concentration cell",
+        "Galvanic cell of far apart metals",
+        "Both same",
+        "Neither has EMF"
+       ],
+       "answer_index": 1,
+       "why": "E.g. Zn-Cu 1.10 V versus tens of mV."
+      },
+      {
+       "id": "gc3",
+       "kind": "short",
+       "level": 2,
+       "marks": 3,
+       "q": "State three differences between galvanic and concentration cell corrosion.",
+       "model_answer_md": "1. **Electrodes:** galvanic has two different metals; concentration has one metal.\n2. **Origin of EMF:** difference in standard electrode potentials; difference in electrolyte concentration or aeration.\n3. **EMF:** large (Zn-Cu 1.10 V); small ($E = \\frac{0.0591}{n}\\log\\frac{C_2}{C_1}$).\n\nExamples: steel bolt in copper sheet; waterline corrosion.",
+       "points": [
+        "Electrode difference",
+        "Origin of EMF",
+        "Magnitude of EMF",
+        "Examples"
+       ]
+      },
+      {
+       "id": "gc-p1",
+       "pyq": "6df299dafe6c7093",
+       "level": 2,
+       "points": [
+        "Key differences: electrodes, origin of EMF, anode, EMF, example",
+        "Applications of concentration cell: explain waterline, pitting, crevice corrosion",
+        "Determination of solubility product or unknown concentration",
+        "pH measurement and oxygen sensors"
+       ]
+      },
+      {
+       "id": "gc-p2",
+       "pyq": "9c15b766504a79a0",
+       "level": 2,
+       "points": [
+        "Galvanic: different metals; concentration: same metal",
+        "Galvanic from $E^\\circ$ difference; concentration from concentration or aeration difference",
+        "Concentration difference makes less aerated or dilute region the anode",
+        "Anode reaction $\\mathrm{M \\rightarrow M^{n+} + ne^-}$, cathode oxygen reduction"
+       ]
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "topic": "Passivity",
+   "subtopics": [
+    {
+     "id": "passivity-meaning",
+     "title": "Passivity and corrosion resistance",
+     "theory_md": "**Passivity** is the loss of chemical reactivity of a metal that is active in the electrochemical series, due to a very thin (about 0.0004 mm), **non-porous, adherent, self-healing** oxide film formed in an oxidising environment.\n- Examples: Al ($\\mathrm{Al_2O_3}$), Cr, Ti, Ni, stainless steel (at least 11 to 12% Cr), Fe in conc. $\\mathrm{HNO_3}$.\n- The film re-forms if scratched, in presence of oxygen.\n- Passivity breaks down in $\\mathrm{Cl^-}$ media or reducing conditions (pitting).\n- Hence Al ($E^\\circ = -1.66$ V) resists corrosion better than Fe ($-0.44$ V): Al forms protective $\\mathrm{Al_2O_3}$ (PBR 1.29), Fe forms porous rust.",
+     "basics_md": "Position in the series says what a metal would like to do. A tight oxide skin decides what it can do.",
+     "key_points": [
+      "Very thin, non-porous, adherent, self-healing oxide film",
+      "Oxidising environment needed",
+      "Examples: Al, Cr, Ti, stainless steel (Cr at least 11 to 12%)",
+      "Breaks down in chloride, giving pitting",
+      "Used in anodising and anodic protection"
+     ],
+     "questions": [
+      {
+       "id": "p1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "Which is a passive metal/alloy?",
+       "options": [
+        "Mild steel",
+        "Stainless steel",
+        "Zinc in acid",
+        "Sodium"
+       ],
+       "answer_index": 1,
+       "why": "Its Cr gives a self-healing $\\mathrm{Cr_2O_3}$ film."
+      },
+      {
+       "id": "p2",
+       "kind": "mcq",
+       "level": 2,
+       "q": "Passivity of stainless steel needs at least about",
+       "options": [
+        "1% Cr",
+        "5% Ni",
+        "11 to 12% Cr",
+        "30% C"
+       ],
+       "answer_index": 2,
+       "why": "This much Cr gives a continuous $\\mathrm{Cr_2O_3}$ film."
+      },
+      {
+       "id": "p3",
+       "kind": "short",
+       "level": 2,
+       "marks": 3,
+       "q": "Why does aluminium resist corrosion although it is above iron in the electrochemical series?",
+       "model_answer_md": "Al ($E^\\circ = -1.66$ V) is more active than Fe ($-0.44$ V), but in air it instantly forms a thin, compact, adherent, non-porous and self-healing film of $\\mathrm{Al_2O_3}$ ($\\mathrm{4Al + 3O_2 \\rightarrow 2Al_2O_3}$, PBR 1.29). This makes Al **passive**. Rust on iron is porous and flaky, so fresh iron is exposed.",
+       "points": [
+        "Al more active than Fe",
+        "$\\mathrm{Al_2O_3}$ film thin, compact, self-healing",
+        "PBR 1.29 protective",
+        "Iron rust is porous"
+       ]
+      },
+      {
+       "id": "p-p1",
+       "pyq": "e92b06b44df34b59",
+       "level": 2,
+       "points": [
+        "Definition: active metal shows corrosion resistance due to thin protective oxide film",
+        "Film about 0.0004 mm, non-porous, self-healing",
+        "Examples: Al, Cr, Ti, stainless steel, Fe in conc. $\\mathrm{HNO_3}$",
+        "Breakdown in $\\mathrm{Cl^-}$"
+       ]
+      },
+      {
+       "id": "p-p2",
+       "pyq": "e9a48c0bd7afb3ea",
+       "level": 2,
+       "points": [
+        "Al more active (-1.66 V) than Fe (-0.44 V)",
+        "Al forms compact, adherent, self-healing $\\mathrm{Al_2O_3}$ film, becomes passive",
+        "Iron rust is porous, non-adherent, flakes off",
+        "So iron keeps corroding"
+       ]
+      }
+     ]
+    },
+    {
+     "id": "passivity-nitric",
+     "title": "Iron in dilute and concentrated nitric acid",
+     "theory_md": "**Dilute $\\mathrm{HNO_3}$** acts as an acid and mild oxidant. Iron dissolves actively ($\\mathrm{Fe \\rightarrow Fe^{2+} + 2e^-}$) and the products are soluble, so no protective film forms: **rapid corrosion**.\n**Concentrated $\\mathrm{HNO_3}$** is a strong oxidising agent. It forms a very thin, compact, non-porous oxide film ($\\mathrm{Fe_3O_4}$/$\\mathrm{Fe_2O_3}$) on iron. Iron becomes **passive** and does not corrode further, nor does it displace Cu from $\\mathrm{CuSO_4}$ until the film is scratched.\nOther passivating cases: Al, Cr in oxidising acids.",
+     "basics_md": "A strong oxidiser paints the metal with its own oxide in one stroke; a weak acid just eats the metal.",
+     "key_points": [
+      "Dilute acid: soluble products, no film, active corrosion",
+      "Concentrated acid: strong oxidiser, forms thin non-porous oxide film",
+      "Iron becomes passive in conc. $\\mathrm{HNO_3}$",
+      "Passive Fe does not displace Cu from $\\mathrm{CuSO_4}$"
+     ],
+     "questions": [
+      {
+       "id": "pn1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "Iron becomes passive in",
+       "options": [
+        "dilute HCl",
+        "conc. $\\mathrm{HNO_3}$",
+        "dilute $\\mathrm{H_2SO_4}$",
+        "dilute $\\mathrm{HNO_3}$"
+       ],
+       "answer_index": 1,
+       "why": "Strong oxidising action forms a protective oxide film."
+      },
+      {
+       "id": "pn2",
+       "kind": "mcq",
+       "level": 2,
+       "q": "Why does iron corrode in dilute but not conc. $\\mathrm{HNO_3}$?",
+       "options": [
+        "Conc. acid is a weaker acid",
+        "Conc. acid forms a protective oxide film",
+        "Dilute acid has no water",
+        "Iron is a noble metal"
+       ],
+       "answer_index": 1,
+       "why": "Passivity by the strongly oxidising concentrated acid."
+      },
+      {
+       "id": "pn-p1",
+       "pyq": "5a1555db7c6f74b3",
+       "level": 2,
+       "points": [
+        "Dilute $\\mathrm{HNO_3}$: acts mainly as acid, iron dissolves $\\mathrm{Fe \\rightarrow Fe^{2+} + 2e^-}$, soluble products, no film",
+        "Conc. $\\mathrm{HNO_3}$: strong oxidiser forms thin, compact, non-porous oxide film",
+        "Iron becomes passive, further attack stops",
+        "Passivity is the reason"
+       ]
+      },
+      {
+       "id": "pn3",
+       "kind": "short",
+       "level": 2,
+       "marks": 2,
+       "q": "Define passivity and give two ways in which a metal can be made passive.",
+       "model_answer_md": "**Passivity:** loss of chemical reactivity of an active metal due to a thin, non-porous, adherent oxide film.\n\nWays: (1) treatment with a strong oxidising agent such as conc. $\\mathrm{HNO_3}$ or chromate; (2) anodic oxidation (anodising) or exposure to air, as for Al, Cr, stainless steel.",
+       "points": [
+        "Definition",
+        "Strong oxidising agent method",
+        "Anodising or air exposure"
+       ]
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "topic": "Soil, pitting, intergranular, waterline and stress corrosion",
+   "subtopics": [
+    {
+     "id": "pitting",
+     "title": "Pitting corrosion",
+     "theory_md": "**Pitting** is localised attack producing small, **deep holes** while the rest of the surface is little affected.\n- **Cause**: breakdown of the protective film (scratch, $\\mathrm{Cl^-}$, inclusions) or a deposit (sand, dust, drop) giving **differential aeration**.\n- The spot under the deposit or film break is poorly aerated: **small anode**. The surroundings are the **large cathode**.\n- Anode: $\\mathrm{Fe \\rightarrow Fe^{2+} + 2e^-}$; cathode: $\\mathrm{O_2 + 2H_2O + 4e^- \\rightarrow 4OH^-}$.\n- Small anode and large cathode make it intense and self-accelerating. Example: stainless steel in chloride solutions.",
+     "basics_md": "A small wound in the protective skin becomes a deep hole, because the wound and the healthy skin form their own battery.",
+     "key_points": [
+      "Localised deep holes",
+      "Caused by film breakdown or deposit",
+      "Differential aeration: small anode, large cathode",
+      "Intense and self-accelerating",
+      "Example: stainless steel in chloride"
+     ],
+     "questions": [
+      {
+       "id": "pit1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "In pitting corrosion the pit acts as",
+       "options": [
+        "large cathode",
+        "small anode",
+        "neutral",
+        "inhibitor"
+       ],
+       "answer_index": 1,
+       "why": "The pit is anodic and the surroundings are cathodic."
+      },
+      {
+       "id": "pit2",
+       "kind": "mcq",
+       "level": 2,
+       "q": "Pitting is promoted by",
+       "options": [
+        "pure water",
+        "$\\mathrm{Cl^-}$ ions",
+        "dry air",
+        "inhibitors"
+       ],
+       "answer_index": 1,
+       "why": "Chloride breaks down the passive film."
+      },
+      {
+       "id": "pit3",
+       "kind": "short",
+       "level": 2,
+       "marks": 2,
+       "q": "Why is pitting more dangerous than uniform corrosion?",
+       "model_answer_md": "The attack is concentrated at a small anode, so the metal is perforated quickly while the total weight loss is small. The large cathode keeps supplying electrons, and the acid formed inside the pit makes it deepen (self-accelerating). It is hard to detect and may cause sudden failure.",
+       "points": [
+        "Concentrated at small anode",
+        "Large cathode",
+        "Self-accelerating",
+        "Hard to detect"
+       ]
+      },
+      {
+       "id": "pit-p1",
+       "pyq": "81a3487e66ad36a1",
+       "level": 1,
+       "points": [
+        "Localised deep holes",
+        "Film breakdown or deposit, differential aeration",
+        "Small anode inside pit, large cathode outside",
+        "Reactions"
+       ]
+      },
+      {
+       "id": "pit-p2",
+       "pyq": "5e6be717aa70d7f3",
+       "level": 2,
+       "points": [
+        "Localised deep holes",
+        "Film breakdown or deposit, differential aeration",
+        "Small anode inside pit, large cathode outside",
+        "Reactions"
+       ]
+      },
+      {
+       "id": "pit-p3",
+       "pyq": "b31e8f7b90c7c3cc",
+       "level": 2,
+       "points": [
+        "Definition: localised deep holes with rest of surface unaffected",
+        "Cause: film breakdown/deposit, differential aeration",
+        "Small anode, large cathode, intense attack",
+        "Anode and cathode reactions"
+       ]
+      }
+     ]
+    },
+    {
+     "id": "soil-corrosion",
+     "title": "Soil corrosion",
+     "theory_md": "Soil acts as the electrolyte for buried pipes, cables and tank bottoms.\n- **Factors**: moisture, aeration (a pipe through clay and sand corrodes in the clay by **differential aeration**), pH and salts, low resistivity, stray currents, and **sulphate-reducing bacteria** in waterlogged soil: $\\mathrm{SO_4^{2-} + 8H^+ + 8e^- \\rightarrow S^{2-} + 4H_2O}$, $\\mathrm{Fe^{2+} + S^{2-} \\rightarrow FeS}$ (black).\n- **Prevention**: coatings (coal-tar, bitumen, epoxy, polyethylene wrap), cathodic protection (Mg/Zn anodes or impressed current), uniform backfill, drainage, insulation from stray currents.",
+     "basics_md": "Buried metal lies in a damp, uneven electrolyte. Wet clay and dry sand form cells; bacteria add more.",
+     "key_points": [
+      "Soil is the electrolyte",
+      "Moisture, aeration, pH, salts, stray currents, bacteria",
+      "Differential aeration on clay/sand",
+      "Prevention: coatings, cathodic protection, backfill, drainage"
+     ],
+     "questions": [
+      {
+       "id": "s1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "Black FeS on buried iron in waterlogged soil indicates",
+       "options": [
+        "stray current",
+        "sulphate-reducing bacteria",
+        "galvanising",
+        "passivity"
+       ],
+       "answer_index": 1,
+       "why": "Bacteria reduce sulphate to sulphide."
+      },
+      {
+       "id": "s2",
+       "kind": "mcq",
+       "level": 2,
+       "q": "A buried pipe is best protected by",
+       "options": [
+        "bare burial in clay",
+        "coating plus cathodic protection",
+        "using sand only on one side",
+        "leaving it unpainted"
+       ],
+       "answer_index": 1,
+       "why": "Coating and cathodic protection are standard."
+      },
+      {
+       "id": "s-p1",
+       "pyq": "115215c99c1bd29a",
+       "level": 2,
+       "points": [
+        "Soil as electrolyte for buried structures",
+        "Factors: moisture, aeration, pH, bacteria, stray currents",
+        "Differential aeration clay/sand example",
+        "Prevention: coatings, cathodic protection, backfill, drainage"
+       ]
+      },
+      {
+       "id": "s3",
+       "kind": "short",
+       "level": 2,
+       "marks": 2,
+       "q": "Give two reasons why a pipe corrodes where it passes from sand into clay.",
+       "model_answer_md": "1. Clay is less aerated than sand, so the clay section is the **anode** (differential aeration) and the sand section is the cathode.\n2. Clay holds water and salts and is more conducting; sulphate-reducing bacteria thrive in it.",
+       "points": [
+        "Differential aeration, clay is anode",
+        "Moisture and bacteria"
+       ]
+      }
+     ]
+    },
+    {
+     "id": "other-localised",
+     "title": "Waterline, intergranular and stress corrosion",
+     "theory_md": "- **Waterline corrosion**: in a partly filled tank, the metal just **below the waterline** (less oxygen) is the anode and corrodes; the part at the surface is the cathode.\n- **Intergranular corrosion**: attack along grain boundaries. In austenitic stainless steel welded or heated at 500 to 800 °C, chromium carbide precipitates at boundaries, leaving Cr-depleted anodic zones (**weld decay**). Remedy: low-carbon grade, stabilise with Ti or Nb, or solution anneal.\n- **Stress corrosion cracking**: tensile stress plus a specific environment. Examples: season cracking of brass in ammonia, caustic embrittlement of boiler steel with NaOH, stainless steel in chloride.",
+     "basics_md": "Three ways a normal metal is attacked unevenly: by the water level, by its own grain edges, and by stress with the wrong chemical.",
+     "key_points": [
+      "Waterline: differential aeration just below water surface",
+      "Intergranular: grain boundary attacked, weld decay by Cr carbide",
+      "Stress corrosion: tensile stress plus specific environment",
+      "Examples: season cracking, caustic embrittlement"
+     ],
+     "questions": [
+      {
+       "id": "o1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "Weld decay in stainless steel is a type of",
+       "options": [
+        "intergranular corrosion",
+        "pitting",
+        "galvanic corrosion",
+        "waterline corrosion"
+       ],
+       "answer_index": 0,
+       "why": "Chromium carbide precipitates at grain boundaries."
+      },
+      {
+       "id": "o2",
+       "kind": "mcq",
+       "level": 2,
+       "q": "Season cracking of brass occurs in",
+       "options": [
+        "pure water",
+        "ammonia",
+        "dry air",
+        "alkali only"
+       ],
+       "answer_index": 1,
+       "why": "Brass under tensile stress cracks in ammonia."
+      },
+      {
+       "id": "o3",
+       "kind": "short",
+       "level": 2,
+       "marks": 3,
+       "q": "Explain waterline corrosion.",
+       "model_answer_md": "In a partly filled steel tank the metal just **below the waterline** is poorly aerated and becomes the **anode** ($\\mathrm{Fe \\rightarrow Fe^{2+} + 2e^-}$). The metal at or just above the waterline, with plenty of $\\mathrm{O_2}$, is the **cathode** ($\\mathrm{O_2 + 2H_2O + 4e^- \\rightarrow 4OH^-}$). It is a differential aeration cell; a band of attack forms just below the waterline.",
+       "points": [
+        "Differential aeration",
+        "Anode below waterline",
+        "Cathode at the surface with reaction"
+       ]
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "topic": "Galvanic series",
+   "subtopics": [
+    {
+     "id": "series-vs-series",
+     "title": "Galvanic series and electrochemical series",
+     "theory_md": "The **electrochemical series** ranks pure metals by standard electrode potential (1 M ions, 25 °C, hydrogen as reference); it is thermodynamic. The **galvanic series** ranks metals and alloys by their potential in an actual medium such as sea water; it tells which one corrodes in a real couple, includes alloys and passive states, and may differ in order.\n- **Noble** metals (Ag, Cu, Au, Pt; positive $E^\\circ$) are below hydrogen, do not displace $\\mathrm{H_2}$, and form protective or unstable films.\n- **Active** metals (Mg, Zn, Fe) corrode readily. In a couple the one higher in the series is the anode.",
+     "basics_md": "Textbook series: ideal lab conditions. Galvanic series: what really happens in sea water.",
+     "key_points": [
+      "Electrochemical series: pure metals, standard conditions",
+      "Galvanic series: practical medium (sea water), includes alloys",
+      "In a couple the more active metal is anode",
+      "Noble metals lie below hydrogen"
+     ],
+     "questions": [
+      {
+       "id": "sr1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "The galvanic series is based on potentials measured in",
+       "options": [
+        "standard 1 M solutions",
+        "a real medium such as sea water",
+        "vacuum",
+        "molten salt"
+       ],
+       "answer_index": 1,
+       "why": "It reflects practical corrosion behaviour."
+      },
+      {
+       "id": "sr2",
+       "kind": "mcq",
+       "level": 2,
+       "q": "In a Zn-Fe couple in moist air, the corroding metal is",
+       "options": [
+        "Fe",
+        "Zn",
+        "both",
+        "neither"
+       ],
+       "answer_index": 1,
+       "why": "Zn is the more active metal."
+      },
+      {
+       "id": "sr-p1",
+       "pyq": "ea667d8bba42d8b0",
+       "level": 2,
+       "points": [
+        "Ag (+0.80 V) and Cu (+0.34 V) are below hydrogen (noble), Fe (-0.44 V) above",
+        "Low tendency to oxidise",
+        "Cannot displace hydrogen in acid",
+        "Cu forms protective film (PBR about 1.68, green patina); Ag oxide unstable",
+        "Rust on iron is porous so iron keeps corroding"
+       ]
+      },
+      {
+       "id": "sr3",
+       "kind": "short",
+       "level": 2,
+       "marks": 3,
+       "q": "Differentiate between the electrochemical series and the galvanic series.",
+       "model_answer_md": "| Electrochemical series | Galvanic series |\n|---|---|\n| Pure metals only | Metals and alloys |\n| Standard conditions (1 M, 25 °C) | Actual medium such as sea water |\n| Standard electrode potentials, thermodynamic | Practical corrosion tendency incl. passivity |\n| Order may differ from practice | Used to choose compatible metals |",
+       "points": [
+        "Pure metals versus metals and alloys",
+        "Standard versus real medium",
+        "Use of each"
+       ]
+      }
+     ]
+    },
+    {
+     "id": "couple-prediction",
+     "title": "Predicting the corroding metal in a couple",
+     "theory_md": "In a couple the metal with the lower (more negative) $E^\\circ$ is the **anode**: $E^\\circ_{cell} = E^\\circ_{cathode} - E^\\circ_{anode}$. The bigger the gap, the faster it corrodes.\n$E^\\circ$ (V): Mg $-2.37$, Al $-1.66$, Zn $-0.76$, Fe $-0.44$, Ni $-0.25$, Sn $-0.14$, Cu $+0.34$, Ag $+0.80$.\nZn with Fe, Ni, Sn, Cu gives EMF $0.32, 0.51, 0.62, 1.10$ V, so Zn corrodes **most with Cu**. Fe-Cu: $0.34-(-0.44)=0.78$ V.",
+     "basics_md": "Compare the neighbours: the further apart two metals sit, the harder the weaker one is pulled apart.",
+     "key_points": [
+      "Anode is the metal with lower $E^\\circ$",
+      "EMF = cathode minus anode",
+      "Larger EMF means faster anode corrosion",
+      "Zn-Cu is the worst for Zn among Fe, Ni, Sn, Cu"
+     ],
+     "questions": [
+      {
+       "id": "cp3",
+       "kind": "mcq",
+       "level": 1,
+       "q": "The metal that corrodes in a galvanic couple is the one with",
+       "options": [
+        "higher (more positive) E",
+        "lower (more negative) E",
+        "larger density",
+        "higher melting point"
+       ],
+       "answer_index": 1,
+       "why": "The lower E metal is the anode."
+      },
+      {
+       "id": "cp1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "In a Zn-Sn couple, the cell EMF is ($E^\\circ_{Zn} = -0.76$, $E^\\circ_{Sn} = -0.14$ V)",
+       "options": [
+        "0.62 V",
+        "0.90 V",
+        "$-0.62$ V",
+        "1.10 V"
+       ],
+       "answer_index": 0,
+       "why": "$-0.14-(-0.76)=0.62$ V."
+      },
+      {
+       "id": "cp2",
+       "kind": "numerical",
+       "level": 3,
+       "marks": 3,
+       "q": "Calculate the EMF of the Fe-Cu couple and Mg-Fe couple and say which metal corrodes in each. ($E^\\circ$: Mg $-2.37$, Fe $-0.44$, Cu $+0.34$ V)",
+       "model_answer_md": "Fe-Cu: $E^\\circ_{cell} = 0.34-(-0.44) = 0.78$ V, **Fe** corrodes.\nMg-Fe: $E^\\circ_{cell} = -0.44-(-2.37) = 1.93$ V, **Mg** corrodes and protects Fe.",
+       "points": [
+        "0.78 V Fe corrodes",
+        "1.93 V Mg corrodes",
+        "Lower E is anode"
+       ]
+      },
+      {
+       "id": "cp-p1",
+       "pyq": "1ce81b516eeda0de",
+       "level": 3,
+       "points": [
+        "Answer (b) Zn with Cu",
+        "Zn is the anode in all four couples",
+        "EMF: Zn-Fe 0.32, Zn-Ni 0.51, Zn-Sn 0.62, Zn-Cu 1.10 V",
+        "Larger separation means faster corrosion",
+        "Order Zn-Cu > Zn-Sn > Zn-Ni > Zn-Fe"
+       ]
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "topic": "Factors influencing corrosion",
+   "subtopics": [
+    {
+     "id": "nature-of-metal",
+     "title": "Factors from the nature of the metal",
+     "theory_md": "1. **Position in the galvanic series**: more active metal corrodes faster; bigger gap in a couple, faster attack.\n2. **Relative areas**: rate $\\propto A_{cathode}/A_{anode}$. Small anode and large cathode corrodes intensely.\n3. **Purity**: impurities form local cells, so impure metal corrodes faster.\n4. **Nature of oxide film**: protective, porous, volatile.\n5. **Overvoltage**: high $\\mathrm{H_2}$ overvoltage slows corrosion.\n6. **Physical state**: stressed and fine-grained parts are anodic.\n7. **Passivity**; solubility and volatility of products.",
+     "basics_md": "Anything about the metal itself: how active, how pure, how it is built.",
+     "key_points": [
+      "Galvanic position",
+      "Anode/cathode area ratio",
+      "Purity (local cells)",
+      "Oxide film and overvoltage",
+      "Physical state"
+     ],
+     "questions": [
+      {
+       "id": "n1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "Which gives the most intense anode corrosion?",
+       "options": [
+        "Large anode, small cathode",
+        "Small anode, large cathode",
+        "Equal areas",
+        "Anode only"
+       ],
+       "answer_index": 1,
+       "why": "Rate depends on $A_c/A_a$."
+      },
+      {
+       "id": "n2",
+       "kind": "mcq",
+       "level": 2,
+       "q": "Impure zinc dissolves faster in acid because impurities",
+       "options": [
+        "raise overvoltage",
+        "act as cathodes of local cells",
+        "make it passive",
+        "lower temperature"
+       ],
+       "answer_index": 1,
+       "why": "They lower hydrogen overvoltage and form local cells."
+      },
+      {
+       "id": "n3",
+       "kind": "numerical",
+       "level": 3,
+       "marks": 3,
+       "q": "A steel rivet (area 2 cm$^2$) holds a copper plate (area 50 cm$^2$) in a moist atmosphere. Compare the relative corrosion rate with the reverse (copper rivet, steel plate of same sizes).",
+       "model_answer_md": "Rate $\\propto A_{cathode}/A_{anode}$.\n\nCase 1 (steel rivet anode, Cu plate cathode): $50/2 = 25$.\nCase 2 (Cu rivet cathode, steel plate anode): $2/50 = 0.04$.\n\nRatio $= 25/0.04 = 625$ times faster in case 1. The steel rivet corrodes very rapidly.",
+       "points": [
+        "Rate proportional to $A_c/A_a$",
+        "25 and 0.04",
+        "625 times",
+        "Small anode intense"
+       ]
+      },
+      {
+       "id": "n-p1",
+       "pyq": "87214e2d2e835397",
+       "level": 2,
+       "points": [
+        "Impurity has different electrode potential",
+        "Forms numerous tiny local galvanic cells",
+        "Base metal is anode, impurity cathode, corrodes faster"
+       ]
+      },
+      {
+       "id": "n-p2",
+       "pyq": "5ca96b17b4266132",
+       "level": 2,
+       "points": [
+        "Rate $\\propto A_{cathode}/A_{anode}$",
+        "Large cathode demands electrons from small anode",
+        "Anode current density high, intense local attack"
+       ]
+      },
+      {
+       "id": "n-p3",
+       "pyq": "093be760c49e1cce",
+       "level": 2,
+       "points": [
+        "False",
+        "Rate proportional to cathode area / anode area",
+        "Large anode with small cathode spreads attack, low current density",
+        "Small anode with large cathode is intense"
+       ]
+      }
+     ]
+    },
+    {
+     "id": "nature-of-environment",
+     "title": "Factors from the environment",
+     "theory_md": "1. **Temperature**: raises reaction and diffusion rates.\n2. **Humidity**: above **critical humidity** (about 60 to 80% for Fe) a moisture film forms and rusting speeds up.\n3. **Atmospheric impurities**: $\\mathrm{SO_2}$, $\\mathrm{H_2S}$, $\\mathrm{CO_2}$, NaCl increase acidity and conductivity.\n4. **Suspended particles**: hygroscopic or active particles absorb moisture and gases.\n5. **pH**: below 4 hydrogen evolution; 4 to 10 depends on oxygen; above about 10 iron is passive.\n6. **Oxygen concentration**, flow and conductivity of the medium.\nSaline water rusts iron faster: NaCl raises conductivity and $\\mathrm{Cl^-}$ breaks passive films.",
+     "basics_md": "Water, salt, acid gases and heat all help the little batteries on the metal to work.",
+     "key_points": [
+      "Temperature, humidity (critical humidity)",
+      "Impurities: $\\mathrm{SO_2}$, NaCl",
+      "pH and dissolved oxygen",
+      "Saline water: conductivity and $\\mathrm{Cl^-}$"
+     ],
+     "questions": [
+      {
+       "id": "e1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "Which atmosphere is most corrosive?",
+       "options": [
+        "Dry desert",
+        "Marine/industrial",
+        "Vacuum",
+        "Cold dry"
+       ],
+       "answer_index": 1,
+       "why": "Salts and acid gases plus moisture."
+      },
+      {
+       "id": "e2",
+       "kind": "mcq",
+       "level": 2,
+       "q": "Iron rusts slowly above about pH",
+       "options": [
+        "2",
+        "7",
+        "10",
+        "4"
+       ],
+       "answer_index": 2,
+       "why": "Alkaline medium passivates iron."
+      },
+      {
+       "id": "e-p1",
+       "pyq": "d925c9bf212281cf",
+       "level": 2,
+       "points": [
+        "NaCl increases conductivity of water",
+        "Corrosion current flows easily",
+        "$\\mathrm{Cl^-}$ breaks down protective oxide film"
+       ]
+      },
+      {
+       "id": "e3",
+       "kind": "short",
+       "level": 2,
+       "marks": 3,
+       "q": "Explain the effect of humidity and atmospheric impurities on corrosion.",
+       "model_answer_md": "**Humidity:** above the critical humidity (about 60 to 80% for iron) a moisture film forms on the metal and acts as electrolyte; rusting is rapid.\n\n**Impurities:** $\\mathrm{SO_2}$, $\\mathrm{CO_2}$, $\\mathrm{H_2S}$ dissolve to give acids; NaCl near the sea raises conductivity. Marine and industrial atmospheres are most corrosive.",
+       "points": [
+        "Critical humidity",
+        "Moisture film electrolyte",
+        "Acid gases",
+        "NaCl conductivity"
+       ]
+      }
+     ]
+    },
+    {
+     "id": "factors-full",
+     "title": "Factors in an exam answer",
+     "theory_md": "Exam answers split the factors into two groups and give four in each, each with a one-line reason.\n- **Nature of metal**: galvanic position, area ratio, purity, oxide film (also overvoltage, physical state).\n- **Nature of environment**: temperature, humidity, impurities in atmosphere, pH or suspended particles.\nWrite the group heading, number the points, and give an example for the area ratio (steel rivet in copper plate) and humidity (critical humidity).",
+     "basics_md": "Think of two columns: what the metal is, and what surrounds it.",
+     "key_points": [
+      "Two groups: metal and environment",
+      "Four points each",
+      "One-line reason and example",
+      "Area ratio and humidity are favourites"
+     ],
+     "questions": [
+      {
+       "id": "f3",
+       "kind": "mcq",
+       "level": 2,
+       "q": "Critical humidity is the humidity above which",
+       "options": [
+        "corrosion stops",
+        "a moisture film forms and corrosion becomes rapid",
+        "metals become passive",
+        "paint dries"
+       ],
+       "answer_index": 1,
+       "why": "The film acts as electrolyte."
+      },
+      {
+       "id": "f1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "Which is a factor of the nature of metal?",
+       "options": [
+        "Humidity",
+        "Purity",
+        "pH",
+        "Temperature"
+       ],
+       "answer_index": 1,
+       "why": "Purity belongs to the metal."
+      },
+      {
+       "id": "f2",
+       "kind": "short",
+       "level": 2,
+       "marks": 4,
+       "q": "List four factors each under nature of metal and nature of environment.",
+       "model_answer_md": "**Nature of metal:** 1. galvanic position; 2. relative anode/cathode area; 3. purity; 4. oxide film nature.\n\n**Nature of environment:** 1. temperature; 2. humidity; 3. atmospheric impurities ($\\mathrm{SO_2}$, NaCl); 4. pH / suspended particles.",
+       "points": [
+        "Four metal factors",
+        "Four environment factors"
+       ]
+      },
+      {
+       "id": "f-p1",
+       "pyq": "bdb2da42a2c7976a",
+       "level": 2,
+       "points": [
+        "Nature of metal: galvanic position, area ratio, purity, oxide film",
+        "Nature of environment: temperature, humidity, impurities, pH",
+        "Reasons for each"
+       ]
+      },
+      {
+       "id": "f-p2",
+       "pyq": "de65c0c7ea4c125e",
+       "level": 2,
+       "points": [
+        "Nature of metal: galvanic position, area ratio, purity, oxide film, overvoltage, physical state, passivity",
+        "Nature of environment: temperature, humidity, impurities, suspended particles, pH",
+        "Examples"
+       ]
+      },
+      {
+       "id": "f-p3",
+       "pyq": "d3c1dc4c956ca7ce",
+       "level": 2,
+       "points": [
+        "Four factors under nature of metal in detail",
+        "Four factors under nature of environment in detail"
+       ]
+      },
+      {
+       "id": "f-p4",
+       "pyq": "574bc0b342592961",
+       "level": 1,
+       "points": [
+        "Nature of metal factors",
+        "Nature of environment factors"
+       ]
+      },
+      {
+       "id": "f-p5",
+       "pyq": "fc52b22f139e0f23",
+       "level": 1,
+       "points": [
+        "Nature of metal factors",
+        "Nature of environment factors"
+       ]
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "topic": "Protection against corrosion",
+   "subtopics": [
+    {
+     "id": "design-material",
+     "title": "Design and selection of material",
+     "theory_md": "Corrosion needs anode, cathode, electrolyte and contact; design removes these.\n- **Material**: noble or passive metals (stainless steel, Ti, Al); pure metals; avoid dissimilar metals far apart in the series, or insulate them; alloys for the medium (Cu-Ni for sea water).\n- **Design**: keep the anode large and cathode small (copper plates with steel rivets are bad); insulating washers; avoid crevices, sharp corners, stagnant pockets; prefer welding to riveting; sloping drainable tank bottoms; uniform aeration; easy inspection and repainting.",
+     "basics_md": "Prevention before cure: choose the right metal and shape the part so water cannot collect.",
+     "key_points": [
+      "Choose noble/passive/pure metals",
+      "Avoid dissimilar metals, insulate if needed",
+      "Large anode, small cathode",
+      "Avoid crevices, allow drainage, weld not rivet"
+     ],
+     "questions": [
+      {
+       "id": "dm3",
+       "kind": "mcq",
+       "level": 2,
+       "q": "Which joint design reduces crevice corrosion?",
+       "options": [
+        "Riveting",
+        "Welding",
+        "Overlapping bolted plates",
+        "Gaps filled with moisture"
+       ],
+       "answer_index": 1,
+       "why": "Welds leave no crevice for stagnant water."
+      },
+      {
+       "id": "dm1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "Which design is better?",
+       "options": [
+        "Copper plate with steel rivets",
+        "Steel plate with copper rivets",
+        "Steel plate with steel rivets",
+        "Equal Cu and steel parts in contact"
+       ],
+       "answer_index": 2,
+       "why": "Same metal gives no galvanic couple; the other two have small anodes or couples."
+      },
+      {
+       "id": "dm2",
+       "kind": "short",
+       "level": 2,
+       "marks": 2,
+       "q": "Give two design rules that reduce corrosion.",
+       "model_answer_md": "1. Avoid crevices and stagnant pockets; use welded joints and sloping, fully drainable bottoms so water does not collect.\n2. Do not join dissimilar metals; if unavoidable, insulate them with rubber washers and keep the anode area large and the cathode small.",
+       "points": [
+        "Rule 1 with reason",
+        "Rule 2 with reason"
+       ]
+      },
+      {
+       "id": "dm-p1",
+       "pyq": "58cf8d41d69e2153",
+       "level": 2,
+       "points": [
+        "Yes, design and material selection can prevent corrosion",
+        "Material: noble/passive metals, pure metals, metals close in series",
+        "Design: area ratio, insulation, avoid crevices, welding, drainage",
+        "Suitable example"
+       ]
+      },
+      {
+       "id": "dm-p2",
+       "pyq": "f92adb57db264d2e",
+       "level": 2,
+       "points": [
+        "Yes",
+        "Material selection: passive alloys, avoid dissimilar metals",
+        "Design: no crevices, drainage, insulation",
+        "Example"
+       ]
+      }
+     ]
+    },
+    {
+     "id": "sacrificial-anode",
+     "title": "Sacrificial anodic protection",
+     "theory_md": "The structure is connected by a wire to a **more active metal** (Mg, Zn, Al or alloys) that becomes the anode and corrodes ('sacrificed'); the structure becomes the cathode and is protected.\n- Anode: $\\mathrm{Mg \\rightarrow Mg^{2+} + 2e^-}$; cathode (steel): $\\mathrm{O_2 + 2H_2O + 4e^- \\rightarrow 4OH^-}$.\n- Anodes are replaced periodically.\n- Uses: buried pipelines and cables, ship hulls, tanks, boilers; Mg in water heaters.\n- Merits: no power, simple, cheap; demerits: anode consumed, limited current.\nRelative areas matter: a large cathode needs a good anode.",
+     "basics_md": "The sacrificial metal is the bodyguard who takes the hit.",
+     "key_points": [
+      "Connect to more active metal: Mg, Zn, Al",
+      "Structure becomes cathode",
+      "Reactions at anode and cathode",
+      "Anodes replaced; uses on pipelines, hulls"
+     ],
+     "questions": [
+      {
+       "id": "sa3",
+       "kind": "short",
+       "level": 2,
+       "marks": 3,
+       "q": "Describe sacrificial anodic protection of a buried steel pipe.",
+       "model_answer_md": "Blocks of Mg (or Zn) are buried near the pipe in a backfill of gypsum and bentonite and joined to it by an insulated wire.\n- Anode: $\\mathrm{Mg \\rightarrow Mg^{2+} + 2e^-}$\n- Cathode (pipe): $\\mathrm{O_2 + 2H_2O + 4e^- \\rightarrow 4OH^-}$\n\nMg is consumed and replaced periodically; the pipe is protected. No external power is needed.",
+       "points": [
+        "Mg blocks joined to pipe by wire",
+        "Anode reaction",
+        "Cathode reaction at pipe",
+        "Anode replaced periodically"
+       ]
+      },
+      {
+       "id": "sa1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "Which is used as a sacrificial anode for steel?",
+       "options": [
+        "Cu",
+        "Mg",
+        "Ag",
+        "Pt"
+       ],
+       "answer_index": 1,
+       "why": "Mg is more active than iron."
+      },
+      {
+       "id": "sa2",
+       "kind": "mcq",
+       "level": 2,
+       "q": "The protected structure in sacrificial protection acts as",
+       "options": [
+        "anode",
+        "cathode",
+        "electrolyte",
+        "insulator"
+       ],
+       "answer_index": 1,
+       "why": "It receives electrons."
+      },
+      {
+       "id": "sa-p1",
+       "pyq": "1fea3f8bde0d01fa",
+       "level": 1,
+       "points": [
+        "Connect to more active metal (Mg, Zn, Al)",
+        "Active metal anode, structure cathode",
+        "Reactions",
+        "Anode replaced periodically"
+       ]
+      },
+      {
+       "id": "sa-p2",
+       "pyq": "cb1792fd0f2100e9",
+       "level": 2,
+       "points": [
+        "Connect to more active metal (Mg, Zn, Al)",
+        "Active metal anode, structure cathode",
+        "Reactions",
+        "Anode replaced periodically, uses"
+       ]
+      },
+      {
+       "id": "sa-p3",
+       "pyq": "924f185bf87644be",
+       "level": 2,
+       "points": [
+        "Rate $\\propto A_{cathode}/A_{anode}$ and why",
+        "Small anode, large cathode is intense, large anode desirable",
+        "Sacrificial anodic protection: Mg/Zn/Al connected, reactions",
+        "Uses and replacement"
+       ]
+      }
+     ]
+    },
+    {
+     "id": "impressed-current",
+     "title": "Impressed current cathodic protection and pipelines",
+     "theory_md": "A DC source (rectifier) is connected with its **negative terminal to the structure** and the **positive terminal to an inert anode** (graphite, high-silicon iron, scrap iron, platinised Ti) buried in a backfill (coke breeze, gypsum, bentonite). Current flows through the soil to the pipe, forcing it to be the cathode.\n| | Sacrificial | Impressed current |\n|---|---|---|\n| Power | not needed | needed |\n| Cost | low initial | higher initial |\n| Anode | consumed | inert, long life |\n| Current | small fixed | large adjustable |\n| Stray current | none | possible |\nFor an underground pipeline use Mg blocks in backfill (sacrificial) or a rectifier with graphite anodes (ICCP).",
+     "basics_md": "Instead of a sacrificial bodyguard, a pump pushes electrons into the pipe so it cannot lose any.",
+     "key_points": [
+      "Negative terminal to structure, positive to inert anode",
+      "Backfill improves contact",
+      "Needs external power; adjustable current",
+      "Suits long pipelines; may cause stray-current damage"
+     ],
+     "questions": [
+      {
+       "id": "ic1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "In ICCP the pipeline is connected to the",
+       "options": [
+        "positive terminal",
+        "negative terminal",
+        "a Cu anode only",
+        "earth only"
+       ],
+       "answer_index": 1,
+       "why": "The structure must be cathode."
+      },
+      {
+       "id": "ic2",
+       "kind": "mcq",
+       "level": 2,
+       "q": "A disadvantage of ICCP over sacrificial anodes is",
+       "options": [
+        "Needs power supply",
+        "Anode consumed",
+        "Cannot protect large structures",
+        "No control"
+       ],
+       "answer_index": 0,
+       "why": "It needs an external DC source."
+      },
+      {
+       "id": "ic-p1",
+       "pyq": "75e5c65f74ba6c90",
+       "level": 2,
+       "points": [
+        "Both are cathodic protection",
+        "Sacrificial: Mg/Zn/Al anode, reactions, merits and demerits",
+        "ICCP: DC source, inert anode, backfill, merits and demerits",
+        "Table comparison"
+       ]
+      },
+      {
+       "id": "ic-p2",
+       "pyq": "815969d68be4ed53",
+       "level": 2,
+       "points": [
+        "Two factors: galvanic position/area ratio, humidity and impurities",
+        "Sacrificial: Mg blocks in backfill connected by wire to pipe",
+        "ICCP: rectifier, graphite anode, negative to pipe",
+        "Reactions"
+       ]
+      },
+      {
+       "id": "ic3",
+       "kind": "short",
+       "level": 2,
+       "marks": 3,
+       "q": "Compare sacrificial anode and impressed current methods in three points.",
+       "model_answer_md": "1. Power: sacrificial none; ICCP needs a DC source.\n2. Anode: sacrificial anode is consumed and replaced; ICCP anode is inert and lasts long.\n3. Suitability: sacrificial for small structures; ICCP for long pipelines and high-resistivity soils (stray current risk).",
+       "points": [
+        "Power",
+        "Anode life",
+        "Suitability"
+       ]
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "topic": "Protective coatings: anodic and cathodic",
+   "subtopics": [
+    {
+     "id": "anodic-cathodic",
+     "title": "Anodic and cathodic coatings",
+     "theory_md": "- **Anodic coating**: coating metal is **more active** than the base (Zn, Al, Cd on iron). If scratched, the coating corrodes instead and the base is protected: $\\mathrm{Zn \\rightarrow Zn^{2+} + 2e^-}$. Example: galvanised iron.\n- **Cathodic coating**: coating metal is **nobler** than the base (Sn, Ni, Cr, Cu on iron). Protects only while intact; at a pore the base becomes a small anode and corrodes quickly. Example: tin plate.\nAnodic coatings need not be pore-free; cathodic coatings must be.",
+     "basics_md": "Zinc coating guards iron even when broken. Tin coating only guards while perfect, and then makes things worse.",
+     "key_points": [
+      "Anodic: coating more active (Zn on Fe)",
+      "Cathodic: coating nobler (Sn on Fe)",
+      "Anodic protects at scratches",
+      "Cathodic fails at pores, accelerates base corrosion"
+     ],
+     "questions": [
+      {
+       "id": "ac1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "Galvanised iron is an example of",
+       "options": [
+        "cathodic coating",
+        "anodic coating",
+        "paint",
+        "conversion coating"
+       ],
+       "answer_index": 1,
+       "why": "Zn is more active than Fe."
+      },
+      {
+       "id": "ac2",
+       "kind": "mcq",
+       "level": 2,
+       "q": "A scratch on tinned iron leads to",
+       "options": [
+        "Fe protected",
+        "Fe corroding rapidly",
+        "Sn corroding",
+        "no change"
+       ],
+       "answer_index": 1,
+       "why": "Fe becomes the small anode."
+      },
+      {
+       "id": "ac3",
+       "kind": "short",
+       "level": 2,
+       "marks": 3,
+       "q": "Distinguish anodic and cathodic coatings with examples.",
+       "model_answer_md": "| Anodic | Cathodic |\n|---|---|\n| Coating more active than base | Coating nobler than base |\n| Zn on Fe (galvanising) | Sn on Fe (tinning) |\n| Protects even if scratched | Protects only if intact |\n| Coating corrodes | Base corrodes at pores |",
+       "points": [
+        "Definition",
+        "Example",
+        "Behaviour at scratch"
+       ]
+      },
+      {
+       "id": "ac-p1",
+       "pyq": "366c95aceb8ec3ab",
+       "level": 2,
+       "points": [
+        "Sacrificial metallic protection: coating more anodic (Zn, Al, Cd) corrodes preferentially, galvanising example",
+        "Electroplating advantages: thin uniform adherent, room temperature, decorative",
+        "Electroplating disadvantages: porous cathodic coats, toxic baths, uneven thickness, needs power"
+       ]
+      }
+     ]
+    },
+    {
+     "id": "coating-methods",
+     "title": "Metallic coating methods",
+     "theory_md": "- **Hot dipping**: dip in molten metal, e.g. galvanising (Zn at 425 to 450 °C), tinning.\n- **Electroplating**: article as cathode in a bath of the coating metal's salt; anode is the coating metal or inert.\n- **Metal spraying, cementation (sherardising with Zn, calorising with Al, chromising), cladding**.\nElectroplating pros: thin uniform adherent coat, room temperature. Cons: needs electricity, porous, toxic baths, poor throwing power.",
+     "basics_md": "Different ways of putting a metal skin on another metal.",
+     "key_points": [
+      "Hot dipping: galvanising, tinning",
+      "Electroplating: article cathode",
+      "Spraying, cementation, cladding",
+      "Electroplating merits and demerits"
+     ],
+     "questions": [
+      {
+       "id": "cm3",
+       "kind": "mcq",
+       "level": 2,
+       "q": "Electroplating of a cathodic coating (Ni on steel) is risky because",
+       "options": [
+        "pinholes make the steel a small anode",
+        "Ni is more active than steel",
+        "it needs no power",
+        "it is thick"
+       ],
+       "answer_index": 0,
+       "why": "Corrosion concentrates at pores."
+      },
+      {
+       "id": "cm1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "In electroplating the article to be plated is made the",
+       "options": [
+        "anode",
+        "cathode",
+        "electrolyte",
+        "salt bridge"
+       ],
+       "answer_index": 1,
+       "why": "Metal ions are reduced onto it."
+      },
+      {
+       "id": "cm2",
+       "kind": "short",
+       "level": 2,
+       "marks": 3,
+       "q": "Describe hot-dip galvanising.",
+       "model_answer_md": "Steps: (1) clean by pickling in dilute $\\mathrm{H_2SO_4}$ to remove rust; (2) wash and flux with $\\mathrm{ZnCl_2}$-$\\mathrm{NH_4Cl}$; (3) dip into molten Zn at 425 to 450 °C; (4) remove excess by rollers or wiping. Forms anodic Zn coating on iron sheets, pipes, wires.",
+       "points": [
+        "Pickling",
+        "Flux",
+        "Molten Zn dip at 425 to 450 °C"
+       ]
+      }
+     ]
+    },
+    {
+     "id": "paint-composition",
+     "title": "Paint: ingredients and requisites",
+     "theory_md": "A **paint** is a mechanical dispersion of **pigment** in a drying oil with thinner, drier, filler and plasticiser.\n| Ingredient | Example | Role |\n|---|---|---|\n| Pigment | $\\mathrm{TiO_2}$, red lead, ZnO | colour, opacity, UV protection |\n| Vehicle | linseed oil | film-forming binder |\n| Thinner | turpentine | lowers viscosity |\n| Drier | Pb, Mn, Co linoleate | speeds drying |\n| Extender | $\\mathrm{BaSO_4}$, talc | cheaper, durable |\n| Plasticiser | tricresyl phosphate | elasticity |\n**Requisites**: tough adherent crack-free film, good spreading and hiding power, fast drying, glossy, resistant to weather and chemicals, stable colour.",
+     "basics_md": "Each ingredient has one job: colour, glue, thinning, drying, filling, flexing.",
+     "key_points": [
+      "Pigment, vehicle, thinner, drier, extender, plasticiser",
+      "Role of each with example",
+      "Requisites of a good paint"
+     ],
+     "questions": [
+      {
+       "id": "pc3",
+       "kind": "short",
+       "level": 2,
+       "marks": 3,
+       "q": "Name the ingredients of a paint and the role of any three.",
+       "model_answer_md": "Ingredients: pigment, vehicle (drying oil), thinner, drier, extender, plasticiser.\n- Pigment: colour, opacity, UV protection (e.g. $\\mathrm{TiO_2}$).\n- Vehicle: film-forming binder (linseed oil).\n- Drier: speeds oxidation and drying (Pb, Mn, Co linoleate).",
+       "points": [
+        "Ingredients named",
+        "Three roles",
+        "Examples"
+       ]
+      },
+      {
+       "id": "pc1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "The role of thinner in paint is to",
+       "options": [
+        "give colour",
+        "reduce viscosity",
+        "speed drying",
+        "give elasticity"
+       ],
+       "answer_index": 1,
+       "why": "Turpentine lowers viscosity."
+      },
+      {
+       "id": "pc2",
+       "kind": "mcq",
+       "level": 2,
+       "q": "Driers are usually",
+       "options": [
+        "linoleates of Pb, Mn, Co",
+        "$\\mathrm{TiO_2}$",
+        "linseed oil",
+        "talc"
+       ],
+       "answer_index": 0,
+       "why": "They catalyse oxidation of the oil."
+      },
+      {
+       "id": "pc-p1",
+       "pyq": "12f17840f1f14b4e",
+       "level": 2,
+       "points": [
+        "Pigment: colour, opacity, protection",
+        "Vehicle (drying oil): binder, film",
+        "Thinner, drier, extender, plasticiser with roles and examples"
+       ]
+      },
+      {
+       "id": "pc-p2",
+       "pyq": "98085866d9c34efe",
+       "level": 1,
+       "points": [
+        "Tough uniform adherent film, no cracking",
+        "Good spreading and hiding power",
+        "Quick drying, glossy",
+        "Resistant to weather and chemicals, stable colour, elastic"
+       ]
+      }
+     ]
+    },
+    {
+     "id": "pvc-varnish",
+     "title": "Pigment volume concentration and paint versus varnish",
+     "theory_md": "**PVC** $= \\dfrac{V_{pigment}}{V_{pigment}+V_{binder}} \\times 100$ (dry film, thinner excluded). Below the critical PVC the binder wets all pigment: glossy, non-porous, durable film; above it, porous, matt, less protective.\n**Paint vs varnish**: paint has pigment and is opaque; varnish is a resin solution with no pigment and is transparent. For **outdoor metals paint is better**: pigment screens UV, inhibitive pigments (red lead, zinc chromate) protect, thicker and more elastic film; varnish becomes brittle.",
+     "basics_md": "PVC says how much of the dry film is pigment. Paint has pigment; varnish does not.",
+     "key_points": [
+      "PVC formula with volumes of solids",
+      "Critical PVC and film properties",
+      "Paint opaque with pigment, varnish transparent resin",
+      "Paint better outdoors: UV, inhibitors, elasticity"
+     ],
+     "questions": [
+      {
+       "id": "pv3",
+       "kind": "mcq",
+       "level": 2,
+       "q": "Varnish differs from paint because it",
+       "options": [
+        "contains pigment",
+        "is a resin solution without pigment",
+        "is always opaque",
+        "is thicker"
+       ],
+       "answer_index": 1,
+       "why": "It is transparent."
+      },
+      {
+       "id": "pv1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "PVC of a paint is calculated from",
+       "options": [
+        "volume of thinner",
+        "pigment and binder volumes",
+        "drier volume",
+        "colour"
+       ],
+       "answer_index": 1,
+       "why": "Only non-volatile solids count."
+      },
+      {
+       "id": "pv2",
+       "kind": "numerical",
+       "level": 3,
+       "marks": 2,
+       "q": "A dry paint film contains 25 cm$^3$ pigment and 75 cm$^3$ binder. Find PVC.",
+       "model_answer_md": "$\\mathrm{PVC} = \\dfrac{25}{25+75} \\times 100 = 25\\%$",
+       "points": [
+        "Formula",
+        "25%"
+       ]
+      },
+      {
+       "id": "pv-p1",
+       "pyq": "f1dc5f66617d6f8e",
+       "level": 2,
+       "points": [
+        "PVC = pigment volume / (pigment + binder) x 100",
+        "Significance: below CPVC glossy non-porous durable; above porous",
+        "Used to formulate paints"
+       ]
+      },
+      {
+       "id": "pv-p2",
+       "pyq": "100d7a451194870b",
+       "level": 2,
+       "points": [
+        "PVC definition and formula",
+        "Non-volatile solids only",
+        "Significance"
+       ]
+      },
+      {
+       "id": "pv-p3",
+       "pyq": "f820be9bb54091fb",
+       "level": 2,
+       "points": [
+        "Paint: pigment dispersion; varnish: resin solution, no pigment",
+        "Opaque versus transparent",
+        "Paint better outdoors: UV protection, inhibitive pigments, thicker elastic film"
+       ]
+      }
+     ]
+    }
+   ]
+  }
+ ]
+}

@@ -1,0 +1,1472 @@
+{
+ "code": "CY1110",
+ "unit": "Auxiliary Pollutions",
+ "written": "2026-10-19",
+ "by": "claude-sonnet-5-5, in a Claude Code session",
+ "topics": [
+  {
+   "topic": "Soil pollution",
+   "subtopics": [
+    {
+     "id": "composition-air-water",
+     "title": "Soil composition, soil air and soil water",
+     "theory_md": "A good loam soil is, by volume, about **45% mineral matter** (sand, silt, clay from weathered rock), **5% organic matter** (humus, living organisms), **25% water** and **25% air**.\n\n**Soil water** occurs as gravitational (drains down), **capillary** (held in fine pores; the water plants use), hygroscopic and combined water (both unavailable).\n\n**Soil air** fills the pores, with more $\\mathrm{CO_2}$ and less $\\mathrm{O_2}$ than the atmosphere. It supplies $\\mathrm{O_2}$ for respiration of roots, earthworms and aerobic microbes, removes $\\mathrm{CO_2}$, and allows aerobic decay and nitrification.\n\n**Waterlogging** drives the air out ($\\mathrm{O_2}$ diffuses about 10,000 times slower in water), so organisms suffocate and anaerobic microbes make $\\mathrm{H_2S}$ and $\\mathrm{CH_4}$.",
+     "basics_md": "Soil is a sponge of crumbs with tiny gaps. The gaps hold either air or water. Animals and roots breathe the air in the gaps, so if water fills every gap they cannot breathe.",
+     "key_points": [
+      "Composition by volume: 45% mineral, 5% organic, 25% water, 25% air",
+      "Capillary water is the main water available to plants",
+      "Soil air gives O2 for respiration and removes CO2; supports aerobic decay and nitrification",
+      "Excess water expels air: suffocation, anaerobic conditions, toxic H2S and CH4, denitrification"
+     ],
+     "questions": [
+      {
+       "id": "sc-q1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "Typical volume percentage of air in a good loam soil is",
+       "options": [
+        "5%",
+        "25%",
+        "45%",
+        "75%"
+       ],
+       "answer_index": 1,
+       "why": "Loam is 45% mineral, 5% organic, 25% water, 25% air."
+      },
+      {
+       "id": "sc-q2",
+       "kind": "mcq",
+       "level": 1,
+       "q": "Which soil water is the main water available to plants?",
+       "options": [
+        "Gravitational water",
+        "Hygroscopic water",
+        "Capillary water",
+        "Combined water"
+       ],
+       "answer_index": 2,
+       "why": "Capillary water is held in fine pores against gravity and roots can take it up; the others drain away or are bound too tightly."
+      },
+      {
+       "id": "sc-q3",
+       "kind": "short",
+       "level": 2,
+       "marks": 2,
+       "q": "List the four forms of soil water and say which one plants use.",
+       "model_answer_md": "**Forms of soil water**\n1. **Gravitational**: fills large pores after rain and drains down.\n2. **Capillary**: held in fine pores by surface tension. **This is what plants use.**\n3. **Hygroscopic**: thin film stuck to particles, unavailable.\n4. **Combined**: chemically bound in minerals, unavailable.",
+       "points": [
+        "Gravitational water drains under gravity",
+        "Capillary water held in fine pores by surface tension",
+        "Hygroscopic and combined water are unavailable",
+        "Plants use capillary water"
+       ]
+      },
+      {
+       "id": "sc-p1",
+       "pyq": "b95a70781e0c2f6a",
+       "level": 2,
+       "points": [
+        "Soil is about 25% water by volume (45% mineral, 5% organic, 25% air)",
+        "Four forms: gravitational, capillary, hygroscopic, combined",
+        "Capillary water is the main one available to plants",
+        "Or mineral matter: 45% inorganic, from weathered rock; gravel, sand, silt, clay by particle size; gives texture and supplies K, Ca, Mg, Fe"
+       ]
+      },
+      {
+       "id": "sc-p2",
+       "pyq": "1c23846baf2c900b",
+       "level": 2,
+       "points": [
+        "Soil air is about 25% of volume, richer in CO2 and poorer in O2 than air",
+        "Supplies O2 for respiration of earthworms, insects, microbes; CO2 diffuses out",
+        "Supports aerobic decomposition and nitrification, and gives burrowing space",
+        "Excess water drives air out; O2 diffuses about 10,000 times slower in water, so suffocation",
+        "Anaerobic conditions give toxic H2S, CH4; burrows collapse; animals migrate or die"
+       ]
+      },
+      {
+       "id": "sc-p3",
+       "pyq": "3a6b1a0c57131815",
+       "level": 3,
+       "points": [
+        "Aeration = gas exchange between soil pores and atmosphere, keeps O2 supplied",
+        "Needed for respiration, removing CO2, aerobic decay and nitrification (NH4+ to NO2- to NO3-)",
+        "Keeps Fe, Mn, S in oxidised non-toxic forms",
+        "Excess water: air expelled, suffocation, anaerobic microbes give H2S, CH4",
+        "Reduction of Fe3+ to Fe2+, Mn4+ to Mn2+; denitrification lowers nutrients; animals flee or die"
+       ]
+      }
+     ]
+    },
+    {
+     "id": "profile-formation",
+     "title": "Soil profile and formation of soil",
+     "theory_md": "**Soil profile** is the vertical section from surface to bedrock, made of layers called **horizons**: **O** (litter and humus), **A** (dark fertile topsoil), **E** (leached, light coloured), **B** (subsoil where clay, Fe and Al accumulate), **C** (weathered parent rock), **R** (bedrock).\n\n**Formation (weathering of parent rock)**:\n- **Physical**: temperature change, wind, water, and **freezing**. Water in cracks freezes below 0 °C and expands by about 9%, widening the crack (frost wedging); repeated freeze-thaw splits the rock.\n- **Chemical**: hydration, hydrolysis, oxidation, carbonation.\n- **Biological**: lichens, roots, microbes; humus forms.\n\nDepends on climate, parent rock, organisms, topography, time.",
+     "basics_md": "Soil is crushed rock mixed with rotted plants. Ice, rain, wind and tiny living things slowly break rock down; rotting plants add the dark part on top. Cutting down through the ground you see the layers, like a cake.",
+     "key_points": [
+      "Profile = vertical section with horizons O, A, E, B, C, R",
+      "A horizon is topsoil, rich in humus; B is where leached clay, Fe, Al collect",
+      "Soil forms by physical, chemical and biological weathering",
+      "Freezing: water expands about 9%, frost wedging, freeze-thaw cycles break rock",
+      "Isostasy: lighter, thicker granitic continental crust floats higher than denser basaltic oceanic crust"
+     ],
+     "questions": [
+      {
+       "id": "pf-q1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "In a soil profile the horizon richest in humus and most fertile is",
+       "options": [
+        "O",
+        "A",
+        "B",
+        "C"
+       ],
+       "answer_index": 1,
+       "why": "A (topsoil) is dark with humus, roots and organisms; B is the subsoil where clay and oxides accumulate."
+      },
+      {
+       "id": "pf-q2",
+       "kind": "mcq",
+       "level": 1,
+       "q": "On freezing, water in rock cracks",
+       "options": [
+        "contracts by about 9%",
+        "expands by about 9%",
+        "does not change volume",
+        "dissolves the rock"
+       ],
+       "answer_index": 1,
+       "why": "Water is unusual: ice is about 9% larger in volume, so it wedges the crack open."
+      },
+      {
+       "id": "pf-q3",
+       "kind": "short",
+       "level": 2,
+       "marks": 3,
+       "q": "Name the horizons of a soil profile in order from the surface and state one feature of each.",
+       "model_answer_md": "**Soil profile (top to bottom)**\n1. **O**: organic litter and humus.\n2. **A**: topsoil, dark, rich in humus and roots.\n3. **E**: eluviation zone, light, clay, Fe and Al leached out.\n4. **B**: subsoil, clay, Fe, Al oxides accumulate.\n5. **C**: weathered parent material.\n6. **R**: unweathered bedrock.",
+       "points": [
+        "Order O, A, E, B, C, R",
+        "A is topsoil rich in humus",
+        "E is leached zone",
+        "B is where leached material accumulates",
+        "C is weathered rock and R is bedrock"
+       ]
+      },
+      {
+       "id": "pf-p1",
+       "pyq": "767d65d8f3e7b18e",
+       "level": 1,
+       "points": [
+        "Soil profile: vertical section from surface to bedrock showing horizons",
+        "Horizons O, A, E, B, C, R with one feature each"
+       ]
+      },
+      {
+       "id": "pf-p2",
+       "pyq": "62bfec72e24001f9",
+       "level": 2,
+       "points": [
+        "Water enters rock cracks and freezes below 0 °C",
+        "Expands by about 9% in volume, exerts large pressure (frost wedging)",
+        "Repeated freeze-thaw breaks the rock into fragments, the parent material of soil"
+       ]
+      },
+      {
+       "id": "pf-p3",
+       "pyq": "5da4a5a9373617e8",
+       "level": 2,
+       "points": [
+        "Physical weathering: water seeps into cracks, freezes below 0 °C and expands about 9%",
+        "Crack widens; thawing lets water go deeper; repeated freeze-thaw splits rock into gravel, sand, silt",
+        "Fragments are colonised by lichens, mosses, microbes which add humus, giving soil",
+        "Most effective in cold, high-altitude regions where temperature crosses 0 °C often"
+       ]
+      },
+      {
+       "id": "pf-p4",
+       "pyq": "c0afc8d019d9fec5",
+       "level": 2,
+       "points": [
+        "Soil profile: horizons O, A, E, B, C, R",
+        "Composition by volume: 45% mineral, 5% organic, 25% water, 25% air",
+        "Formation by physical, chemical and biological weathering of parent rock, then humus formation",
+        "Factors: climate, parent rock, organisms, topography, time"
+       ]
+      },
+      {
+       "id": "pf-p5",
+       "pyq": "2eba20ffeaa73672",
+       "level": 2,
+       "points": [
+        "Cause is isostasy: both crusts float on the denser plastic mantle",
+        "Continental crust is granitic (sial), lighter (about 2.7 g/cm3) and thicker (30-70 km), so it floats high",
+        "Oceanic crust is basaltic (sima), denser (about 3.0 g/cm3) and thinner (5-10 km), so it sits low",
+        "On collision the denser oceanic plate subducts"
+       ]
+      }
+     ]
+    },
+    {
+     "id": "pollutants-effects",
+     "title": "Sources, effects and acid rain",
+     "theory_md": "**Soil pollution** is contamination by chemicals, salts, pathogens or radioactive matter that harms organisms or lowers fertility.\n\n**Sources**: *agricultural* (excess fertilisers, persistent pesticides such as DDT and endosulfan, saline or sewage irrigation); *industrial* (heavy metals Pb, Cd, Cr, Hg, As, fly ash, hazardous waste); *urban* (MSW, plastics, leachate, sludge, e-waste); *mining* (tailings, acid drainage); acid rain, oil spills.\n\n**Effects**: loss of fertility, death of earthworms and microbes, lower yield, **biomagnification** of metals and pesticides, groundwater pollution, health damage.\n\n**Acid rain** (pH below 5.6, $\\mathrm{H_2SO_4}$ and $\\mathrm{HNO_3}$) leaches $\\mathrm{Ca^{2+}}$, $\\mathrm{Mg^{2+}}$ and frees toxic $\\mathrm{Al^{3+}}$. Acidic salts such as $\\mathrm{FeCl_3}$ lower soil pH by hydrolysis.",
+     "basics_md": "Soil is a living home and a food factory. Anything poisonous put on it soaks in, harms the tiny creatures, enters crops, and later washes into water.",
+     "key_points": [
+      "Sources: agricultural, industrial, urban, mining, others",
+      "Effects: fertility loss, organisms killed, lower yield, biomagnification, groundwater pollution, health",
+      "Heavy metals Pb, Cd, Cr, Hg, As; persistent pesticides DDT, endosulfan",
+      "Acid rain: H+ leaches nutrients, frees Al3+ and metals, kills microbes; also lowers lake pH",
+      "Hydrolysis of salts of weak base: Fe3+ + 3H2O gives Fe(OH)3 + 3H+, so pH falls"
+     ],
+     "questions": [
+      {
+       "id": "pe-q1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "Which is a persistent organochlorine pesticide that biomagnifies?",
+       "options": [
+        "Neem extract",
+        "DDT",
+        "Urea",
+        "Gypsum"
+       ],
+       "answer_index": 1,
+       "why": "DDT persists for years and builds up along the food chain; neem is a biopesticide, urea a fertiliser."
+      },
+      {
+       "id": "pe-q2",
+       "kind": "mcq",
+       "level": 1,
+       "q": "Nitrate leached from fertilised soil into drinking water causes",
+       "options": [
+        "blue-baby syndrome",
+        "itai-itai disease",
+        "fluorosis",
+        "minamata disease"
+       ],
+       "answer_index": 0,
+       "why": "Nitrate converts to nitrite in infants and blocks oxygen transport; itai-itai is Cd, minamata is Hg."
+      },
+      {
+       "id": "pe-q3",
+       "kind": "short",
+       "level": 2,
+       "marks": 3,
+       "q": "How does excessive use of chemical fertilisers pollute soil?",
+       "model_answer_md": "**Effects of excess fertilisers**\n1. Ammonium fertilisers **acidify** the soil.\n2. Only NPK is added, so micronutrients (Zn, B) and organic matter fall.\n3. Phosphate fertilisers add Cd impurities that accumulate.\n4. Earthworms and microbes decline, structure worsens.\n5. Nitrate leaches to groundwater (blue-baby syndrome); runoff causes eutrophication.",
+       "points": [
+        "Acidification",
+        "Micronutrient and organic matter depletion",
+        "Cd accumulation",
+        "Fall in soil organisms",
+        "Nitrate leaching and eutrophication"
+       ]
+      },
+      {
+       "id": "pe-p1",
+       "pyq": "091173974da79771",
+       "level": 2,
+       "points": [
+        "Definition of soil pollution",
+        "Sources: agricultural, industrial, urban, mining, others (acid rain, oil spills)",
+        "Effects: fertility loss, organisms killed, lower yield, entry into food chain, groundwater pollution, health damage"
+       ]
+      },
+      {
+       "id": "pe-p2",
+       "pyq": "e7923a4e6ce1c28f",
+       "level": 3,
+       "points": [
+        "Any five pollutants, each with source, effect and control",
+        "Fertilisers, pesticides (DDT), heavy metals, municipal solid waste and plastics, fly ash or industrial waste",
+        "Controls: soil testing, IPM, effluent treatment, segregation and sanitary landfill, uses of fly ash"
+       ]
+      },
+      {
+       "id": "pe-p3",
+       "pyq": "8f01c611a91d5452",
+       "level": 2,
+       "points": [
+        "Acid rain pH below 5.6: H2SO4 and HNO3 from SO2 and NOx",
+        "Water: lowers lake pH, kills fish and plankton, leaches Al3+",
+        "Soil: H+ displaces Ca2+, Mg2+, K+, frees Al3+ and heavy metals, kills microbes",
+        "Soil leachate carries acid into lakes and groundwater, so both are linked"
+       ]
+      },
+      {
+       "id": "pe-p4",
+       "pyq": "1930a9e45337d43c",
+       "level": 1,
+       "points": [
+        "Answer (c) decreases",
+        "Fe3+ hydrolyses: Fe3+ + 3H2O gives Fe(OH)3 + 3H+, releasing acid"
+       ]
+      }
+     ]
+    },
+    {
+     "id": "control-remediation",
+     "title": "Prevention, control and remediation",
+     "theory_md": "**Prevention (at source)**: soil testing and balanced fertiliser use, **biofertilisers** (*Rhizobium*, *Azotobacter*, blue-green algae), compost, organic farming; **integrated pest management** with **biopesticides** (neem) and a ban on DDT; segregation, 3R and composting of solid waste with disposal only in **sanitary landfills**; treatment of industrial effluent (ETP) and secure landfills for hazardous waste; less plastic; drainage against salinity; afforestation and contour ploughing.\n\n**Remediation of polluted soil**: **bioremediation** (microbes degrade oil and pesticides), **phytoremediation** (Indian mustard, *Brassica juncea*, for Pb; sunflower for radionuclides), liming acidic soil ($\\mathrm{CaCO_3 + 2H^+ \\rightarrow Ca^{2+} + H_2O + CO_2}$), gypsum for sodic soil, reclamation of mined land.\n\nLaws: Environment (Protection) Act 1986.",
+     "basics_md": "Stopping the spill is cheaper than cleaning it. Cleaning uses microbes or plants that eat or absorb the poison, or chemicals that neutralise acid or salt.",
+     "key_points": [
+      "Balanced fertiliser, biofertilisers, compost, organic farming",
+      "IPM, biopesticides, ban on persistent pesticides",
+      "Solid waste: segregation, 3R, sanitary landfill; treat industrial effluent",
+      "Bioremediation (microbes) and phytoremediation (plants, e.g. Indian mustard for Pb)",
+      "Liming for acid soil, gypsum for sodic soil; laws and awareness"
+     ],
+     "questions": [
+      {
+       "id": "cr-q1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "Acidic soil is corrected by adding",
+       "options": [
+        "gypsum",
+        "lime (CaCO3)",
+        "urea",
+        "common salt"
+       ],
+       "answer_index": 1,
+       "why": "Lime neutralises H+; gypsum is for sodic (alkali) soils, urea would add acidity."
+      },
+      {
+       "id": "cr-q2",
+       "kind": "mcq",
+       "level": 1,
+       "q": "Indian mustard (Brassica juncea) is used in phytoremediation of soil contaminated with",
+       "options": [
+        "lead and other heavy metals",
+        "crude oil only",
+        "plastics",
+        "nitrogen gas"
+       ],
+       "answer_index": 0,
+       "why": "It is a hyperaccumulator that takes up Pb and Cd into its shoots, which are then harvested."
+      },
+      {
+       "id": "cr-q3",
+       "kind": "short",
+       "level": 2,
+       "marks": 3,
+       "q": "Differentiate bioremediation and phytoremediation with one example each.",
+       "model_answer_md": "**Bioremediation**: micro-organisms (bacteria, fungi) degrade or detoxify pollutants to harmless products such as $\\mathrm{CO_2}$ and $\\mathrm{H_2O}$. Example: *Pseudomonas* for oil spills.\n\n**Phytoremediation**: green plants remove, stabilise or degrade pollutants. Example: Indian mustard for lead.\n\nBoth are cheap and eco-friendly but slow.",
+       "points": [
+        "Bioremediation uses microbes",
+        "Phytoremediation uses plants",
+        "Example of each",
+        "Both are slow and eco-friendly"
+       ]
+      },
+      {
+       "id": "cr-p1",
+       "pyq": "69b11c0aab38d79b",
+       "level": 2,
+       "points": [
+        "Judicious fertiliser use with soil testing; biofertilisers, compost",
+        "Integrated pest management, biopesticides, ban on persistent pesticides",
+        "Solid waste segregation, 3R, sanitary landfill; treat industrial waste",
+        "Remediation: bioremediation, phytoremediation, liming, gypsum",
+        "Afforestation, reclamation, laws and awareness"
+       ]
+      },
+      {
+       "id": "cr-p2",
+       "pyq": "9b852ae15cfbe926",
+       "level": 3,
+       "points": [
+        "Composition: 45% mineral, 5% organic, 25% water, 25% air",
+        "Impact: fertility loss, organisms killed, toxicity to crops, salinity, poor structure, lower yield",
+        "Strategies: soil testing, biofertilisers, IPM, organic farming, treated water and drainage, remediation"
+       ]
+      },
+      {
+       "id": "cr-p3",
+       "pyq": "40dc55cc5e26bded",
+       "level": 3,
+       "points": [
+        "Composition table 45/5/25/25",
+        "Profile horizons O, A, E, B, C, R with description",
+        "Control methods with a one-line evaluation of each (effective, cheap, slow, costly)",
+        "Conclusion: prevention at source is cheapest; remediation for already polluted soil"
+       ]
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "topic": "Noise pollution",
+   "subtopics": [
+    {
+     "id": "sources-types",
+     "title": "Noise: sources and classification",
+     "theory_md": "**Noise** is unwanted sound; **noise pollution** is noise of a level or duration that harms health or efficiency.\n\n**Sources**: *transport* (traffic, horns, trains, aircraft; the largest in cities), *industry* (machines, generators, compressors), *construction and mining* (drilling, pile driving, blasting), *social events* (loudspeakers, DJ, firecrackers), *domestic* (TV, coolers, DG sets), commercial and defence.\n\n**Classification**: by source (industrial, transport, community, natural); by time pattern: **steady**, **fluctuating**, **intermittent**, **impulsive** (gunshot, most harmful); by frequency: **infrasonic** (below 20 Hz), audible (20 Hz to 20 kHz), **ultrasonic** (above 20 kHz).\n\n**Echolocation** (bats, dolphins) inspired SONAR, ultrasonography, RADAR and ultrasonic sensors.",
+     "basics_md": "Sound is a vibration of air. Noise is sound we do not want. We can sort noise by where it comes from, how it behaves in time, and how fast it vibrates.",
+     "key_points": [
+      "Sources: transport, industrial, construction, social, domestic",
+      "Types by pattern: steady, fluctuating, intermittent, impulsive",
+      "By frequency: infrasonic below 20 Hz, audible 20 Hz-20 kHz, ultrasonic above 20 kHz",
+      "Echolocation gives SONAR, ultrasonography, RADAR/LiDAR, parking sensors, blind-aid canes"
+     ],
+     "questions": [
+      {
+       "id": "st-q1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "A gunshot or firecracker is an example of ______ noise.",
+       "options": [
+        "steady",
+        "fluctuating",
+        "intermittent",
+        "impulsive"
+       ],
+       "answer_index": 3,
+       "why": "Impulsive noise is a very short, sharp burst. Intermittent noise comes and goes, like a passing train."
+      },
+      {
+       "id": "st-q2",
+       "kind": "mcq",
+       "level": 1,
+       "q": "Sound of frequency 10 Hz is",
+       "options": [
+        "audible",
+        "infrasonic",
+        "ultrasonic",
+        "supersonic"
+       ],
+       "answer_index": 1,
+       "why": "Below 20 Hz is infrasonic; above 20 kHz is ultrasonic."
+      },
+      {
+       "id": "st-q3",
+       "kind": "short",
+       "level": 2,
+       "marks": 3,
+       "q": "Classify noise on the basis of time pattern, giving one example of each.",
+       "model_answer_md": "**Noise by time pattern**\n1. **Steady**: level nearly constant, e.g. a fan or running pump.\n2. **Fluctuating**: level varies continuously, e.g. road traffic.\n3. **Intermittent**: comes and goes, e.g. passing train or aircraft.\n4. **Impulsive**: very short sharp burst, e.g. gunshot, firecracker, pile driving; most harmful to the ear.",
+       "points": [
+        "Steady with example",
+        "Fluctuating with example",
+        "Intermittent with example",
+        "Impulsive with example"
+       ]
+      },
+      {
+       "id": "st-p1",
+       "pyq": "cdbf102c1cd42e1f",
+       "level": 1,
+       "points": [
+        "Transport: traffic, horns, trains, aircraft",
+        "Industrial: machines, generators, compressors",
+        "Construction: drilling, pile driving, blasting",
+        "Social and domestic: loudspeakers, DJ, firecrackers, TV, coolers"
+       ]
+      },
+      {
+       "id": "st-p2",
+       "pyq": "de99ca52073eea2b",
+       "level": 2,
+       "points": [
+        "Transport (largest urban source), industries, construction and mining",
+        "Social and religious functions: loudspeakers, firecrackers",
+        "Domestic, commercial, defence activities; natural sources minor"
+       ]
+      },
+      {
+       "id": "st-p3",
+       "pyq": "c3054feb2f5e65a7",
+       "level": 2,
+       "points": [
+        "By source: industrial, transport, community, natural",
+        "By time pattern: steady, fluctuating, intermittent, impulsive with examples",
+        "By frequency: infrasonic, audible, ultrasonic",
+        "By zone (Noise Rules 2000) and by origin (natural or man-made)"
+       ]
+      },
+      {
+       "id": "st-p4",
+       "pyq": "e732044549065411",
+       "level": 2,
+       "points": [
+        "Echolocation: emit ultrasound, judge object from returning echo; distance = speed x time / 2",
+        "SONAR and echo sounders; medical ultrasonography",
+        "RADAR and LiDAR; ultrasonic parking sensors and robots",
+        "Assistive canes for the blind; ultrasonic flaw detection"
+       ]
+      },
+      {
+       "id": "st-p5",
+       "pyq": "50866ff2c8fa9135",
+       "level": 1,
+       "points": [
+        "a-v: cycles per second is frequency of sound",
+        "b-iv: zinc, sodium, iron are micronutrients",
+        "c-i: L10 and Leq are noise indices",
+        "d-iii: fume and plume belong to air pollution"
+       ]
+      }
+     ]
+    },
+    {
+     "id": "decibel-indices",
+     "title": "Decibel, dB(A) and noise indices",
+     "theory_md": "**Decibel** is a logarithmic unit: $L_I = 10\\log_{10}(I/I_0)$ with $I_0 = 10^{-12}\\ \\mathrm{W/m^2}$ (threshold of hearing, 0 dB); $L_p = 20\\log_{10}(p/p_0)$ with $p_0 = 20\\ \\mu$Pa. **+10 dB = 10 times intensity; +3 dB = double.**\n\nCombining sources: $L = 10\\log_{10}\\sum 10^{L_i/10}$, so 80 + 80 = 83 dB, not 160.\n\n**dB(A)**: A-weighting cuts low and very high frequencies like the ear, so it shows perceived loudness and damage.\n\n**$L_{eq}$**: steady level with the same energy as the fluctuating noise over time $T$: $L_{eq}=10\\log_{10}\\left[\\frac1T\\int 10^{L/10}dt\\right]$.\n\n**$L_{10}$** is the level exceeded for 10% of the time. **$L_{10}$ (18 hour)** is the average of the 18 hourly $L_{10}$ values from 6 am to midnight (traffic noise).",
+     "basics_md": "Our ears judge loudness on a squeeze scale: each doubling feels like a small step, so noise is measured in tens of decibels. Equal sounds add very little: two 80 dB sources make 83, not 160.",
+     "key_points": [
+      "dB is logarithmic: L = 10 log(I/I0), I0 = 1e-12 W/m2; +10 dB is 10x intensity",
+      "dB(A) weights frequencies like the human ear (less sensitive to low and very high)",
+      "Leq is the energy average of a fluctuating level, not the arithmetic mean",
+      "L10 (18 h) is the average of 18 hourly L10 values, 6 am to midnight, traffic noise index"
+     ],
+     "questions": [
+      {
+       "id": "di-q1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "Two identical machines each produce 80 dB(A). Together they produce about",
+       "options": [
+        "160 dB",
+        "83 dB",
+        "90 dB",
+        "80 dB"
+       ],
+       "answer_index": 1,
+       "why": "Levels add logarithmically: 10 log(2 x 10^8) = 83 dB; the common mistake is 160 dB."
+      },
+      {
+       "id": "di-q2",
+       "kind": "mcq",
+       "level": 1,
+       "q": "A sound whose intensity is 100 times another is higher in level by",
+       "options": [
+        "2 dB",
+        "10 dB",
+        "20 dB",
+        "100 dB"
+       ],
+       "answer_index": 2,
+       "why": "10 log(100) = 20 dB."
+      },
+      {
+       "id": "di-q3",
+       "kind": "numerical",
+       "level": 2,
+       "marks": 3,
+       "q": "A sound intensity of $10^{-5}\\ \\mathrm{W/m^2}$ is measured. Find its level in dB. Two such sources of 60 dB and 70 dB act together; find the combined level.",
+       "model_answer_md": "**Level of one sound**\n$$L = 10\\log_{10}\\frac{10^{-5}}{10^{-12}} = 10\\log_{10}10^{7} = 70\\ \\mathrm{dB}$$\n\n**Combined 60 dB and 70 dB**\n$$L = 10\\log_{10}\\left(10^{6}+10^{7}\\right) = 10\\log_{10}(1.1\\times10^{7}) = 70.4\\ \\mathrm{dB}$$\nThe louder source dominates; the answer is not 130 dB.",
+       "points": [
+        "L = 10 log(I/I0)",
+        "70 dB",
+        "Combined = 10 log(10^6 + 10^7)",
+        "About 70.4 dB, not the arithmetic sum"
+       ]
+      },
+      {
+       "id": "di-q4",
+       "kind": "numerical",
+       "level": 3,
+       "marks": 4,
+       "q": "A worker is exposed to 60 dB(A) for 6 hours and 80 dB(A) for 2 hours in an 8-hour shift. Find $L_{eq}$ and compare it with the arithmetic mean.",
+       "model_answer_md": "**Energy average**\n$$L_{eq}=10\\log_{10}\\left[\\frac{6\\times10^{6}+2\\times10^{8}}{8}\\right]=10\\log_{10}(2.575\\times10^{7})=74.1\\ \\mathrm{dB(A)}$$\n\n**Arithmetic mean**: $(6\\times60+2\\times80)/8 = 65$ dB(A).\n\n$L_{eq}$ is much higher because the loud period carries most of the energy; this is why $L_{eq}$, not the arithmetic mean, is used.",
+       "points": [
+        "Leq = 10 log of time-weighted mean of 10^(L/10)",
+        "Leq = 74.1 dB(A)",
+        "Arithmetic mean = 65 dB(A)",
+        "Loud period dominates energy"
+       ]
+      },
+      {
+       "id": "di-p1",
+       "pyq": "843591844bca1195",
+       "level": 2,
+       "points": [
+        "dB(A) matches human hearing: A-weighting cuts low and very high frequencies",
+        "Averaging (Leq) handles fluctuating community noise; energy average, not arithmetic",
+        "Standards (Noise Rules 2000, WHO) are stated as Leq in dB(A), so comparison is direct"
+       ]
+      },
+      {
+       "id": "di-p2",
+       "pyq": "d923c22f5af0e40f",
+       "level": 1,
+       "points": [
+        "Decibel (dB), logarithmic unit with I0 = 1e-12 W/m2",
+        "dB(A) for environmental noise; frequency in hertz"
+       ]
+      },
+      {
+       "id": "di-p3",
+       "pyq": "beea96f4192f70d6",
+       "level": 2,
+       "points": [
+        "L10 (18 h) = arithmetic average of 18 hourly L10 values, 6 am to midnight",
+        "L10 is level exceeded for 10% of time",
+        "Traffic noise index in dB(A)"
+       ]
+      }
+     ]
+    },
+    {
+     "id": "effects-limits",
+     "title": "Effects of noise and permissible limits",
+     "theory_md": "**Audible range** of a young healthy person: **20 Hz to 20 kHz**, most sensitive at 1-4 kHz.\n\n**Auditory effects**: temporary threshold shift, permanent **noise-induced hearing loss** (long exposure above 85-90 dB(A)), tinnitus, eardrum rupture near 150 dB.\n\n**Physiological**: raised blood pressure and heart rate, headache, fatigue, sleep disturbance, ulcers.\n\n**Psychological**: annoyance, stress, anxiety, loss of concentration and efficiency, speech interference, depression.\n\n**Noise Rules 2000** (under EPA 1986), $L_{eq}$ dB(A), day / night: industrial 75/70, commercial 65/55, residential 55/45, **silence zone 50/40** (100 m around hospitals, schools, courts). Typical: whisper 30, conversation 60, heavy traffic 90, jet 140 dB; pain at 120-130 dB.",
+     "basics_md": "Loud sound hurts the ear and also the body's alarm system. Ears get tired and can be damaged for good. The heart and mind stay stressed, so sleep, mood and work suffer.",
+     "key_points": [
+      "Audible range 20 Hz to 20 kHz",
+      "Auditory: temporary then permanent hearing loss, tinnitus, eardrum rupture",
+      "Physiological: BP, heart rate, headache, sleep disturbance",
+      "Psychological: annoyance, stress, poor concentration, speech interference",
+      "Limits dB(A) day/night: industrial 75/70, commercial 65/55, residential 55/45, silence 50/40"
+     ],
+     "questions": [
+      {
+       "id": "el-q1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "The Indian night-time limit for a residential zone is",
+       "options": [
+        "45 dB(A)",
+        "55 dB(A)",
+        "40 dB(A)",
+        "70 dB(A)"
+       ],
+       "answer_index": 0,
+       "why": "Residential is 55 day and 45 night; 40 is the silence zone night limit."
+      },
+      {
+       "id": "el-q2",
+       "kind": "mcq",
+       "level": 1,
+       "q": "Prolonged exposure above about 90 dB(A) mainly causes",
+       "options": [
+        "noise-induced hearing loss",
+        "blue-baby syndrome",
+        "fluorosis",
+        "anaemia"
+       ],
+       "answer_index": 0,
+       "why": "Hair cells in the cochlea are damaged and do not regrow."
+      },
+      {
+       "id": "el-q3",
+       "kind": "short",
+       "level": 2,
+       "marks": 3,
+       "q": "State the Indian noise limits for the four zones and the silence zone area.",
+       "model_answer_md": "**Noise Rules 2000**, $L_{eq}$ in dB(A), day (6 am-10 pm) / night:\n1. Industrial: 75 / 70\n2. Commercial: 65 / 55\n3. Residential: 55 / 45\n4. Silence zone: 50 / 40\n\nSilence zone = area within **100 m** of hospitals, educational institutions and courts.",
+       "points": [
+        "Industrial 75/70",
+        "Commercial 65/55",
+        "Residential 55/45",
+        "Silence 50/40 within 100 m of hospitals, schools, courts"
+       ]
+      },
+      {
+       "id": "el-p1",
+       "pyq": "89eb58921bd34ff4",
+       "level": 2,
+       "points": [
+        "Audible range 20 Hz to 20 kHz",
+        "Physiological: hearing loss, tinnitus, raised BP and heart rate, headache, sleep loss",
+        "Psychological: annoyance, stress, anxiety, poor concentration, speech interference"
+       ]
+      },
+      {
+       "id": "el-p2",
+       "pyq": "8a2ae9343406a4b8",
+       "level": 3,
+       "points": [
+        "Units: dB (10 log I/I0, 20 log p/p0), dB(A), Leq, L10, hertz, phon and sone",
+        "Typical levels: whisper 30, conversation 60, traffic 90 dB",
+        "Effects: auditory, physiological, psychological, on animals, on property"
+       ]
+      }
+     ]
+    },
+    {
+     "id": "control-insulation",
+     "title": "Control of noise and sound reduction index",
+     "theory_md": "**Control**\n- **Source**: silencers and mufflers, maintenance and lubrication, quieter machines, vibration mounts, ban on pressure horns.\n- **Path**: distance and zoning, noise barriers, **green belts** (neem, ashoka, tamarind), acoustic enclosures, double glazing, absorbing materials.\n- **Receiver**: ear plugs and muffs, limited exposure, job rotation.\n- **Law**: Noise Rules 2000, silence zones, no loudspeakers 10 pm to 6 am.\n\n**Sound reduction index** (transmission loss) of a barrier:\n$$\\tau=\\frac{I_t}{I_i}=\\left(\\frac{p_t}{p_i}\\right)^2,\\qquad R=10\\log_{10}\\frac1\\tau=20\\log_{10}\\frac{p_i}{p_t}\\ \\mathrm{dB}$$\nUse $20\\log$ for pressures and $10\\log$ for intensity or power.",
+     "basics_md": "Noise needs a source, a path and a listener. You can quiet the source, block or lengthen the path, or protect the listener. A wall's quality is how many decibels it removes.",
+     "key_points": [
+      "Control at source, path and receiver, plus legal measures",
+      "Green belts and barriers on the path; ear plugs at the receiver",
+      "tau = transmitted / incident; R = 10 log(1/tau) dB",
+      "In pressure terms R = 20 log(p_i/p_t); in intensity or power terms 10 log",
+      "State the reading used (pressure or power) in the answer"
+     ],
+     "questions": [
+      {
+       "id": "ci-q1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "Sound reduction index in terms of sound pressures is",
+       "options": [
+        "10 log(p_i/p_t)",
+        "20 log(p_i/p_t)",
+        "20 log(p_t/p_i)",
+        "log(p_i p_t)"
+       ],
+       "answer_index": 1,
+       "why": "Intensity is proportional to pressure squared, so the 10 log becomes 20 log; the ratio is incident over transmitted."
+      },
+      {
+       "id": "ci-q2",
+       "kind": "mcq",
+       "level": 1,
+       "q": "Which is a path control measure for noise?",
+       "options": [
+        "Silencer on engine",
+        "Green belt",
+        "Ear plug",
+        "Pressure horn ban"
+       ],
+       "answer_index": 1,
+       "why": "Silencer and horn ban act at the source; ear plugs act at the receiver."
+      },
+      {
+       "id": "ci-q3",
+       "kind": "numerical",
+       "level": 2,
+       "marks": 3,
+       "q": "A wall receives sound pressure 200 and transmits 4 (arbitrary units). Find $\\tau$ and the sound reduction index.",
+       "model_answer_md": "**Given**: $p_i=200$, $p_t=4$.\n$$\\tau=\\left(\\frac{4}{200}\\right)^2=4\\times10^{-4}$$\n$$R=20\\log_{10}\\frac{200}{4}=20\\log_{10}50=34.0\\ \\mathrm{dB}$$\n(check: $10\\log_{10}(1/4\\times10^{-4})=34.0$ dB)",
+       "points": [
+        "Formula R = 20 log(p_i/p_t)",
+        "tau = 4e-4",
+        "R = 34 dB"
+       ]
+      },
+      {
+       "id": "ci-q4",
+       "kind": "short",
+       "level": 2,
+       "marks": 3,
+       "q": "Describe three ways of controlling noise along its path.",
+       "model_answer_md": "**Control along the path**\n1. **Green belts** of dense trees (neem, ashoka) along roads and around hospitals absorb and scatter sound.\n2. **Barriers and enclosures**: highway noise walls, acoustic enclosures round machines, double-glazed windows.\n3. **Distance and zoning**: keep industries, airports and highways away from homes, schools and hospitals.",
+       "points": [
+        "Green belts",
+        "Barriers or enclosures",
+        "Distance or land-use zoning"
+       ]
+      },
+      {
+       "id": "ci-p1",
+       "pyq": "e6e58d9ce1cbb748",
+       "level": 3,
+       "points": [
+        "Causes: transport, industry, construction, social events, domestic, commercial, defence",
+        "Control at source: silencers, maintenance, quieter machines, ban pressure horns",
+        "Path: green belts, barriers, absorbing material, zoning; receiver: ear plugs",
+        "Law: Noise Rules 2000 limits and silence zones; awareness"
+       ]
+      },
+      {
+       "id": "ci-p2",
+       "pyq": "5b5bf1f6ebb2ebe4",
+       "level": 2,
+       "points": [
+        "Sources: transport, industrial, construction, social, domestic",
+        "Control at source, along path, at receiver",
+        "Legal: Noise Rules 2000, silence zones, loudspeaker ban 10 pm to 6 am"
+       ]
+      },
+      {
+       "id": "ci-p3",
+       "pyq": "a1e3ef3663b9553c",
+       "level": 2,
+       "points": [
+        "Expression R = 10 log(1/tau) = 20 log(p_i/p_t) dB",
+        "tau = (5/50)^2 = 0.01",
+        "R = 20 log 10 = 20 dB",
+        "If read as intensity, R = 10 dB; state the reading"
+       ]
+      },
+      {
+       "id": "ci-p4",
+       "pyq": "e9901acaf800dc1e",
+       "level": 2,
+       "points": [
+        "R = 10 log(1/tau) = 20 log(p_i/p_t) dB",
+        "tau = (10/100)^2 = 0.01",
+        "R = 20 log 10 = 20 dB"
+       ]
+      },
+      {
+       "id": "ci-p5",
+       "pyq": "17615db2561be5d8",
+       "level": 2,
+       "points": [
+        "tau = transmitted / incident = 0.05/5 = 0.01",
+        "R = 10 log(1/0.01) = 10 log 100",
+        "R = 20 dB (only 1% of energy passes)"
+       ]
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "topic": "Thermal pollution",
+   "subtopics": [
+    {
+     "id": "sources-effects",
+     "title": "Thermal pollution: sources and effects",
+     "theory_md": "**Thermal pollution** is the degradation of water quality by a change in water temperature, usually from discharge of **heated water**.\n\n**Sources**: **thermal power plants** (only about 35% of fuel energy becomes electricity; the rest leaves as heat in condenser cooling water), nuclear plants, steel, refineries, paper and chemical industries, hot urban runoff, removal of shade trees, cold-water release from deep reservoirs.\n\n**Effects**:\n1. **Dissolved oxygen falls** as temperature rises (about 14.6 mg/L at 0 °C, 9.1 at 20 °C, 7.6 at 30 °C).\n2. Warm water raises fish metabolism and microbial decay, so oxygen demand rises too.\n3. **Thermal shock** and fish kills; spawning and migration disturbed.\n4. Pollutants more toxic, pathogens multiply, blue-green algal blooms.",
+     "basics_md": "Warm water holds less dissolved gas, like a warm fizzy drink going flat. Fish need that gas to breathe, and warmth makes them need more.",
+     "key_points": [
+      "Thermal pollution is a change in water temperature, mainly by heated effluent",
+      "Main source: condenser cooling water of thermal and nuclear power plants",
+      "DO falls with temperature while oxygen demand rises, a double effect",
+      "Thermal shock, disturbed spawning, algal blooms, loss of species"
+     ],
+     "questions": [
+      {
+       "id": "te-q1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "The main source of thermal pollution of water bodies is",
+       "options": [
+        "agricultural runoff",
+        "power plant cooling water",
+        "domestic sewage",
+        "acid rain"
+       ],
+       "answer_index": 1,
+       "why": "Condenser cooling water returns warm to the river or sea."
+      },
+      {
+       "id": "te-q2",
+       "kind": "mcq",
+       "level": 1,
+       "q": "As water temperature rises, the solubility of oxygen",
+       "options": [
+        "increases",
+        "decreases",
+        "stays constant",
+        "becomes zero at 20 °C"
+       ],
+       "answer_index": 1,
+       "why": "Gas solubility falls with temperature; the common error is saying warm water holds more oxygen."
+      },
+      {
+       "id": "te-q3",
+       "kind": "short",
+       "level": 2,
+       "marks": 3,
+       "q": "Explain why a few degrees of warming can kill fish.",
+       "model_answer_md": "**Why small warming harms fish**\n1. **Less oxygen supplied**: dissolved oxygen falls with temperature (about 9.1 mg/L at 20 °C to 7.6 mg/L at 30 °C).\n2. **More oxygen needed**: fish metabolic rate and microbial decay rise, so demand increases.\n3. Together this causes oxygen stress; sudden change gives **thermal shock**.\n4. Spawning and egg hatching are disturbed, and pollutants become more toxic.",
+       "points": [
+        "DO falls as temperature rises",
+        "Metabolic rate and oxygen demand rise",
+        "Thermal shock and breeding disturbed",
+        "Higher toxicity of pollutants"
+       ]
+      }
+     ]
+    },
+    {
+     "id": "control-numerical",
+     "title": "Control of thermal pollution and heat load",
+     "theory_md": "**Control**\n- **Cooling towers** (wet evaporative, natural-draft or mechanical-draft; dry towers where water is scarce) cool the water, which is then recirculated.\n- **Cooling ponds** (large shallow ponds, cool by surface evaporation and radiation) and **spray ponds** (water sprayed into air over a pond).\n- Recirculating instead of once-through cooling.\n- Reuse of waste heat: cogeneration, district heating, greenhouses, aquaculture.\n- CPCB norm: discharge not more than **5 °C above** the intake temperature.\n\n**Heat carried by cooling water**: $Q=\\dot m\\,c_p\\,\\Delta T$ with $c_p=4186$ J/(kg K) and water density 1000 kg/m$^3$.",
+     "basics_md": "A cooling tower works like sweat: some water evaporates and carries the heat away. Then the cooler water goes back to the plant instead of the river.",
+     "key_points": [
+      "Cooling towers, cooling ponds, spray ponds before discharge",
+      "Recirculating cooling and reuse of waste heat",
+      "Discharge limit: 5 °C above intake (CPCB)",
+      "Q = m c_p dT with c_p = 4186 J/kg K"
+     ],
+     "questions": [
+      {
+       "id": "tc-q1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "Which device cools hot condenser water before it is recirculated?",
+       "options": [
+        "Settling tank",
+        "Cooling tower",
+        "Trickling filter",
+        "Scrubber"
+       ],
+       "answer_index": 1,
+       "why": "Cooling towers reject the heat to air by evaporation; the other options treat wastewater or gases."
+      },
+      {
+       "id": "tc-q2",
+       "kind": "mcq",
+       "level": 1,
+       "q": "A cooling tower",
+       "options": [
+        "removes dissolved pollutants",
+        "removes heat from water",
+        "adds oxygen to sewage",
+        "filters suspended solids"
+       ],
+       "answer_index": 1,
+       "why": "It transfers heat, it does not clean the water."
+      },
+      {
+       "id": "tc-q3",
+       "kind": "numerical",
+       "level": 2,
+       "marks": 3,
+       "q": "A power plant passes $10\\ \\mathrm{m^3/s}$ of cooling water through its condenser and the water warms by 8 °C. Find the heat rejected to the river. ($c_p=4186$ J/kg K)",
+       "model_answer_md": "**Given**: $\\dot m = 10\\times1000=10^4$ kg/s, $\\Delta T=8$ K.\n$$Q=\\dot m\\,c_p\\,\\Delta T=10^4\\times4186\\times8=3.35\\times10^{8}\\ \\mathrm{W}\\approx 335\\ \\mathrm{MW}$$",
+       "points": [
+        "Mass flow 10^4 kg/s",
+        "Q = m c_p dT",
+        "About 335 MW"
+       ]
+      },
+      {
+       "id": "tc-q4",
+       "kind": "numerical",
+       "level": 3,
+       "marks": 4,
+       "q": "A plant rejects 600 MW of heat to a river flowing at $50\\ \\mathrm{m^3/s}$. Find the temperature rise of the river and say whether it meets the 5 °C norm.",
+       "model_answer_md": "**Given**: $Q=6\\times10^{8}$ W, $\\dot m=50\\times1000=5\\times10^4$ kg/s.\n$$\\Delta T=\\frac{Q}{\\dot m\\,c_p}=\\frac{6\\times10^{8}}{5\\times10^{4}\\times4186}=2.87\\ \\mathrm{K}$$\nThe rise is 2.9 °C, below 5 °C, so it meets the norm.",
+       "points": [
+        "Delta T = Q / (m c_p)",
+        "2.87 °C",
+        "Compared with 5 °C limit: meets"
+       ]
+      },
+      {
+       "id": "tc-q5",
+       "kind": "short",
+       "level": 2,
+       "marks": 2,
+       "q": "Differentiate a cooling pond and a spray pond.",
+       "model_answer_md": "**Cooling pond**: large shallow pond; hot water cools slowly by surface evaporation and radiation; needs much land.\n\n**Spray pond**: the hot water is sprayed into air over a pond; droplets give a larger surface so cooling is faster and less land is needed.",
+       "points": [
+        "Cooling pond cools by surface evaporation, large area",
+        "Spray pond sprays droplets, faster cooling, less area"
+       ]
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "topic": "Radioactive pollution",
+   "subtopics": [
+    {
+     "id": "types-sources",
+     "title": "Radioactive pollution: radiation types and sources",
+     "theory_md": "**Radioactive pollution** is the rise in background radiation due to human release of radioactive substances.\n\n**Radiation**: **$\\alpha$** (He nuclei) stopped by paper, most damaging inside the body; **$\\beta$** (electrons) stopped by a few mm of aluminium; **$\\gamma$** and X-rays penetrate and need lead or concrete. All are ionising and damage DNA.\n\n**Natural sources**: cosmic rays, radon from rocks, K-40, U and Th.\n**Man-made**: nuclear weapon tests, reactors and accidents (**Chernobyl 1986, Fukushima 2011**), uranium mining, radioactive waste, medical X-rays and radiotherapy.\n\n**Isotopes**: **I-131** (8 days) goes to the thyroid; **Sr-90** (29 years) acts like Ca and goes to bone; **Cs-137** (30 years) acts like K in soft tissue.",
+     "basics_md": "Some atoms are unstable and shoot out energy or particles as they settle. That energy can knock electrons off atoms in our cells and damage them.",
+     "key_points": [
+      "Alpha, beta, gamma: increasing penetration; alpha most harmful if ingested",
+      "Natural: cosmic rays, radon, K-40; man-made: weapon tests, reactors, medical",
+      "Accidents: Chernobyl 1986, Fukushima 2011",
+      "I-131 thyroid, Sr-90 bone, Cs-137 soft tissue"
+     ],
+     "questions": [
+      {
+       "id": "rt-q1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "Strontium-90 is dangerous because it accumulates in",
+       "options": [
+        "thyroid",
+        "bone",
+        "lungs",
+        "liver only"
+       ],
+       "answer_index": 1,
+       "why": "Sr behaves like Ca and lodges in bone; I-131 goes to the thyroid."
+      },
+      {
+       "id": "rt-q2",
+       "kind": "mcq",
+       "level": 1,
+       "q": "Radiation stopped by a sheet of paper is",
+       "options": [
+        "alpha",
+        "beta",
+        "gamma",
+        "X-rays"
+       ],
+       "answer_index": 0,
+       "why": "Alpha is stopped by paper but is the most damaging if inhaled or swallowed; gamma needs lead or concrete."
+      },
+      {
+       "id": "rt-q3",
+       "kind": "short",
+       "level": 2,
+       "marks": 3,
+       "q": "List the natural and man-made sources of radioactive pollution.",
+       "model_answer_md": "**Natural**: cosmic rays, radon gas from rocks and soil, K-40, uranium and thorium in rocks.\n\n**Man-made**: nuclear weapon tests (fallout), reactors and accidents (Chernobyl 1986, Fukushima 2011), uranium mining, radioactive waste, medical X-rays, CT and radiotherapy, industrial isotopes.",
+       "points": [
+        "Cosmic rays and radon",
+        "K-40, U and Th in rocks",
+        "Weapon tests and reactor accidents",
+        "Mining, waste and medical use"
+       ]
+      }
+     ]
+    },
+    {
+     "id": "effects-units",
+     "title": "Effects of radiation and its units",
+     "theory_md": "**Somatic effects** (on the exposed person): radiation burns and sickness, hair loss, cataract, leukaemia and other cancers, death at high dose. **Genetic effects**: mutations passed to offspring.\n\n**Units**\n- **Activity**: becquerel (Bq) = 1 decay/s; $1\\ \\mathrm{Ci}=3.7\\times10^{10}$ Bq.\n- **Absorbed dose**: gray (Gy) = 1 J/kg.\n- **Equivalent dose**: sievert (Sv), $H = D\\times w_R$, with $w_R$ = 20 for $\\alpha$ and 1 for $\\beta$ and $\\gamma$.\n\nGray measures energy absorbed; sievert measures biological damage.",
+     "basics_md": "Gray tells how much energy the body soaked up. Sievert corrects it for how nasty the kind of radiation is, because alpha does far more harm per joule than gamma.",
+     "key_points": [
+      "Somatic effects: burns, cataract, cancers; genetic effects: mutations",
+      "Bq is activity; Gy is absorbed dose (J/kg); Sv is equivalent dose",
+      "H = D x w_R, w_R = 20 for alpha, 1 for beta and gamma",
+      "Gray is energy, sievert is biological effect"
+     ],
+     "questions": [
+      {
+       "id": "eu-q1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "The SI unit of radioactivity (activity) is",
+       "options": [
+        "gray",
+        "sievert",
+        "becquerel",
+        "roentgen"
+       ],
+       "answer_index": 2,
+       "why": "1 Bq = 1 decay per second; gray and sievert are doses."
+      },
+      {
+       "id": "eu-q2",
+       "kind": "mcq",
+       "level": 1,
+       "q": "Equivalent dose is expressed in",
+       "options": [
+        "Bq",
+        "Gy",
+        "Sv",
+        "Ci"
+       ],
+       "answer_index": 2,
+       "why": "Sievert includes the radiation weighting factor."
+      },
+      {
+       "id": "eu-q3",
+       "kind": "short",
+       "level": 2,
+       "marks": 3,
+       "q": "Differentiate between gray and sievert. An absorbed dose of 2 mGy of alpha radiation is received; find the equivalent dose ($w_R=20$).",
+       "model_answer_md": "**Gray**: unit of absorbed dose, energy absorbed per kg (1 Gy = 1 J/kg).\n**Sievert**: unit of equivalent dose, $H=D\\times w_R$, takes the biological effect of the radiation type into account.\n\n**Numerical**: $H = 2\\ \\mathrm{mGy}\\times20 = 40\\ \\mathrm{mSv}$.",
+       "points": [
+        "Gray is absorbed energy per kg",
+        "Sievert includes weighting factor",
+        "H = D x w_R",
+        "H = 40 mSv"
+       ]
+      }
+     ]
+    },
+    {
+     "id": "decay-numerical",
+     "title": "Half-life and decay numericals",
+     "theory_md": "Decay law: $N=N_0e^{-\\lambda t}$. **Half-life**: $t_{1/2}=\\dfrac{0.693}{\\lambda}$. Fraction left after time $t$: $N/N_0=\\left(\\tfrac12\\right)^{t/t_{1/2}}$. Activity: $A=\\lambda N$.\n\nSteps: find the number of half-lives $n=t/t_{1/2}$, then fraction $=(1/2)^n$.\n\nAfter 1, 2, 3 half-lives: 1/2, 1/4, 1/8 remain. After two half-lives it is **not** all gone.\n\nExample: I-131, $t_{1/2}$ = 8 days; after 24 days $n=3$, so 1/8 (12.5%) remains.",
+     "basics_md": "Every half-life, half of whatever is left disappears. It keeps halving but never quite reaches zero.",
+     "key_points": [
+      "Fraction left = (1/2)^(t / t_half)",
+      "t_half = 0.693 / lambda",
+      "Count half-lives first, then halve that many times",
+      "A = lambda N is the activity"
+     ],
+     "questions": [
+      {
+       "id": "dn-q1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "After two half-lives, the fraction of a radioactive sample remaining is",
+       "options": [
+        "1/2",
+        "1/4",
+        "1/8",
+        "0"
+       ],
+       "answer_index": 1,
+       "why": "(1/2)^2 = 1/4; the trap is thinking it is all gone."
+      },
+      {
+       "id": "dn-q2",
+       "kind": "mcq",
+       "level": 1,
+       "q": "The decay constant of a nuclide with half-life $t_{1/2}$ is",
+       "options": [
+        "0.693 t",
+        "0.693 / t",
+        "t / 0.693",
+        "1 / t^2"
+       ],
+       "answer_index": 1,
+       "why": "lambda = ln 2 / t_half = 0.693 / t_half."
+      },
+      {
+       "id": "dn-q3",
+       "kind": "numerical",
+       "level": 2,
+       "marks": 3,
+       "q": "I-131 has a half-life of 8 days. What fraction of a sample remains after 24 days? Find its decay constant.",
+       "model_answer_md": "**Number of half-lives**: $n=24/8=3$.\n$$\\frac{N}{N_0}=\\left(\\frac12\\right)^3=\\frac18=0.125$$\nSo 12.5% remains.\n$$\\lambda=\\frac{0.693}{8\\ \\mathrm{d}}=0.0866\\ \\mathrm{d^{-1}}$$",
+       "points": [
+        "n = 3 half-lives",
+        "Fraction 1/8 = 12.5%",
+        "lambda = 0.0866 per day"
+       ]
+      },
+      {
+       "id": "dn-q4",
+       "kind": "numerical",
+       "level": 3,
+       "marks": 4,
+       "q": "Sr-90 has a half-life of 29 years. After how many years will its activity fall to 1/16 of the initial value, and what percentage remains after 30 years?",
+       "model_answer_md": "**Time to 1/16**: $(1/2)^n=1/16$ gives $n=4$, so $t=4\\times29=116$ years.\n\n**After 30 years**: $n=30/29=1.034$\n$$\\frac{N}{N_0}=\\left(\\tfrac12\\right)^{1.034}=0.488$$\nAbout 48.8% remains.",
+       "points": [
+        "n = 4 half-lives",
+        "t = 116 years",
+        "(1/2)^(30/29)",
+        "About 48.8% remains"
+       ]
+      }
+     ]
+    },
+    {
+     "id": "waste-control",
+     "title": "Radioactive waste disposal and control",
+     "theory_md": "**Control**\n- Safe reactor design, siting and containment; monitoring; regulation by **AERB** (India).\n- **Shielding, time and distance** (ALARA): lead and concrete shields, short exposure, large distance.\n- Avoid unnecessary X-rays; protective clothing and dosimeters for workers.\n\n**Waste disposal**\n- **Low-level waste**: stored until it decays, diluted, or buried in shallow trenches.\n- **High-level waste** (spent fuel): reprocessed, then **vitrified** (glass blocks) in steel canisters and stored in **deep geological repositories**, kept away from water.\n- Short half-life waste is held until it decays; long half-life waste needs isolation for thousands of years.",
+     "basics_md": "Nuclear waste cannot be burnt or neutralised, so we shield it, wait for it to decay, or lock it away deep underground.",
+     "key_points": [
+      "Reactor safety, containment, monitoring, AERB regulation",
+      "Shielding, time, distance (ALARA)",
+      "Low-level waste stored or buried; high-level waste vitrified",
+      "Deep geological repository for long-lived waste"
+     ],
+     "questions": [
+      {
+       "id": "wc-q1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "High-level nuclear waste is finally stored by",
+       "options": [
+        "dumping in rivers",
+        "vitrification and deep geological repository",
+        "open burning",
+        "incineration at 850 °C"
+       ],
+       "answer_index": 1,
+       "why": "Radioactivity is not destroyed by burning; the waste is fixed in glass and isolated underground."
+      },
+      {
+       "id": "wc-q2",
+       "kind": "mcq",
+       "level": 1,
+       "q": "Radiation protection by ALARA means",
+       "options": [
+        "as low as reasonably achievable",
+        "as low as radiation allows",
+        "absorbed limit of radiation",
+        "annual limit of radiation"
+       ],
+       "answer_index": 0,
+       "why": "Exposure should be kept as low as reasonably achievable using time, distance and shielding."
+      },
+      {
+       "id": "wc-q3",
+       "kind": "short",
+       "level": 2,
+       "marks": 3,
+       "q": "How is high-level nuclear waste disposed of?",
+       "model_answer_md": "**Disposal of high-level waste**\n1. Spent fuel is cooled in water pools and may be reprocessed.\n2. Remaining waste is **vitrified** (fused into glass blocks) and sealed in steel canisters.\n3. Canisters are placed in **deep geological repositories** in stable rock, isolated from groundwater, for thousands of years.\n4. Sites are monitored and regulated by AERB.",
+       "points": [
+        "Cooling or reprocessing",
+        "Vitrification in glass",
+        "Deep geological repository",
+        "Isolation from groundwater and monitoring"
+       ]
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "topic": "Solid waste management",
+   "subtopics": [
+    {
+     "id": "basics-hierarchy",
+     "title": "Solid waste, its types and the management hierarchy",
+     "theory_md": "**Solid waste** is discarded solid or semi-solid material from homes, commerce, industry and agriculture. Types: **municipal (MSW)**, industrial (fly ash, slag), **hazardous**, **biomedical**, **e-waste**, construction and agricultural waste. About half of Indian MSW is wet organic.\n\n**Functional elements**: generation, storage and **segregation at source**, collection, transfer, processing and recovery, disposal.\n\n**Hierarchy** (most to least preferred): **Reduce (prevent) $\\rightarrow$ Reuse $\\rightarrow$ Recycle $\\rightarrow$ Recover energy $\\rightarrow$ Dispose (landfill)**.\n\nRules (2016, under EPA 1986): Solid Waste, Plastic Waste, Bio-Medical Waste, Hazardous Waste; E-Waste Rules revised 2022. Three-way segregation: wet, dry, domestic hazardous.",
+     "basics_md": "The best waste is the one never made. Next best is using the same thing again, then turning it into new things, then burning it for energy, and burying it is the last resort.",
+     "key_points": [
+      "MSW, industrial, hazardous, biomedical, e-waste are the main types",
+      "Segregation at source into wet, dry, domestic hazardous",
+      "Hierarchy: reduce, reuse, recycle, recover, dispose",
+      "Landfill is the last option, not the best"
+     ],
+     "questions": [
+      {
+       "id": "bh-q1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "In the solid waste hierarchy the most preferred option is",
+       "options": [
+        "landfill",
+        "incineration",
+        "recycling",
+        "reduction at source"
+       ],
+       "answer_index": 3,
+       "why": "Prevention is first; landfill is last. Recycling comes after reduce and reuse."
+      },
+      {
+       "id": "bh-q2",
+       "kind": "mcq",
+       "level": 1,
+       "q": "Under the SWM Rules 2016, waste is segregated at source into",
+       "options": [
+        "wet, dry and domestic hazardous",
+        "organic only",
+        "liquid and solid",
+        "plastic and metal"
+       ],
+       "answer_index": 0,
+       "why": "Three-way segregation: wet (biodegradable), dry (recyclable), domestic hazardous."
+      },
+      {
+       "id": "bh-q3",
+       "kind": "short",
+       "level": 2,
+       "marks": 3,
+       "q": "Explain the solid waste management hierarchy with an example for each step.",
+       "model_answer_md": "**Hierarchy (best to worst)**\n1. **Reduce**: avoid generating waste, e.g. cloth bags instead of plastic.\n2. **Reuse**: use again, e.g. glass jars.\n3. **Recycle**: reprocess into new material, e.g. paper, PET.\n4. **Recover**: energy or compost from the waste, e.g. biogas.\n5. **Dispose**: sanitary landfill for the residue only.",
+       "points": [
+        "Reduce",
+        "Reuse",
+        "Recycle",
+        "Recover energy",
+        "Dispose in landfill last"
+       ]
+      }
+     ]
+    },
+    {
+     "id": "disposal-methods",
+     "title": "Composting, incineration and landfill: methods and a numerical",
+     "theory_md": "**Composting**: **aerobic** decomposition of organic waste to humus at 55-65 °C, which kills pathogens; best C/N ratio about 25-30. **Vermicomposting** uses earthworms. **Anaerobic digestion** (biomethanation) gives biogas, $\\mathrm{C_6H_{12}O_6\\rightarrow3CH_4+3CO_2}$.\n\n**Incineration**: burning at $\\ge$850 °C cuts volume by about 90% and gives energy, but emits dioxins, furans and fly ash, and wet Indian MSW has low calorific value.\n\n**Sanitary landfill**: clay or HDPE **liner**, leachate collection and treatment, daily soil cover, gas venting or methane recovery, final cap. An **open dump** has none of these.\n\n**Landfill volume** $V=M/\\rho$.",
+     "basics_md": "Composting copies nature: microbes with air turn kitchen waste into soil food. Burning shrinks waste but makes smoke. A landfill is a lined pit, not a dump.",
+     "key_points": [
+      "Composting is aerobic, at 55-65 °C; anaerobic digestion gives biogas",
+      "Incineration: at least 850 °C, 90% volume cut, dioxins, needs dry high-calorific waste",
+      "Sanitary landfill: liner, leachate collection, daily cover, gas control",
+      "Volume of landfill = mass / compacted density"
+     ],
+     "questions": [
+      {
+       "id": "dm-q1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "Composting of municipal solid waste is essentially",
+       "options": [
+        "aerobic biological decomposition",
+        "pyrolysis",
+        "anaerobic burning",
+        "chemical oxidation"
+       ],
+       "answer_index": 0,
+       "why": "Microbes with oxygen turn organic waste to humus; anaerobic digestion is a different process that gives biogas."
+      },
+      {
+       "id": "dm-q2",
+       "kind": "mcq",
+       "level": 1,
+       "q": "A sanitary landfill differs from an open dump by having",
+       "options": [
+        "no cover",
+        "a liner and leachate collection",
+        "more rodents",
+        "no gas control"
+       ],
+       "answer_index": 1,
+       "why": "Liner, leachate collection, daily cover and gas control define a sanitary landfill."
+      },
+      {
+       "id": "dm-q3",
+       "kind": "long",
+       "level": 2,
+       "marks": 5,
+       "q": "Compare composting, incineration and sanitary landfill with one merit and one demerit each.",
+       "model_answer_md": "**Comparison**\n\n| Method | Merit | Demerit |\n|---|---|---|\n| **Composting** (aerobic, 55-65 °C) | Gives manure, kills pathogens, cheap | Needs segregated organic waste; slow, odour if poorly aerated |\n| **Incineration** (at least 850 °C) | Cuts volume by about 90%, energy recovery | Dioxins, furans, fly ash; costly; unsuitable for wet MSW |\n| **Sanitary landfill** | Takes all residue, low cost | Needs land, leachate and methane, long-term monitoring |",
+       "points": [
+        "Composting merit and demerit",
+        "Incineration merit and demerit",
+        "Landfill merit and demerit",
+        "Aerobic composting; 850 °C for incineration"
+       ]
+      },
+      {
+       "id": "dm-q4",
+       "kind": "numerical",
+       "level": 2,
+       "marks": 3,
+       "q": "A city generates 500 tonnes of MSW per day. If it is compacted to 800 kg/m$^3$ in a landfill, find the volume needed per day and per year.",
+       "model_answer_md": "**Given**: $M=500\\ \\mathrm{t}=5\\times10^5$ kg/day, $\\rho=800$ kg/m$^3$.\n$$V_{day}=\\frac{5\\times10^{5}}{800}=625\\ \\mathrm{m^3/day}$$\n$$V_{year}=625\\times365=2.28\\times10^{5}\\ \\mathrm{m^3/year}\\ (228\\,125\\ \\mathrm{m^3})$$",
+       "points": [
+        "V = M / density",
+        "625 m3 per day",
+        "228 125 m3 per year"
+       ]
+      }
+     ]
+    },
+    {
+     "id": "landfill-leachate",
+     "title": "Leachate: its odour and danger",
+     "theory_md": "**Leachate** is the liquid that drains from a landfill after rain percolates through waste, carrying dissolved and suspended matter.\n\n**Foul odour** comes from **anaerobic decomposition** of biodegradable organic matter, which gives $\\mathrm{H_2S}$, mercaptans, amines, ammonia and volatile fatty acids. So the smell does indicate biodegradable organic matter, with very high BOD.\n\n**Why leachate is more dangerous than urban runoff**:\n1. **Far higher strength**: BOD about 2,000-30,000 mg/L and ammonia-N up to about 2,000 mg/L, against 10-100 mg/L BOD in runoff.\n2. **Toxic load**: heavy metals (Pb, Cd, Cr, Hg), xenobiotics and pathogens.\n3. **Groundwater contamination**: percolates into aquifers with little dilution or degradation, persists for decades, hard to clean.",
+     "basics_md": "Rain falling on a rubbish heap turns into a strong, smelly soup. It sinks into the ground and reaches the drinking water below, where nothing can clean it.",
+     "key_points": [
+      "Leachate = liquid draining from landfill waste",
+      "Foul smell: anaerobic decay giving H2S, mercaptans, amines, NH3, fatty acids",
+      "Much higher BOD and COD than runoff",
+      "Contains heavy metals, xenobiotics, pathogens",
+      "Reaches groundwater and persists for decades"
+     ],
+     "questions": [
+      {
+       "id": "ll-q1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "Foul odour of landfill leachate is mainly due to",
+       "options": [
+        "aerobic decay",
+        "anaerobic decay of organic matter",
+        "dissolved oxygen",
+        "chlorine"
+       ],
+       "answer_index": 1,
+       "why": "Anaerobic decomposition releases H2S, amines and fatty acids."
+      },
+      {
+       "id": "ll-q2",
+       "kind": "mcq",
+       "level": 1,
+       "q": "Compared with urban runoff, landfill leachate has",
+       "options": [
+        "lower BOD",
+        "higher BOD and toxic load",
+        "no metals",
+        "less pathogens"
+       ],
+       "answer_index": 1,
+       "why": "Leachate is concentrated waste juice; runoff is diluted rain water."
+      },
+      {
+       "id": "ll-q3",
+       "kind": "short",
+       "level": 2,
+       "marks": 3,
+       "q": "Give three reasons why landfill leachate is more hazardous than surface runoff.",
+       "model_answer_md": "**Three reasons**\n1. **Higher strength**: BOD thousands of mg/L against tens in runoff.\n2. **Toxic load**: heavy metals, xenobiotics, pathogens.\n3. **Groundwater contamination**: reaches aquifers, no dilution, persists for decades after closure.",
+       "points": [
+        "Higher BOD/COD",
+        "Toxic metals and organics",
+        "Groundwater, persistence"
+       ]
+      },
+      {
+       "id": "ll-p1",
+       "pyq": "50746c25c80bf907",
+       "level": 3,
+       "points": [
+        "Yes: foul odour from anaerobic decay of biodegradable organic matter (H2S, amines, fatty acids), high BOD",
+        "Reason 1: much higher strength than runoff (BOD thousands vs tens of mg/L)",
+        "Reason 2: heavy metals, xenobiotics, pathogens",
+        "Reason 3: groundwater contamination, persists for decades, hard to clean"
+       ]
+      }
+     ]
+    },
+    {
+     "id": "plastic-ewaste",
+     "title": "Plastics: types and environmental effects",
+     "theory_md": "**Plastics** are polymers. **Thermoplastics** (polyethylene, PVC, polystyrene, PET, nylon) are linear, soften on heating and can be recycled. **Thermosetting plastics** (Bakelite, melamine- and urea-formaldehyde, epoxy) have a cross-linked network, set permanently and cannot be remoulded.\n\n**Effects of plastic pollution**:\n- **Land**: block aeration and recharge; additives (phthalates, BPA, Pb, Cd) leach; choke drains and breed mosquitoes.\n- **Water**: 8-11 million tonnes enter oceans yearly; garbage patches; animals ingest or are entangled; **microplastics** enter the food chain.\n- **Animals**: cattle die eating plastic bags.\n- **Air**: burning gives dioxins, furans, HCl.\n- **Health**: endocrine disruptors.\n\n**Control**: reduce single-use plastic, recycle, extended producer responsibility, Plastic Waste Rules 2016.",
+     "basics_md": "Plastic does not rot. It just breaks into smaller and smaller pieces that stay in soil, rivers and finally our food.",
+     "key_points": [
+      "Thermoplastic: linear, remouldable; thermosetting: cross-linked, not remouldable",
+      "Plastics are non-biodegradable and last for hundreds of years",
+      "Effects on land, water and marine life, animals, air (dioxins), human health (microplastics, BPA)",
+      "Control: reduce, reuse, recycle, EPR, Plastic Waste Rules 2016"
+     ],
+     "questions": [
+      {
+       "id": "pe2-q1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "Which of these is a thermosetting plastic?",
+       "options": [
+        "Polyethylene",
+        "PVC",
+        "Bakelite",
+        "Nylon"
+       ],
+       "answer_index": 2,
+       "why": "Bakelite is cross-linked and cannot be remoulded; the others are thermoplastics."
+      },
+      {
+       "id": "pe2-q2",
+       "kind": "mcq",
+       "level": 1,
+       "q": "Microplastics are plastic particles smaller than",
+       "options": [
+        "5 mm",
+        "5 cm",
+        "50 cm",
+        "5 m"
+       ],
+       "answer_index": 0,
+       "why": "Microplastics are below 5 mm and enter the food chain."
+      },
+      {
+       "id": "pe2-q3",
+       "kind": "short",
+       "level": 2,
+       "marks": 3,
+       "q": "Why is burning plastic waste harmful?",
+       "model_answer_md": "**Open burning of plastic**\n1. Releases **dioxins and furans** (carcinogenic) and HCl from PVC.\n2. Emits CO and soot, causing respiratory disease.\n3. Releases greenhouse gases because plastics are made from fossil fuels.",
+       "points": [
+        "Dioxins and furans",
+        "HCl, CO, soot cause respiratory disease",
+        "Greenhouse gases"
+       ]
+      },
+      {
+       "id": "pl-p1",
+       "pyq": "9d77429152820a40",
+       "level": 3,
+       "points": [
+        "Plastics non-biodegradable, persist for hundreds of years",
+        "Land and soil: block aeration, leach additives, choke drains",
+        "Water: garbage patches, ingestion and entanglement, microplastics in food chain",
+        "Air: burning gives dioxins and furans; health: BPA, phthalates, endocrine disruptors",
+        "Control: reduce single-use, recycle, EPR, PWM Rules 2016"
+       ]
+      },
+      {
+       "id": "pl-p2",
+       "pyq": "c3dc2d1053922298",
+       "level": 2,
+       "points": [
+        "Thermoplastic softens on heating, reversible; linear chains; recyclable (PE, PVC, PS, PET)",
+        "Thermosetting sets permanently; cross-linked network; cannot be remoulded (Bakelite, melamine, epoxy)",
+        "Thermoplastics are usually addition polymers, thermosets condensation"
+       ]
+      }
+     ]
+    }
+   ]
+  }
+ ]
+}

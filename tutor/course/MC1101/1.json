@@ -1,0 +1,2119 @@
+{
+ "code": "MC1101",
+ "unit": "Calculus",
+ "written": "2026-10-19",
+ "by": "claude-sonnet-5-5, in a Claude Code session",
+ "topics": [
+  {
+   "topic": "Sequences and series",
+   "subtopics": [
+    {
+     "id": "seq-limits",
+     "title": "Convergence of a sequence",
+     "theory_md": "$\\{a_n\\}$ **converges** to $l$ if for every $\\varepsilon>0$ there is $N$ with $|a_n-l|<\\varepsilon$ for all $n>N$. It **diverges** if $a_n\\to\\pm\\infty$, and **oscillates** (finitely like $(-1)^n$, infinitely like $(-1)^n n$) otherwise.\n\n**Monotonic and bounded implies convergent.** For a recurrence: show increasing (or decreasing), show a bound by induction, then put $a_n,a_{n+1}\\to l$ in the recurrence.\n\nStandard limits: $n^{1/n}\\to1$, $\\left(1+\\frac1n\\right)^n\\to e$, $x^n\\to0$ for $|x|<1$.\n\nIf two subsequences have different limits, the sequence is not convergent. Rational plus irrational is irrational.",
+     "basics_md": "A sequence is a list of numbers that goes on forever. It converges if the list settles down towards one number and stays near it.",
+     "key_points": [
+      "Definition: $|a_n-l|<\\varepsilon$ for all $n>N$",
+      "Types: convergent, divergent ($\\pm\\infty$), oscillating finitely or infinitely",
+      "Monotone and bounded gives convergent; find $l$ from the recurrence",
+      "Different subsequence limits mean no limit"
+     ],
+     "questions": [
+      {
+       "id": "sl-1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "The sequence $a_n=(-1)^n$ is",
+       "options": [
+        "convergent to 0",
+        "divergent to $+\\infty$",
+        "oscillating finitely",
+        "oscillating infinitely"
+       ],
+       "answer_index": 2,
+       "why": "It takes only the values $1$ and $-1$ alternately: bounded, no limit, so it oscillates finitely."
+      },
+      {
+       "id": "sl-2",
+       "kind": "short",
+       "level": 2,
+       "marks": 2,
+       "q": "Using the $\\varepsilon$-$N$ definition, show that $a_n=\\dfrac{1}{n}\\to0$ and find $N$ for $\\varepsilon=0.01$.",
+       "model_answer_md": "**Definition:** we need $|a_n-0|<\\varepsilon$ for all $n>N$.\n\n1. $\\left|\\frac1n-0\\right|=\\frac1n<\\varepsilon$ exactly when $n>\\frac1\\varepsilon$.\n2. Choose $N\\ge\\frac1\\varepsilon$; then $n>N\\Rightarrow\\frac1n<\\varepsilon$. Hence $a_n\\to0$.\n3. For $\\varepsilon=0.01$: $N=\\frac1{0.01}=100$.",
+       "points": [
+        "Writes $|a_n-l|<\\varepsilon$ and solves for $n$",
+        "Chooses $N\\ge 1/\\varepsilon$ and concludes",
+        "$N=100$ for $\\varepsilon=0.01$"
+       ]
+      },
+      {
+       "id": "sl-3",
+       "kind": "numerical",
+       "level": 3,
+       "marks": 3,
+       "q": "A sequence is defined by $a_1=\\sqrt2$, $a_{n+1}=\\sqrt{2+a_n}$. Show that it converges and find its limit.",
+       "model_answer_md": "**1. Bounded above by 2 (induction).** $a_1=\\sqrt2<2$. If $a_n<2$ then $a_{n+1}=\\sqrt{2+a_n}<\\sqrt4=2$.\n\n**2. Increasing.** $a_{n+1}^2-a_n^2=2+a_n-a_n^2=(2-a_n)(1+a_n)>0$ since $a_n<2$, so $a_{n+1}>a_n$.\n\n**3. Monotone and bounded, hence convergent.** Let $a_n\\to l$.\n\n**4. Limit.** $l=\\sqrt{2+l}\\Rightarrow l^2-l-2=0\\Rightarrow(l-2)(l+1)=0$. Since $a_n>0$, $l=2$.",
+       "points": [
+        "Bounded above by 2, proved by induction",
+        "Increasing shown with a sign argument",
+        "Monotone and bounded theorem quoted",
+        "$l^2=2+l$ gives $l=2$, rejects $-1$"
+       ]
+      },
+      {
+       "id": "p-6ef377bd",
+       "pyq": "6ef377bd8e54e3b2",
+       "level": 2,
+       "points": [
+        "Take the rational limit $c=1/x$ ($c=1$ if $x=0$)",
+        "Define $a_n=c+\\sqrt2/n$",
+        "Each $a_n$ is irrational: rational plus irrational (else $\\sqrt2$ would be rational)",
+        "$a_n\\to c$ because $\\sqrt2/n\\to0$"
+       ]
+      },
+      {
+       "id": "p-3ce0e243",
+       "pyq": "3ce0e24319e36ed7",
+       "level": 2,
+       "points": [
+        "Even $n$: pair terms, sum is $-n/2$, so $x_n=-\\tfrac12$",
+        "Odd $n$: sum is $(n+1)/2$, so $x_n=\\frac{n+1}{2n}\\to\\tfrac12$",
+        "Two subsequences with different limits $-\\tfrac12$ and $\\tfrac12$",
+        "Hence not convergent (oscillates finitely)"
+       ]
+      }
+     ]
+    },
+    {
+     "id": "cauchy",
+     "title": "Cauchy sequences",
+     "theory_md": "$\\{x_n\\}$ is **Cauchy** if for every $\\varepsilon>0$ there is $N$ with $|x_m-x_n|<\\varepsilon$ for all $m,n>N$. In $\\mathbb R$, **Cauchy $\\iff$ convergent**, and a Cauchy criterion lets you prove convergence without knowing the limit.\n\n**Geometric tail trick:** if $|x_{n+1}-x_n|\\le Cr^n$ with $0<r<1$, then for $m>n$, by the triangle inequality, $|x_m-x_n|\\le\\sum_{k=n}^{m-1}Cr^k<\\dfrac{Cr^n}{1-r}\\to0$, so $\\{x_n\\}$ is Cauchy.\n\n$|x_{n+1}-x_n|\\to0$ alone is **not** enough: partial sums of $\\sum\\frac1n$ have it but diverge.",
+     "basics_md": "Terms of a Cauchy sequence get close to each other, not just to a limit. In the real numbers, getting close to each other forces getting close to a limit.",
+     "key_points": [
+      "Definition: $|x_m-x_n|<\\varepsilon$ for all $m,n>N$",
+      "Cauchy and convergent are equivalent in $\\mathbb R$",
+      "Triangle inequality plus geometric tail $\\frac{r^{n}}{1-r}$",
+      "Consecutive differences tending to 0 is not sufficient"
+     ],
+     "questions": [
+      {
+       "id": "ca-1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "Which sequence is Cauchy?",
+       "options": [
+        "$n$",
+        "$(-1)^n$",
+        "$\\dfrac1n$",
+        "$\\ln n$"
+       ],
+       "answer_index": 2,
+       "why": "$1/n$ converges, hence is Cauchy; the others are unbounded or oscillate."
+      },
+      {
+       "id": "ca-2",
+       "kind": "mcq",
+       "level": 2,
+       "q": "If $|x_{n+1}-x_n|=\\dfrac1n$ for all $n$, then $\\{x_n\\}$",
+       "options": [
+        "is Cauchy because the differences tend to 0",
+        "need not be Cauchy: it can behave like partial sums of $\\sum\\frac1n$",
+        "is Cauchy because $\\sum\\frac1n$ converges",
+        "is convergent to 0"
+       ],
+       "answer_index": 1,
+       "why": "Differences tending to 0 is not enough; $x_n=\\sum_{k<n}\\frac1k$ has these differences and diverges."
+      },
+      {
+       "id": "ca-3",
+       "kind": "short",
+       "level": 2,
+       "marks": 3,
+       "q": "Prove that every convergent sequence is a Cauchy sequence.",
+       "model_answer_md": "**Let** $x_n\\to l$. Given $\\varepsilon>0$, choose $N$ with $|x_n-l|<\\varepsilon/2$ for all $n>N$.\n\n**Then** for $m,n>N$, by the triangle inequality,\n$$|x_m-x_n|\\le|x_m-l|+|l-x_n|<\\frac\\varepsilon2+\\frac\\varepsilon2=\\varepsilon.$$\nHence $\\{x_n\\}$ is Cauchy.",
+       "points": [
+        "Chooses $N$ for $\\varepsilon/2$",
+        "Triangle inequality through $l$",
+        "Gets $<\\varepsilon$ for all $m,n>N$"
+       ]
+      },
+      {
+       "id": "p-c601d161",
+       "pyq": "c601d161b3937266",
+       "level": 2,
+       "points": [
+        "Take $m>n$; triangle inequality gives $|x_m-x_n|\\le\\sum_{k=n+1}^m|x_{k-1}-x_k|$",
+        "Each term $<r^k$, so the sum is $<\\frac{r^{n+1}}{1-r}$ (geometric series)",
+        "$r^n\\to0$, so for any $\\varepsilon$ choose $N$ with $\\frac{r^{N+1}}{1-r}<\\varepsilon$",
+        "Hence $|x_m-x_n|<\\varepsilon$ for $m,n\\ge N$: Cauchy"
+       ]
+      }
+     ]
+    },
+    {
+     "id": "series-sums",
+     "title": "Partial sums, geometric series, telescoping",
+     "theory_md": "A series $\\sum u_n$ **converges** iff its partial sums $S_n=u_1+\\dots+u_n$ converge; the sum is $\\lim S_n$.\n\n**Geometric:** $\\sum_{n=1}^\\infty ar^{n-1}=\\dfrac{a}{1-r}$ for $|r|<1$; diverges for $|r|\\ge1$.\n\n**Telescoping:** split $u_n$ by partial fractions so that terms cancel, e.g. $\\dfrac1{n(n+1)}=\\dfrac1n-\\dfrac1{n+1}$, giving $S_n=1-\\dfrac1{n+1}\\to1$.\n\nIf $u_n\\not\\to0$ the series diverges (next topic).",
+     "basics_md": "Add the terms one at a time and watch the running total. If the running total settles on a number, that number is the sum.",
+     "key_points": [
+      "Series converges iff $S_n$ converges",
+      "Geometric sum $\\frac{a}{1-r}$ for $|r|<1$",
+      "Partial fractions then cancel to get $S_n$ in closed form"
+     ],
+     "questions": [
+      {
+       "id": "ss-1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "The sum of $1+\\dfrac12+\\dfrac14+\\dfrac18+\\cdots$ is",
+       "options": [
+        "1",
+        "$\\dfrac32$",
+        "2",
+        "diverges"
+       ],
+       "answer_index": 2,
+       "why": "Geometric with $a=1$, $r=\\frac12$: $\\frac{1}{1-1/2}=2$."
+      },
+      {
+       "id": "ss-2",
+       "kind": "numerical",
+       "level": 2,
+       "marks": 2,
+       "q": "Find the sum of $\\displaystyle\\sum_{n=1}^\\infty 3\\left(\\frac23\\right)^{n-1}$.",
+       "model_answer_md": "Geometric series with first term $a=3$ and ratio $r=\\frac23$, $|r|<1$, so it converges.\n$$S=\\frac{a}{1-r}=\\frac{3}{1-\\frac23}=\\frac{3}{1/3}=9.$$",
+       "points": [
+        "Identifies $a=3$, $r=2/3$ and $|r|<1$",
+        "Applies $a/(1-r)$",
+        "Sum $=9$"
+       ]
+      },
+      {
+       "id": "ss-3",
+       "kind": "short",
+       "level": 3,
+       "marks": 3,
+       "q": "Show that $\\displaystyle\\sum_{n=1}^\\infty\\frac1{n(n+2)}$ converges and find its sum.",
+       "model_answer_md": "**1. Partial fractions:** $\\dfrac1{n(n+2)}=\\dfrac12\\left(\\dfrac1n-\\dfrac1{n+2}\\right)$.\n\n**2. Partial sum:** the terms cancel in steps of 2, leaving\n$$S_n=\\frac12\\left(1+\\frac12-\\frac1{n+1}-\\frac1{n+2}\\right).$$\n\n**3. Limit:** $S_n\\to\\frac12\\cdot\\frac32=\\dfrac34$. The partial sums converge, so the series converges to $\\dfrac34$.",
+       "points": [
+        "Partial fractions with the factor $\\frac12$",
+        "$S_n$ written after cancellation",
+        "$\\lim S_n=3/4$"
+       ]
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "topic": "Convergence of sequences and series",
+   "subtopics": [
+    {
+     "id": "nth-term-p",
+     "title": "nth-term test, geometric and p-series",
+     "theory_md": "**nth-term test:** if $u_n\\not\\to0$ (or the limit does not exist), $\\sum u_n$ **diverges**. The converse is false: $\\frac1n\\to0$ but $\\sum\\frac1n$ diverges.\n\n**p-series:** $\\sum\\dfrac1{n^p}$ converges iff $p>1$ ($p=1$ is the harmonic series, divergent).\n\n**Geometric:** $\\sum r^n$ converges iff $|r|<1$.\n\nAlways check $\\lim u_n$ first; if it is non-zero you are done in one line. Say the test by name and state the limit.",
+     "basics_md": "To add up forever and get a finite answer, the pieces must shrink to nothing. But shrinking to nothing is not enough: it must shrink fast enough.",
+     "key_points": [
+      "State the test: $u_n\\not\\to0$ implies divergence",
+      "Compute $\\lim u_n$ and quote its value",
+      "$p$-series: converges iff $p>1$",
+      "$u_n\\to0$ is necessary, not sufficient"
+     ],
+     "questions": [
+      {
+       "id": "np-1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "$\\displaystyle\\sum_{n=1}^\\infty\\frac1{n^{0.9}}$ is",
+       "options": [
+        "convergent since $\\frac1{n^{0.9}}\\to0$",
+        "divergent ($p<1$)",
+        "convergent ($p<1$)",
+        "oscillating"
+       ],
+       "answer_index": 1,
+       "why": "A $p$-series converges only for $p>1$; here $p=0.9$."
+      },
+      {
+       "id": "np-2",
+       "kind": "mcq",
+       "level": 2,
+       "q": "If $\\lim u_n=0$ then $\\sum u_n$ is",
+       "options": [
+        "always convergent",
+        "always divergent",
+        "may converge or diverge",
+        "convergent only if positive"
+       ],
+       "answer_index": 2,
+       "why": "$u_n\\to0$ is only necessary. $\\sum\\frac1{n^2}$ converges, $\\sum\\frac1n$ diverges."
+      },
+      {
+       "id": "np-3",
+       "kind": "short",
+       "level": 2,
+       "marks": 2,
+       "q": "Test the convergence of $\\displaystyle\\sum_{n=1}^\\infty\\frac{n}{2n+1}$.",
+       "model_answer_md": "$u_n=\\dfrac{n}{2n+1}=\\dfrac{1}{2+1/n}\\to\\dfrac12\\ne0$.\n\nBy the nth-term test, since $u_n\\not\\to0$, the series **diverges**.",
+       "points": [
+        "$\\lim u_n=\\frac12\\neq0$",
+        "Concludes divergence by the nth-term test"
+       ]
+      },
+      {
+       "id": "p-598897ab",
+       "pyq": "598897ab3f0344bc",
+       "level": 2,
+       "points": [
+        "$u_n=\\frac{1-2^{1-n}}{1+2^{-n}}\\to1\\ne0$",
+        "nth-term test: if $\\sum u_n$ converged then $u_n\\to0$",
+        "Hence the series diverges"
+       ]
+      },
+      {
+       "id": "p-70c1d377",
+       "pyq": "70c1d3774c7c6a8e",
+       "level": 2,
+       "points": [
+        "$u_n=1/n^{1/2}$, a $p$-series with $p=\\frac12$",
+        "$p$-series converges iff $p>1$; here $p\\le1$",
+        "Hence diverges (or $\\frac1{\\sqrt n}\\ge\\frac1n$ and harmonic diverges)"
+       ]
+      }
+     ]
+    },
+    {
+     "id": "comparison",
+     "title": "Comparison and limit comparison",
+     "theory_md": "For **positive** terms:\n\n**Comparison:** $0\\le u_n\\le v_n$ and $\\sum v_n$ converges $\\Rightarrow\\sum u_n$ converges; $u_n\\ge v_n$ and $\\sum v_n$ diverges $\\Rightarrow\\sum u_n$ diverges.\n\n**Limit comparison:** if $\\lim\\dfrac{u_n}{v_n}=c$ with $0<c<\\infty$, both series behave alike. Choose $v_n=\\dfrac1{n^p}$ from the highest powers (or $\\frac1{|x|^n}$ for geometric terms).\n\nUseful: $\\sin\\frac1n\\sim\\frac1n$, $1-e^{-1/n}\\sim\\frac1n$, $\\ln\\left(1+\\frac1n\\right)\\sim\\frac1n$. Then $p>1$ converges.",
+     "basics_md": "Compare your series with one you already know. If yours is smaller than a convergent one, it converges. If it is bigger than a divergent one, it diverges.",
+     "key_points": [
+      "Name the test and the comparison series $v_n$",
+      "Limit of $u_n/v_n$ finite and non-zero",
+      "State whether $\\sum v_n$ converges ($p>1$ or $|r|<1$)",
+      "Conclusion for $\\sum u_n$"
+     ],
+     "questions": [
+      {
+       "id": "cp-1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "To test $\\displaystyle\\sum\\frac1{n^2+1}$ the natural comparison series is",
+       "options": [
+        "$\\sum\\frac1n$",
+        "$\\sum\\frac1{n^2}$",
+        "$\\sum 2^{-n}$",
+        "$\\sum n^2$"
+       ],
+       "answer_index": 1,
+       "why": "Highest powers: $\\frac{1}{n^2}$. It converges ($p=2$), and the limit of the ratio is 1."
+      },
+      {
+       "id": "cp-2",
+       "kind": "mcq",
+       "level": 2,
+       "q": "$\\displaystyle\\sum\\frac{\\sqrt n}{n^2+1}$ is compared with",
+       "options": [
+        "$\\sum\\frac1{n^{3/2}}$, and it converges",
+        "$\\sum\\frac1{n^{3/2}}$, and it diverges",
+        "$\\sum\\frac1{n^{1/2}}$, and it diverges",
+        "$\\sum\\frac1{n}$, and it diverges"
+       ],
+       "answer_index": 0,
+       "why": "$u_n/n^{-3/2}\\to1$ and $p=\\frac32>1$, so it converges."
+      },
+      {
+       "id": "cp-3",
+       "kind": "short",
+       "level": 2,
+       "marks": 2,
+       "q": "Test the convergence of $\\displaystyle\\sum_{n=1}^\\infty\\frac{2n+1}{n^3+4}$.",
+       "model_answer_md": "All terms are positive. Take $v_n=\\dfrac1{n^2}$ (degree of denominator minus degree of numerator is 2).\n\n$$\\lim\\frac{u_n}{v_n}=\\lim\\frac{(2n+1)n^2}{n^3+4}=2,$$\nfinite and non-zero. $\\sum\\frac1{n^2}$ is a $p$-series with $p=2>1$, convergent. By the limit comparison test, $\\sum u_n$ **converges**.",
+       "points": [
+        "Chooses $v_n=1/n^2$",
+        "Limit of ratio $=2$, finite non-zero",
+        "$p=2>1$, so converges"
+       ]
+      },
+      {
+       "id": "p-5b2602ad",
+       "pyq": "5b2602ad50fd01a4",
+       "level": 3,
+       "points": [
+        "$|x|\\le1$: $x^n+1\\not\\to0$ ($\\to1$, or $\\frac12$ for $x=1$), so diverges by the nth-term test",
+        "$|x|>1$: $\\frac{1/(x^n+1)}{1/|x|^n}\\to1$; compare with the convergent geometric series $\\sum|x|^{-n}$",
+        "Converges exactly for $|x|>1$, i.e. $x>1$ or $x<-1$"
+       ]
+      },
+      {
+       "id": "p-6e3508d8",
+       "pyq": "6e3508d8e9ebfb5c",
+       "level": 2,
+       "points": [
+        "Positive terms; compare with $v_n=1/n^2$",
+        "$\\frac{1-e^{-1/n}}{1/n}\\to1$ and $\\frac{\\ln(1+1/n)}{1/n}\\to1$, so $u_n/v_n\\to1$",
+        "$\\sum 1/n^2$ is a $p$-series with $p=2>1$",
+        "Limit comparison gives convergence"
+       ]
+      },
+      {
+       "id": "p-523f436a",
+       "pyq": "523f436aed820fed",
+       "level": 2,
+       "points": [
+        "Positive terms; $v_n=1/n^{3/2}$",
+        "$u_n/v_n=\\frac{\\sin(1/n)}{1/n}\\to1$, finite non-zero",
+        "$p=\\frac32>1$, convergent",
+        "Hence converges (or $\\sin\\frac1n\\le\\frac1n$)"
+       ]
+      },
+      {
+       "id": "p-d9966223",
+       "pyq": "d99662233905c9a8",
+       "level": 3,
+       "points": [
+        "Numbers ending in $x$ have the form $10k+x$ (division algorithm), so $a_n=10(n-1)+x$ (or $10n$ if $x=0$)",
+        "$a_n<10n$, so $\\frac1{a_n}>\\frac1{10n}$",
+        "$\\sum\\frac1{10n}=\\frac1{10}\\sum\\frac1n$ diverges (harmonic)",
+        "Comparison test: $\\sum\\frac1{a_n}$ diverges"
+       ]
+      }
+     ]
+    },
+    {
+     "id": "ratio-root",
+     "title": "Ratio, root and Raabe tests; series in x",
+     "theory_md": "**Ratio test:** $\\lim\\dfrac{u_{n+1}}{u_n}=l$; converges if $l<1$, diverges if $l>1$, no decision if $l=1$. (Grewal's form is $\\lim\\frac{u_n}{u_{n+1}}=k$ with $k>1$ convergent: say which you use.) Best for factorials and powers $a^n$.\n\n**Root test:** $\\lim u_n^{1/n}=l$, same rule.\n\n**Raabe:** when ratio gives 1, $\\lim n\\left(\\frac{u_n}{u_{n+1}}-1\\right)=k$; converges if $k>1$, diverges if $k<1$.\n\n**Series in $x$:** ratio test gives the range of $|x|$; test the end points separately. The ratio test always gives 1 for a $p$-series.",
+     "basics_md": "The ratio test asks how fast the terms shrink step to step. If each term is less than a fixed fraction of the one before, the series behaves like a geometric series.",
+     "key_points": [
+      "Ratio $\\frac{u_{n+1}}{u_n}$ simplified, then its limit",
+      "$l<1$ converges, $l>1$ diverges, $l=1$ inconclusive",
+      "Series in $x$: range from ratio test, then check end points",
+      "Raabe or comparison when ratio gives 1"
+     ],
+     "questions": [
+      {
+       "id": "rr-1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "The best test for $\\displaystyle\\sum\\frac{2^n}{n!}$ is",
+       "options": [
+        "limit comparison with $\\frac1n$",
+        "D'Alembert's ratio test",
+        "nth-term test",
+        "integral test"
+       ],
+       "answer_index": 1,
+       "why": "Factorials and $a^n$ call for the ratio test; here $\\frac{u_{n+1}}{u_n}=\\frac{2}{n+1}\\to0<1$."
+      },
+      {
+       "id": "rr-2",
+       "kind": "mcq",
+       "level": 2,
+       "q": "For $\\sum\\frac1{n^2}$, the ratio $\\frac{u_{n+1}}{u_n}$ tends to 1. Then",
+       "options": [
+        "the series diverges",
+        "the series converges",
+        "the ratio test fails; use the $p$-series test",
+        "Raabe's test must give $k<1$"
+       ],
+       "answer_index": 2,
+       "why": "$l=1$ is inconclusive. The $p$-series test ($p=2>1$) shows it converges."
+      },
+      {
+       "id": "rr-3",
+       "kind": "short",
+       "level": 3,
+       "marks": 3,
+       "q": "Test the convergence of $\\displaystyle\\sum_{n=1}^\\infty\\frac{n!}{n^n}$.",
+       "model_answer_md": "$u_n=\\dfrac{n!}{n^n}$, so\n$$\\frac{u_{n+1}}{u_n}=\\frac{(n+1)!}{(n+1)^{n+1}}\\cdot\\frac{n^n}{n!}=\\frac{n^n}{(n+1)^n}=\\frac1{\\left(1+\\frac1n\\right)^n}\\to\\frac1e.$$\nSince $\\frac1e\\approx0.368<1$, the series **converges** by the ratio test.",
+       "points": [
+        "Forms $u_{n+1}/u_n$ and simplifies to $\\left(1+\\frac1n\\right)^{-n}$",
+        "Limit $1/e<1$",
+        "Concludes convergence by the ratio test"
+       ]
+      },
+      {
+       "id": "p-6df355cc",
+       "pyq": "6df355ccab3499e8",
+       "level": 2,
+       "points": [
+        "Ratio test on $u_k=\\frac{(k!)^22^k}{(2k+2)!}$",
+        "$\\frac{u_{k+1}}{u_k}=\\frac{2(k+1)^2}{(2k+4)(2k+3)}=\\frac{(k+1)^2}{(k+2)(2k+3)}$",
+        "Limit $=\\frac12<1$",
+        "Hence convergent"
+       ]
+      },
+      {
+       "id": "p-4fed2014",
+       "pyq": "4fed20149000e507",
+       "level": 3,
+       "points": [
+        "$n=0$ term is undefined; test from $n\\ge1$ (a finite number of terms does not matter)",
+        "Ratio test: $\\left|\\frac{u_{n+1}}{u_n}\\right|\\to x^2$; converges for $|x|<1$, diverges for $|x|>1$",
+        "$x=\\pm1$: $u_n=\\frac1{(n+1)\\sqrt n}$, limit comparison with $\\sum n^{-3/2}$ ($p=\\frac32>1$) converges",
+        "Result: converges for $-1\\le x\\le1$, diverges for $|x|>1$"
+       ]
+      }
+     ]
+    },
+    {
+     "id": "alternating",
+     "title": "Alternating series and absolute convergence",
+     "theory_md": "**Leibniz's test:** $\\sum(-1)^{n-1}b_n$ converges if $b_n>0$, $b_n$ is **decreasing** and $b_n\\to0$.\n\n**Absolutely convergent:** $\\sum|u_n|$ converges (then $\\sum u_n$ converges). **Conditionally convergent:** $\\sum u_n$ converges but $\\sum|u_n|$ diverges, e.g. $\\sum\\frac{(-1)^{n-1}}n$.\n\nApply the ratio or root test to $|u_n|$, never to the signed terms. In an answer, first test $\\sum|u_n|$; if it diverges, then use Leibniz.",
+     "basics_md": "Plus and minus terms partly cancel, so an alternating series can converge even when the same terms all added would not.",
+     "key_points": [
+      "Leibniz: decreasing and tends to 0",
+      "Absolute convergence implies convergence",
+      "Conditional: converges but not absolutely",
+      "Test $|u_n|$ first"
+     ],
+     "questions": [
+      {
+       "id": "al-1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "$\\displaystyle\\sum_{n=1}^\\infty\\frac{(-1)^{n-1}}{n}$ is",
+       "options": [
+        "absolutely convergent",
+        "conditionally convergent",
+        "divergent",
+        "oscillating"
+       ],
+       "answer_index": 1,
+       "why": "Leibniz's test gives convergence, but $\\sum\\frac1n$ diverges."
+      },
+      {
+       "id": "al-2",
+       "kind": "mcq",
+       "level": 2,
+       "q": "$\\displaystyle\\sum_{n=1}^\\infty\\frac{(-1)^n}{n^2}$ is",
+       "options": [
+        "absolutely convergent",
+        "conditionally convergent",
+        "divergent",
+        "not decided by any test"
+       ],
+       "answer_index": 0,
+       "why": "$\\sum\\frac1{n^2}$ converges ($p=2$), so it converges absolutely."
+      },
+      {
+       "id": "al-3",
+       "kind": "short",
+       "level": 2,
+       "marks": 3,
+       "q": "Discuss the convergence of $\\displaystyle\\sum_{n=1}^\\infty\\frac{(-1)^{n-1}}{\\sqrt n}$.",
+       "model_answer_md": "**1. Leibniz:** $b_n=\\frac1{\\sqrt n}$ is decreasing and $\\to0$, so the series **converges**.\n\n**2. Absolute value:** $\\sum\\frac1{\\sqrt n}$ is a $p$-series with $p=\\frac12\\le1$, divergent.\n\n**3. Conclusion:** the series is **conditionally convergent** (convergent, not absolutely).",
+       "points": [
+        "Leibniz conditions checked: decreasing and tends to 0",
+        "$\\sum|u_n|$ is a divergent $p$-series ($p=\\frac12$)",
+        "Conditionally convergent"
+       ]
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "topic": "Limit and continuity",
+   "subtopics": [
+    {
+     "id": "limit-paths",
+     "title": "Limits in two variables: paths and polar form",
+     "theory_md": "$\\lim_{(x,y)\\to(a,b)}f=l$ only if $f\\to l$ along **every** path.\n\n**Disprove a limit:** two paths giving different values, e.g. $y=mx$ (if the answer depends on $m$, no limit). If $y=mx$ gives the same value for all $m$, try $y=mx^2$.\n\n**Prove a limit:** bound $|f-l|\\le g$ with $g\\to0$, or use polar $x=r\\cos\\theta$, $y=r\\sin\\theta$, $r\\to0$, with a bound free of $\\theta$.\n\nA quotient $\\frac{f}{g}$ with $f\\to0$ need not tend to 0 when $g\\to0$ too. Repeated limits can differ from the double limit.",
+     "basics_md": "Near a point in the plane you can come from any direction. A limit exists only if every direction agrees.",
+     "key_points": [
+      "Limit must agree along all paths",
+      "Different values along two paths: limit does not exist",
+      "Existence: squeeze or polar bound independent of $\\theta$",
+      "Try $y=mx$, then $y=mx^2$"
+     ],
+     "questions": [
+      {
+       "id": "lp-1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "$\\displaystyle\\lim_{(x,y)\\to(0,0)}\\frac{xy}{x^2+y^2}$",
+       "options": [
+        "is 0",
+        "is $\\frac12$",
+        "is 1",
+        "does not exist"
+       ],
+       "answer_index": 3,
+       "why": "Along $y=mx$ the value is $\\frac{m}{1+m^2}$, which depends on $m$."
+      },
+      {
+       "id": "lp-2",
+       "kind": "mcq",
+       "level": 2,
+       "q": "For $f=\\dfrac{x^2y}{x^4+y^2}$, the paths $y=mx$ all give 0 as $(x,y)\\to(0,0)$. Then",
+       "options": [
+        "the limit is 0",
+        "the limit does not exist: $y=x^2$ gives $\\frac12$",
+        "the limit is $\\frac12$",
+        "the test is inconclusive and nothing more can be done"
+       ],
+       "answer_index": 1,
+       "why": "On $y=x^2$: $\\frac{x^4}{2x^4}=\\frac12\\ne0$."
+      },
+      {
+       "id": "lp-3",
+       "kind": "short",
+       "level": 2,
+       "marks": 3,
+       "q": "Evaluate $\\displaystyle\\lim_{(x,y)\\to(0,0)}\\frac{x^3-y^3}{x^2+y^2}$.",
+       "model_answer_md": "**Polar form:** $x=r\\cos\\theta$, $y=r\\sin\\theta$, $(x,y)\\to(0,0)\\iff r\\to0$.\n$$\\frac{x^3-y^3}{x^2+y^2}=\\frac{r^3(\\cos^3\\theta-\\sin^3\\theta)}{r^2}=r(\\cos^3\\theta-\\sin^3\\theta).$$\nSince $|\\cos^3\\theta-\\sin^3\\theta|\\le2$, the modulus is at most $2r\\to0$ independently of $\\theta$.\n\n**Limit $=0$.**",
+       "points": [
+        "Substitutes polar form",
+        "Simplifies to $r(\\cos^3\\theta-\\sin^3\\theta)$",
+        "Bound $\\le2r$ free of $\\theta$",
+        "Limit $=0$"
+       ]
+      },
+      {
+       "id": "p-3e6bb05f",
+       "pyq": "3e6bb05f6478b6c9",
+       "level": 2,
+       "points": [
+        "Statement is false",
+        "The limit of $g$ may be 0, giving a $0/0$ form",
+        "Counter-example $f=g=x$ at $(0,0)$: $f/g=1$, limit $1\\ne0$"
+       ]
+      },
+      {
+       "id": "p-7472bdec",
+       "pyq": "7472bdec3c4462e7",
+       "level": 2,
+       "points": [
+        "Statement is true",
+        "Write as $x\\cdot\\frac{x^2-y^2}{x^2+y^2}$ with $|x^2-y^2|\\le x^2+y^2$",
+        "So $|f|\\le|x|\\to0$; squeeze theorem gives limit $0$"
+       ]
+      }
+     ]
+    },
+    {
+     "id": "eps-delta",
+     "title": "Continuity and the epsilon-delta method",
+     "theory_md": "$f$ is **continuous** at $(a,b)$ if $f(a,b)$ exists, the limit exists, and they are equal.\n\n**$\\varepsilon$-$\\delta$:** for every $\\varepsilon>0$ find $\\delta>0$ such that $0<\\sqrt{(x-a)^2+(y-b)^2}<\\delta\\Rightarrow|f-f(a,b)|<\\varepsilon$.\n\n**Method:** put $\\rho=\\sqrt{x^2+y^2}$ and bound $|f|$ using $|x|,|y|\\le\\rho$, $|xy|\\le\\frac{\\rho^2}2$, $x^2+y^2=\\rho^2$. If $|f|\\le c\\rho$ take $\\delta=\\varepsilon/c$; if $|f|\\le c\\rho^2$ take $\\delta=\\sqrt{\\varepsilon/c}$.\n\nContinuity at the origin says nothing about $|f|<\\rho$.",
+     "basics_md": "Continuity says: stay close enough to the point and the function stays as close as you like to its value. Epsilon is how close you want the answer; delta is how close you must stay.",
+     "key_points": [
+      "Three conditions: defined, limit exists, equal",
+      "Bound $|f-f(a,b)|$ in terms of $\\rho=\\sqrt{x^2+y^2}$",
+      "Choose $\\delta$ from $\\varepsilon$ (e.g. $\\varepsilon/c$ or $\\sqrt{\\varepsilon}$)",
+      "State the conclusion: continuous"
+     ],
+     "questions": [
+      {
+       "id": "ed-1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "Continuity of $f$ at $(a,b)$ requires",
+       "options": [
+        "only that $f(a,b)$ is defined",
+        "only that the limit exists",
+        "$f(a,b)$ defined, limit exists, and the two are equal",
+        "that $f_x$ and $f_y$ exist"
+       ],
+       "answer_index": 2,
+       "why": "These are the three conditions."
+      },
+      {
+       "id": "ed-2",
+       "kind": "mcq",
+       "level": 2,
+       "q": "For $f=x^2+y^2$ at the origin, $|f|=\\rho^2$. For $\\varepsilon=0.04$ the value $\\delta=\\sqrt{\\varepsilon}$ is",
+       "options": [
+        "0.0016",
+        "0.04",
+        "0.2",
+        "0.4"
+       ],
+       "answer_index": 2,
+       "why": "$\\delta=\\sqrt{0.04}=0.2$: $\\rho<0.2\\Rightarrow\\rho^2<0.04$."
+      },
+      {
+       "id": "ed-3",
+       "kind": "short",
+       "level": 2,
+       "marks": 3,
+       "q": "Let $f(x,y)=\\dfrac{xy}{\\sqrt{x^2+y^2}}$ for $(x,y)\\ne(0,0)$ and $f(0,0)=0$. Show by $\\varepsilon$-$\\delta$ that $f$ is continuous at the origin.",
+       "model_answer_md": "Let $\\rho=\\sqrt{x^2+y^2}$. Since $|xy|\\le\\frac{x^2+y^2}2=\\frac{\\rho^2}2$,\n$$|f(x,y)-f(0,0)|=\\frac{|xy|}{\\rho}\\le\\frac\\rho2.$$\nGiven $\\varepsilon>0$ choose $\\delta=2\\varepsilon$. Then $0<\\rho<\\delta\\Rightarrow|f-f(0,0)|<\\varepsilon$.\n\nHence $f$ is continuous at $(0,0)$.",
+       "points": [
+        "Uses $|xy|\\le\\rho^2/2$",
+        "Bound $|f|\\le\\rho/2$",
+        "Chooses $\\delta=2\\varepsilon$ and concludes"
+       ]
+      },
+      {
+       "id": "p-45a283a2",
+       "pyq": "45a283a2b8489aa9",
+       "level": 2,
+       "points": [
+        "$|f-f(0,0)|=x^2+y^2=\\rho^2<\\delta^2$",
+        "Need $\\delta^2\\le\\varepsilon=0.01$",
+        "Take $\\delta=0.1$ (in general $\\delta=\\sqrt\\varepsilon$)"
+       ]
+      },
+      {
+       "id": "p-28f82a32",
+       "pyq": "28f82a323af36659",
+       "level": 2,
+       "points": [
+        "$x^4+y^4\\le(x^2+y^2)^2$, so $|f|\\le x^2+y^2<\\delta^2$",
+        "Given $\\varepsilon$ take $\\delta=\\sqrt\\varepsilon$",
+        "Hence $f$ is continuous at $(0,0)$"
+       ]
+      },
+      {
+       "id": "p-88a80ec0",
+       "pyq": "88a80ec0c4296311",
+       "level": 3,
+       "points": [
+        "Statement is false",
+        "Continuity with $f(0,0)=0$ only gives $|f|<\\varepsilon$ near origin, not $|f|<\\rho$",
+        "Counter-example $f=2\\sqrt{x^2+y^2}$ (or $f\\equiv0$ fails at the origin itself)"
+       ]
+      },
+      {
+       "id": "p-a8a85879",
+       "pyq": "a8a8587983cd89e7",
+       "level": 3,
+       "points": [
+        "$|f|\\le\\frac{3x^2|y|+|y|^3}{x^2+y^2}\\le3|y|\\le3\\rho$",
+        "Take $\\delta=\\varepsilon/3$: continuous at $(0,0)$",
+        "$f_y=\\frac{(3x^2-3y^2)(x^2+y^2)-(3x^2y-y^3)2y}{(x^2+y^2)^2}$ (quotient rule)",
+        "At $y=0$: $f_y(x,0)=3$"
+       ]
+      }
+     ]
+    },
+    {
+     "id": "diff-origin",
+     "title": "Partial derivatives at the origin and differentiability",
+     "theory_md": "Where the formula changes (the origin), use the **definition**:\n$$f_x(0,0)=\\lim_{h\\to0}\\frac{f(h,0)-f(0,0)}h,\\quad f_y(0,0)=\\lim_{k\\to0}\\frac{f(0,k)-f(0,0)}k.$$\nIf the limit is $\\pm\\infty$ or the two sides differ, the derivative does **not exist**.\n\n$f$ is **differentiable** at $(0,0)$ iff\n$$\\lim_{(h,k)\\to(0,0)}\\frac{f(h,k)-f(0,0)-hf_x(0,0)-kf_y(0,0)}{\\sqrt{h^2+k^2}}=0.$$\nDifferentiable $\\Rightarrow$ continuous and $f_x,f_y$ exist. The converse fails: partials can exist and $f$ still not be differentiable. Continuous $f_x,f_y$ $\\Rightarrow$ differentiable.",
+     "basics_md": "Differentiable means that near the point the surface looks like a flat tilted plane. Having a slope along the x and y directions alone does not guarantee that.",
+     "key_points": [
+      "Use the limit definition at the origin",
+      "Differentiable implies continuous and partials exist",
+      "Partials existing does not give differentiability",
+      "Test: the limit quotient must be 0; try $k=h$"
+     ],
+     "questions": [
+      {
+       "id": "do-1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "If $f$ is differentiable at a point, then",
+       "options": [
+        "$f$ is continuous there and $f_x,f_y$ exist",
+        "$f_x,f_y$ exist but $f$ may be discontinuous",
+        "$f_x,f_y$ are continuous",
+        "$f_{xy}=f_{yx}$"
+       ],
+       "answer_index": 0,
+       "why": "Differentiability gives both; the other statements are not implied."
+      },
+      {
+       "id": "do-2",
+       "kind": "mcq",
+       "level": 2,
+       "q": "If $f_x(0,0)$ and $f_y(0,0)$ both exist, then $f$ is",
+       "options": [
+        "continuous at the origin",
+        "differentiable at the origin",
+        "not necessarily continuous at the origin",
+        "discontinuous at the origin"
+       ],
+       "answer_index": 2,
+       "why": "Example $\\frac{xy}{x^2+y^2}$ (0 at origin) has both partials 0 yet is discontinuous."
+      },
+      {
+       "id": "do-3",
+       "kind": "short",
+       "level": 2,
+       "marks": 3,
+       "q": "For $f(x,y)=\\sqrt{|xy|}$, find $f_x(0,0)$, $f_y(0,0)$ and test differentiability at the origin.",
+       "model_answer_md": "**Partials:** $f(h,0)=0$ and $f(0,k)=0$, so $f_x(0,0)=f_y(0,0)=0$.\n\n**Differentiability:** need $\\displaystyle\\lim\\frac{f(h,k)-0-0-0}{\\sqrt{h^2+k^2}}=\\lim\\frac{\\sqrt{|hk|}}{\\sqrt{h^2+k^2}}=0$.\n\nAlong $k=h$: $\\dfrac{|h|}{\\sqrt2|h|}=\\dfrac1{\\sqrt2}\\ne0$.\n\nThe limit is not 0, so $f$ is **not differentiable** at the origin although both partials exist.",
+       "points": [
+        "$f_x(0,0)=f_y(0,0)=0$ from the definition",
+        "Writes the differentiability quotient",
+        "Path $k=h$ gives $1/\\sqrt2\\ne0$, not differentiable"
+       ]
+      },
+      {
+       "id": "p-df216b1b",
+       "pyq": "df216b1b0cebdfa8",
+       "level": 2,
+       "points": [
+        "Use the definition at the origin",
+        "$f_x(0,0)=\\lim\\frac{h/|h|}{h}=\\lim\\frac1{|h|}=\\infty$: does not exist",
+        "$f_y(0,0)=\\lim\\frac{0-0}k=0$"
+       ]
+      },
+      {
+       "id": "p-4bf350ac",
+       "pyq": "4bf350acc46ab7a3",
+       "level": 3,
+       "points": [
+        "For $(x,y)\\ne0$: $f_x=\\frac{y^2}{(x^2+y^2)^{3/2}}$, $f_y=\\frac{-xy}{(x^2+y^2)^{3/2}}$",
+        "$f_x(0,0)$ does not exist, so $f_x$ is not continuous at the origin",
+        "$f_y(0,0)=0$ but along $y=x$, $f_y=-\\frac{1}{2\\sqrt2|x|}\\to-\\infty$, so $f_y$ is not continuous"
+       ]
+      },
+      {
+       "id": "p-2a4a4a30",
+       "pyq": "2a4a4a309586bfb5",
+       "level": 3,
+       "points": [
+        "$f=|x|+|y|$: $|f|<2\\delta$, take $\\delta=\\varepsilon/2$, continuous",
+        "$g=|xy|$: $|g|\\le\\rho^2/2$, take $\\delta=\\sqrt\\varepsilon$, continuous",
+        "$f_x(0,0)=\\lim|h|/h$ has no limit ($\\pm1$), so $f$ is not differentiable",
+        "$g_x=g_y=0$ and $\\frac{|hk|}{\\sqrt{h^2+k^2}}\\le\\frac{\\rho}{2}\\to0$, so $g$ is differentiable"
+       ]
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "topic": "Partial differentiation",
+   "subtopics": [
+    {
+     "id": "pd-mixed",
+     "title": "Mixed partial derivatives and the origin",
+     "theory_md": "$f_{xy}=(f_x)_y$ and $f_{yx}=(f_y)_x$. **Schwarz (Clairaut):** if $f_{xy}$ and $f_{yx}$ are continuous at a point, they are equal there.\n\nAt a point where the formula changes (the origin) work in two steps with definitions:\n1. $f_x(0,y)=\\lim_{h\\to0}\\frac{f(h,y)-f(0,y)}h$ for all $y$.\n2. $f_{xy}(0,0)=\\lim_{k\\to0}\\frac{f_x(0,k)-f_x(0,0)}k$.\n\nDo the same for $f_{yx}$. For $f=\\frac{xy(x^2-y^2)}{x^2+y^2}$: $f_x(0,y)=-y$, $f_y(x,0)=x$, so $f_{xy}(0,0)=-1\\ne1=f_{yx}(0,0)$. If a limit blows up, say \"does not exist\".",
+     "basics_md": "Taking x-slope then y-slope usually gives the same answer as y then x. At a point where the formula breaks, the two orders can disagree.",
+     "key_points": [
+      "Mixed partials equal when continuous (Schwarz)",
+      "At the origin use limit definitions, two steps",
+      "Find $f_x(0,y)$ for general $y$, then differentiate in $y$",
+      "A limit of $\\pm1/k$ means the derivative does not exist"
+     ],
+     "questions": [
+      {
+       "id": "pm-1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "Mixed partials $f_{xy}$ and $f_{yx}$ are guaranteed equal at a point if",
+       "options": [
+        "$f$ is continuous",
+        "$f_x$ and $f_y$ exist",
+        "$f_{xy}$ and $f_{yx}$ are continuous there",
+        "$f$ is a polynomial only"
+       ],
+       "answer_index": 2,
+       "why": "This is Schwarz's theorem."
+      },
+      {
+       "id": "pm-2",
+       "kind": "mcq",
+       "level": 2,
+       "q": "For $f=\\dfrac{xy(x^2-y^2)}{x^2+y^2}$, $f(0,0)=0$: $f_{xy}(0,0)$ is",
+       "options": [
+        "$1$",
+        "$-1$",
+        "$0$",
+        "does not exist"
+       ],
+       "answer_index": 1,
+       "why": "$f_x(0,y)=-y$, so $f_{xy}(0,0)=-1$ (and $f_{yx}(0,0)=+1$)."
+      },
+      {
+       "id": "pm-3",
+       "kind": "short",
+       "level": 2,
+       "marks": 3,
+       "q": "Verify that $u_{xy}=u_{yx}$ for $u=\\log(x^2+y^2)$.",
+       "model_answer_md": "$u_x=\\dfrac{2x}{x^2+y^2}$ and $u_y=\\dfrac{2y}{x^2+y^2}$.\n\n$$u_{xy}=\\frac{\\partial}{\\partial y}\\frac{2x}{x^2+y^2}=\\frac{-2x\\cdot2y}{(x^2+y^2)^2}=\\frac{-4xy}{(x^2+y^2)^2},$$\n$$u_{yx}=\\frac{\\partial}{\\partial x}\\frac{2y}{x^2+y^2}=\\frac{-2y\\cdot2x}{(x^2+y^2)^2}=\\frac{-4xy}{(x^2+y^2)^2}.$$\nHence $u_{xy}=u_{yx}$.",
+       "points": [
+        "$u_x$ and $u_y$ correct",
+        "$u_{xy}=-4xy/(x^2+y^2)^2$",
+        "$u_{yx}$ same, so equal"
+       ]
+      },
+      {
+       "id": "p-329caa8e",
+       "pyq": "329caa8e8c397b41",
+       "level": 2,
+       "points": [
+        "Convention $f_{xy}=(f_x)_y$",
+        "$f_x(0,y)=\\lim\\frac{y(h^2-y^2)}{h^2+y^2}=-y$, so $f_{xy}(0,0)=-1$",
+        "$f_y(x,0)=x$, so $f_{yx}(0,0)=1$",
+        "Hence $f_{xy}(0,0)\\ne f_{yx}(0,0)$"
+       ]
+      },
+      {
+       "id": "p-ee884011",
+       "pyq": "ee884011d59908db",
+       "level": 2,
+       "points": [
+        "$f_x(0,y)=-y$ for all $y$, so $f_{xy}(0,0)=\\lim\\frac{-k}k=-1$",
+        "$f_y(x,0)=x$, so $f_{yx}(0,0)=\\lim\\frac hh=1$",
+        "The mixed partials are unequal (not continuous at the origin)"
+       ]
+      },
+      {
+       "id": "p-a3095649",
+       "pyq": "a3095649ce2ae165",
+       "level": 3,
+       "points": [
+        "$f_x(0,y)=\\lim\\frac{hy-y^2}{h^2+y^2}=-1$ for $y\\ne0$, and $f_x(0,0)=0$",
+        "$f_{xy}(0,0)=\\lim\\frac{-1-0}k=\\lim\\frac{-1}{k}$ does not exist",
+        "$f_y(x,0)=1$ for $x\\ne0$, $f_y(0,0)=0$, so $f_{yx}(0,0)=\\lim\\frac1h$ does not exist",
+        "Neither mixed partial exists at the origin"
+       ]
+      },
+      {
+       "id": "p-0d858c94",
+       "pyq": "0d858c94932c7d99",
+       "level": 3,
+       "points": [
+        "$f_x(0,0)=\\lim\\frac{f(h,0)}h=0$ and $f_y(0,0)=0$",
+        "Differentiable iff $\\frac{f(h,k)}{\\sqrt{h^2+k^2}}\\to0$; here the quotient is $\\frac{hk^2}{(h^2+k^2)^{3/2}}$",
+        "Along $k=h>0$ it equals $\\frac1{2\\sqrt2}\\ne0$",
+        "Not differentiable at the origin although the partials exist"
+       ]
+      }
+     ]
+    },
+    {
+     "id": "euler-first",
+     "title": "Euler's theorem, first order",
+     "theory_md": "$u$ is **homogeneous of degree $n$** if $u(tx,ty)=t^nu(x,y)$. The degree of a ratio is degree of numerator minus degree of denominator: $\\frac{x+y}{\\sqrt x+\\sqrt y}$ has degree $1-\\frac12=\\frac12$.\n\n**Euler:** $xu_x+yu_y=nu$ (add $+zu_z$ for three variables).\n\n**Exam twist:** if $u$ is not homogeneous but $F(u)$ is, of degree $n$, then\n$$xu_x+yu_y=n\\frac{F(u)}{F'(u)}=g(u).$$\n$\\sin u$: $n\\tan u$. $\\cos u$: $-n\\cot u$. $\\tan u$: $n\\sin u\\cos u=\\frac n2\\sin2u$. Write $z=F(u)$, its degree, then Euler.",
+     "basics_md": "A function is homogeneous of degree n when scaling x and y by t scales the whole function by t to the n. Euler's theorem is the derivative version of that statement.",
+     "key_points": [
+      "State $z=F(u)$ and show its degree $n$",
+      "Quote Euler: $xz_x+yz_y=nz$",
+      "Convert: $F'(u)(xu_x+yu_y)=nF(u)$",
+      "Final form, e.g. $n\\tan u$ or $\\frac n2\\sin2u$"
+     ],
+     "questions": [
+      {
+       "id": "e1-1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "The degree of homogeneity of $\\dfrac{x^2+y^2}{x+y}$ is",
+       "options": [
+        "0",
+        "1",
+        "2",
+        "3"
+       ],
+       "answer_index": 1,
+       "why": "Numerator degree 2 minus denominator degree 1."
+      },
+      {
+       "id": "e1-2",
+       "kind": "mcq",
+       "level": 2,
+       "q": "If $u=\\tan^{-1}\\dfrac{x^3+y^3}{x-y}$ then $xu_x+yu_y$ equals",
+       "options": [
+        "$2\\tan u$",
+        "$\\sin2u$",
+        "$\\tan2u$",
+        "$2u$"
+       ],
+       "answer_index": 1,
+       "why": "$\\tan u$ has degree 2, so $xu_x+yu_y=2\\sin u\\cos u=\\sin2u$."
+      },
+      {
+       "id": "e1-3",
+       "kind": "short",
+       "level": 3,
+       "marks": 4,
+       "q": "State and prove Euler's theorem on homogeneous functions of two variables (first order).",
+       "model_answer_md": "**Statement:** if $u(x,y)$ is homogeneous of degree $n$ (with continuous first partials) then $x\\dfrac{\\partial u}{\\partial x}+y\\dfrac{\\partial u}{\\partial y}=nu$.\n\n**Proof:** by definition $u(tx,ty)=t^nu(x,y)$.\n\n1. Differentiate both sides with respect to $t$. With $X=tx$, $Y=ty$ the chain rule gives\n$$x\\,u_X(tx,ty)+y\\,u_Y(tx,ty)=nt^{n-1}u(x,y).$$\n2. Put $t=1$: $xu_x+yu_y=nu$. $\\blacksquare$",
+       "points": [
+        "Statement with degree $n$",
+        "Differentiates $u(tx,ty)=t^nu$ with respect to $t$ using the chain rule",
+        "Puts $t=1$ to get the result"
+       ]
+      },
+      {
+       "id": "p-8d1c958e",
+       "pyq": "8d1c958e56062bdd",
+       "level": 2,
+       "points": [
+        "Let $f=\\cos u=\\frac{x+y}{\\sqrt x+\\sqrt y}$, homogeneous of degree $\\frac12$",
+        "Euler: $xf_x+yf_y=\\frac12f$",
+        "$f_x=-\\sin u\\,u_x$ etc., so $-\\sin u(xu_x+yu_y)=\\frac12\\cos u$",
+        "$xu_x+yu_y=-\\frac12\\cot u$"
+       ]
+      },
+      {
+       "id": "p-af38ede7",
+       "pyq": "af38ede7c6761e54",
+       "level": 2,
+       "points": [
+        "$v=\\sin u=\\frac{x+2y+3z}{x^8+y^8+z^8}$ has degree $1-8=-7$",
+        "Euler (three variables): $xv_x+yv_y+zv_z=-7v$",
+        "$\\cos u(xu_x+yu_y+zu_z)=-7\\sin u$",
+        "Result: $-7\\tan u$"
+       ]
+      },
+      {
+       "id": "p-5d876833",
+       "pyq": "5d8768337e91538c",
+       "level": 2,
+       "points": [
+        "$z=\\sin u=\\frac{x^6+y^6}{x+y}$ is homogeneous of degree $6-1=5$",
+        "Euler: $xz_x+yz_y=5z$",
+        "$\\cos u(xu_x+yu_y)=5\\sin u$",
+        "Result: $5\\tan u$"
+       ]
+      },
+      {
+       "id": "p-eec75fe4",
+       "pyq": "eec75fe48d15c890",
+       "level": 2,
+       "points": [
+        "$z=\\tan t=\\frac{x^2+y^2}{x-y}$ is homogeneous of degree 1",
+        "Euler: $xz_x+yz_y=z$, with $z_x=\\sec^2t\\,t_x$",
+        "$xt_x+yt_y=\\tan t\\cos^2t=\\sin t\\cos t$",
+        "$=\\frac12\\sin2t$"
+       ]
+      }
+     ]
+    },
+    {
+     "id": "euler-second",
+     "title": "Euler's theorem, second order",
+     "theory_md": "For $u$ homogeneous of degree $n$:\n$$x^2u_{xx}+2xyu_{xy}+y^2u_{yy}=n(n-1)u.$$\n\nIf only $F(u)$ is homogeneous of degree $n$ and $g(u)=n\\frac{F}{F'}$ (so $xu_x+yu_y=g$), then\n$$x^2u_{xx}+2xyu_{xy}+y^2u_{yy}=g(u)\\,[g'(u)-1].$$\n**Why:** apply $D=x\\partial_x+y\\partial_y$ to $Du=g$: $D^2u=x^2u_{xx}+2xyu_{xy}+y^2u_{yy}+Du=g'g$.\n\n**If $f=e^z$ with $z$ homogeneous of degree $n$:** $f_{xx}=f(z_{xx}+z_x^2)$ etc., giving $x^2f_{xx}+2xyf_{xy}+y^2f_{yy}=f\\left[n(n-1)z+n^2z^2\\right]$.",
+     "basics_md": "Apply the first-order Euler operator twice. The second application also hits the x and y inside the first one, which is where the extra minus one comes from.",
+     "key_points": [
+      "Homogeneous: $n(n-1)u$",
+      "Otherwise $g(g'-1)$ with $g=nF/F'$",
+      "Write $g$ and $g'$ explicitly, then simplify",
+      "Trig identities to finish (e.g. $2\\sin2u\\cos2u=\\sin4u$)"
+     ],
+     "questions": [
+      {
+       "id": "e2-1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "For $u$ homogeneous of degree $n$, $x^2u_{xx}+2xyu_{xy}+y^2u_{yy}=$",
+       "options": [
+        "$nu$",
+        "$n^2u$",
+        "$n(n-1)u$",
+        "$(n-1)u$"
+       ],
+       "answer_index": 2,
+       "why": "Second-order Euler."
+      },
+      {
+       "id": "e2-2",
+       "kind": "mcq",
+       "level": 2,
+       "q": "For $u=x^4+y^4$, $x^2u_{xx}+2xyu_{xy}+y^2u_{yy}=$",
+       "options": [
+        "$4u$",
+        "$12u$",
+        "$16u$",
+        "$24u$"
+       ],
+       "answer_index": 1,
+       "why": "Degree 4: $n(n-1)=12$. Check: $12x^4+12y^4$."
+      },
+      {
+       "id": "e2-3",
+       "kind": "short",
+       "level": 2,
+       "marks": 3,
+       "q": "If $u=\\sin^{-1}\\dfrac xy+\\tan^{-1}\\dfrac yx$, find $xu_x+yu_y$ and $x^2u_{xx}+2xyu_{xy}+y^2u_{yy}$.",
+       "model_answer_md": "Both terms are functions of $y/x$, so $u$ is homogeneous of degree $n=0$.\n\n1. First order: $xu_x+yu_y=nu=0$.\n2. Second order: $x^2u_{xx}+2xyu_{xy}+y^2u_{yy}=n(n-1)u=0$.",
+       "points": [
+        "Shows homogeneous of degree 0",
+        "$xu_x+yu_y=0$",
+        "Second-order expression $=0$"
+       ]
+      },
+      {
+       "id": "p-60915c03",
+       "pyq": "60915c032e510ab5",
+       "level": 3,
+       "points": [
+        "$\\tan u=\\frac{x^3+y^3}{x-y}$ is homogeneous of degree 2",
+        "Euler: $xu_x+yu_y=\\sin2u=g(u)$",
+        "Second order: $g(g'-1)=\\sin2u(2\\cos2u-1)$",
+        "$=\\sin4u-\\sin2u$"
+       ]
+      },
+      {
+       "id": "p-e060a05b",
+       "pyq": "e060a05b9e2f10be",
+       "level": 3,
+       "points": [
+        "$\\sin u=\\frac{x+y}{\\sqrt x+\\sqrt y}$ has degree $\\frac12$",
+        "$xu_x+yu_y=\\frac12\\tan u=g$",
+        "$g(g'-1)=\\frac12\\tan u\\left(\\frac12\\sec^2u-1\\right)$",
+        "$=-\\frac{\\sin u\\cos2u}{4\\cos^3u}$ using $1-2\\cos^2u=-\\cos2u$"
+       ]
+      },
+      {
+       "id": "p-221d8a0c",
+       "pyq": "221d8a0c032bb93e",
+       "level": 3,
+       "points": [
+        "$z=\\log f$ is homogeneous of degree 4, $f=e^z$",
+        "$xz_x+yz_y=4z$ and $x^2z_{xx}+2xyz_{xy}+y^2z_{yy}=12z$",
+        "$f_{xx}=f(z_{xx}+z_x^2)$ etc., so LHS $=f[12z+16z^2]$",
+        "Exact value $12f\\log f+16f(\\log f)^2$; the printed RHS $16f\\log f$ does not hold, so the question is misprinted"
+       ]
+      },
+      {
+       "id": "p-c42a6029",
+       "pyq": "c42a6029054d098a",
+       "level": 2,
+       "points": [
+        "$e^u=\\frac{x^2+y^2}{x+y}$ is homogeneous of degree 1, so $xu_x+yu_y=1$",
+        "Differentiate this with respect to $x$ and $y$",
+        "Multiply by $x$ and $y$ and add: $x^2u_{xx}+2xyu_{xy}+y^2u_{yy}+(xu_x+yu_y)=0$",
+        "Result: $-1$ (or $g=1$, $g'=0$, $g(g'-1)=-1$)"
+       ]
+      }
+     ]
+    },
+    {
+     "id": "pd-manipulation",
+     "title": "Chain rule, implicit and operator problems",
+     "theory_md": "Typical proofs:\n- **Combined arguments:** for $\\theta=f\\left(\\frac{y-x}{xy},\\frac{z-x}{xz}\\right)$ put $u=\\frac1x-\\frac1y$, $v=\\frac1x-\\frac1z$ and use the chain rule: $\\theta_x=f_uu_x+f_vv_x$.\n- **Implicit:** $x^xy^yz^z=c$: take logs, $x\\ln x+y\\ln y+z\\ln z=\\ln c$; differentiate with $z=z(x,y)$: $z_x=-\\frac{1+\\ln x}{1+\\ln z}$.\n- **$v(r)$, $r^2=x^2+y^2$:** $r_x=\\frac xr$, $v_{xx}=v''\\frac{x^2}{r^2}+v'\\left(\\frac1r-\\frac{x^2}{r^3}\\right)$.\n- **Operator:** $(\\partial_x+\\partial_y+\\partial_z)^2u$ means apply twice; factor $x^3+y^3+z^3-3xyz=(x+y+z)(x^2+y^2+z^2-xy-yz-zx)$.",
+     "basics_md": "These are chain-rule bookkeeping questions. Name the inner functions, differentiate once, and let the cancellations do the proof.",
+     "key_points": [
+      "Introduce inner variables and use the chain rule",
+      "Take logs for products with variable powers",
+      "Factor before differentiating (log of a product)",
+      "Apply an operator twice, simplify after each application"
+     ],
+     "questions": [
+      {
+       "id": "pdm-1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "If $r^2=x^2+y^2$ then $\\dfrac{\\partial r}{\\partial x}=$",
+       "options": [
+        "$\\dfrac xr$",
+        "$\\dfrac rx$",
+        "$2x$",
+        "$\\dfrac{x}{r^2}$"
+       ],
+       "answer_index": 0,
+       "why": "$2rr_x=2x$."
+      },
+      {
+       "id": "pdm-2",
+       "kind": "mcq",
+       "level": 2,
+       "q": "$x^3+y^3+z^3-3xyz$ factorises as",
+       "options": [
+        "$(x+y+z)(x^2+y^2+z^2-xy-yz-zx)$",
+        "$(x+y+z)(x^2+y^2+z^2+xy+yz+zx)$",
+        "$(x-y)(y-z)(z-x)$",
+        "$(x+y+z)^3$"
+       ],
+       "answer_index": 0,
+       "why": "Standard identity; it makes $\\log$ of this expression easy."
+      },
+      {
+       "id": "pdm-3",
+       "kind": "short",
+       "level": 2,
+       "marks": 3,
+       "q": "If $u=f(x-y,\\;y-z,\\;z-x)$, show that $u_x+u_y+u_z=0$.",
+       "model_answer_md": "Put $p=x-y$, $q=y-z$, $r=z-x$, so $u=f(p,q,r)$.\n\n| | $p$ | $q$ | $r$ |\n|---|---|---|---|\n| $\\partial/\\partial x$ | $1$ | $0$ | $-1$ |\n| $\\partial/\\partial y$ | $-1$ | $1$ | $0$ |\n| $\\partial/\\partial z$ | $0$ | $-1$ | $1$ |\n\n$u_x=f_p-f_r$, $u_y=-f_p+f_q$, $u_z=-f_q+f_r$.\n\nAdding, everything cancels: $u_x+u_y+u_z=0$. $\\blacksquare$",
+       "points": [
+        "Names $p,q,r$",
+        "Writes $u_x,u_y,u_z$ by the chain rule",
+        "Adds and cancels to 0"
+       ]
+      },
+      {
+       "id": "p-4f479677",
+       "pyq": "4f479677b61b6b5a",
+       "level": 3,
+       "points": [
+        "Take logs: $x\\ln x+y\\ln y+z\\ln z=\\ln c$, $z=z(x,y)$",
+        "$z_x=-\\frac{1+\\ln x}{1+\\ln z}$, $z_y=-\\frac{1+\\ln y}{1+\\ln z}$",
+        "$z_{xy}=-\\frac{(1+\\ln x)(1+\\ln y)}{z(1+\\ln z)^3}$",
+        "Put $x=y=z$: $-\\frac1{x(1+\\ln x)}=-(x\\log ex)^{-1}$"
+       ]
+      },
+      {
+       "id": "p-d14d2850",
+       "pyq": "d14d2850d4ab5fd0",
+       "level": 3,
+       "points": [
+        "Take logs: $x\\ln x+y\\ln y+z\\ln z=\\ln c$",
+        "$z_x=-\\frac{1+\\ln x}{1+\\ln z}$ and $z_y$ similarly",
+        "Differentiate $z_x$ with respect to $y$: $z_{xy}=-\\frac{(1+\\ln x)(1+\\ln y)}{z(1+\\ln z)^3}$",
+        "At $x=y=z$ this is $-(x\\log ex)^{-1}$ since $\\log ex=1+\\log x$"
+       ]
+      },
+      {
+       "id": "p-da29e250",
+       "pyq": "da29e25088238f2f",
+       "level": 2,
+       "points": [
+        "$r_x=\\frac xr$, $r_y=\\frac yr$",
+        "$r_{xx}=\\frac{y^2}{r^3}$, $r_{yy}=\\frac{x^2}{r^3}$",
+        "LHS $=\\frac{x^2+y^2}{r^3}=\\frac1r$",
+        "RHS $=\\frac1r\\cdot\\frac{x^2+y^2}{r^2}=\\frac1r$, equal"
+       ]
+      },
+      {
+       "id": "p-7a53fefd",
+       "pyq": "7a53fefd5faec8e2",
+       "level": 2,
+       "points": [
+        "$v_x=v'(r)\\frac xr$",
+        "$v_{xx}=v''\\frac{x^2}{r^2}+v'\\left(\\frac1r-\\frac{x^2}{r^3}\\right)$, similarly $v_{yy}$",
+        "Add using $x^2+y^2=r^2$",
+        "$v_{xx}+v_{yy}=v''+\\frac1rv'$"
+       ]
+      },
+      {
+       "id": "p-af133b81",
+       "pyq": "af133b817933b748",
+       "level": 2,
+       "points": [
+        "$V=x^3+y^3+z^3-3xyz=(x+y+z)(x^2+y^2+z^2-xy-yz-zx)$",
+        "$(\\partial_x+\\partial_y+\\partial_z)u=\\frac{3(x^2+y^2+z^2-xy-yz-zx)}{V}=\\frac3{x+y+z}$",
+        "Apply the operator again, $(\\partial_x+\\partial_y+\\partial_z)(x+y+z)=3$",
+        "Result $-\\frac9{(x+y+z)^2}$"
+       ]
+      },
+      {
+       "id": "p-f8a550ef",
+       "pyq": "f8a550ef2deb2086",
+       "level": 2,
+       "points": [
+        "Factor: $x^3+y^3-x^2y-xy^2=(x+y)(x-y)^2$",
+        "$u=\\log(x+y)+2\\log(x-y)$",
+        "$(\\partial_x+\\partial_y)u=\\frac2{x+y}$",
+        "Apply again: $-\\frac4{(x+y)^2}$"
+       ]
+      },
+      {
+       "id": "p-93df7462",
+       "pyq": "93df7462b1e6cc8f",
+       "level": 3,
+       "points": [
+        "Put $u=\\frac1x-\\frac1y$, $v=\\frac1x-\\frac1z$, $\\theta=f(u,v)$",
+        "$u_x=v_x=-\\frac1{x^2}$, $u_y=\\frac1{y^2}$, $v_z=\\frac1{z^2}$, others 0",
+        "$\\theta_x=-\\frac{f_u+f_v}{x^2}$, $\\theta_y=\\frac{f_u}{y^2}$, $\\theta_z=\\frac{f_v}{z^2}$",
+        "$x^2\\theta_x+y^2\\theta_y+z^2\\theta_z=0$"
+       ]
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "topic": "Total differentiation",
+   "subtopics": [
+    {
+     "id": "chain-total",
+     "title": "Total differential, chain rule and implicit functions",
+     "theory_md": "**Total differential:** $du=u_xdx+u_ydy$. If $x,y$ depend on $t$:\n$$\\frac{du}{dt}=\\frac{\\partial u}{\\partial x}\\frac{dx}{dt}+\\frac{\\partial u}{\\partial y}\\frac{dy}{dt}.$$\nDraw the tree $u\\to x,y\\to t$: one product per branch.\n\n**Implicit:** $F(x,y)=c\\Rightarrow\\dfrac{dy}{dx}=-\\dfrac{F_x}{F_y}$.\n\n**Differentiable at a point** means $\\Delta f=f_xh+f_yk+\\varepsilon_1h+\\varepsilon_2k$ with $\\varepsilon_i\\to0$. Putting $k=0$ (or $h=0$) shows $f_x$ and $f_y$ exist, and $f$ is continuous. The converse is false.",
+     "basics_md": "When a quantity depends on two things and both change with time, its total rate of change is the sum of the two separate effects.",
+     "key_points": [
+      "$du=u_xdx+u_ydy$",
+      "Chain rule: one term per branch of the tree",
+      "$dy/dx=-F_x/F_y$ for $F(x,y)=c$",
+      "Differentiable implies partials exist and continuity"
+     ],
+     "questions": [
+      {
+       "id": "ct-1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "If $x^2+y^2=25$ then $\\dfrac{dy}{dx}=$",
+       "options": [
+        "$\\dfrac xy$",
+        "$-\\dfrac xy$",
+        "$-\\dfrac yx$",
+        "$\\dfrac{y}{x}$"
+       ],
+       "answer_index": 1,
+       "why": "$-F_x/F_y=-2x/2y$."
+      },
+      {
+       "id": "ct-2",
+       "kind": "mcq",
+       "level": 2,
+       "q": "If $u=x^2y$, $x=t^2$, $y=t^3$ then $\\dfrac{du}{dt}=$",
+       "options": [
+        "$5t^4$",
+        "$7t^6$",
+        "$6t^5$",
+        "$t^7$"
+       ],
+       "answer_index": 1,
+       "why": "$u=t^7$; chain rule: $2xy(2t)+x^2(3t^2)=4t^6+3t^6=7t^6$."
+      },
+      {
+       "id": "ct-3",
+       "kind": "short",
+       "level": 2,
+       "marks": 3,
+       "q": "If $x^3+y^3=3axy$, find $\\dfrac{dy}{dx}$.",
+       "model_answer_md": "Let $F=x^3+y^3-3axy=0$.\n\n$F_x=3x^2-3ay$, $F_y=3y^2-3ax$.\n$$\\frac{dy}{dx}=-\\frac{F_x}{F_y}=-\\frac{x^2-ay}{y^2-ax}=\\frac{ay-x^2}{y^2-ax}.$$",
+       "points": [
+        "Writes $F=0$ and finds $F_x,F_y$",
+        "Uses $-F_x/F_y$",
+        "Correct simplified result"
+       ]
+      },
+      {
+       "id": "p-02dc365e",
+       "pyq": "02dc365e64ff507a",
+       "level": 2,
+       "points": [
+        "Chain rule $\\frac{du}{dt}=u_x\\frac{dx}{dt}+u_y\\frac{dy}{dt}$",
+        "$u_x=\\frac1{\\sqrt{1-(x-y)^2}}$, $u_y=-u_x$, $\\frac{dx}{dt}=3$, $\\frac{dy}{dt}=12t^2$",
+        "$\\frac{du}{dt}=\\frac{3-12t^2}{\\sqrt{1-(3t-4t^3)^2}}$"
+       ]
+      },
+      {
+       "id": "p-d4c0af17",
+       "pyq": "d4c0af1735a13ff2",
+       "level": 2,
+       "points": [
+        "Statement is true",
+        "Differentiable: $\\Delta f=Ah+Bk+\\varepsilon_1h+\\varepsilon_2k$",
+        "Put $k=0$, divide by $h$: $f_x=A$; put $h=0$: $f_y=B$"
+       ]
+      }
+     ]
+    },
+    {
+     "id": "change-var",
+     "title": "Change of variables and second-order chain rule",
+     "theory_md": "If $z=f(u,v)$ with $u,v$ functions of $(x,y)$: $z_x=z_uu_x+z_vv_x$, $z_y=z_uu_y+z_vv_y$.\n\nFor second order, differentiate $z_x$ again, remembering $z_u,z_v$ are themselves functions of $(u,v)$.\n\nFor $u=e^x\\cos y$, $v=e^x\\sin y$: $u_x=u$, $v_x=v$, $u_y=-v$, $v_y=u$, giving $z_{xx}+z_{yy}=(u^2+v^2)(z_{uu}+z_{vv})$.\n\n**Polar:** $x=r\\cos\\theta$, $y=r\\sin\\theta$ gives $z_x^2+z_y^2=z_r^2+\\dfrac1{r^2}z_\\theta^2$. **Jacobian:** $\\frac{\\partial(x,y)}{\\partial(r,\\theta)}=r$.",
+     "basics_md": "Changing coordinates is relabelling the plane. The chain rule translates slopes from the old labels to the new ones.",
+     "key_points": [
+      "First derivatives $z_x,z_y$ by the chain rule",
+      "Second derivatives: differentiate again, treat $z_u,z_v$ as functions of $(u,v)$",
+      "Add: cross and first-derivative terms cancel",
+      "Final form $(u^2+v^2)(z_{uu}+z_{vv})$"
+     ],
+     "questions": [
+      {
+       "id": "cv-1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "The Jacobian $\\dfrac{\\partial(x,y)}{\\partial(r,\\theta)}$ for $x=r\\cos\\theta$, $y=r\\sin\\theta$ is",
+       "options": [
+        "$1$",
+        "$r$",
+        "$r^2$",
+        "$\\dfrac1r$"
+       ],
+       "answer_index": 1,
+       "why": "$\\begin{vmatrix}\\cos\\theta&-r\\sin\\theta\\\\\\sin\\theta&r\\cos\\theta\\end{vmatrix}=r$."
+      },
+      {
+       "id": "cv-2",
+       "kind": "mcq",
+       "level": 2,
+       "q": "For $x=r\\cos\\theta$, $y=r\\sin\\theta$, $z_r=$",
+       "options": [
+        "$z_x\\cos\\theta+z_y\\sin\\theta$",
+        "$-z_x\\sin\\theta+z_y\\cos\\theta$",
+        "$z_x\\sin\\theta+z_y\\cos\\theta$",
+        "$r(z_x\\cos\\theta+z_y\\sin\\theta)$"
+       ],
+       "answer_index": 0,
+       "why": "$z_r=z_xx_r+z_yy_r$ with $x_r=\\cos\\theta$, $y_r=\\sin\\theta$."
+      },
+      {
+       "id": "cv-3",
+       "kind": "short",
+       "level": 2,
+       "marks": 4,
+       "q": "If $x=r\\cos\\theta$, $y=r\\sin\\theta$ and $z=f(x,y)$, show that $z_x^2+z_y^2=z_r^2+\\dfrac1{r^2}z_\\theta^2$.",
+       "model_answer_md": "**Chain rule:**\n$z_r=z_x\\cos\\theta+z_y\\sin\\theta$,\n$z_\\theta=-rz_x\\sin\\theta+rz_y\\cos\\theta$.\n\n**Square and add:**\n$$z_r^2+\\frac{z_\\theta^2}{r^2}=(z_x\\cos\\theta+z_y\\sin\\theta)^2+(-z_x\\sin\\theta+z_y\\cos\\theta)^2.$$\nThe cross terms $\\pm2z_xz_y\\sin\\theta\\cos\\theta$ cancel and $\\cos^2\\theta+\\sin^2\\theta=1$:\n$$=z_x^2+z_y^2.\\ \\blacksquare$$",
+       "points": [
+        "$z_r$ by the chain rule",
+        "$z_\\theta$ with the factor $r$",
+        "Cross terms cancel and $\\sin^2+\\cos^2=1$"
+       ]
+      },
+      {
+       "id": "p-17f676b4",
+       "pyq": "17f676b41556b868",
+       "level": 3,
+       "points": [
+        "$u_x=u$, $v_x=v$, $u_y=-v$, $v_y=u$",
+        "$z_x=uz_u+vz_v$, $z_y=-vz_u+uz_v$",
+        "$z_{xx}=u^2z_{uu}+2uvz_{uv}+v^2z_{vv}+uz_u+vz_v$",
+        "$z_{yy}=v^2z_{uu}-2uvz_{uv}+u^2z_{vv}-uz_u-vz_v$",
+        "Add: $(u^2+v^2)(z_{uu}+z_{vv})$"
+       ]
+      },
+      {
+       "id": "p-107ef006",
+       "pyq": "107ef0064ffe19bd",
+       "level": 3,
+       "points": [
+        "$u_x=u$, $v_x=v$, $u_y=-v$, $v_y=u$",
+        "$z_x=uz_u+vz_v$, $z_y=-vz_u+uz_v$",
+        "$z_{xx}$ and $z_{yy}$ by differentiating again with the chain rule",
+        "Adding cancels $z_{uv}$, $z_u$, $z_v$ terms: $(u^2+v^2)(z_{uu}+z_{vv})$"
+       ]
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "topic": "Taylor's series",
+   "subtopics": [
+    {
+     "id": "taylor-formula",
+     "title": "Taylor's formula in two variables",
+     "theory_md": "About $(a,b)$, with $h=x-a$, $k=y-b$:\n$$f=f(a,b)+(hf_x+kf_y)+\\frac1{2!}\\left(h^2f_{xx}+2hkf_{xy}+k^2f_{yy}\\right)+\\cdots$$\nall derivatives at $(a,b)$. Third order: $\\frac1{3!}(h^3f_{xxx}+3h^2kf_{xxy}+3hk^2f_{xyy}+k^3f_{yyy})$.\n\n**Method:** table of $f,f_x,f_y,f_{xx},f_{xy},f_{yy}$ at $(a,b)$; substitute; write the answer in powers of $(x-a)$ and $(y-b)$. Expanding \"in powers of $(y+2)$\" means $b=-2$.\n\nMaclaurin: $(a,b)=(0,0)$.",
+     "basics_md": "Taylor's series approximates a smooth function near a point by a polynomial that matches its value, slopes and curvature there.",
+     "key_points": [
+      "Formula with $h=x-a$, $k=y-b$",
+      "Table of derivatives at the point",
+      "Coefficient: $\\frac12$ overall, $2hk f_{xy}$ in the middle",
+      "Answer in powers of $(x-a)$, $(y-b)$"
+     ],
+     "questions": [
+      {
+       "id": "tf-1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "In the second-degree term of Taylor's series, the coefficient of $hk$ is",
+       "options": [
+        "$f_{xy}$",
+        "$\\dfrac12f_{xy}$",
+        "$2f_{xy}$",
+        "$f_{xx}f_{yy}$"
+       ],
+       "answer_index": 0,
+       "why": "$\\frac1{2!}\\cdot2hkf_{xy}=hkf_{xy}$."
+      },
+      {
+       "id": "tf-2",
+       "kind": "mcq",
+       "level": 2,
+       "q": "Expanding in powers of $(x-1)$ and $(y+2)$ means the point is",
+       "options": [
+        "$(1,2)$",
+        "$(-1,2)$",
+        "$(1,-2)$",
+        "$(-1,-2)$"
+       ],
+       "answer_index": 2,
+       "why": "$y+2=y-(-2)$."
+      },
+      {
+       "id": "tf-3",
+       "kind": "short",
+       "level": 2,
+       "marks": 3,
+       "q": "Expand $f(x,y)=x^2+xy+y^2$ in powers of $(x-1)$ and $(y-1)$.",
+       "model_answer_md": "At $(1,1)$: $f=3$, $f_x=2x+y=3$, $f_y=x+2y=3$, $f_{xx}=2$, $f_{xy}=1$, $f_{yy}=2$; higher derivatives are 0.\n\nWith $h=x-1$, $k=y-1$:\n$$f=3+3h+3k+\\tfrac12(2h^2+2hk+2k^2)=3+3(x-1)+3(y-1)+(x-1)^2+(x-1)(y-1)+(y-1)^2.$$\n(Exact, since $f$ is a quadratic.)",
+       "points": [
+        "Values of $f$ and all six derivatives at $(1,1)$",
+        "Substitutes into the formula",
+        "Correct expansion"
+       ]
+      },
+      {
+       "id": "p-375b36e8",
+       "pyq": "375b36e8525c286b",
+       "level": 2,
+       "points": [
+        "Derivatives: $f_x=y\\cos xy$, $f_y=x\\cos xy$, $f_{xx}=-y^2\\sin xy$, $f_{xy}=\\cos xy-xy\\sin xy$, $f_{yy}=-x^2\\sin xy$",
+        "At $(1,\\frac\\pi2)$: $f=1$, $f_x=f_y=0$, $f_{xx}=-\\frac{\\pi^2}4$, $f_{xy}=-\\frac\\pi2$, $f_{yy}=-1$",
+        "$\\sin xy\\approx1-\\frac{\\pi^2}8(x-1)^2-\\frac\\pi2(x-1)(y-\\frac\\pi2)-\\frac12(y-\\frac\\pi2)^2$"
+       ]
+      },
+      {
+       "id": "p-2e736589",
+       "pyq": "2e73658918923757",
+       "level": 2,
+       "points": [
+        "Point $(0,\\frac\\pi2)$, $h=x$, $k=y-\\frac\\pi2$",
+        "$f=0$, $f_x=0$, $f_y=-1$, $f_{xx}=0$, $f_{xy}=-1$, $f_{yy}=0$",
+        "$e^x\\cos y\\approx-(y-\\frac\\pi2)-x(y-\\frac\\pi2)$"
+       ]
+      },
+      {
+       "id": "p-4f4ed1e2",
+       "pyq": "4f4ed1e2a4989990",
+       "level": 2,
+       "points": [
+        "At $(1,1)$: $f=\\frac\\pi4$, $f_x=-\\frac12$, $f_y=\\frac12$, $f_{xx}=\\frac12$, $f_{yy}=-\\frac12$, $f_{xy}=0$",
+        "$\\tan^{-1}\\frac yx\\approx\\frac\\pi4-\\frac12(x-1)+\\frac12(y-1)+\\frac14(x-1)^2-\\frac14(y-1)^2$",
+        "At $(1.1,0.9)$: $h=0.1$, $k=-0.1$, value $\\approx0.6854$"
+       ]
+      }
+     ]
+    },
+    {
+     "id": "taylor-approx",
+     "title": "Approximate values with the quadratic approximation",
+     "theory_md": "To find $f(a+h,b+k)$ approximately choose $(a,b)$ close to the point where $f$ and its derivatives are exact, with $h,k$ small:\n- **Linear:** $f+hf_x+kf_y$.\n- **Quadratic:** add $\\frac12(h^2f_{xx}+2hkf_{xy}+k^2f_{yy})$.\n\nOne variable, e.g. $\\cos x$ about $\\frac\\pi6$ (derivatives $-\\sin,-\\cos,\\sin,\\cos$):\n$$\\cos x\\approx\\tfrac{\\sqrt3}2-\\tfrac12h-\\tfrac{\\sqrt3}4h^2+\\tfrac1{12}h^3+\\tfrac{\\sqrt3}{48}h^4.$$\n**Convert degrees to radians:** $2^\\circ=\\frac{\\pi}{90}=0.0349$ rad.\n\nIf the expansion point is not printed, take the nearest point where the values are exact.",
+     "basics_md": "Close to a point you can replace a curvy function by its tangent plane, and improve it with the curvature terms.",
+     "key_points": [
+      "Choose $(a,b)$ near the target with exact values",
+      "Compute $h,k$ (radians for angles)",
+      "Substitute into linear or quadratic formula",
+      "Give a numerical answer, optionally compare with exact"
+     ],
+     "questions": [
+      {
+       "id": "ta-1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "To approximate $(1.02)^{2.99}$ with $f(x,y)=x^y$ the best expansion point is",
+       "options": [
+        "$(0,0)$",
+        "$(1,3)$",
+        "$(2,3)$",
+        "$(1,2)$"
+       ],
+       "answer_index": 1,
+       "why": "$(1,3)$ is close and $f(1,3)=1$ is exact."
+      },
+      {
+       "id": "ta-2",
+       "kind": "mcq",
+       "level": 2,
+       "q": "Expanding $\\cos x$ about $\\frac\\pi6$ to find $\\cos32^\\circ$, the increment $h$ in radians is",
+       "options": [
+        "$2$",
+        "$\\dfrac{\\pi}{90}$",
+        "$\\dfrac{\\pi}{6}$",
+        "$\\dfrac{2}{\\pi}$"
+       ],
+       "answer_index": 1,
+       "why": "$2^\\circ\\times\\frac{\\pi}{180}=\\frac\\pi{90}\\approx0.0349$."
+      },
+      {
+       "id": "ta-3",
+       "kind": "numerical",
+       "level": 2,
+       "marks": 3,
+       "q": "Find an approximate value of $\\sqrt{(3.04)^2+(3.96)^2}$ using the linear approximation of $f(x,y)=\\sqrt{x^2+y^2}$ at $(3,4)$.",
+       "model_answer_md": "$f(3,4)=5$. $f_x=\\dfrac x{\\sqrt{x^2+y^2}}=\\dfrac35$, $f_y=\\dfrac y{\\sqrt{x^2+y^2}}=\\dfrac45$ at $(3,4)$.\n\n$h=0.04$, $k=-0.04$:\n$$f\\approx5+\\tfrac35(0.04)+\\tfrac45(-0.04)=5+0.024-0.032=\\mathbf{4.992}.$$\n(The exact value is $4.9923$.)",
+       "points": [
+        "$f(3,4)=5$, $f_x=\\frac35$, $f_y=\\frac45$",
+        "$h=0.04$, $k=-0.04$",
+        "Value $4.992$"
+       ]
+      },
+      {
+       "id": "p-7710f019",
+       "pyq": "7710f019d3c9001d",
+       "level": 2,
+       "points": [
+        "Read the first coordinate as $1.1$; expand about $(1,1)$ with $h=0.1$, $k=-0.2$",
+        "$f=\\frac\\pi4$, $f_x=f_y=\\frac12$, $f_{xx}=f_{yy}=-\\frac12$, $f_{xy}=0$",
+        "$f\\approx\\frac\\pi4+\\frac12h+\\frac12k-\\frac14(h^2+k^2)$",
+        "$f(1.1,0.8)\\approx0.7229$"
+       ]
+      },
+      {
+       "id": "p-88450a43",
+       "pyq": "88450a4322d4b4e3",
+       "level": 2,
+       "points": [
+        "Derivatives of $\\tan^{-1}(xy)$ at $(1,1)$: $f=\\frac\\pi4$, $f_x=f_y=\\frac12$, $f_{xx}=f_{yy}=-\\frac12$, $f_{xy}=0$",
+        "Series: $\\frac\\pi4+\\frac12[(x-1)+(y-1)]-\\frac14[(x-1)^2+(y-1)^2]$",
+        "$h=0.1$, $k=-0.2$: $0.785398-0.05-0.0125=0.7229$"
+       ]
+      },
+      {
+       "id": "p-ab36eb59",
+       "pyq": "ab36eb592f6a376d",
+       "level": 3,
+       "points": [
+        "Expansion point not printed: take $(1,-1)$, $h=x-1$, $k=y+1$",
+        "At $(1,-1)$: $f=-\\frac\\pi4$, $f_x=-\\frac12$, $f_y=\\frac12$, $f_{xx}=f_{yy}=\\frac12$, $f_{xy}=0$",
+        "Linear $L=-\\frac\\pi4-\\frac12h+\\frac12k$; quadratic adds $\\frac14(h^2+k^2)$",
+        "At $(0.9,-1.2)$: $h=-0.1$, $k=-0.2$, $L=-0.8354$, $Q=-0.8229$"
+       ]
+      },
+      {
+       "id": "p-74562867",
+       "pyq": "74562867e2a52fa3",
+       "level": 3,
+       "points": [
+        "Derivatives of $\\cos x$ at $\\frac\\pi6$: $\\frac{\\sqrt3}2,-\\frac12,-\\frac{\\sqrt3}2,\\frac12,\\frac{\\sqrt3}2$",
+        "$\\cos x\\approx\\frac{\\sqrt3}2-\\frac h2-\\frac{\\sqrt3}2\\frac{h^2}{2!}+\\frac12\\frac{h^3}{3!}+\\frac{\\sqrt3}2\\frac{h^4}{4!}$, $h=x-\\frac\\pi6$",
+        "Yes: $32^\\circ=30^\\circ+2^\\circ$, $h=\\frac\\pi{90}=0.03491$ is small",
+        "$\\cos32^\\circ\\approx0.84805$"
+       ]
+      }
+     ]
+    },
+    {
+     "id": "maclaurin-product",
+     "title": "Maclaurin series of products in x and y",
+     "theory_md": "Expanding about $(0,0)$ to a given degree: multiply the one-variable series and collect terms by total degree ($x^2y$ is degree 3).\n\n$e^x=1+x+\\frac{x^2}2+\\frac{x^3}6$, $\\log(1+y)=y-\\frac{y^2}2+\\frac{y^3}3$, $\\sin y=y-\\frac{y^3}6$, $\\cos y=1-\\frac{y^2}2$.\n\n$$e^x\\log(1+y)=y+\\left(xy-\\frac{y^2}2\\right)+\\left(\\frac{x^2y}2-\\frac{xy^2}2+\\frac{y^3}3\\right)+\\cdots$$\nThis is accepted as Taylor's series about $(0,0)$ unless the question demands the derivative table; the derivatives at the origin give the same coefficients.",
+     "basics_md": "Each factor already has a known polynomial. Multiplying the polynomials and keeping only the terms up to the required degree is the quickest way to the same result.",
+     "key_points": [
+      "Write each standard series",
+      "Multiply and group by degree",
+      "Keep terms only up to the degree asked",
+      "Optionally check with $f_{xy}$ etc. at the origin"
+     ],
+     "questions": [
+      {
+       "id": "mp-1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "In the expansion of $e^x\\sin y$ about the origin, the coefficient of $xy$ is",
+       "options": [
+        "0",
+        "1",
+        "$\\dfrac12$",
+        "2"
+       ],
+       "answer_index": 1,
+       "why": "$(1+x+\\dots)(y-\\dots)$: the $xy$ term comes from $x\\cdot y$."
+      },
+      {
+       "id": "mp-2",
+       "kind": "mcq",
+       "level": 2,
+       "q": "The terms of $e^x\\cos y$ up to degree 2 are",
+       "options": [
+        "$1+x+\\dfrac{x^2-y^2}2$",
+        "$1+x+x^2+y^2$",
+        "$1+x-\\dfrac{x^2+y^2}2$",
+        "$1+x+xy$"
+       ],
+       "answer_index": 0,
+       "why": "$(1+x+\\frac{x^2}2)(1-\\frac{y^2}2)$, degree $\\le2$ gives $1+x+\\frac{x^2}2-\\frac{y^2}2$."
+      },
+      {
+       "id": "mp-3",
+       "kind": "short",
+       "level": 2,
+       "marks": 3,
+       "q": "Expand $e^x\\sin y$ in powers of $x$ and $y$ up to third-degree terms.",
+       "model_answer_md": "$e^x=1+x+\\frac{x^2}2+\\frac{x^3}6$ and $\\sin y=y-\\frac{y^3}6$.\n\nMultiply and collect by degree:\n- degree 1: $y$\n- degree 2: $xy$\n- degree 3: $\\dfrac{x^2y}2-\\dfrac{y^3}6$\n\n$$e^x\\sin y\\approx y+xy+\\frac{x^2y}2-\\frac{y^3}6.$$",
+       "points": [
+        "Writes both series",
+        "Collects degrees 1, 2, 3 correctly",
+        "Final expansion"
+       ]
+      },
+      {
+       "id": "p-fa6a6bc8",
+       "pyq": "fa6a6bc8d28eaa66",
+       "level": 2,
+       "points": [
+        "$e^x=1+x+\\frac{x^2}2+\\frac{x^3}6$, $\\log(1+y)=y-\\frac{y^2}2+\\frac{y^3}3$",
+        "Degree 1: $y$; degree 2: $xy-\\frac{y^2}2$",
+        "Degree 3: $\\frac{x^2y}2-\\frac{xy^2}2+\\frac{y^3}3$",
+        "$f\\approx y+xy-\\frac{y^2}2+\\frac{x^2y}2-\\frac{xy^2}2+\\frac{y^3}3$"
+       ]
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "topic": "Maxima and minima of functions of two or more variables",
+   "subtopics": [
+    {
+     "id": "classify",
+     "title": "Stationary points and the rt - s^2 test",
+     "theory_md": "**1.** Solve $f_x=0$, $f_y=0$ together: factorise, never divide by a variable that can be 0.\n**2.** At each point find $r=f_{xx}$, $s=f_{xy}$, $t=f_{yy}$.\n**3.** Test:\n- $rt-s^2>0$, $r<0$: **maximum**; $r>0$: **minimum**\n- $rt-s^2<0$: **saddle point**\n- $rt-s^2=0$: **doubtful**; compare $f$ with $f(a,b)$ along different paths.\n\n**4.** Give the extreme **value**. Word problems: eliminate with the constraint (open box of volume $V$: $z=\\frac V{xy}$, $S=xy+2z(x+y)$).",
+     "basics_md": "Where the surface is flat, it may be the top of a hill, the bottom of a valley or a mountain pass. The second derivatives tell which.",
+     "key_points": [
+      "Solve $f_x=f_y=0$ and list every point",
+      "Evaluate $r,s,t$ at each point separately",
+      "Decision from $rt-s^2$ and $r$",
+      "State the max/min value; doubtful needs further study"
+     ],
+     "questions": [
+      {
+       "id": "cl-1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "At a stationary point $rt-s^2<0$. The point is",
+       "options": [
+        "a maximum",
+        "a minimum",
+        "a saddle point",
+        "doubtful"
+       ],
+       "answer_index": 2,
+       "why": "Negative discriminant means the function rises in one direction and falls in another."
+      },
+      {
+       "id": "cl-2",
+       "kind": "short",
+       "level": 2,
+       "marks": 3,
+       "q": "Find the extreme value of $f(x,y)=x^2+xy+y^2+3x-3y+4$.",
+       "model_answer_md": "**1. Stationary point:** $f_x=2x+y+3=0$, $f_y=x+2y-3=0$. Solving: $x=-3$, $y=3$.\n\n**2. Second derivatives:** $r=2$, $s=1$, $t=2$, so $rt-s^2=3>0$ and $r>0$: **minimum**.\n\n**3. Value:** $f(-3,3)=9-9+9-9-9+4=-5$.\n\nMinimum value $=-5$ at $(-3,3)$.",
+       "points": [
+        "$f_x=f_y=0$ solved: $(-3,3)$",
+        "$r=2,s=1,t=2$; $rt-s^2=3>0$, $r>0$ so minimum",
+        "Value $-5$"
+       ]
+      },
+      {
+       "id": "cl-3",
+       "kind": "numerical",
+       "level": 3,
+       "marks": 4,
+       "q": "Find the dimensions of an open rectangular box of volume $32\\ \\mathrm{m^3}$ that has the least surface area.",
+       "model_answer_md": "**1. Variables:** base $x$ by $y$, height $z=\\dfrac{32}{xy}$. Surface $S=xy+2z(x+y)=xy+\\dfrac{64}y+\\dfrac{64}x$.\n\n**2. Stationary point:** $S_x=y-\\dfrac{64}{x^2}=0$, $S_y=x-\\dfrac{64}{y^2}=0\\Rightarrow x^3=y^3=64\\Rightarrow x=y=4$.\n\n**3. Test:** $r=\\dfrac{128}{x^3}=2$, $s=1$, $t=2$; $rt-s^2=3>0$, $r>0$: minimum.\n\n**4. Result:** $x=y=4\\ \\mathrm m$, $z=\\dfrac{32}{16}=2\\ \\mathrm m$, least area $S=16+16+16=48\\ \\mathrm{m^2}$.",
+       "points": [
+        "Eliminates $z$ using the volume",
+        "$x=y=4$",
+        "Second-derivative test shows minimum",
+        "$z=2\\ \\mathrm m$, $S=48\\ \\mathrm{m^2}$"
+       ]
+      },
+      {
+       "id": "p-6acd5a58",
+       "pyq": "6acd5a58fb86a614",
+       "level": 2,
+       "points": [
+        "$f_x=0$: $xy^2-5x-4y=0$; $f_y=0$: $x^2y-4x-5y=0$",
+        "Subtract: $(y-x)(xy+1)=0$",
+        "$y=x$: $x^3-9x=0$, points $(0,0),(3,3),(-3,-3)$",
+        "$xy=-1$: $(1,-1),(-1,1)$"
+       ]
+      },
+      {
+       "id": "p-c04db119",
+       "pyq": "c04db11966c7f8a6",
+       "level": 2,
+       "points": [
+        "$y=x^3-x$ and $x=y^3-y$ give stationary points $(0,0),(\\sqrt2,\\sqrt2),(-\\sqrt2,-\\sqrt2)$",
+        "$r=12x^2-4$, $s=-4$, $t=12y^2-4$",
+        "At $(\\pm\\sqrt2,\\pm\\sqrt2)$: $rt-s^2=384>0$, $r=20>0$, minima with $f=-8$",
+        "At $(0,0)$: $rt-s^2=0$; $f$ takes both signs near the origin, saddle point"
+       ]
+      },
+      {
+       "id": "p-50145926",
+       "pyq": "501459260d388dd3",
+       "level": 2,
+       "points": [
+        "$x=\\pm1$, $y=\\pm2$: four stationary points",
+        "$r=6x$, $s=0$, $t=6y$, $rt-s^2=36xy$",
+        "$(1,2)$ minimum, $f=2$; $(-1,-2)$ maximum, $f=38$",
+        "$(1,-2)$ and $(-1,2)$ are saddle points"
+       ]
+      },
+      {
+       "id": "p-aaa6c6df",
+       "pyq": "aaa6c6dfb35ca1fd",
+       "level": 2,
+       "points": [
+        "$y=x^2/a$, $x=y^2/a$ gives $x(x^3-a^3)=0$: points $(0,0),(a,a)$",
+        "$r=6x$, $s=-3a$, $t=6y$",
+        "$(0,0)$: $rt-s^2=-9a^2<0$, saddle",
+        "$(a,a)$: $27a^2>0$, an extremum, not a saddle"
+       ]
+      },
+      {
+       "id": "p-c7179a9b",
+       "pyq": "c7179a9bd223604c",
+       "level": 3,
+       "points": [
+        "$f_x+f_y=0$ gives $y=-x$; then $x(x^2-2)=0$: $(0,0),(\\sqrt2,-\\sqrt2),(-\\sqrt2,\\sqrt2)$",
+        "$r=12x^2-4$, $s=4$, $t=12y^2-4$",
+        "At $(\\pm\\sqrt2,\\mp\\sqrt2)$: $rt-s^2=384>0$, $r>0$: minimum, value $-8$",
+        "$(0,0)$: $rt-s^2=0$, $f$ changes sign, saddle; no maximum"
+       ]
+      },
+      {
+       "id": "p-ef143f01",
+       "pyq": "ef143f012e95f479",
+       "level": 1,
+       "points": [
+        "$f_x=0$: $x^2+y^2-10x+24=0$; $f_y=6y(x-5)=0$",
+        "$y=0$: $x=4,6$; $x=5$: $y=\\pm1$",
+        "Points $(4,0),(6,0),(5,1),(5,-1)$"
+       ]
+      },
+      {
+       "id": "p-86ea863f",
+       "pyq": "86ea863ffd789c19",
+       "level": 2,
+       "points": [
+        "$r=6x-30$, $s=6y$, $t=6x-30$",
+        "$(4,0)$: $rt-s^2=36>0$, $r<0$: maximum, $f=112$",
+        "$(6,0)$: $rt-s^2=36>0$, $r>0$: minimum, $f=108$",
+        "$(5,\\pm1)$: $rt-s^2=-36<0$, saddle points"
+       ]
+      },
+      {
+       "id": "p-0802e930",
+       "pyq": "0802e9306a363295",
+       "level": 2,
+       "points": [
+        "$f_x=y-\\frac{a^3}{x^2}=0$, $f_y=x-\\frac{a^3}{y^2}=0$ give $x=y=a$",
+        "$r=2$, $s=1$, $t=2$, $rt-s^2=3>0$, $r>0$: minimum",
+        "$f_{\\min}=a^2+2a^2=3a^2$"
+       ]
+      }
+     ]
+    },
+    {
+     "id": "discuss-extrema",
+     "title": "Discuss the extrema: products and trigonometric functions",
+     "theory_md": "**\"Discuss maxima and minima\"** means: stationary points, the test, the value, and what happens at the other points.\n\n- **$u=a\\,x^3y^2(1-x-y)$:** $u_x=ax^2y^2(3-4x-3y)$, $u_y=ax^3y(2-2x-3y)$. Set the brackets to 0: $\\left(\\frac12,\\frac13\\right)$. Axis points give no extremum since $u$ changes sign. Max if $a>0$, min if $a<0$, value $\\frac a{432}$.\n- **Angles of a triangle:** eliminate $C=\\pi-A-B$.\n- **$\\sin x\\sin y\\sin(x+y)$:** $u_x=\\sin y\\sin(2x+y)$, $u_y=\\sin x\\sin(x+2y)$.\n\nCheck $rt-s^2$ and the sign of $r$; state values.",
+     "basics_md": "Same method as before, but you must factor out the sine, cosine or power factors that cannot be zero in the allowed region and solve what is left.",
+     "key_points": [
+      "Factorise the derivatives; drop non-vanishing factors",
+      "Solve the remaining linear or trigonometric equations",
+      "$rt-s^2$ and sign of $r$, then the value",
+      "Comment on axes/boundaries and on dependence on the sign of $a$"
+     ],
+     "questions": [
+      {
+       "id": "de-1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "For $u=a\\,x^3y^2(1-x-y)$ the points on the axes $x=0$ or $y=0$",
+       "options": [
+        "are maxima",
+        "are minima",
+        "are not extrema ($u$ changes sign there)",
+        "are the only stationary points"
+       ],
+       "answer_index": 2,
+       "why": "$x^3$ changes sign across $x=0$; so no extremum there."
+      },
+      {
+       "id": "de-2",
+       "kind": "short",
+       "level": 2,
+       "marks": 3,
+       "q": "Discuss the maximum and minimum of $u=xy(6-x-y)$.",
+       "model_answer_md": "**1. Stationary points:** $u_x=y(6-2x-y)=0$, $u_y=x(6-x-2y)=0$. Taking $x,y\\ne0$: $2x+y=6$, $x+2y=6\\Rightarrow x=y=2$.\n\n**2. Test:** $r=-2y=-4$, $s=6-2x-2y=-2$, $t=-2x=-4$. $rt-s^2=16-4=12>0$, $r<0$: **maximum**.\n\n**3. Value:** $u_{\\max}=2\\cdot2\\cdot2=8$ at $(2,2)$.\n\nPoints $(0,0),(0,6),(6,0)$ have $rt-s^2<0$: saddle points; no minimum.",
+       "points": [
+        "Stationary point $(2,2)$",
+        "$r=-4$, $s=-2$, $t=-4$, $rt-s^2=12>0$",
+        "Maximum value $8$"
+       ]
+      },
+      {
+       "id": "de-3",
+       "kind": "mcq",
+       "level": 2,
+       "q": "For angles $A,B,C$ of a triangle, $\\sin A+\\sin B+\\sin C$ has its maximum when the triangle is equilateral. The maximum is",
+       "options": [
+        "$\\dfrac32$",
+        "$\\dfrac{3\\sqrt3}2$",
+        "$\\dfrac{\\sqrt3}{2}$",
+        "$3$"
+       ],
+       "answer_index": 1,
+       "why": "$3\\sin60^\\circ=\\frac{3\\sqrt3}2\\approx2.598$."
+      },
+      {
+       "id": "p-55952495",
+       "pyq": "55952495335c545a",
+       "level": 3,
+       "points": [
+        "$u_x=ax^2y^2(3-4x-3y)$, $u_y=ax^3y(2-2x-3y)$",
+        "$4x+3y=3$, $2x+3y=2$: $(\\frac12,\\frac13)$",
+        "$r=-\\frac a9$, $s=-\\frac a{12}$, $t=-\\frac a8$; $rt-s^2=\\frac{a^2}{144}>0$",
+        "$a>0$: maximum $\\frac a{432}$; $a<0$: minimum; axes give no extremum"
+       ]
+      },
+      {
+       "id": "p-5c850a5c",
+       "pyq": "5c850a5c97bd49d1",
+       "level": 3,
+       "points": [
+        "$u_x=ax^2y^2(3-4x-3y)$, $u_y=ax^3y(2-2x-3y)$",
+        "Stationary point $(\\frac12,\\frac13)$",
+        "$rt-s^2=\\frac{a^2}{144}>0$, sign of $r=-\\frac a9$",
+        "Maximum $\\frac a{432}$ for $a>0$, minimum for $a<0$"
+       ]
+      },
+      {
+       "id": "p-b99246cc",
+       "pyq": "b99246ccd47000c9",
+       "level": 3,
+       "points": [
+        "$u=-\\cos A\\cos B\\cos(A+B)$ with $C=\\pi-A-B$",
+        "$u_A=\\cos B\\sin(2A+B)$, $u_B=\\cos A\\sin(A+2B)$; stationary at $A=B=\\frac\\pi3$",
+        "$r=t=-1$, $s=-\\frac12$, $rt-s^2=\\frac34>0$, $r<0$",
+        "Maximum $\\frac18$ for the equilateral triangle"
+       ]
+      },
+      {
+       "id": "p-9a477e43",
+       "pyq": "9a477e43f5e52b11",
+       "level": 3,
+       "points": [
+        "$u_x=\\sin y\\sin(2x+y)$, $u_y=\\sin x\\sin(x+2y)$",
+        "Stationary points $(\\frac\\pi3,\\frac\\pi3)$ and $(\\frac{2\\pi}3,\\frac{2\\pi}3)$",
+        "At $(\\frac\\pi3,\\frac\\pi3)$: $rt-s^2=\\frac94>0$, $r<0$: maximum $\\frac{3\\sqrt3}8$",
+        "At $(\\frac{2\\pi}3,\\frac{2\\pi}3)$: minimum $-\\frac{3\\sqrt3}8$"
+       ]
+      }
+     ]
+    },
+    {
+     "id": "abs-extrema",
+     "title": "Absolute maximum and minimum on a closed region",
+     "theory_md": "A continuous $f$ on a closed bounded region has an absolute maximum and minimum.\n\n1. **Interior:** solve $f_x=f_y=0$ inside; record $f$ (no second-derivative test needed).\n2. **Each edge:** substitute the edge into $f$ to get a one-variable function; find its critical points and the values at the **corners**.\n3. **Compare** every value; the largest is the absolute maximum, the smallest the absolute minimum. Name the points.\n\nCheck that each candidate lies inside the region.",
+     "basics_md": "The highest and lowest points on a closed patch are either in the middle, on the edges, or at the corners. Check all three places and compare.",
+     "key_points": [
+      "Interior stationary points inside $D$",
+      "Edges as one-variable problems, including corners",
+      "Table of all candidate values",
+      "State absolute max and min with points"
+     ],
+     "questions": [
+      {
+       "id": "ae-1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "For the absolute extrema of $f$ on a closed square we must compare",
+       "options": [
+        "only interior stationary points",
+        "only the corners",
+        "interior stationary points, edge critical points and corners",
+        "only the $rt-s^2$ values"
+       ],
+       "answer_index": 2,
+       "why": "All candidates must be compared."
+      },
+      {
+       "id": "ae-2",
+       "kind": "mcq",
+       "level": 2,
+       "q": "The absolute maximum of $f=x+y$ on $[0,1]\\times[0,1]$ is",
+       "options": [
+        "0 at $(0,0)$",
+        "1 at $(1,0)$",
+        "2 at $(1,1)$",
+        "no maximum exists"
+       ],
+       "answer_index": 2,
+       "why": "No interior stationary point; the maximum is at a corner."
+      },
+      {
+       "id": "ae-3",
+       "kind": "numerical",
+       "level": 2,
+       "marks": 4,
+       "q": "Find the absolute maximum and minimum of $f(x,y)=x^2+y^2-x-y$ on $[0,1]\\times[0,1]$.",
+       "model_answer_md": "**Interior:** $f_x=2x-1=0$, $f_y=2y-1=0$: $\\left(\\frac12,\\frac12\\right)$, $f=-\\frac12$.\n\n**Edges:** on $x=0$: $f=y^2-y$, critical at $y=\\frac12$, $f=-\\frac14$; ends $f=0$. The other three edges give the same by symmetry. Corners: $f=0$ at $(0,0),(1,0),(0,1),(1,1)$.\n\n**Compare:** $-\\frac12,\\ -\\frac14,\\ 0$.\n\n**Absolute maximum $=0$** (at the four corners); **absolute minimum $=-\\frac12$** at $\\left(\\frac12,\\frac12\\right)$.",
+       "points": [
+        "Interior point $(\\frac12,\\frac12)$, value $-\\frac12$",
+        "Edge critical value $-\\frac14$ and corner values $0$",
+        "Max $0$, min $-\\frac12$ with points"
+       ]
+      },
+      {
+       "id": "p-57fa0494",
+       "pyq": "57fa049492641531",
+       "level": 3,
+       "points": [
+        "Interior: $y=x$, $x=y^3$ gives $(0,0),(1,1),(-1,-1)$ with $f=0,1,1$",
+        "Edges: $x=\\pm2$, $y=\\pm2$ reduced to one variable; critical values $\\approx-0.44$ and $-8$; corner values $-8,-40$",
+        "Compare all values",
+        "Absolute maximum $1$ at $(1,1),(-1,-1)$; absolute minimum $-40$ at $(2,-2),(-2,2)$"
+       ]
+      },
+      {
+       "id": "p-a74dfab4",
+       "pyq": "a74dfab4ceae1c17",
+       "level": 3,
+       "points": [
+        "Interior points $(0,0),(1,1),(-1,-1)$, $f=0,1,1$",
+        "Four edges: e.g. $x=2$: $g(y)=8y-8-y^4$, critical $y=2^{1/3}$, $g\\approx-0.44$; ends $-8,-40$",
+        "Compare candidates $1,0,-0.44,-8,-40$",
+        "Max $1$, min $-40$ with points"
+       ]
+      },
+      {
+       "id": "p-1faf0bab",
+       "pyq": "1faf0babe73a425c",
+       "level": 3,
+       "points": [
+        "Interior stationary points $(0,0),(1,1),(-1,-1)$ with values $0,1,1$",
+        "Boundary edges reduced to one variable with critical values and corner values",
+        "Largest value $1$ at $(1,1),(-1,-1)$",
+        "Smallest value $-40$ at $(2,-2),(-2,2)$"
+       ]
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "topic": "Lagrange's method of undetermined multipliers",
+   "subtopics": [
+    {
+     "id": "lagrange-one",
+     "title": "One constraint: F = f + lambda phi",
+     "theory_md": "To extremise $f(x,y,z)$ subject to $\\phi(x,y,z)=0$ form $F=f+\\lambda\\phi$ and solve\n$$F_x=0,\\ F_y=0,\\ F_z=0,\\ \\phi=0$$\n(four equations, four unknowns $x,y,z,\\lambda$).\n\n**Eliminate $\\lambda$:** equate the expressions for $\\lambda$, or multiply the equations by $x,y,z$ and add. For products take logs first.\n\nThe method gives the stationary points only. Decide max or min from the geometry (a sphere has a largest inscribed box; a plane has a nearest point to the origin). For distance problems minimise the **square** of the distance.",
+     "basics_md": "You are moving along a curve or surface (the constraint) and want the highest or lowest value of f. At the best point, the level curves of f just touch the constraint.",
+     "key_points": [
+      "Form $F=f+\\lambda\\phi$; equations $F_x=F_y=F_z=0$ and $\\phi=0$",
+      "Eliminate $\\lambda$ by ratios, or multiply by $x,y,z$",
+      "Solve and substitute for the value",
+      "Argue max or min from the geometry"
+     ],
+     "questions": [
+      {
+       "id": "l1-1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "For one constraint on $f(x,y,z)$, Lagrange's method uses how many equations in $x,y,z,\\lambda$?",
+       "options": [
+        "3",
+        "4",
+        "5",
+        "6"
+       ],
+       "answer_index": 1,
+       "why": "Three of $F_x,F_y,F_z=0$ plus the constraint."
+      },
+      {
+       "id": "l1-2",
+       "kind": "mcq",
+       "level": 2,
+       "q": "The minimum of $x^2+y^2$ subject to $x+y=2$ is",
+       "options": [
+        "0",
+        "1",
+        "2",
+        "4"
+       ],
+       "answer_index": 2,
+       "why": "$F_x=2x+\\lambda=0$, $F_y=2y+\\lambda=0$ so $x=y=1$; value $2$."
+      },
+      {
+       "id": "l1-3",
+       "kind": "short",
+       "level": 2,
+       "marks": 3,
+       "q": "Find the maximum value of $xyz$ subject to $x+y+z=6$.",
+       "model_answer_md": "$F=xyz+\\lambda(x+y+z-6)$.\n\n$F_x=yz+\\lambda=0$, $F_y=xz+\\lambda=0$, $F_z=xy+\\lambda=0$. So $yz=xz=xy$, hence $x=y=z$ (positive values).\n\nConstraint: $3x=6\\Rightarrow x=y=z=2$.\n\n$$(xyz)_{\\max}=2\\cdot2\\cdot2=8.$$\n(It is a maximum: the product is $0$ on the boundary and positive inside.)",
+       "points": [
+        "Auxiliary function and three equations",
+        "$x=y=z=2$",
+        "Maximum $8$ with a justification"
+       ]
+      },
+      {
+       "id": "l1-4",
+       "kind": "numerical",
+       "level": 3,
+       "marks": 4,
+       "q": "Find the shortest distance from the origin to the plane $x+2y+3z=14$.",
+       "model_answer_md": "Minimise $f=x^2+y^2+z^2$ (the square of the distance) subject to $x+2y+3z=14$.\n\n$F=x^2+y^2+z^2+\\lambda(x+2y+3z-14)$.\n\n$F_x=2x+\\lambda=0$, $F_y=2y+2\\lambda=0$, $F_z=2z+3\\lambda=0$, so $(x,y,z)=-\\frac\\lambda2(1,2,3)$.\n\nConstraint: $-\\frac\\lambda2(1+4+9)=14\\Rightarrow-\\frac\\lambda2=1$, so $(x,y,z)=(1,2,3)$.\n\n$f=1+4+9=14$, so the shortest distance is $\\sqrt{14}\\approx3.74$ units (the minimum, since distances to the plane are unbounded above).",
+       "points": [
+        "Minimises the square of the distance",
+        "Point $(1,2,3)$",
+        "Distance $\\sqrt{14}\\approx3.74$"
+       ]
+      },
+      {
+       "id": "p-2c136785",
+       "pyq": "2c136785785614f6",
+       "level": 2,
+       "points": [
+        "$F=4xyz^2+\\lambda(x^2+y^2+z^2-1)$",
+        "Multiply $F_x,F_y,F_z$ by $x,y,z$: $x^2=y^2$, $z^2=2x^2$",
+        "Constraint: $x^2=y^2=\\frac14$, $z^2=\\frac12$",
+        "$T=2xy$ largest for $xy=\\frac14$: $T_{\\max}=\\frac12$"
+       ]
+      },
+      {
+       "id": "p-3f02d998",
+       "pyq": "3f02d99863cf2d0e",
+       "level": 3,
+       "points": [
+        "Maximise $Q=40K^{0.4}L^{0.6}$ subject to $200K+100L=120000$",
+        "$F_K,F_L$ give $\\frac{16}{24}\\frac LK=\\frac{200}{100}$, so $L=3K$",
+        "Budget: $500K=120000$, $K=240$, $L=720$",
+        "Cobb-Douglas is concave, so this is the maximum; $Q_{\\max}\\approx18559$ units"
+       ]
+      }
+     ]
+    },
+    {
+     "id": "lagrange-two",
+     "title": "Two constraints and the economic form",
+     "theory_md": "**Two constraints** $\\phi_1=\\phi_2=0$: $F=f+\\lambda\\phi_1+\\mu\\phi_2$. Solve $F_x=F_y=F_z=0$ with both constraints (five equations; $x,y,z,\\lambda,\\mu$).\n\nLinear constraints can also be used to eliminate variables and reduce to one-variable calculus: a check.\n\n**Budget (economics):** maximise output $Q(K,L)$ with $P_KK+P_LL=B$. The optimum satisfies\n$$\\frac{Q_K}{Q_L}=\\frac{P_K}{P_L}.$$\nReport the allocation and the maximum output. For Cobb-Douglas $K^aL^b$ the budget splits in the ratio $a:b$.",
+     "basics_md": "Each extra constraint takes away one degree of freedom, so it brings in one more multiplier. In economics the best mix is where the extra output per rupee is the same for both inputs.",
+     "key_points": [
+      "$F=f+\\lambda\\phi_1+\\mu\\phi_2$ for two constraints",
+      "Use constraints to find $x,y,z$ in terms of one variable",
+      "Economics: $Q_K/Q_L=P_K/P_L$",
+      "State the optimal allocation with units"
+     ],
+     "questions": [
+      {
+       "id": "l2-1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "With two constraints we introduce",
+       "options": [
+        "one multiplier",
+        "two multipliers",
+        "no multiplier",
+        "three multipliers"
+       ],
+       "answer_index": 1,
+       "why": "One per constraint: $F=f+\\lambda\\phi_1+\\mu\\phi_2$."
+      },
+      {
+       "id": "l2-2",
+       "kind": "short",
+       "level": 2,
+       "marks": 3,
+       "q": "Find the minimum value of $x^2+y^2+z^2$ subject to $x+y+z=1$ and $x-y=0$.",
+       "model_answer_md": "$F=x^2+y^2+z^2+\\lambda(x+y+z-1)+\\mu(x-y)$.\n\n$F_x=2x+\\lambda+\\mu=0$, $F_y=2y+\\lambda-\\mu=0$, $F_z=2z+\\lambda=0$.\n\nSubtracting the first two: $2(x-y)+2\\mu=0$. With $x=y$ this gives $\\mu=0$, so $x=y=z=-\\frac\\lambda2$.\n\nConstraint: $3x=1$, $x=y=z=\\frac13$.\n\n$$f_{\\min}=3\\cdot\\frac19=\\frac13.$$",
+       "points": [
+        "$F$ with two multipliers",
+        "$x=y=z$ found",
+        "$x=y=z=\\frac13$ and value $\\frac13$"
+       ]
+      },
+      {
+       "id": "l2-3",
+       "kind": "numerical",
+       "level": 2,
+       "marks": 3,
+       "q": "A firm's output is $Q=\\sqrt{KL}$. Capital costs Rs. 4 per unit, labour Rs. 1 per unit, and the budget is Rs. 80. Find the output-maximising $K$ and $L$ and the maximum output.",
+       "model_answer_md": "Maximise $Q=K^{1/2}L^{1/2}$ subject to $4K+L=80$.\n\n$F=K^{1/2}L^{1/2}+\\lambda(80-4K-L)$.\n\n$F_K=\\frac12K^{-1/2}L^{1/2}-4\\lambda=0$, $F_L=\\frac12K^{1/2}L^{-1/2}-\\lambda=0$.\n\nDivide: $\\dfrac LK=4\\Rightarrow L=4K$.\n\nBudget: $4K+4K=80\\Rightarrow K=10$ units, $L=40$ units.\n\n$$Q_{\\max}=\\sqrt{10\\times40}=20\\ \\text{units}.$$\n(Half the budget is spent on each input, as for any equal-exponent Cobb-Douglas.)",
+       "points": [
+        "Lagrange equations and ratio $L/K=4$",
+        "$K=10$, $L=40$",
+        "$Q_{\\max}=20$"
+       ]
+      },
+      {
+       "id": "p-ffc2ae1b",
+       "pyq": "ffc2ae1b9fd6b0e6",
+       "level": 2,
+       "points": [
+        "$F=x^2+2xy+z^2+\\lambda(2x+y)+\\mu(x+y+z-1)$",
+        "Constraints: $y=-2x$, $z=1+x$",
+        "$F_z$: $\\mu=-2(1+x)$; $F_y$: $\\lambda=2$; $F_x$: $x=\\frac12$",
+        "Point $(\\frac12,-1,\\frac32)$, $f=\\frac32$, a maximum (on the line $f=-2x^2+2x+1$ is concave)"
+       ]
+      }
+     ]
+    }
+   ]
+  }
+ ]
+}

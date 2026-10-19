@@ -1,0 +1,1699 @@
+{
+ "code": "HS1106",
+ "unit": "Communication",
+ "written": "2026-10-19",
+ "by": "claude-sonnet-5-5, in a Claude Code session",
+ "topics": [
+  {
+   "topic": "Significance of communication",
+   "subtopics": [
+    {
+     "id": "importance",
+     "title": "Why communication skill matters",
+     "theory_md": "**Communication** is the two-way sharing of information, ideas and feelings so that sender and receiver reach a common understanding. It is a **skill**: it improves with practice.\n\nIt matters for:\n- **Career**: interviews, group discussions, presentations, promotion; employers rank it first.\n- **Academics**: understanding lectures, writing reports, viva, projects.\n- **Engineering work**: explaining designs to teams, managers, clients; writing specifications, manuals, proposals.\n- **Teamwork and leadership**: coordination, fewer errors, trust.\n- **Personal life**: relationships, conflict handling, confidence.",
+     "basics_md": "Think of a brilliant idea that nobody understands. It is worth nothing until it is shared clearly. Communication is the bridge that carries the idea across.",
+     "key_points": [
+      "Communication = two-way exchange leading to common understanding",
+      "It is a learnable skill, not just a talent",
+      "Benefits: career, academics, teamwork, leadership, confidence",
+      "Engineers must explain technical ideas to non-technical people"
+     ],
+     "figures": [],
+     "questions": [
+      {
+       "id": "im-q1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "Communication is best defined as",
+       "options": [
+        "one-way sending of orders",
+        "two-way exchange of information leading to common understanding",
+        "only speaking in English",
+        "only written reports"
+       ],
+       "answer_index": 1,
+       "why": "The key words are two-way and common understanding."
+      },
+      {
+       "id": "im-q2",
+       "kind": "mcq",
+       "level": 1,
+       "q": "Communication skill can be improved by",
+       "options": [
+        "birth only",
+        "practice, reading, writing and feedback",
+        "avoiding presentations",
+        "memorising grammar rules only"
+       ],
+       "answer_index": 1,
+       "why": "It is a skill, so practice and feedback improve it."
+      },
+      {
+       "id": "im-q3",
+       "kind": "short",
+       "level": 2,
+       "marks": 4,
+       "q": "Explain the importance of developing communication as a skill. (4 marks)",
+       "model_answer_md": "Communication is a skill that can be learned, so it should be developed deliberately.\n\n1. **Career**: interviews, GDs, presentations and promotions depend on it.\n2. **Academics**: lectures, reports, projects and viva need clear expression.\n3. **Workplace**: coordination in teams, fewer errors and conflicts.\n4. **Leadership**: instructing, motivating and persuading others.\n5. **Personal growth**: confidence, relationships and handling conflict.\n\n**Conclusion**: technical knowledge reaches others only through communication.",
+       "points": [
+        "Communication is a learnable skill",
+        "Career: interviews, GD, presentations",
+        "Academic and workplace use",
+        "Leadership, teamwork, confidence",
+        "Conclusion linking skill to success"
+       ]
+      },
+      {
+       "id": "im-p1",
+       "pyq": "638b219e990dce14",
+       "level": 2,
+       "points": [
+        "Skill, not just natural ability; improves with practice",
+        "Career: employers rank it first; interviews, GD, presentations",
+        "Academic success and workplace coordination",
+        "Leadership, relationships, confidence",
+        "Example or conclusion"
+       ]
+      },
+      {
+       "id": "im-p2",
+       "pyq": "418862fe3f27e1df",
+       "level": 2,
+       "points": [
+        "Engineers explain technical ideas to teams, managers, clients, public",
+        "Student stage: read widely, write regularly (reports, blogs), seek feedback",
+        "Speak: presentations, GDs, mock interviews, clubs",
+        "Learn technical writing, listening, e-mail etiquette",
+        "Professional stage: mentors, courses, review of own work, feedback",
+        "Continuous practice throughout career"
+       ]
+      },
+      {
+       "id": "im-p3",
+       "pyq": "c554c0685dfa7bcd",
+       "level": 3,
+       "points": [
+        "Essay of about 1000 words: introduction, body, conclusion",
+        "Body: designs to clients, teamwork, reports and documentation, safety and ethics, career growth, global/multicultural teams",
+        "Examples from engineering (bridge, software, plant commissioning)",
+        "Skills involved: oral, written, listening, presentation",
+        "Conclusion: technical + communication skill makes a complete engineer"
+       ]
+      }
+     ]
+    },
+    {
+     "id": "seven-cs",
+     "title": "The seven C's of communication",
+     "theory_md": "Two standard lists appear in the papers. Learn both.\n\n**List A**: Completeness, Conciseness, Consideration, Clarity, Concreteness, Courtesy, Correctness.\n**List B**: Clear, Concise, Concrete, Correct, Coherent, Complete, Courteous.\n\n- **Clarity**: one idea, simple words. \"Submit by 5 p.m. Friday\", not \"sometime soon\".\n- **Conciseness**: fewest words, no filler.\n- **Concreteness**: facts, figures, examples.\n- **Correctness**: right facts, grammar, tone.\n- **Completeness**: all needed information (who, what, when, where, how).\n- **Consideration** (you-attitude) and **Courtesy**: respect the receiver; polite, positive.\n- **Coherence**: logical flow.",
+     "basics_md": "Imagine giving directions to a stranger. You must be clear, brief, specific, right, complete and polite. Those are the Cs.",
+     "key_points": [
+      "Name all seven Cs (either list)",
+      "Each C with a one-line meaning",
+      "One example each",
+      "Examples show bad version against good version"
+     ],
+     "figures": [],
+     "questions": [
+      {
+       "id": "cs-q1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "Which is NOT one of the seven C's of effective communication?",
+       "options": [
+        "Conciseness",
+        "Courtesy",
+        "Complexity",
+        "Concreteness"
+       ],
+       "answer_index": 2,
+       "why": "Complexity works against clarity."
+      },
+      {
+       "id": "cs-q2",
+       "kind": "mcq",
+       "level": 1,
+       "q": "\"Please send the report by 5 p.m. on Friday\" is a good example of",
+       "options": [
+        "clarity and concreteness",
+        "vagueness",
+        "jargon",
+        "over-formality"
+       ],
+       "answer_index": 0,
+       "why": "It gives exact task and time."
+      },
+      {
+       "id": "cs-q3",
+       "kind": "short",
+       "level": 2,
+       "marks": 4,
+       "q": "Explain the 7 C's of effective communication with one example each. (4 marks)",
+       "model_answer_md": "1. **Clarity**: one clear idea. *Eg:* \"Submit the report by 5 p.m. Friday.\"\n2. **Conciseness**: fewest words. *Eg:* \"Please attend\" for \"I would like to request you to kindly be present\".\n3. **Concreteness**: specific facts. *Eg:* \"Output rose 12% in June\" not \"output improved\".\n4. **Correctness**: right facts, grammar and tone.\n5. **Completeness**: all required details (date, time, venue).\n6. **Consideration**: view from the receiver's side, you-attitude.\n7. **Courtesy**: polite, respectful words.",
+       "points": [
+        "Seven Cs named",
+        "Meaning of each in one line",
+        "Example for each",
+        "Clarity/conciseness/concreteness distinguished"
+       ]
+      },
+      {
+       "id": "cs-q4",
+       "kind": "short",
+       "level": 3,
+       "marks": 2,
+       "q": "A manager writes: \"Send it sometime soon, as discussed.\" Which Cs are broken and how would you rewrite it? (2 marks)",
+       "model_answer_md": "**Broken**: clarity (what is \"it\"?), concreteness (\"sometime soon\"), completeness (no date or recipient).\n\n**Rewrite**: \"Please e-mail the final cost report to Mr Rao by 5 p.m. on Friday, 24 October.\"",
+       "points": [
+        "Names clarity/concreteness/completeness",
+        "Rewrite gives item, recipient and deadline"
+       ]
+      },
+      {
+       "id": "cs-p1",
+       "pyq": "267d7fd5ee9c014c",
+       "level": 1,
+       "points": [
+        "Clarity, Conciseness, Concreteness, Correctness, Completeness, Consideration, Courtesy",
+        "One line meaning for each C",
+        "Short example for any"
+       ]
+      },
+      {
+       "id": "cs-p2",
+       "pyq": "f8e3a842d17c5871",
+       "level": 1,
+       "points": [
+        "Seven Cs listed: clarity, conciseness, concreteness, correctness, completeness, consideration, courtesy (or coherence)",
+        "Brief explanation of each"
+       ]
+      },
+      {
+       "id": "cs-p3",
+       "pyq": "61f425d34138ced6",
+       "level": 2,
+       "points": [
+        "Seven Cs named",
+        "Each C explained in one line",
+        "Example given for each C (bad against good version)"
+       ]
+      },
+      {
+       "id": "cs-p4",
+       "pyq": "c77e3e2c09a84f66",
+       "level": 2,
+       "points": [
+        "Consideration: Bina walks close to Sonu, takes his hand; asks Prakash about the cows with concern",
+        "Clarity: Prakash explains what he told his parents; clear route details",
+        "Concreteness: specific facts (school up to class Eight, father away nine months, Miss Ramola)",
+        "Any three Cs with passage evidence"
+       ]
+      }
+     ]
+    },
+    {
+     "id": "strategies",
+     "title": "Strategies for effective communication",
+     "theory_md": "Strategies to communicate effectively:\n1. Know the **purpose** and the **audience**; plan the message.\n2. Follow the **7 C's**.\n3. **Listen actively**: attention, notes, questions, paraphrase.\n4. Use simple language and suitable **tone**; avoid jargon and slang.\n5. Use positive **body language** and voice.\n6. Choose the right **channel**; ask for **feedback**.\n7. Read, write and speak regularly; practise.\n\n**Role in academic career**: understanding lectures, writing assignments and reports, presentations, viva, group projects, interviews and placements, building rapport with teachers and peers.",
+     "basics_md": "Effective communication is a habit made of small decisions: who is listening, what do they need, how will I say it, did they get it?",
+     "key_points": [
+      "Strategies: purpose, audience, 7 Cs, listening, tone, channel, feedback",
+      "Active listening and positive body language",
+      "Academic role: lectures, reports, presentations, viva, placements",
+      "Two parts of the answer: strategies and role"
+     ],
+     "figures": [],
+     "questions": [
+      {
+       "id": "st-q1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "Which is the BEST first step before communicating?",
+       "options": [
+        "Choose the font",
+        "Know the purpose and the audience",
+        "Speak louder",
+        "Use technical terms"
+       ],
+       "answer_index": 1,
+       "why": "Everything else follows from purpose and audience."
+      },
+      {
+       "id": "st-q2",
+       "kind": "mcq",
+       "level": 1,
+       "q": "Asking the listener to restate the message is an example of",
+       "options": [
+        "noise",
+        "feedback",
+        "a barrier",
+        "a channel"
+       ],
+       "answer_index": 1,
+       "why": "Restating checks understanding."
+      },
+      {
+       "id": "st-q3",
+       "kind": "short",
+       "level": 2,
+       "marks": 5,
+       "q": "What strategies can we adopt for effective communication? What role does it play in academic career? (5 marks)",
+       "model_answer_md": "**A. Strategies**\n1. Clear purpose and audience analysis.\n2. Follow the 7 C's.\n3. Active listening.\n4. Simple language, right tone, no jargon.\n5. Positive body language and voice modulation.\n6. Suitable channel and feedback.\n7. Regular practice: reading, writing, speaking.\n\n**B. Role in academic career**\n- Understanding lectures and asking doubts.\n- Clear assignments, lab and project reports.\n- Confident presentations, viva and seminars.\n- Group work and rapport with teachers.\n- Success in GDs, interviews and placement.",
+       "points": [
+        "Strategies listed (purpose, audience, 7 Cs, listening, tone, feedback)",
+        "Active listening and body language",
+        "Academic role: reports, presentations, viva",
+        "Interviews, placement, teamwork"
+       ]
+      },
+      {
+       "id": "st-p1",
+       "pyq": "a095cab4d2eaa1c4",
+       "level": 2,
+       "points": [
+        "Strategies: purpose, audience, 7 Cs, active listening, tone, feedback",
+        "Role: lectures, assignments, reports, presentations, viva",
+        "Placement and career benefit"
+       ]
+      },
+      {
+       "id": "st-p2",
+       "pyq": "101c714df5a4ccac",
+       "level": 2,
+       "points": [
+        "Strategies: purpose, audience, 7 Cs, active listening, tone, feedback",
+        "Role in academic career: lectures, reports, presentations, viva",
+        "Placement and teamwork benefit"
+       ]
+      },
+      {
+       "id": "st-p3",
+       "pyq": "ca0f05a8ae3dc964",
+       "level": 2,
+       "points": [
+        "Know purpose and audience; 7 Cs; active listening",
+        "Suitable language, tone, positive body language",
+        "Academic role: understanding, writing, presenting, interviews",
+        "Feedback and continuous practice"
+       ]
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "topic": "Communication process",
+   "subtopics": [
+    {
+     "id": "process-model",
+     "title": "The communication process and feedback",
+     "theory_md": "Elements in order: **sender (encoder) -> encoding -> message -> channel -> decoding -> receiver -> feedback**, with **noise** acting at every stage.\n\n- **Encoding**: idea converted to words, pictures or gestures.\n- **Channel**: the medium (speech, e-mail, notice).\n- **Decoding**: receiver interprets the symbols.\n- **Feedback**: the receiver's response; it **completes the cycle** and makes communication two-way.\n- **Noise**: anything that distorts the message (physical, semantic, psychological).\n\nFeedback confirms understanding, allows correction, builds trust and saves time. Example: a student nods or asks \"Do you mean ...?\" and the teacher re-explains.",
+     "basics_md": "Throwing a ball: the sender throws, the ball is the message, the receiver catches. Feedback is the ball thrown back to show it was caught.",
+     "key_points": [
+      "Eight elements with correct order",
+      "Feedback completes the cycle and makes it two-way",
+      "Noise acts at every stage",
+      "Diagram in words with feedback arrow"
+     ],
+     "figures": [],
+     "questions": [
+      {
+       "id": "pm-q1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "Converting an idea into words or symbols is called",
+       "options": [
+        "decoding",
+        "encoding",
+        "feedback",
+        "noise"
+       ],
+       "answer_index": 1,
+       "why": "Encoding is done by the sender; decoding by the receiver."
+      },
+      {
+       "id": "pm-q2",
+       "kind": "mcq",
+       "level": 1,
+       "q": "Which element completes the communication cycle?",
+       "options": [
+        "Message",
+        "Channel",
+        "Feedback",
+        "Noise"
+       ],
+       "answer_index": 2,
+       "why": "Feedback tells the sender the message was understood."
+      },
+      {
+       "id": "pm-q3",
+       "kind": "short",
+       "level": 2,
+       "marks": 3,
+       "q": "Explain the importance of feedback in communication with an example. (3 marks)",
+       "model_answer_md": "**Feedback** is the receiver's response to the sender's message. It completes the cycle.\n\n**Importance**\n1. Confirms the message was understood.\n2. Allows early correction of misunderstanding.\n3. Makes communication two-way and builds trust.\n4. Improves the sender's future messages.\n\n**Example**: A manager gives a task; the employee repeats it and asks about the deadline. The manager clarifies, so the work is done correctly.",
+       "points": [
+        "Definition: receiver's response completing the cycle",
+        "Confirms understanding / corrects errors",
+        "Two-way, trust",
+        "Relevant example"
+       ]
+      },
+      {
+       "id": "pm-p1",
+       "pyq": "df2900f430472946",
+       "level": 2,
+       "points": [
+        "Feedback = receiver's response; completes the cycle",
+        "Confirms understanding, allows correction, two-way, builds trust",
+        "Example given"
+       ]
+      },
+      {
+       "id": "pm-p2",
+       "pyq": "9c3194d732cef736",
+       "level": 3,
+       "points": [
+        "Process: sender, encoding, message, channel, receiver, decoding, feedback, noise",
+        "Diagram in words with feedback arrow and noise",
+        "Barriers: physical, semantic, psychological, perceptual, cultural, organisational, attitudinal, lack of feedback",
+        "Overcoming: plan, simple language, 7 Cs, right channel, active listening, control emotions, respect culture"
+       ]
+      }
+     ]
+    },
+    {
+     "id": "levels-channels",
+     "title": "Levels, channels and flow of communication",
+     "theory_md": "**Levels**: **intrapersonal** (within oneself: self-talk, thinking, decisions), **interpersonal** (between two persons, e.g. a conversation), group, public and mass.\n\n**Channels**\n- **Formal** (chain of command): downward (orders, circulars), upward (reports, suggestions), horizontal (peer to peer), diagonal (across levels and departments).\n- **Informal**: grapevine (rumour, tea-break news).\n- By medium: oral, written, non-verbal, visual, audio-visual, electronic (e-mail, WhatsApp, Zoom).\n\nFree flow of information in all directions gives faster decisions, coordination, higher morale and fewer rumours.",
+     "basics_md": "A company is like a family house: instructions go down, news comes up, siblings talk sideways, and gossip travels everywhere.",
+     "key_points": [
+      "Intrapersonal = within one person; interpersonal = between persons",
+      "Formal channels: downward, upward, horizontal, diagonal",
+      "Informal channel = grapevine",
+      "Medium types with examples",
+      "Free flow gives better decisions, coordination, morale"
+     ],
+     "figures": [],
+     "questions": [
+      {
+       "id": "lc-q1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "Self-talk and thinking before a decision is",
+       "options": [
+        "interpersonal",
+        "intrapersonal",
+        "mass",
+        "diagonal"
+       ],
+       "answer_index": 1,
+       "why": "Intra means within oneself."
+      },
+      {
+       "id": "lc-q2",
+       "kind": "mcq",
+       "level": 1,
+       "q": "A circular issued by the HOD to all faculty flows",
+       "options": [
+        "upward",
+        "downward",
+        "horizontal",
+        "through the grapevine"
+       ],
+       "answer_index": 1,
+       "why": "Superior to subordinate is downward."
+      },
+      {
+       "id": "lc-q3",
+       "kind": "short",
+       "level": 2,
+       "marks": 3,
+       "q": "Differentiate between intrapersonal and interpersonal communication with examples. (3 marks)",
+       "model_answer_md": "| Basis | Intrapersonal | Interpersonal |\n|---|---|---|\n| Meaning | within oneself | between two or more persons |\n| Participants | same person is sender and receiver | separate sender and receiver |\n| Form | thinking, self-talk, planning | conversation, interview, phone call |\n| Feedback | internal | from the other person |\n\n*Example*: planning the day alone (intra); discussing a project with a friend (inter).",
+       "points": [
+        "Meaning of each",
+        "Sender and receiver same against different",
+        "Examples",
+        "Feedback difference"
+       ]
+      },
+      {
+       "id": "lc-q4",
+       "kind": "short",
+       "level": 2,
+       "marks": 5,
+       "q": "Describe the channels of communication in an organisation with examples. (5 marks)",
+       "model_answer_md": "**A. Formal channels**\n- **Downward**: superior to subordinate, e.g. HOD issues a notice.\n- **Upward**: subordinate to superior, e.g. progress report to manager.\n- **Horizontal**: peers, e.g. production and quality managers.\n- **Diagonal**: different levels of different departments, e.g. design engineer to purchase head.\n\n**B. Informal channel (grapevine)**: unofficial and quick, e.g. bonus news at tea break.\n\n**C. By medium**: oral (meeting, phone), written (letter, e-mail), non-verbal (gestures), visual (charts), audio-visual (video conference), electronic (WhatsApp, Teams).\n\nChoice depends on urgency, record need, confidentiality and feedback.",
+       "points": [
+        "Formal channels: downward, upward, horizontal, diagonal with examples",
+        "Informal grapevine",
+        "Medium-based channels with examples",
+        "Factors for choosing a channel"
+       ]
+      },
+      {
+       "id": "lc-p1",
+       "pyq": "c55fc00f4e1f92b5",
+       "level": 2,
+       "points": [
+        "Intrapersonal: within oneself; interpersonal: between persons",
+        "Sender and receiver same against different",
+        "Examples: self-talk, planning against conversation"
+       ]
+      },
+      {
+       "id": "lc-p2",
+       "pyq": "54a457880892feaa",
+       "level": 2,
+       "points": [
+        "Intrapersonal: within oneself; interpersonal: between persons",
+        "Sender and receiver same against different",
+        "Examples: self-talk, planning against conversation"
+       ]
+      },
+      {
+       "id": "lc-p3",
+       "pyq": "42691dead2abebb0",
+       "level": 2,
+       "points": [
+        "Channel = path through which message flows",
+        "Formal: downward, upward, horizontal, diagonal, each with example",
+        "Informal: grapevine",
+        "By medium: oral, written, non-verbal, visual, audio-visual, electronic with examples"
+       ]
+      },
+      {
+       "id": "lc-p4",
+       "pyq": "d33e0e5f3f7bc7e6",
+       "level": 2,
+       "points": [
+        "Formal channels with direction and example",
+        "Informal channel (grapevine)",
+        "Medium-based channels with examples"
+       ]
+      },
+      {
+       "id": "lc-p5",
+       "pyq": "d7d50914d55080c1",
+       "level": 2,
+       "points": [
+        "Formal channels with direction and example",
+        "Informal channel (grapevine)",
+        "Medium-based channels with examples"
+       ]
+      },
+      {
+       "id": "lc-p6",
+       "pyq": "2e82b9d57f40a167",
+       "level": 2,
+       "points": [
+        "Downward, upward, horizontal, diagonal flow, formal and informal",
+        "Why free flow is vital: quick decisions, coordination, morale, fewer errors and rumours, innovation",
+        "Blocked flow causes delay and distortion (filtering, fear, many levels)",
+        "Conclusion: open two-way flow keeps organisation aligned"
+       ]
+      }
+     ]
+    },
+    {
+     "id": "audience-written",
+     "title": "Audience-centred approach and written communication steps",
+     "theory_md": "**Audience-centred approach**: plan the message around the receiver's needs, knowledge, culture and attitude. Reasons: message is understood; desired response (what is in it for me); rapport and trust; saves time; holds attention; useful feedback. Steps: analyse audience, choose content and channel, anticipate questions, invite feedback.\n\n**Steps of written communication**:\n1. Identify purpose\n2. Analyse audience\n3. Gather information\n4. Organise (outline)\n5. Write first draft\n6. Revise\n7. Edit and proofread\n8. Send and seek feedback\n\nEach step improves focus, accuracy, flow or credibility.",
+     "basics_md": "A doctor explains the same illness differently to a colleague and to a child. The audience decides the words.",
+     "key_points": [
+      "Audience-centred = message planned around receiver's needs",
+      "Reasons: understanding, response, rapport, saves time, attention",
+      "Eight steps of written communication in order",
+      "Contribution of each step stated"
+     ],
+     "figures": [],
+     "questions": [
+      {
+       "id": "aw-q1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "An audience-centred message is planned around",
+       "options": [
+        "the sender's convenience",
+        "the receiver's needs and knowledge",
+        "the length of the message",
+        "the channel only"
+       ],
+       "answer_index": 1,
+       "why": "Audience centred means receiver centred."
+      },
+      {
+       "id": "aw-q2",
+       "kind": "mcq",
+       "level": 1,
+       "q": "Which step comes right BEFORE writing the first draft?",
+       "options": [
+        "Proofreading",
+        "Organising the ideas (outline)",
+        "Sending",
+        "Revising"
+       ],
+       "answer_index": 1,
+       "why": "Plan and outline first, then draft."
+      },
+      {
+       "id": "aw-q3",
+       "kind": "short",
+       "level": 2,
+       "marks": 5,
+       "q": "Why should communicators take an audience-centred approach? (5 marks)",
+       "model_answer_md": "An audience-centred approach plans the message around the receiver's needs, knowledge, expectations and culture.\n\n1. **Understanding**: language and level match the receiver.\n2. **Response**: benefits to the audience win acceptance.\n3. **Rapport and trust**: respect creates goodwill.\n4. **Saves time**: only relevant content.\n5. **Attention**: audience-based examples keep interest.\n6. **Feedback**: encourages two-way flow.\n\n*Example*: jargon for a technical team; plain outcomes for a client.",
+       "points": [
+        "Definition",
+        "Understanding and response",
+        "Rapport/trust",
+        "Saves time and attention",
+        "Example"
+       ]
+      },
+      {
+       "id": "aw-p1",
+       "pyq": "9710e5d5bf98d8f8",
+       "level": 2,
+       "points": [
+        "Plan the message around the receiver's needs, knowledge, culture",
+        "Reasons: understanding, desired response, trust, saves time, attention, feedback",
+        "Steps: analyse audience, choose content/channel, invite feedback",
+        "Example technical against non-technical audience"
+       ]
+      },
+      {
+       "id": "aw-p2",
+       "pyq": "12cff083fd096ccd",
+       "level": 3,
+       "points": [
+        "Eight steps: purpose, audience, gather, organise, draft, revise, edit/proofread, send and feedback",
+        "Contribution of each step (focus, language level, credibility, coherence, clarity, accuracy)",
+        "Direct order for good news, indirect for bad news"
+       ]
+      }
+     ]
+    },
+    {
+     "id": "case-passages",
+     "title": "Case and passage questions",
+     "theory_md": "Passage and case questions test the same ideas on a text. Method: **quote the evidence**, then **name the concept**.\n\n- Communication failure: unclear instructions, no feedback, assumptions, wrong channel, expectations not passed on.\n- Ensuring clarity: written brief with details (what, how many, size, colour, deadline), meeting plus follow-up e-mail, examples and samples, ask the team to repeat back.\n- Role of feedback: clarifying questions at start, progress reviews during, final review before delivery.\n- Better understanding: ask questions, request the brief, paraphrase, check-in meetings, written confirmation.\n\nDescribing a setting: use the details in the text, in your own words.",
+     "basics_md": "In a passage question, the marker is checking whether you can point to the line that proves your point.",
+     "key_points": [
+      "Quote or cite the passage as evidence",
+      "Name the concept (clarity, feedback, barrier)",
+      "Invent realistic details when asked",
+      "Give several short numbered points"
+     ],
+     "figures": [],
+     "questions": [
+      {
+       "id": "cp-q1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "A manager e-mails only \"Create visuals\" to the team. The main fault is lack of",
+       "options": [
+        "clarity and completeness",
+        "courtesy",
+        "speed",
+        "grammar"
+       ],
+       "answer_index": 0,
+       "why": "No details of what, how many, or in what style."
+      },
+      {
+       "id": "cp-q2",
+       "kind": "mcq",
+       "level": 1,
+       "q": "The best way to confirm a task is understood is to",
+       "options": [
+        "assume yes",
+        "ask the receiver to repeat it back",
+        "send it again",
+        "wait silently"
+       ],
+       "answer_index": 1,
+       "why": "Repeating back is feedback."
+      },
+      {
+       "id": "cp-q3",
+       "kind": "short",
+       "level": 2,
+       "marks": 3,
+       "q": "A manager sent a one-line e-mail \"Prepare the report\" and the report missed the mark. List three communication failures and one remedy for each. (3 marks)",
+       "model_answer_md": "1. **Vague instruction** (no format, metrics, deadline): give a detailed written brief.\n2. **No feedback or follow-up**: hold a check-in and ask the team to repeat the task.\n3. **Assumptions by the team**: encourage clarifying questions at the start.",
+       "points": [
+        "Vague instruction with remedy",
+        "No feedback with remedy",
+        "Assumption with remedy"
+       ]
+      },
+      {
+       "id": "cp-p1",
+       "pyq": "f8f1869f1923277c",
+       "level": 2,
+       "points": [
+        "Vague instructions (\"Create visuals\", \"Prepare the report\")",
+        "No follow-up or feedback; one-way communication",
+        "Team assumed instead of asking",
+        "Single short e-mail channel for a complex brief",
+        "Client expectations not transmitted"
+       ]
+      },
+      {
+       "id": "cp-p2",
+       "pyq": "d076382cff43cee6",
+       "level": 3,
+       "points": [
+        "Detailed written brief with invented specifics (number of posts, sizes, colours, tone, deadline)",
+        "Briefing meeting plus follow-up e-mail",
+        "Samples/examples and checklist",
+        "Ask team to repeat requirements; review points"
+       ]
+      },
+      {
+       "id": "cp-p3",
+       "pyq": "c12653b8f9139e60",
+       "level": 2,
+       "points": [
+        "Feedback closes the loop",
+        "Clarifying questions at start",
+        "Progress reviews during the project",
+        "Final review before delivery catches the gap early"
+       ]
+      },
+      {
+       "id": "cp-p4",
+       "pyq": "9052a9177c8887b4",
+       "level": 2,
+       "points": [
+        "Ask clarifying questions instead of assuming",
+        "Request client brief and brand guidelines",
+        "Paraphrase/repeat requirements and confirm in writing",
+        "Regular check-ins and draft reviews"
+       ]
+      },
+      {
+       "id": "cp-p5",
+       "pyq": "accf3a81cf30e7e4",
+       "level": 1,
+       "points": [
+        "Koli: small mountain village, primary school, single ration shop, routine work (fields, spring water, fodder)",
+        "Nauti: larger village with High School up to Eighth",
+        "Zigzag paths, lanes, shortcuts, fields and ravines, joining a busy road with mules, cattle, goats"
+       ]
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "topic": "Barriers to communication",
+   "subtopics": [
+    {
+     "id": "barrier-types",
+     "title": "Types of barriers to communication",
+     "theory_md": "A **barrier** is anything that blocks or distorts a message. Types, with an example each:\n- **Physical/environmental**: noise, distance, poor network.\n- **Semantic/language**: jargon, ambiguity, different dialects.\n- **Psychological/emotional**: anger, fear, stress, prejudice, closed mind.\n- **Attitudinal**: negative or closed-off attitude; people stop speaking up.\n- **Perceptual**: different assumptions.\n- **Organisational**: many levels, rigid rules, overload.\n- **Cultural**, **physiological** (hearing, fatigue), **lack of feedback**.\n\nRemedy pattern: clear language, right channel, written confirmation, feedback, calm and empathy.",
+     "basics_md": "Noise on a phone line stops the words, while anger stops the meaning. Both are barriers, one outside you and one inside.",
+     "key_points": [
+      "Name the barrier type and give an example",
+      "Physical, semantic, psychological, organisational, cultural, attitudinal",
+      "Always add how to overcome it",
+      "Link evidence in the scenario to the barrier name"
+     ],
+     "figures": [],
+     "questions": [
+      {
+       "id": "bt-q1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "A listener ignoring advice because he is angry is a",
+       "options": [
+        "physical barrier",
+        "psychological/emotional barrier",
+        "semantic barrier",
+        "channel failure"
+       ],
+       "answer_index": 1,
+       "why": "Emotions block reception."
+      },
+      {
+       "id": "bt-q2",
+       "kind": "mcq",
+       "level": 1,
+       "q": "Use of technical jargon with a layperson is a",
+       "options": [
+        "semantic barrier",
+        "physical barrier",
+        "cultural barrier",
+        "organisational barrier"
+       ],
+       "answer_index": 0,
+       "why": "Words are not understood."
+      },
+      {
+       "id": "bt-q3",
+       "kind": "short",
+       "level": 2,
+       "marks": 2,
+       "q": "Write a short paragraph on emotional barrier to communication. (2 marks)",
+       "model_answer_md": "An emotional barrier is a mental block caused by strong feelings such as fear, anger, anxiety, shyness or mistrust. A worried student may not ask a doubt; an angry listener hears only what supports his anger. Emotions distort perception and cause misunderstanding. It is overcome by calming down, empathy and open discussion.",
+       "points": [
+        "Definition: mental block due to emotions",
+        "Examples of emotions (fear, anger, shyness)",
+        "Effect: distortion/misunderstanding",
+        "Remedy"
+       ]
+      },
+      {
+       "id": "bt-q4",
+       "kind": "short",
+       "level": 2,
+       "marks": 4,
+       "q": "Discuss four challenges to interpersonal communication, with examples. (4 marks)",
+       "model_answer_md": "1. **Language/semantic**: jargon, ambiguity. *Eg:* technical terms with a layperson.\n2. **Psychological**: anger, fear, prejudice. *Eg:* an angry person does not listen.\n3. **Physical**: noise, distance. *Eg:* a call on a bad network.\n4. **Cultural/perceptual**: different values and assumptions. *Eg:* a direct 'no' seen as rude.",
+       "points": [
+        "Four barriers named",
+        "Example for each",
+        "Barriers affect two-way exchange"
+       ]
+      },
+      {
+       "id": "bt-p1",
+       "pyq": "0c4b4417008bf44f",
+       "level": 2,
+       "points": [
+        "Language and semantic barriers: jargon, ambiguity",
+        "Psychological and emotional barriers: anger, fear, prejudice",
+        "Physical and cultural barriers",
+        "Example for each"
+       ]
+      },
+      {
+       "id": "bt-p2",
+       "pyq": "55ea0b0bcf539115",
+       "level": 2,
+       "points": [
+        "Channel/organisational barrier: no written notice or confirmation",
+        "No feedback or planning: understanding not checked",
+        "Manager's emotional reaction (frustration, hasty conclusions)",
+        "Remedies: written notice with agenda, acknowledgement, reminder, talk to supervisors calmly"
+       ]
+      },
+      {
+       "id": "bt-p3",
+       "pyq": "c804effb705a2713",
+       "level": 2,
+       "points": [
+        "Ineffective channel/transmission failure",
+        "Lack of feedback",
+        "Organisational and emotional barriers",
+        "Remedies: written notice with time/agenda, acknowledgement, feedback, trust and listening"
+       ]
+      },
+      {
+       "id": "bt-p4",
+       "pyq": "8f865596ec7b087f",
+       "level": 1,
+       "points": [
+        "Emotional barrier: mental block due to fear, anger, anxiety, mistrust",
+        "Example (worried student not asking, angry listener)",
+        "Distorts perception, causes misunderstanding"
+       ]
+      },
+      {
+       "id": "bt-p5",
+       "pyq": "77fd342e4ba54516",
+       "level": 1,
+       "points": [
+        "Negative or closed attitude acts as a barrier",
+        "Harsh words/critical feedback make team afraid to speak",
+        "Reduces listening, empathy; misunderstandings follow"
+       ]
+      },
+      {
+       "id": "bt-p6",
+       "pyq": "98091a9969637f36",
+       "level": 2,
+       "points": [
+        "Psychological/emotional: Prakash's careless attitude, parents angry",
+        "Generation/attitude gap",
+        "Physical/distance: father away nine months, long walk",
+        "Rumour/second-hand information ('they say')",
+        "Age/ability gap (Sonu)"
+       ]
+      },
+      {
+       "id": "bt-p7",
+       "pyq": "cdd3fd2241fccc4a",
+       "level": 3,
+       "points": [
+        "Specific example (100-200 words) of defusing a tense situation: listened, stayed calm, empathy, neutral words",
+        "Barriers named: emotional/psychological, perceptual, attitudinal, possibly language",
+        "How communication skills solved it"
+       ]
+      }
+     ]
+    },
+    {
+     "id": "language-culture",
+     "title": "Language, accent and culture in a multilingual class",
+     "theory_md": "In a multilingual, multicultural class the common barriers are:\n1. **Language**: different mother tongues; limited common language; different words for one thing.\n2. **Accent/pronunciation**: **mother tongue influence (MTI)**, fast speech.\n3. **Cultural**: customs, gestures, food, festivals, humour.\n4. **Semantic**: slang, idioms, regional words.\n5. **Stereotypes/prejudice**.\n6. **Shyness** or fear of mockery.\n\n**Remedies**: speak slowly and simply, use a common link language, repeat or paraphrase, ask politely for repetition, learn some basics of each other's languages, respect customs, avoid slang, use visuals, form mixed groups.\n\n**MTI** examples: think -> tink, vine/wine merged, zoo -> joo; syllable-timed rhythm.",
+     "basics_md": "When two people speak different languages, even kind words can fail. Patience, simple words and curiosity fix most of it.",
+     "key_points": [
+      "Barriers: language, accent (MTI), culture, semantic, stereotype",
+      "Examples for each barrier",
+      "Remedies: simple language, paraphrase, respect, mixed groups",
+      "MTI: sounds, stress, intonation, grammar transfer"
+     ],
+     "figures": [],
+     "questions": [
+      {
+       "id": "lg-q1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "Saying 'tink' for 'think' is an example of",
+       "options": [
+        "mother tongue influence",
+        "a semantic barrier",
+        "dogma",
+        "jargon"
+       ],
+       "answer_index": 0,
+       "why": "/th/ replaced by the nearest native sound."
+      },
+      {
+       "id": "lg-q2",
+       "kind": "mcq",
+       "level": 1,
+       "q": "The best remedy for an accent barrier is to",
+       "options": [
+        "speak louder",
+        "speak slowly and paraphrase",
+        "use jargon",
+        "avoid talking"
+       ],
+       "answer_index": 1,
+       "why": "Slow speech and paraphrasing aid understanding."
+      },
+      {
+       "id": "lg-q3",
+       "kind": "short",
+       "level": 2,
+       "marks": 3,
+       "q": "Discuss any three barriers you face when talking to people from different regions and suggest remedies. (2.5 marks)",
+       "model_answer_md": "1. **Language/accent**: different mother tongues and pronunciation. *Remedy:* use a common link language, speak slowly, ask for repetition.\n2. **Semantic**: regional words and slang. *Remedy:* use standard simple words, explain terms.\n3. **Cultural**: different customs and gestures. *Remedy:* learn and respect other cultures, avoid stereotypes.",
+       "points": [
+        "Three barriers named with example",
+        "Remedy for each",
+        "Respect for diversity"
+       ]
+      },
+      {
+       "id": "lg-q4",
+       "kind": "short",
+       "level": 3,
+       "marks": 5,
+       "q": "How does the mother tongue affect the way we speak English? Give examples. (5 marks)",
+       "model_answer_md": "**MTI** is the carry-over of the sounds, stress and grammar of the first language into English.\n1. **Sounds**: /th/ becomes /t/ or /d/ (think -> tink); v and w merged; z -> j.\n2. **Vowels**: long and short pairs merge (ship/sheep).\n3. **Stress and rhythm**: syllable-timed speech gives equal stress (PHO-TO-GRA-PHY).\n4. **Intonation** of the mother tongue is applied.\n5. **Grammar and vocabulary**: 'I am having a car', 'prepone'.\n6. **Spelling-based speech**: 'Wed-nes-day'.\n\n**Effect**: misunderstanding, loss of confidence. **Remedy**: IPA dictionary, minimal pairs, listening, recording own speech.",
+       "points": [
+        "Definition of MTI",
+        "Sounds with examples",
+        "Stress/rhythm and intonation",
+        "Grammar transfer examples",
+        "Effect and remedy"
+       ]
+      },
+      {
+       "id": "lg-p1",
+       "pyq": "64e82641200d0411",
+       "level": 3,
+       "points": [
+        "MTI = transfer of first-language sounds, stress, grammar into English",
+        "Sounds: th -> t/d, v/w merged, z -> j",
+        "Stress and rhythm, vowel length, intonation",
+        "Grammar and vocabulary examples",
+        "Effect and remedies"
+       ]
+      },
+      {
+       "id": "lg-p2",
+       "pyq": "f5ddf45e973220f5",
+       "level": 2,
+       "points": [
+        "Barriers: language, accent (MTI), cultural, semantic, stereotypes, shyness",
+        "Remedies: common language, slow clear speech, paraphrase, respect, mixed groups"
+       ]
+      },
+      {
+       "id": "lg-p3",
+       "pyq": "e7c0cd0899d1dbe8",
+       "level": 2,
+       "points": [
+        "Barriers: language, accent, cultural, semantic, stereotypes, shyness",
+        "Remedies: common language, slow clear speech, paraphrase, respect, mixed groups"
+       ]
+      },
+      {
+       "id": "lg-p4",
+       "pyq": "09795fb63186389e",
+       "level": 2,
+       "points": [
+        "Barriers: language, accent/mother tongue, cultural, stereotype",
+        "Remedies: simple common language, paraphrase, empathy, group activities, respect"
+       ]
+      },
+      {
+       "id": "lg-p5",
+       "pyq": "3b894d57191e4a21",
+       "level": 2,
+       "points": [
+        "Any three: language/accent, semantic, cultural",
+        "Remedy for each: link language, slow speech, simple words, respect"
+       ]
+      },
+      {
+       "id": "lg-p6",
+       "pyq": "ce47af8a8219e03b",
+       "level": 2,
+       "points": [
+        "Any three: language/accent, semantic, cultural",
+        "Remedy for each: link language, slow speech, simple words, respect"
+       ]
+      }
+     ]
+    },
+    {
+     "id": "dogma",
+     "title": "Dogma as a barrier",
+     "theory_md": "**Dogma** is a rigid, fixed belief (religious, political, cultural or personal) held as absolutely true and beyond question, accepted on authority rather than evidence. It is a **psychological/attitudinal barrier**.\n\n**How it blocks communication**: closed mind, selective listening, rejection or distortion of contrary messages, stereotyping, argument and hostility, no learning. *Eg:* a manager who says \"we have always done it this way\" ignores a junior's better method.\n\n**Overcoming**: open mind, active listening, empathy, ask questions, rely on facts and critical thinking, accept feedback, find common ground, read and interact with diverse groups.",
+     "basics_md": "A person with fixed beliefs hears a door shut before anyone knocks.",
+     "key_points": [
+      "Dogma = rigid unquestioned belief",
+      "Psychological/attitudinal barrier",
+      "Effects: closed mind, selective listening, conflict",
+      "Remedies: open mind, active listening, empathy, evidence"
+     ],
+     "figures": [],
+     "questions": [
+      {
+       "id": "dg-q1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "Dogma as a communication barrier is mainly",
+       "options": [
+        "physical",
+        "psychological/attitudinal",
+        "technological",
+        "semantic"
+       ],
+       "answer_index": 1,
+       "why": "It is a fixed attitude in the mind."
+      },
+      {
+       "id": "dg-q2",
+       "kind": "mcq",
+       "level": 1,
+       "q": "Which is a way to overcome dogma?",
+       "options": [
+        "Insisting on one's view",
+        "Keeping an open mind and listening actively",
+        "Avoiding the speaker",
+        "Using jargon"
+       ],
+       "answer_index": 1,
+       "why": "Open-mindedness and listening."
+      },
+      {
+       "id": "dg-q3",
+       "kind": "short",
+       "level": 2,
+       "marks": 5,
+       "q": "What is dogma? How does it act as a barrier to communication? Give examples. (5 marks)",
+       "model_answer_md": "**Dogma** is a rigid belief held as absolutely true and refused to be questioned.\n\n**As a barrier**\n1. **Closed-mindedness**: contrary ideas rejected unheard.\n2. **Selective listening and distorted perception.**\n3. **Stereotyping and prejudice.**\n4. **Conflict, argument**, no exchange of ideas.\n\n**Examples**: 'boss is always right' culture ignores a junior's idea; refusing to accept a classmate's view on a religious or cultural matter.\n\n**Remedies**: open mind, active listening, empathy, evidence-based thinking.",
+       "points": [
+        "Definition",
+        "Closed mind and selective listening",
+        "Prejudice and conflict",
+        "Examples",
+        "Remedies"
+       ]
+      },
+      {
+       "id": "dg-p1",
+       "pyq": "a3e3ecd7b9fc5874",
+       "level": 2,
+       "points": [
+        "Dogma: rigid unquestioned belief; psychological/attitudinal barrier",
+        "Selective listening, closed-mindedness, rejection of contrary messages, hostility",
+        "Strategies: open mind, active listening, empathy, questions, facts and critical thinking, feedback",
+        "Example (word limit 300 words)"
+       ]
+      },
+      {
+       "id": "dg-p2",
+       "pyq": "8fe5f708d88dead5",
+       "level": 2,
+       "points": [
+        "Dogma = fixed belief held as absolutely true",
+        "Barrier: closed-mindedness, selective listening, stereotyping",
+        "Examples (manager, cultural or religious belief)",
+        "Brief remedies"
+       ]
+      },
+      {
+       "id": "dg-p3",
+       "pyq": "9ee15f3aca582f4c",
+       "level": 2,
+       "points": [
+        "Dogma = belief accepted on authority without evidence",
+        "Barrier: closed mind, selective listening, prejudice, no feedback",
+        "Examples such as 'boss is always right' culture",
+        "Brief remedies"
+       ]
+      }
+     ]
+    },
+    {
+     "id": "listening",
+     "title": "Listening and its barriers",
+     "theory_md": "**Listening** is actively receiving, understanding, evaluating, remembering and responding to a message; it is half of communication.\n\n**Five levels (Covey)**: ignoring, pretend, selective, attentive, empathetic.\n\n**Barriers to listening and remedies**\n- Physical noise: quiet place, silence phones.\n- Physiological: tiredness, hearing; speed gap (speech about 125-150 wpm, thinking 400-500 wpm) so the mind wanders: summarise mentally.\n- Psychological: prejudice, emotions: open mind.\n- Lack of interest/pseudo-listening: take notes, ask questions.\n- Semantic: jargon, accent: paraphrase.\n- Interrupting, premature evaluation: wait till the speaker finishes.\n\n**Active listening**: attention, eye contact, nodding, questions, paraphrasing.",
+     "basics_md": "Hearing is automatic; listening is a decision. You can hear a lecture and still not listen to it.",
+     "key_points": [
+      "Listening is active; half of communication",
+      "Five levels: ignoring, pretend, selective, attentive, empathetic",
+      "Barriers: physical, physiological, psychological, interest, semantic, interrupting",
+      "Remedy for each barrier"
+     ],
+     "figures": [],
+     "questions": [
+      {
+       "id": "li-q1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "The highest of the five levels of listening is",
+       "options": [
+        "ignoring",
+        "selective",
+        "attentive",
+        "empathetic"
+       ],
+       "answer_index": 3,
+       "why": "Empathetic listening seeks the speaker's feelings and view."
+      },
+      {
+       "id": "li-q2",
+       "kind": "mcq",
+       "level": 1,
+       "q": "Nodding \"yes\" while thinking of something else is",
+       "options": [
+        "attentive listening",
+        "pretend listening",
+        "empathetic listening",
+        "active listening"
+       ],
+       "answer_index": 1,
+       "why": "Signs of attention without following the message."
+      },
+      {
+       "id": "li-q3",
+       "kind": "short",
+       "level": 2,
+       "marks": 2,
+       "q": "Discuss the role of listening in effective communication. (2 marks)",
+       "model_answer_md": "Listening is half of communication: a message is complete only when it is received and understood. Active listening (attention, eye contact, nodding, questions, paraphrasing) avoids misunderstanding, shows respect, builds trust and gives feedback to the speaker.",
+       "points": [
+        "Half of communication; message complete only when understood",
+        "Active listening features",
+        "Respect, trust, feedback"
+       ]
+      },
+      {
+       "id": "li-q4",
+       "kind": "short",
+       "level": 2,
+       "marks": 5,
+       "q": "Discuss any four barriers to listening and how to remove them. (5 marks)",
+       "model_answer_md": "Listening is receiving, understanding and responding to a message; poor listening breaks the whole process.\n1. **Physical**: noise, interruptions. *Remedy:* quiet place, silence phones.\n2. **Physiological**: fatigue, hearing, speed gap between speech and thought. *Remedy:* rest, summarise mentally.\n3. **Psychological**: prejudice, anger, closed mind. *Remedy:* open mind, listen to understand.\n4. **Lack of interest / pseudo-listening.** *Remedy:* find personal benefit, notes, questions.\n5. **Semantic**: jargon, accent. *Remedy:* ask clarification, paraphrase.",
+       "points": [
+        "Listening defined; fundamental to communication",
+        "Four barriers named",
+        "Remedy for each",
+        "Examples"
+       ]
+      },
+      {
+       "id": "li-p1",
+       "pyq": "bc52ba91f1eeef73",
+       "level": 1,
+       "points": [
+        "Listening is half of communication",
+        "Active listening: attention, eye contact, questions, paraphrase",
+        "Avoids misunderstanding, shows respect, builds trust"
+       ]
+      },
+      {
+       "id": "li-p2",
+       "pyq": "0afb0281761a70db",
+       "level": 2,
+       "points": [
+        "Listening: receiving, understanding, evaluating, remembering, responding",
+        "Barriers: physical, physiological (speed gap), psychological, lack of interest, semantic, interrupting",
+        "Remedy for each",
+        "Poor listening breaks the communication process"
+       ]
+      },
+      {
+       "id": "li-p3",
+       "pyq": "03a72cbebde669f5",
+       "level": 2,
+       "points": [
+        "Any four barriers: physical, physiological, psychological, lack of interest, semantic, interrupting",
+        "Remedy for each",
+        "Link to listening as fundamental to communication"
+       ]
+      },
+      {
+       "id": "li-p4",
+       "pyq": "92c3379445da4707",
+       "level": 1,
+       "points": [
+        "Ignoring",
+        "Pretend listening",
+        "Selective listening",
+        "Attentive listening",
+        "Empathetic listening (highest)"
+       ]
+      },
+      {
+       "id": "li-p5",
+       "pyq": "c76aa432138278e4",
+       "level": 2,
+       "points": [
+        "Bina responds to Prakash's story with a relevant question about the cows",
+        "Bina looked up, excited, at news of Miss Ramola and thought of questions",
+        "Bina takes Sonu's hand, responding to his need; children talk and listen to each other"
+       ]
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "topic": "Verbal and non-verbal communication",
+   "subtopics": [
+    {
+     "id": "verbal-nonverbal",
+     "title": "Verbal against non-verbal, overt against covert",
+     "theory_md": "**Verbal**: uses words, spoken or written. **Non-verbal**: messages without words (face, eyes, gestures, posture, touch, space, tone, appearance, time).\n\n| Verbal | Non-verbal |\n|---|---|\n| words | cues and behaviour |\n| intentional, structured | often unconscious |\n| precise for facts | conveys feelings, attitudes |\n| record in writing | no record |\n| can be used at a distance | needs presence |\n\nIn conflict, people **believe body language** over words. Mehrabian (feelings and attitudes only): 7% words, 38% tone, 55% facial/body.\n\n**Overt**: open, direct, explicit. **Covert**: hidden, implied, by hints, sarcasm, silence.",
+     "basics_md": "Words say what; body and voice say how they mean it. When they disagree, the listener trusts the how.",
+     "key_points": [
+      "Verbal = words; non-verbal = cues without words",
+      "Non-verbal conveys feelings; verbal conveys facts",
+      "Listeners trust body language when it conflicts with words",
+      "Mehrabian: 7, 38, 55 (feelings and attitudes only)",
+      "Overt = explicit; covert = implied"
+     ],
+     "figures": [],
+     "questions": [
+      {
+       "id": "vn-q1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "According to Mehrabian, for feelings and attitudes the largest share of impact comes from",
+       "options": [
+        "words (7%)",
+        "tone (38%)",
+        "facial and body cues (55%)",
+        "written text"
+       ],
+       "answer_index": 2,
+       "why": "55% facial/body, 38% tone, 7% words."
+      },
+      {
+       "id": "vn-q2",
+       "kind": "mcq",
+       "level": 1,
+       "q": "A sarcastic \"Great job, as usual\" meaning the work was poor is",
+       "options": [
+        "overt communication",
+        "covert communication",
+        "written communication",
+        "formal communication"
+       ],
+       "answer_index": 1,
+       "why": "The real meaning is hidden."
+      },
+      {
+       "id": "vn-q3",
+       "kind": "short",
+       "level": 2,
+       "marks": 4,
+       "q": "Do you agree that non-verbal communication is less impactful than verbal? Discuss. (4 marks)",
+       "model_answer_md": "**No.** Non-verbal communication is often more impactful.\n\n- Mehrabian: for feelings and attitudes, words give about 7%, tone 38%, facial and body cues 55%.\n- It is spontaneous and so **more honest**; when words and body language conflict, listeners trust the body.\n- It repeats, emphasises, substitutes and contradicts words.\n- It shapes first impressions (dress, handshake).\n\nWords are better for facts and instructions, so both should agree.",
+       "points": [
+        "Disagree with reason",
+        "Mehrabian percentages",
+        "Honest/believed when conflict",
+        "Functions or first impression",
+        "Balance: words for facts"
+       ]
+      },
+      {
+       "id": "vn-q4",
+       "kind": "short",
+       "level": 2,
+       "marks": 5,
+       "q": "Differentiate between overt and covert communication with examples. (5 marks)",
+       "model_answer_md": "| Basis | Overt | Covert |\n|---|---|---|\n| Nature | open, direct, explicit | hidden, indirect, implicit |\n| Intention | clear | concealed |\n| Mode | clear words | hints, sarcasm, tone, silence, actions |\n| Understanding | easy | needs reading between the lines |\n| Transparency | high, builds trust | low, may cause suspicion |\n| Use | notices, contracts, instructions | diplomacy, office politics |\n\n*Overt*: \"Submit the report by 5 p.m.\" *Covert*: a host yawning and looking at the clock instead of saying \"Please leave\".",
+       "points": [
+        "Definitions",
+        "At least four points of difference",
+        "Overt example",
+        "Covert example"
+       ]
+      },
+      {
+       "id": "vn-p1",
+       "pyq": "db3666f73feca1b8",
+       "level": 2,
+       "points": [
+        "Differences: words against cues; intentional against unconscious; facts against feelings; record against none; distance against presence",
+        "Role of non-verbal: expresses emotion, complements, substitutes, contradicts, regulates, creates impressions",
+        "Examples (teacher's frown, nodding)"
+       ]
+      },
+      {
+       "id": "vn-p2",
+       "pyq": "8785fabe718d8fdf",
+       "level": 2,
+       "points": [
+        "Disagree: non-verbal often more impactful",
+        "Mehrabian: most of emotional impact from tone and body",
+        "Spontaneous and believed when conflicting with words"
+       ]
+      },
+      {
+       "id": "vn-p3",
+       "pyq": "27f8102a0563dde0",
+       "level": 2,
+       "points": [
+        "Disagree",
+        "Mehrabian studies; more honest; believed when conflicting",
+        "Repeats, emphasises, substitutes words; first impressions",
+        "Words better for facts, so both needed"
+       ]
+      },
+      {
+       "id": "vn-p4",
+       "pyq": "ef7170a32361695d",
+       "level": 2,
+       "points": [
+        "Overt: open, direct, explicit; covert: hidden, implied",
+        "Table of differences: intention, mode, understanding, transparency, use",
+        "Examples: overt (notice, instruction); covert (sarcasm, hints, silence)"
+       ]
+      }
+     ]
+    },
+    {
+     "id": "role-nonverbal",
+     "title": "Role of non-verbal communication",
+     "theory_md": "**Functions** of non-verbal cues with words: **repeating** (pointing while saying \"go straight\"), **complementing** (smile with congratulations), **accenting** (thumping the table: \"safety first\"), **substituting** (thumbs-up), **contradicting** (\"I am fine\" through clenched teeth), **regulating** (nodding to continue, looking at watch to end).\n\n**Forms**: kinesics (gestures, posture), facial expression, oculesics (eye contact), paralanguage (tone, pitch, pace), haptics (touch), proxemics (space), chronemics (time), appearance, **silence**.\n\nSilence can show respect, disapproval, thought, deep emotion, protest; it is ambiguous, so read it with context.\n\nGestures are culture specific (head shake can mean yes in parts of India).",
+     "basics_md": "A smile on a message tells you more than the message. Non-verbal cues are the emotion channel of conversation.",
+     "key_points": [
+      "Functions: repeat, complement, accent, substitute, contradict, regulate",
+      "Forms: kinesics, oculesics, paralanguage, haptics, proxemics, chronemics, appearance, silence",
+      "Examples for each",
+      "Culture-specific, silence ambiguous"
+     ],
+     "figures": [],
+     "questions": [
+      {
+       "id": "rn-q1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "Thumbs-up used instead of saying \"well done\" is",
+       "options": [
+        "repeating",
+        "substituting",
+        "contradicting",
+        "regulating"
+       ],
+       "answer_index": 1,
+       "why": "It replaces the words."
+      },
+      {
+       "id": "rn-q2",
+       "kind": "mcq",
+       "level": 1,
+       "q": "Study of tone, pitch and pace of voice is",
+       "options": [
+        "kinesics",
+        "haptics",
+        "paralanguage",
+        "chronemics"
+       ],
+       "answer_index": 2,
+       "why": "Paralanguage is how something is said."
+      },
+      {
+       "id": "rn-q3",
+       "kind": "short",
+       "level": 2,
+       "marks": 5,
+       "q": "\"Silence is more eloquent than words.\" Discuss. (5 marks)",
+       "model_answer_md": "Silence is non-verbal communication and can say more than speech.\n- **Respect/agreement**: two minutes' silence for the dead.\n- **Disapproval**: parent's silence at bad marks.\n- **Thoughtfulness**: pause before answering.\n- **Deep emotion**: grief, awe.\n- **Protest**: silent march, Gandhi's silence day.\n- **Attention**: a pause before a key point.\n\n**But** silence is ambiguous (fear, boredom, ignorance), so read it with facial expression and context. Words are needed for facts.",
+       "points": [
+        "Non-verbal definition and silence",
+        "Several meanings with examples",
+        "Ambiguity",
+        "Conclusion"
+       ]
+      },
+      {
+       "id": "rn-p1",
+       "pyq": "06a3d849fa60985d",
+       "level": 2,
+       "points": [
+        "Words give content, non-verbal cues give interpretation of feelings",
+        "Functions: repeat, complement, accent, substitute, contradict, regulate with examples",
+        "Mehrabian 7/38/55",
+        "Forms: kinesics, oculesics, paralanguage, haptics, proxemics, appearance"
+       ]
+      },
+      {
+       "id": "rn-p2",
+       "pyq": "d2590dd37aee8717",
+       "level": 2,
+       "points": [
+        "Expresses emotions and attitudes",
+        "Reinforces or contradicts words, regulates conversation",
+        "Builds rapport and first impressions",
+        "At least three examples (smile, eye contact, handshake, posture)"
+       ]
+      },
+      {
+       "id": "rn-p3",
+       "pyq": "00ce719433847bdc",
+       "level": 3,
+       "points": [
+        "Non-verbal definition and types: kinesics, face, eye contact, paralanguage, haptics, proxemics, chronemics, appearance, silence",
+        "Functions of non-verbal cues",
+        "Importance of gestures: emotions, reinforce, replace words, first impressions, reveal feelings, regulate",
+        "Cultural caution"
+       ]
+      },
+      {
+       "id": "rn-p4",
+       "pyq": "95e6e78b15b55a62",
+       "level": 2,
+       "points": [
+        "Non-verbal communication defined with forms",
+        "Silence conveys respect, disapproval, thought, emotion, protest with examples",
+        "Silence is ambiguous; read with context",
+        "Conclusion (300 words)"
+       ]
+      },
+      {
+       "id": "rn-p5",
+       "pyq": "04258e728d05f9b6",
+       "level": 1,
+       "points": [
+        "Prakash's careless tone and shrug; voice rising in amusement",
+        "Bina's concern in her eyes; eyes shone with excitement",
+        "Touch: took Sonu's hand, hand on shoulder; looking up, walking faster"
+       ]
+      }
+     ]
+    },
+    {
+     "id": "phonetics",
+     "title": "Phonetics and linguistics",
+     "theory_md": "**Linguistics** is the scientific study of language as a whole: sounds, word formation (morphology), sentence structure (syntax), meaning (semantics) and use. **Phonetics** is the scientific study of **speech sounds**: how they are produced (articulatory), transmitted (acoustic) and heard (auditory).\n\nSo phonetics is one **branch of linguistics**.\n\nThe **IPA** (International Phonetic Alphabet) gives one symbol per sound, e.g. /θ/ in think, /ð/ in this. Pronunciation problems such as mother tongue influence are studied with phonetics.",
+     "basics_md": "Linguistics is the whole map of language; phonetics is the street map of sound.",
+     "key_points": [
+      "Phonetics = study of speech sounds",
+      "Linguistics = study of language as a whole",
+      "Phonetics is a branch of linguistics",
+      "IPA symbols represent sounds"
+     ],
+     "figures": [],
+     "questions": [
+      {
+       "id": "ph-q1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "Phonetics is the study of",
+       "options": [
+        "grammar rules",
+        "speech sounds",
+        "word meaning",
+        "writing styles"
+       ],
+       "answer_index": 1,
+       "why": "Production, transmission and hearing of sounds."
+      },
+      {
+       "id": "ph-q2",
+       "kind": "mcq",
+       "level": 1,
+       "q": "Syntax and semantics are branches of",
+       "options": [
+        "phonetics",
+        "linguistics",
+        "paralanguage",
+        "kinesics"
+       ],
+       "answer_index": 1,
+       "why": "Sentence structure and meaning belong to linguistics."
+      },
+      {
+       "id": "ph-q3",
+       "kind": "short",
+       "level": 2,
+       "marks": 2,
+       "q": "Define and differentiate between phonetics and linguistics. (2 marks)",
+       "model_answer_md": "**Phonetics** is the scientific study of speech sounds: their production, transmission and perception.\n**Linguistics** is the scientific study of language as a whole: sounds, word formation, sentence structure, meaning and use.\nPhonetics is therefore one branch of linguistics.",
+       "points": [
+        "Phonetics: speech sounds",
+        "Linguistics: language as a whole",
+        "Phonetics is a part of linguistics"
+       ]
+      },
+      {
+       "id": "ph-p1",
+       "pyq": "afa6ea917e056694",
+       "level": 1,
+       "points": [
+        "Phonetics: scientific study of speech sounds (production, transmission, hearing)",
+        "Linguistics: scientific study of language as a whole (sounds, morphology, syntax, semantics)",
+        "Phonetics is a branch of linguistics"
+       ]
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "topic": "Body language",
+   "subtopics": [
+    {
+     "id": "forms",
+     "title": "Forms of body language: haptics and proxemics",
+     "theory_md": "**Kinesics**: gestures, posture, movement. **Oculesics**: eye contact. **Paralanguage**: tone, pitch, pace.\n\n**Haptics** (touch). Heslin's types: functional-professional (doctor), social-polite (handshake), friendship-warmth (pat on back), love-intimacy. It conveys support, appreciation, confidence (firm handshake), power (seniors initiate touch). Norms differ by culture; unwanted touch at work can be harassment.\n\n**Proxemics** (Edward Hall): use of space. Intimate (up to about 0.5 m), personal (0.5-1.2 m), social (1.2-3.5 m), public (over 3.5 m). Closeness shows warmth; distance shows formality.\n\n**Chronemics**: use of time.",
+     "basics_md": "Distance and touch speak before words do. A handshake or a step backwards already says a lot.",
+     "key_points": [
+      "Haptics = touch; Heslin's categories",
+      "Proxemics = use of space; four Hall zones with distances",
+      "Touch and space are culture-dependent",
+      "Other forms: kinesics, oculesics, paralanguage, chronemics"
+     ],
+     "figures": [],
+     "questions": [
+      {
+       "id": "fo-q1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "Hall's social distance (business meetings) is about",
+       "options": [
+        "0-0.5 m",
+        "0.5-1.2 m",
+        "1.2-3.5 m",
+        "over 3.5 m"
+       ],
+       "answer_index": 2,
+       "why": "Social zone is about 1.2 to 3.5 m."
+      },
+      {
+       "id": "fo-q2",
+       "kind": "mcq",
+       "level": 1,
+       "q": "A doctor examining a patient is an example of which type of touch?",
+       "options": [
+        "love-intimacy",
+        "functional-professional",
+        "friendship-warmth",
+        "social-polite"
+       ],
+       "answer_index": 1,
+       "why": "Touch needed to do the job."
+      },
+      {
+       "id": "fo-q3",
+       "kind": "short",
+       "level": 2,
+       "marks": 2,
+       "q": "Name and discuss the type of non-verbal communication in which the arrangement of space shows closeness. (2 marks)",
+       "model_answer_md": "This is **proxemics**, the study of how people use space (Edward Hall).\n- Intimate: up to about 0.5 m (family).\n- Personal: 0.5-1.2 m (friends).\n- Social: 1.2-3.5 m (business).\n- Public: over 3.5 m (lectures).\nCloseness shows warmth; distance shows formality. Norms vary by culture.",
+       "points": [
+        "Proxemics named",
+        "Four zones with distances",
+        "Closeness/distance meaning",
+        "Culture varies"
+       ]
+      },
+      {
+       "id": "fo-q4",
+       "kind": "short",
+       "level": 2,
+       "marks": 4,
+       "q": "Discuss haptics as a form of non-verbal communication. (4 marks)",
+       "model_answer_md": "**Haptics** is the study of touch as communication.\n\n**Types (Heslin)**: functional-professional (doctor), social-polite (handshake), friendship-warmth (pat on back), love-intimacy (holding hands).\n\n**What touch conveys**: support, appreciation, confidence (firm handshake), power and status.\n\n**Cultural and professional limits**: norms vary by culture and gender; in the workplace limit to a handshake; unwanted touch may be harassment.",
+       "points": [
+        "Definition: touch as communication",
+        "Types with examples",
+        "What touch conveys",
+        "Cultural/professional limits"
+       ]
+      },
+      {
+       "id": "fo-p1",
+       "pyq": "ae081b0fee992499",
+       "level": 2,
+       "points": [
+        "Haptics = touch as non-verbal communication",
+        "Heslin types: functional-professional, social-polite, friendship-warmth, love-intimacy",
+        "Conveys support, appreciation, confidence, power",
+        "Cultural norms and workplace limits"
+       ]
+      },
+      {
+       "id": "fo-p2",
+       "pyq": "fd3e92743fbed221",
+       "level": 2,
+       "points": [
+        "Proxemics (Edward Hall)",
+        "Intimate, personal, social, public zones with distances",
+        "Closeness shows warmth; distance shows formality; culture varies"
+       ]
+      }
+     ]
+    },
+    {
+     "id": "presentation-use",
+     "title": "Body language in presentations",
+     "theory_md": "Used deliberately, non-verbal cues engage the audience and **reinforce key points**.\n- **Eye contact**: scan the room, 3-5 seconds per person; builds trust and confidence; lets the speaker read confusion; improves retention.\n- **Gestures**: open, purposeful, between waist and shoulders (counting on fingers, pointing to a chart); act as visual anchors; avoid fiddling and hands in pockets.\n- **Posture**: upright, feet shoulder-width, facing audience: authority and credibility; slouching shows low confidence; purposeful movement marks transitions.\n- Smile, voice variation (pitch, pace, pause), dress, brief looks at slides.\n\n**Consistency**: cues must match words, or the audience trusts the body.",
+     "basics_md": "Your body is the first slide the audience sees. Make it say the same thing as your voice.",
+     "key_points": [
+      "Eye contact: scan, 3-5 s, trust, retention",
+      "Gestures: open, purposeful, visual anchors",
+      "Posture: upright, authority; movement for transitions",
+      "Cues must agree with words",
+      "Voice variation and pauses emphasise key points"
+     ],
+     "figures": [],
+     "questions": [
+      {
+       "id": "pu-q1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "In presentations, hands in pockets and fidgeting with a pen",
+       "options": [
+        "show confidence",
+        "distract the audience",
+        "improve retention",
+        "emphasise points"
+       ],
+       "answer_index": 1,
+       "why": "They are distracting habits."
+      },
+      {
+       "id": "pu-q2",
+       "kind": "mcq",
+       "level": 1,
+       "q": "A speaker should hold eye contact with a listener for about",
+       "options": [
+        "0.5 s",
+        "3-5 seconds",
+        "30 seconds",
+        "never"
+       ],
+       "answer_index": 1,
+       "why": "Long enough to connect, short enough to move on."
+      },
+      {
+       "id": "pu-q3",
+       "kind": "short",
+       "level": 2,
+       "marks": 5,
+       "q": "How can non-verbal communication be used strategically in a business presentation? Explain the effect of eye contact, gestures and posture. (5 marks)",
+       "model_answer_md": "Non-verbal cues add credibility and emphasis.\n\n1. **Eye contact**: scan the room, 3-5 s each. *Perception:* confidence, honesty. *Retention:* listeners feel addressed, stay attentive; pause on a key statistic.\n2. **Gestures**: open, purposeful, between waist and shoulders (count on fingers, point to chart). *Perception:* openness and enthusiasm. *Retention:* act as visual anchors. Avoid fiddling.\n3. **Posture and movement**: upright, relaxed shoulders, facing audience. *Perception:* authority; slouching shows low confidence. Step forward for key points.\n4. **Also**: smile, voice variation and pauses, dress, minimal slide-reading.\n\n**Consistency**: body must match words.",
+       "points": [
+        "Eye contact with technique and effect",
+        "Gestures with technique and effect",
+        "Posture and movement",
+        "Retention link",
+        "Consistency with words"
+       ]
+      },
+      {
+       "id": "pu-p1",
+       "pyq": "3a663d34965a6810",
+       "level": 2,
+       "points": [
+        "Eye contact: scan, 3-5 s; confidence, trust; retention",
+        "Gestures: open, purposeful; visual anchors; avoid fiddling",
+        "Posture and movement: upright, authority; transitions",
+        "Facial expression, voice, appearance; consistency with words"
+       ]
+      },
+      {
+       "id": "pu-p2",
+       "pyq": "d7cd8f0e6e33de6d",
+       "level": 2,
+       "points": [
+        "Eye contact: scan the audience 3-5 s; trust, reading reactions",
+        "Gestures: open, purposeful; emphasis and memory",
+        "Posture: upright; authority; movement for emphasis",
+        "Cues consistent with words"
+       ]
+      },
+      {
+       "id": "pu-p3",
+       "pyq": "f8aa1b83a0496a0e",
+       "level": 2,
+       "points": [
+        "Eye contact: scan, 3-5 s; confidence, trust; retention",
+        "Gestures: open, purposeful; visual anchors; avoid fiddling",
+        "Posture and movement: upright, authority; transitions",
+        "Facial expression, voice, appearance; consistency with words"
+       ]
+      },
+      {
+       "id": "pu-p4",
+       "pyq": "0bc18ea5455933fd",
+       "level": 2,
+       "points": [
+        "Non-verbal is more influential for emotions and attitudes (Mehrabian 7% words, 38% tone, 55% facial/body)",
+        "Use eye contact, gestures, posture, facial expression, voice and pauses to enhance the message",
+        "Cues must match words; avoid contradiction"
+       ]
+      }
+     ]
+    }
+   ]
+  }
+ ]
+}

@@ -1,0 +1,1057 @@
+{
+ "code": "PY1102",
+ "unit": "Laser and Fiber Optics",
+ "written": "2026-10-19",
+ "by": "claude-sonnet-5-5, in a Claude Code session",
+ "topics": [
+  {
+   "topic": "Laser phenomena",
+   "subtopics": [
+    {
+     "id": "emission-processes",
+     "title": "Absorption, spontaneous and stimulated emission",
+     "theory_md": "Between levels $E_1<E_2$ with $h\\nu=E_2-E_1$ there are three processes.\n- **Stimulated absorption**: a photon lifts an atom from $E_1$ to $E_2$.\n- **Spontaneous emission**: an excited atom falls to $E_1$ by itself, in a random direction and phase, so the light is **incoherent**.\n- **Stimulated emission**: an incident photon of energy $h\\nu$ makes the excited atom emit a second photon with the **same frequency, phase, direction and polarisation**. This is the source of laser light.\n\nLASER = Light Amplification by Stimulated Emission of Radiation. Laser light is monochromatic, coherent, highly directional and intense.",
+     "basics_md": "Think of a crowd of people shouting at random (spontaneous) against a choir that sings together because one singer cues the next (stimulated).",
+     "key_points": [
+      "Stimulated emission: incident photon produces an identical photon (same frequency, phase, direction)",
+      "Spontaneous emission is random, so incoherent",
+      "Absorption needs a photon of $h\\nu=E_2-E_1$",
+      "Laser light: monochromatic, coherent, directional, intense"
+     ],
+     "figures": [],
+     "questions": [
+      {
+       "id": "e-q1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "Which process gives rise to coherent light in a laser?",
+       "options": [
+        "Stimulated absorption",
+        "Spontaneous emission",
+        "Stimulated emission",
+        "Non-radiative decay"
+       ],
+       "answer_index": 2,
+       "why": "The stimulated photon copies the phase, frequency and direction of the stimulating photon."
+      },
+      {
+       "id": "e-q2",
+       "kind": "mcq",
+       "level": 1,
+       "q": "Light from an ordinary bulb is incoherent mainly because its emission is",
+       "options": [
+        "stimulated",
+        "spontaneous",
+        "in the infrared",
+        "too intense"
+       ],
+       "answer_index": 1,
+       "why": "Atoms emit independently, so phases are random."
+      },
+      {
+       "id": "e-q3",
+       "kind": "short",
+       "level": 2,
+       "marks": 3,
+       "q": "Distinguish between spontaneous and stimulated emission. State four properties of laser light.",
+       "model_answer_md": "**Spontaneous emission:** the excited atom drops to a lower level without any external agency; photons go in random directions with random phase (incoherent); the rate is $A_{21}N_2$.\n\n**Stimulated emission:** an incident photon of energy $h\\nu=E_2-E_1$ induces the atom to emit a photon identical in frequency, phase, direction and polarisation (coherent); the rate is $B_{21}N_2u(\\nu)$.\n\n**Laser properties:** (1) monochromatic, (2) coherent, (3) highly directional (very small divergence), (4) very intense.",
+       "points": [
+        "Spontaneous: no external agency, random direction and phase, incoherent",
+        "Stimulated: induced by a photon of $h\\nu$, identical photon, coherent",
+        "Rates $A_{21}N_2$ and $B_{21}N_2u$",
+        "Any four laser properties: monochromatic, coherent, directional, intense"
+       ]
+      }
+     ]
+    },
+    {
+     "id": "population-inversion",
+     "title": "Population inversion and pumping",
+     "theory_md": "At thermal equilibrium the lower level is more populated (Boltzmann, $N_2/N_1=e^{-h\\nu/kT}<1$), so absorption beats stimulated emission and light is attenuated.\n\n**Population inversion** is the non-equilibrium state with $N_2>N_1$. Only then does stimulated emission dominate and the medium amplify light.\n\nIt is achieved by **pumping** (optical, electrical discharge, collisions) into a **metastable state**, an excited level with a long lifetime (about $10^{-3}$ s against $10^{-8}$ s for ordinary levels), so atoms pile up there. A three-level system needs strong pumping (over half the atoms lifted); a four-level system inverts easily because the lower laser level empties quickly.",
+     "basics_md": "Water flows downhill by itself. To have more water upstairs than downstairs you must keep pumping it up and give it a tank that holds it. The pump is pumping, the tank is the metastable state.",
+     "key_points": [
+      "$N_2>N_1$, opposite of Boltzmann distribution",
+      "Needed for net stimulated emission, i.e. amplification",
+      "Achieved by pumping through a metastable state (lifetime about $10^{-3}$ s)",
+      "Four-level scheme is easier than three-level"
+     ],
+     "figures": [],
+     "questions": [
+      {
+       "id": "pi-p1",
+       "pyq": "8e90ac1af045372e",
+       "level": 1,
+       "points": [
+        "$N_2>N_1$: more atoms in the higher level than the lower",
+        "Non-equilibrium, reverse of Boltzmann distribution",
+        "Needed for amplification by stimulated emission; achieved by pumping via a metastable state"
+       ]
+      },
+      {
+       "id": "pi-q1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "A metastable state is one that",
+       "options": [
+        "has zero energy",
+        "has a long lifetime, so atoms accumulate in it",
+        "emits light instantly",
+        "lies below the ground state"
+       ],
+       "answer_index": 1,
+       "why": "Lifetime of about $10^{-3}$ s lets the population build up."
+      },
+      {
+       "id": "pi-q2",
+       "kind": "mcq",
+       "level": 2,
+       "q": "At thermal equilibrium at temperature $T>0$, the populations satisfy",
+       "options": [
+        "$N_2>N_1$",
+        "$N_2=N_1$",
+        "$N_2<N_1$",
+        "$N_2=0$ always"
+       ],
+       "answer_index": 2,
+       "why": "Boltzmann: $N_2/N_1=e^{-h\\nu/kT}<1$."
+      },
+      {
+       "id": "pi-q3",
+       "kind": "short",
+       "level": 2,
+       "marks": 3,
+       "q": "Why is population inversion necessary for laser action, and why can it not be reached by thermal means? What is the role of a metastable state?",
+       "model_answer_md": "1. At equilibrium $N_1>N_2$, so absorption exceeds stimulated emission and the beam is attenuated.\n2. Net amplification needs $N_2>N_1$ (population inversion).\n3. Heating only moves the ratio $N_2/N_1=e^{-h\\nu/kT}$ towards 1, never above it, so inversion needs **pumping**.\n4. A **metastable state** has a long lifetime ($\\sim10^{-3}$ s), so pumped atoms stay there instead of decaying at once, allowing $N_2>N_1$.",
+       "points": [
+        "Equilibrium: $N_1>N_2$, absorption dominates",
+        "Amplification needs $N_2>N_1$",
+        "Thermal means cannot invert; pumping is needed",
+        "Metastable state has long lifetime so atoms accumulate"
+       ]
+      }
+     ]
+    },
+    {
+     "id": "einstein-coefficients",
+     "title": "Einstein coefficients and their relation",
+     "theory_md": "For levels 1 and 2 ($N_1,N_2$ atoms) in radiation of energy density $u(\\nu)$:\n- Absorption rate $=B_{12}N_1u$\n- Spontaneous emission rate $=A_{21}N_2$\n- Stimulated emission rate $=B_{21}N_2u$\n\n$A_{21}$, $B_{12}$, $B_{21}$ are the **Einstein coefficients**.\n\nAt equilibrium absorption = emission: $B_{12}N_1u=A_{21}N_2+B_{21}N_2u$. With $N_1/N_2=e^{h\\nu/kT}$ this gives $u=\\dfrac{A_{21}}{B_{12}e^{h\\nu/kT}-B_{21}}$. Matching Planck's law $u=\\dfrac{8\\pi h\\nu^3}{c^3}\\dfrac{1}{e^{h\\nu/kT}-1}$:\n$$B_{12}=B_{21},\\qquad \\frac{A_{21}}{B_{21}}=\\frac{8\\pi h\\nu^3}{c^3}$$\nSpontaneous emission wins as $\\nu^3$ grows, so high-frequency lasers are hard to build.",
+     "basics_md": "A is the chance an excited atom emits on its own per second. B is the chance per second per unit of radiation density, for absorbing or being stimulated.",
+     "key_points": [
+      "Define $A_{21}$, $B_{12}$, $B_{21}$ with their rates",
+      "Equilibrium: $B_{12}N_1u=A_{21}N_2+B_{21}N_2u$",
+      "Use Boltzmann $N_1/N_2=e^{h\\nu/kT}$ and Planck's law",
+      "$B_{12}=B_{21}$ and $A_{21}/B_{21}=8\\pi h\\nu^3/c^3$"
+     ],
+     "figures": [],
+     "questions": [
+      {
+       "id": "ab-p1",
+       "pyq": "5a6790707bdc9841",
+       "level": 2,
+       "points": [
+        "Define the three processes with rates: absorption $B_{12}N_1u$, spontaneous emission $A_{21}N_2$, stimulated emission $B_{21}N_2u$",
+        "At equilibrium: $B_{12}N_1u=A_{21}N_2+B_{21}N_2u$, so $u=\\dfrac{A_{21}}{B_{12}(N_1/N_2)-B_{21}}$",
+        "Boltzmann: $N_1/N_2=e^{h\\nu/kT}$",
+        "Compare with Planck's law $u=\\frac{8\\pi h\\nu^3}{c^3}\\frac{1}{e^{h\\nu/kT}-1}$",
+        "Result: $B_{12}=B_{21}$ and $A_{21}/B_{21}=8\\pi h\\nu^3/c^3$"
+       ]
+      },
+      {
+       "id": "ab-p2",
+       "pyq": "5cfb16754d35ce3d",
+       "level": 2,
+       "points": [
+        "Define the three processes with rates: absorption $B_{12}N_1u$, spontaneous emission $A_{21}N_2$, stimulated emission $B_{21}N_2u$",
+        "At equilibrium: $B_{12}N_1u=A_{21}N_2+B_{21}N_2u$, so $u=\\dfrac{A_{21}}{B_{12}(N_1/N_2)-B_{21}}$",
+        "Boltzmann: $N_1/N_2=e^{h\\nu/kT}$",
+        "Compare with Planck's law $u=\\frac{8\\pi h\\nu^3}{c^3}\\frac{1}{e^{h\\nu/kT}-1}$",
+        "Result: $B_{12}=B_{21}$ and $A_{21}/B_{21}=8\\pi h\\nu^3/c^3$"
+       ]
+      },
+      {
+       "id": "ab-p3",
+       "pyq": "a5f6ef6ade9b7dcb",
+       "level": 2,
+       "points": [
+        "Define the three processes with rates: absorption $B_{12}N_1u$, spontaneous emission $A_{21}N_2$, stimulated emission $B_{21}N_2u$",
+        "At equilibrium: $B_{12}N_1u=A_{21}N_2+B_{21}N_2u$, so $u=\\dfrac{A_{21}}{B_{12}(N_1/N_2)-B_{21}}$",
+        "Boltzmann: $N_1/N_2=e^{h\\nu/kT}$",
+        "Compare with Planck's law $u=\\frac{8\\pi h\\nu^3}{c^3}\\frac{1}{e^{h\\nu/kT}-1}$",
+        "Result: $B_{12}=B_{21}$ and $A_{21}/B_{21}=8\\pi h\\nu^3/c^3$"
+       ]
+      },
+      {
+       "id": "ab-p4",
+       "pyq": "9b8bab8ce815aa25",
+       "level": 2,
+       "points": [
+        "Define the three processes with rates: absorption $B_{12}N_1u$, spontaneous emission $A_{21}N_2$, stimulated emission $B_{21}N_2u$",
+        "At equilibrium: $B_{12}N_1u=A_{21}N_2+B_{21}N_2u$, so $u=\\dfrac{A_{21}}{B_{12}(N_1/N_2)-B_{21}}$",
+        "Boltzmann: $N_1/N_2=e^{h\\nu/kT}$",
+        "Compare with Planck's law $u=\\frac{8\\pi h\\nu^3}{c^3}\\frac{1}{e^{h\\nu/kT}-1}$",
+        "Result: $B_{12}=B_{21}$ and $A_{21}/B_{21}=8\\pi h\\nu^3/c^3$",
+        "Conclusion: spontaneous to stimulated ratio grows as $\\nu^3$"
+       ]
+      },
+      {
+       "id": "ab-q1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "The Einstein relation between the coefficients is",
+       "options": [
+        "$B_{12}=B_{21}$ and $A_{21}/B_{21}=8\\pi h\\nu^3/c^3$",
+        "$B_{12}=2B_{21}$ and $A_{21}=B_{21}$",
+        "$A_{21}=B_{12}=B_{21}$",
+        "$A_{21}/B_{21}=8\\pi h\\nu/c$"
+       ],
+       "answer_index": 0,
+       "why": "Comparison with Planck's law fixes both."
+      },
+      {
+       "id": "ab-q2",
+       "kind": "mcq",
+       "level": 2,
+       "q": "The ratio of spontaneous to stimulated emission coefficients $A/B$ varies with frequency as",
+       "options": [
+        "$\\nu$",
+        "$\\nu^2$",
+        "$\\nu^3$",
+        "$1/\\nu$"
+       ],
+       "answer_index": 2,
+       "why": "$A/B=8\\pi h\\nu^3/c^3$; this makes X-ray lasers hard."
+      },
+      {
+       "id": "ab-q3",
+       "kind": "short",
+       "level": 3,
+       "marks": 3,
+       "q": "Which Einstein coefficient is independent of the radiation density, and why is the ratio $B_{12}/B_{21}=1$ here? Why are lasers harder to make at high frequency?",
+       "model_answer_md": "$A_{21}$ is independent of $u(\\nu)$ because spontaneous emission needs no radiation. $B_{12}=B_{21}$ here because the levels are taken as non-degenerate and Planck's law must hold at all temperatures. Since $A_{21}/B_{21}=8\\pi h\\nu^3/c^3\\propto\\nu^3$, at high frequency spontaneous emission dominates stimulated emission, so inversion is hard to keep and X-ray lasers are difficult.",
+       "points": [
+        "$A_{21}$ independent of $u$",
+        "$B_{12}=B_{21}$ from matching Planck's law at all $T$",
+        "$A/B\\propto\\nu^3$",
+        "High $\\nu$: spontaneous dominates, hard to lase"
+       ]
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "topic": "Ruby and He-Ne lasers and applications",
+   "subtopics": [
+    {
+     "id": "ruby-laser",
+     "title": "Ruby laser",
+     "theory_md": "**Construction:** a rod of $\\mathrm{Al_2O_3}$ doped with about 0.05% $\\mathrm{Cr^{3+}}$, ends flat, parallel and silvered (one fully, one partly); a helical **xenon flash lamp** around it for optical pumping.\n\n**Working (three-level):** flash lifts $\\mathrm{Cr^{3+}}$ from $E_1$ to the broad band $E_3$; fast non-radiative decay to the metastable $E_2$ (lifetime $\\sim10^{-3}$ s); inversion between $E_2$ and $E_1$; stimulated emission at **6943 Å** (red), a pulse leaves via the partial mirror.\n\n**Disadvantages:** high pump power (three-level), efficiency under 1%, pulsed output, heating.\n**Uses:** holography, ranging, eye surgery, drilling and welding.",
+     "basics_md": "Chromium ions in the ruby crystal are the active atoms. The lamp lights them up, they park in a long-lived level, and then fire together.",
+     "key_points": [
+      "Ruby rod $\\mathrm{Al_2O_3}$ with 0.05% $\\mathrm{Cr^{3+}}$, xenon flash lamp pump",
+      "Three-level scheme: $E_1\\to E_3\\to E_2$ (metastable), lasing $E_2\\to E_1$",
+      "Wavelength 6943 Å, pulsed red light",
+      "Disadvantages: high pump power, low efficiency, pulsed"
+     ],
+     "figures": [],
+     "questions": [
+      {
+       "id": "ru-p1",
+       "pyq": "33fb55e86f7df20e",
+       "level": 2,
+       "points": [
+        "Construction: ruby rod ($\\mathrm{Al_2O_3}$ + 0.05% $\\mathrm{Cr^{3+}}$), polished silvered ends (one partial), xenon flash lamp",
+        "Working: pumping $E_1\\to E_3$, non-radiative decay to metastable $E_2$, inversion, stimulated emission at 6943 Å",
+        "Disadvantages: three-level so high pumping, under 1% efficiency, pulsed, heating",
+        "Applications: holography, ranging, surgery, welding/drilling"
+       ]
+      },
+      {
+       "id": "ru-q1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "The active medium and wavelength of the ruby laser are",
+       "options": [
+        "$\\mathrm{Nd^{3+}}$, 1064 nm",
+        "$\\mathrm{Cr^{3+}}$, 694.3 nm",
+        "Ne, 632.8 nm",
+        "$\\mathrm{CO_2}$, 10.6 $\\mu$m"
+       ],
+       "answer_index": 1,
+       "why": "Chromium ions in alumina emit 6943 Å."
+      },
+      {
+       "id": "ru-q2",
+       "kind": "mcq",
+       "level": 2,
+       "q": "Why is the ruby laser said to need high pump power?",
+       "options": [
+        "It is a three-level system, so over half the ions must be lifted from the ground level",
+        "It uses a gas",
+        "The mirrors are 100% reflecting",
+        "It operates at 10 kV DC"
+       ],
+       "answer_index": 0,
+       "why": "The lower laser level is the ground level, which is full at the start."
+      },
+      {
+       "id": "ru-q3",
+       "kind": "short",
+       "level": 2,
+       "marks": 2,
+       "q": "Give the pumping method, type of output and two disadvantages of the ruby laser.",
+       "model_answer_md": "- Pumping: optical, by a helical xenon flash lamp.\n- Output: pulsed (not continuous), red, 6943 Å.\n- Disadvantages: (1) three-level system needs very high pump power and has efficiency under 1%; (2) the rod heats up, so cooling is needed and only pulses are possible.",
+       "points": [
+        "Optical pumping by xenon flash lamp",
+        "Pulsed red output at 6943 Å",
+        "Low efficiency and high pump power",
+        "Heating of the rod"
+       ]
+      }
+     ]
+    },
+    {
+     "id": "he-ne-laser",
+     "title": "He-Ne laser",
+     "theory_md": "**Construction:** a glass tube (about 30 cm) with He:Ne at about 10:1 and about 1 mm Hg; DC discharge of a few kV between electrodes; two mirrors form the cavity (one fully, one about 99% reflecting) or Brewster windows.\n\n**Working (four-level):** electrons excite He to metastable $2^3S_1$ (19.8 eV) and $2^1S_0$ (20.6 eV). These match Ne $4s$ and $5s$, so resonant collisions pump Ne: **inversion** against $3p$ and $4p$. Lasing $5s\\to3p$ gives **632.8 nm** red (also 3.39 $\\mu$m, 1.15 $\\mu$m). Ne decays $3p\\to3s$, then to ground by wall collisions, keeping the lower levels empty.\n\nCW output, 1 to 50 mW, efficiency about 0.1%.",
+     "basics_md": "Helium is the pump and neon is the lasing atom. Helium collects energy from the electric current and hands it over to neon by collision.",
+     "key_points": [
+      "He:Ne about 10:1 at about 1 mm Hg, electrical discharge",
+      "He metastable levels $2^3S$, $2^1S$ pass energy to Ne $5s$, $4s$ by resonant collision",
+      "Lasing transition $5s\\to3p$, $\\lambda=632.8$ nm",
+      "Lower levels cleared by $3p\\to3s$ decay and wall collisions"
+     ],
+     "figures": [],
+     "questions": [
+      {
+       "id": "hn-p1",
+       "pyq": "345bc5dc87aecc12",
+       "level": 2,
+       "points": [
+        "Labelled diagram: discharge tube with He and Ne (10:1), electrodes with HV supply, full and partial mirrors",
+        "Electron impact excites He to metastable $2^3S_1$ and $2^1S_0$",
+        "Resonant collision transfers energy to Ne $5s$, $4s$: population inversion",
+        "Lasing $5s\\to3p$ at 632.8 nm; output through partial mirror"
+       ]
+      },
+      {
+       "id": "hn-p2",
+       "pyq": "9da40dd016d1df53",
+       "level": 2,
+       "points": [
+        "Energy level diagram: He $2^3S$, $2^1S$; Ne $5s$, $4s$, $4p$, $3p$, $3s$, ground",
+        "Pumping by electron impact then He-Ne collision",
+        "Lasing lines 632.8 nm, 3.39 $\\mu$m, 1.15 $\\mu$m",
+        "Principle: inversion + stimulated emission + mirror cavity"
+       ]
+      },
+      {
+       "id": "hn-p3",
+       "pyq": "9668b1bd9d509a44",
+       "level": 3,
+       "points": [
+        "Construction: 30 cm tube, He:Ne 10:1 at about 1 torr, electrodes about 1000 V, mirrors/Brewster windows",
+        "Working: He metastable levels excited by electrons, resonant transfer to Ne $4s$, $5s$",
+        "Lasing transitions $5s\\to3p$ 6328 Å, $5s\\to4p$ 3.39 $\\mu$m, $4s\\to3p$ 1.15 $\\mu$m",
+        "Fast decay $3p\\to3s$ and wall collisions keep inversion; power 1 to 50 mW",
+        "Energy level diagram drawn"
+       ]
+      },
+      {
+       "id": "hn-q1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "In the He-Ne laser the atoms that actually emit the laser light are",
+       "options": [
+        "He",
+        "Ne",
+        "both equally",
+        "electrons"
+       ],
+       "answer_index": 1,
+       "why": "He only transfers energy; Ne has the lasing transition."
+      },
+      {
+       "id": "hn-q2",
+       "kind": "mcq",
+       "level": 2,
+       "q": "Why is a mixture of about 10 He : 1 Ne used?",
+       "options": [
+        "He has more energy levels than Ne",
+        "More He atoms are excited, so Ne is pumped efficiently through collisions",
+        "Ne is poisonous",
+        "He absorbs 632.8 nm light"
+       ],
+       "answer_index": 1,
+       "why": "Excess He ensures many resonant collisions with Ne."
+      },
+      {
+       "id": "hn-q3",
+       "kind": "short",
+       "level": 2,
+       "marks": 2,
+       "q": "Give the pumping method and the lasing wavelength of the He-Ne laser. How does it differ from the ruby laser?",
+       "model_answer_md": "- Pumping: electrical discharge exciting He, then He-Ne collisions (gas, four-level).\n- Wavelength: 632.8 nm red.\n- Difference: He-Ne gives **continuous** output with a narrow beam and good coherence at low power (mW); ruby is a solid, three-level, optically pumped **pulsed** laser of high power.",
+       "points": [
+        "Discharge pumping with He-Ne collisional transfer",
+        "632.8 nm",
+        "He-Ne: four-level, continuous, low power",
+        "Ruby: three-level, pulsed, high power"
+       ]
+      }
+     ]
+    },
+    {
+     "id": "laser-applications",
+     "title": "Applications and comparison",
+     "theory_md": "| | Ruby | He-Ne |\n|---|---|---|\n| Medium | solid, $\\mathrm{Cr^{3+}}$ in $\\mathrm{Al_2O_3}$ | gas, He:Ne 10:1 |\n| Levels | three | four |\n| Pumping | optical, flash lamp | electric discharge |\n| Output | pulsed, 6943 Å | continuous, 6328 Å |\n| Efficiency | under 1% | about 0.1% |\n\n**Applications:** holography, range finding and surveying, bar-code scanners and alignment (He-Ne), eye surgery, cutting, drilling and welding (high-power), optical communication, spectroscopy.",
+     "basics_md": "Match the laser to the job: a gentle continuous pointer beam for scanning and alignment, a short powerful pulse for drilling and ranging.",
+     "key_points": [
+      "Ruby: solid, three-level, pulsed; He-Ne: gas, four-level, continuous",
+      "Medicine: eye surgery, bloodless surgery",
+      "Industry: cutting, drilling, welding; surveying and ranging",
+      "Holography, bar-code reading, communication"
+     ],
+     "figures": [],
+     "questions": [
+      {
+       "id": "ap-q1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "Which laser is commonly used for bar-code scanning and alignment?",
+       "options": [
+        "Ruby",
+        "He-Ne",
+        "$\\mathrm{CO_2}$ only",
+        "Dye only"
+       ],
+       "answer_index": 1,
+       "why": "Low-power continuous red beam."
+      },
+      {
+       "id": "ap-q2",
+       "kind": "mcq",
+       "level": 2,
+       "q": "Which statement is correct?",
+       "options": [
+        "Ruby is continuous, He-Ne is pulsed",
+        "Ruby is a three-level pulsed laser, He-Ne a four-level continuous laser",
+        "Both are four-level",
+        "Both are gas lasers"
+       ],
+       "answer_index": 1,
+       "why": "Ruby: optical pumping, pulses. He-Ne: discharge, CW."
+      },
+      {
+       "id": "ap-q3",
+       "kind": "short",
+       "level": 2,
+       "marks": 4,
+       "q": "Compare the ruby and He-Ne lasers on medium, level scheme, pumping and output, and list four uses of lasers.",
+       "model_answer_md": "| | Ruby | He-Ne |\n|---|---|---|\n| Medium | solid | gas mixture |\n| Levels | three | four |\n| Pumping | optical (flash lamp) | electrical discharge |\n| Output | pulsed, 6943 Å | continuous, 6328 Å |\n\nUses: holography, range finding, surgery, cutting/welding, bar-code scanners, communication (any four).",
+       "points": [
+        "Medium: solid vs gas",
+        "Three-level vs four-level",
+        "Pumping: optical vs discharge",
+        "Pulsed vs continuous; four uses"
+       ]
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "topic": "Laser holography",
+   "subtopics": [
+    {
+     "id": "hologram-recording",
+     "title": "Principle, recording and reconstruction",
+     "theory_md": "**Holography** records both **amplitude and phase** of light from an object, giving a 3-D image. Photography records only intensity.\n\n**Recording:** a laser beam is split. The **object beam** is scattered by the object onto a photographic plate; the **reference beam** (from a mirror) falls directly on the plate. Their **interference** pattern, a fringe pattern, is recorded: the hologram. Coherent light is essential (He-Ne is common).\n\n**Reconstruction:** the developed hologram is illuminated by the reference beam alone. It diffracts the light and reproduces the original object wave, giving a **virtual 3-D image** (and a real image).\n\nHolography was proposed by Gabor (1948).",
+     "basics_md": "A hologram is a frozen interference pattern. Shine the reference wave on it again and the pattern re-creates the object wave, so you see the object as if it were there.",
+     "key_points": [
+      "Records amplitude and phase by interference of object and reference beams",
+      "Beam splitter, mirror, photographic plate; coherent laser needed",
+      "Reconstruction by the reference beam alone",
+      "Gives 3-D virtual image; Gabor invented it"
+     ],
+     "figures": [],
+     "questions": [
+      {
+       "id": "h-q1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "A hologram stores information about the object's",
+       "options": [
+        "intensity only",
+        "amplitude and phase",
+        "colour only",
+        "size only"
+       ],
+       "answer_index": 1,
+       "why": "Interference with the reference beam encodes the phase too."
+      },
+      {
+       "id": "h-q2",
+       "kind": "mcq",
+       "level": 2,
+       "q": "A hologram is reconstructed by illuminating it with",
+       "options": [
+        "the object beam only",
+        "the reference beam",
+        "white light of any kind with no coherence",
+        "ultrasound"
+       ],
+       "answer_index": 1,
+       "why": "The reference beam is diffracted by the fringes to give the object wave."
+      },
+      {
+       "id": "h-q3",
+       "kind": "short",
+       "level": 2,
+       "marks": 5,
+       "q": "Explain the recording and reconstruction of a hologram with a diagram.",
+       "model_answer_md": "**Recording (diagram described):** a laser beam falls on a beam splitter. One part (object beam) illuminates the object, which scatters it onto the photographic plate. The other part (reference beam) is reflected by a mirror and falls directly on the plate. The two coherent beams interfere and the fringe pattern, containing amplitude and phase, is recorded.\n\n**Reconstruction (diagram described):** the developed plate is illuminated with the reference beam only. The fringes diffract it, reproducing the original object wave. An observer behind the plate sees a virtual, 3-D image at the object's position (a real image is also formed).",
+       "points": [
+        "Beam splitter gives object and reference beams",
+        "Interference pattern recorded on plate",
+        "Reconstruct with reference beam",
+        "Virtual 3-D image seen; labelled diagram"
+       ]
+      }
+     ]
+    },
+    {
+     "id": "hologram-properties",
+     "title": "Holography versus photography, applications",
+     "theory_md": "| Photography | Holography |\n|---|---|\n| Records intensity only | Records amplitude and phase |\n| 2-D image | 3-D image |\n| Lens needed | No lens needed |\n| Whole image on whole plate | Any piece of a hologram gives the whole (from a different angle) |\n| One image per plate | Many holograms on one plate at different angles |\n\n**Applications:** holographic interferometry (stress and vibration analysis), non-destructive testing, data storage, security holograms on notes and cards, art and 3-D displays, pattern recognition.",
+     "basics_md": "A broken piece of a photograph shows only part of the picture. A broken piece of a hologram still shows the whole scene, only through a smaller window.",
+     "key_points": [
+      "Holography: amplitude and phase, 3-D, no lens",
+      "Each part of the hologram has the whole object information",
+      "Applications: interferometry, NDT, data storage, security"
+     ],
+     "figures": [],
+     "questions": [
+      {
+       "id": "hp-q1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "If a hologram plate is broken, each piece",
+       "options": [
+        "shows nothing",
+        "shows the whole object",
+        "shows only a part of the object",
+        "loses depth"
+       ],
+       "answer_index": 1,
+       "why": "Every point of the plate receives light from the whole object."
+      },
+      {
+       "id": "hp-q2",
+       "kind": "mcq",
+       "level": 2,
+       "q": "Which is an application of holography?",
+       "options": [
+        "Non-destructive testing and vibration analysis",
+        "Radio broadcasting",
+        "Rectification",
+        "Welding rails"
+       ],
+       "answer_index": 0,
+       "why": "Holographic interferometry detects tiny deformations."
+      },
+      {
+       "id": "hp-q3",
+       "kind": "short",
+       "level": 2,
+       "marks": 3,
+       "q": "Differentiate holography from ordinary photography (three points) and state two applications.",
+       "model_answer_md": "1. Photography records intensity only; holography records amplitude and phase.\n2. Photography gives a 2-D image; holography gives a 3-D image.\n3. Photography needs a lens and the image is localised; holography needs no lens and every part of the plate holds the whole image.\n\nApplications: non-destructive testing by holographic interferometry; data storage; security holograms.",
+       "points": [
+        "Intensity vs amplitude and phase",
+        "2-D vs 3-D",
+        "Lens/part-of-plate difference",
+        "Two applications"
+       ]
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "topic": "Types of optical fibers",
+   "subtopics": [
+    {
+     "id": "fibre-structure-tir",
+     "title": "Structure and propagation by total internal reflection",
+     "theory_md": "An **optical fibre** is a thin glass or plastic strand with a **core** (index $n_1$), a **cladding** (index $n_2<n_1$) and a protective buffer or jacket.\n\nLight is guided by **total internal reflection (TIR)** at the core-cladding boundary. TIR needs light to go from denser to rarer medium with angle of incidence greater than the **critical angle**\n$$\\theta_c=\\sin^{-1}\\frac{n_2}{n_1}$$\nThe ray zig-zags down the core with very little loss. Rays entering outside the acceptance cone hit the boundary below $\\theta_c$ and leak into the cladding.",
+     "basics_md": "Think of a corridor of mirrors: a ray that hits the wall at a shallow angle bounces forever; a ray hitting steeply escapes.",
+     "key_points": [
+      "Core $n_1>$ cladding $n_2$",
+      "Propagation by repeated TIR",
+      "Condition: angle at core-cladding boundary $>\\theta_c=\\sin^{-1}(n_2/n_1)$",
+      "Rays outside the acceptance cone are lost"
+     ],
+     "figures": [],
+     "questions": [
+      {
+       "id": "s-q1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "For guidance in a fibre the cladding index must be",
+       "options": [
+        "greater than the core index",
+        "less than the core index",
+        "equal to the core index",
+        "zero"
+       ],
+       "answer_index": 1,
+       "why": "TIR needs light going from higher to lower index."
+      },
+      {
+       "id": "s-q2",
+       "kind": "mcq",
+       "level": 2,
+       "q": "The critical angle at the core-cladding boundary is",
+       "options": [
+        "$\\sin^{-1}(n_1/n_2)$",
+        "$\\sin^{-1}(n_2/n_1)$",
+        "$\\cos^{-1}(n_2/n_1)$",
+        "$\\tan^{-1}(n_2/n_1)$"
+       ],
+       "answer_index": 1,
+       "why": "$\\sin\\theta_c=n_2/n_1<1$."
+      },
+      {
+       "id": "s-q3",
+       "kind": "short",
+       "level": 2,
+       "marks": 3,
+       "q": "Explain with a diagram how light travels through an optical fibre and state the conditions for TIR.",
+       "model_answer_md": "**Diagram (described):** a long cylindrical core of index $n_1$ inside a cladding of index $n_2<n_1$; a ray enters the end face, refracts, and zig-zags by repeated TIR at the core-cladding interface.\n\n**Conditions:** (1) $n_1>n_2$; (2) angle of incidence at the core-cladding boundary $\\phi>\\theta_c=\\sin^{-1}(n_2/n_1)$, which is satisfied only for rays entering within the acceptance angle.",
+       "points": [
+        "Core and cladding with $n_1>n_2$",
+        "Propagation by repeated TIR",
+        "$\\phi>\\theta_c$, $\\sin\\theta_c=n_2/n_1$",
+        "Acceptance angle limits entering rays"
+       ]
+      }
+     ]
+    },
+    {
+     "id": "acceptance-na",
+     "title": "Acceptance angle and numerical aperture",
+     "theory_md": "A ray enters the end face from air ($n_0=1$) at angle $\\theta_0$, refracts to $\\theta_r$ in the core and meets the boundary at $\\phi=90^\\circ-\\theta_r$. The limit is $\\phi=\\theta_c$, $\\sin\\theta_c=n_2/n_1$.\n\nSnell: $n_0\\sin\\theta_0=n_1\\sin\\theta_r=n_1\\cos\\theta_c=\\sqrt{n_1^2-n_2^2}$.\n\n- **Acceptance angle** $\\theta_0=\\sin^{-1}\\!\\big(\\sqrt{n_1^2-n_2^2}/n_0\\big)$: the maximum entry angle for guided rays.\n- **Numerical aperture** $NA=n_0\\sin\\theta_0=\\sqrt{n_1^2-n_2^2}=n_1\\sqrt{2\\Delta}$, with $\\Delta=(n_1-n_2)/n_1$.\n\nNA measures light-gathering power. Always: $\\theta_c$ first, then NA, then $\\theta_0$.",
+     "basics_md": "The acceptance angle is the half-angle of a cone: light shone into the fibre inside this cone is trapped, outside it is lost.",
+     "key_points": [
+      "Acceptance angle: max entry angle for TIR",
+      "$NA=\\sqrt{n_1^2-n_2^2}=n_1\\sqrt{2\\Delta}$",
+      "$\\theta_0=\\sin^{-1}(NA/n_0)$",
+      "Derive from Snell at entry and $\\sin\\theta_c=n_2/n_1$"
+     ],
+     "figures": [],
+     "questions": [
+      {
+       "id": "na-p1",
+       "pyq": "15d9c9137829589e",
+       "level": 2,
+       "points": [
+        "TIR zig-zag propagation of rays inside core",
+        "Snell at entrance: $n_0\\sin\\theta_0=n_1\\sin\\theta_r$ with $\\theta_r=90^\\circ-\\phi_c$",
+        "$\\theta_0=\\sin^{-1}(\\sqrt{n_1^2-n_2^2}/n_0)$",
+        "$NA=\\sqrt{n_1^2-n_2^2}=n_1\\sqrt{2\\Delta}$"
+       ]
+      },
+      {
+       "id": "na-p2",
+       "pyq": "c65b248ad1eeb669",
+       "level": 2,
+       "points": [
+        "Derivation of $NA=\\sqrt{n_1^2-n_2^2}$ with critical angle condition",
+        "$NA=\\sqrt{2.4025-2.2801}=\\sqrt{0.1224}\\approx0.35$",
+        "Acceptance angle $\\sin^{-1}0.35\\approx20.5^\\circ$"
+       ]
+      },
+      {
+       "id": "na-p3",
+       "pyq": "8883230c0c0d575c",
+       "level": 2,
+       "points": [
+        "NA defined as $\\sin$ of acceptance angle (light-gathering ability); expression $\\sqrt{n_1^2-n_2^2}$",
+        "$NA^2=(n_1-n_2)(n_1+n_2)$, so $n_1+n_2=0.1521/0.05=3.042$",
+        "$n_1=(3.042+0.05)/2\\approx1.546$"
+       ]
+      },
+      {
+       "id": "na-p4",
+       "pyq": "199c109c7b595f1b",
+       "level": 2,
+       "points": [
+        "$\\theta_c=\\sin^{-1}(1.50/1.55)=75.4^\\circ$",
+        "$NA=\\sqrt{1.55^2-1.50^2}=0.39$",
+        "$\\theta_A=\\sin^{-1}(0.39)=23.0^\\circ$"
+       ]
+      },
+      {
+       "id": "na-p5",
+       "pyq": "3e51df36f06fcc2c",
+       "level": 2,
+       "points": [
+        "$\\theta_c=\\sin^{-1}(1.48/1.5)=80.6^\\circ$",
+        "$\\Delta=0.02/1.5=0.0133$",
+        "$NA=\\sqrt{2.25-2.1904}=0.244$",
+        "$\\theta_0=\\sin^{-1}(0.244)=14.1^\\circ$"
+       ]
+      },
+      {
+       "id": "na-q1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "Numerical aperture of a step-index fibre in air is",
+       "options": [
+        "$n_1^2-n_2^2$",
+        "$\\sqrt{n_1^2-n_2^2}$",
+        "$n_1/n_2$",
+        "$n_1-n_2$"
+       ],
+       "answer_index": 1,
+       "why": "$NA=\\sin\\theta_0=\\sqrt{n_1^2-n_2^2}$."
+      },
+      {
+       "id": "na-q2",
+       "kind": "mcq",
+       "level": 2,
+       "q": "A larger NA means the fibre",
+       "options": [
+        "accepts light from a wider cone",
+        "accepts a narrower cone",
+        "has no cladding",
+        "has zero loss"
+       ],
+       "answer_index": 0,
+       "why": "$\\theta_0=\\sin^{-1}(NA)$ grows with NA."
+      },
+      {
+       "id": "na-q3",
+       "kind": "numerical",
+       "level": 3,
+       "marks": 3,
+       "q": "A fibre has core index 1.48 and cladding index 1.46. Find $\\Delta$, NA and the acceptance angle in air.",
+       "model_answer_md": "$\\Delta=\\dfrac{1.48-1.46}{1.48}=0.0135$\n\n$NA=\\sqrt{1.48^2-1.46^2}=\\sqrt{0.0588}=0.242$\n\n$\\theta_0=\\sin^{-1}(0.242)=14.0^\\circ$",
+       "points": [
+        "$\\Delta=0.0135$",
+        "$NA=0.242$",
+        "$\\theta_0=14.0^\\circ$"
+       ]
+      }
+     ]
+    },
+    {
+     "id": "fibre-types-v-number",
+     "title": "Fibre types, V-number and modes",
+     "theory_md": "**By index profile:** *step-index* (constant core index, abrupt drop at cladding) and *graded-index* (core index falls smoothly from axis to cladding, rays follow curves, less modal dispersion).\n**By modes:** *single-mode* (core about 8 to 10 $\\mu$m, one path, no modal dispersion, long-haul, laser source) and *multimode* (core 50 to 62.5 $\\mu$m, many paths, LED source, short distances).\n\n**V-number:** $V=\\dfrac{\\pi d}{\\lambda}NA=\\dfrac{2\\pi a}{\\lambda}NA$. Modes: $N\\approx V^2/2$ (step-index), $V^2/4$ (graded). Single-mode only if $V<2.405$.",
+     "basics_md": "The V-number says how many 'lanes' light can use. Small V (thin core, small NA, long wavelength) gives one lane.",
+     "key_points": [
+      "Step-index vs graded-index profile",
+      "Single-mode (thin core, $V<2.405$) vs multimode (thick core)",
+      "$V=(\\pi d/\\lambda)NA$",
+      "Number of modes $N\\approx V^2/2$ step-index, $V^2/4$ graded"
+     ],
+     "figures": [],
+     "questions": [
+      {
+       "id": "v-p1",
+       "pyq": "36fca33c698dac8c",
+       "level": 3,
+       "points": [
+        "$n_2=n_1(1-\\Delta)=1.5189$; $NA=n_1\\sqrt{2\\Delta}=0.0569$",
+        "Acceptance angle $\\sin^{-1}0.0569=3.26^\\circ$",
+        "Critical angle $\\sin^{-1}(n_2/n_1)=87.9^\\circ$",
+        "$V=\\pi dNA/\\lambda=3.99$",
+        "Modes $N=V^2/2\\approx7.9$, about 7 to 8 modes"
+       ]
+      },
+      {
+       "id": "v-q1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "A fibre supports a single mode when",
+       "options": [
+        "$V<2.405$",
+        "$V>100$",
+        "$NA=0$",
+        "$V=10$"
+       ],
+       "answer_index": 0,
+       "why": "The cutoff of the second mode is $V=2.405$."
+      },
+      {
+       "id": "v-q2",
+       "kind": "mcq",
+       "level": 2,
+       "q": "Compared with step-index, a graded-index multimode fibre has",
+       "options": [
+        "more modal dispersion",
+        "less modal dispersion",
+        "a uniform core index",
+        "no cladding"
+       ],
+       "answer_index": 1,
+       "why": "The curved paths equalise travel times."
+      },
+      {
+       "id": "v-q3",
+       "kind": "numerical",
+       "level": 3,
+       "marks": 3,
+       "q": "A step-index fibre has core diameter 50 $\\mu$m, NA 0.2 and is used at $\\lambda=1\\ \\mu$m. Find $V$ and the number of modes.",
+       "model_answer_md": "$V=\\dfrac{\\pi d}{\\lambda}NA=\\dfrac{\\pi\\times50\\times0.2}{1}=31.4$\n\n$N\\approx\\dfrac{V^2}{2}=\\dfrac{(31.4)^2}{2}\\approx493$ modes.",
+       "points": [
+        "$V=\\pi dNA/\\lambda=31.4$",
+        "$N=V^2/2$",
+        "$N\\approx493$"
+       ]
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "topic": "Attenuation and fiber losses",
+   "subtopics": [
+    {
+     "id": "attenuation-coefficient",
+     "title": "Attenuation and the dB/km numerical",
+     "theory_md": "**Attenuation** is the loss of optical power along the fibre.\n$$\\alpha=\\frac{10}{L}\\log_{10}\\frac{P_{in}}{P_{out}}\\ \\text{dB/km}$$\nwith $L$ in km. Total loss in dB $=\\alpha L$; $P_{out}=P_{in}\\times10^{-\\alpha L/10}$. Typical silica fibre: about 0.2 dB/km at 1550 nm, 0.35 dB/km at 1310 nm; the minimum-loss window is 1550 nm. 3 dB means half the power.",
+     "basics_md": "A decibel is a ratio on a log scale: every 10 dB is a factor of 10 in power, 3 dB is a factor of 2.",
+     "key_points": [
+      "$\\alpha=(10/L)\\log_{10}(P_{in}/P_{out})$ dB/km",
+      "Total loss $=\\alpha L$ in dB",
+      "$P_{out}=P_{in}10^{-\\alpha L/10}$",
+      "Minimum loss near 1550 nm"
+     ],
+     "figures": [],
+     "questions": [
+      {
+       "id": "at-q1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "Attenuation in an optical fibre is usually expressed in",
+       "options": [
+        "dB/km",
+        "W/m",
+        "Hz",
+        "nm"
+       ],
+       "answer_index": 0,
+       "why": "Power loss per unit length on a log scale."
+      },
+      {
+       "id": "at-q2",
+       "kind": "mcq",
+       "level": 2,
+       "q": "A 3 dB loss means the output power is about",
+       "options": [
+        "one half of input",
+        "one tenth of input",
+        "double the input",
+        "one quarter of input"
+       ],
+       "answer_index": 0,
+       "why": "$10^{-0.3}=0.50$."
+      },
+      {
+       "id": "at-q3",
+       "kind": "numerical",
+       "level": 2,
+       "marks": 3,
+       "q": "Light of 2 mW enters a 10 km fibre and 0.5 mW emerges. Find the attenuation coefficient. What power emerges from a 50 km link of 0.4 dB/km fibre fed with 1 mW?",
+       "model_answer_md": "$\\alpha=\\dfrac{10}{10}\\log_{10}\\dfrac{2}{0.5}=\\log_{10}4=0.602$ dB/km.\n\nLink: loss $=0.4\\times50=20$ dB, so $P_{out}=1\\ \\text{mW}\\times10^{-2}=0.01$ mW $=10\\ \\mu$W.",
+       "points": [
+        "$\\alpha=0.602$ dB/km",
+        "Link loss 20 dB",
+        "$P_{out}=10\\ \\mu$W"
+       ]
+      }
+     ]
+    },
+    {
+     "id": "loss-mechanisms",
+     "title": "Causes of fibre loss",
+     "theory_md": "- **Absorption:** intrinsic (silica UV and IR tails) and extrinsic (impurities such as $\\mathrm{Fe^{2+}}$, $\\mathrm{Cu^{2+}}$ and $\\mathrm{OH^-}$ ions, water peaks).\n- **Scattering:** **Rayleigh scattering** from density and composition fluctuations, loss $\\propto1/\\lambda^4$, the main loss below 1.6 $\\mu$m.\n- **Bending losses:** *macrobending* (large bends, angle falls below $\\theta_c$) and *microbending* (tiny axial kinks from pressure or cabling).\n- **Dispersion** (modal, material, waveguide) does not lose power but broadens pulses and limits bit rate.\n- Coupling and splice losses.",
+     "basics_md": "Light is lost by being swallowed (absorption), thrown sideways (scattering) or leaking out at bends.",
+     "key_points": [
+      "Absorption: intrinsic and impurity ions ($\\mathrm{OH^-}$, metals)",
+      "Rayleigh scattering $\\propto1/\\lambda^4$",
+      "Macro- and micro-bending losses",
+      "Dispersion broadens pulses, limits bandwidth"
+     ],
+     "figures": [],
+     "questions": [
+      {
+       "id": "lm-q1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "Rayleigh scattering loss varies with wavelength as",
+       "options": [
+        "$\\lambda$",
+        "$1/\\lambda^4$",
+        "$\\lambda^2$",
+        "independent of $\\lambda$"
+       ],
+       "answer_index": 1,
+       "why": "Shorter wavelengths scatter far more."
+      },
+      {
+       "id": "lm-q2",
+       "kind": "mcq",
+       "level": 2,
+       "q": "Which causes loss by the ray striking the boundary below the critical angle?",
+       "options": [
+        "Rayleigh scattering",
+        "Macrobending",
+        "Impurity absorption",
+        "Material dispersion"
+       ],
+       "answer_index": 1,
+       "why": "At a sharp bend the incidence angle falls below $\\theta_c$."
+      },
+      {
+       "id": "lm-q3",
+       "kind": "numerical",
+       "level": 2,
+       "marks": 4,
+       "q": "List the types of loss in optical fibres and explain any two. By what factor is Rayleigh loss at 0.85 $\\mu$m larger than at 1.55 $\\mu$m?",
+       "model_answer_md": "Losses: absorption, scattering, bending, dispersion, coupling.\n\n**Absorption:** impurity ions ($\\mathrm{OH^-}$, $\\mathrm{Fe^{2+}}$) and the intrinsic silica tails absorb light and turn it to heat.\n**Rayleigh scattering:** density fluctuations frozen in the glass scatter light, $\\propto\\lambda^{-4}$.\n\nRatio: $(1.55/0.85)^4=11.1$ times larger.",
+       "points": [
+        "Names absorption, scattering, bending",
+        "Explains two types",
+        "Rayleigh $\\propto1/\\lambda^4$",
+        "Ratio 11.1"
+       ]
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "topic": "Fiber optic communication",
+   "subtopics": [
+    {
+     "id": "communication-system",
+     "title": "Block diagram of an optical communication link",
+     "theory_md": "**Transmitter:** an electrical signal modulates a light source, a **laser diode** (single-mode, long distance) or **LED** (multimode, short distance), at 850, 1310 or 1550 nm.\n**Channel:** the optical fibre, with **repeaters/amplifiers** (EDFA) along long links to restore the signal.\n**Receiver:** a **photodiode** (PIN or avalanche) converts light back to current, then amplifier and decoder give the output.\n\nBlock diagram: Input signal $\\to$ encoder $\\to$ modulator + source $\\to$ fibre (with repeaters) $\\to$ detector $\\to$ amplifier/decoder $\\to$ output.",
+     "basics_md": "It is the same chain as a telephone line, only the wire is glass and the carrier is light.",
+     "key_points": [
+      "Transmitter: LED/laser diode with modulator",
+      "Fibre channel with repeaters or amplifiers",
+      "Receiver: photodiode (PIN/APD), amplifier, decoder",
+      "Wavelength windows 850, 1310, 1550 nm"
+     ],
+     "figures": [],
+     "questions": [
+      {
+       "id": "cs-q1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "In a fibre link the device that converts light to current is the",
+       "options": [
+        "laser diode",
+        "photodiode",
+        "LED",
+        "repeater"
+       ],
+       "answer_index": 1,
+       "why": "A PIN or avalanche photodiode is the detector."
+      },
+      {
+       "id": "cs-q2",
+       "kind": "mcq",
+       "level": 2,
+       "q": "For long-distance single-mode links the preferred source is",
+       "options": [
+        "LED",
+        "laser diode",
+        "bulb",
+        "neon lamp"
+       ],
+       "answer_index": 1,
+       "why": "The laser has a narrow spectrum and couples into a thin core."
+      },
+      {
+       "id": "cs-q3",
+       "kind": "short",
+       "level": 2,
+       "marks": 4,
+       "q": "Draw and explain the block diagram of an optical fibre communication system.",
+       "model_answer_md": "**Block diagram (described):** Information $\\to$ encoder/modulator $\\to$ optical source (laser diode or LED) $\\to$ optical fibre with repeaters $\\to$ photodetector (PIN or APD) $\\to$ amplifier and decoder $\\to$ output.\n\n- **Transmitter:** converts the signal to digital pulses and drives the source, which emits the modulated light.\n- **Fibre:** guides the light by TIR; repeaters regenerate the attenuated and dispersed signal.\n- **Receiver:** the photodiode converts light to current; the amplifier and decoder recover the original information.",
+       "points": [
+        "Source: LED or laser diode, modulated",
+        "Fibre with repeaters",
+        "Photodetector, amplifier, decoder",
+        "Labelled block diagram"
+       ]
+      }
+     ]
+    },
+    {
+     "id": "advantages-fibre",
+     "title": "Advantages and applications",
+     "theory_md": "**Advantages over copper:**\n- Enormous bandwidth, so very high data rate.\n- Very low loss (about 0.2 dB/km), so fewer repeaters.\n- Immune to electromagnetic interference and no cross-talk.\n- Small, light and cheap raw material (silica).\n- Secure: hard to tap; no spark hazard.\n\n**Limits:** splicing and connectors are costly and need skill; fibre is brittle.\n\n**Applications:** telephony and internet backbone, cable TV, LAN, medical endoscopy, sensors, military links. Several wavelengths can share one fibre (WDM).",
+     "basics_md": "Light has a far higher frequency than electric signals in wire, so a fibre can carry many more signals at once and with less loss.",
+     "key_points": [
+      "Large bandwidth and low loss",
+      "Immune to EMI and cross-talk, secure",
+      "Light, small, cheap material",
+      "Uses: telecom, endoscopy, sensors, LAN"
+     ],
+     "figures": [],
+     "questions": [
+      {
+       "id": "ad-q1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "A major advantage of optical fibre over copper cable is",
+       "options": [
+        "immunity to electromagnetic interference",
+        "higher electrical conductivity",
+        "need for more repeaters",
+        "greater weight"
+       ],
+       "answer_index": 0,
+       "why": "Light signals are not affected by electromagnetic fields."
+      },
+      {
+       "id": "ad-q2",
+       "kind": "mcq",
+       "level": 2,
+       "q": "WDM stands for",
+       "options": [
+        "Wide Data Medium",
+        "Wavelength Division Multiplexing",
+        "Wave Dispersion Mode",
+        "Wire Digital Modulation"
+       ],
+       "answer_index": 1,
+       "why": "Many wavelengths carried on one fibre."
+      },
+      {
+       "id": "ad-q3",
+       "kind": "short",
+       "level": 2,
+       "marks": 3,
+       "q": "State four advantages of optical fibre communication and two applications.",
+       "model_answer_md": "1. Very large bandwidth, so high data rates.\n2. Very low attenuation, so fewer repeaters.\n3. No electromagnetic interference or cross-talk.\n4. Small size, light weight, secure.\n\nApplications: telephone and internet backbones; medical endoscopy.",
+       "points": [
+        "Bandwidth",
+        "Low loss",
+        "No EMI/cross-talk",
+        "Two applications"
+       ]
+      }
+     ]
+    }
+   ]
+  }
+ ]
+}

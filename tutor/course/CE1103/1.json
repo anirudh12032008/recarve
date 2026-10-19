@@ -1,0 +1,2227 @@
+{
+ "code": "CE1103",
+ "unit": "Force and Equilibrium",
+ "written": "2026-10-19",
+ "by": "claude-sonnet-5-5, in a Claude Code session",
+ "topics": [
+  {
+   "topic": "Vector representation of forces and moments",
+   "subtopics": [
+    {
+     "id": "force-and-moment",
+     "title": "Force, transmissibility and moment",
+     "theory_md": "A **force** is a vector, fixed by four things: **magnitude, direction, sense** (push or pull) and **point of application**.\n\n**Principle of transmissibility:** on a rigid body, a force may be moved to any point **along its line of action** without changing its external effect (equilibrium or motion). Internal stresses do change, and moving it off the line is not allowed.\n\n**Moment** of a force about a point: $M = F\\times d$, with $d$ the perpendicular distance from the point to the line of action. Unit N$\\cdot$m; it measures the turning effect, clockwise or anticlockwise. A force through the point has zero moment. For a force at $(x,y)$: $M_O = xF_y - yF_x$.",
+     "basics_md": "A spanner turns a nut better when you hold it at the far end: the same push, a longer perpendicular distance, a bigger turning effect. That turning effect is the moment.",
+     "key_points": [
+      "Force is characterised by magnitude, direction, sense and point of application",
+      "Transmissibility: a force can slide along its line of action on a rigid body, external effect unchanged",
+      "Moment = force x perpendicular distance, unit N.m, with a sense (clockwise or anticlockwise)",
+      "Moment measures the turning effect; a force through the point has zero moment"
+     ],
+     "figures": [],
+     "questions": [
+      {
+       "id": "fm-q1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "Sliding a force along its own line of action on a rigid body without changing its external effect is the principle of",
+       "options": [
+        "Varignon",
+        "Transmissibility",
+        "Lami",
+        "Superposition"
+       ],
+       "answer_index": 1,
+       "why": "Transmissibility is exactly this statement; Varignon is about moments of a resultant."
+      },
+      {
+       "id": "fm-q2",
+       "kind": "mcq",
+       "level": 2,
+       "q": "A 50 N force acts with its line of action 0.4 m from a point O. Its moment about O is",
+       "options": [
+        "125 N.m",
+        "20 N.m",
+        "0.008 N.m",
+        "50.4 N.m"
+       ],
+       "answer_index": 1,
+       "why": "M = F x d = 50 x 0.4 = 20 N.m; the others divide or add."
+      },
+      {
+       "id": "fm-q3",
+       "kind": "numerical",
+       "level": 2,
+       "marks": 3,
+       "q": "A 80 N force is applied at the end of a 0.6 m spanner arm, at $30^\\circ$ to the arm. Find its moment about the nut.",
+       "model_answer_md": "Perpendicular distance $d = 0.6\\sin30^\\circ = 0.3$ m.\n\n$M = F\\,d = 80\\times0.3 = \\mathbf{24\\ N\\cdot m}$ (only the component perpendicular to the arm turns the nut).",
+       "points": [
+        "Perpendicular distance = 0.6 sin 30 = 0.3 m (or perpendicular component 80 sin 30 = 40 N)",
+        "M = 80 x 0.3",
+        "M = 24 N.m"
+       ]
+      },
+      {
+       "id": "fm-q4",
+       "kind": "numerical",
+       "level": 3,
+       "marks": 4,
+       "q": "A 100 N force at $60^\\circ$ to the x-axis passes through the point $(2\\ \\text{m},\\,1\\ \\text{m})$. Find its moment about the origin.",
+       "model_answer_md": "$F_x = 100\\cos60^\\circ = 50.00$ N, $F_y = 100\\sin60^\\circ = 86.60$ N.\n\n$M_O = xF_y - yF_x = 2(86.60) - 1(50.00) = \\mathbf{123.21\\ N\\cdot m}$ anticlockwise.",
+       "points": [
+        "Resolve: Fx = 50 N, Fy = 86.60 N",
+        "Use M = x Fy - y Fx",
+        "M = 123.21 N.m anticlockwise"
+       ]
+      },
+      {
+       "id": "fm-p1",
+       "pyq": "098c23411250c5f2",
+       "level": 1,
+       "points": [
+        "Magnitude",
+        "Direction (inclination of the line of action)",
+        "Sense: push or pull, shown by the arrowhead",
+        "Point of application"
+       ]
+      },
+      {
+       "id": "fm-p2",
+       "pyq": "b52ca0bc42625165",
+       "level": 1,
+       "points": [
+        "A force on a rigid body may be considered to act at any other point on its line of action",
+        "External effect (equilibrium or motion) unchanged",
+        "Example: pushing or pulling a cart along the same line"
+       ]
+      },
+      {
+       "id": "fm-p3",
+       "pyq": "e5d7a9e648f65997",
+       "level": 1,
+       "points": [
+        "Statement: point of application can be moved along the line of action of the force on a rigid body, external effect unchanged",
+        "Sketch: force pushing at A and the same force pulling at B on one line, same motion",
+        "Limits: rigid bodies only, along the line only; internal stress changes (compression vs tension)"
+       ]
+      },
+      {
+       "id": "fm-p4",
+       "pyq": "b660f0400efa17ae",
+       "level": 1,
+       "points": [
+        "Moment = force x perpendicular distance, $M=F\\times d$, unit N.m",
+        "Vector perpendicular to the plane, clockwise or anticlockwise",
+        "Significance: turning (rotational) effect; longer arm gives more turning, e.g. long spanner, door handle far from hinge"
+       ]
+      }
+     ]
+    },
+    {
+     "id": "varignon",
+     "title": "Varignon's theorem (law of moments)",
+     "theory_md": "**Statement:** the algebraic sum of the moments of coplanar forces about any point equals the moment of their resultant about that point: $\\sum M_O = R\\,d$.\n\n**Proof (two forces $P$, $Q$ meeting at A; any point O, $AO=d$):** take the x-axis along AO. Only y-components have a moment, with arm $d$:\n$M_P = d\\,P\\sin\\theta_1,\\ M_Q = d\\,Q\\sin\\theta_2,\\ M_R = d\\,R\\sin\\theta$.\nResolving, $R\\sin\\theta = P\\sin\\theta_1 + Q\\sin\\theta_2$. Multiply by $d$: $M_R = M_P + M_Q$. For more forces, combine two at a time.\n\n**Use:** the line of action of a resultant is at $d = \\sum M_O/R$; for equilibrium $\\sum M=0$ about any point.",
+     "basics_md": "Pushing a door with two hands at different spots gives the same turning as one equal push at the right spot. Varignon says exactly that: add the turning effects of the parts and you get the turning effect of the whole.",
+     "key_points": [
+      "Statement: sum of moments of forces about a point = moment of the resultant about that point",
+      "Proof: x-axis along AO, only y-components give moment, R sin(theta) = P sin(theta1) + Q sin(theta2), multiply by d",
+      "Extends to any number of forces by combining two at a time",
+      "Use: position of the resultant, d = sum M / R"
+     ],
+     "figures": [],
+     "questions": [
+      {
+       "id": "v-q1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "Varignon's theorem relates the moment of the resultant about a point to",
+       "options": [
+        "the sum of the forces",
+        "the algebraic sum of the moments of the forces about the same point",
+        "the product of the forces",
+        "the moments about different points"
+       ],
+       "answer_index": 1,
+       "why": "The moments of the parts and of the resultant must be about the same point."
+      },
+      {
+       "id": "v-q2",
+       "kind": "mcq",
+       "level": 2,
+       "q": "Varignon's theorem is mostly used to find",
+       "options": [
+        "the magnitude of the resultant",
+        "the angle of the resultant",
+        "the line of action (position) of the resultant",
+        "the number of unknown reactions"
+       ],
+       "answer_index": 2,
+       "why": "Magnitude and angle come from resolving; position needs moments."
+      },
+      {
+       "id": "v-q3",
+       "kind": "numerical",
+       "level": 2,
+       "marks": 3,
+       "q": "Two parallel downward forces, 10 N at 1 m and 30 N at 3 m from A along a bar, act on it. Find the position of their resultant from A.",
+       "model_answer_md": "$R = 10 + 30 = 40$ N (downward).\n\nVarignon about A: $R\\,x = 10(1) + 30(3) = 100$ N$\\cdot$m.\n\n$x = 100/40 = \\mathbf{2.5\\ m}$ from A.",
+       "points": [
+        "R = 40 N",
+        "Moment of resultant = sum of moments about A: 40 x = 10(1) + 30(3)",
+        "x = 2.5 m from A"
+       ]
+      },
+      {
+       "id": "v-q4",
+       "kind": "numerical",
+       "level": 3,
+       "marks": 4,
+       "q": "A 500 N force at $45^\\circ$ above the +x axis acts at the point $(0.4,\\ 0.3)$ m. Find its moment about the origin using components.",
+       "model_answer_md": "$F_x = F_y = 500\\cos45^\\circ = 353.55$ N.\n\nBy Varignon, add the moments of the components: $M_O = xF_y - yF_x = 0.4(353.55) - 0.3(353.55) = \\mathbf{35.36\\ N\\cdot m}$ anticlockwise.",
+       "points": [
+        "Components Fx = Fy = 353.55 N",
+        "M = x Fy - y Fx (moment of components, by Varignon)",
+        "M = 35.36 N.m anticlockwise"
+       ]
+      },
+      {
+       "id": "v-p1",
+       "pyq": "f6c1637f44016388",
+       "level": 2,
+       "points": [
+        "Statement: sum of moments of coplanar forces about a point = moment of the resultant about that point",
+        "Figure: P and Q at A, resultant R, point O, x-axis along AO",
+        "M = d P sin(theta1), d Q sin(theta2), d R sin(theta); R sin(theta) = P sin(theta1) + Q sin(theta2)",
+        "Multiply by d: M_R = M_P + M_Q"
+       ]
+      },
+      {
+       "id": "v-p2",
+       "pyq": "edc6983bd369319c",
+       "level": 2,
+       "points": [
+        "Statement: sum M_O = R d",
+        "Figure of P, Q, R at A with O; x-axis along AO, y perpendicular",
+        "Only y-components have moment, each with arm d",
+        "R sin(theta) = P sin(theta1) + Q sin(theta2) so M_R = M_P + M_Q; extends to many forces"
+       ]
+      },
+      {
+       "id": "v-p3",
+       "pyq": "9c767753daaa4931",
+       "level": 2,
+       "points": [
+        "To prove M_O(P) + M_O(Q) = M_O(R)",
+        "Take x-axis along AO; moment of a force at A = AO x its perpendicular component",
+        "y-component of R = sum of y-components of P and Q",
+        "Multiply by AO to get M_R = M_P + M_Q"
+       ]
+      },
+      {
+       "id": "v-p4",
+       "pyq": "0bad61f852775202",
+       "level": 2,
+       "points": [
+        "Moment = F x d, turning effect, N.m, clockwise or anticlockwise",
+        "Law of moments (Varignon) statement",
+        "Derivation with P, Q, R at A, O any point, x-axis along AO, moments of y-components",
+        "Corollary: for equilibrium, sum of moments about any point = 0"
+       ]
+      }
+     ]
+    },
+    {
+     "id": "couple",
+     "title": "Couple and its properties",
+     "theory_md": "A **couple** is a pair of **equal, opposite, parallel, non-collinear** forces. Its resultant force is zero, so it produces pure rotation.\n\n**Couple moment:** $M = F\\times d$, $d$ = perpendicular distance between the forces (the arm), N$\\cdot$m.\n\n**Properties:**\n1. Resultant force is zero; it cannot be replaced by a single force, only balanced by an equal and opposite couple.\n2. Its moment is the **same about every point** of the plane (a free vector).\n3. It may be moved anywhere in its plane, or to a parallel plane, without changing its effect.\n4. Two couples of equal moment are equivalent.\n\n**Proof of 2:** about a point at distance $x$ outside the pair: $F(x+d) - Fx = Fd$; between the forces: $Fx + F(d-x) = Fd$.",
+     "basics_md": "Turning a steering wheel with both hands pushes one side up and one down by equal amounts. Nothing moves sideways; the wheel only rotates. That pair is a couple.",
+     "key_points": [
+      "Couple = two equal, opposite, parallel, non-collinear forces; resultant force zero",
+      "Moment M = F x d, same about every point in the plane",
+      "Only another couple can balance a couple",
+      "Can be shifted anywhere in its plane without changing its effect"
+     ],
+     "figures": [],
+     "questions": [
+      {
+       "id": "c-q1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "The resultant force of a couple is",
+       "options": [
+        "F",
+        "2F",
+        "zero",
+        "F d"
+       ],
+       "answer_index": 2,
+       "why": "The two forces are equal and opposite, so they add to zero; only the moment F d remains."
+      },
+      {
+       "id": "c-q2",
+       "kind": "mcq",
+       "level": 2,
+       "q": "The moment of a couple about a point in its plane",
+       "options": [
+        "depends on how far the point is from the couple",
+        "is the same for every point",
+        "is zero at the mid-point of the forces",
+        "is F only"
+       ],
+       "answer_index": 1,
+       "why": "Sum of moments = F d about any point, a free vector."
+      },
+      {
+       "id": "c-q3",
+       "kind": "numerical",
+       "level": 2,
+       "marks": 3,
+       "q": "A couple is formed by two 40 N forces 0.25 m apart. Find its moment. What is the arm if the forces are changed to 20 N and the moment must stay the same?",
+       "model_answer_md": "$M = F\\,d = 40\\times0.25 = \\mathbf{10\\ N\\cdot m}$.\n\nFor $F = 20$ N: $d = M/F = 10/20 = \\mathbf{0.5\\ m}$.",
+       "points": [
+        "M = F d = 40 x 0.25 = 10 N.m",
+        "Same moment with 20 N: d = 10/20",
+        "d = 0.5 m"
+       ]
+      },
+      {
+       "id": "c-q4",
+       "kind": "short",
+       "level": 2,
+       "marks": 3,
+       "q": "State three properties of a couple and say why it cannot be balanced by a single force.",
+       "model_answer_md": "1. Resultant force is zero; it only rotates the body.\n2. Moment $M = Fd$ is the same about any point in its plane.\n3. It can be shifted anywhere in its plane without changing its effect.\n\nA single force has a non-zero resultant, but a couple has none, so a single force always leaves a net force. Only an equal and opposite couple balances it.",
+       "points": [
+        "Resultant force zero, pure rotation",
+        "Moment same about every point, M = F d",
+        "May be moved anywhere in its plane",
+        "Balanced only by an equal and opposite couple"
+       ]
+      },
+      {
+       "id": "c-p1",
+       "pyq": "2af2cafe5c6d2bc7",
+       "level": 2,
+       "points": [
+        "Properties: two equal, opposite, parallel, non-collinear forces; resultant zero; pure rotation; M = F d",
+        "Cannot be balanced by a single force, only by an equal and opposite couple",
+        "Can be shifted anywhere in its plane",
+        "Proof: about a point outside, F(x+d) - F x = F d; between the forces, F x + F(d-x) = F d; constant"
+       ]
+      },
+      {
+       "id": "c-p2",
+       "pyq": "85ac8a2a5b1c797d",
+       "level": 1,
+       "points": [
+        "Couple = equal, opposite, parallel forces with different lines of action; resultant zero, pure rotation",
+        "Couple moment M = F x d (arm d), N.m, same about every point",
+        "Balanced only by an equal and opposite couple; example steering wheel"
+       ]
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "topic": "Vector operations",
+   "subtopics": [
+    {
+     "id": "force-as-vector",
+     "title": "Forces as vectors: addition and components",
+     "theory_md": "A force is a **vector**: it has magnitude, direction and sense, and adds by the **parallelogram law** (or triangle law). Mass and time are scalars.\n\n**Characteristics of a force:** magnitude, direction, sense, point of application.\n\n**Parallelogram law:** two forces $P$, $Q$ at angle $\\theta$ have the resultant along the diagonal:\n$R=\\sqrt{P^2+Q^2+2PQ\\cos\\theta}$, $\\tan\\alpha=\\dfrac{Q\\sin\\theta}{P+Q\\cos\\theta}$ ($\\alpha$ from $P$).\n\n**Components:** $F_x = F\\cos\\theta$, $F_y = F\\sin\\theta$. In 3D, $F_x = F\\,\\ell_x/L$ with $\\ell_x$ the x-extent and $L$ the length of the line of action.",
+     "basics_md": "Walking 3 m east then 4 m north puts you 5 m from the start, not 7 m. Directions matter when you add vectors.",
+     "key_points": [
+      "A force is a vector: magnitude, direction, sense, point of application",
+      "Two forces add by the parallelogram (or triangle) law",
+      "R = sqrt(P^2 + Q^2 + 2PQ cos(theta)); at 90 degrees R = sqrt(P^2 + Q^2)",
+      "Components: Fx = F cos(theta), Fy = F sin(theta)"
+     ],
+     "figures": [],
+     "questions": [
+      {
+       "id": "fv-q1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "Which of these is a vector quantity?",
+       "options": [
+        "Mass",
+        "Force",
+        "Time",
+        "Volume"
+       ],
+       "answer_index": 1,
+       "why": "Force has direction and sense; the others are scalars."
+      },
+      {
+       "id": "fv-q2",
+       "kind": "mcq",
+       "level": 2,
+       "q": "Forces of 3 N and 4 N act at a point at $90^\\circ$. Their resultant is",
+       "options": [
+        "7 N",
+        "1 N",
+        "5 N",
+        "12 N"
+       ],
+       "answer_index": 2,
+       "why": "R = sqrt(9 + 16) = 5 N; 7 N is the scalar sum (angle 0), 1 N is angle 180."
+      },
+      {
+       "id": "fv-q3",
+       "kind": "numerical",
+       "level": 2,
+       "marks": 3,
+       "q": "Find the resultant of 5 N and 12 N acting at right angles to each other, and its angle with the 5 N force.",
+       "model_answer_md": "$R = \\sqrt{5^2+12^2} = \\mathbf{13\\ N}$.\n\n$\\tan\\alpha = \\dfrac{12}{5} \\Rightarrow \\alpha = \\mathbf{67.38^\\circ}$ with the 5 N force.",
+       "points": [
+        "R = sqrt(25 + 144) = 13 N",
+        "tan(alpha) = 12/5",
+        "alpha = 67.38 degrees with the 5 N force"
+       ]
+      },
+      {
+       "id": "fv-q4",
+       "kind": "numerical",
+       "level": 3,
+       "marks": 3,
+       "q": "A force of 130 N acts along the line from A(0, 0, 0) to B(3, 4, 12) m. Find its components.",
+       "model_answer_md": "$L = \\sqrt{3^2+4^2+12^2} = 13$ m.\n\n$F_x = 130(3/13) = \\mathbf{30}$ N, $F_y = 130(4/13) = \\mathbf{40}$ N, $F_z = 130(12/13) = \\mathbf{120}$ N.",
+       "points": [
+        "Length of AB = 13 m",
+        "Components = F x (extent/length)",
+        "Fx = 30 N, Fy = 40 N, Fz = 120 N"
+       ]
+      },
+      {
+       "id": "fv-p1",
+       "pyq": "afadb9adcf76266b",
+       "level": 1,
+       "points": [
+        "Parallelogram law: two forces as adjacent sides, resultant is the diagonal through the point; R = sqrt(P^2 + Q^2 + 2PQ cos(theta)), tan(alpha) = Q sin(theta)/(P + Q cos(theta))",
+        "Example: 3 N and 4 N at 90 degrees give 5 N at 53.13 degrees with P",
+        "Characteristics of a force: magnitude, direction, sense, point of application"
+       ]
+      }
+     ]
+    },
+    {
+     "id": "dot-cross",
+     "title": "Dot product, cross product and moment as r x F",
+     "theory_md": "**Unit vector** along $\\vec A$: $\\hat a = \\vec A/|\\vec A|$.\n\n**Dot product** (scalar): $\\vec A\\cdot\\vec B = AB\\cos\\theta = A_xB_x + A_yB_y + A_zB_z$. Zero for perpendicular vectors; gives the angle and the component of one vector along another.\n\n**Cross product** (vector): $|\\vec A\\times\\vec B| = AB\\sin\\theta$, direction by the right-hand rule, $\\vec A\\times\\vec B = -\\vec B\\times\\vec A$; evaluated as the determinant of $(\\hat i,\\hat j,\\hat k)$, $A$, $B$.\n\n**Moment of a force about O:** $\\vec M_O = \\vec r\\times\\vec F$, $\\vec r$ from O to any point on the line of action. Its magnitude is $F\\,d$.",
+     "basics_md": "Dot product asks how much two arrows point the same way and gives a number. Cross product asks how much they sweep across each other and gives a new arrow at right angles, which is why a moment points along the axis of rotation.",
+     "key_points": [
+      "Dot product is a scalar = AB cos(theta); zero when perpendicular",
+      "Cross product is a vector of magnitude AB sin(theta), direction by right-hand rule; A x B = -B x A",
+      "Moment of a force about O is M = r x F with r from O to the line of action",
+      "Use the determinant of i, j, k to evaluate the cross product"
+     ],
+     "figures": [],
+     "questions": [
+      {
+       "id": "dc-q1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "The dot product of two perpendicular vectors is",
+       "options": [
+        "1",
+        "zero",
+        "the product of their magnitudes",
+        "a vector"
+       ],
+       "answer_index": 1,
+       "why": "cos 90 = 0, and a dot product is always a scalar."
+      },
+      {
+       "id": "dc-q2",
+       "kind": "mcq",
+       "level": 2,
+       "q": "For vectors $\\vec A$ and $\\vec B$, $\\vec A\\times\\vec B$ equals",
+       "options": [
+        "$\\vec B\\times\\vec A$",
+        "$-\\vec B\\times\\vec A$",
+        "$\\vec A\\cdot\\vec B$",
+        "$AB\\cos\\theta$"
+       ],
+       "answer_index": 1,
+       "why": "The cross product changes sign when the order is reversed."
+      },
+      {
+       "id": "dc-q3",
+       "kind": "numerical",
+       "level": 2,
+       "marks": 4,
+       "q": "For $\\vec A = 2\\hat i + 3\\hat j + 6\\hat k$ and $\\vec B = \\hat i - 2\\hat j + 2\\hat k$, find $\\vec A\\cdot\\vec B$, $\\vec A\\times\\vec B$ and the angle between them.",
+       "model_answer_md": "$\\vec A\\cdot\\vec B = 2(1) + 3(-2) + 6(2) = \\mathbf{8}$.\n\n$\\vec A\\times\\vec B = (3\\cdot2 - 6\\cdot(-2))\\hat i + (6\\cdot1 - 2\\cdot2)\\hat j + (2\\cdot(-2) - 3\\cdot1)\\hat k = \\mathbf{18\\hat i + 2\\hat j -7\\hat k}$.\n\n$|\\vec A| = 7$, $|\\vec B| = 3$, $\\cos\\theta = 8/21 \\Rightarrow \\theta = \\mathbf{67.61^\\circ}$.",
+       "points": [
+        "Dot product = 8",
+        "Cross product = 18 i + 2 j - 7 k",
+        "|A| = 7, |B| = 3",
+        "theta = 67.61 degrees"
+       ]
+      },
+      {
+       "id": "dc-q4",
+       "kind": "numerical",
+       "level": 3,
+       "marks": 4,
+       "q": "A force $\\vec F = 10\\hat i + 20\\hat j - 5\\hat k$ N acts at a point with position vector $\\vec r = 3\\hat i + 2\\hat j + \\hat k$ m from O. Find the moment about O and its magnitude.",
+       "model_answer_md": "$\\vec M_O = \\vec r\\times\\vec F$\n\n$= (2(-5) - 1(20))\\hat i + (1(10) - 3(-5))\\hat j + (3(20) - 2(10))\\hat k = \\mathbf{-30\\hat i + 25\\hat j + 40\\hat k}$ N$\\cdot$m.\n\n$|M_O| = \\sqrt{30^2+25^2+40^2} = \\mathbf{55.90\\ N\\cdot m}$.",
+       "points": [
+        "M = r x F (position first)",
+        "Components -30 i + 25 j + 40 k N.m",
+        "Magnitude 55.90 N.m"
+       ]
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "topic": "Planar force systems",
+   "subtopics": [
+    {
+     "id": "resultant-coplanar",
+     "title": "Resultant of a coplanar force system",
+     "theory_md": "Coplanar systems are **concurrent** (lines meet at a point), **parallel**, or **general non-concurrent**.\n\nSteps for the resultant:\n1. Resolve: $\\Sigma F_x$, $\\Sigma F_y$.\n2. $R = \\sqrt{(\\Sigma F_x)^2 + (\\Sigma F_y)^2}$, $\\tan\\theta = |\\Sigma F_y/\\Sigma F_x|$; the signs give the quadrant.\n3. Moments about a point O: $\\Sigma M_O$. By Varignon, $R\\,d = \\Sigma M_O$, so $d = \\Sigma M_O/R$.\n4. Where it cuts an axis: on the x-axis $x = \\Sigma M_O/\\Sigma F_y$; on the y-axis $y = \\Sigma M_O/\\Sigma F_x$.\n\nA force through O has no moment about O; a force along an axis has no moment about a point on it. Pick O to kill as many terms as possible.",
+     "basics_md": "Add up all the pushes sideways and all the pushes up and down to get the size and direction of the single equal push. Add up all the turning effects about a point to learn where that single push must sit.",
+     "key_points": [
+      "Resolve into Fx and Fy and sum; R = sqrt(sum Fx^2 + sum Fy^2), direction by arctan and the signs",
+      "Take moments about a convenient point; sum M_O = R d (Varignon)",
+      "Position: x = sum M_O / sum Fy on the x-axis; d = sum M_O / R perpendicular",
+      "State magnitude, direction and position, with units"
+     ],
+     "figures": [],
+     "questions": [
+      {
+       "id": "rc-q1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "A system of forces whose lines of action meet at one point is",
+       "options": [
+        "parallel",
+        "concurrent",
+        "collinear",
+        "a couple"
+       ],
+       "answer_index": 1,
+       "why": "Concurrent forces share a point of intersection."
+      },
+      {
+       "id": "rc-q2",
+       "kind": "mcq",
+       "level": 2,
+       "q": "To find where the line of action of the resultant cuts the base you use",
+       "options": [
+        "Lami's theorem",
+        "the parallelogram law",
+        "moments (Varignon): x = sum M / sum Fy",
+        "the triangle law"
+       ],
+       "answer_index": 2,
+       "why": "Position needs moments; the other methods only give magnitude and direction of concurrent forces."
+      },
+      {
+       "id": "rc-q3",
+       "kind": "numerical",
+       "level": 2,
+       "marks": 5,
+       "q": "A horizontal 40 N force acts along a line 3 m above O, and a 60 N downward force acts through x = 2 m on the x-axis. Find the magnitude, direction and the point where the resultant cuts the x-axis.",
+       "model_answer_md": "$\\Sigma F_x = 40$ N, $\\Sigma F_y = -60$ N.\n\n$R = \\sqrt{40^2+60^2} = \\mathbf{72.11\\ N}$, $\\theta = \\tan^{-1}(60/40) = \\mathbf{56.31^\\circ}$ below the horizontal (down and to the right).\n\n$\\Sigma M_O$ (anticlockwise +): $-(3)(40) + (2)(-60) = -240$ N$\\cdot$m, i.e. 240 N$\\cdot$m clockwise.\n\nOn the x-axis: $x = 240/60 = \\mathbf{4\\ m}$ from O. (Perpendicular distance $d = 240/72.11 = 3.33$ m.)",
+       "points": [
+        "Sum Fx = 40 N, sum Fy = -60 N",
+        "R = 72.11 N, 56.31 degrees below horizontal",
+        "Moment about O = 240 N.m clockwise",
+        "Cuts the x-axis at 4 m from O"
+       ]
+      },
+      {
+       "id": "rc-q4",
+       "kind": "numerical",
+       "level": 3,
+       "marks": 5,
+       "q": "Parallel vertical forces on a bar: 100 N up at x = 0, 200 N down at x = 2 m, 80 N down at x = 5 m. Find the resultant and its position from x = 0.",
+       "model_answer_md": "Taking down as negative: $R = 100 - 200 - 80 = -180$ N, so $\\mathbf{180\\ N\\ downward}$.\n\nMoments about x = 0 (clockwise +): $200(2) + 80(5) = 800$ N$\\cdot$m.\n\n$x = 800/180 = \\mathbf{4.44\\ m}$ from x = 0.",
+       "points": [
+        "R = 180 N downward",
+        "Moments about x = 0: 200(2) + 80(5) = 800 N.m (the upward force at x = 0 has no moment)",
+        "x = 800/180 = 4.44 m"
+       ]
+      },
+      {
+       "id": "rc-p1",
+       "pyq": "7685462f2c965838",
+       "level": 2,
+       "points": [
+        "Components: 1000 at 90 deg, 1500 at 60, 1000 at 45, 500 at 30; sum Fx = 1890.12 N, sum Fy = 3256.15 N",
+        "R = 3764.97 N at 59.87 degrees with PS",
+        "Moments about P of vertical components: 13 853.0 N.m",
+        "x = 13 853.0/3256.15 = 4.25 m from P"
+       ]
+      },
+      {
+       "id": "rc-p2",
+       "pyq": "0c04433636e76b2f",
+       "level": 2,
+       "points": [
+        "Forces taken in order: 5P along AB, 10P along BC, 12P along CD, 15P along DA",
+        "Sum Fx = -7P, sum Fy = -5P; R = 8.60P at 35.54 degrees with AB, third quadrant",
+        "Moment about A = 4400P N.mm anticlockwise",
+        "d = 511.5 mm; intercept on AB produced 880 mm on the side away from B"
+       ]
+      },
+      {
+       "id": "rc-p3",
+       "pyq": "e7774b9ff89b778f",
+       "level": 2,
+       "points": [
+        "Table of forces with coordinates: sum Fx = 5 kN, sum Fy = -85 kN",
+        "R = 85.15 kN at 86.63 degrees below horizontal",
+        "Sum M_O = 215 kN.m clockwise",
+        "x = 215/85 = 2.53 m from bottom-left corner"
+       ]
+      },
+      {
+       "id": "rc-p4",
+       "pyq": "0197233f26dd391f",
+       "level": 2,
+       "points": [
+        "Components (diagonal forces at 45 degrees): sum Fx = 2.929 N, sum Fy = 75.355 N",
+        "R = 75.41 N at 87.77 degrees with AB",
+        "Moment about A = 1272.79 N.mm anticlockwise (only 30 N BD has a moment)",
+        "d = 16.88 mm; cuts AB at x = 16.89 mm from A"
+       ]
+      },
+      {
+       "id": "rc-p5",
+       "pyq": "667e85e1af810a7b",
+       "level": 1,
+       "points": [
+        "Law of moments: sum of moments about a point = moment of the resultant about that point",
+        "Proof with P, Q at A, x-axis along AO, y-components give M_P, M_Q, M_R",
+        "R sin(theta) = P sin(theta1) + Q sin(theta2), multiply by d"
+       ]
+      },
+      {
+       "id": "rc-p6",
+       "pyq": "70cbcad8e2eb15b0",
+       "level": 2,
+       "points": [
+        "8 kN at 120 degrees to the beam: vertical 6.928 kN, horizontal 4 kN",
+        "Reactions: H_A = 4 kN, V_A = 11.93 kN, M_A = 28.86 kN.m",
+        "Resultant 12.58 kN at 71.46 degrees to the beam",
+        "Position by Varignon: x = 28.86/11.93 = 2.42 m from A"
+       ]
+      }
+     ]
+    },
+    {
+     "id": "distributed-loads",
+     "title": "Types of loading and equivalent point loads",
+     "theory_md": "**Loads on a beam:** concentrated (point) load, **UDL** (constant intensity $w$ kN/m), **UVL** (intensity varying linearly; triangular if zero at one end) and applied couples.\n\nReplace a distributed load by one force equal to the **area of the load diagram**, acting through its **centroid**:\n- UDL over $L$: $wL$ at $L/2$.\n- Triangular load (zero to $w$): $\\tfrac12 wL$ at $L/3$ from the larger end ($2L/3$ from the zero end).\n- Trapezoid ($w_1$ to $w_2$): split into a rectangle $w_1L$ and a triangle $\\tfrac12(w_2-w_1)L$.\n\nUse the equivalent loads in $\\Sigma M$ and $\\Sigma F$.",
+     "basics_md": "A pile of sand spread along a plank pushes down everywhere. For the equations of balance you can pretend the whole weight sits in one lump at the middle of the pile's shape.",
+     "key_points": [
+      "UDL: total wL at the centre of its length",
+      "Triangular load: (1/2) w L at L/3 from the larger end",
+      "UVL = area of load diagram acting at its centroid (split trapezoid into rectangle + triangle)",
+      "Units: intensity in kN/m, equivalent load in kN"
+     ],
+     "figures": [],
+     "questions": [
+      {
+       "id": "dl-q1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "A UDL of $w$ kN/m over a length $L$ is equivalent to a point load acting at",
+       "options": [
+        "one end",
+        "$L/3$ from one end",
+        "the centre of $L$",
+        "$2L/3$ from one end"
+       ],
+       "answer_index": 2,
+       "why": "The centroid of a rectangle is at its mid-length."
+      },
+      {
+       "id": "dl-q2",
+       "kind": "mcq",
+       "level": 2,
+       "q": "A triangular load rising from zero to $w$ over $L$ has its resultant at",
+       "options": [
+        "$L/2$ from the zero end",
+        "$L/3$ from the zero end",
+        "$L/3$ from the larger end",
+        "at the larger end"
+       ],
+       "answer_index": 2,
+       "why": "Centroid of a triangle is one third of the base from the vertical side, i.e. from the larger end."
+      },
+      {
+       "id": "dl-q3",
+       "kind": "numerical",
+       "level": 2,
+       "marks": 4,
+       "q": "A load varies uniformly from 10 kN/m to 40 kN/m over 5 m. Find the equivalent load and its distance from the 10 kN/m end.",
+       "model_answer_md": "Rectangle: $10\\times5 = 50$ kN at 2.5 m.\nTriangle: $\\tfrac12(40-10)(5) = 75$ kN at $\\tfrac23(5) = 3.333$ m from the 10 kN/m end.\n\nTotal $= \\mathbf{125\\ kN}$.\n\n$x = \\dfrac{50(2.5)+75(3.333)}{125} = \\mathbf{3.0\\ m}$ from the 10 kN/m end.",
+       "points": [
+        "Split into rectangle 50 kN at 2.5 m and triangle 75 kN at 3.33 m",
+        "Total 125 kN",
+        "x = (125 + 250)/125 = 3.0 m from the 10 kN/m end"
+       ]
+      },
+      {
+       "id": "dl-p1",
+       "pyq": "7cc36b397af5b32c",
+       "level": 1,
+       "points": [
+        "Types: concentrated, UDL, UVL (triangular, trapezoidal), applied couple",
+        "UDL: constant w, rectangle, total wL at L/2",
+        "UVL: linear w1 to w2, trapezium, total (w1 + w2)L/2",
+        "Triangular: zero to w, total wL/2 at L/3 from the larger end; special case of UVL"
+       ]
+      }
+     ]
+    },
+    {
+     "id": "dam-stability",
+     "title": "Dam stability and the middle-third rule",
+     "theory_md": "A dam is acted on by the **water thrust** (horizontal, $\\Sigma H$), its **weight** and other vertical loads ($\\Sigma V$, uplift counted upward), all about the heel O.\n\n1. $R=\\sqrt{(\\Sigma H)^2+(\\Sigma V)^2}$, $\\tan\\theta = \\Sigma V/\\Sigma H$.\n2. $\\Sigma M_O$ of all forces (same sense for thrust and weight about the heel).\n3. The resultant cuts the base at $\\bar x = \\Sigma M_O/\\Sigma V$ from O.\n\n**Middle-third rule:** the dam is safe (no tension in the base) if $\\bar x$ lies between $B/3$ and $2B/3$ from the heel, i.e. eccentricity $e\\le B/6$. If the resultant falls outside the middle third, tension appears at one edge of the base.",
+     "basics_md": "Stand a book on a table and push it high on one side: it tips before it slides. The resultant of push and weight must land inside the base, and for a dam, inside the middle third so no part of the base is pulled.",
+     "key_points": [
+      "Find sum H and sum V, then R and its angle",
+      "Take moments about the heel: x = sum M_O / sum V",
+      "Safe if x lies in the middle third, B/3 to 2B/3 from the heel",
+      "Outside the middle third: tension at one edge of the base"
+     ],
+     "figures": [],
+     "questions": [
+      {
+       "id": "ds-q1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "A dam is safe against tension if the resultant cuts the base within",
+       "options": [
+        "the first third from the heel",
+        "the last third near the toe",
+        "the middle third",
+        "anywhere on the base"
+       ],
+       "answer_index": 2,
+       "why": "The middle third keeps the whole base in compression."
+      },
+      {
+       "id": "ds-q2",
+       "kind": "mcq",
+       "level": 2,
+       "q": "If the resultant of a dam falls outside the middle third,",
+       "options": [
+        "the dam must slide",
+        "tension develops at one edge of the base",
+        "the dam is stronger",
+        "compression is uniform"
+       ],
+       "answer_index": 1,
+       "why": "The eccentricity exceeds B/6, so one edge goes into tension."
+      },
+      {
+       "id": "ds-q3",
+       "kind": "numerical",
+       "level": 2,
+       "marks": 5,
+       "q": "A dam of base width 6 m carries a horizontal water thrust of 200 kN at 3 m above the base and a vertical weight 900 kN at 3.2 m from the heel. Is it safe?",
+       "model_answer_md": "$\\Sigma V = 900$ kN, $\\Sigma H = 200$ kN, $R = \\sqrt{900^2+200^2} = 922.0$ kN.\n\nMoments about the heel: $\\Sigma M = 200(3) + 900(3.2) = 600 + 2880 = 3480$ kN$\\cdot$m.\n\n$\\bar x = 3480/900 = \\mathbf{3.87\\ m}$ from the heel.\n\nMiddle third: $6/3 = 2$ m to $4$ m. Since $2 < 3.87 < 4$, **the dam is safe**.",
+       "points": [
+        "Sum V = 900 kN, sum H = 200 kN",
+        "Moment about heel = 3480 kN.m",
+        "x = 3.87 m from the heel",
+        "Middle third is 2 m to 4 m, so safe"
+       ]
+      },
+      {
+       "id": "ds-q4",
+       "kind": "numerical",
+       "level": 3,
+       "marks": 5,
+       "q": "Same base (6 m) and thrust 300 kN at 3 m above the base, but the weight 900 kN acts at 4.5 m from the heel. Check the dam.",
+       "model_answer_md": "$\\Sigma M = 300(3) + 900(4.5) = 900 + 4050 = 4950$ kN$\\cdot$m.\n\n$\\bar x = 4950/900 = \\mathbf{5.5\\ m}$ from the heel.\n\nThe middle third ends at 4 m. Since $5.5 > 4$, the resultant lies outside it, so **the dam is not safe**: tension develops at the heel.",
+       "points": [
+        "Moment about heel = 4950 kN.m",
+        "x = 5.5 m from the heel",
+        "Beyond 4 m, outside the middle third",
+        "Not safe: tension at the heel"
+       ]
+      },
+      {
+       "id": "ds-p1",
+       "pyq": "28aacd7751f83461",
+       "level": 2,
+       "points": [
+        "Sum H = 500 kN; sum V = 1120 - 120 + 420 = 1420 kN; R = 1505.46 kN at 70.60 degrees with horizontal",
+        "Moments about O: 500x4 + 1120x2 - 120x6 + 420x5 = 5620 kN.m",
+        "x = 5620/1420 = 3.96 m from O",
+        "Middle third is 2.33 m to 4.67 m, 3.96 lies inside so the dam is safe"
+       ]
+      },
+      {
+       "id": "ds-p2",
+       "pyq": "4b37aea42611f203",
+       "level": 3,
+       "points": [
+        "Resolve 600 kN normal to the 60 degree face: Fx = -519.62, Fy = -300 kN, applied at (16, 3.464) m",
+        "Sum Fx = 480.38 kN, sum Fy = -2700 kN; R = 2742.40 kN at 79.91 degrees below horizontal toward B",
+        "Moment about A = 6000 + 16 800 + 3000 = 25 800 kN.m",
+        "x = 25 800/2700 = 9.56 m from A; middle third 6 m to 12 m, so safe"
+       ]
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "topic": "Composition of concurrent forces in a plane",
+   "subtopics": [
+    {
+     "id": "parallelogram-law",
+     "title": "Parallelogram, triangle and polygon laws",
+     "theory_md": "**Parallelogram law:** if two forces at a point are the adjacent sides of a parallelogram (in magnitude and direction), their resultant is the diagonal through that point.\n\n$R=\\sqrt{P^2+Q^2+2PQ\\cos\\theta}$, $\\tan\\alpha=\\dfrac{Q\\sin\\theta}{P+Q\\cos\\theta}$ ($\\alpha$ measured from $P$).\n\n**Proof:** in parallelogram OACB, drop CD perpendicular to OA produced: $AD=Q\\cos\\theta$, $CD=Q\\sin\\theta$; $OC^2=(P+Q\\cos\\theta)^2+(Q\\sin\\theta)^2$.\n\nSpecial cases: $\\theta=0$: $R=P+Q$; $\\theta=90^\\circ$: $R=\\sqrt{P^2+Q^2}$; $\\theta=180^\\circ$: $R=|P-Q|$; $P=Q$: $R=2P\\cos(\\theta/2)$, along the bisector.\n\n**Triangle law:** two forces as two sides in order; the closing side is the resultant. **Polygon law:** same for many forces.",
+     "basics_md": "Two people pulling a sled at an angle get a pull along the diagonal of the parallelogram their ropes make. Pulling closer together gives a bigger resultant.",
+     "key_points": [
+      "Statement: resultant is the diagonal of the parallelogram on the two forces",
+      "R = sqrt(P^2 + Q^2 + 2PQ cos(theta)), tan(alpha) = Q sin(theta)/(P + Q cos(theta))",
+      "Proof with CD perpendicular to OA produced and Pythagoras",
+      "Triangle law for two forces, polygon law for many; special cases 0, 90, 180 degrees"
+     ],
+     "figures": [],
+     "questions": [
+      {
+       "id": "pl-q1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "The resultant of two forces is greatest when the angle between them is",
+       "options": [
+        "0 degrees",
+        "90 degrees",
+        "120 degrees",
+        "180 degrees"
+       ],
+       "answer_index": 0,
+       "why": "cos 0 = 1 gives R = P + Q; 180 degrees gives the least, |P - Q|."
+      },
+      {
+       "id": "pl-q2",
+       "kind": "mcq",
+       "level": 2,
+       "q": "Two equal forces P act at angle $\\theta$. The resultant is",
+       "options": [
+        "$2P\\sin(\\theta/2)$ along the bisector",
+        "$2P\\cos(\\theta/2)$ along the bisector",
+        "$P\\cos\\theta$",
+        "$2P\\cos\\theta$"
+       ],
+       "answer_index": 1,
+       "why": "R = P sqrt(2 + 2 cos(theta)) = 2P cos(theta/2)."
+      },
+      {
+       "id": "pl-q3",
+       "kind": "numerical",
+       "level": 2,
+       "marks": 3,
+       "q": "Find the resultant of 30 N and 40 N acting at $60^\\circ$, and its angle with the 30 N force.",
+       "model_answer_md": "$R = \\sqrt{30^2+40^2+2(30)(40)\\cos60^\\circ} = \\sqrt{3700} = \\mathbf{60.83\\ N}$.\n\n$\\tan\\alpha = \\dfrac{40\\sin60^\\circ}{30+40\\cos60^\\circ} = \\dfrac{34.64}{50} \\Rightarrow \\alpha = \\mathbf{34.72^\\circ}$ with the 30 N force.",
+       "points": [
+        "R^2 = 900 + 1600 + 1200 = 3700",
+        "R = 60.83 N",
+        "tan(alpha) = 34.64/50, alpha = 34.72 degrees"
+       ]
+      },
+      {
+       "id": "pl-q4",
+       "kind": "numerical",
+       "level": 3,
+       "marks": 3,
+       "q": "The resultant of two forces of 10 N and 8 N is 14 N. Find the angle between them.",
+       "model_answer_md": "$14^2 = 10^2 + 8^2 + 2(10)(8)\\cos\\theta \\Rightarrow 196 = 164 + 160\\cos\\theta$\n\n$\\cos\\theta = 32/160 = 0.2 \\Rightarrow \\theta = \\mathbf{78.46^\\circ}$.",
+       "points": [
+        "Use R^2 = P^2 + Q^2 + 2PQ cos(theta)",
+        "cos(theta) = 0.2",
+        "theta = 78.46 degrees"
+       ]
+      },
+      {
+       "id": "pl-p1",
+       "pyq": "fc70b5fdba81eafb",
+       "level": 1,
+       "points": [
+        "Statement: resultant of two forces at a point is the diagonal of the parallelogram on them",
+        "R = sqrt(P^2 + Q^2 + 2PQ cos(theta)); tan(alpha) = Q sin(theta)/(P + Q cos(theta))",
+        "Proof with figure OACB and CD perpendicular to OA produced; OC^2 = (P + Q cos(theta))^2 + (Q sin(theta))^2"
+       ]
+      },
+      {
+       "id": "pl-p2",
+       "pyq": "7101e7241374f818",
+       "level": 1,
+       "points": [
+        "Statement of the law",
+        "Figure: parallelogram OACB, OA = P, OB = Q",
+        "AD = Q cos(theta), CD = Q sin(theta); R^2 = (P + Q cos(theta))^2 + (Q sin(theta))^2 gives the formula"
+       ]
+      },
+      {
+       "id": "pl-p3",
+       "pyq": "41b096bc670e873f",
+       "level": 2,
+       "points": [
+        "R^2 = P^2 + Q^2 + 2PQ cos(theta) (1)",
+        "New resultant of P and 2Q is perpendicular to P: P + 2Q cos(theta) = 0, so 2PQ cos(theta) = -P^2 (2)",
+        "Substitute (2) in (1): R^2 = Q^2, so R = Q"
+       ]
+      }
+     ]
+    },
+    {
+     "id": "resolution",
+     "title": "Resolution versus composition; resolved part of a resultant",
+     "theory_md": "**Composition:** many forces into **one resultant** (unique): parallelogram, triangle, polygon laws, or analytically.\n**Resolution:** one force into **components** (not unique; usually two perpendicular): $F_x=F\\cos\\theta$, $F_y=F\\sin\\theta$. They are inverse operations.\n\nAlong a line making angle $\\varphi$ with a force, the component is $F\\cos\\varphi$ and the perpendicular component $F\\sin\\varphi$.\n\n**Resolved-parts theorem:** the sum of the resolved parts of forces in any direction equals the resolved part of their resultant in that direction:\n$R\\cos(\\alpha-\\varphi)=\\Sigma F_i\\cos(\\theta_i-\\varphi)$.\n\nAlong two **non-perpendicular** directions, use the sine rule (Lami) on the triangle of forces.",
+     "basics_md": "A pull on a rope tied to a sled's front can be thought of as part pulling forward and part lifting upward. Splitting a push into parts like this is resolution; putting parts back into one push is composition.",
+     "key_points": [
+      "Composition: several forces to one resultant; resolution: one force to components",
+      "Components are not unique; usually taken along perpendicular axes",
+      "Fx = F cos(theta), Fy = F sin(theta)",
+      "Resolved part of the resultant = algebraic sum of resolved parts of the forces"
+     ],
+     "figures": [],
+     "questions": [
+      {
+       "id": "rs-q1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "The horizontal component of a 100 N force inclined at $30^\\circ$ to the horizontal is",
+       "options": [
+        "50 N",
+        "86.6 N",
+        "100 N",
+        "57.7 N"
+       ],
+       "answer_index": 1,
+       "why": "100 cos 30 = 86.6 N; 50 N is the vertical component."
+      },
+      {
+       "id": "rs-q2",
+       "kind": "mcq",
+       "level": 2,
+       "q": "The component of a force along a line making angle $\\varphi$ with it is",
+       "options": [
+        "$F\\sin\\varphi$",
+        "$F\\tan\\varphi$",
+        "$F\\cos\\varphi$",
+        "$F/\\cos\\varphi$"
+       ],
+       "answer_index": 2,
+       "why": "Along the line: F cos(varphi); sine is the perpendicular component."
+      },
+      {
+       "id": "rs-q3",
+       "kind": "numerical",
+       "level": 2,
+       "marks": 3,
+       "q": "A 400 N force makes $25^\\circ$ with line AB. Find its components along AB and perpendicular to AB.",
+       "model_answer_md": "Along AB: $400\\cos25^\\circ = \\mathbf{362.52\\ N}$.\nPerpendicular to AB: $400\\sin25^\\circ = \\mathbf{169.05\\ N}$.",
+       "points": [
+        "Along AB = F cos 25",
+        "= 362.52 N",
+        "Perpendicular = F sin 25 = 169.05 N"
+       ]
+      },
+      {
+       "id": "rs-q4",
+       "kind": "numerical",
+       "level": 3,
+       "marks": 4,
+       "q": "Resolve a vertical 1000 N force into two components along lines at $30^\\circ$ and $45^\\circ$ on either side of it.",
+       "model_answer_md": "The force and its two components form a triangle with the angle between the components $= 30^\\circ + 45^\\circ = 75^\\circ$. By the sine rule (each component is opposite the other line's angle):\n\n$P = \\dfrac{1000\\sin45^\\circ}{\\sin75^\\circ} = \\mathbf{732.05\\ N}$ (along the $30^\\circ$ line), $Q = \\dfrac{1000\\sin30^\\circ}{\\sin75^\\circ} = \\mathbf{517.64\\ N}$ (along the $45^\\circ$ line).",
+       "points": [
+        "Triangle of forces with angle 75 degrees between the components",
+        "Sine rule: P/sin 45 = Q/sin 30 = 1000/sin 75",
+        "P = 732.05 N, Q = 517.64 N"
+       ]
+      },
+      {
+       "id": "rs-p1",
+       "pyq": "a75ccaf52bf0e414",
+       "level": 1,
+       "points": [
+        "Composition: finding the single resultant of two or more forces; resolution: splitting a force into components",
+        "Composition by parallelogram, triangle or polygon law, or R = sqrt(sum Fx^2 + sum Fy^2)",
+        "Resolution: Fx = F cos(theta), Fy = F sin(theta); components are not unique, resultant is",
+        "Examples: three forces on a hook; 100 N at 30 degrees gives 86.6 N and 50 N"
+       ]
+      },
+      {
+       "id": "rs-p2",
+       "pyq": "016b693a690836a5",
+       "level": 2,
+       "points": [
+        "R cos(alpha) = sum F_i cos(theta_i) and R sin(alpha) = sum F_i sin(theta_i)",
+        "Resolved part of R along direction phi: R cos(alpha - phi) = R cos(alpha) cos(phi) + R sin(alpha) sin(phi)",
+        "= sum F_i cos(theta_i - phi): the sum of the resolved parts of the forces"
+       ]
+      }
+     ]
+    },
+    {
+     "id": "analytical-resultant",
+     "title": "Analytical resultant of concurrent forces",
+     "theory_md": "For any number of concurrent forces:\n1. Choose axes; write each force's angle from the +x axis, **anticlockwise** (North of East $\\theta$, South of West $180^\\circ+\\theta$, and so on).\n2. $\\Sigma F_x=\\Sigma F\\cos\\theta$, $\\Sigma F_y=\\Sigma F\\sin\\theta$ (keep signs).\n3. $R=\\sqrt{(\\Sigma F_x)^2+(\\Sigma F_y)^2}$, $\\tan\\alpha=|\\Sigma F_y/\\Sigma F_x|$, quadrant from the signs.\n4. **Equilibrant** = same magnitude as $R$, opposite sense.\n\nForces along the sides or diagonals of a square or polygon: write the angles from the geometry (a regular pentagon has $36^\\circ$ between successive lines from one vertex; forces along the sides of a closed polygon taken in order turn by the exterior angle).",
+     "basics_md": "Count how far east-west and how far north-south all the pushes add up to, then join those two totals. The signs tell you which quadrant the single push points to.",
+     "key_points": [
+      "Resolve every force along x and y with signs",
+      "R = sqrt(sum Fx^2 + sum Fy^2); angle = arctan(|sum Fy / sum Fx|)",
+      "Signs of sum Fx and sum Fy fix the quadrant",
+      "Equilibrant is equal and opposite to the resultant"
+     ],
+     "figures": [],
+     "questions": [
+      {
+       "id": "ar-q1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "If $\\Sigma F_x<0$ and $\\Sigma F_y>0$, the resultant lies in the",
+       "options": [
+        "first quadrant",
+        "second quadrant",
+        "third quadrant",
+        "fourth quadrant"
+       ],
+       "answer_index": 1,
+       "why": "Negative x and positive y is the second quadrant: angle = 180 - arctan(|Fy/Fx|)."
+      },
+      {
+       "id": "ar-q2",
+       "kind": "mcq",
+       "level": 2,
+       "q": "A force 30 N acts $60^\\circ$ South of West. Its angle measured anticlockwise from East is",
+       "options": [
+        "$60^\\circ$",
+        "$120^\\circ$",
+        "$240^\\circ$",
+        "$300^\\circ$"
+       ],
+       "answer_index": 2,
+       "why": "West is 180 degrees; 60 degrees further towards South gives 240 degrees."
+      },
+      {
+       "id": "ar-q3",
+       "kind": "numerical",
+       "level": 2,
+       "marks": 4,
+       "q": "Forces 50 N at $0^\\circ$, 80 N at $90^\\circ$ and 60 N at $210^\\circ$ act at a point. Find the resultant.",
+       "model_answer_md": "$\\Sigma F_x = 50 + 0 + 60\\cos210^\\circ = 50 - 51.96 = -1.96$ N.\n$\\Sigma F_y = 0 + 80 + 60\\sin210^\\circ = 80 - 30 = 50.00$ N.\n\n$R = \\sqrt{(-1.96)^2 + 50.00^2} = \\mathbf{50.04\\ N}$, at $\\mathbf{92.25^\\circ}$ from the +x axis (second quadrant, almost vertical).",
+       "points": [
+        "Sum Fx = -1.96 N, sum Fy = 50 N",
+        "R = 50.04 N",
+        "Direction 92.25 degrees from +x (second quadrant)"
+       ]
+      },
+      {
+       "id": "ar-q4",
+       "kind": "numerical",
+       "level": 3,
+       "marks": 5,
+       "q": "Forces 100 N at $0^\\circ$, 150 N at $90^\\circ$ and 200 N at $225^\\circ$ act at a point. Find the resultant and the equilibrant.",
+       "model_answer_md": "$\\Sigma F_x = 100 + 200\\cos225^\\circ = 100 - 141.42 = -41.42$ N.\n$\\Sigma F_y = 150 + 200\\sin225^\\circ = 150 - 141.42 = 8.58$ N.\n\n$R = \\sqrt{-41.42^2 + 8.58^2} = \\mathbf{42.30\\ N}$ at $\\tan^{-1}(8.58/41.42) = 11.70^\\circ$ above the negative x-axis, i.e. $\\mathbf{168.30^\\circ}$ from +x.\n\nEquilibrant: $\\mathbf{42.30\\ N}$ at $348.30^\\circ$ from +x (opposite sense).",
+       "points": [
+        "Sum Fx = -41.42 N, sum Fy = 8.58 N",
+        "R = 42.30 N, second quadrant, 168.30 degrees from +x",
+        "Equilibrant equal and opposite: 42.30 N at 348.30 degrees"
+       ]
+      },
+      {
+       "id": "ar-p1",
+       "pyq": "725ac9ddcb259242",
+       "level": 2,
+       "points": [
+        "Angles from East: 30, 90, 135, 220 degrees",
+        "Sum Fx = -30.704 N, sum Fy = 33.716 N",
+        "R = 45.60 N",
+        "Second quadrant: 47.68 degrees North of West (132.32 degrees from East)"
+       ]
+      },
+      {
+       "id": "ar-p2",
+       "pyq": "3c3b9621f952bc15",
+       "level": 2,
+       "points": [
+        "A origin, AB along x, AD along y, AC at 45 degrees",
+        "Sum Fx = 4 + 8 cos 45 = 9.657, sum Fy = 10 + 8 sin 45 = 15.657",
+        "R = 18.40 units",
+        "Angle 58.33 degrees with AB"
+       ]
+      },
+      {
+       "id": "ar-p3",
+       "pyq": "12da216d533b99f0",
+       "level": 3,
+       "points": [
+        "Resultant of the given system is 18.40 units at 58.33 degrees to AB",
+        "AJ at 63.43 degrees (unit vector (1, 2)/sqrt 5), AH at 26.57 degrees (unit vector (2, 1)/sqrt 5) to AB",
+        "Balancing equations: P + 2Q = -21.594, 2P + Q = -35.010",
+        "P = -16.14, Q = -2.73: forces act opposite to AJ and AH, 16.14 units along JA and 2.73 units along HA"
+       ]
+      },
+      {
+       "id": "ar-p4",
+       "pyq": "bf74b377e9886f24",
+       "level": 2,
+       "points": [
+        "Forces taken in order along an equilateral triangle act at 0, 120, 240 degrees",
+        "Sum Fx = 20 - 17.5 - 5 = -2.5 N; sum Fy = 30.311 - 8.660 = 21.651 N",
+        "R = 21.79 N",
+        "Second quadrant: 96.59 degrees to the 20 N force (check: 10 N and 25 N at 120 degrees)"
+       ]
+      },
+      {
+       "id": "ar-p5",
+       "pyq": "fa40a9d0cb38f8bf",
+       "level": 2,
+       "points": [
+        "Angles from East: 90, 45, 0, 300, 240 degrees",
+        "Sum Fx = 17.071 N, sum Fy = -11.230 N",
+        "R = 20.43 N",
+        "Fourth quadrant: 33.34 degrees South of East"
+       ]
+      },
+      {
+       "id": "ar-p6",
+       "pyq": "19f60b252f5914c0",
+       "level": 2,
+       "points": [
+        "Forces at 0, 36, 72, 108 degrees (diagonals trisect the 108 degree interior angle)",
+        "Sum Fx = 7.191 N, sum Fy = 4.392 N",
+        "R = 8.43 N",
+        "Angle 31.42 degrees with AB"
+       ]
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "topic": "Free body diagrams",
+   "subtopics": [
+    {
+     "id": "fbd-concept",
+     "title": "The free body diagram",
+     "theory_md": "A **free body diagram (FBD)** is a sketch of a body (or part of a structure) **isolated** from its surroundings, with **every external force** on it shown: applied loads, self-weight (at the centre of gravity) and the **reactions** that replace supports and contacts.\n\nSteps: isolate the body; draw the weight; replace each support or contact by its reaction; mark dimensions and angles; then write $\\Sigma F_x=0$, $\\Sigma F_y=0$, $\\Sigma M=0$.\n\nReaction directions: smooth surface, normal to the surface; string, tension along the string away from the body; hinge, $H$ and $V$; fixed end, $H$, $V$ and $M$; friction along the surface.\n\nLadder against a smooth wall on rough floor ($\\theta$ with floor, length $L$, weight $W$): $R_f=W$, $F=R_w$, $R_w=\\tfrac{W}{2}\\cot\\theta$.",
+     "basics_md": "To see what is pushing a body, cut it out of the picture and draw an arrow for everything that touched it or pulled on it. Every missing arrow is a missing term in your equations.",
+     "key_points": [
+      "FBD = body isolated, all external forces shown",
+      "Weight at the centre of gravity; supports replaced by reactions",
+      "Smooth contact: normal reaction; string: tension along the string; hinge: H and V; fixed end: H, V, M",
+      "Then apply the equations of equilibrium to the FBD"
+     ],
+     "figures": [],
+     "questions": [
+      {
+       "id": "fb-q1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "In a free body diagram the body is shown",
+       "options": [
+        "with its supports drawn",
+        "isolated, with the supports replaced by reactions",
+        "only with its weight",
+        "with internal forces"
+       ],
+       "answer_index": 1,
+       "why": "Supports and contacts are removed and replaced by the forces they exert."
+      },
+      {
+       "id": "fb-q2",
+       "kind": "mcq",
+       "level": 2,
+       "q": "The reaction of a smooth surface on a body acts",
+       "options": [
+        "along the surface",
+        "normal to the surface",
+        "at $45^\\circ$ to it",
+        "vertically always"
+       ],
+       "answer_index": 1,
+       "why": "With no friction there is no tangential component, so the reaction is perpendicular to the surface."
+      },
+      {
+       "id": "fb-q3",
+       "kind": "short",
+       "level": 2,
+       "marks": 3,
+       "q": "Describe the FBD of a uniform ladder resting on a rough floor against a smooth wall.",
+       "model_answer_md": "Draw the ladder alone with:\n- weight $W$ vertically down at its mid-point,\n- wall reaction $R_w$ horizontal (normal to the smooth wall), away from the wall,\n- floor normal reaction $R_f$ vertically up at the foot,\n- friction $F$ along the floor towards the wall at the foot.\n\nEquations: $R_f = W$, $F = R_w$, moments about the foot give $R_w L\\sin\\theta = W\\,\\tfrac L2\\cos\\theta$.",
+       "points": [
+        "Ladder isolated from wall and floor",
+        "W at the mid-point; R_w horizontal; R_f vertical; friction along the floor",
+        "Three equations of equilibrium"
+       ]
+      },
+      {
+       "id": "fb-q4",
+       "kind": "numerical",
+       "level": 2,
+       "marks": 3,
+       "q": "For the ladder above, $W = 300$ N and $\\theta = 60^\\circ$ with the floor. Find $R_w$, $R_f$ and the friction needed.",
+       "model_answer_md": "$R_f = W = \\mathbf{300\\ N}$.\n\nMoments about the foot: $R_w L\\sin60^\\circ = 300\\,\\tfrac L2\\cos60^\\circ \\Rightarrow R_w = \\tfrac{300}{2}\\cot60^\\circ = \\mathbf{86.60\\ N}$.\n\nFriction $F = R_w = \\mathbf{86.60\\ N}$.",
+       "points": [
+        "R_f = W = 300 N",
+        "Moments about foot: R_w = (W/2) cot(theta)",
+        "R_w = F = 86.60 N"
+       ]
+      },
+      {
+       "id": "fb-p1",
+       "pyq": "5397ff44e81ea8d1",
+       "level": 1,
+       "points": [
+        "FBD is a diagram of the body detached from supports and surroundings",
+        "Shows every external force: loads, weight, reactions replacing supports",
+        "Example: ladder against smooth wall with W, R_w horizontal, R_f vertical and friction",
+        "First step in applying the equations of equilibrium"
+       ]
+      },
+      {
+       "id": "fb-p2",
+       "pyq": "d98015461b33c5ee",
+       "level": 1,
+       "points": [
+        "FBD = sketch of the isolated body with all external forces",
+        "Steps: isolate, weight at CG, replace supports by reactions (smooth: normal, string: tension, hinge: H and V, fixed: H, V, M), mark angles",
+        "Sketch: sphere against smooth wall held by string, W down, R horizontal, T along the string, concurrent at the centre"
+       ]
+      }
+     ]
+    },
+    {
+     "id": "supports-reactions",
+     "title": "Types of supports and their reactions",
+     "theory_md": "| Support | Prevents | Reactions |\n|---|---|---|\n| Simple (free) support / smooth surface | movement into the surface | 1: normal |\n| **Roller** | movement normal to the rolling surface | 1: normal to the surface (on an incline, perpendicular to the incline) |\n| **Hinge (pin)** | any translation, allows rotation | 2: $H$ and $V$ |\n| **Fixed (built-in)** | translation and rotation | 3: $H$, $V$ and moment $M$ |\n\nA **simply supported beam** (hinge + roller) has 3 unknowns, solved by $\\Sigma F_x=\\Sigma F_y=\\Sigma M=0$ (statically determinate); a **fixed** beam has 6, so equilibrium alone is not enough.",
+     "basics_md": "A roller only pushes straight out from its surface. A hinge can push any way but cannot stop you turning. A wall-embedded end stops everything, including the turning, so it also gives a moment.",
+     "key_points": [
+      "Roller: one reaction, normal to the surface",
+      "Hinge: two reactions H and V, no moment",
+      "Fixed support: H, V and a moment M",
+      "Hinge + roller beam: 3 unknowns, determinate"
+     ],
+     "figures": [],
+     "questions": [
+      {
+       "id": "sr-q1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "How many reaction components does a fixed support provide in a plane?",
+       "options": [
+        "1",
+        "2",
+        "3",
+        "4"
+       ],
+       "answer_index": 2,
+       "why": "H, V and the fixing moment M."
+      },
+      {
+       "id": "sr-q2",
+       "kind": "mcq",
+       "level": 2,
+       "q": "A roller on a $30^\\circ$ inclined surface exerts a reaction",
+       "options": [
+        "vertical",
+        "horizontal",
+        "along the incline",
+        "perpendicular to the incline"
+       ],
+       "answer_index": 3,
+       "why": "A roller (smooth contact) pushes normal to the surface it rolls on."
+      },
+      {
+       "id": "sr-q3",
+       "kind": "short",
+       "level": 2,
+       "marks": 3,
+       "q": "Why can a simply supported beam be analysed by statics alone while a beam fixed at both ends cannot?",
+       "model_answer_md": "A hinge (2 components) plus a roller (1) give **3 unknown** reactions, equal to the 3 equations of plane equilibrium, so it is statically determinate.\n\nA beam fixed at both ends has $3 + 3 = 6$ unknowns but only 3 equations, so it is statically indeterminate; deflection (compatibility) conditions are needed.",
+       "points": [
+        "Hinge 2 + roller 1 = 3 unknowns",
+        "3 equations of equilibrium available",
+        "Both ends fixed gives 6 unknowns, so indeterminate"
+       ]
+      },
+      {
+       "id": "sr-p1",
+       "pyq": "178c899fcdb012dc",
+       "level": 1,
+       "points": [
+        "Simple support: vertical reaction only",
+        "Roller: reaction normal to the rolling surface, allows horizontal movement and rotation",
+        "Hinge: H and V, allows rotation only",
+        "Fixed: H, V and moment, no movement",
+        "Simply supported beam normally hinge + roller, 3 unknowns"
+       ]
+      }
+     ]
+    },
+    {
+     "id": "smooth-contact",
+     "title": "Bodies in smooth contact: spheres and cylinders",
+     "theory_md": "For smooth spheres or cylinders the reaction at a contact is **normal to the surfaces**: through the centre for a wall or floor contact, along the **line of centres** between two bodies.\n\nMethod:\n1. Geometry: horizontal gap between centres $=b-r_1-r_2$ (in a channel), centre distance $=r_1+r_2$, so $\\cos\\theta=\\dfrac{\\text{gap}}{r_1+r_2}$ with $\\theta$ the angle of the line of centres with the horizontal.\n2. FBD of the upper body: $W$, wall reaction (horizontal), contact force $R$ along the line of centres: $R\\sin\\theta=W$, wall $=R\\cos\\theta$.\n3. FBD of the lower body: add $R$ (reversed) to its weight and the other reactions; use $\\Sigma F_x=0$, $\\Sigma F_y=0$.",
+     "basics_md": "Draw each ball on its own. The only forces on it are its weight and pushes straight out from every surface it touches. Solve the top ball first, then pass its push down to the one below.",
+     "key_points": [
+      "Smooth contact: reaction normal to the surfaces, through the centres",
+      "Contact force between bodies acts along the line of centres",
+      "Geometry gives the angle of the line of centres; then resolve",
+      "Solve the upper body first, then the lower with the reversed contact force"
+     ],
+     "figures": [],
+     "questions": [
+      {
+       "id": "sc-q1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "The force between two smooth spheres in contact acts",
+       "options": [
+        "horizontally",
+        "vertically",
+        "along the line joining their centres",
+        "at $45^\\circ$ always"
+       ],
+       "answer_index": 2,
+       "why": "The common normal at the point of contact passes through both centres."
+      },
+      {
+       "id": "sc-q2",
+       "kind": "mcq",
+       "level": 2,
+       "q": "A smooth cylinder resting against a vertical wall receives a wall reaction that is",
+       "options": [
+        "vertical",
+        "horizontal",
+        "along the cylinder's weight",
+        "inclined at the friction angle"
+       ],
+       "answer_index": 1,
+       "why": "Normal to a vertical wall is horizontal."
+      },
+      {
+       "id": "sc-q3",
+       "kind": "numerical",
+       "level": 2,
+       "marks": 3,
+       "q": "A smooth sphere of weight 60 N rests on a smooth $30^\\circ$ incline, held by a string parallel to the incline. Find the string tension and the normal reaction.",
+       "model_answer_md": "Resolve along and perpendicular to the incline:\n\n$T = W\\sin30^\\circ = \\mathbf{30\\ N}$, $N = W\\cos30^\\circ = \\mathbf{51.96\\ N}$.",
+       "points": [
+        "Along incline: T = W sin 30",
+        "T = 30 N",
+        "Perpendicular: N = W cos 30 = 51.96 N"
+       ]
+      },
+      {
+       "id": "sc-q4",
+       "kind": "numerical",
+       "level": 3,
+       "marks": 5,
+       "q": "Two smooth spheres, each of weight 50 N and radius 100 mm, lie one above the other in a vertical-walled trough 320 mm wide (lower on the floor, upper against the other wall). Find the force between them, the wall reaction and the floor reaction.",
+       "model_answer_md": "Horizontal gap $= 320 - 2(100) = 120$ mm, centre distance $= 200$ mm, so $\\cos\\theta = 0.6$, $\\sin\\theta = 0.8$.\n\nUpper sphere: $R\\sin\\theta = 50 \\Rightarrow R = \\mathbf{62.5\\ N}$; wall reaction $= R\\cos\\theta = \\mathbf{37.5\\ N}$.\n\nLower sphere: floor reaction $= 50 + R\\sin\\theta = \\mathbf{100\\ N}$; other wall reaction $= R\\cos\\theta = 37.5$ N.",
+       "points": [
+        "cos(theta) = 120/200 = 0.6, sin(theta) = 0.8",
+        "R = 50/0.8 = 62.5 N",
+        "Wall reaction = 37.5 N",
+        "Floor reaction = 100 N"
+       ]
+      },
+      {
+       "id": "sc-p1",
+       "pyq": "de388ed19e6d9c3b",
+       "level": 2,
+       "points": [
+        "Geometry: O1 = (103.92, 180) mm, O2 at x = 260 mm; O1O2 = 280 mm; line of centres at 56.12 degrees",
+        "Cylinder 2: R_Q sin(theta) = 200, so R_Q = 240.90 N; R_P = R_Q cos(theta) = 134.28 N",
+        "Cylinder 1: R_L cos 30 = 134.28 gives R_L = 155.05 N",
+        "R_N = 250 + 200 - R_L sin 30 = 372.47 N"
+       ]
+      },
+      {
+       "id": "sc-p2",
+       "pyq": "006e2deb8681e6c2",
+       "level": 2,
+       "points": [
+        "Geometry: centre of A at x = 51.96 mm; B at 130 mm; centre distance 140 mm; line of centres at 56.12 degrees",
+        "B: R sin(theta) = 400, R = 481.79 N; R_P = R cos(theta) = 268.56 N",
+        "A: R_L cos 30 = 268.56 gives R_L = 310.11 N",
+        "R_N = 1000 + 400 - R_L sin 30 = 1244.95 N"
+       ]
+      },
+      {
+       "id": "sc-p3",
+       "pyq": "42316d0bc3fbd1c1",
+       "level": 2,
+       "points": [
+        "Horizontal distance between centres = 900 - 500 = 400 mm; centre distance 500 mm; cos(theta) = 0.8",
+        "Upper sphere: R sin(theta) = W, R = 166.67 N",
+        "Wall reaction R cos(theta) = 133.33 N",
+        "Floor reaction 200 N; force between the spheres 166.67 N"
+       ]
+      },
+      {
+       "id": "sc-p4",
+       "pyq": "71f7c550ccc7d386",
+       "level": 3,
+       "points": [
+        "Cylinder A on the 60 degree plane: normal R_A at 60 degrees to the vertical, bar force C at 15 degrees",
+        "A: R_A sin 60 = C cos 15 and R_A cos 60 + C sin 15 = 4000, giving C = 4898.98 kN, R_A = 5464.10 kN",
+        "B: three equations with R_B normal to the 45 degree plane, P at 60 degrees to vertical",
+        "P = 1071.8 kN (bar in compression)"
+       ]
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "topic": "Reduction of a force system to a force and a couple",
+   "subtopics": [
+    {
+     "id": "force-to-force-couple",
+     "title": "Replacing a force by a force and a couple",
+     "theory_md": "A force $F$ can be moved **parallel to itself** to another point B if a **couple** is added whose moment equals the moment of the original force about B: $M = F\\times d$, $d$ the perpendicular distance from B to the line of action.\n\nProcedure: put the same force $F$ at B (same magnitude, direction, sense) and add the couple $M_B$ with the **same sense** as the moment of $F$ about B.\n\nThe new force at B and the couple together are equivalent to the original force. This is the reverse of finding a single resultant, and it is how loads are carried to a support (the 500 N load at a bracket becomes a force plus a moment at the wall).",
+     "basics_md": "Pushing a door at its edge is the same as pushing the hinge with that force plus twisting the hinge. Moving a force sideways always costs a twist equal to force times the shift.",
+     "key_points": [
+      "Same force at the new point plus a couple",
+      "Couple moment = F x perpendicular distance from the new point to the line of action",
+      "Couple has the sense of the original force's moment about the new point",
+      "Equivalence holds for a rigid body"
+     ],
+     "figures": [],
+     "questions": [
+      {
+       "id": "fc-q1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "Shifting a force parallel to itself by a distance $d$ requires adding",
+       "options": [
+        "an equal and opposite force",
+        "a couple of moment $F\\,d$",
+        "a moment of $F/d$",
+        "nothing for a rigid body"
+       ],
+       "answer_index": 1,
+       "why": "The added couple restores the turning effect lost by moving the line of action."
+      },
+      {
+       "id": "fc-q2",
+       "kind": "mcq",
+       "level": 2,
+       "q": "The sense of the added couple is the same as the sense of",
+       "options": [
+        "the force's moment about the new point",
+        "the weight",
+        "the reaction",
+        "the original force's direction"
+       ],
+       "answer_index": 0,
+       "why": "The couple carries the turning effect of the original force about the new point."
+      },
+      {
+       "id": "fc-q3",
+       "kind": "numerical",
+       "level": 2,
+       "marks": 3,
+       "q": "A 200 N downward load acts at A, 0.8 m to the right of O. Replace it by a force at O and a couple.",
+       "model_answer_md": "Force at O: $\\mathbf{200\\ N\\ downward}$.\n\nCouple: $M = 200\\times0.8 = \\mathbf{160\\ N\\cdot m}$, clockwise (a downward force to the right of O turns it clockwise).",
+       "points": [
+        "200 N downward at O",
+        "Couple = 200 x 0.8 = 160 N.m",
+        "Clockwise"
+       ]
+      },
+      {
+       "id": "fc-q4",
+       "kind": "numerical",
+       "level": 3,
+       "marks": 4,
+       "q": "A 100 N force at $30^\\circ$ above the +x axis acts at the point $(0.6,\\ 0.2)$ m. Replace it by a force at the origin and a couple.",
+       "model_answer_md": "Force at O: $F_x = 100\\cos30^\\circ = 86.60$ N, $F_y = 100\\sin30^\\circ = 50.00$ N (100 N at $30^\\circ$).\n\nCouple: $M_O = xF_y - yF_x = 0.6(50.00) - 0.2(86.60) = \\mathbf{12.68\\ N\\cdot m}$ anticlockwise.",
+       "points": [
+        "Same force 100 N at 30 degrees at the origin",
+        "M = x Fy - y Fx",
+        "M = 12.68 N.m anticlockwise"
+       ]
+      },
+      {
+       "id": "fc-p1",
+       "pyq": "33a8f092f228762b",
+       "level": 2,
+       "points": [
+        "Properties of a couple: equal, opposite, parallel forces, zero resultant, same moment about any point, balanced only by a couple, movable in its plane",
+        "500 N load is 4 cm to the right of A and 10 cm from B",
+        "At A: 500 N downward + clockwise couple 500 x 4 = 2000 N.cm = 20 N.m",
+        "At B: 500 N downward + clockwise couple 500 x 10 = 5000 N.cm = 50 N.m"
+       ]
+      }
+     ]
+    },
+    {
+     "id": "resultant-force-couple",
+     "title": "Reducing a system to a force and a couple, and the single resultant",
+     "theory_md": "Reduce all forces to a point O: $R=\\sqrt{(\\Sigma F_x)^2+(\\Sigma F_y)^2}$ at O, plus a couple $M_O=\\Sigma M_O$ (moments of all forces, plus applied couples, which are added as they are).\n\nThe cases:\n- $R\\neq0$: the pair is equivalent to a **single resultant** $R$ whose line is at $d=M_O/R$ from O, on the side that gives the moment $M_O$. Cuts the x-axis at $x=M_O/\\Sigma F_y$, the y-axis at $y=-M_O/\\Sigma F_x$.\n- $R=0$, $M_O\\neq0$: a **pure couple**, the same about every point.\n- $R=0$, $M_O=0$: **equilibrium**.\n\nMoment of a force at $(x,y)$: $M_O=xF_y-yF_x$.",
+     "basics_md": "Any pile of pushes and twists on a plate boils down to one push at a chosen point plus one twist. If the twist happens to be zero, or the push is zero, the picture simplifies even further.",
+     "key_points": [
+      "Reduce to R at O and a couple M_O = sum of moments (plus applied couples)",
+      "R not zero: single resultant at d = M_O/R",
+      "R zero and M not zero: pure couple; both zero: equilibrium",
+      "Intercepts: x = M_O / sum Fy, y = -M_O / sum Fx"
+     ],
+     "figures": [],
+     "questions": [
+      {
+       "id": "rf-q1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "If $\\Sigma F=0$ but $\\Sigma M_O\\neq0$, the system reduces to",
+       "options": [
+        "a single force",
+        "a couple",
+        "equilibrium",
+        "a force and a couple"
+       ],
+       "answer_index": 1,
+       "why": "No resultant force, only a turning effect, the same about every point."
+      },
+      {
+       "id": "rf-q2",
+       "kind": "mcq",
+       "level": 2,
+       "q": "The perpendicular distance of the resultant from O is",
+       "options": [
+        "$R/M_O$",
+        "$M_O/R$",
+        "$M_O\\,R$",
+        "$\\Sigma F_x/\\Sigma F_y$"
+       ],
+       "answer_index": 1,
+       "why": "Varignon: R d = M_O."
+      },
+      {
+       "id": "rf-q3",
+       "kind": "numerical",
+       "level": 2,
+       "marks": 3,
+       "q": "Vertical forces on a bar: 10 N down at x = 0, 20 N down at x = 1 m, 30 N up at x = 2 m. Reduce the system.",
+       "model_answer_md": "$\\Sigma F = -10 - 20 + 30 = 0$, so there is **no resultant force**.\n\nMoment about x = 0 (anticlockwise +): $0 + 1(-20) + 2(30) = \\mathbf{40\\ N\\cdot m}$.\n\nThe system is a **pure couple of 40 N$\\cdot$m anticlockwise**, the same about every point.",
+       "points": [
+        "Sum of forces = 0",
+        "Moment = -20 + 60 = 40 N.m",
+        "Pure couple 40 N.m anticlockwise"
+       ]
+      },
+      {
+       "id": "rf-q4",
+       "kind": "numerical",
+       "level": 3,
+       "marks": 5,
+       "q": "On a plate with O at the lower-left corner, 100 N acts along +x at O, 80 N acts upward at (4, 0) m, and 60 N acts horizontally to the left at (4, 3) m. Find the resultant and where it cuts the x-axis.",
+       "model_answer_md": "$\\Sigma F_x = 100 - 60 = 40$ N, $\\Sigma F_y = 80$ N.\n\n$R = \\sqrt{40^2+80^2} = \\mathbf{89.44\\ N}$ at $\\tan^{-1}(80/40) = \\mathbf{63.43^\\circ}$ above the +x axis.\n\n$\\Sigma M_O = 4(80) + 3(60) = 500$ N$\\cdot$m anticlockwise (the leftward force at height 3 m also turns anticlockwise).\n\n$d = 500/89.44 = 5.59$ m; cuts the x-axis at $x = 500/80 = \\mathbf{6.25\\ m}$.",
+       "points": [
+        "Sum Fx = 40 N, sum Fy = 80 N",
+        "R = 89.44 N at 63.43 degrees",
+        "Sum M_O = 500 N.m anticlockwise",
+        "x-intercept 6.25 m (d = 5.59 m)"
+       ]
+      },
+      {
+       "id": "rf-p1",
+       "pyq": "498689c4de96323a",
+       "level": 3,
+       "points": [
+        "Coordinates A(0,0), B(200,0), C(200,200), D(0,200), E(100,0) in mm; unit vectors from the geometry",
+        "Table of Fx, Fy, moment about B; sum Fx = 115.25 N, sum Fy = 319.21 N",
+        "R = 339.38 N at 70.15 degrees with AB",
+        "Sum M_B = 36 020 N.mm; d = 106.14 mm; cuts AB produced 112.84 mm beyond B"
+       ]
+      },
+      {
+       "id": "rf-p2",
+       "pyq": "ea44733a81f39508",
+       "level": 2,
+       "points": [
+        "Forces on the board: 25 N down and 25 N at 60 degrees at P; 50 N down and 50 N at 30 degrees at Q",
+        "Sum Fx = 30.80 N, sum Fy = -71.65 N",
+        "R = 77.99 N at 66.74 degrees below horizontal",
+        "Sum M_A = -139.95 N.m; d = 1.79 m; cuts AB at 1.95 m from A"
+       ]
+      },
+      {
+       "id": "rf-p3",
+       "pyq": "be4f809151f5c5b8",
+       "level": 3,
+       "points": [
+        "Resolve: 75 N at 30 degrees to vertical gives Fx = 37.5, Fy = 64.95; 100 N down; 50 N horizontal; couple 75 N.m",
+        "Sum Fx = 87.50 N, sum Fy = -35.05 N; R = 94.26 N at 21.83 degrees below horizontal",
+        "Sum M_B = 75 N.m clockwise, d = 0.796 m",
+        "Line of action: -35.05x - 87.50y = -75; meets AB at 0.857 m above B, BC produced at 2.14 m from B, CD at 0.056 m above C"
+       ]
+      }
+     ]
+    },
+    {
+     "id": "min-force-through-point",
+     "title": "Condition for the resultant to pass through a point",
+     "theory_md": "The resultant of a system passes through a point D **if and only if** the total moment about D is zero: $\\Sigma M_D=0$.\n\nTo make a given system's resultant pass through D with an unknown force $P$ applied at A:\n1. Write $\\Sigma M_D=0$ with $P$'s moment as $P\\,d_P$.\n2. For a given moment, $P$ is **least when its arm $d_P$ is greatest**. The greatest arm about D is the distance AD, reached when $P$ is **perpendicular to AD**.\n3. $P_{min}=\\dfrac{\\text{moment of the other forces about D}}{AD}$.",
+     "basics_md": "If a push passes through a pivot it cannot turn it. To make the combined push go through D, the other pushes' turning about D must be cancelled; the cheapest way is to push as far from D as possible, at a right angle to the line to D.",
+     "key_points": [
+      "Resultant passes through D when the sum of moments about D is zero",
+      "Least force when the moment arm is greatest",
+      "Greatest arm = distance AD, so P perpendicular to AD",
+      "P_min = (moment of the others about D) / AD"
+     ],
+     "figures": [],
+     "questions": [
+      {
+       "id": "mf-q1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "The resultant of a system passes through point D when",
+       "options": [
+        "the sum of forces is zero",
+        "the sum of moments about D is zero",
+        "the sum of Fx is zero",
+        "all forces are concurrent"
+       ],
+       "answer_index": 1,
+       "why": "A resultant through D has zero moment about D, and the moment of the system equals that of the resultant (Varignon)."
+      },
+      {
+       "id": "mf-q2",
+       "kind": "mcq",
+       "level": 2,
+       "q": "For a fixed required moment about D, a force applied at A is least when it is",
+       "options": [
+        "parallel to AD",
+        "along AD",
+        "perpendicular to AD",
+        "at $45^\\circ$ to AD"
+       ],
+       "answer_index": 2,
+       "why": "Arm = AD sin(angle); greatest when the angle is 90 degrees."
+      },
+      {
+       "id": "mf-q3",
+       "kind": "numerical",
+       "level": 2,
+       "marks": 4,
+       "q": "A 300 N downward load acts at (1, 0) m. A force P at A(0, 0) is to make the resultant pass through D(4, 0). Find the minimum P and its direction.",
+       "model_answer_md": "Moment of 300 N about D: it is 3 m to the left of D, downward, so $+300\\times3 = 900$ N$\\cdot$m (anticlockwise).\n\nP must give 900 N$\\cdot$m clockwise. Greatest arm $= AD = 4$ m, with P perpendicular to AD (vertical).\n\n$P_{min} = 900/4 = \\mathbf{225\\ N}$ **upward** (an upward force left of D turns clockwise).",
+       "points": [
+        "Moment of 300 N about D = 900 N.m",
+        "P perpendicular to AD, arm 4 m",
+        "P_min = 225 N upward"
+       ]
+      },
+      {
+       "id": "mf-p1",
+       "pyq": "3c92a9240ddbb445",
+       "level": 3,
+       "points": [
+        "Condition: sum of moments about D = 0",
+        "Geometry: hexagon side 0.3 m; C is 0.15 m, F is 0.45 m horizontally from D; AD = 2a = 0.6 m at 60 degrees to AB",
+        "400 N up at C: +60 N.m; downward force F at F: +0.45F; P d_P = 60 + 0.45F",
+        "P_min when P is perpendicular to AD: P_min = (60 + 0.45F)/0.6 = 100 + 0.75F N, at 30 degrees with AB"
+       ]
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "topic": "Equilibrium of rigid bodies in two and three dimensions",
+   "subtopics": [
+    {
+     "id": "equilibrium-conditions",
+     "title": "Conditions of equilibrium and support reactions",
+     "theory_md": "A rigid body is in equilibrium when the resultant force and resultant moment are both zero.\n\n**2D:** $\\Sigma F_x=0$, $\\Sigma F_y=0$, $\\Sigma M=0$ (3 equations). Concurrent forces need only two; parallel forces need two ($\\Sigma F$ and $\\Sigma M$).\n**3D:** $\\Sigma F_x=\\Sigma F_y=\\Sigma F_z=0$ and $\\Sigma M_x=\\Sigma M_y=\\Sigma M_z=0$ (6 equations).\n\n**Support reaction:** the force (and moment at a fixed support) a support develops to keep the structure in equilibrium.\n\n**Determinate:** unknown reactions $\\le$ number of equations (simply supported, cantilever, overhanging beam). **Indeterminate:** more unknowns (fixed beam, propped cantilever, continuous beam); extra deflection conditions are needed.\n\nA **two-force member** carries a force along the line joining its two points.",
+     "basics_md": "A body that is not moving needs two things: no net push (so it does not slide) and no net twist (so it does not spin). Count the unknowns against the equations: if they match, statics alone is enough.",
+     "key_points": [
+      "2D equilibrium: sum Fx = 0, sum Fy = 0, sum M = 0",
+      "3D equilibrium: six equations (three forces, three moments)",
+      "Support reaction = force or moment a support exerts to hold the structure in equilibrium",
+      "Determinate: unknowns <= equations; indeterminate: more unknowns than equations"
+     ],
+     "figures": [],
+     "questions": [
+      {
+       "id": "ec-q1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "How many independent equilibrium equations exist for a rigid body in 3D?",
+       "options": [
+        "3",
+        "4",
+        "6",
+        "9"
+       ],
+       "answer_index": 2,
+       "why": "Three force and three moment equations."
+      },
+      {
+       "id": "ec-q2",
+       "kind": "mcq",
+       "level": 2,
+       "q": "A cantilever beam is",
+       "options": [
+        "indeterminate with 4 unknowns",
+        "statically determinate with 3 reactions",
+        "unstable",
+        "a fixed beam"
+       ],
+       "answer_index": 1,
+       "why": "One fixed end gives H, V and M: 3 unknowns, 3 equations."
+      },
+      {
+       "id": "ec-q3",
+       "kind": "short",
+       "level": 2,
+       "marks": 3,
+       "q": "Define statically determinate and indeterminate beams with an example each.",
+       "model_answer_md": "- **Determinate:** all reactions found from $\\Sigma F_x=\\Sigma F_y=\\Sigma M=0$ alone (3 unknowns). Example: simply supported beam (hinge + roller).\n- **Indeterminate:** unknown reactions exceed the equations, so deflection conditions are also needed. Example: beam fixed at both ends (6 unknowns).",
+       "points": [
+        "Determinate: unknowns equal the 3 equations",
+        "Example simply supported or cantilever",
+        "Indeterminate: more unknowns than equations",
+        "Example fixed beam or continuous beam"
+       ]
+      },
+      {
+       "id": "ec-q4",
+       "kind": "numerical",
+       "level": 3,
+       "marks": 5,
+       "q": "A light rectangular plate 4 m x 2 m is supported on vertical posts at A(0, 0), B(4, 0) and C(4, 2) m and carries a 120 kN vertical load at (3, 1) m. Find the three post reactions.",
+       "model_answer_md": "$\\Sigma M_x = 0$ (about the x-axis, using y-coordinates): $R_C(2) = 120(1) \\Rightarrow R_C = \\mathbf{60\\ kN}$.\n\n$\\Sigma M_y = 0$ (about the y-axis, using x-coordinates): $4R_B + 4R_C = 120(3) \\Rightarrow R_B = \\mathbf{30\\ kN}$.\n\n$\\Sigma F_z = 0$: $R_A = 120 - 60 - 30 = \\mathbf{30\\ kN}$.",
+       "points": [
+        "Three unknown vertical reactions, three equations (Fz, Mx, My)",
+        "R_C = 60 kN",
+        "R_B = 30 kN",
+        "R_A = 30 kN"
+       ]
+      },
+      {
+       "id": "ec-p1",
+       "pyq": "ebf50a055ccec0a2",
+       "level": 1,
+       "points": [
+        "Support reaction: reactive force (and moment at a fixed support) developed by a support to resist loads and keep the structure in equilibrium",
+        "Example: R_A and R_B upward at the supports of a simply supported beam"
+       ]
+      },
+      {
+       "id": "ec-p2",
+       "pyq": "1292b12cf0e2e397",
+       "level": 1,
+       "points": [
+        "Determinate: reactions found from equations of equilibrium alone, 3 unknowns",
+        "Examples: simply supported, cantilever, overhanging",
+        "Indeterminate: more unknowns than equations, extra conditions needed",
+        "Examples: fixed beam (6 unknowns), propped cantilever, continuous beam"
+       ]
+      },
+      {
+       "id": "ec-p3",
+       "pyq": "fd77dec1dffa9d7f",
+       "level": 2,
+       "points": [
+        "Support reaction defined; roller one normal force, hinge H and V, fixed H, V and M",
+        "FBD with supports replaced by reactions; horizontal reaction zero for vertical loads",
+        "UDL as point load at its centre, triangular load as its area at centroid",
+        "Sum M_A = 0 gives R_B = sum W x / L; sum Fy = 0 gives R_A; check with moments about B"
+       ]
+      }
+     ]
+    },
+    {
+     "id": "lami",
+     "title": "Lami's theorem and three-force equilibrium",
+     "theory_md": "**Lami's theorem:** if three **coplanar, concurrent** forces keep a body in equilibrium, each force is proportional to the **sine of the angle between the other two**:\n$\\dfrac{P}{\\sin\\alpha}=\\dfrac{Q}{\\sin\\beta}=\\dfrac{R}{\\sin\\gamma}$, with $\\alpha$ between $Q,R$; $\\beta$ between $R,P$; $\\gamma$ between $P,Q$ ($\\alpha+\\beta+\\gamma=360^\\circ$).\n\n**Proof:** the forces form a closed triangle (sides parallel to $P,Q,R$); its interior angles are $180^\\circ-\\alpha$, $180^\\circ-\\beta$, $180^\\circ-\\gamma$. The sine rule and $\\sin(180^\\circ-\\theta)=\\sin\\theta$ give the result.\n\nUse for **exactly three** forces. For a smooth contact the reaction is normal; for a string the tension is along the string. For more forces, resolve instead.",
+     "basics_md": "Three pulls on a knot that stays still must close up into a triangle. In that triangle the sine rule links each side to the opposite angle, and that is Lami's theorem.",
+     "key_points": [
+      "Statement: P/sin(alpha) = Q/sin(beta) = R/sin(gamma), alpha opposite P",
+      "Only for three coplanar concurrent forces in equilibrium",
+      "Proof: triangle of forces and the sine rule, sin(180 - x) = sin(x)",
+      "Angles are between the lines of action of the other two forces"
+     ],
+     "figures": [],
+     "questions": [
+      {
+       "id": "la-q1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "Lami's theorem applies to",
+       "options": [
+        "any number of concurrent forces",
+        "three coplanar concurrent forces in equilibrium",
+        "three parallel forces",
+        "two forces only"
+       ],
+       "answer_index": 1,
+       "why": "Exactly three coplanar concurrent forces in equilibrium."
+      },
+      {
+       "id": "la-q2",
+       "kind": "mcq",
+       "level": 2,
+       "q": "In Lami's theorem the force P is proportional to the sine of",
+       "options": [
+        "the angle between P and Q",
+        "the angle between P and R",
+        "the angle between Q and R",
+        "the angle opposite the longest force"
+       ],
+       "answer_index": 2,
+       "why": "P is proportional to sin of the angle between the other two forces, Q and R."
+      },
+      {
+       "id": "la-q3",
+       "kind": "numerical",
+       "level": 2,
+       "marks": 4,
+       "q": "A smooth sphere of weight 50 N is held against a smooth vertical wall by a string fixed to the wall and making $30^\\circ$ with the wall. Find the tension and the wall reaction.",
+       "model_answer_md": "Forces: $W$ (down), wall reaction $R$ (horizontal), tension $T$ (along the string, $30^\\circ$ to the vertical).\n\nVertical: $T\\cos30^\\circ = 50 \\Rightarrow T = \\mathbf{57.74\\ N}$.\nHorizontal: $R = T\\sin30^\\circ = 50\\tan30^\\circ = \\mathbf{28.87\\ N}$.",
+       "points": [
+        "Three forces W, T, R in equilibrium",
+        "T cos 30 = 50, T = 57.74 N",
+        "R = 50 tan 30 = 28.87 N"
+       ]
+      },
+      {
+       "id": "la-q4",
+       "kind": "numerical",
+       "level": 3,
+       "marks": 5,
+       "q": "A 100 N lamp hangs from two strings meeting at C, inclined at $30^\\circ$ and $60^\\circ$ to the horizontal on opposite sides. Find the tensions.",
+       "model_answer_md": "Horizontal: $T_1\\cos30^\\circ = T_2\\cos60^\\circ$, so $T_1 = 0.5774\\,T_2$.\nVertical: $T_1\\sin30^\\circ + T_2\\sin60^\\circ = 100 \\Rightarrow 0.2887T_2 + 0.8660T_2 = 100$.\n\n$T_2 = \\mathbf{86.60\\ N}$ (string at $60^\\circ$), $T_1 = \\mathbf{50.00\\ N}$ (string at $30^\\circ$).",
+       "points": [
+        "Horizontal balance T1 cos 30 = T2 cos 60",
+        "Vertical balance T1 sin 30 + T2 sin 60 = 100",
+        "T2 = 86.60 N, T1 = 50 N"
+       ]
+      },
+      {
+       "id": "la-p1",
+       "pyq": "f7732e2139dd7dae",
+       "level": 1,
+       "points": [
+        "Statement: three coplanar concurrent forces in equilibrium, each proportional to the sine of the angle between the other two",
+        "Figure with P, Q, R at O, alpha opposite P",
+        "Triangle of forces with interior angles 180 - alpha, 180 - beta, 180 - gamma",
+        "Sine rule and sin(180 - x) = sin(x) give P/sin(alpha) = Q/sin(beta) = R/sin(gamma)"
+       ]
+      },
+      {
+       "id": "la-p2",
+       "pyq": "0875c0e3a39f4d62",
+       "level": 1,
+       "points": [
+        "Statement of Lami's theorem",
+        "Complete parallelogram OACB on P and Q, diagonal OC equal and opposite to R",
+        "In triangle OAC angles 180 - gamma, 180 - alpha, 180 - beta",
+        "Sine rule gives the result"
+       ]
+      },
+      {
+       "id": "la-p3",
+       "pyq": "4924c95e14471b82",
+       "level": 1,
+       "points": [
+        "Three coplanar concurrent forces in equilibrium: each proportional to the sine of the angle between the other two",
+        "P/sin(alpha) = Q/sin(beta) = R/sin(gamma)",
+        "Valid for exactly three forces, coplanar and concurrent"
+       ]
+      },
+      {
+       "id": "la-p4",
+       "pyq": "4720fa518eb260cc",
+       "level": 2,
+       "points": [
+        "Weight W = 72 x (4/3) pi (0.15)^3 = 1.0179 kN",
+        "Reactions normal to the legs, perpendicular to each other, through the centre",
+        "Lami: W/sin 90 = R_A/sin 150 = R_B/sin 120",
+        "R_A = 0.509 kN, R_B = 0.8815 kN"
+       ]
+      },
+      {
+       "id": "la-p5",
+       "pyq": "cfaaf22fcc2d99d1",
+       "level": 3,
+       "points": [
+        "Resolve along each plane so the normals drop out",
+        "Roller A: T cos(60 - beta) = 100 sin 60 = 86.60",
+        "Roller B: T cos(30 + beta) = 200 sin 30 = 100",
+        "Divide: tan(60 - beta) = 1.1547, beta = 10.89 degrees; T = 132.29 kN"
+       ]
+      },
+      {
+       "id": "la-p6",
+       "pyq": "e1981ef6396c3610",
+       "level": 3,
+       "points": [
+        "Smooth contact reaction passes through the centre O; makes 60 degrees with the vertical",
+        "Moments about O: T cos(alpha) x 2 = 29.43 x 1.414, T cos(alpha) = 20.81 N",
+        "R_E = 24.03 N from horizontal balance",
+        "T sin(alpha) = 127.53 - 12.01 = 115.52 N; T = 117.37 N, alpha = 79.79 degrees"
+       ]
+      },
+      {
+       "id": "la-p7",
+       "pyq": "114d002029afd3ae",
+       "level": 3,
+       "points": [
+        "Geometry for CD horizontal: sqrt(2025 - h^2) + sqrt(900 - h^2) = 60, h = 21.79 cm",
+        "AC at 28.96 degrees, DB at 46.57 degrees",
+        "Joint C: T2 = 200/tan(28.96) = 361.48 N",
+        "Joint D: W = T2 tan(46.57) = 381.8 N"
+       ]
+      }
+     ]
+    },
+    {
+     "id": "beam-reactions",
+     "title": "Support reactions of beams",
+     "theory_md": "Method for a beam:\n1. **FBD:** replace the supports by reactions (hinge $H_A$, $V_A$; roller $R_B$ **normal to its surface**, so along the vertical for a horizontal surface and at the incline's normal otherwise).\n2. Replace UDLs and UVLs by point loads at their centroids; resolve inclined loads; a couple enters $\\Sigma M$ as itself.\n3. $\\Sigma M_A=0$ (the hinge, to eliminate $H_A$ and $V_A$) gives the roller force.\n4. $\\Sigma F_y=0$ gives $V_A$; $\\Sigma F_x=0$ gives $H_A$.\n5. Check with $\\Sigma M_B=0$.\n\nVertical loads on a vertical-roller beam give $H_A=0$. A roller on a slope $\\tan\\alpha$ contributes a **horizontal thrust** $R_B\\sin\\alpha$.",
+     "basics_md": "Pick the hinge as the pivot so the unknown hinge forces disappear from the moment equation, solve the roller force from that, then get the hinge forces from the two force balances.",
+     "key_points": [
+      "FBD with each support replaced by its reactions; roller normal to its surface",
+      "UDL = w L at L/2; triangular = area at the centroid; inclined loads resolved",
+      "Moments about the hinge first, then sum Fy and sum Fx",
+      "Check with moments about the other support"
+     ],
+     "figures": [],
+     "questions": [
+      {
+       "id": "br-q1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "The first equation to write for a hinge-and-roller beam is usually",
+       "options": [
+        "sum Fx = 0",
+        "sum Fy = 0",
+        "moments about the hinge",
+        "moments about mid-span"
+       ],
+       "answer_index": 2,
+       "why": "It removes H_A and V_A and gives the roller reaction directly."
+      },
+      {
+       "id": "br-q2",
+       "kind": "mcq",
+       "level": 2,
+       "q": "For a beam with only vertical loads, resting on a hinge and a vertical roller, the horizontal hinge reaction is",
+       "options": [
+        "equal to the total load",
+        "zero",
+        "equal to V_A",
+        "equal to R_B"
+       ],
+       "answer_index": 1,
+       "why": "No horizontal load and the roller gives no horizontal force."
+      },
+      {
+       "id": "br-q3",
+       "kind": "numerical",
+       "level": 2,
+       "marks": 4,
+       "q": "A simply supported beam AB of 8 m carries a 12 kN/m UDL over the first 5 m from A and a 20 kN point load 7 m from A. Find the reactions.",
+       "model_answer_md": "UDL: $12\\times5 = 60$ kN at 2.5 m from A.\n\n$\\Sigma M_A = 0$: $R_B(8) = 60(2.5) + 20(7) = 290 \\Rightarrow R_B = \\mathbf{36.25\\ kN}$.\n\n$\\Sigma F_y = 0$: $R_A = 80 - 36.25 = \\mathbf{43.75\\ kN}$.",
+       "points": [
+        "UDL equivalent 60 kN at 2.5 m",
+        "Moments about A: R_B = 290/8 = 36.25 kN",
+        "R_A = 43.75 kN"
+       ]
+      },
+      {
+       "id": "br-q4",
+       "kind": "numerical",
+       "level": 3,
+       "marks": 5,
+       "q": "A beam ABC is supported at A and B (AB = 6 m) with an overhang BC = 2 m. It carries 5 kN/m over the full 8 m and a 20 kN load at C. Find the reactions.",
+       "model_answer_md": "UDL: $5\\times8 = 40$ kN at 4 m from A.\n\n$\\Sigma M_A = 0$: $R_B(6) = 40(4) + 20(8) = 320 \\Rightarrow R_B = \\mathbf{53.33\\ kN}$.\n\n$\\Sigma F_y = 0$: $R_A = 60 - 53.33 = \\mathbf{6.67\\ kN}$.",
+       "points": [
+        "Equivalent UDL 40 kN at 4 m",
+        "R_B = 320/6 = 53.33 kN",
+        "R_A = 6.67 kN"
+       ]
+      },
+      {
+       "id": "br-p1",
+       "pyq": "9efe396c355b680e",
+       "level": 2,
+       "points": [
+        "Total load 300 + 100 = 400 N; boy R_b = 400/3 = 133.33 N, man 266.67 N",
+        "Moments about the man's end: R_b x 2 = 300 x + 100 x 1",
+        "x = 0.556 m from the man (1.444 m from the boy)"
+       ]
+      },
+      {
+       "id": "br-p2",
+       "pyq": "99d4aebb79ccbc8c",
+       "level": 3,
+       "points": [
+        "UVL 20 to 50 kN/m over 6 m: rectangle 120 kN at 5 m, triangle 90 kN at 6 m from A",
+        "Roller on 30 degree incline: R_B at 60 degrees to horizontal; sum M_A: R_B sin 60 x 10 = 2180",
+        "R_B = 251.72 kN, V_A = 72 kN, H_A = 125.86 kN",
+        "R_A = 145.0 kN at 29.77 degrees"
+       ]
+      },
+      {
+       "id": "br-p3",
+       "pyq": "a18e6632cea7827b",
+       "level": 2,
+       "points": [
+        "UDL 80 kN at 2 m from A; 10 kN at 8 m",
+        "H_A = 0",
+        "Sum M_A: R_B x 10 = 160 + 80, R_B = 24 kN",
+        "V_A = 90 - 24 = 66 kN; check with moments about B"
+       ]
+      },
+      {
+       "id": "br-p4",
+       "pyq": "09dad04ee9493f1b",
+       "level": 2,
+       "points": [
+        "Positions from A: B = 1.5, C = 3.0, D = 4.2, E = 6.0, F = 7.5 m",
+        "Loads: 27 kN at 1.5 m, 13.5 kN at 5.25 m, 5 kN at 4.2 m; total 45.5 kN",
+        "Sum M_B: R_E x 4.5 = 13.5 x 3.75 + 5 x 2.7, R_E = 14.25 kN",
+        "R_B = 31.25 kN; check with moments about E"
+       ]
+      },
+      {
+       "id": "br-p5",
+       "pyq": "7df03aaf27ddf71b",
+       "level": 2,
+       "points": [
+        "UDL 10 x 2 = 20 kN at 3 m from A",
+        "Sum M_A: T sin 30 x 4 = 5 x 2 + 20 x 3, T = 35 kN",
+        "H_A = T cos 30 = 30.31 kN, V_A = 25 - 17.5 = 7.5 kN",
+        "R_A = 31.22 kN at 13.9 degrees"
+       ]
+      },
+      {
+       "id": "br-p6",
+       "pyq": "8688b3608e2451dd",
+       "level": 3,
+       "points": [
+        "R_B normal to the 3:4 incline, 36.87 degrees from the vertical (cos 0.8, sin 0.6)",
+        "6 kN: vertical 5.196 kN, horizontal 3 kN; UDL 30 kN at 3 m; couple 3 kN.m",
+        "Sum M_A: 0.8 R_B x 4 = 5.196 + 3 + 90, R_B = 30.69 kN; horizontal thrust 18.41 kN",
+        "V_A = 10.65 kN, H_A = 15.41 kN, R_A = 18.73 kN"
+       ]
+      },
+      {
+       "id": "br-p7",
+       "pyq": "a851bcf45272910d",
+       "level": 3,
+       "points": [
+        "R_B normal to 1:2 incline, 26.57 degrees to vertical",
+        "100 kN: vertical 86.60, horizontal 50 kN; UDL 100 kN at 3 m",
+        "Sum M_A: 0.8944 R_B x 4 = 400.60, R_B = 111.97 kN",
+        "V_A = 93.45 kN, H_A about 0.08 kN"
+       ]
+      },
+      {
+       "id": "br-p8",
+       "pyq": "986771393ba61422",
+       "level": 2,
+       "points": [
+        "Loads: 100 kN vertical 86.60 kN and horizontal 50 kN; triangle 2.5 kN at 1.667 m; UDL 150 kN at 2.5 m",
+        "Sum M_A: R_B cos 26.57 x 4 = 465.77, R_B = 130.19 kN",
+        "V_A = 122.66 kN, H_A = 8.22 kN",
+        "R_A = 122.94 kN"
+       ]
+      },
+      {
+       "id": "br-p9",
+       "pyq": "85a988cdaa3948e3",
+       "level": 1,
+       "points": [
+        "Sum M_A = 0: R_B x 5 = 6 + 12 + 25 = 43, R_B = 8.6 kN",
+        "Sum Fy = 0: R_A = 12 - 8.6 = 3.4 kN"
+       ]
+      },
+      {
+       "id": "br-p10",
+       "pyq": "cd7eb56f06206134",
+       "level": 1,
+       "points": [
+        "UDL 2 x 1.5 = 3 kN at 2.25 m; 4 kN at 1.5 m; 1.5 kN at 4.5 m",
+        "Sum M_A: R_B x 6 = 6 + 6.75 + 6.75 = 19.5, R_B = 3.25 kN",
+        "R_A = 8.5 - 3.25 = 5.25 kN"
+       ]
+      },
+      {
+       "id": "br-p11",
+       "pyq": "922925972bd7c9e5",
+       "level": 3,
+       "points": [
+        "Beam AB: R_B normal to CD, 30 degrees to vertical; sum M_A: R_B cos 30 x 3 = 300, R_B = 115.47 kN",
+        "H_A = 57.74 kN, V_A = 200 kN, R_A = 208.17 kN at 73.9 degrees",
+        "Member CD: moments about C, R_D x 1.25 = 115.47 x 1.05, R_D = 97.0 kN",
+        "H_C = 39.26 kN, V_C = 100 kN, R_C = 107.43 kN"
+       ]
+      }
+     ]
+    },
+    {
+     "id": "rods-levers-contact",
+     "title": "Rods, levers, wedges and rolling bodies",
+     "theory_md": "These are all solved by an FBD and the three equations, choosing the moment point to remove unknowns.\n\n- **Rod or lever on a hinge:** moments about the hinge give the string/force; the hinge reaction follows from $\\Sigma F$.\n- **Two-force member** (a link pinned at both ends, no load between): its force is along the line of the pins.\n- **Roller turning over a step:** at the moment of turning, the ground reaction is zero; take moments about the step corner C. The force is least when perpendicular to OC (arm $=r$).\n- **Wedge with friction:** each contact has normal reaction plus friction, a single resultant at the friction angle $\\phi$ from the normal, opposing slip.\n- **Bar on smooth wall and incline:** the reactions are normal; moments about one end give the angle.",
+     "basics_md": "Whenever two unknown forces cross at a point, take moments about that point: they vanish, and one equation gives the third unknown.",
+     "key_points": [
+      "Take moments about a point where unknown forces cross",
+      "A two-force member carries a force along the line joining its pins",
+      "Roller turning over a step: ground reaction becomes zero, moments about the corner",
+      "Friction: resultant reaction inclined at the friction angle to the normal"
+     ],
+     "figures": [],
+     "questions": [
+      {
+       "id": "rl-q1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "A member loaded only at its two end pins carries a force",
+       "options": [
+        "perpendicular to its length",
+        "along the line joining the pins",
+        "at $45^\\circ$ to its length",
+        "of zero magnitude"
+       ],
+       "answer_index": 1,
+       "why": "For two-force equilibrium the forces must be equal, opposite and collinear, i.e. along the line joining the pins."
+      },
+      {
+       "id": "rl-q2",
+       "kind": "mcq",
+       "level": 2,
+       "q": "A roller is on the point of turning over a step. At that instant the ground reaction is",
+       "options": [
+        "equal to the weight",
+        "half the weight",
+        "zero",
+        "equal to the pull"
+       ],
+       "answer_index": 2,
+       "why": "The roller loses contact with the ground, so the reaction there is zero."
+      },
+      {
+       "id": "rl-q3",
+       "kind": "numerical",
+       "level": 2,
+       "marks": 4,
+       "q": "A uniform rod AB, 2 m long and weighing 100 N, is hinged at A and held horizontal by a string at B making $45^\\circ$ with the rod. A 50 N load hangs from B. Find the tension and the hinge reaction.",
+       "model_answer_md": "$\\Sigma M_A = 0$: $T\\sin45^\\circ(2) = 100(1) + 50(2) = 200 \\Rightarrow T = \\mathbf{141.42\\ N}$.\n\n$H_A = T\\cos45^\\circ = \\mathbf{100\\ N}$.\n$V_A = 150 - T\\sin45^\\circ = 150 - 100 = \\mathbf{50\\ N}$ (up).\n\n$R_A = \\sqrt{100^2+50^2} = 111.80$ N.",
+       "points": [
+        "Moments about A: T sin 45 x 2 = 100 x 1 + 50 x 2",
+        "T = 141.42 N",
+        "H_A = 100 N, V_A = 50 N"
+       ]
+      },
+      {
+       "id": "rl-q4",
+       "kind": "numerical",
+       "level": 3,
+       "marks": 5,
+       "q": "A roller of weight 1000 N and radius 0.5 m is to be pulled over a 0.2 m high step. Find the horizontal pull at its centre needed, and the minimum pull in any direction.",
+       "model_answer_md": "Corner C: vertical height of the centre above C $= r - h = 0.3$ m; horizontal distance $= \\sqrt{0.5^2-0.3^2} = 0.4$ m.\n\nGround reaction $=0$; moments about C. Horizontal pull: $P(0.3) = 1000(0.4) \\Rightarrow P = \\mathbf{1333.3\\ N}$.\n\nMinimum pull: perpendicular to OC, arm $= r = 0.5$ m: $P_{min}(0.5) = 1000(0.4) \\Rightarrow P_{min} = \\mathbf{800\\ N}$.",
+       "points": [
+        "Geometry: 0.3 m and 0.4 m from the corner",
+        "Ground reaction zero, moments about the corner",
+        "Horizontal P = 1333.3 N",
+        "Minimum P = 800 N perpendicular to OC"
+       ]
+      },
+      {
+       "id": "rl-p1",
+       "pyq": "3f3c4d08a007c053",
+       "level": 3,
+       "points": [
+        "At impending motion each contact reaction is normal plus friction, inclined at 15 degrees to the normal",
+        "A: R1 at 15 degrees to the vertical, R2 at 35 degrees; sum Fx and Fy give R2 = 32.21 kN, R1 = 101.95 kN",
+        "B: R3 cos 15 = R2 cos 35 gives R3 = 27.32 kN",
+        "P = R2 sin 35 + R3 sin 15 = 25.55 kN"
+       ]
+      },
+      {
+       "id": "rl-p2",
+       "pyq": "882dd99922a66477",
+       "level": 3,
+       "points": [
+        "At turning the ground reaction is zero; W, P and the corner reaction act",
+        "Moments about C; OC makes 30 degrees with horizontal, horizontal distance 155.88 cm",
+        "P is least when perpendicular to OC (arm = r = 180 cm)",
+        "P_min = W cos 30 = 2078.5 N at 60 degrees to the horizontal"
+       ]
+      },
+      {
+       "id": "rl-p3",
+       "pyq": "e6c394c3ea33189d",
+       "level": 2,
+       "points": [
+        "BD is a two-force member, force along BD",
+        "Moments about A: 400 x 0.7 = F_BD x 0.2121, F_BD = 1.32 kN",
+        "Components 933.3 N each; A_x = 533.3 N, A_y = 933.3 N (down)",
+        "F_A = 1.07 kN at 60.3 degrees below horizontal"
+       ]
+      },
+      {
+       "id": "rl-p4",
+       "pyq": "416ec3b283488e73",
+       "level": 2,
+       "points": [
+        "FBD of rod: H_A, V_A at hinge, 270 N at 1.5 m, 120 N at B, T along BC",
+        "Moments about A: T sin 30 x 3 = 270 x 1.5 + 120 x 3 = 765, T = 510 N",
+        "H_A = T cos 30 = 441.67 N",
+        "V_A = 390 - 255 = 135 N; R_A = 461.84 N at 17 degrees to the rod"
+       ]
+      },
+      {
+       "id": "rl-p5",
+       "pyq": "f818a0f01a49c493",
+       "level": 3,
+       "points": [
+        "Reactions N_A horizontal (smooth wall), N_B at 45 degrees (smooth incline)",
+        "Sum Fy: N_B cos 45 = 400, N_B = 565.69 N; sum Fx: N_A = 600 N",
+        "Moments about A: 1600 cos(theta) - 1600 sin(theta) - 400 cos(theta) - 600 sin(theta) = 0",
+        "tan(theta) = 12/22, theta = 28.61 degrees"
+       ]
+      },
+      {
+       "id": "rl-p6",
+       "pyq": "6c5107be8b17c425",
+       "level": 2,
+       "points": [
+        "Moments about M for P: arm of 600 N = 120 mm, arm of 400 N = 207.85 mm, arm of P = 173.21 mm",
+        "P x 173.21 = 72 000 + 83 138, P = 895.7 N",
+        "Components of P: 306.3 N horizontal, 841.7 N vertical",
+        "R_M = 1444.7 N at 86.3 degrees to horizontal"
+       ]
+      },
+      {
+       "id": "rl-p7",
+       "pyq": "82513570b602c90f",
+       "level": 3,
+       "points": [
+        "Frictionless pulley: tension 4 kN both sides; inclined strand 2:3 gives 2.219 kN horizontal and 3.328 kN vertical",
+        "Equivalent to F_x = 2.219 kN (left) and F_y = 0.672 kN (down) at pin C",
+        "H_A = 2.219 kN, V_A = 0.672 kN",
+        "M_A = 2.219 x 100 - 0.672 x 30 = 201.73 kN.cm = 2.017 kN.m; R_A = 2.318 kN"
+       ]
+      }
+     ]
+    }
+   ]
+  }
+ ]
+}

@@ -1,0 +1,558 @@
+{
+ "code": "ME1104",
+ "unit": "Development of Solids",
+ "written": "2026-10-19",
+ "by": "claude-sonnet-5-5, in a Claude Code session",
+ "topics": [
+  {
+   "topic": "Principle of development",
+   "subtopics": [
+    {
+     "id": "meaning",
+     "title": "Development and true-shape surfaces",
+     "theory_md": "**Development** is the unfolding of the lateral surface of a solid onto one plane, so that it is seen in **true shape and size**. Only the lateral surface is developed (not the bases, unless asked). It is used for sheet-metal work: ducts, funnels, hoppers, tanks.\n\nThe line lengths in the development are **true lengths**: edges of a prism are true in the front view only when parallel to the VP; slant edges of a pyramid and generators of an oblique solid must be found by true-length construction.\n\n| Solid | Development |\n|---|---|\n| Prism | rectangle (or parallelograms) |\n| Cylinder | rectangle $\\pi d \\times h$ |\n| Pyramid | triangles joined at the apex |\n| Cone | sector of a circle |\n\n**Methods:** parallel line (prism, cylinder) and radial line (pyramid, cone).",
+     "basics_md": "Imagine cutting a paper cone along one line and flattening it. The flat paper is the development. Because it is flat, every length on it is the real length on the solid.",
+     "key_points": [
+      "Development = unfolding the lateral surface onto a plane, showing true shape",
+      "Only the lateral surface is developed",
+      "Prism and cylinder: parallel line method; pyramid and cone: radial line method",
+      "Lengths in the development must be true lengths",
+      "Cylinder gives a rectangle, cone gives a sector"
+     ],
+     "figures": [],
+     "questions": [
+      {
+       "id": "m-q1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "The development of the lateral surface of a right circular cone is",
+       "options": [
+        "a rectangle",
+        "a sector of a circle",
+        "an isosceles triangle",
+        "a full circle"
+       ],
+       "answer_index": 1,
+       "why": "Unrolling a cone gives a sector whose radius is the slant length."
+      },
+      {
+       "id": "m-q2",
+       "kind": "mcq",
+       "level": 1,
+       "q": "Which pair is correctly matched?",
+       "options": [
+        "Cylinder: radial line method",
+        "Pyramid: parallel line method",
+        "Prism: parallel line method",
+        "Cone: parallel line method"
+       ],
+       "answer_index": 2,
+       "why": "Prisms and cylinders have parallel edges or generators, so the parallel line method is used; pyramids and cones use radial lines from the apex."
+      },
+      {
+       "id": "m-q3",
+       "kind": "short",
+       "level": 2,
+       "marks": 3,
+       "q": "Define development of surfaces. Name the two methods and state which solids each is used for.",
+       "model_answer_md": "**Development of surfaces:** unfolding the lateral surface of a solid on a plane so that it shows its true shape and size.\n\n**Methods**\n1. **Parallel line method:** for prisms and cylinders (edges or generators are parallel).\n2. **Radial line method:** for pyramids and cones (edges or generators radiate from the apex).",
+       "points": [
+        "Development = unfolding lateral surface on a plane, true shape",
+        "Parallel line method for prisms and cylinders",
+        "Radial line method for pyramids and cones"
+       ]
+      },
+      {
+       "id": "m-q4",
+       "kind": "short",
+       "level": 3,
+       "marks": 3,
+       "q": "State what the development of (a) a cylinder, (b) a square pyramid and (c) a cone looks like, and why true lengths are needed.",
+       "model_answer_md": "(a) **Cylinder:** a rectangle of length $\\pi d$ and height $h$.\n(b) **Square pyramid:** four isosceles triangles with a common apex; base sides equal the base edges and the equal sides are the **true slant edge length**.\n(c) **Cone:** a sector of radius equal to the slant length $L$.\n\n**True lengths are needed** because the development is a flat model of the actual surface; a foreshortened projected length would make the model too small.",
+       "points": [
+        "Cylinder: rectangle $\\pi d \\times h$",
+        "Pyramid: triangles with apex common, true edge lengths",
+        "Cone: sector of radius $L$",
+        "True lengths needed because projected lengths are foreshortened"
+       ]
+      }
+     ]
+    },
+    {
+     "id": "sector",
+     "title": "Cone sector angle and areas",
+     "theory_md": "A cone of base radius $r$, height $h$ has slant length $L=\\sqrt{r^2+h^2}$.\n\nThe arc of the sector equals the base circumference: $2\\pi r = \\dfrac{\\theta}{360}\\,2\\pi L$, so\n$$\\theta=\\frac{r}{L}\\times 360^\\circ=\\frac{d}{2L}\\times360^\\circ$$\n\nLateral area $=\\pi r L$. For a cylinder: rectangle $\\pi d\\times h$, area $\\pi d h$.\n\nWorked: $d=50$, $h=60$: $L=65$ mm, $\\theta=\\frac{25}{65}\\times360=138.46^\\circ$.",
+     "basics_md": "Start from the paper cone. Its curved edge is the old base circle, so the arc length of the flat sector must still equal the circumference of the base.",
+     "key_points": [
+      "Slant length $L=\\sqrt{r^2+h^2}$",
+      "Sector radius = $L$",
+      "Sector angle $\\theta=360\\,r/L$ degrees",
+      "Arc length = base circumference $\\pi d$"
+     ],
+     "figures": [],
+     "questions": [
+      {
+       "id": "s-q1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "The sector angle of the development of a cone of base radius $r$ and slant length $L$ is",
+       "options": [
+        "$360\\,L/r$",
+        "$360\\,r/L$",
+        "$180\\,r/L$",
+        "$360\\,r/h$"
+       ],
+       "answer_index": 1,
+       "why": "Arc of sector = base circumference, giving $\\theta=360\\,r/L$."
+      },
+      {
+       "id": "s-q2",
+       "kind": "mcq",
+       "level": 2,
+       "q": "A cone has base diameter 40 mm and slant length 50 mm. The sector angle is",
+       "options": [
+        "144$^\\circ$",
+        "288$^\\circ$",
+        "115.2$^\\circ$",
+        "72$^\\circ$"
+       ],
+       "answer_index": 0,
+       "why": "$\\theta=360\\times20/50=144^\\circ$. 288 is what you get using $d$ instead of $r$."
+      },
+      {
+       "id": "s-q3",
+       "kind": "numerical",
+       "level": 2,
+       "marks": 5,
+       "q": "A cone has base diameter 60 mm and axis 80 mm. Find the radius, angle and arc length of the sector in its development, and the lateral surface area.",
+       "model_answer_md": "**Given:** $r=30$ mm, $h=80$ mm.\n1. Slant length $L=\\sqrt{30^2+80^2}=85.44$ mm. Sector radius $=85.44$ mm.\n2. Sector angle $\\theta=\\dfrac{30}{85.44}\\times360=126.40^\\circ$.\n3. Arc length $=\\pi d=\\pi\\times60=188.5$ mm.\n4. Lateral area $=\\pi r L=\\pi\\times30\\times85.44=8052$ mm$^2$.",
+       "points": [
+        "$L=\\sqrt{r^2+h^2}=85.44$ mm",
+        "Angle $=360r/L=126.4^\\circ$",
+        "Arc length $=\\pi d=188.5$ mm",
+        "Lateral area $\\pi r L$ (about 8052 mm$^2$)"
+       ]
+      },
+      {
+       "id": "s-q4",
+       "kind": "numerical",
+       "level": 3,
+       "marks": 4,
+       "q": "Find the size of the rectangular development of a cylinder of diameter 40 mm and height 60 mm, and its lateral area. A cone has the same base and height: find its sector angle.",
+       "model_answer_md": "**Cylinder:** rectangle of length $\\pi d=\\pi\\times40=125.7$ mm and height 60 mm. Area $=125.7\\times60=7540$ mm$^2$.\n\n**Cone:** $L=\\sqrt{20^2+60^2}=63.25$ mm, $\\theta=\\dfrac{20}{63.25}\\times360=113.8^\\circ$.",
+       "points": [
+        "Rectangle $125.7\\times60$ mm",
+        "Area $\\pi d h\\approx7540$ mm$^2$",
+        "Cone $L=63.25$ mm",
+        "Sector angle $113.8^\\circ$"
+       ]
+      }
+     ]
+    },
+    {
+     "id": "shortest-path",
+     "title": "Shortest path on a surface",
+     "theory_md": "A string, insect or tape going round a solid by the **shortest route** follows a **straight line on the development**.\n\nMethod for a cone: draw the sector, join the ends of the arc (initial and final positions) by a **straight chord**; this is the shortest path. Mark where the chord cuts the generators, bring those distances (from the apex) back to the front view along the same generators, project up to the top view, and join with a smooth curve (hidden where on the back).\n\nChord length $=2L\\sin(\\theta/2)$. For $d=50$, $h=80$: $L=83.8$ mm, $\\theta=107.4^\\circ$, chord $=135.1$ mm.",
+     "basics_md": "A straight line is the shortest distance between two points only on a flat sheet. So flatten the surface first, join the points, then wrap the sheet back.",
+     "key_points": [
+      "Shortest path on a surface is a straight line on its development",
+      "Cone: chord joining ends of the sector arc",
+      "Transfer chord-generator intersections back to the views",
+      "Join with smooth curve; hidden part dotted"
+     ],
+     "figures": [],
+     "questions": [
+      {
+       "id": "p-q1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "The shortest path of a string wound once round a cone is, in the development, a",
+       "options": [
+        "circular arc",
+        "straight line",
+        "parabola",
+        "sine curve"
+       ],
+       "answer_index": 1,
+       "why": "Shortest distance between two points on a flat sheet is a straight line."
+      },
+      {
+       "id": "p-q2",
+       "kind": "short",
+       "level": 2,
+       "marks": 3,
+       "q": "Describe how you would draw the shortest path of an insect that goes once round a cone and returns to the starting point on its base.",
+       "model_answer_md": "1. Draw the front view and top view; divide the base into 12 equal parts and draw generators.\n2. Draw the development: sector of radius $L$ and angle $360r/L$, divided into 12 parts.\n3. Join the two ends of the arc by a straight chord: this is the shortest path.\n4. Mark where the chord cuts each generator, transfer the distances from the apex to the front view generators and project to the top view.\n5. Join the points by a smooth curve in both views.",
+       "points": [
+        "Draw development of the cone",
+        "Straight chord joining the ends of the arc",
+        "Transfer intersections to generators in the views",
+        "Smooth curve in front and top view"
+       ]
+      },
+      {
+       "id": "p-q3",
+       "kind": "numerical",
+       "level": 2,
+       "marks": 3,
+       "q": "A cone of base diameter 50 mm and axis 80 mm. Find the length of the shortest path of a string that goes once round it from a point on the base back to the same point.",
+       "model_answer_md": "$L=\\sqrt{25^2+80^2}=83.82$ mm; $\\theta=\\dfrac{25}{83.82}\\times360=107.38^\\circ$.\nChord $=2L\\sin(\\theta/2)=2\\times83.82\\times\\sin(53.69^\\circ)=135.1$ mm.",
+       "points": [
+        "$L=83.8$ mm",
+        "$\\theta=107.4^\\circ$",
+        "Chord $=2L\\sin(\\theta/2)=135.1$ mm"
+       ]
+      },
+      {
+       "id": "p-p1",
+       "pyq": "9078e4a19d536773",
+       "level": 3,
+       "points": [
+        "Slant length $L=83.8$ mm, sector angle $107.4^\\circ$",
+        "FV triangle and TV circle with 12 generators; development drawn as sector",
+        "Straight chord joining the ends of the arc is the shortest path (about 135 mm)",
+        "Chord-generator intersections transferred to the front view and projected to the top view",
+        "Smooth curves for the path in both views, hidden portion dotted"
+       ]
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "topic": "Parallel line method",
+   "subtopics": [
+    {
+     "id": "prism-cyl",
+     "title": "Prism and cylinder development",
+     "theory_md": "**Parallel line method.** Edges or generators are parallel to each other and (when the axis is vertical) true length in the front view.\n\n**Prism:** draw a stretch-out line of length equal to the **perimeter** of the base. Divide it into the base edge lengths, erect perpendiculars of height $h$. Result: rectangle(s) side by side: $4\\times30$ base edge, $h=60$ gives $120\\times60$.\n\n**Cylinder:** stretch-out $=\\pi d$. Divide the base circle into 12 equal parts; divide the stretch-out into 12 equal parts; erect lines of height $h$.\n\nLateral area = perimeter $\\times$ height.",
+     "basics_md": "Peel the label off a tin: it is a rectangle as tall as the tin and as long as the distance round it.",
+     "key_points": [
+      "Stretch-out line = perimeter of the base (cylinder $\\pi d$)",
+      "Height of rectangle = axis height",
+      "Divide base and stretch-out into equal parts, 12 for a cylinder",
+      "Lateral area = perimeter $\\times$ height"
+     ],
+     "figures": [],
+     "questions": [
+      {
+       "id": "pc-q1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "The length of the development of a cylinder of diameter $d$ is",
+       "options": [
+        "$d$",
+        "$\\pi d/2$",
+        "$\\pi d$",
+        "$2\\pi d$"
+       ],
+       "answer_index": 2,
+       "why": "The stretch-out is the circumference."
+      },
+      {
+       "id": "pc-q2",
+       "kind": "numerical",
+       "level": 2,
+       "marks": 4,
+       "q": "Draw the development of the lateral surface of a square prism of base side 30 mm and axis 60 mm, and find its lateral area.",
+       "model_answer_md": "1. Stretch-out line $=4\\times30=120$ mm.\n2. Divide it into four equal parts of 30 mm.\n3. Erect perpendiculars of height 60 mm and complete the rectangle $120\\times60$ mm, edges labelled $A,B,C,D,A$.\n4. Lateral area $=120\\times60=7200$ mm$^2$.",
+       "points": [
+        "Stretch-out $=4\\times30=120$ mm",
+        "Four equal divisions of 30 mm",
+        "Rectangle height 60 mm",
+        "Area $7200$ mm$^2$"
+       ]
+      },
+      {
+       "id": "pc-q3",
+       "kind": "numerical",
+       "level": 2,
+       "marks": 4,
+       "q": "A cylinder has diameter 40 mm and height 60 mm. Give the size of its development and the length of each of the 12 equal divisions.",
+       "model_answer_md": "Stretch-out $=\\pi d=\\pi\\times40=125.7$ mm, height 60 mm.\nEach of 12 divisions $=125.7/12=10.47$ mm.\nDevelopment: rectangle $125.7\\times60$ mm divided into 12 strips.",
+       "points": [
+        "Length $\\pi d=125.7$ mm",
+        "Height 60 mm",
+        "12 divisions of 10.47 mm"
+       ]
+      }
+     ]
+    },
+    {
+     "id": "cut-prism-cyl",
+     "title": "Truncated prism and cylinder",
+     "theory_md": "For a prism or cylinder **cut by an auxiliary inclined plane**:\n1. Draw the FV and TV, divide the base into equal parts (12 for a cylinder), mark generators.\n2. The cutting line in the FV meets each generator at a point; the **height of each point above the base** is read from the FV.\n3. Draw the full development of the uncut solid, mark each generator and **set off the same heights** from the base line.\n4. Join the points: **straight lines for a prism, a smooth sine-like curve for a cylinder**.\n\nThe lower part's development is below the curve; for a prism each face becomes a trapezium.",
+     "basics_md": "The cut only shortens each strip of the rectangle by a different amount. So measure how tall each strip is in the front view and mark that on the flat sheet.",
+     "key_points": [
+      "Divide base, draw generators in FV, cutting line meets each",
+      "Height of each cut point read from FV and set off on development",
+      "Prism: straight lines; cylinder: smooth curve",
+      "Keep generators in the same order on development as in the views"
+     ],
+     "figures": [],
+     "questions": [
+      {
+       "id": "cp-q1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "In the development of a cylinder cut by an inclined plane, the cut edge appears as a",
+       "options": [
+        "straight line",
+        "smooth sine-like curve",
+        "circle",
+        "hyperbola"
+       ],
+       "answer_index": 1,
+       "why": "Generator heights vary smoothly round the cylinder."
+      },
+      {
+       "id": "cp-q0",
+       "kind": "mcq",
+       "level": 2,
+       "q": "A square prism is cut by an inclined plane. In the development, each face of the lower part is a",
+       "options": [
+        "rectangle",
+        "trapezium",
+        "sector",
+        "circle"
+       ],
+       "answer_index": 1,
+       "why": "The two vertical edges of a face are cut at different heights, giving a trapezium (a rectangle only if the cut is parallel to the base)."
+      },
+      {
+       "id": "cp-q2",
+       "kind": "short",
+       "level": 3,
+       "marks": 6,
+       "q": "A cylinder of base diameter 40 mm and axis 60 mm stands on the HP and is cut by an AIP at $45^\\circ$ to the HP through the mid-point of the axis. Describe the development of the lower part.",
+       "model_answer_md": "1. Draw FV (rectangle $40\\times60$) and TV (circle $\\varnothing40$), divide TV into 12 parts, project generators.\n2. Draw the cutting line at $45^\\circ$ through the axis mid-point (30 mm up). It meets the generators at $a',b',\\ldots$.\n3. Draw the stretch-out $\\pi d=125.7$ mm, divided into 12 equal parts (10.47 mm), erect generators of height 60 mm.\n4. On each generator set off the height of its cut point above the base from the FV.\n5. Join the points by a smooth curve. The area between the base line and the curve is the development of the lower part.\n\nHeights range from 10 mm to 50 mm about the mean 30 mm.",
+       "points": [
+        "Views with 12 divisions and generators",
+        "Cutting line at $45^\\circ$ through axis mid-point",
+        "Stretch-out $=\\pi d=125.7$ mm in 12 parts",
+        "Heights transferred to generators",
+        "Smooth curve joining the points"
+       ]
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "topic": "Radial line method",
+   "subtopics": [
+    {
+     "id": "pyramid",
+     "title": "Pyramid development",
+     "theory_md": "**Radial line method.** All slant edges meet at the apex and have the same true length $R$.\n\nFor a right pyramid with base edge $a$ and axis $h$:\n- **True slant edge** $R=\\sqrt{h^2+(\\text{base centre to corner})^2}$. Square base: centre to corner $=a/\\sqrt2$.\n- Slant height of a face $=\\sqrt{h^2+(a/2)^2}$.\n\nDevelopment: with the apex as centre and radius $R$, draw an arc; step off the base edges $a$ along it with compass; join the points to the apex.\n\nWorked: square base 40, axis 70: $R=\\sqrt{70^2+28.28^2}=75.5$ mm; face slant height 72.8 mm; lateral area $=4\\times\\frac12\\times40\\times72.8=5824$ mm$^2$.",
+     "basics_md": "Each triangular face of the pyramid is a flat triangle. Lay them side by side around the apex and you have the development, so what you need is the true length of the slant edge and the base edge.",
+     "key_points": [
+      "Edges radiate from the apex: radial line method",
+      "True slant edge from a true-length construction or calculation",
+      "Arc of radius $R$, step off base edges $a$",
+      "Join to apex to get triangles",
+      "Lateral area $=\\frac12\\times$ perimeter $\\times$ slant height"
+     ],
+     "figures": [],
+     "questions": [
+      {
+       "id": "py-q1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "The radius of the arc used to develop a right pyramid is the",
+       "options": [
+        "axis height",
+        "true length of the slant edge",
+        "base edge",
+        "slant height of a face"
+       ],
+       "answer_index": 1,
+       "why": "All triangles have the apex at the centre and their sloping sides are the true slant edges."
+      },
+      {
+       "id": "py-q2",
+       "kind": "mcq",
+       "level": 2,
+       "q": "A square pyramid has base side 40 mm and axis 70 mm. The true slant edge is",
+       "options": [
+        "70 mm",
+        "72.8 mm",
+        "75.5 mm",
+        "80.6 mm"
+       ],
+       "answer_index": 2,
+       "why": "$\\sqrt{70^2+(20\\sqrt2)^2}=75.5$. 72.8 is the face slant height; using half-diagonal wrongly gives other values."
+      },
+      {
+       "id": "py-q3",
+       "kind": "numerical",
+       "level": 2,
+       "marks": 5,
+       "q": "Develop the lateral surface of a square pyramid of base side 40 mm and axis 70 mm. Give all dimensions and the lateral area.",
+       "model_answer_md": "1. Half diagonal of base $=40/\\sqrt2=28.28$ mm.\n2. True slant edge $R=\\sqrt{70^2+28.28^2}=75.50$ mm.\n3. With apex $O$ as centre, radius 75.5 mm, draw an arc; step off 40 mm four times to get $A,B,C,D,A$; join each to $O$ and join the chords.\n4. Face slant height $=\\sqrt{70^2+20^2}=72.80$ mm.\n5. Lateral area $=4\\times\\frac12\\times40\\times72.80=5824$ mm$^2$.",
+       "points": [
+        "Half diagonal 28.28 mm",
+        "True slant edge 75.5 mm",
+        "Arc radius 75.5 mm, four chords of 40 mm",
+        "Triangles joined at apex",
+        "Lateral area 5824 mm$^2$"
+       ]
+      }
+     ]
+    },
+    {
+     "id": "cone-dev",
+     "title": "Cone development and generators",
+     "theory_md": "Draw the cone's FV (triangle) and TV (circle), divide the circle into **12 equal parts** and project to the base of the FV; join to the apex to get generators $o'1',o'2',\\ldots$.\n\nDevelopment: sector of radius $L$ (the extreme generator) and angle $\\theta=360\\,r/L$. Divide the arc into the **same 12 parts**, join to the apex.\n\nOnly the two extreme generators ($o'1'$ and $o'7'$) are true length in the FV. Every other generator is a true length only on the development.",
+     "basics_md": "The 12 divisions on the base circle become 12 equal pieces of the sector's arc, so each generator on the cone sits on a matching line of the sector.",
+     "key_points": [
+      "Divide base circle into 12 equal parts and draw generators",
+      "Sector radius $L$, angle $360r/L$",
+      "Arc divided into the same 12 parts",
+      "Only extreme generators show true length in the FV"
+     ],
+     "figures": [],
+     "questions": [
+      {
+       "id": "cd-q1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "Which generators of a cone resting on the HP show true length in the front view?",
+       "options": [
+        "All",
+        "The two extreme ones",
+        "None",
+        "Only the central one"
+       ],
+       "answer_index": 1,
+       "why": "Only generators parallel to the VP are seen true length, which are the extreme ones."
+      },
+      {
+       "id": "cd-q0",
+       "kind": "mcq",
+       "level": 2,
+       "q": "The sector angle for a cone of base diameter 50 mm and axis 60 mm is",
+       "options": [
+        "138.5$^\\circ$",
+        "150$^\\circ$",
+        "277$^\\circ$",
+        "180$^\\circ$"
+       ],
+       "answer_index": 0,
+       "why": "$L=65$, $\\theta=360\\times25/65=138.5^\\circ$; 277 comes from using the diameter."
+      },
+      {
+       "id": "cd-q2",
+       "kind": "numerical",
+       "level": 2,
+       "marks": 5,
+       "q": "Draw the development of the lateral surface of a cone of base diameter 50 mm and axis 60 mm and give its dimensions.",
+       "model_answer_md": "1. $L=\\sqrt{25^2+60^2}=65$ mm.\n2. $\\theta=\\dfrac{25}{65}\\times360=138.46^\\circ$.\n3. Draw FV and TV, divide the TV circle into 12 parts, join the points to the apex in the FV.\n4. Draw a sector of radius 65 mm and angle $138.5^\\circ$; arc length $=\\pi\\times50=157.1$ mm; divide into 12 parts (13.09 mm each) and join to the apex.",
+       "points": [
+        "$L=65$ mm",
+        "$\\theta=138.46^\\circ$",
+        "12 equal divisions of arc (13.09 mm each)",
+        "Arc length 157.1 mm"
+       ]
+      }
+     ]
+    },
+    {
+     "id": "cut-cone",
+     "title": "Cone cut by a section plane",
+     "theory_md": "For a cone cut by a plane, find where the plane meets each generator, then bring those distances onto the development.\n\n1. FV and TV with 12 generators.\n2. Draw the cutting line in the FV (e.g. $60^\\circ$ to the HP through the mid-point of the axis, or parallel to the extreme generator at 10 mm). It cuts the generators at $a',b',c',\\ldots$.\n3. **True length from the apex:** draw a horizontal from each cut point to the **extreme generator** $o'1'$ (true length) and measure from $o'$.\n4. Development sector $L$, $\\theta=360\\,r/L$; set off each measured length from the apex on its generator.\n5. Join the points by a **smooth curve**. Keep the part asked (the lower, truncated part is the base side).\n\nPlane parallel to a generator gives a parabola; inclined across the axis gives an ellipse.",
+     "basics_md": "The cut point on a generator is some distance down from the apex. That distance, measured on the true-length generator, is the distance to mark on the flat sector.",
+     "key_points": [
+      "Mark cutting line in the FV and the points on the 12 generators",
+      "Horizontal from each cut point to extreme generator gives true length from apex",
+      "Set off these lengths on the sector generators",
+      "Smooth curve; keep the correct portion",
+      "Parallel-to-generator cut gives a parabola"
+     ],
+     "figures": [],
+     "questions": [
+      {
+       "id": "cc-q1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "To find the true distance of a cut point on a cone generator from the apex, you project it horizontally to the",
+       "options": [
+        "axis",
+        "base line",
+        "extreme generator",
+        "cutting plane"
+       ],
+       "answer_index": 2,
+       "why": "Only the extreme generator is true length in the FV, so lengths are transferred to it."
+      },
+      {
+       "id": "cc-q2",
+       "kind": "mcq",
+       "level": 2,
+       "q": "For a cone cut by a plane parallel to an extreme generator, the cut curve is a",
+       "options": [
+        "circle",
+        "ellipse",
+        "parabola",
+        "hyperbola"
+       ],
+       "answer_index": 2,
+       "why": "A plane parallel to one generator gives a parabola."
+      },
+      {
+       "id": "cc-p1",
+       "pyq": "3ecb2d353f269bb0",
+       "level": 2,
+       "points": [
+        "$L=65$ mm, sector angle $138.46^\\circ$",
+        "FV with 12 generators; cutting line at $60^\\circ$ through axis mid-point",
+        "Horizontals from cut points to the extreme generator give true lengths from the apex",
+        "Set off on sector generators and join by smooth curve",
+        "Lower (base side) portion shown as development of truncated cone"
+       ]
+      },
+      {
+       "id": "cc-p2",
+       "pyq": "38c4754064feb696",
+       "level": 3,
+       "points": [
+        "Slant length 65 mm and sector angle $138.46^\\circ$ shown",
+        "FV triangle and TV circle, 12 generators, AIP at $60^\\circ$ through mid-point of axis",
+        "Section curve (ellipse) projected to the TV and hatched",
+        "True lengths transferred to the sector, smooth curve drawn",
+        "Both projections and the development shown, part above the plane removed"
+       ]
+      },
+      {
+       "id": "cc-p3",
+       "pyq": "f592903df1264bc8",
+       "level": 3,
+       "points": [
+        "$L=65$ mm, sector angle $138.5^\\circ$",
+        "Cutting line parallel to extreme generator, 10 mm away, gives parabola",
+        "Cut points on generators and true lengths from apex by horizontals to the extreme generator",
+        "Smooth curve on the development",
+        "Remaining bigger portion hatched"
+       ]
+      },
+      {
+       "id": "cc-q3",
+       "kind": "long",
+       "level": 2,
+       "marks": 6,
+       "q": "A cone of base diameter 50 mm and axis 60 mm stands on its base on the HP. It is cut by a plane inclined at $45^\\circ$ to the HP and passing through the mid-point of the axis. Describe how to draw the development of the lower part.",
+       "model_answer_md": "**Given:** $r=25$, $h=60$, $L=65$ mm, $\\theta=138.46^\\circ$.\n1. Draw FV and TV, 12 generators.\n2. Draw the cutting line at $45^\\circ$ through the mid-point (30 mm up). Mark $a',b',\\ldots$ where it meets generators.\n3. Horizontals from each point to $o'1'$; measure from $o'$ as the true length.\n4. Draw the sector, radius 65 mm, angle $138.46^\\circ$, 12 equal divisions.\n5. Mark true lengths on the generators and join by a smooth curve.\n6. The part between the curve and the arc is the development of the lower part.",
+       "points": [
+        "Data $L$ and $\\theta$",
+        "Generators and cutting line at $45^\\circ$",
+        "True lengths by horizontals to extreme generator",
+        "Sector with 12 divisions, points set off",
+        "Smooth curve; lower portion shown"
+       ]
+      }
+     ]
+    }
+   ]
+  }
+ ]
+}

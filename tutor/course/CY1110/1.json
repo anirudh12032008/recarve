@@ -1,0 +1,1895 @@
+{
+ "code": "CY1110",
+ "unit": "Natural Resources",
+ "written": "2026-10-19",
+ "by": "claude-sonnet-5-5, in a Claude Code session",
+ "topics": [
+  {
+   "topic": "Renewable and non-renewable resources",
+   "subtopics": [
+    {
+     "id": "classification",
+     "title": "Natural resources and their classification",
+     "theory_md": "A **natural resource** is anything from the environment that humans use: air, water, soil, forests, minerals, fuels, sunlight.\n\nBy renewability:\n- **Inexhaustible**: not used up by use (solar, wind, tidal).\n- **Renewable**: regenerate naturally within a human time scale (forests, fresh water, soil, fish).\n- **Non-renewable**: fixed stock formed over geological time (coal, petroleum, natural gas, uranium, minerals). Consumption $\\gg$ formation. Metals can be recycled; fossil fuels cannot.\n\nBy origin: **biotic** (forests, animals, fossil fuels) and **abiotic** (water, air, minerals).\n\nYears a non-renewable stock lasts: $R/P = \\text{proven reserves}/\\text{annual production}$.",
+     "basics_md": "Think of a bank account. A renewable resource is a salary that arrives every month. A non-renewable one is a lump sum: every withdrawal leaves less, and nothing is paid back.",
+     "key_points": [
+      "Natural resource defined with examples",
+      "Three classes: inexhaustible, renewable, non-renewable, with two examples each",
+      "Non-renewable: consumption far exceeds formation (finite stock)",
+      "Coal, petroleum, gas, uranium and minerals are non-renewable; metals are recyclable"
+     ],
+     "questions": [
+      {
+       "id": "c-q1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "Which one is a non-renewable resource?",
+       "options": [
+        "Fresh water",
+        "Natural gas",
+        "Fish",
+        "Solar radiation"
+       ],
+       "answer_index": 1,
+       "why": "Natural gas formed over millions of years and cannot be replaced on a human time scale."
+      },
+      {
+       "id": "c-q2",
+       "kind": "short",
+       "level": 2,
+       "marks": 2,
+       "q": "Differentiate renewable and non-renewable resources with two examples each.",
+       "model_answer_md": "| Renewable | Non-renewable |\n|---|---|\n| Regenerate naturally in a human time scale | Fixed stock formed over geological time |\n| Last if use $\\le$ regeneration | Deplete with every use (consumption $\\gg$ formation) |\n| e.g. forests, fresh water, soil, solar energy | e.g. coal, petroleum, natural gas, iron ore |",
+       "points": [
+        "Renewable regenerate in a human time scale; non-renewable do not",
+        "Use rate versus regeneration rate stated",
+        "Two correct examples of each"
+       ]
+      },
+      {
+       "id": "c-p1",
+       "pyq": "fdcf99fbb83e3608",
+       "level": 1,
+       "points": [
+        "E) Both B) and D)",
+        "Coal and methane (natural gas) are fossil fuels formed over millions of years, so non-renewable",
+        "Solar and hydroelectric are renewable"
+       ]
+      },
+      {
+       "id": "c-p2",
+       "pyq": "7b47fd5de425e62f",
+       "level": 2,
+       "points": [
+        "False",
+        "A non-renewable resource is finite: consumption far exceeds its natural formation",
+        "Consumption = production describes a renewable resource used sustainably"
+       ]
+      },
+      {
+       "id": "c-q3",
+       "kind": "numerical",
+       "level": 2,
+       "marks": 3,
+       "q": "A country has proven coal reserves of 600 Gt and produces 8 Gt per year. For how many years will the coal last at this rate? Why is the real figure usually different?",
+       "model_answer_md": "$R/P = \\dfrac{600\\ \\text{Gt}}{8\\ \\text{Gt/yr}} = 75\\ \\text{years}$\n\nThe real figure differs because production usually **rises** with demand (shorter life), while new discoveries and better recovery add to reserves (longer life).",
+       "points": [
+        "R/P = reserves / annual production",
+        "75 years with units",
+        "Production growth and new discoveries change it"
+       ]
+      }
+     ]
+    },
+    {
+     "id": "overuse",
+     "title": "When a renewable resource becomes non-renewable",
+     "theory_md": "A renewable resource stays renewable only while **use rate $\\le$ regeneration rate** (sustainable yield). If use exceeds regeneration for long, the stock collapses and the resource behaves as non-renewable.\n\n- **Forests**: felled or burnt faster than they regrow (short jhum cycle, timber felling); barren land follows.\n- **Groundwater**: pumped faster than rain recharges (Punjab, Haryana); the water table keeps falling.\n- **Soil**: 2.5 cm of topsoil takes several hundred years to form but erosion can remove it in a few years.\n- **Fish and wildlife**: overfishing and hunting cause extinction, which is irreversible.\n\nConservation: 3Rs (reduce, reuse, recycle), efficiency, substitution by renewables.",
+     "basics_md": "A well refills from rain. Draw a bucket a day and it stays full. Draw ten buckets a day and it runs dry, and then it is as good as a resource that never refills.",
+     "key_points": [
+      "Renewable only if use $\\le$ regeneration (sustainable yield)",
+      "Overuse exhausts the stock, so it behaves as non-renewable",
+      "Examples: forests, groundwater, soil, fish or wildlife",
+      "Remedy: 3Rs, efficiency, renewable substitutes"
+     ],
+     "questions": [
+      {
+       "id": "o-q1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "A renewable resource remains renewable only if",
+       "options": [
+        "its rate of use is at most its rate of regeneration",
+        "it is stored underground",
+        "it is used only in rural areas",
+        "it is first recycled"
+       ],
+       "answer_index": 0,
+       "why": "This is the sustainable yield condition."
+      },
+      {
+       "id": "o-q2",
+       "kind": "mcq",
+       "level": 2,
+       "q": "Which overuse example turns a renewable resource into an effectively non-renewable one?",
+       "options": [
+        "Using sunlight for solar cells",
+        "Pumping groundwater far faster than recharge",
+        "Planting trees on fallow land",
+        "Rainwater harvesting"
+       ],
+       "answer_index": 1,
+       "why": "The water table falls and deep aquifers cannot refill within a human time scale."
+      },
+      {
+       "id": "o-p1",
+       "pyq": "6b92f64dccc2b70e",
+       "level": 2,
+       "points": [
+        "Yes, a renewable resource can become non-renewable [1]",
+        "Renewable only while rate of use $\\le$ rate of regeneration; sustained overuse exhausts it",
+        "Forests: cut faster than they regrow (jhum, timber) leave barren land",
+        "Groundwater: pumped faster than recharge (Punjab, Haryana)",
+        "Soil: 2.5 cm takes centuries to form, erosion removes it quickly; overfishing or hunting causes extinction",
+        "Conclusion: renewability depends on sustainable use"
+       ]
+      },
+      {
+       "id": "o-q3",
+       "kind": "short",
+       "level": 3,
+       "marks": 3,
+       "q": "State three steps an individual can take to conserve natural resources, and say which resource each protects.",
+       "model_answer_md": "1. **Switch off lights and use LED/efficient appliances**: saves coal and other fuels burnt for electricity.\n2. **Fix leaks, harvest rainwater, use drip or bucket methods**: saves fresh water and groundwater.\n3. **Reduce, reuse, recycle paper, metals and plastic; go paperless**: saves forests and minerals.\n4. Plant trees, use public transport, avoid food waste.",
+       "points": [
+        "Three distinct individual actions",
+        "Each linked to the resource it saves",
+        "3Rs mentioned"
+       ]
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "topic": "Forest resources",
+   "subtopics": [
+    {
+     "id": "uses-forests",
+     "title": "Uses of forests and their ecological role",
+     "theory_md": "Forests cover about 21.7% of India (ISFR 2021); the National Forest Policy 1988 target is 33% (two-thirds in hills).\n\n**Commercial uses**: timber, fuelwood, pulp and paper, bamboo, gums, resins, lac, medicinal plants.\n\n**Ecological services**:\n- Carbon sink: absorb $\\mathrm{CO_2}$ in photosynthesis and release $\\mathrm{O_2}$.\n- Watershed: regulate the water cycle, recharge groundwater, reduce floods.\n- Roots bind soil, preventing erosion and landslides.\n- Habitat for most terrestrial biodiversity; local climate control.\n\n**Deforestation and global warming**: removing trees removes the sink, and burning or decay of felled wood releases stored carbon as $\\mathrm{CO_2}$.",
+     "basics_md": "A forest is a giant sponge, filter and air-conditioner at once. It soaks up rain, holds the soil with its roots and takes carbon dioxide out of the air.",
+     "key_points": [
+      "India forest cover about 21.7%, policy target 33%",
+      "Commercial uses: timber, fuelwood, paper, gums, medicines",
+      "Ecological: carbon sink, water cycle, soil binding, biodiversity, climate",
+      "Deforestation removes the carbon sink and releases stored $\\mathrm{CO_2}$"
+     ],
+     "questions": [
+      {
+       "id": "u-q1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "The National Forest Policy 1988 sets the target of forest and tree cover at",
+       "options": [
+        "10%",
+        "21.7%",
+        "33%",
+        "50%"
+       ],
+       "answer_index": 2,
+       "why": "33% of the land (two-thirds in hills). 21.7% is the actual forest cover, a common mix-up."
+      },
+      {
+       "id": "u-q2",
+       "kind": "short",
+       "level": 2,
+       "marks": 3,
+       "q": "List the ecological functions of forests.",
+       "model_answer_md": "1. **Carbon sink and oxygen**: absorb $\\mathrm{CO_2}$, release $\\mathrm{O_2}$ (reduce global warming).\n2. **Water cycle**: transpiration, rainfall, watershed protection and groundwater recharge.\n3. **Soil conservation**: roots bind soil, prevent erosion and landslides.\n4. **Flood and drought control** by slowing runoff.\n5. **Habitat** for wildlife and biodiversity; moderate local climate.",
+       "points": [
+        "Carbon sink and oxygen",
+        "Water cycle and groundwater",
+        "Soil conservation",
+        "Biodiversity and climate regulation"
+       ]
+      },
+      {
+       "id": "u-p1",
+       "pyq": "d76641e44ed45cb5",
+       "level": 1,
+       "points": [
+        "Forests are carbon sinks absorbing $\\mathrm{CO_2}$ in photosynthesis",
+        "Deforestation removes the sink",
+        "Burning or decay of felled wood releases stored carbon as $\\mathrm{CO_2}$",
+        "Greenhouse gases rise, so global temperature rises"
+       ]
+      },
+      {
+       "id": "u-q3",
+       "kind": "mcq",
+       "level": 2,
+       "q": "Which is a COMMERCIAL use of forests?",
+       "options": [
+        "Carbon sequestration",
+        "Lac, resins and timber",
+        "Flood control",
+        "Soil binding"
+       ],
+       "answer_index": 1,
+       "why": "The others are ecological services."
+      }
+     ]
+    },
+    {
+     "id": "deforestation",
+     "title": "Deforestation: causes, effects and remedies",
+     "theory_md": "**Causes**: agriculture, **shifting cultivation** (jhum, North-East India: cut, burn, farm 2-3 years, abandon; the fallow cycle has shrunk from 20-30 to 2-5 years), **overgrazing** (seedlings eaten and trampled, no regeneration), fuelwood and timber, mining, dams, roads, urbanisation, fires.\n\n**Effects**: loss of biodiversity, soil erosion, **floods** (more runoff), **droughts** (less transpiration and rain), **landslides** (roots no longer bind the soil), siltation of reservoirs, more $\\mathrm{CO_2}$, desertification.\n\n**Dams**: submerge forest, fragment habitat, displace tribal people.\n\n**Remedies**: afforestation, social and agro-forestry, Joint Forest Management, planting trees, paperless work, recycling, protected areas.",
+     "basics_md": "Roots are like nails holding a hillside together. Cut the forest and the nails are gone, so rain washes the soil down and the stream floods.",
+     "key_points": [
+      "Causes: shifting cultivation, overgrazing, agriculture, timber, mining, dams",
+      "Jhum: short fallow cycle, forest cannot regrow; overgrazing stops regeneration",
+      "Effects: biodiversity loss, erosion, flood, drought, landslide, global warming",
+      "Remedies: afforestation, social forestry, JFM, recycling"
+     ],
+     "questions": [
+      {
+       "id": "d-q1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "Landslides after deforestation occur mainly because",
+       "options": [
+        "rainfall increases",
+        "tree roots no longer bind the soil",
+        "groundwater is polluted",
+        "the soil becomes more acidic"
+       ],
+       "answer_index": 1,
+       "why": "Roots hold the slope together."
+      },
+      {
+       "id": "d-q2",
+       "kind": "long",
+       "level": 2,
+       "marks": 5,
+       "q": "What is deforestation? Discuss its causes and effects.",
+       "model_answer_md": "**Deforestation** is the large-scale removal of forest cover for other uses.\n\n**Causes**\n1. Agricultural expansion and **shifting cultivation** (jhum).\n2. **Overgrazing** beyond carrying capacity.\n3. Fuelwood and timber demand; paper industry.\n4. Mining, dams, roads and urbanisation; forest fires.\n\n**Effects**\n1. Loss of biodiversity and medicinal plants.\n2. Soil erosion, siltation, landslides.\n3. Floods and droughts (water cycle disturbed).\n4. Global warming: carbon sink lost, $\\mathrm{CO_2}$ released.\n5. Desertification and loss of tribal livelihood.",
+       "points": [
+        "Definition",
+        "At least four causes",
+        "At least four effects incl. climate, soil, biodiversity",
+        "Organised under headings"
+       ]
+      },
+      {
+       "id": "d-p1",
+       "pyq": "202fff8fce8bc47e",
+       "level": 2,
+       "points": [
+        "Shifting cultivation: cut and burn forest, farm 2-3 years, abandon; fallow cycle shrunk from 20-30 to 2-5 years so forest never recovers",
+        "Burning releases $\\mathrm{CO_2}$, kills soil organisms, exposes slopes to erosion",
+        "Overgrazing: cattle, goats and sheep beyond carrying capacity eat and trample seedlings, regeneration stops",
+        "Soil compaction and erosion lead to scrub, barren land and desertification",
+        "Both remove trees faster than they regrow"
+       ]
+      },
+      {
+       "id": "d-p2",
+       "pyq": "350d3617ac00ab92",
+       "level": 1,
+       "points": [
+        "C) North-East India",
+        "Shifting cultivation is called jhum there, practised by tribal communities"
+       ]
+      },
+      {
+       "id": "d-p3",
+       "pyq": "19d7e779c5a0149b",
+       "level": 1,
+       "points": [
+        "D) loosing of soil",
+        "Tree roots bind soil on slopes; once forests are cut the soil is loose and slides in rain"
+       ]
+      },
+      {
+       "id": "d-p4",
+       "pyq": "7381176dae4b88d1",
+       "level": 1,
+       "points": [
+        "D) acid mine drainage",
+        "It comes from oxidation of pyrite in mines, not from loss of forest",
+        "Biodiversity loss, drought and flood are effects of deforestation"
+       ]
+      },
+      {
+       "id": "d-p5",
+       "pyq": "e7b980eee819c240",
+       "level": 2,
+       "points": [
+        "F) Not encouraging recycling of used products",
+        "Not recycling raises demand for fresh wood, paper and land",
+        "Planting trees, going paperless and eating vegetarian meals reduce deforestation"
+       ]
+      },
+      {
+       "id": "d-q3",
+       "kind": "mcq",
+       "level": 2,
+       "q": "Shifting cultivation causes deforestation mainly because",
+       "options": [
+        "the fallow period has become too short for the forest to regrow",
+        "it plants too many trees",
+        "it uses heavy machinery",
+        "it needs no burning"
+       ],
+       "answer_index": 0,
+       "why": "Fallow cycle fell from 20-30 to 2-5 years."
+      }
+     ]
+    },
+    {
+     "id": "forest-cases",
+     "title": "Sariska, Chipko and other forest case studies",
+     "theory_md": "**Sariska Tiger Reserve**: Alwar district, **Rajasthan** (Aravalli hills); Project Tiger reserve since 1978. Marble and limestone **mining**, tree felling, grazing and roads destroyed habitat; organised **poaching** wiped out all tigers (Tiger Task Force, 2005). After the Supreme Court banned mining, tigers were **relocated from Ranthambhore** from 2008.\n\n**Chipko** (1973, Garhwal, Uttarakhand): villagers hugged trees; Sunderlal Bahuguna, Chandi Prasad Bhatt, Gaura Devi (Reni, 1974).\n**Appiko** (1983, Karnataka). **Silent Valley** (Kerala): dam stopped, national park. **Narmada Bachao Andolan** (Medha Patkar) against Sardar Sarovar.",
+     "basics_md": "Sariska is the cautionary tale: a protected forest still lost its tigers when mining and poachers came in.",
+     "key_points": [
+      "Sariska: Alwar, Rajasthan, Project Tiger 1978",
+      "Causes: mining, felling, grazing, poaching; all tigers gone by 2005",
+      "Revival: mining ban, Ranthambhore tigers from 2008",
+      "Chipko 1973 Uttarakhand; Appiko 1983 Karnataka"
+     ],
+     "questions": [
+      {
+       "id": "f-q1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "The Chipko movement began in",
+       "options": [
+        "Karnataka in 1983",
+        "Garhwal (Uttarakhand) in 1973",
+        "Kerala in 1984",
+        "Rajasthan in 1978"
+       ],
+       "answer_index": 1,
+       "why": "Karnataka and 1983 is Appiko."
+      },
+      {
+       "id": "f-q2",
+       "kind": "short",
+       "level": 2,
+       "marks": 3,
+       "q": "Write a short note on the destruction of Sariska Tiger Reserve (50-75 words).",
+       "model_answer_md": "Sariska, in Alwar district of Rajasthan (Aravallis), became a Project Tiger reserve in 1978. Large-scale **marble and limestone mining**, tree felling, grazing and roads degraded its habitat, and organised **poaching** removed every tiger, confirmed by the Tiger Task Force in 2005. After the Supreme Court banned mining, tigers were **relocated from Ranthambhore** from 2008 to revive the population.",
+       "points": [
+        "Location and Project Tiger status",
+        "Mining and habitat loss",
+        "Poaching, no tigers by 2005",
+        "Ranthambhore relocation after mining ban"
+       ]
+      },
+      {
+       "id": "f-p1",
+       "pyq": "be5f3e22141594dc",
+       "level": 2,
+       "points": [
+        "Sariska, Alwar district, Rajasthan, Project Tiger reserve 1978",
+        "Marble and limestone mining, felling, grazing, roads destroyed habitat",
+        "Organised poaching wiped out all tigers (Tiger Task Force 2005)",
+        "Supreme Court banned mining; tigers relocated from Ranthambhore from 2008"
+       ]
+      },
+      {
+       "id": "f-p2",
+       "pyq": "c5d62af4fee6d574",
+       "level": 2,
+       "points": [
+        "Sariska, Alwar, Rajasthan (Aravallis), Project Tiger reserve 1978",
+        "Mining, fuelwood cutting, grazing degraded forest",
+        "Poaching wiped out all tigers; none left in 2005",
+        "Relocation from Ranthambhore from 2008 restored the reserve"
+       ]
+      },
+      {
+       "id": "f-p3",
+       "pyq": "876cd6c2222e689f",
+       "level": 1,
+       "points": [
+        "B) Rajasthan",
+        "Sariska is in Alwar district in the Aravalli hills; Jim Corbett is in Uttarakhand"
+       ]
+      },
+      {
+       "id": "f-q3",
+       "kind": "mcq",
+       "level": 2,
+       "q": "Which pair is correctly matched?",
+       "options": [
+        "Appiko: Uttarakhand",
+        "Chipko: Karnataka",
+        "Silent Valley: Kerala",
+        "Sariska: Assam"
+       ],
+       "answer_index": 2,
+       "why": "Appiko is Karnataka, Chipko Uttarakhand, Sariska Rajasthan."
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "topic": "Water resources",
+   "subtopics": [
+    {
+     "id": "water-properties",
+     "title": "Water on Earth and why its properties matter",
+     "theory_md": "Earth's water is about **97.5% saline**; only **2.5% is fresh**, mostly as ice and groundwater, and under 1% is easily usable. India has about 18% of the world's people but about 4% of its fresh water.\n\n**Falkenmark indicator** (per-capita availability): stress below 1700, scarcity below 1000, absolute scarcity below 500 $\\mathrm{m^3/person/yr}$.\n\n**Properties that matter**: high **surface tension** (with cohesion and adhesion: capillary rise of water in tree trunks); high specific heat; **universal solvent**; liquid from 0 to 100 °C; **anomalous expansion** (densest at 4 °C, so ice floats and aquatic life survives under it).",
+     "basics_md": "Almost all water is salty, and most of the fresh part is frozen or deep underground. The water we can actually use is a tiny fraction.",
+     "key_points": [
+      "97.5% saline, 2.5% fresh, under 1% easily usable",
+      "Falkenmark: stress < 1700, scarcity < 1000 $\\mathrm{m^3/person/yr}$",
+      "Surface tension gives capillary rise in trees",
+      "Anomalous expansion lets ice float and protects aquatic life"
+     ],
+     "questions": [
+      {
+       "id": "w-q1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "The percentage of Earth's water that is fresh is about",
+       "options": [
+        "2.5",
+        "10",
+        "25",
+        "97.5"
+       ],
+       "answer_index": 0,
+       "why": "97.5% is saline."
+      },
+      {
+       "id": "w-q2",
+       "kind": "numerical",
+       "level": 2,
+       "marks": 3,
+       "q": "A river basin supplies $3.0\\times10^{9}\\ \\mathrm{m^3}$ of renewable water per year to 2.5 million people. Find the per-capita availability and classify the basin.",
+       "model_answer_md": "$\\text{Per capita} = \\dfrac{3.0\\times10^{9}\\ \\mathrm{m^3/yr}}{2.5\\times10^{6}\\ \\text{persons}} = 1200\\ \\mathrm{m^3/person/yr}$\n\nThis is below 1700, so the basin is **water-stressed**, but above 1000, so not yet water-scarce.",
+       "points": [
+        "Divide annual water by population",
+        "1200 $\\mathrm{m^3/person/yr}$ with units",
+        "Below 1700 stress line, above 1000 scarcity line"
+       ]
+      },
+      {
+       "id": "w-p1",
+       "pyq": "11c14773b21a3125",
+       "level": 2,
+       "points": [
+        "(a) rise of water through trunks of trees",
+        "High surface tension with cohesion and adhesion gives capillary rise in xylem",
+        "Survival under ice is due to anomalous expansion, cloud formation to latent heat, so (d) is wrong"
+       ]
+      },
+      {
+       "id": "w-p2",
+       "pyq": "8aebb61f1855cf60",
+       "level": 2,
+       "points": [
+        "(d) Both a and c",
+        "Edible oils such as coconut oil or ghee solidify near ordinary temperature, so body fluid could freeze",
+        "Fats deposit in arteries, raising heart attack chance",
+        "Water is liquid from 0 to 100 °C and a universal solvent; (b) is unrelated"
+       ]
+      },
+      {
+       "id": "w-q3",
+       "kind": "mcq",
+       "level": 2,
+       "q": "Ice floats on water and aquatic life survives under it because of",
+       "options": [
+        "high surface tension",
+        "anomalous expansion (maximum density at 4 °C)",
+        "high solvent power",
+        "capillarity"
+       ],
+       "answer_index": 1,
+       "why": "Surface tension explains capillary rise, not floating ice."
+      }
+     ]
+    },
+    {
+     "id": "groundwater",
+     "title": "Aquifers and overuse of groundwater",
+     "theory_md": "An **aquifer** is a permeable underground layer (sand, gravel, porous sandstone) that stores groundwater and yields it freely to wells. It may be **unconfined** (open to recharge from above) or **confined** (between impermeable layers).\n\n**Good aquifer**: porous and permeable (sand, gravel). **Clay** is porous but has tiny pores and very low permeability, so it is an aquiclude, a bad aquifer.\n\n**Overuse of groundwater**: falling water table, drying wells, land subsidence, sea-water intrusion in coastal areas, more arsenic and fluoride in deep water.\n**Overuse of surface water**: dries rivers downstream, destroys wetlands.",
+     "basics_md": "Water sits in the gaps between grains. Big connected gaps (sand, gravel) let it flow to a well. Clay has gaps too, but so tiny that water barely moves.",
+     "key_points": [
+      "Aquifer: permeable rock storing and yielding groundwater",
+      "Unconfined versus confined",
+      "Sand and gravel good; clay is porous but impermeable",
+      "Overuse: falling table, subsidence, saline intrusion, arsenic and fluoride"
+     ],
+     "questions": [
+      {
+       "id": "g-q1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "A good aquifer must be",
+       "options": [
+        "porous and permeable",
+        "porous and impermeable",
+        "non-porous",
+        "made of clay"
+       ],
+       "answer_index": 0,
+       "why": "Water must be stored and also flow."
+      },
+      {
+       "id": "g-q2",
+       "kind": "short",
+       "level": 2,
+       "marks": 3,
+       "q": "Discuss the effects of over-utilisation of groundwater.",
+       "model_answer_md": "1. **Falling water table**: wells and borewells dry up (Punjab, Haryana, Rajasthan).\n2. **Land subsidence**: ground sinks as water is removed from the aquifer.\n3. **Sea-water intrusion**: in coastal aquifers saline water enters.\n4. **Quality loss**: deeper water has more arsenic, fluoride.\n5. Higher pumping cost; reduced base flow of rivers.",
+       "points": [
+        "Falling table",
+        "Subsidence",
+        "Saline intrusion",
+        "Arsenic and fluoride"
+       ]
+      },
+      {
+       "id": "g-p1",
+       "pyq": "ce98b4be88fb819c",
+       "level": 1,
+       "points": [
+        "Aquifer: permeable underground layer of rock or sediment (sand, gravel, porous sandstone)",
+        "Stores groundwater and yields it freely to wells and springs",
+        "Unconfined (open to recharge) or confined (between impermeable layers)"
+       ]
+      },
+      {
+       "id": "g-p2",
+       "pyq": "c3554288f466993a",
+       "level": 1,
+       "points": [
+        "(c) both a and b",
+        "Sand and gravel have large connected pores: porous and permeable",
+        "Clay has tiny pores, very low permeability, an aquiclude"
+       ]
+      },
+      {
+       "id": "g-p3",
+       "pyq": "eebecc4ea9d131fb",
+       "level": 1,
+       "points": [
+        "(d) clay",
+        "Very fine pores and low permeability, holds water but does not let it flow",
+        "Sand and gravel make good aquifers"
+       ]
+      },
+      {
+       "id": "g-q3",
+       "kind": "mcq",
+       "level": 2,
+       "q": "Sea-water intrusion into an aquifer is caused by",
+       "options": [
+        "over-pumping of coastal groundwater",
+        "heavy rainfall",
+        "afforestation",
+        "rainwater harvesting"
+       ],
+       "answer_index": 0,
+       "why": "Lowered fresh-water head lets saline water enter."
+      }
+     ]
+    },
+    {
+     "id": "dams-conflicts",
+     "title": "Big dams and water conflicts (Cauvery, Tehri)",
+     "theory_md": "**Dam benefits**: irrigation, hydropower, drinking water, flood control, fisheries.\n**Problems**: displacement of people, submergence of forest, siltation, waterlogging and salinity in the command area, reservoir-induced seismicity, loss of fish migration.\n\n**Tehri Dam**: Bhagirathi river, Tehri Garhwal, **Uttarakhand**; India's tallest dam; opposed by Sunderlal Bahuguna.\n\n**Cauvery dispute**: river rises at Talakaveri (Kodagu, Karnataka), flows through **Tamil Nadu** to the Bay of Bengal; tributaries in **Kerala**; delta region Karaikal of **Puducherry**. 1892 and 1924 agreements; Tribunal award 2007 (TN 419, Karnataka 270, Kerala 30, Puducherry 7 TMC ft); Supreme Court 2018 (Karnataka 284.75, TN 404.25); Cauvery Water Management Authority formed.",
+     "basics_md": "A dam is a trade: water and power for some people, lost land and homes for others. A river that crosses state borders turns that trade into an argument over shares.",
+     "key_points": [
+      "Dam benefits and problems listed separately",
+      "Tehri: Bhagirathi, Uttarakhand",
+      "Cauvery parties: Karnataka, Tamil Nadu, Kerala, Puducherry",
+      "Tribunal 2007 and Supreme Court 2018 shares; CWMA"
+     ],
+     "questions": [
+      {
+       "id": "m-q1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "The Cauvery river rises in",
+       "options": [
+        "Tamil Nadu",
+        "Kerala",
+        "Karnataka",
+        "Puducherry"
+       ],
+       "answer_index": 2,
+       "why": "At Talakaveri in Kodagu, Karnataka."
+      },
+      {
+       "id": "m-q2",
+       "kind": "mcq",
+       "level": 2,
+       "q": "The Supreme Court (2018) modified the Cauvery award to give Karnataka",
+       "options": [
+        "270 TMC ft",
+        "284.75 TMC ft",
+        "419 TMC ft",
+        "404.25 TMC ft"
+       ],
+       "answer_index": 1,
+       "why": "270 was the 2007 Tribunal figure; 404.25 is Tamil Nadu's 2018 share."
+      },
+      {
+       "id": "m-q3",
+       "kind": "short",
+       "level": 2,
+       "marks": 3,
+       "q": "Discuss the benefits and problems of big dams.",
+       "model_answer_md": "**Benefits**: irrigation, hydropower, drinking water supply, flood control, fisheries.\n\n**Problems**: displacement of tribal and rural people; submergence of forests and loss of biodiversity; siltation; waterlogging and salinity in the command area; reservoir-induced seismicity; blocked fish migration.",
+       "points": [
+        "Benefits listed",
+        "Problems listed",
+        "Both sides given"
+       ]
+      },
+      {
+       "id": "m-p1",
+       "pyq": "8ec66fc2e688b77b",
+       "level": 2,
+       "points": [
+        "Parties: Karnataka, Tamil Nadu, Kerala (tributaries), Puducherry (Karaikal)",
+        "Background: 1892 and 1924 agreements; Tribunal 2007; Supreme Court 2018; Cauvery Water Management Authority",
+        "Tamil Nadu: delta rice bowl, Mettur dam, drinking water",
+        "Karnataka: KRS and Kabini dams, Mandya farms, Bengaluru water, hydropower",
+        "Kerala and Puducherry: irrigation and drinking water; supports millions, hence contentious"
+       ]
+      },
+      {
+       "id": "m-p2",
+       "pyq": "db84f4599826517f",
+       "level": 2,
+       "points": [
+        "Rises at Talakaveri, Kodagu, flows through Tamil Nadu to Bay of Bengal",
+        "Karnataka, Tamil Nadu, Kerala, Puducherry dispute it, 1892 and 1924 agreements",
+        "Tribunal 2007: Tamil Nadu 419, Karnataka 270 TMC ft",
+        "Supreme Court 2018: Karnataka 284.75, TN 404.25; CWMA formed"
+       ]
+      },
+      {
+       "id": "m-p3",
+       "pyq": "1d65dcc61ccf4b13",
+       "level": 1,
+       "points": [
+        "(a) Uttarakhand",
+        "On the Bhagirathi, Tehri Garhwal; India's tallest dam; Himachal is tempting because of Bhakra"
+       ]
+      }
+     ]
+    },
+    {
+     "id": "flood-conservation",
+     "title": "Floods, droughts and rainwater harvesting",
+     "theory_md": "**Floods**: heavy rain made worse by deforestation, siltation and encroachment of flood plains. **Droughts**: failed monsoon made worse by over-pumping, deforestation and water-intensive crops. Both are partly man-made.\n\n**Conservation**: rainwater harvesting, watershed management, check dams, drip and sprinkler irrigation, reuse of treated wastewater.\n\n**Rooftop harvesting potential**: $V = A \\times R \\times C$ with $A$ catchment area ($\\mathrm{m^2}$), $R$ annual rainfall (m, convert mm to m), $C$ runoff coefficient. $1\\ \\mathrm{m^3}=1000$ L.",
+     "basics_md": "Rain falling on a roof is free water. Catch it in a tank or send it underground, instead of letting it run into the drain.",
+     "key_points": [
+      "Floods and droughts have human causes",
+      "Conservation: harvesting, watershed, drip, reuse",
+      "$V = A R C$ with rainfall in metres"
+     ],
+     "questions": [
+      {
+       "id": "h-q1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "In $V=A\\times R\\times C$, the term $C$ is the",
+       "options": [
+        "cost factor",
+        "runoff coefficient",
+        "capacity of the tank",
+        "concentration"
+       ],
+       "answer_index": 1,
+       "why": "The fraction of rain that can actually be collected."
+      },
+      {
+       "id": "h-q2",
+       "kind": "numerical",
+       "level": 2,
+       "marks": 3,
+       "q": "A roof of 100 $\\mathrm{m^2}$ receives 800 mm of rain a year; the runoff coefficient is 0.8. Find the water that can be harvested in litres per year.",
+       "model_answer_md": "$R = 800\\ \\text{mm} = 0.8\\ \\text{m}$\n\n$V = A\\times R\\times C = 100\\times0.8\\times0.8 = 64\\ \\mathrm{m^3}$\n\n$64\\ \\mathrm{m^3}\\times1000 = 64\\,000\\ \\text{L/yr}$",
+       "points": [
+        "Convert mm to m",
+        "V = ARC applied",
+        "64 $\\mathrm{m^3}$ = 64 000 L"
+       ]
+      },
+      {
+       "id": "h-q3",
+       "kind": "short",
+       "level": 2,
+       "marks": 3,
+       "q": "Why are floods and droughts called partly man-made?",
+       "model_answer_md": "**Floods** worsen when deforestation increases runoff, silt raises river beds, and flood plains are built over. **Droughts** worsen when groundwater is over-pumped, forests are cut (less transpiration and rain) and water-hungry crops are grown in dry regions. Nature triggers them; human activity magnifies them.",
+       "points": [
+        "Natural trigger plus human aggravation",
+        "Flood factors: deforestation, siltation, encroachment",
+        "Drought factors: over-pumping, deforestation, crop choice"
+       ]
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "topic": "Mineral resources",
+   "subtopics": [
+    {
+     "id": "ores",
+     "title": "Minerals and ores: composition",
+     "theory_md": "**Minerals** are naturally occurring inorganic substances with definite composition; an **ore** is a mineral from which a metal can be extracted profitably. They are non-renewable (metals recyclable).\n\n| Mineral | Formula |\n|---|---|\n| Hematite | $\\mathrm{Fe_2O_3}$ |\n| Magnetite | $\\mathrm{Fe_3O_4}$ |\n| Limonite | $\\mathrm{FeO(OH)\\cdot nH_2O}$ |\n| Siderite | $\\mathrm{FeCO_3}$ |\n| Bauxite | $\\mathrm{Al_2O_3\\cdot nH_2O}$ |\n| Gypsum | $\\mathrm{CaSO_4\\cdot2H_2O}$ |\n| Dolomite | $\\mathrm{CaMg(CO_3)_2}$ |\n| Limestone | $\\mathrm{CaCO_3}$ |\n| Pyrite | $\\mathrm{FeS_2}$ |",
+     "basics_md": "An ore is a rock worth digging up because it holds a useful metal in good amount. The name tells the compound: hematite is iron oxide, gypsum is hydrated calcium sulphate.",
+     "key_points": [
+      "Mineral: natural inorganic, definite composition; ore: metal extractable profitably",
+      "Iron ores: hematite $\\mathrm{Fe_2O_3}$, magnetite $\\mathrm{Fe_3O_4}$, limonite, siderite",
+      "Gypsum $\\mathrm{CaSO_4\\cdot2H_2O}$; dolomite $\\mathrm{CaMg(CO_3)_2}$",
+      "Bauxite is the aluminium ore"
+     ],
+     "questions": [
+      {
+       "id": "r-q1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "The chemical formula of hematite is",
+       "options": [
+        "$\\mathrm{Fe_3O_4}$",
+        "$\\mathrm{Fe_2O_3}$",
+        "$\\mathrm{FeCO_3}$",
+        "$\\mathrm{FeS_2}$"
+       ],
+       "answer_index": 1,
+       "why": "Fe3O4 is magnetite, FeCO3 siderite, FeS2 pyrite."
+      },
+      {
+       "id": "r-q2",
+       "kind": "short",
+       "level": 2,
+       "marks": 2,
+       "q": "Differentiate a mineral from an ore. Give the formula of one iron ore and of gypsum.",
+       "model_answer_md": "A **mineral** is a naturally occurring inorganic substance of definite composition; an **ore** is a mineral (or rock) from which a metal can be extracted economically.\n\nIron ore: hematite $\\mathrm{Fe_2O_3}$. Gypsum: $\\mathrm{CaSO_4\\cdot2H_2O}$.",
+       "points": [
+        "Mineral versus ore",
+        "Correct iron ore formula",
+        "Gypsum formula"
+       ]
+      },
+      {
+       "id": "r-p1",
+       "pyq": "2620f6af9be992e0",
+       "level": 1,
+       "points": [
+        "(c) $\\mathrm{FeO(OH)\\cdot nH_2O}$",
+        "Limonite is a hydrated iron(III) oxide-hydroxide ore",
+        "$\\mathrm{CaMg(CO_3)_2}$ is dolomite, $\\mathrm{K_3[Fe(CN)_6]}$ is a lab compound"
+       ]
+      },
+      {
+       "id": "r-p2",
+       "pyq": "2195384ddddcdf13",
+       "level": 1,
+       "points": [
+        "(a) $\\mathrm{CaSO_4\\cdot2H_2O}$",
+        "Hydrated calcium sulphate",
+        "Ca(OCl)Cl is bleaching powder, Fe3O4 magnetite"
+       ]
+      },
+      {
+       "id": "r-q3",
+       "kind": "mcq",
+       "level": 2,
+       "q": "Which pair of mineral and formula is correct?",
+       "options": [
+        "Dolomite: $\\mathrm{CaCO_3}$",
+        "Gypsum: $\\mathrm{CaSO_4\\cdot2H_2O}$",
+        "Magnetite: $\\mathrm{Fe_2O_3}$",
+        "Bauxite: $\\mathrm{FeS_2}$"
+       ],
+       "answer_index": 1,
+       "why": "Dolomite is CaMg(CO3)2, magnetite Fe3O4, bauxite the aluminium ore."
+      }
+     ]
+    },
+    {
+     "id": "mining-methods",
+     "title": "Types of mining",
+     "theory_md": "- **Open pit / surface mining**: overburden removed in layers; shallow deposits (iron ore, coal, limestone). Strips vegetation and clears **vast areas of forest**.\n- **Sub-surface (underground) mining**: shafts and tunnels reach deep deposits (coal, gold); leaves **large cavities underground**, causing subsidence.\n- **Placer mining**: loose alluvial deposits of heavy minerals (gold, tin, sand) recovered by **dredging** or **hydraulic mining** (high-pressure water jets).\n- **In-situ leaching**: ore dissolved in place by a chemical solution (e.g. copper, uranium), little surface disturbance.\n- **Auger mining**: boring into a coal seam on a hillside.",
+     "basics_md": "Match the method to where the ore sits: near the top, dig a pit; deep down, tunnel; loose in river sand, wash or scoop it; dissolvable, pump a solution through it.",
+     "key_points": [
+      "Open pit: surface, forest and land cleared",
+      "Sub-surface: underground cavities, subsidence",
+      "Placer: dredging and hydraulic mining",
+      "In-situ leaching: chemical dissolution in place"
+     ],
+     "questions": [
+      {
+       "id": "t-q1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "Which mining method works through shafts and tunnels?",
+       "options": [
+        "Open pit",
+        "Placer",
+        "Sub-surface",
+        "Dredging"
+       ],
+       "answer_index": 2,
+       "why": "Underground mining."
+      },
+      {
+       "id": "t-q2",
+       "kind": "short",
+       "level": 2,
+       "marks": 3,
+       "q": "Compare open pit and sub-surface mining.",
+       "model_answer_md": "| | Open pit | Sub-surface |\n|---|---|---|\n| Deposit | Shallow | Deep |\n| Land and forest | Vast area cleared | Little surface disturbed |\n| Hole | Large hole at surface | Large cavities underground |\n| Hazards | Dust, overburden dumps, habitat loss | Subsidence, roof falls, black lung |",
+       "points": [
+        "Depth of deposit",
+        "Land and forest effect",
+        "Type of hole",
+        "Hazards"
+       ]
+      },
+      {
+       "id": "t-p1",
+       "pyq": "35bbce20d6f158c5",
+       "level": 1,
+       "points": [
+        "(b) Placer mining",
+        "Hydraulic mining uses high-pressure water jets on alluvial deposits of heavy minerals such as gold"
+       ]
+      },
+      {
+       "id": "t-p2",
+       "pyq": "9c85e241d4adf3c7",
+       "level": 1,
+       "points": [
+        "(b) Placer mining",
+        "Dredging scoops loose sediment from river or sea beds for heavy minerals"
+       ]
+      },
+      {
+       "id": "t-p3",
+       "pyq": "718e1041f0698916",
+       "level": 1,
+       "points": [
+        "(a) Sub-surface mining",
+        "Ore removed through shafts and tunnels leaves large cavities underground, causing subsidence",
+        "Open pit makes the hole at the surface"
+       ]
+      },
+      {
+       "id": "t-p4",
+       "pyq": "aac25c26c6497bd8",
+       "level": 1,
+       "points": [
+        "(b) Open pit mining",
+        "All vegetation and overburden stripped, clearing large forest areas"
+       ]
+      },
+      {
+       "id": "t-q3",
+       "kind": "mcq",
+       "level": 2,
+       "q": "Large-scale clearing of forest is most associated with",
+       "options": [
+        "in-situ leaching",
+        "sub-surface mining",
+        "open pit mining",
+        "dredging"
+       ],
+       "answer_index": 2,
+       "why": "Surface stripping of vegetation."
+      }
+     ]
+    },
+    {
+     "id": "mining-effects",
+     "title": "Environmental effects of mining",
+     "theory_md": "1. **Deforestation and land degradation**: topsoil and vegetation stripped, overburden dumps.\n2. **Subsidence** (Jharia coalfield).\n3. **Water pollution**: **acid mine drainage** from pyrite: $\\mathrm{2FeS_2 + 7O_2 + 2H_2O \\rightarrow 2Fe^{2+} + 4SO_4^{2-} + 4H^+}$; acid leaches Pb, Cd, As, Hg.\n4. **Groundwater depletion** by mine dewatering.\n5. **Air pollution**: dust, $\\mathrm{SO_2}$ from smelting, coal fires.\n6. **Health**: black lung, silicosis, asbestosis (from asbestos fibres).\n7. Noise and vibration.\n\nHg, Cd and As cannot be metabolised or excreted efficiently, so they **bioaccumulate** and pass up the food chain.",
+     "basics_md": "Digging exposes rock that was sealed away. Air and water react with it, so the streams turn acidic and metal-laden, and the dust and fumes spread.",
+     "key_points": [
+      "Land: deforestation, dumps, subsidence",
+      "Acid mine drainage with the pyrite equation",
+      "Heavy metals bioaccumulate",
+      "Diseases: silicosis, asbestosis, black lung"
+     ],
+     "questions": [
+      {
+       "id": "e-q1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "Acid mine drainage arises from oxidation of",
+       "options": [
+        "limestone",
+        "pyrite",
+        "gypsum",
+        "bauxite"
+       ],
+       "answer_index": 1,
+       "why": "FeS2 reacts with oxygen and water to give sulphuric acid and iron ions."
+      },
+      {
+       "id": "e-q2",
+       "kind": "short",
+       "level": 2,
+       "marks": 3,
+       "q": "Write the reaction of acid mine drainage and state why it is harmful.",
+       "model_answer_md": "$\\mathrm{2FeS_2 + 7O_2 + 2H_2O \\rightarrow 2Fe^{2+} + 4SO_4^{2-} + 4H^+}$\n\nExposed pyrite is oxidised by air and water to give sulphate and acid. The low pH kills aquatic life and leaches toxic metals (Pb, Cd, As, Hg) into streams and groundwater.",
+       "points": [
+        "Balanced equation",
+        "Acidity and low pH",
+        "Toxic metals leached"
+       ]
+      },
+      {
+       "id": "e-p1",
+       "pyq": "2d9583ccdc9d8cf2",
+       "level": 2,
+       "points": [
+        "Deforestation and land degradation, loss of habitat",
+        "Subsidence over underground cavities (Jharia)",
+        "Water pollution: acid mine drainage with equation, leaching of Pb, Cd, As, Hg",
+        "Groundwater depletion by pumping",
+        "Air pollution: dust, SO2; occupational diseases (black lung, silicosis, asbestosis); noise and vibration"
+       ]
+      },
+      {
+       "id": "e-p2",
+       "pyq": "2d2e729c05893935",
+       "level": 2,
+       "points": [
+        "(a) Both A and R are true, and R is the correct explanation of A",
+        "Hg, Cd and As cannot be metabolised or excreted efficiently, so they are retained in tissues",
+        "Hence bioaccumulation and transfer up the food chain"
+       ]
+      },
+      {
+       "id": "e-p3",
+       "pyq": "41c089f9b9bb2f16",
+       "level": 1,
+       "points": [
+        "(c) Asbestosis",
+        "Occupational lung fibrosis from inhaling asbestos fibres",
+        "Asthma and cancer have many non-mining causes; dengue is mosquito-borne"
+       ]
+      },
+      {
+       "id": "e-q3",
+       "kind": "mcq",
+       "level": 2,
+       "q": "Which disease is an occupational hazard of mining?",
+       "options": [
+        "Dengue",
+        "Silicosis",
+        "Goitre",
+        "Anaemia"
+       ],
+       "answer_index": 1,
+       "why": "Silica dust damages the lungs."
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "topic": "Food resources",
+   "subtopics": [
+    {
+     "id": "food-nutrition",
+     "title": "World food problems and deficiency diseases",
+     "theory_md": "Hunger persists because of poverty, uneven distribution, population growth, land degradation and waste. **Undernutrition**: too few calories (a person getting under 90% of the minimum is undernourished, under 80% seriously undernourished). **Malnutrition**: lack of specific nutrients.\n\n| Deficiency | Disease |\n|---|---|\n| Iron | Anaemia |\n| Iodine | Goitre |\n| Vitamin A | Night blindness |\n| Vitamin C | Scurvy |\n| Vitamin D | Rickets |\n| Protein | Kwashiorkor |\n\nRice, wheat and maize give most calories.",
+     "basics_md": "Undernutrition is not enough food. Malnutrition can occur even with enough food, if one needed nutrient is missing.",
+     "key_points": [
+      "Undernutrition (calories) versus malnutrition (nutrients)",
+      "Under 90% of requirement undernourished, under 80% seriously",
+      "Iron: anaemia; iodine: goitre; vitamin A: night blindness"
+     ],
+     "questions": [
+      {
+       "id": "n-q1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "Scurvy is caused by deficiency of",
+       "options": [
+        "vitamin C",
+        "vitamin D",
+        "iron",
+        "iodine"
+       ],
+       "answer_index": 0,
+       "why": "Vitamin D deficiency gives rickets."
+      },
+      {
+       "id": "n-q2",
+       "kind": "short",
+       "level": 2,
+       "marks": 2,
+       "q": "Differentiate undernutrition and malnutrition.",
+       "model_answer_md": "**Undernutrition**: too little food, i.e. calories below the requirement (below 90% is undernourished, below 80% seriously so).\n\n**Malnutrition**: lack of specific nutrients such as protein, iron, iodine or vitamin A even if calories are enough, causing diseases like anaemia and goitre.",
+       "points": [
+        "Undernutrition is calorie shortage",
+        "Malnutrition is nutrient shortage",
+        "Example diseases"
+       ]
+      },
+      {
+       "id": "n-p1",
+       "pyq": "3b6582826df18202",
+       "level": 1,
+       "points": [
+        "(c) Anemia",
+        "Iron is part of haemoglobin; deficiency lowers oxygen carrying capacity",
+        "Goitre is iodine deficiency, blindness vitamin A"
+       ]
+      },
+      {
+       "id": "n-p2",
+       "pyq": "4e49efec5730b15e",
+       "level": 1,
+       "points": [
+        "(a) Goiter",
+        "Iodine is needed for thyroxine; deficiency enlarges the thyroid"
+       ]
+      },
+      {
+       "id": "n-p3",
+       "pyq": "e226bcfc26e8fb55",
+       "level": 1,
+       "points": [
+        "(b) 80%",
+        "Below 90% of the minimum calories is undernourished; below 80% seriously undernourished"
+       ]
+      },
+      {
+       "id": "n-q3",
+       "kind": "mcq",
+       "level": 2,
+       "q": "Night blindness is caused by deficiency of",
+       "options": [
+        "vitamin A",
+        "iron",
+        "iodine",
+        "vitamin D"
+       ],
+       "answer_index": 0,
+       "why": "Iron gives anaemia, iodine goitre."
+      }
+     ]
+    },
+    {
+     "id": "fert-pest",
+     "title": "Fertilisers, pesticides and the Green Revolution",
+     "theory_md": "The **Green Revolution** (HYV seeds, irrigation, fertilisers, pesticides; M.S. Swaminathan) made India grain self-sufficient but brought problems.\n\n**Fertilisers (NPK)**:\n- **Nitrate** leaching: nitrate over 45 mg/L in drinking water causes **blue baby syndrome**, as nitrite converts haemoglobin to methaemoglobin.\n- N and P runoff: **eutrophication**.\n- Micronutrient imbalance, soil acidity.\n\n**Pesticides** (DDT, BHC): persistent and fat-soluble, so they **biomagnify** up the food chain; pest resistance; death of beneficial organisms. Remedy: integrated pest management, biopesticides (neem), organic farming.",
+     "basics_md": "Fertiliser dissolves and washes into water; pesticide stays and piles up in fat. So fertilisers cause algal blooms and nitrate poisoning, while DDT builds up in birds at the top of the food chain.",
+     "key_points": [
+      "Green Revolution: HYV, irrigation, fertiliser, pesticide",
+      "Nitrate: blue baby syndrome; N and P: eutrophication",
+      "DDT: persistent, biomagnification, resistance",
+      "Remedy: IPM, neem, organic farming"
+     ],
+     "questions": [
+      {
+       "id": "p-q1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "Eutrophication is mainly caused by excess",
+       "options": [
+        "DDT",
+        "nitrates and phosphates",
+        "sodium chloride",
+        "asbestos"
+       ],
+       "answer_index": 1,
+       "why": "N and P cause algal blooms."
+      },
+      {
+       "id": "p-q2",
+       "kind": "short",
+       "level": 2,
+       "marks": 3,
+       "q": "Distinguish bioaccumulation from biomagnification, with an example.",
+       "model_answer_md": "**Bioaccumulation**: build-up of a persistent substance in a single organism over time.\n\n**Biomagnification**: increase in concentration of the substance at each higher trophic level of a food chain. Example: DDT in water, then plankton, fish, fish-eating birds (thin-shelled eggs).",
+       "points": [
+        "Bioaccumulation: one organism",
+        "Biomagnification: along food chain",
+        "DDT example"
+       ]
+      },
+      {
+       "id": "p-p1",
+       "pyq": "aad7e976b8a80912",
+       "level": 1,
+       "points": [
+        "(a) Nitrates",
+        "Nitrate above about 45 mg/L is reduced to nitrite which forms methaemoglobin in infants",
+        "Phosphates cause eutrophication, not blue baby syndrome"
+       ]
+      },
+      {
+       "id": "p-p2",
+       "pyq": "78867061a5e3fffe",
+       "level": 1,
+       "points": [
+        "(c) asbestosis",
+        "A lung disease from inhaling asbestos fibres, not a fertiliser problem",
+        "Micronutrient imbalance, nitrate pollution and eutrophication are fertiliser problems"
+       ]
+      },
+      {
+       "id": "p-p3",
+       "pyq": "bed94f9c16923281",
+       "level": 1,
+       "points": [
+        "(c) DDT",
+        "Persistent, fat-soluble, stored in fatty tissue and magnified at each trophic level",
+        "Nitrate is water-soluble; it causes eutrophication"
+       ]
+      },
+      {
+       "id": "p-q3",
+       "kind": "mcq",
+       "level": 2,
+       "q": "Blue baby syndrome in infants is caused by nitrate because",
+       "options": [
+        "it forms methaemoglobin via nitrite",
+        "it causes algal bloom",
+        "it biomagnifies",
+        "it lowers soil pH"
+       ],
+       "answer_index": 0,
+       "why": "Methaemoglobin cannot carry oxygen. Algal bloom is eutrophication."
+      }
+     ]
+    },
+    {
+     "id": "salinity",
+     "title": "Waterlogging, salinity and sustainability of agriculture",
+     "theory_md": "**Waterlogging**: over-irrigation and canal seepage raise the water table into the root zone; roots lack oxygen.\n\n**Salinity**: in arid areas evaporation from the waterlogged soil leaves salts ($\\mathrm{NaCl}$, $\\mathrm{Na_2SO_4}$, $\\mathrm{Na_2CO_3}$) at the surface (Punjab, Haryana, Rajasthan). High osmotic pressure stops roots taking up water; sodium destroys soil structure; yield falls and land becomes barren.\n\n**Remedies**: drainage, drip irrigation, flushing, gypsum for sodic soils, salt-tolerant crops.\n\n**Pesticide long-term effects**: persistence, resistance, loss of beneficial organisms, contamination.",
+     "basics_md": "Too much irrigation brings the water table up. When it evaporates, it leaves its salt behind like the white ring in a kettle, and crops cannot grow in it.",
+     "key_points": [
+      "Mechanism: high water table, evaporation, salt left behind",
+      "Effects: osmotic stress, poor soil structure, barren land",
+      "Remedies: drainage, drip, gypsum, salt-tolerant crops"
+     ],
+     "questions": [
+      {
+       "id": "s-q1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "Soil salinity in irrigated dry regions is caused mainly by",
+       "options": [
+        "waterlogging followed by evaporation",
+        "excess rainfall",
+        "deforestation",
+        "earthworms"
+       ],
+       "answer_index": 0,
+       "why": "Evaporation leaves the salts in the surface layer."
+      },
+      {
+       "id": "s-q2",
+       "kind": "short",
+       "level": 2,
+       "marks": 3,
+       "q": "Explain waterlogging and salinity and one remedy for each.",
+       "model_answer_md": "**Waterlogging**: excess irrigation and canal seepage raise the water table to the root zone; roots lack air. Remedy: sub-surface drainage.\n\n**Salinity**: capillary rise and evaporation leave salts at the surface; roots cannot absorb water. Remedy: flushing with water, gypsum for sodic soil, drip irrigation.",
+       "points": [
+        "Waterlogging mechanism",
+        "Salinity mechanism",
+        "One remedy each"
+       ]
+      },
+      {
+       "id": "s-p1",
+       "pyq": "675d8549a956bf8c",
+       "level": 3,
+       "points": [
+        "Salinity: waterlogging then evaporation leaves salts (NaCl, Na2SO4, Na2CO3); osmotic stress, sodium damages soil structure, yield falls, land barren",
+        "Reclamation slow and costly",
+        "Pesticides: persistence and biomagnification, resistance, loss of beneficial organisms, contamination of groundwater and food",
+        "Both make farming dependent on higher inputs while fertility and biodiversity fall, so yields cannot be sustained",
+        "Remedies: drip irrigation, drainage, salt-tolerant crops, IPM, neem, organic farming"
+       ]
+      },
+      {
+       "id": "s-q3",
+       "kind": "mcq",
+       "level": 2,
+       "q": "Which treatment reclaims sodic saline soil?",
+       "options": [
+        "Gypsum with drainage and flushing",
+        "More irrigation without drainage",
+        "Adding common salt",
+        "Burning crop residue"
+       ],
+       "answer_index": 0,
+       "why": "Ca2+ replaces Na+, drainage removes salts."
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "topic": "Energy resources",
+   "subtopics": [
+    {
+     "id": "coal",
+     "title": "Coal and its ranks",
+     "theory_md": "**Coalification** (rank rises): peat $\\rightarrow$ lignite $\\rightarrow$ bituminous $\\rightarrow$ anthracite.\n\n| Property | Peat | Lignite | Bituminous | Anthracite |\n|---|---|---|---|---|\n| Carbon % | 50-60 | 60-70 | 80-90 | 90-98 |\n| Moisture | highest | 20-40% | 4-8% | lowest |\n| Volatile matter | very high | high | 20-45% | < 10% |\n| Calorific value | lowest | low | high | highest |\n\nLignite is **brown coal** (Neyveli). Bituminous is **soft coal** and the coking coal, with the highest sulphur (burning gives $\\mathrm{SO_2}$). Anthracite is hard coal.",
+     "basics_md": "Coal is plant matter squeezed and baked for millions of years. The longer and hotter, the more carbon, the less water, and the more energy per kilogram.",
+     "key_points": [
+      "Order: peat, lignite, bituminous, anthracite",
+      "Carbon and calorific value rise with rank; moisture and volatile matter fall",
+      "Lignite brown coal; bituminous soft coal with high sulphur; anthracite hard coal"
+     ],
+     "questions": [
+      {
+       "id": "co-q1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "The coal with the highest carbon content is",
+       "options": [
+        "peat",
+        "lignite",
+        "bituminous",
+        "anthracite"
+       ],
+       "answer_index": 3,
+       "why": "90-98% carbon."
+      },
+      {
+       "id": "co-q2",
+       "kind": "short",
+       "level": 2,
+       "marks": 3,
+       "q": "Arrange peat, lignite, bituminous coal and anthracite in order of rank and state how carbon and moisture change.",
+       "model_answer_md": "Rank order: **peat $\\rightarrow$ lignite $\\rightarrow$ bituminous $\\rightarrow$ anthracite**.\n\nCarbon rises (50-60% to 90-98%) and calorific value rises; moisture and volatile matter fall (peat highest, anthracite lowest).",
+       "points": [
+        "Correct order",
+        "Carbon rises",
+        "Moisture and volatile matter fall"
+       ]
+      },
+      {
+       "id": "co-p1",
+       "pyq": "475178ece40ba0c4",
+       "level": 2,
+       "points": [
+        "Order of rank: peat, lignite, bituminous, anthracite",
+        "Carbon 50-60, 60-70, 80-90, 90-98 %",
+        "Moisture and volatile matter highest in peat, lowest in anthracite; calorific value highest in anthracite",
+        "Colour and burning: brown fibrous to jet black, smoky to smokeless blue flame",
+        "Uses: domestic, thermal power (Neyveli lignite), steel and coke (bituminous)"
+       ]
+      },
+      {
+       "id": "co-p2",
+       "pyq": "b1c9375cf6e5907e",
+       "level": 1,
+       "points": [
+        "(d) bituminous",
+        "Highest sulphur, often 1-4%, as pyrite and organic sulphur",
+        "Burning gives SO2 and acid rain"
+       ]
+      },
+      {
+       "id": "co-p3",
+       "pyq": "ba7c80f61bad61d5",
+       "level": 1,
+       "points": [
+        "(a) peat",
+        "Least matured coal, moisture up to about 90% when fresh",
+        "Anthracite has the least moisture"
+       ]
+      },
+      {
+       "id": "co-p4",
+       "pyq": "ca623d52f51e90b6",
+       "level": 1,
+       "points": [
+        "(c) brown coal",
+        "Lignite is brown low-rank coal, 60-70% carbon",
+        "Soft coal is bituminous, hard coal is anthracite"
+       ]
+      },
+      {
+       "id": "co-q3",
+       "kind": "mcq",
+       "level": 2,
+       "q": "Which coal burns with a short, smokeless blue flame and is hard to ignite?",
+       "options": [
+        "Peat",
+        "Lignite",
+        "Bituminous",
+        "Anthracite"
+       ],
+       "answer_index": 3,
+       "why": "Lowest volatile matter."
+      }
+     ]
+    },
+    {
+     "id": "petroleum",
+     "title": "Petroleum, fractional distillation and gaseous fuels",
+     "theory_md": "**Crude oil** is a mixture of hydrocarbons separated by **fractional distillation**: heated to about 400 °C in a furnace, vapour enters a column that is hot at the bottom and cool at the top; each fraction condenses on the tray where the temperature falls below its boiling point.\n\n| Fraction | b.p. (°C) | Carbons |\n|---|---|---|\n| Refinery gas | < 40 | C1-C4 |\n| Petrol | 40-120 | C5-C10 |\n| Naphtha | 120-180 | C7-C10 |\n| Kerosene | 180-250 | C10-C16 |\n| Diesel | 250-350 | C15-C20 |\n| Lubricating/fuel oil | 350-400 | C20-C40 |\n| Bitumen | > 400 | > C40 |\n\n**SNG**: coal gasification to syngas ($\\mathrm{CO + H_2}$) then methanation gives mainly $\\mathrm{CH_4}$ with $\\mathrm{H_2}$.",
+     "basics_md": "Crude oil is many liquids mixed. Boil it, and the lightest rise highest and condense near the top, the heaviest stay near the bottom. Each level is a different fuel.",
+     "key_points": [
+      "Principle: different boiling points",
+      "Column hot at bottom, cool at top; furnace, bubble-cap trays",
+      "Order of fractions from gas to bitumen with b.p.",
+      "Petrol has octane C8H18; kerosene has undecane C11H24",
+      "SNG is CH4 + H2; syngas is CO + H2"
+     ],
+     "figures": [
+      {
+       "smiles": "C",
+       "caption": "Methane (CH4), natural gas"
+      },
+      {
+       "smiles": "CCCCCCCC",
+       "caption": "Octane C8H18, in petrol"
+      },
+      {
+       "smiles": "CC(C)CC(C)(C)C",
+       "caption": "Iso-octane (2,2,4-trimethylpentane), the 100 on the octane scale"
+      },
+      {
+       "smiles": "CCCCCCCCCCC",
+       "caption": "Undecane C11H24, in kerosene"
+      }
+     ],
+     "questions": [
+      {
+       "id": "pe-q1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "The petroleum fraction with the highest boiling point is",
+       "options": [
+        "petrol",
+        "kerosene",
+        "diesel",
+        "bitumen"
+       ],
+       "answer_index": 3,
+       "why": "Heaviest, collected at the bottom."
+      },
+      {
+       "id": "pe-q2",
+       "kind": "long",
+       "level": 2,
+       "marks": 5,
+       "q": "Explain the principle of fractional distillation of crude oil with a labelled layout and name one environmental concern.",
+       "model_answer_md": "**Principle**: crude oil is a mixture of hydrocarbons with different boiling points; it is separated by boiling point in a fractionating column.\n\n**Layout (draw)**: furnace (about 400 °C) feeding the column near the bottom; bubble-cap trays; temperature falls upward. Outlets from top: refinery gas (< 40 °C), petrol (40-120), naphtha, kerosene (180-250), diesel (250-350), lubricating/fuel oil, bitumen at the bottom.\n\n**Why used**: continuous, large-scale, cheap separation into useful fuels and feedstocks without chemical change.\n\n**Environmental concern**: furnace emissions of $\\mathrm{CO_2}$, $\\mathrm{SO_2}$, $\\mathrm{NO_x}$, VOCs, and oily wastewater.",
+       "points": [
+        "Different boiling points",
+        "Labelled column: furnace, trays, hot bottom, cool top, fractions with temperatures",
+        "Why used",
+        "One environmental concern"
+       ]
+      },
+      {
+       "id": "pe-p1",
+       "pyq": "1fdf4021d66dcddb",
+       "level": 3,
+       "points": [
+        "Tactic: crude is a mixture with different boiling points; vaporised and separated in a column hot at the bottom and cool at the top",
+        "Layout: furnace, bubble-cap trays, fractions top to bottom (gas, petrol, naphtha, kerosene, diesel, lubricating oil, bitumen) with temperatures",
+        "Used because crude is useless as such; gives fuels and feedstocks continuously",
+        "Concern: CO2, SO2, NOx, VOCs, oily wastewater"
+       ]
+      },
+      {
+       "id": "pe-p2",
+       "pyq": "ff1458fd5573b732",
+       "level": 3,
+       "points": [
+        "Principle: boiling-point difference; heated to 350-400 °C, vapour condenses on trays as temperature falls up the column",
+        "Layout with outlets and temperatures top to bottom, bubble caps, furnace near base",
+        "Why: continuous large-scale separation into fuels, lubricants, feedstock, road tar",
+        "Concern: CO2, SO2, NOx from burning and flaring, oily wastewater, VOC smog"
+       ]
+      },
+      {
+       "id": "pe-p3",
+       "pyq": "a0e774db33b3c7fd",
+       "level": 1,
+       "points": [
+        "(b) Octane (C8H18)",
+        "Petrol is the C5-C10 fraction; iso-octane is its key component",
+        "Methane and butane are gases"
+       ]
+      },
+      {
+       "id": "pe-p4",
+       "pyq": "3e91fa8ab5977410",
+       "level": 1,
+       "points": [
+        "(d) Undecane (C11H24)",
+        "Kerosene is the C10-C16 fraction, 180-250 °C",
+        "Octane belongs to petrol"
+       ]
+      },
+      {
+       "id": "pe-p5",
+       "pyq": "d41ac8344e3b0caa",
+       "level": 1,
+       "points": [
+        "(c) CH4 + H2",
+        "SNG is made by gasification then methanation, mainly methane",
+        "CO + H2 is syngas, the intermediate"
+       ]
+      },
+      {
+       "id": "pe-q3",
+       "kind": "mcq",
+       "level": 2,
+       "q": "In a fractionating column the temperature is",
+       "options": [
+        "hottest at the top",
+        "coolest at the bottom",
+        "hottest at the bottom and cooler at the top",
+        "uniform"
+       ],
+       "answer_index": 2,
+       "why": "Light fractions rise and condense higher."
+      }
+     ]
+    },
+    {
+     "id": "nuclear",
+     "title": "Nuclear fission and fusion",
+     "theory_md": "**Fission**: slow neutron splits $\\mathrm{^{235}U}$; chain reaction sustained and controlled by **moderators** (heavy water, graphite) and **control rods** (Cd, B). It is the commercial nuclear power today (Tarapur, Kudankulam).\n\n$\\mathrm{^{235}_{92}U + ^{1}_{0}n \\rightarrow ^{141}_{56}Ba + ^{92}_{36}Kr + 3\\,^{1}_{0}n}$ + about 200 MeV\n\n**Fusion** (D-T): $\\mathrm{^{2}_{1}H + ^{3}_{1}H \\rightarrow ^{4}_{2}He + ^{1}_{0}n}$ + 17.6 MeV. Needs about $10^8$ K to overcome repulsion; no material holds the plasma; confinement (tokamak, ITER, lasers) has not given sustained net energy, so it is **not yet practical**. It would be cleaner (little long-lived waste, abundant fuel).",
+     "basics_md": "Fission is splitting a heavy nucleus, which happens at ordinary reactor temperatures. Fusion is forcing two light nuclei together, which needs the heat of the sun. We can do the first on a large scale; not yet the second.",
+     "key_points": [
+      "Fission is practical: controllable at ordinary temperature",
+      "Fission reaction balanced, about 200 MeV",
+      "Fusion needs 10^8 K and plasma confinement; experimental",
+      "Fusion D-T reaction, 17.6 MeV"
+     ],
+     "questions": [
+      {
+       "id": "nu-q1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "Control rods in a fission reactor are made of",
+       "options": [
+        "graphite",
+        "cadmium or boron",
+        "heavy water",
+        "uranium"
+       ],
+       "answer_index": 1,
+       "why": "They absorb neutrons; graphite and heavy water are moderators."
+      },
+      {
+       "id": "nu-q2",
+       "kind": "short",
+       "level": 2,
+       "marks": 4,
+       "q": "Compare nuclear fission and fusion as practical electricity sources. Give the reaction for each.",
+       "model_answer_md": "**Fission is practical, fusion is not yet.**\n\nFission: $\\mathrm{^{235}_{92}U + ^{1}_{0}n \\rightarrow ^{141}_{56}Ba + ^{92}_{36}Kr + 3\\,^{1}_{0}n}$ + about 200 MeV. Started by slow neutrons at normal temperature; chain reaction controlled by moderators and control rods (Cd, B).\n\nFusion: $\\mathrm{^{2}_{1}H + ^{3}_{1}H \\rightarrow ^{4}_{2}He + ^{1}_{0}n}$ + 17.6 MeV. Needs about $10^8$ K and plasma confinement; no sustained net gain yet.",
+       "points": [
+        "Fission practical, fusion not",
+        "Fission equation with energy",
+        "Fusion equation with energy",
+        "Reason: temperature and confinement"
+       ]
+      },
+      {
+       "id": "nu-p1",
+       "pyq": "6439cbada75dfaf4",
+       "level": 2,
+       "points": [
+        "Fission is the practical source; fusion is not yet [1]",
+        "Fission: 235U plus slow neutron, reaction, controlled by moderators and control rods; reactors in India",
+        "Fusion: needs about 10^7-10^8 K, plasma confinement not solved (tokamak, ITER), still experimental",
+        "Fusion cleaner but fission is the only usable nuclear source now"
+       ]
+      },
+      {
+       "id": "nu-p2",
+       "pyq": "babdbdf205c46716",
+       "level": 3,
+       "points": [
+        "No, fusion not yet practical; fission generates electricity commercially (Tarapur, Kudankulam)",
+        "Fission occurs readily with slow neutrons and is controlled by moderators and control rods",
+        "Fusion needs about 10^8 K and plasma confinement, net gain only in a single 2022 laser shot",
+        "Fission: U-235 + n gives Ba-141 + Kr-92 + 3n + 200 MeV",
+        "Fusion: D + T gives He-4 + n + 17.6 MeV"
+       ]
+      },
+      {
+       "id": "nu-q3",
+       "kind": "numerical",
+       "level": 3,
+       "marks": 3,
+       "q": "Estimate the energy from complete fission of 1 g of $^{235}$U at 200 MeV per fission ($N_A=6.022\\times10^{23}$, 1 MeV $=1.602\\times10^{-13}$ J). How many kg of coal of 29 MJ/kg is this equal to?",
+       "model_answer_md": "Atoms in 1 g: $\\dfrac{6.022\\times10^{23}}{235} = 2.56\\times10^{21}$\n\nEnergy: $2.56\\times10^{21}\\times200\\times1.602\\times10^{-13} = 8.2\\times10^{10}\\ \\text{J}$\n\nCoal: $\\dfrac{8.2\\times10^{10}}{29\\times10^{6}} \\approx 2830\\ \\text{kg}$, about 2.8 tonnes.",
+       "points": [
+        "Number of atoms 2.56e21",
+        "Energy 8.2e10 J with units",
+        "About 2830 kg coal"
+       ]
+      }
+     ]
+    },
+    {
+     "id": "biogas",
+     "title": "Biomass and biogas",
+     "theory_md": "**Biomass** is organic matter of recent plant or animal origin used for energy (cattle dung, crop residue, wood).\n\n**Biogas** is produced by **anaerobic digestion** of dung and farm or kitchen waste in a digester: overall $\\mathrm{(C_6H_{10}O_5)_n + nH_2O \\rightarrow 3nCH_4 + 3nCO_2}$.\n\nComposition: **55-65% $\\mathrm{CH_4}$**, 30-40% $\\mathrm{CO_2}$, traces of $\\mathrm{H_2S}$, $\\mathrm{N_2}$, $\\mathrm{H_2}$. Clean cooking and lighting fuel; residue slurry is good manure. Combustion: $\\mathrm{CH_4 + 2O_2 \\rightarrow CO_2 + 2H_2O}$. Xenon is never present.",
+     "basics_md": "Dung and waste rot without air in a closed tank. Microbes make methane, the same gas as natural gas. You burn the gas and keep the leftover as fertiliser.",
+     "key_points": [
+      "Biogas by anaerobic digestion of dung and waste",
+      "55-65% CH4, 30-40% CO2, traces H2S",
+      "Renewable; slurry as manure",
+      "Biomass: organic matter of recent origin, e.g. cattle dung"
+     ],
+     "figures": [
+      {
+       "smiles": "C",
+       "caption": "Methane, the main component of biogas"
+      }
+     ],
+     "questions": [
+      {
+       "id": "b-q1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "Biogas is produced by",
+       "options": [
+        "aerobic oxidation",
+        "anaerobic digestion",
+        "fractional distillation",
+        "nuclear fission"
+       ],
+       "answer_index": 1,
+       "why": "Microbes act without oxygen."
+      },
+      {
+       "id": "b-q2",
+       "kind": "short",
+       "level": 2,
+       "marks": 3,
+       "q": "Write the composition of biogas and two advantages of biogas plants.",
+       "model_answer_md": "**Composition**: $\\mathrm{CH_4}$ 55-65%, $\\mathrm{CO_2}$ 30-40%, traces of $\\mathrm{H_2S}$, $\\mathrm{N_2}$, $\\mathrm{H_2}$.\n\n**Advantages**: clean renewable cooking and lighting fuel; leftover slurry is a rich manure; reduces dung burning and waste.",
+       "points": [
+        "Composition with percentages",
+        "Two advantages"
+       ]
+      },
+      {
+       "id": "b-p1",
+       "pyq": "37ab5aa582ec8f9e",
+       "level": 1,
+       "points": [
+        "Biogas: fuel gas from anaerobic digestion of dung and farm or kitchen waste",
+        "55-65% methane, rest mainly CO2",
+        "Clean renewable fuel; slurry is manure"
+       ]
+      },
+      {
+       "id": "b-p2",
+       "pyq": "ce96e63fa0d2c7af",
+       "level": 1,
+       "points": [
+        "(c) Xe",
+        "Biogas is CH4, CO2, traces of H2S, N2, H2",
+        "H2S is a genuine minor constituent"
+       ]
+      },
+      {
+       "id": "b-p3",
+       "pyq": "6aeeb3f818238282",
+       "level": 1,
+       "points": [
+        "(c) Cattle dung",
+        "Biomass is organic matter of recent plant or animal origin used for energy",
+        "Sewage, radioactive waste and sediment are not biomass"
+       ]
+      },
+      {
+       "id": "b-q3",
+       "kind": "mcq",
+       "level": 2,
+       "q": "The residue (slurry) of a biogas plant is used as",
+       "options": [
+        "manure",
+        "explosive",
+        "coolant",
+        "moderator"
+       ],
+       "answer_index": 0,
+       "why": "Rich in nutrients."
+      }
+     ]
+    },
+    {
+     "id": "solar-hydro",
+     "title": "Solar, hydro, tidal and wind energy",
+     "theory_md": "- **Solar**: photovoltaic cell (doped **silicon** or **gallium** arsenide semiconductor) converts light directly to electricity. Sun is the ultimate energy source of the biosphere (photosynthesis).\n- **Hydro**: $P=\\eta\\rho g Q H$; needs perennial river with large head: **Himalayas** (Tehri, Bhakra).\n- **Tidal**: needs coast with high tidal range: Gulf of Khambhat, Kutch, Coromandel coast; not Himalayas or desert.\n- **Wind**: $P=\\tfrac12\\rho A v^3$, turbine gets $C_p P$ with $C_p\\le0.593$ (Betz); doubling speed gives 8 times power.\n\nAll are renewable and clean in use; solar and wind are intermittent.",
+     "basics_md": "Each source needs the right place: sun for solar cells, a high waterfall for hydro, a sea with big tides for tidal, strong steady wind for turbines.",
+     "key_points": [
+      "Solar cell: semiconductor Si or Ga compounds",
+      "Hydropower needs head and flow (Himalayas)",
+      "Tidal needs coast; wind power proportional to v cubed",
+      "Sun is the source of energy in the biosphere"
+     ],
+     "questions": [
+      {
+       "id": "sh-q1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "If wind speed doubles, the power available in the wind becomes",
+       "options": [
+        "2 times",
+        "4 times",
+        "8 times",
+        "16 times"
+       ],
+       "answer_index": 2,
+       "why": "Power varies as v cubed."
+      },
+      {
+       "id": "sh-q2",
+       "kind": "numerical",
+       "level": 2,
+       "marks": 3,
+       "q": "A hydro station has Q = 20 $\\mathrm{m^3/s}$, head H = 50 m and overall efficiency 0.85. Find its power output.",
+       "model_answer_md": "$P=\\eta\\rho g Q H = 0.85\\times1000\\times9.81\\times20\\times50 = 8.34\\times10^{6}\\ \\text{W}$\n\n$P \\approx 8.3\\ \\text{MW}$",
+       "points": [
+        "Formula with efficiency",
+        "Substitution",
+        "8.3 MW"
+       ]
+      },
+      {
+       "id": "sh-q3",
+       "kind": "numerical",
+       "level": 3,
+       "marks": 3,
+       "q": "A wind turbine has rotor diameter 40 m, wind speed 10 m/s, air density 1.2 $\\mathrm{kg/m^3}$. Find the power in the wind and the electrical output at $C_p=0.4$.",
+       "model_answer_md": "$A=\\pi(20)^2=1257\\ \\mathrm{m^2}$\n\n$P=\\tfrac12\\rho A v^3=0.5\\times1.2\\times1257\\times10^3=754\\ \\text{kW}$\n\nOutput $=0.4\\times754\\approx302\\ \\text{kW}$ (below the Betz limit 59.3%).",
+       "points": [
+        "Swept area",
+        "Wind power 754 kW",
+        "Output about 302 kW"
+       ]
+      },
+      {
+       "id": "sh-p1",
+       "pyq": "0b4a11a284b7c1c3",
+       "level": 1,
+       "points": [
+        "(a) Himalayas",
+        "Perennial snow-fed rivers with large head drive turbines (Tehri, Bhakra)"
+       ]
+      },
+      {
+       "id": "sh-p2",
+       "pyq": "a55ed0f71ede1dc7",
+       "level": 1,
+       "points": [
+        "(b) Coromandel coast",
+        "Tidal power needs sea with large tidal range, e.g. Khambhat and Kutch gulfs"
+       ]
+      },
+      {
+       "id": "sh-p3",
+       "pyq": "e6b6d881fc86d815",
+       "level": 1,
+       "points": [
+        "(d) Si and Ga",
+        "Solar cells are semiconductors: doped silicon, gallium arsenide"
+       ]
+      },
+      {
+       "id": "sh-p4",
+       "pyq": "9b0f92c65f404531",
+       "level": 1,
+       "points": [
+        "The Sun is the source of energy in the biosphere",
+        "Green plants trap it by photosynthesis and pass it along the food chain"
+       ]
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "topic": "Land resources",
+   "subtopics": [
+    {
+     "id": "degradation",
+     "title": "Land degradation and desertification",
+     "theory_md": "**Land degradation**: decline of the land's productive capacity through erosion, waterlogging, salinity, nutrient loss, pollution, mining and construction. About 30% of India's land is degraded.\n\n**Human causes**: over-cultivation, **unrestricted grazing**, **deforestation**, poor irrigation (waterlogging, salinity).\n\n**Desertification** (UNCCD): land degradation in arid, semi-arid and dry sub-humid areas from climatic variations and human activities. It is not the advance of existing deserts.\n\nThese activities strip plant cover so topsoil erodes: result **soil erosion and desertification**. Waterlogging results only from over-irrigation.",
+     "basics_md": "Plants hold soil in place. Take away the plants by cutting, over-grazing or over-ploughing, and wind and rain carry the soil away until only dry, barren land is left.",
+     "key_points": [
+      "Land degradation defined with forms",
+      "Causes: over-cultivation, grazing, deforestation, poor irrigation",
+      "Desertification: degradation in drylands, climate plus human activity"
+     ],
+     "questions": [
+      {
+       "id": "l-q1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "Desertification is best defined as",
+       "options": [
+        "advance of an existing desert",
+        "land degradation in dry areas due to climate and human activity",
+        "flooding of farmland",
+        "growth of forests in deserts"
+       ],
+       "answer_index": 1,
+       "why": "The UNCCD definition."
+      },
+      {
+       "id": "l-q2",
+       "kind": "short",
+       "level": 2,
+       "marks": 2,
+       "q": "Define land degradation and list four causes.",
+       "model_answer_md": "**Land degradation** is any decline in the productive capacity of land.\n\nCauses: over-cultivation, overgrazing, deforestation, poor irrigation (waterlogging, salinity), mining and construction, chemical pollution.",
+       "points": [
+        "Definition",
+        "Four causes"
+       ]
+      },
+      {
+       "id": "l-p1",
+       "pyq": "8f350264c1808c78",
+       "level": 2,
+       "points": [
+        "F) Soil erosion and desertification",
+        "Over-cultivation, grazing and deforestation strip plant cover so topsoil erodes",
+        "Waterlogging (E) results only from over-irrigation"
+       ]
+      },
+      {
+       "id": "l-q3",
+       "kind": "mcq",
+       "level": 2,
+       "q": "Which causes waterlogging rather than erosion?",
+       "options": [
+        "Over-irrigation without drainage",
+        "Overgrazing",
+        "Deforestation",
+        "Shifting cultivation"
+       ],
+       "answer_index": 0,
+       "why": "It raises the water table."
+      }
+     ]
+    },
+    {
+     "id": "erosion",
+     "title": "Soil erosion, landslides and conservation",
+     "theory_md": "**Soil erosion** by **water** (sheet, rill, gully; ravines of the Chambal) or **wind** (arid Rajasthan). Causes: deforestation, overgrazing, ploughing on slopes, shifting cultivation, mining.\n\n**Man-induced landslides**: cutting slopes for roads and buildings, blasting, quarrying, deforestation, reservoir filling (Joshimath 2023).\n\n**Conservation**: afforestation, shelter belts, **contour ploughing**, **terracing**, strip cropping, check dams and gully plugging, mulching, controlled grazing, crop rotation.\n\nUSLE: $A=R\\,K\\,L\\,S\\,C\\,P$.",
+     "basics_md": "Rain hits bare soil like tiny hammers and the runoff carries the soil off: first a thin sheet, then little channels (rills), then deep gullies. Terraces and plants slow the water down.",
+     "key_points": [
+      "Water erosion: sheet, rill, gully; wind erosion",
+      "Man-induced landslides: slope cutting, blasting, deforestation",
+      "Conservation: contour ploughing, terracing, shelter belts, afforestation"
+     ],
+     "questions": [
+      {
+       "id": "er-q1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "Which is NOT a soil conservation measure?",
+       "options": [
+        "Terracing",
+        "Contour ploughing",
+        "Overgrazing",
+        "Shelter belts"
+       ],
+       "answer_index": 2,
+       "why": "Overgrazing causes erosion."
+      },
+      {
+       "id": "er-q2",
+       "kind": "short",
+       "level": 2,
+       "marks": 3,
+       "q": "Name the types of water erosion and four measures of soil conservation.",
+       "model_answer_md": "**Water erosion**: sheet, rill, gully (ravines).\n\n**Conservation**: contour ploughing, terracing, strip cropping, shelter belts and afforestation, check dams and gully plugging, mulching, controlled grazing.",
+       "points": [
+        "Sheet, rill, gully",
+        "Four measures"
+       ]
+      },
+      {
+       "id": "er-q3",
+       "kind": "short",
+       "level": 3,
+       "marks": 3,
+       "q": "Explain man-induced landslides with two examples of causes.",
+       "model_answer_md": "Human activities destabilise slopes: cutting hills for roads, tunnels and buildings; blasting and quarrying; deforestation (roots no longer bind soil); filling reservoirs. Example: Joshimath subsidence 2023 (Himalaya), Malin 2014 (Western Ghats).",
+       "points": [
+        "Slope cutting and blasting",
+        "Deforestation",
+        "Examples"
+       ]
+      }
+     ]
+    },
+    {
+     "id": "soil-ph",
+     "title": "Soil acidity and liming",
+     "theory_md": "Soil pH decides nutrient availability. Acid soils (rain, leaching, fertilisers) are corrected by **liming**.\n\n$\\mathrm{CaCO_3 + 2H^+ \\rightarrow Ca^{2+} + H_2O + CO_2}$\n\n$[\\mathrm{H^+}]$ falls, so **pH rises**. It cannot make pH 0, which is extremely acidic. **Sodic (alkaline) soils** are treated with gypsum; sulphur lowers pH.",
+     "basics_md": "Lime is a mild base. Add it to sour (acid) soil and it eats up the acid, so the soil becomes less acidic.",
+     "key_points": [
+      "Liming neutralises soil acidity",
+      "CaCO3 + 2H+ gives Ca2+ + H2O + CO2",
+      "pH rises; gypsum for sodic soil"
+     ],
+     "questions": [
+      {
+       "id": "ph-q1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "Gypsum is used to reclaim",
+       "options": [
+        "acidic soils",
+        "sodic soils",
+        "sandy soils",
+        "peat"
+       ],
+       "answer_index": 1,
+       "why": "It supplies Ca2+ to replace sodium."
+      },
+      {
+       "id": "ph-q2",
+       "kind": "short",
+       "level": 2,
+       "marks": 2,
+       "q": "How does adding $\\mathrm{CaCO_3}$ change the pH of an acidic soil? Give the reaction.",
+       "model_answer_md": "pH **increases**: $\\mathrm{CaCO_3 + 2H^+ \\rightarrow Ca^{2+} + H_2O + CO_2}$. Hydrogen ions are consumed, so soil acidity falls.",
+       "points": [
+        "pH increases",
+        "Equation",
+        "H+ consumed"
+       ]
+      },
+      {
+       "id": "ph-p1",
+       "pyq": "5eeb367e22d583b8",
+       "level": 1,
+       "points": [
+        "(a) increases",
+        "CaCO3 is basic: CaCO3 + 2H+ gives Ca2+ + H2O + CO2",
+        "[H+] falls so pH rises; pH 0 would be extremely acidic"
+       ]
+      },
+      {
+       "id": "ph-q3",
+       "kind": "mcq",
+       "level": 2,
+       "q": "Which is used to raise the pH of an acidic soil?",
+       "options": [
+        "Lime",
+        "Sulphur",
+        "Ammonium sulphate",
+        "Gypsum"
+       ],
+       "answer_index": 0,
+       "why": "Lime neutralises acid. Sulphur and ammonium sulphate lower pH."
+      }
+     ]
+    }
+   ]
+  }
+ ]
+}

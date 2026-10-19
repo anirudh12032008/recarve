@@ -1,0 +1,2056 @@
+{
+ "code": "BS1111",
+ "unit": "Cell Biology",
+ "written": "2026-10-19",
+ "by": "claude-sonnet-5-5, in a Claude Code session",
+ "topics": [
+  {
+   "topic": "Cell theory",
+   "subtopics": [
+    {
+     "id": "cell-theory",
+     "title": "Cell theory: who, what, exceptions",
+     "theory_md": "**Hooke (1665)** saw dead cork cell walls and named them \"cells\"; **Leeuwenhoek** first saw living cells. **Schleiden (1838)**, botanist, and **Schwann (1839)**, zoologist, proposed the **cell theory**: all organisms are made of cells, and the cell is the basic unit of structure and function. **Virchow (1855)** added *omnis cellula e cellula*: new cells arise only from pre-existing cells.\n\n**Modern cell theory** adds: cells carry hereditary DNA passed on in division; all metabolism happens inside cells; cells are chemically alike.\n\n**Exceptions:** viruses (acellular, need a host), coenocytes/syncytia (multinucleate, e.g. *Rhizopus*, striated muscle), mature RBCs and sieve tubes (no nucleus).",
+     "basics_md": "A cell is the smallest piece that can live on its own. The theory says every living thing is built from these pieces and that a new piece can only be made by an old piece splitting.",
+     "key_points": [
+      "Hooke 1665 coined 'cell'; Leeuwenhoek saw living cells",
+      "Schleiden 1838 (plants) and Schwann 1839 (animals) proposed the theory",
+      "Virchow 1855: cells arise from pre-existing cells",
+      "Modern additions: DNA is hereditary, metabolism inside cells, similar chemistry",
+      "Exceptions: viruses, coenocytes, enucleate RBCs and sieve tubes"
+     ],
+     "questions": [
+      {
+       "id": "ct-q1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "Who stated that every cell arises from a pre-existing cell?",
+       "options": [
+        "Schleiden",
+        "Schwann",
+        "Virchow",
+        "Hooke"
+       ],
+       "answer_index": 2,
+       "why": "Virchow, 1855. Schleiden and Schwann could not explain the origin of new cells."
+      },
+      {
+       "id": "ct-q2",
+       "kind": "mcq",
+       "level": 1,
+       "q": "Which of these is an exception to the cell theory?",
+       "options": [
+        "Amoeba",
+        "Bacteria",
+        "Virus",
+        "Yeast"
+       ],
+       "answer_index": 2,
+       "why": "A virus is acellular and multiplies only inside a host cell."
+      },
+      {
+       "id": "ct-q3",
+       "kind": "short",
+       "level": 2,
+       "marks": 3,
+       "q": "State the postulates of the modern cell theory.",
+       "model_answer_md": "1. All living organisms are made of one or more cells and cell products.\n2. The cell is the basic structural and functional unit of life.\n3. All cells arise from pre-existing cells by division (Virchow).\n4. Cells contain hereditary material (DNA) passed on during division.\n5. All metabolic reactions occur within cells.",
+       "points": [
+        "All organisms are made of cells",
+        "Cell is the basic unit of structure and function",
+        "New cells arise from pre-existing cells (Virchow)",
+        "Modern: DNA is hereditary, metabolism occurs in cells"
+       ]
+      },
+      {
+       "id": "ct-q4",
+       "kind": "short",
+       "level": 3,
+       "marks": 3,
+       "q": "Give three exceptions to the cell theory and say why each is one.",
+       "model_answer_md": "1. **Viruses:** acellular (nucleic acid in a protein coat), no metabolism of their own, multiply only in a host.\n2. **Coenocytes / syncytia** (*Rhizopus*, striated muscle fibre): many nuclei in one continuous cytoplasm, not separate cells.\n3. **Mature mammalian RBCs and sieve tubes:** no nucleus, yet functional.",
+       "points": [
+        "Viruses: acellular, need a host",
+        "Coenocytes: multinucleate, no cell boundaries",
+        "RBCs and sieve tubes: functional without a nucleus"
+       ]
+      }
+     ]
+    },
+    {
+     "id": "size-life",
+     "title": "Why cells are small; attributes of life",
+     "theory_md": "A cell takes in nutrients and removes waste through its **surface**, but its demand grows with its **volume**. For a sphere\n$$\\frac{SA}{V}=\\frac{4\\pi r^2}{\\tfrac43\\pi r^3}=\\frac{3}{r}$$\nso the ratio falls as the cell grows. Past a limit the surface cannot feed the volume, so the cell **divides** (or folds its surface: microvilli, ER).\n\n**Attributes of life:** cellular organisation, metabolism, growth, reproduction, response to stimuli, homeostasis, heredity and evolution. About 1.7 to 2 million species are described; insects (about 1 million) are the largest group.",
+     "basics_md": "Food comes in through the skin of the cell but has to feed the whole inside. A bigger ball has relatively less skin per bit of inside, so there is a size where it cannot cope.",
+     "key_points": [
+      "SA/V = 3/r for a sphere; falls as r grows",
+      "Uptake is by surface, need is by volume",
+      "Large cell divides to restore SA/V",
+      "Life: cells, metabolism, growth, reproduction, response, homeostasis, heredity"
+     ],
+     "questions": [
+      {
+       "id": "sl-q1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "For a spherical cell of radius $r$, the surface-area-to-volume ratio is",
+       "options": [
+        "$r/3$",
+        "$3/r$",
+        "$4\\pi r^2$",
+        "$3r$"
+       ],
+       "answer_index": 1,
+       "why": "$4\\pi r^2/(\\tfrac43\\pi r^3)=3/r$."
+      },
+      {
+       "id": "sl-q2",
+       "kind": "numerical",
+       "level": 2,
+       "marks": 3,
+       "q": "Two spherical cells have radii 5 µm and 20 µm. Compare their $SA/V$ and say what it means for the larger cell.",
+       "model_answer_md": "$SA/V=3/r$.\n- $r=5$ µm: $3/5=0.6\\ \\mu\\mathrm{m^{-1}}$\n- $r=20$ µm: $3/20=0.15\\ \\mu\\mathrm{m^{-1}}$\n\nThe larger cell has one quarter of the surface per unit volume, so diffusion cannot supply its interior; it must divide or increase its surface.",
+       "points": [
+        "Formula SA/V = 3/r",
+        "0.6 and 0.15 per µm",
+        "Larger cell has 1/4 the ratio",
+        "Cannot exchange enough, so divides or folds surface"
+       ]
+      },
+      {
+       "id": "sl-q3",
+       "kind": "short",
+       "level": 2,
+       "marks": 2,
+       "q": "List four attributes that distinguish a living entity.",
+       "model_answer_md": "1. **Cellular organisation.**\n2. **Metabolism:** reactions that release and use energy.\n3. **Growth and reproduction.**\n4. **Response to stimuli and homeostasis.**\n5. **Heredity:** genetic information passed on and open to evolution.",
+       "points": [
+        "Cellular organisation",
+        "Metabolism",
+        "Growth and reproduction",
+        "Response / homeostasis / heredity"
+       ]
+      },
+      {
+       "id": "sl-p1",
+       "pyq": "dcaf704f2a08333b",
+       "level": 2,
+       "points": [
+        "Life: organised cellular system that metabolises, grows, reproduces, responds and passes on genetic information",
+        "Attributes: cells, metabolism, growth, reproduction, response to stimuli, homeostasis, heredity",
+        "Examples with approximate described species: insects about 1,000,000, plants about 3,90,000, fungi about 1,50,000, fishes 36,000, reptiles 12,000, birds 11,000, mammals 6,500",
+        "About 1.7 to 2 million species described in all"
+       ]
+      },
+      {
+       "id": "sl-p2",
+       "pyq": "79d71c4f739d2bbc",
+       "level": 2,
+       "points": [
+        "Exchange is through the surface, need depends on volume",
+        "SA/V = 3/r falls as the cell grows",
+        "When surface cannot supply volume the cell divides, restoring a high SA/V"
+       ]
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "topic": "Cell organelles: structure and function",
+   "subtopics": [
+    {
+     "id": "cell-diagram",
+     "title": "The eukaryotic cell, drawn and labelled",
+     "theory_md": "A eukaryotic cell has a true **nucleus** and membrane-bound organelles. In a labelled diagram draw: plasma membrane, cytoplasm, nucleus (envelope, pore, chromatin, nucleolus), rough and smooth ER, Golgi, mitochondria, lysosomes, vacuoles, ribosomes, centrioles (animal).\n\n| Organelle | Key role |\n|---|---|\n| Mitochondria | aerobic respiration, ATP |\n| Lysosomes | digestion, autophagy |\n| Golgi | modify, sort, package, secrete |\n| Vacuoles | store water and wastes, turgor |\n| ER | RER makes proteins; SER lipids, detox |\n\n**Plant only:** cell wall, chloroplasts, large vacuole. **Animal only:** centrioles, typical lysosomes. **Both:** nucleus, mitochondria, ER, Golgi, ribosomes.",
+     "basics_md": "Think of a cell as a small factory. Each organelle is a room with one job, and walls (membranes) keep jobs from mixing.",
+     "key_points": [
+      "Draw and label: membrane, nucleus, ER, Golgi, mitochondria, lysosome, vacuole, ribosome",
+      "Mitochondria = ATP; lysosome = digestion; Golgi = sorting and packaging; ER = synthesis",
+      "Animal-only: centrioles; plant-only: wall, chloroplast, big vacuole",
+      "Mitochondria and Golgi are present in both"
+     ],
+     "questions": [
+      {
+       "id": "cd-q1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "Which organelle is present in animal cells but not in higher plant cells?",
+       "options": [
+        "Mitochondria",
+        "Centriole",
+        "Golgi body",
+        "Ribosome"
+       ],
+       "answer_index": 1,
+       "why": "Higher plants form the spindle without centrioles."
+      },
+      {
+       "id": "cd-q2",
+       "kind": "mcq",
+       "level": 1,
+       "q": "Which of these is NOT a membrane-bound organelle?",
+       "options": [
+        "Lysosome",
+        "Golgi body",
+        "Ribosome",
+        "Vacuole"
+       ],
+       "answer_index": 2,
+       "why": "Ribosomes are particles of rRNA and protein with no membrane."
+      },
+      {
+       "id": "cd-q3",
+       "kind": "long",
+       "level": 2,
+       "marks": 5,
+       "q": "Draw a labelled diagram of a eukaryotic animal cell and give one function each of nucleus, mitochondria, Golgi, lysosome and RER.",
+       "model_answer_md": "**Diagram (described):** a rounded cell bounded by the plasma membrane. Centre: nucleus with envelope, pores, chromatin, nucleolus. Cytoplasm: rough ER (ribosomes on it) joined to the nuclear envelope, smooth ER, Golgi stack (cis face towards ER), mitochondria with cristae, lysosomes, vacuoles, free ribosomes, centrioles.\n\n**Functions**\n- Nucleus: holds DNA, controls the cell.\n- Mitochondria: ATP by aerobic respiration.\n- Golgi: modifies, sorts and packages proteins and lipids.\n- Lysosome: intracellular digestion.\n- RER: makes proteins for secretion and membranes.",
+       "points": [
+        "Labelled diagram with membrane, nucleus, ER, Golgi, mitochondria, lysosome",
+        "Nucleus controls the cell and holds DNA",
+        "Mitochondria make ATP",
+        "Golgi packages; lysosome digests; RER makes protein"
+       ]
+      },
+      {
+       "id": "cd-p1",
+       "pyq": "1a973ea65d8df693",
+       "level": 2,
+       "points": [
+        "Diagram: plasma membrane, cytoplasm, nucleus, RER, SER, Golgi, mitochondria, lysosomes, vacuoles, ribosomes",
+        "Mitochondria: aerobic respiration, ATP (powerhouse)",
+        "Lysosomes: intracellular digestion, autophagy",
+        "Golgi: modify, sort, package and secrete",
+        "Vacuoles: store water, salts, wastes; turgor",
+        "ER: RER makes proteins, SER makes lipids"
+       ]
+      },
+      {
+       "id": "cd-p2",
+       "pyq": "c2480a47810d9ed7",
+       "level": 2,
+       "points": [
+        "Labelled animal cell: membrane, nucleus, RER, SER, Golgi, mitochondria, lysosomes, centrioles, no cell wall",
+        "Present in animal but not plant cells: centrioles (organise spindle, form cilia/flagella basal bodies)",
+        "Typical lysosomes (digestion) and small temporary vacuoles",
+        "Plant cells have wall, chloroplast, large vacuole instead"
+       ]
+      },
+      {
+       "id": "cd-p3",
+       "pyq": "2285289411d8be9c",
+       "level": 2,
+       "points": [
+        "Labelled eukaryotic cell diagram",
+        "Briefly: nucleus (control, DNA), mitochondria (ATP), ER (synthesis), Golgi (packaging), lysosomes (digestion), ribosomes (protein synthesis), plasma membrane (selective barrier)"
+       ]
+      },
+      {
+       "id": "cd-p4",
+       "pyq": "2ac0e295b10ec428",
+       "level": 2,
+       "points": [
+        "Labelled eukaryotic cell diagram",
+        "Briefly: nucleus (control, DNA), mitochondria (ATP), ER (synthesis), Golgi (packaging), lysosomes (digestion), ribosomes (protein synthesis), plasma membrane (selective barrier)"
+       ]
+      },
+      {
+       "id": "cd-p5",
+       "pyq": "82d858f96bfc1a63",
+       "level": 1,
+       "points": [
+        "Mitochondria: aerobic respiration and ATP",
+        "Golgi apparatus: modifies, packages and secretes proteins (ER, nucleus, ribosomes also accepted)"
+       ]
+      }
+     ]
+    },
+    {
+     "id": "membrane-nucleus-ribosome",
+     "title": "Plasma membrane, nucleus and ribosomes",
+     "theory_md": "**Plasma membrane:** fluid mosaic model (Singer and Nicolson, 1972): a phospholipid bilayer with embedded proteins; it **regulates movement** of substances, allows cell communication and recognition. It does not make ATP in eukaryotes and does not give mechanical support (the wall does that in plants).\n\n**Nucleus:** double envelope with pores, chromatin (DNA), **nucleolus**. The nucleolus makes **rRNA** and assembles ribosomal subunits.\n\n**Ribosomes:** rRNA and protein, no membrane; the site of **protein synthesis (translation)** in both prokaryotes (70S) and eukaryotes (80S).",
+     "basics_md": "The membrane is the cell's gate, the nucleus is its office holding the plans, and ribosomes are the machines that follow the plans to build proteins.",
+     "key_points": [
+      "Membrane: lipid bilayer with proteins, selective transport and cell communication",
+      "Nucleus: DNA, envelope with pores, nucleolus",
+      "Nucleolus makes rRNA and ribosomal subunits",
+      "Ribosomes: protein synthesis in all cells, 70S prokaryote, 80S eukaryote"
+     ],
+     "questions": [
+      {
+       "id": "mn-q1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "The nucleolus is mainly concerned with",
+       "options": [
+        "DNA replication",
+        "Making ribosomes",
+        "Lipid synthesis",
+        "Photosynthesis"
+       ],
+       "answer_index": 1,
+       "why": "It transcribes rRNA and assembles ribosomal subunits."
+      },
+      {
+       "id": "mn-q2",
+       "kind": "mcq",
+       "level": 2,
+       "q": "A eukaryotic ribosome is made of subunits",
+       "options": [
+        "50S + 30S",
+        "60S + 40S",
+        "60S + 20S",
+        "40S + 30S"
+       ],
+       "answer_index": 1,
+       "why": "60S + 40S = 80S; Svedberg units are not additive. 50S + 30S = 70S is the prokaryote."
+      },
+      {
+       "id": "mn-q3",
+       "kind": "short",
+       "level": 2,
+       "marks": 3,
+       "q": "Describe the plasma membrane and list two of its functions.",
+       "model_answer_md": "**Fluid mosaic model:** a phospholipid bilayer (heads out, tails in) with integral and peripheral proteins that move laterally; cholesterol modulates fluidity.\n\n**Functions:** 1. controls what enters and leaves (selectively permeable); 2. cell-to-cell communication and recognition through glycoproteins.",
+       "points": [
+        "Phospholipid bilayer with proteins (fluid mosaic)",
+        "Selectively permeable, regulates transport",
+        "Communication and recognition"
+       ]
+      },
+      {
+       "id": "mn-p1",
+       "pyq": "b762504fb6ccb967",
+       "level": 1,
+       "points": [
+        "C) Generating ATP is not a function of the plasma membrane",
+        "It regulates transport and communication; ATP is made in mitochondria"
+       ]
+      },
+      {
+       "id": "mn-p2",
+       "pyq": "4c20752ba910b4bd",
+       "level": 1,
+       "points": [
+        "C) Ribosome production",
+        "Nucleolus makes rRNA and assembles ribosomal subunits"
+       ]
+      },
+      {
+       "id": "mn-p3",
+       "pyq": "110020c245030152",
+       "level": 2,
+       "points": [
+        "Ribosomes are rRNA plus protein, non-membrane-bound",
+        "Site of protein synthesis (translation) in prokaryotes and eukaryotes",
+        "Read mRNA codons; tRNA brings amino acids; peptide bonds formed",
+        "70S in prokaryotes, 80S in eukaryotes"
+       ]
+      }
+     ]
+    },
+    {
+     "id": "endomembrane",
+     "title": "ER, Golgi, lysosomes and vacuoles",
+     "theory_md": "**RER** (ribosomes) makes proteins for secretion and membranes; **SER** makes lipids and steroids and detoxifies.\n\n**Golgi:** a stack of cisternae; **cis face** receives from the ER, **trans face** ships out. It modifies (glycosylation), sorts and packages proteins, and forms lysosomes. It is the organelle that packages and modifies proteins before secretion.\n\n**Lysosomes:** single-membrane vesicles of acid hydrolases (pH about 5): digest food, bacteria and worn-out organelles (**autophagy**); \"suicide bags\".\n\n**Vacuoles:** store water, salts and wastes; the large plant vacuole keeps turgor.",
+     "basics_md": "Proteins are made on the rough ER, posted through the Golgi like a sorting office, and lysosomes are the cell's recycling bins.",
+     "key_points": [
+      "RER: protein synthesis; SER: lipids, steroids, detox",
+      "Golgi: cis in, trans out; modifies, sorts, packages; forms lysosomes",
+      "Lysosome: acid hydrolases, digestion, autophagy",
+      "Autophagy: lysosome fuses with an autophagosome holding worn organelles"
+     ],
+     "questions": [
+      {
+       "id": "em-q1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "The 'suicide bags' of the cell are",
+       "options": [
+        "Ribosomes",
+        "Lysosomes",
+        "Peroxisomes",
+        "Golgi bodies"
+       ],
+       "answer_index": 1,
+       "why": "Their enzymes digest the cell if the membrane bursts."
+      },
+      {
+       "id": "em-q2",
+       "kind": "mcq",
+       "level": 2,
+       "q": "Lysosomal enzymes are made on the rough ER and finally packaged into lysosomes by the",
+       "options": [
+        "Nucleolus",
+        "Mitochondria",
+        "Golgi apparatus",
+        "Centriole"
+       ],
+       "answer_index": 2,
+       "why": "Lysosomes bud from the trans face of the Golgi."
+      },
+      {
+       "id": "em-q3",
+       "kind": "short",
+       "level": 2,
+       "marks": 3,
+       "q": "Write short notes on the Golgi apparatus.",
+       "model_answer_md": "- Stack of flattened cisternae with vesicles; **cis** face towards ER, **trans** face towards membrane.\n- Modifies proteins and lipids (glycosylation).\n- Sorts and packages them into vesicles for secretion or delivery.\n- Forms lysosomes.",
+       "points": [
+        "Stack of cisternae, cis and trans faces",
+        "Modification (glycosylation)",
+        "Sorting, packaging, secretion",
+        "Forms lysosomes"
+       ]
+      },
+      {
+       "id": "em-p1",
+       "pyq": "d893e19430bc1efd",
+       "level": 1,
+       "points": [
+        "B) Golgi apparatus",
+        "It receives proteins from ER, modifies and packages them for secretion"
+       ]
+      },
+      {
+       "id": "em-p2",
+       "pyq": "ea83eebca8166c3d",
+       "level": 2,
+       "points": [
+        "Autophagy: the cell digests its own worn-out organelles and proteins",
+        "Lysosomes carry it out: a double membrane engulfs the organelle (autophagosome)",
+        "It fuses with a lysosome and acid hydrolases digest it",
+        "Products are recycled; protects against damaged organelles"
+       ]
+      }
+     ]
+    },
+    {
+     "id": "mitochondria-ets",
+     "title": "Mitochondria and the electron transport system",
+     "theory_md": "**Mitochondria:** double membrane, inner membrane folded into **cristae**, matrix with circular DNA and 70S ribosomes. The **powerhouse**: Krebs cycle in the matrix, ETS and oxidative phosphorylation on the inner membrane make most of the ATP.\n\n**ETS:** Complex I (NADH dehydrogenase) and II (succinate dehydrogenase) $\\rightarrow$ ubiquinone $\\rightarrow$ III ($bc_1$) $\\rightarrow$ cytochrome c $\\rightarrow$ IV (cytochrome oxidase) $\\rightarrow$ $\\mathrm{O_2}$ gives $\\mathrm{H_2O}$. $\\mathrm{H^+}$ pumped across the inner membrane drives ATP synthase (chemiosmosis).\n\n**Malate-aspartate shuttle:** cytosolic NADH cannot cross the inner membrane, so malate carries its reducing power in and aspartate returns.",
+     "basics_md": "Food is burned slowly in steps. The energy released moves protons across a membrane, and when they flow back through ATP synthase they make ATP, like water turning a turbine.",
+     "key_points": [
+      "Cristae increase area; matrix has Krebs enzymes, DNA, 70S ribosomes",
+      "ETS on inner membrane: I, II, III, IV, with O2 as final acceptor",
+      "Proton gradient drives ATP synthase (chemiosmosis)",
+      "Shuttle moves cytosolic NADH equivalents into the matrix as malate; aspartate returns"
+     ],
+     "questions": [
+      {
+       "id": "me-q1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "The powerhouse of the cell is the",
+       "options": [
+        "Golgi apparatus",
+        "Ribosome",
+        "Mitochondrion",
+        "Endoplasmic reticulum"
+       ],
+       "answer_index": 2,
+       "why": "Mitochondria make most of the ATP. Ribosomes make protein."
+      },
+      {
+       "id": "me-q2",
+       "kind": "mcq",
+       "level": 2,
+       "q": "The final electron acceptor in the electron transport system is",
+       "options": [
+        "NAD$^+$",
+        "Cytochrome c",
+        "Oxygen",
+        "Ubiquinone"
+       ],
+       "answer_index": 2,
+       "why": "Complex IV passes electrons to $\\mathrm{O_2}$, forming water."
+      },
+      {
+       "id": "me-q3",
+       "kind": "long",
+       "level": 3,
+       "marks": 5,
+       "q": "Describe the structure of a mitochondrion and the sites of its ATP-producing steps.",
+       "model_answer_md": "**Structure:** outer membrane (porous), intermembrane space, **inner membrane folded into cristae** carrying the ETS and ATP synthase, **matrix** with Krebs enzymes, circular DNA and 70S ribosomes.\n\n**ATP production:** Krebs cycle in the matrix gives NADH, $\\mathrm{FADH_2}$ and GTP; the ETS on the cristae oxidises them and ATP synthase makes ATP by chemiosmosis.",
+       "points": [
+        "Double membrane, cristae, matrix",
+        "Own circular DNA and 70S ribosomes",
+        "Krebs cycle in matrix",
+        "ETS and ATP synthase on inner membrane"
+       ]
+      },
+      {
+       "id": "me-p1",
+       "pyq": "d3feeabe430f12b3",
+       "level": 1,
+       "points": [
+        "C) Mitochondria",
+        "Makes most of the cell's ATP by aerobic respiration"
+       ]
+      },
+      {
+       "id": "me-p2",
+       "pyq": "3a6885c288be8aa7",
+       "level": 1,
+       "points": [
+        "B) Mitochondria",
+        "ATP from the Krebs cycle and oxidative phosphorylation"
+       ]
+      },
+      {
+       "id": "me-p3",
+       "pyq": "cbbd3f0ef9550523",
+       "level": 2,
+       "points": [
+        "Produce most of the cell's ATP by aerobic respiration, hence powerhouse",
+        "Pyruvate to acetyl-CoA, Krebs cycle in matrix",
+        "NADH and FADH2 oxidised in ETS on cristae; oxidative phosphorylation",
+        "Also own DNA, heat production and apoptosis"
+       ]
+      },
+      {
+       "id": "me-p4",
+       "pyq": "61755f1fb09ec7f4",
+       "level": 3,
+       "points": [
+        "ETS on the inner membrane: complexes I, II, III, IV, ubiquinone, cytochrome c; O2 final acceptor forming water",
+        "Proton pumping and ATP synthase (chemiosmosis); about 2.5 ATP per NADH, 1.5 per FADH2",
+        "Shuttle needed: inner membrane is impermeable to cytosolic NADH",
+        "Malate-aspartate: cytosolic NADH reduces OAA to malate, malate enters matrix, regenerates NADH (to Complex I); aspartate returns via the glutamate-aspartate antiporter",
+        "Schematic diagram with cytosol, inner membrane, matrix"
+       ]
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "topic": "Cell types",
+   "subtopics": [
+    {
+     "id": "prokaryote-eukaryote",
+     "title": "Prokaryotic and eukaryotic cells",
+     "theory_md": "| Feature | Prokaryote | Eukaryote |\n|---|---|---|\n| Size | 1 to 10 µm | 10 to 100 µm |\n| Nucleus | none; DNA in **nucleoid** | true nucleus with envelope |\n| DNA | single circular, no histones; plasmids | linear chromosomes with histones |\n| Organelles | no membrane-bound | present |\n| Ribosomes | 70S | 80S |\n| Wall | peptidoglycan | cellulose (plants), chitin (fungi), none in animals |\n| Division | binary fission | mitosis / meiosis |\n\nA prokaryote also has a capsule, mesosomes, flagella and pili. Examples: *E. coli*, *Anabaena* (prokaryote); *Chlamydomonas*, *Euglena*, *Amoeba* (eukaryote). Small size gives a high $SA/V$ and fast division.",
+     "basics_md": "Prokaryotes are the simple, small, older cells where the DNA floats loose. Eukaryotes are larger and keep the DNA in a nucleus and split work into organelles.",
+     "key_points": [
+      "No nuclear membrane, nucleoid, circular DNA vs true nucleus",
+      "No membrane-bound organelles vs present",
+      "70S vs 80S ribosomes",
+      "Peptidoglycan wall, binary fission, small size",
+      "Examples: E. coli / Anabaena; Chlamydomonas / Amoeba"
+     ],
+     "questions": [
+      {
+       "id": "pe-q1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "Prokaryotic ribosomes have sedimentation coefficient",
+       "options": [
+        "80S",
+        "70S",
+        "60S",
+        "40S"
+       ],
+       "answer_index": 1,
+       "why": "70S = 50S + 30S. 80S is the eukaryote."
+      },
+      {
+       "id": "pe-q2",
+       "kind": "mcq",
+       "level": 2,
+       "q": "Which feature is found in a bacterial cell?",
+       "options": [
+        "Mitochondria",
+        "Nuclear envelope",
+        "Plasmid",
+        "Golgi body"
+       ],
+       "answer_index": 2,
+       "why": "Plasmids are small circular DNA; the others are eukaryotic."
+      },
+      {
+       "id": "pe-q3",
+       "kind": "short",
+       "level": 2,
+       "marks": 4,
+       "q": "Differentiate between prokaryotic and eukaryotic cells (four points).",
+       "model_answer_md": "| Feature | Prokaryotic | Eukaryotic |\n|---|---|---|\n| Nucleus | no envelope, nucleoid | true nucleus |\n| Organelles | none membrane-bound | present |\n| Ribosomes | 70S | 80S |\n| DNA | circular, no histones | linear with histones |",
+       "points": [
+        "Nucleus: nucleoid vs true nucleus",
+        "Membrane organelles absent vs present",
+        "70S vs 80S",
+        "DNA circular vs linear with histones"
+       ]
+      },
+      {
+       "id": "pe-q4",
+       "kind": "short",
+       "level": 3,
+       "marks": 3,
+       "q": "Why does a 1 µm bacterium divide faster than a 50 µm protist cell?",
+       "model_answer_md": "A small cell has a high $SA/V$ ($3/r$), so nutrients reach every part by diffusion without internal transport and growth is quick. It has a single circular chromosome copied rapidly and divides by simple binary fission (about 20 min). The large cell has a low $SA/V$, many chromosomes and a spindle-based mitosis.",
+       "points": [
+        "High SA/V of small cell",
+        "Fast diffusion, no transport needed",
+        "Simple DNA and binary fission",
+        "Large cell: low SA/V, mitosis slower"
+       ]
+      },
+      {
+       "id": "pe-p1",
+       "pyq": "fd8ff27d69ac700b",
+       "level": 2,
+       "points": [
+        "Type A is prokaryotic (bacterium or cyanobacterium)",
+        "Reasons: 1-2 µm, no nucleus (nucleoid), no membrane-bound organelles, rigid wall",
+        "Type B is eukaryotic (unicellular alga or protist)",
+        "Reasons: 10-50 µm, true nucleus, mitochondria and ER"
+       ]
+      },
+      {
+       "id": "pe-p2",
+       "pyq": "c29acd118019989a",
+       "level": 2,
+       "points": [
+        "Nucleus: nucleoid vs nuclear envelope",
+        "Membrane-bound organelles: absent vs present",
+        "Size: small vs large",
+        "Ribosomes 70S vs 80S (any three differences)"
+       ]
+      },
+      {
+       "id": "pe-p3",
+       "pyq": "4f2132c043316238",
+       "level": 3,
+       "points": [
+        "A: small size, high SA/V, fast uptake and division; no nucleus gives quick response; rigid wall prevents osmotic lysis",
+        "B: nucleus protects DNA and allows regulation; organelles compartmentalise reactions",
+        "Organelles supply large internal membrane area to offset low SA/V",
+        "A favours speed, B favours size and specialisation"
+       ]
+      },
+      {
+       "id": "pe-p4",
+       "pyq": "7043cfa11213ee3f",
+       "level": 1,
+       "points": [
+        "A: Escherichia coli or Anabaena / Nostoc (cyanobacterium)",
+        "B: Chlamydomonas, Euglena, Paramecium or Amoeba"
+       ]
+      },
+      {
+       "id": "pe-p5",
+       "pyq": "57ff6d24b1feadf5",
+       "level": 2,
+       "points": [
+        "Features: 1-10 µm, no nucleus (nucleoid), circular DNA, plasmids",
+        "No membrane-bound organelles, 70S ribosomes",
+        "Envelope: capsule, peptidoglycan wall, plasma membrane; mesosomes",
+        "Flagella, pili; binary fission",
+        "Diagram labelled: capsule, wall, membrane, nucleoid, plasmid, ribosomes, flagellum, pili"
+       ]
+      },
+      {
+       "id": "pe-p6",
+       "pyq": "6432b63facac1b29",
+       "level": 1,
+       "points": [
+        "Nucleus: nucleoid vs true nucleus",
+        "Membrane-bound organelles: absent vs present",
+        "Ribosomes: 70S vs 80S; size: small vs large"
+       ]
+      },
+      {
+       "id": "pe-p7",
+       "pyq": "38f35f7bb309fe87",
+       "level": 2,
+       "points": [
+        "Organisation: nucleoid, no organelles vs true nucleus and organelles",
+        "Genetic: single circular DNA, plasmids, no histones vs linear chromosomes with histones",
+        "Complexity: unicellular, small, 70S vs often multicellular, large, 80S",
+        "Division: binary fission vs mitosis and meiosis"
+       ]
+      },
+      {
+       "id": "pe-p8",
+       "pyq": "373a1759dbb0ea34",
+       "level": 2,
+       "points": [
+        "Nucleus: nucleoid vs true nucleus",
+        "Organelles: none vs present",
+        "Ribosomes 70S vs 80S",
+        "DNA circular vs linear; division fission vs mitosis (minimum four)"
+       ]
+      }
+     ]
+    },
+    {
+     "id": "plant-animal",
+     "title": "Plant vs animal cells; germ vs somatic cells",
+     "theory_md": "| Feature | Plant cell | Animal cell |\n|---|---|---|\n| Cell wall | cellulose, outside membrane | absent |\n| Plastids | chloroplasts (photosynthesis) | absent |\n| Vacuole | large central (tonoplast) | small or none |\n| Centrioles | usually absent | present |\n| Lysosomes | rare | typical |\n| Reserve food | starch | glycogen |\n| Shape | fixed, polygonal | round, irregular |\n\n**Germ cells** (gametes and their precursors in gonads): haploid ($n$) gametes, divide by meiosis, pass genes to the next generation. **Somatic cells** (all other body cells): diploid ($2n$), divide by mitosis, not inherited.",
+     "basics_md": "Plants need rigid shape and make their own food, so they have a wall and chloroplasts. Germ cells are the ones that become eggs and sperm; every other body cell is somatic.",
+     "key_points": [
+      "Plant: wall, chloroplast, big vacuole, no centriole",
+      "Animal: no wall, centrioles, small vacuoles",
+      "Germ cells give haploid gametes by meiosis",
+      "Somatic cells are diploid, divide by mitosis, not inherited"
+     ],
+     "questions": [
+      {
+       "id": "pa-q1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "A plant cell differs from an animal cell in having",
+       "options": [
+        "Mitochondria",
+        "Cell wall and chloroplasts",
+        "Nucleus",
+        "Ribosomes"
+       ],
+       "answer_index": 1,
+       "why": "Mitochondria, nucleus and ribosomes are in both."
+      },
+      {
+       "id": "pa-q2",
+       "kind": "mcq",
+       "level": 1,
+       "q": "Somatic cells of a human are",
+       "options": [
+        "Haploid, divide by meiosis",
+        "Diploid, divide by mitosis",
+        "Haploid, divide by mitosis",
+        "Diploid, divide by meiosis"
+       ],
+       "answer_index": 1,
+       "why": "Haploid gametes arise from germ cells by meiosis."
+      },
+      {
+       "id": "pa-q3",
+       "kind": "short",
+       "level": 2,
+       "marks": 4,
+       "q": "Differentiate between plant and animal cells (four points).",
+       "model_answer_md": "| Feature | Plant | Animal |\n|---|---|---|\n| Cell wall | present (cellulose) | absent |\n| Chloroplasts | present | absent |\n| Vacuole | large central | small |\n| Centrioles | absent | present |",
+       "points": [
+        "Wall present vs absent",
+        "Chloroplasts present vs absent",
+        "Large vs small vacuole",
+        "Centrioles absent vs present"
+       ]
+      },
+      {
+       "id": "pa-p1",
+       "pyq": "8bc1b94f3934ed40",
+       "level": 1,
+       "points": [
+        "Plant cell has cellulose wall; animal cell has none",
+        "Plant has chloroplasts and large central vacuole; animal has neither"
+       ]
+      },
+      {
+       "id": "pa-p2",
+       "pyq": "21d332f64d19d277",
+       "level": 1,
+       "points": [
+        "Cell wall present in plant, absent in animal",
+        "Plastids and big vacuole in plant; centrioles in animal"
+       ]
+      },
+      {
+       "id": "pa-p3",
+       "pyq": "bfd61e927ae3c192",
+       "level": 1,
+       "points": [
+        "Cell wall present in plant, absent in animal",
+        "Chloroplasts and big vacuole in plant; centrioles in animal"
+       ]
+      },
+      {
+       "id": "pa-p4",
+       "pyq": "208a2c2b19cc4253",
+       "level": 1,
+       "points": [
+        "Cell wall, plastids, vacuole size, centrioles (any four)",
+        "Plant: wall, chloroplast, large vacuole, no centriole; animal the opposite"
+       ]
+      },
+      {
+       "id": "pa-p5",
+       "pyq": "1a972dc6dff0feaf",
+       "level": 1,
+       "points": [
+        "Four differences: wall, plastids, vacuole, centrioles",
+        "Reserve food starch vs glycogen may be added"
+       ]
+      },
+      {
+       "id": "pa-p6",
+       "pyq": "cc12d169077f0fca",
+       "level": 2,
+       "points": [
+        "Plant: cellulose wall (support, prevents bursting), chloroplasts (photosynthesis), large vacuole (turgor, storage)",
+        "Animal: centrioles (spindle), lysosomes (digestion), small vacuoles, only plasma membrane",
+        "Both share nucleus, mitochondria, ER, Golgi, ribosomes"
+       ]
+      },
+      {
+       "id": "pa-p7",
+       "pyq": "2f41c250dc874b67",
+       "level": 1,
+       "points": [
+        "Germ cells: form gametes, haploid, meiosis, inherited",
+        "Somatic cells: body tissues, diploid, mitosis, not inherited"
+       ]
+      },
+      {
+       "id": "pa-p8",
+       "pyq": "3a12a9718411d9c1",
+       "level": 1,
+       "points": [
+        "Germ cells: form gametes, haploid, meiosis, pass genes on",
+        "Somatic cells: body tissues, diploid, mitosis, not passed on"
+       ]
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "topic": "Cell growth and division",
+   "subtopics": [
+    {
+     "id": "cell-cycle",
+     "title": "The cell cycle and its control",
+     "theory_md": "The **cell cycle** is the ordered sequence of events by which a cell grows, duplicates its DNA and divides. About 24 h in a human cell.\n\n**Interphase:** $G_1$ (cell growth, protein and RNA synthesis, preparation for DNA synthesis), **S** (DNA replication, $2C\\to4C$, chromosome number still $2n$), $G_2$ (grows, makes spindle proteins). **M phase:** mitosis then cytokinesis. $G_0$: resting.\n\n**Control:** cyclins and CDKs at checkpoints ($G_1/S$, $G_2/M$, metaphase). **p53** and **Rb** stop damaged cells; loss of these or oncogene activation gives uncontrolled division, i.e. **cancer**.",
+     "basics_md": "A cell goes through a loop: grow, copy its DNA, check the copy, split. Checkpoints are inspectors that stop the loop if something is wrong.",
+     "key_points": [
+      "Cell cycle = interphase (G1, S, G2) + M phase",
+      "G1: growth; S: DNA replication; G2: preparation for mitosis",
+      "Cyclin-CDK checkpoints at G1/S, G2/M, metaphase",
+      "p53, Rb arrest damaged cells; failure leads to cancer"
+     ],
+     "questions": [
+      {
+       "id": "cc-q1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "DNA replication takes place in the",
+       "options": [
+        "G1 phase",
+        "S phase",
+        "G2 phase",
+        "M phase"
+       ],
+       "answer_index": 1,
+       "why": "S for synthesis. G1 and G2 are growth gaps."
+      },
+      {
+       "id": "cc-q2",
+       "kind": "mcq",
+       "level": 2,
+       "q": "A cell has $2C$ DNA in G1. Its DNA content and chromosome number at the end of G2 are",
+       "options": [
+        "2C, 2n",
+        "4C, 2n",
+        "4C, 4n",
+        "2C, n"
+       ],
+       "answer_index": 1,
+       "why": "DNA doubles in S but chromosome number stays $2n$ until anaphase."
+      },
+      {
+       "id": "cc-q3",
+       "kind": "short",
+       "level": 2,
+       "marks": 3,
+       "q": "Explain the cell cycle with a labelled sketch of its phases.",
+       "model_answer_md": "**Cell cycle** = sequence of growth, DNA replication and division.\n- **$G_1$:** growth, preparation for DNA synthesis.\n- **S:** DNA replicates ($2C\\to4C$).\n- **$G_2$:** growth, checks, spindle proteins made.\n- **M phase:** mitosis (karyokinesis) and cytokinesis.\n\n**Sketch (described):** a circle with $G_1\\to S\\to G_2$ forming interphase, then M, returning to $G_1$; $G_0$ branching off $G_1$.",
+       "points": [
+        "Definition",
+        "G1, S, G2 with events",
+        "M phase = mitosis + cytokinesis",
+        "Circular diagram with G0"
+       ]
+      },
+      {
+       "id": "cc-p1",
+       "pyq": "28a25722bee82858",
+       "level": 1,
+       "points": [
+        "Ordered sequence of events: growth, DNA replication, division into two daughter cells",
+        "Interphase (G1, S, G2) and M phase"
+       ]
+      },
+      {
+       "id": "cc-p2",
+       "pyq": "26e61486082b98c5",
+       "level": 1,
+       "points": [
+        "C) S phase",
+        "DNA doubles 2C to 4C; chromosome number stays 2n"
+       ]
+      },
+      {
+       "id": "cc-p3",
+       "pyq": "1d4c220ee83c6494",
+       "level": 1,
+       "points": [
+        "B) Cell growth and preparation for DNA synthesis",
+        "DNA replication is S; separation of chromosomes is M"
+       ]
+      },
+      {
+       "id": "cc-p4",
+       "pyq": "e2ea72fadeea5cc9",
+       "level": 2,
+       "points": [
+        "Definition; about 24 h in human cell",
+        "G1, S, G2 events; M phase = mitosis and cytokinesis",
+        "G0 resting state",
+        "Labelled circular diagram"
+       ]
+      },
+      {
+       "id": "cc-p5",
+       "pyq": "3a248d93dc3f8e00",
+       "level": 2,
+       "points": [
+        "Cyclins and CDKs drive the cycle through checkpoints",
+        "Checkpoints: G1/S, G2/M, metaphase spindle",
+        "p53 and Rb halt cycle for repair or send the cell to apoptosis",
+        "Cancer: tumour suppressors inactivated or oncogenes active, so checkpoints are bypassed"
+       ]
+      }
+     ]
+    },
+    {
+     "id": "mitosis",
+     "title": "Mitosis, cytokinesis and the spindle",
+     "theory_md": "Mitosis is **equational** division: $2n\\to2n$, two identical daughters (growth, repair).\n\n- **Prophase:** chromatin condenses, nucleolus and envelope disappear, spindle forms.\n- **Metaphase:** chromosomes align at the equator, spindle fibres attached to kinetochores.\n- **Anaphase:** centromeres split, sister chromatids pulled to opposite poles.\n- **Telophase:** chromosomes decondense, envelope and nucleolus reappear.\n\n**Karyokinesis** is division of the nucleus; **cytokinesis** divides the cytoplasm. Animals: **cleavage furrow** (actin-myosin ring, outside in). Plants: **cell plate** from Golgi vesicles (inside out), becoming the new wall.\n\n**Spindle fibres** are microtubules; if they fail, chromosomes missegregate (aneuploidy).",
+     "basics_md": "The cell copies its chromosomes, lines them up, pulls one copy of each to each end, and then pinches the cell in two.",
+     "key_points": [
+      "PMAT order with one feature each",
+      "Metaphase: align; anaphase: chromatids separate; telophase: reverse of prophase",
+      "Karyokinesis = nucleus, cytokinesis = cytoplasm",
+      "Furrow in animals, cell plate in plants",
+      "Spindle microtubules; failure causes aneuploidy"
+     ],
+     "questions": [
+      {
+       "id": "mi-q1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "Sister chromatids separate during",
+       "options": [
+        "Prophase",
+        "Metaphase",
+        "Anaphase",
+        "Telophase"
+       ],
+       "answer_index": 2,
+       "why": "Centromeres split in anaphase. At metaphase they only line up."
+      },
+      {
+       "id": "mi-q2",
+       "kind": "mcq",
+       "level": 2,
+       "q": "The cell plate forms in",
+       "options": [
+        "Animal cytokinesis from the actin ring",
+        "Plant cytokinesis from Golgi vesicles",
+        "Binary fission of bacteria",
+        "Meiosis I only"
+       ],
+       "answer_index": 1,
+       "why": "Golgi vesicles fuse at the centre and grow outward."
+      },
+      {
+       "id": "mi-q3",
+       "kind": "long",
+       "level": 2,
+       "marks": 5,
+       "q": "Describe the phases of mitosis with the distinct feature of each.",
+       "model_answer_md": "**Mitosis** ($2n\\to2n$):\n1. **Prophase:** chromatin condenses to chromosomes of two chromatids; nucleolus and envelope vanish; spindle forms.\n2. **Metaphase:** chromosomes at the equatorial plate, attached to spindle by kinetochores.\n3. **Anaphase:** centromeres split; sister chromatids move to opposite poles.\n4. **Telophase:** chromosomes decondense; nuclear envelope and nucleolus reform.\n**Cytokinesis** then separates the cytoplasm.",
+       "points": [
+        "Prophase: condensation, envelope breaks, spindle",
+        "Metaphase: equatorial alignment",
+        "Anaphase: chromatids separate to poles",
+        "Telophase: envelope reforms; then cytokinesis"
+       ]
+      },
+      {
+       "id": "mi-p1",
+       "pyq": "2001b9094f80f839",
+       "level": 2,
+       "points": [
+        "Mitosis equational: 2n to 2n, identical daughters",
+        "Prophase, metaphase, anaphase, telophase each with a feature",
+        "Diagrams of the phases"
+       ]
+      },
+      {
+       "id": "mi-p2",
+       "pyq": "5632d9b30122123b",
+       "level": 2,
+       "points": [
+        "Cell cycle: interphase G1, S, G2 then M",
+        "Mitosis phases: prophase, metaphase, anaphase, telophase with features",
+        "Cytokinesis completes division"
+       ]
+      },
+      {
+       "id": "mi-p3",
+       "pyq": "c12edcd29a996b5b",
+       "level": 2,
+       "points": [
+        "Cell structure: membrane, nucleus, organelles (briefly)",
+        "Sequential stages of division: interphase, then P, M, A, T, cytokinesis",
+        "Key morphological changes: condensation, alignment, separation, decondensation"
+       ]
+      },
+      {
+       "id": "mi-p4",
+       "pyq": "d7e9787e9edae3ed",
+       "level": 1,
+       "points": [
+        "Karyokinesis: division of the nucleus; cytokinesis: division of the cytoplasm",
+        "Karyokinesis first (prophase to telophase); cytokinesis follows or accompanies telophase"
+       ]
+      },
+      {
+       "id": "mi-p5",
+       "pyq": "aeee09981b432ea3",
+       "level": 1,
+       "points": [
+        "Karyokinesis: division of the nucleus; cytokinesis: division of the cytoplasm",
+        "Karyokinesis first; cytokinesis completes the division"
+       ]
+      },
+      {
+       "id": "mi-p6",
+       "pyq": "0dac5046a6570b01",
+       "level": 1,
+       "points": [
+        "Anaphase: centromere splits, sister chromatids move to opposite poles",
+        "Telophase: chromosomes reach poles and decondense; envelope and nucleolus reappear"
+       ]
+      },
+      {
+       "id": "mi-p7",
+       "pyq": "42149cf979722151",
+       "level": 1,
+       "points": [
+        "Anaphase: centromeres split, chromatids separate and move to poles",
+        "Telophase: chromosomes decondense, nuclear envelope reforms"
+       ]
+      },
+      {
+       "id": "mi-p8",
+       "pyq": "a2a39a9f297fc2ab",
+       "level": 1,
+       "points": [
+        "Prophase: first stage, chromatin condenses, envelope breaks",
+        "Telophase: last stage, chromosomes decondense, envelope reforms"
+       ]
+      },
+      {
+       "id": "mi-p9",
+       "pyq": "e59ae9c8847e4fc1",
+       "level": 1,
+       "points": [
+        "C) Anaphase",
+        "Centromeres split and spindle pulls chromatids; metaphase is alignment"
+       ]
+      },
+      {
+       "id": "mi-p10",
+       "pyq": "5a45d94573ebff38",
+       "level": 2,
+       "points": [
+        "Spindle fibres are microtubules organised by centrosomes",
+        "Kinetochore fibres align chromosomes and pull chromatids to poles in anaphase",
+        "Failure gives non-disjunction and aneuploidy (e.g. Down syndrome) or polyploidy",
+        "Spindle checkpoint arrests the cell; colchicine blocks the spindle"
+       ]
+      },
+      {
+       "id": "mi-p11",
+       "pyq": "93d59fb486fff27b",
+       "level": 2,
+       "points": [
+        "Animal: cleavage furrow, actin-myosin ring, outside to inside",
+        "Plant: cell plate from Golgi vesicles, centre outward, forms wall",
+        "Diagram of both"
+       ]
+      },
+      {
+       "id": "mi-p12",
+       "pyq": "510515723703af73",
+       "level": 2,
+       "points": [
+        "Cytokinesis: division of the cytoplasm after nuclear division",
+        "Animal cells have no wall: furrow pinches the cell",
+        "Plant cells have a wall: cell plate forms and becomes middle lamella and new wall",
+        "Diagram"
+       ]
+      }
+     ]
+    },
+    {
+     "id": "meiosis",
+     "title": "Meiosis and how it differs from mitosis",
+     "theory_md": "Meiosis is **reductional** division in germ cells: one $2n$ cell makes **four haploid ($n$) cells** by two divisions with one DNA replication.\n\n**Meiosis I:** Prophase I (leptotene, **zygotene** synapsis and bivalents, **pachytene** crossing over, **diplotene** chiasmata, diakinesis), Metaphase I (bivalents at equator), **Anaphase I (homologues separate; centromeres do not split)**, Telophase I. **Meiosis II** is like mitosis (sister chromatids separate).\n\n**Significance:** keeps the chromosome number constant over generations, and gives **variation** through crossing over and random assortment.\n\n| | Mitosis | Meiosis |\n|---|---|---|\n| Cells | somatic | germ |\n| Divisions | one | two |\n| Products | 2, $2n$, identical | 4, $n$, different |",
+     "basics_md": "Eggs and sperm must carry half the chromosomes, otherwise the number would double every generation. Meiosis does the halving and shuffles genes while it is at it.",
+     "key_points": [
+      "Two divisions, one replication, 4 haploid cells",
+      "Prophase I: synapsis, crossing over, chiasmata",
+      "Anaphase I separates homologues, not chromatids",
+      "Significance: constant chromosome number and variation",
+      "Mitosis: 1 division, 2 identical 2n; meiosis: 2 divisions, 4 different n"
+     ],
+     "questions": [
+      {
+       "id": "ms-q1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "Crossing over occurs in",
+       "options": [
+        "Zygotene",
+        "Pachytene",
+        "Diplotene",
+        "Metaphase I"
+       ],
+       "answer_index": 1,
+       "why": "Pachytene. Zygotene is pairing; diplotene shows the chiasmata."
+      },
+      {
+       "id": "ms-q2",
+       "kind": "mcq",
+       "level": 2,
+       "q": "Which is TRUE of meiosis?",
+       "options": [
+        "Gives identical daughter cells",
+        "Occurs in somatic cells",
+        "Produces haploid gametes",
+        "One division only"
+       ],
+       "answer_index": 2,
+       "why": "Meiosis halves the chromosome number."
+      },
+      {
+       "id": "ms-q3",
+       "kind": "short",
+       "level": 2,
+       "marks": 5,
+       "q": "Compare mitosis and meiosis in four points.",
+       "model_answer_md": "| Point | Mitosis | Meiosis |\n|---|---|---|\n| Occurs in | somatic cells | germ cells |\n| Divisions | one | two |\n| Daughter cells | 2, $2n$, identical | 4, $n$, genetically different |\n| Crossing over | absent | present in prophase I |\n| Purpose | growth, repair | gametes, variation |",
+       "points": [
+        "Somatic vs germ cells",
+        "One vs two divisions",
+        "2 identical 2n vs 4 haploid different",
+        "Crossing over only in meiosis"
+       ]
+      },
+      {
+       "id": "ms-p1",
+       "pyq": "eae4aec6dd26cbcf",
+       "level": 3,
+       "points": [
+        "Prophase I: leptotene, zygotene (synapsis, bivalent), pachytene (crossing over), diplotene (chiasmata), diakinesis (terminalisation)",
+        "Metaphase I: bivalents at equator; Anaphase I: homologues separate; Telophase I: dyad",
+        "Unique: reductional, synapsis, crossing over, centromere not split in anaphase I, genetically different cells"
+       ]
+      },
+      {
+       "id": "ms-p2",
+       "pyq": "bca159c7b57e096d",
+       "level": 1,
+       "points": [
+        "Halves chromosome number so fertilisation restores 2n",
+        "Crossing over and independent assortment give variation, drives evolution"
+       ]
+      },
+      {
+       "id": "ms-p3",
+       "pyq": "17e7278866ea5b12",
+       "level": 2,
+       "points": [
+        "Process: cells, divisions, products, crossing over",
+        "Outcomes: 2 identical 2n vs 4 haploid different",
+        "Significance: growth, repair (mitosis); gametes, variation, constant chromosome number (meiosis)"
+       ]
+      },
+      {
+       "id": "ms-p4",
+       "pyq": "ecc1869b568a5b54",
+       "level": 2,
+       "points": [
+        "Meiosis: reductional division in germ cells, two divisions, 4 haploid cells",
+        "Stages of meiosis I and II in brief",
+        "Differences from mitosis (any four)"
+       ]
+      },
+      {
+       "id": "ms-p5",
+       "pyq": "bbff696022fd744b",
+       "level": 2,
+       "points": [
+        "Process: one vs two divisions, crossing over only in meiosis",
+        "Objective: growth and repair vs gamete formation",
+        "Daughter cells: 2 identical 2n vs 4 different n"
+       ]
+      },
+      {
+       "id": "ms-p6",
+       "pyq": "b1813541695cf925",
+       "level": 1,
+       "points": [
+        "C) It produces haploid gametes",
+        "Meiosis gives genetically different cells, occurs in germ cells, has two divisions"
+       ]
+      },
+      {
+       "id": "ms-p7",
+       "pyq": "e9772a95a142ffde",
+       "level": 2,
+       "points": [
+        "Somatic vs germ cells",
+        "One vs two divisions",
+        "2 identical 2n vs 4 different n",
+        "Crossing over absent vs present"
+       ]
+      }
+     ]
+    },
+    {
+     "id": "binary-growth",
+     "title": "Binary fission and the bacterial growth curve",
+     "theory_md": "**Binary fission:** bacteria copy the single circular chromosome, attach the copies to the membrane, elongate, and form a septum: two identical cells in about 20 min. There is **no nucleus, no spindle and no distinct stages** (mitosis has all three).\n\n**Growth curve** (log of cell number against time): **lag** (cells adapt to the medium, make enzymes and ribosomes, **no increase in number**), **exponential or log** (doubling every generation time $g$, $N=N_02^{n}$, the straight-line part of the log plot), **stationary** (growth equals death, nutrients run out), **death**.",
+     "basics_md": "Bacteria simply copy their one loop of DNA and split. When put in fresh food, they first get ready (lag), then double again and again (log), then run out of food.",
+     "key_points": [
+      "Binary fission: no nucleus, spindle or stages; septum forms",
+      "Lag: adaptation, no increase in cell number",
+      "Exponential: doubling each generation, N = N0 x 2^n",
+      "Stationary and death phases follow"
+     ],
+     "questions": [
+      {
+       "id": "bg-q1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "In which phase do bacteria divide at the maximum constant rate?",
+       "options": [
+        "Lag",
+        "Exponential",
+        "Stationary",
+        "Death"
+       ],
+       "answer_index": 1,
+       "why": "Lag is adaptation; stationary has growth equal to death."
+      },
+      {
+       "id": "bg-q2",
+       "kind": "mcq",
+       "level": 2,
+       "q": "Binary fission differs from mitosis in lacking",
+       "options": [
+        "Division of DNA",
+        "Spindle apparatus",
+        "Two daughter cells",
+        "Cytoplasm division"
+       ],
+       "answer_index": 1,
+       "why": "No spindle: the DNA copies attach to the membrane and separate."
+      },
+      {
+       "id": "bg-q3",
+       "kind": "short",
+       "level": 2,
+       "marks": 3,
+       "q": "Compare binary fission and mitosis in three points.",
+       "model_answer_md": "| Point | Binary fission | Mitosis |\n|---|---|---|\n| Occurs in | prokaryotes | eukaryotic somatic cells |\n| Nucleus | absent, nucleoid | envelope breaks and reforms |\n| Spindle | absent | present |\n| Stages | none | P, M, A, T |",
+       "points": [
+        "Prokaryotes vs eukaryotes",
+        "No nucleus vs nuclear envelope",
+        "No spindle vs spindle",
+        "No stages vs four stages"
+       ]
+      },
+      {
+       "id": "bg-p1",
+       "pyq": "e9a3c8f143d3ceed",
+       "level": 2,
+       "points": [
+        "Binary fission in prokaryotes; mitosis in eukaryotic somatic cells",
+        "No nucleus, single circular DNA vs many linear chromosomes",
+        "No spindle, no stages vs spindle and four stages",
+        "Fast (about 20 min) vs slow; both give two identical cells"
+       ]
+      },
+      {
+       "id": "bg-p2",
+       "pyq": "51d8104c6c7bbb62",
+       "level": 2,
+       "points": [
+        "Organisms: prokaryotes vs eukaryotes",
+        "Genetic material: one circular vs many linear",
+        "Spindle: none vs present; stages: none vs P, M, A, T",
+        "Speed: fast vs slow (minimum four)"
+       ]
+      },
+      {
+       "id": "bg-p3",
+       "pyq": "664fbd03573edf31",
+       "level": 2,
+       "points": [
+        "Lag: adaptation, enzyme and ribosome synthesis, no increase in cell number",
+        "Exponential: maximum constant rate, doubling each generation, N = N0 x 2^n",
+        "Log N vs t is a straight line in exponential phase"
+       ]
+      }
+     ]
+    },
+    {
+     "id": "growth-numericals",
+     "title": "Bacterial growth numericals",
+     "theory_md": "**Doubling:** $n=t/g$ and $N=N_0\\,2^{n}$. Convert $t$ to the same unit as $g$.\n\n**Large starting numbers:** keep powers of 2 together: $16N_A\\cdot2^{18}=N_A\\cdot2^{22}$. A drop of 1 mL water is 1 g, $=1/18$ mol, so $\\tfrac{1}{18}N_A$ molecules.\n\n**Killing each interval:** if each interval doubles the cells and a fraction $k$ is killed, the factor per interval is $2(1-k)$; apply it for the number of intervals.\n\n**Optical density:** proportional to concentration: $C=OD\\times(\\text{cells/mL at OD }1)$.",
+     "basics_md": "Each generation doubles the cells, so after n generations you have 2 multiplied by itself n times, times the starting number.",
+     "key_points": [
+      "n = t / g, then N = N0 x 2^n",
+      "Same units for t and g",
+      "Killing 70% means the factor per interval is 2 x 0.3 = 0.6",
+      "OD is proportional to cell concentration"
+     ],
+     "questions": [
+      {
+       "id": "gn-q1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "A culture doubles every 20 min. How many generations in 2 h?",
+       "options": [
+        "3",
+        "6",
+        "9",
+        "12"
+       ],
+       "answer_index": 1,
+       "why": "$n=120/20=6$."
+      },
+      {
+       "id": "gn-q2",
+       "kind": "numerical",
+       "level": 2,
+       "marks": 2,
+       "q": "A culture starts with 500 cells and doubles every 20 min. Find the cells after 2 h.",
+       "model_answer_md": "**Given:** $N_0=500$, $g=20$ min, $t=120$ min.\n$n=120/20=6$\n$N=500\\times2^{6}=500\\times64=\\mathbf{32\\,000}$ cells.",
+       "points": [
+        "n = t/g = 6",
+        "N = N0 x 2^n",
+        "32 000 cells"
+       ]
+      },
+      {
+       "id": "gn-q3",
+       "kind": "numerical",
+       "level": 3,
+       "marks": 3,
+       "q": "A culture at OD 0.25 is known to have $8\\times10^8$ cells/mL at OD 1.0. Find the concentration, and the number of generations needed for $10^3$ cells to reach $10^6$ cells.",
+       "model_answer_md": "**Concentration:** $C=0.25\\times8\\times10^8=\\mathbf{2\\times10^8}$ cells/mL.\n\n**Generations:** $10^6=10^3\\cdot2^{n}\\Rightarrow2^n=1000\\Rightarrow n=\\log_2 1000=9.97\\approx10$ generations.",
+       "points": [
+        "Proportionality: 0.25 x 8e8 = 2e8 cells/mL",
+        "2^n = 1000",
+        "n about 10 generations"
+       ]
+      },
+      {
+       "id": "gn-p1",
+       "pyq": "e731306d3b83018f",
+       "level": 2,
+       "points": [
+        "n = 420/30 = 14 generations",
+        "N = 2000 x 2^14 = 2000 x 16384",
+        "N = 3.28 x 10^7 cells"
+       ]
+      },
+      {
+       "id": "gn-p2",
+       "pyq": "7cf54823c0f6ad88",
+       "level": 2,
+       "points": [
+        "n = 420/30 = 14",
+        "N = 2 x 10^3 x 2^14",
+        "N = 3.28 x 10^7 cells"
+       ]
+      },
+      {
+       "id": "gn-p3",
+       "pyq": "9b00693bda6d8794",
+       "level": 2,
+       "points": [
+        "n = 180/30 = 6",
+        "N = 10^6 x 2^6",
+        "N = 6.4 x 10^7 cells/mL"
+       ]
+      },
+      {
+       "id": "gn-p4",
+       "pyq": "e7528501a3ecdb3d",
+       "level": 2,
+       "points": [
+        "OD proportional to concentration",
+        "C = 0.5 x 8 x 10^8",
+        "C = 4 x 10^8 cells/mL"
+       ]
+      },
+      {
+       "id": "gn-p5",
+       "pyq": "f8f9807a959251c6",
+       "level": 3,
+       "points": [
+        "First 60 min, 3 generations, no immunity: 100 x 2^3 = 800",
+        "Next 120 min = 6 intervals, factor 2 x 0.3 = 0.6 each",
+        "N = 800 x 0.6^6 = 800 x 0.046656",
+        "About 37 cells remain"
+       ]
+      },
+      {
+       "id": "gn-p6",
+       "pyq": "d4c36c61275cda07",
+       "level": 3,
+       "points": [
+        "First hour: 100 x 2^3 = 800",
+        "Six intervals with factor 2 x 0.3 = 0.6",
+        "N = 800 x 0.6^6 = 37.3",
+        "About 37 cells"
+       ]
+      },
+      {
+       "id": "gn-p7",
+       "pyq": "9e9f6efbc6a8c8f1",
+       "level": 3,
+       "points": [
+        "n = 360/20 = 18 generations",
+        "N0 = 16 x 6.022e23 = 2^4 N_A",
+        "N = N_A x 2^22 = 6.022e23 x 4194304",
+        "N = 2.53 x 10^30 cells"
+       ]
+      },
+      {
+       "id": "gn-p8",
+       "pyq": "cd2bd371d5278081",
+       "level": 3,
+       "points": [
+        "1 mL water = 1 g = 1/18 mol; N0 = 6.022e23/18 = 3.35e22 molecules",
+        "n = 180/30 = 6",
+        "N = 3.35e22 x 2^6",
+        "N = 2.14 x 10^24 cells"
+       ]
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "topic": "Biomolecules and associated disorders",
+   "subtopics": [
+    {
+     "id": "carbohydrates",
+     "title": "Carbohydrates, glycosidic bond, body elements",
+     "theory_md": "**Elements:** O (65%), C (18%), H (10%), N (3%) make about 96% of body mass.\n\n**Carbohydrates** are polyhydroxy aldehydes or ketones, $\\mathrm{C_n(H_2O)_n}$. By monomer units: **monosaccharides** (glucose, fructose, galactose, ribose); **disaccharides** (sucrose = glucose + fructose, lactose = glucose + galactose, maltose = glucose + glucose); **polysaccharides** (starch in plants, **glycogen** in animals, cellulose, chitin).\n\nA **glycosidic bond** is the C-O-C link formed by dehydration between two sugars; found in di- and polysaccharides.\n\nFunctions: energy (4 kcal/g), storage, structure, cell recognition. Carbohydrates (with fats) give energy; proteins build the body. Catalysis is by enzymes, not carbohydrates.",
+     "basics_md": "Sugars are small molecules made of carbon, hydrogen and oxygen. Joining many gives starch or glycogen, which the body stores and breaks down for energy.",
+     "key_points": [
+      "Four elements: O, C, H, N",
+      "Mono, di, polysaccharides with examples",
+      "Sucrose = glucose + fructose; glycogen = animal store",
+      "Glycosidic bond: C-O-C by dehydration",
+      "Functions: energy, storage, structure, recognition"
+     ],
+     "questions": [
+      {
+       "id": "ca-q1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "Sucrose is made of",
+       "options": [
+        "Glucose + glucose",
+        "Glucose + galactose",
+        "Glucose + fructose",
+        "Fructose + galactose"
+       ],
+       "answer_index": 2,
+       "why": "Maltose is glucose + glucose; lactose is glucose + galactose."
+      },
+      {
+       "id": "ca-q2",
+       "kind": "mcq",
+       "level": 1,
+       "q": "The storage polysaccharide of animals is",
+       "options": [
+        "Starch",
+        "Cellulose",
+        "Glycogen",
+        "Chitin"
+       ],
+       "answer_index": 2,
+       "why": "Starch is the plant store."
+      },
+      {
+       "id": "ca-q3",
+       "kind": "long",
+       "level": 2,
+       "marks": 5,
+       "q": "Classify carbohydrates by the number of monomer units with an example each, and give two roles in the body.",
+       "model_answer_md": "**Carbohydrates** are polyhydroxy aldehydes or ketones, $\\mathrm{C_n(H_2O)_n}$.\n\n1. **Monosaccharides:** glucose, fructose, ribose.\n2. **Oligosaccharides (disaccharides):** sucrose, lactose, maltose.\n3. **Polysaccharides:** starch, glycogen, cellulose.\n\n**Roles:** main energy source (glucose oxidised to ATP); stored as glycogen in liver and muscle.",
+       "points": [
+        "Definition",
+        "Monosaccharide with example",
+        "Disaccharide with example",
+        "Polysaccharide with example",
+        "Energy and storage roles"
+       ]
+      },
+      {
+       "id": "ca-p1",
+       "pyq": "e31a2be4aa7e3357",
+       "level": 1,
+       "points": [
+        "C) Glycogen",
+        "Starch is the plant store; cellulose is structural"
+       ]
+      },
+      {
+       "id": "ca-p2",
+       "pyq": "8b137e163597df33",
+       "level": 1,
+       "points": [
+        "C) Sucrose",
+        "Glucose and fructose are monosaccharides; glycogen is a polysaccharide"
+       ]
+      },
+      {
+       "id": "ca-p3",
+       "pyq": "4c61192c6c11a05d",
+       "level": 1,
+       "points": [
+        "B) Sucrose = glucose + fructose",
+        "Maltose is glucose + glucose; lactose glucose + galactose"
+       ]
+      },
+      {
+       "id": "ca-p4",
+       "pyq": "57ceec7b01a53a95",
+       "level": 1,
+       "points": [
+        "C) Catalysis of biochemical reactions",
+        "Catalysis is done by enzymes (proteins)"
+       ]
+      },
+      {
+       "id": "ca-p5",
+       "pyq": "7e8bb7d56ec0bdf2",
+       "level": 1,
+       "points": [
+        "Covalent C-O-C bond formed by dehydration between hydroxyls of two sugars",
+        "Found in disaccharides (sucrose, lactose, maltose) and polysaccharides (starch, glycogen, cellulose)"
+       ]
+      },
+      {
+       "id": "ca-p6",
+       "pyq": "3ae2ee9880b3ae7b",
+       "level": 1,
+       "points": [
+        "Oxygen about 65%, carbon about 18%, hydrogen about 10%, nitrogen about 3%"
+       ]
+      },
+      {
+       "id": "ca-p7",
+       "pyq": "c9361009b95c40e0",
+       "level": 2,
+       "points": [
+        "Carbohydrates: polyhydroxy aldehydes or ketones, Cn(H2O)n",
+        "Mono, di, polysaccharides with examples"
+       ]
+      },
+      {
+       "id": "ca-p8",
+       "pyq": "7409d8d297b5fa91",
+       "level": 2,
+       "points": [
+        "By structure: mono, di, polysaccharides with examples",
+        "By function: energy source (glucose), storage (starch, glycogen), structural (cellulose, chitin)"
+       ]
+      },
+      {
+       "id": "ca-p9",
+       "pyq": "747a4dcbaa14c897",
+       "level": 2,
+       "points": [
+        "Energy-giving: carbohydrates and fats; body-building: proteins",
+        "Classification of carbohydrates: mono, di, poly with examples",
+        "Role: energy (glucose, ATP), storage (glycogen), cell recognition, fibre",
+        "Example: starch digested by amylase to glucose; insulin and glycogen; diabetes"
+       ]
+      }
+     ],
+     "figures": [
+      {
+       "smiles": "OCC1OC(O)C(O)C(O)C1O",
+       "caption": "Glucose (pyranose form)"
+      }
+     ]
+    },
+    {
+     "id": "proteins",
+     "title": "Proteins: structure, denaturation, disorders",
+     "theory_md": "Proteins are chains of amino acids joined by **peptide bonds**.\n- **Primary:** amino acid sequence (decided by the gene). A mutation changes it and so can change function.\n- **Secondary:** $\\alpha$-helix and $\\beta$-sheet held by **hydrogen bonds** between backbone C=O and N-H.\n- **Tertiary:** 3-D fold of one chain (disulphide bonds, ionic, hydrophobic).\n- **Quaternary:** several chains (haemoglobin).\n\n**Denaturation:** loss of secondary, tertiary and quaternary structure by heat, extreme pH, urea, solvents, heavy metals; peptide bonds and primary structure stay.\n\n**Disorders:** sickle-cell anaemia (Glu to Val), Alzheimer's (amyloid-$\\beta$), Parkinson's ($\\alpha$-synuclein), prion diseases, cystic fibrosis (CFTR misfold). Scurvy: vitamin C deficiency affects collagen.",
+     "basics_md": "A protein is a string of beads (amino acids) that folds into a precise shape. The shape does the job, so a wrong bead or a lost fold stops it working.",
+     "key_points": [
+      "Primary = sequence by peptide bonds; secondary = H-bonds (helix, sheet)",
+      "Tertiary = 3-D fold; quaternary = several chains",
+      "Denaturation breaks non-covalent structure, not peptide bonds",
+      "Misfolding disorders: sickle cell, Alzheimer's, Parkinson's, prion, cystic fibrosis"
+     ],
+     "questions": [
+      {
+       "id": "pr-q1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "Secondary structure of a protein is maintained by",
+       "options": [
+        "Peptide bonds",
+        "Hydrogen bonds between backbone groups",
+        "Disulphide bridges only",
+        "Phosphodiester bonds"
+       ],
+       "answer_index": 1,
+       "why": "Peptide bonds are primary structure; tertiary is the tempting choice."
+      },
+      {
+       "id": "pr-q2",
+       "kind": "mcq",
+       "level": 2,
+       "q": "Denaturation of a protein breaks",
+       "options": [
+        "Peptide bonds",
+        "Primary structure",
+        "Secondary, tertiary and quaternary structure",
+        "Amino acid side chains"
+       ],
+       "answer_index": 2,
+       "why": "The sequence stays intact; only folding is lost."
+      },
+      {
+       "id": "pr-q3",
+       "kind": "short",
+       "level": 2,
+       "marks": 3,
+       "q": "How are proteins denatured? Name three agents and what each disrupts.",
+       "model_answer_md": "**Denaturation** is loss of native 3-D structure without breaking peptide bonds.\n1. **Heat:** breaks hydrogen bonds and hydrophobic interactions (egg white coagulates).\n2. **Extreme pH:** changes charges, breaks salt bridges.\n3. **Urea, solvents, detergents:** break hydrogen and hydrophobic bonds.\n4. **Heavy metals, reducing agents:** bind -SH or break disulphides.",
+       "points": [
+        "Definition: structure lost, peptide bonds intact",
+        "Heat",
+        "Extreme pH",
+        "Urea / solvent / heavy metal"
+       ]
+      },
+      {
+       "id": "pr-p1",
+       "pyq": "5a5e9aac56bc3ac0",
+       "level": 1,
+       "points": [
+        "B) Secondary",
+        "Hydrogen bonds between backbone C=O and N-H (helix, sheet)"
+       ]
+      },
+      {
+       "id": "pr-p2",
+       "pyq": "d9f894f9f92edb40",
+       "level": 1,
+       "points": [
+        "B) Vitamin C",
+        "Needed for collagen synthesis; deficiency weakens connective tissue"
+       ]
+      },
+      {
+       "id": "pr-p3",
+       "pyq": "063705a2bd7e4ec6",
+       "level": 2,
+       "points": [
+        "Ergonomics: study of fitting work, tools and environment to the human; objective to optimise well-being and system performance",
+        "Protein function depends on correct folding set by the sequence",
+        "Five disorders: sickle-cell anaemia (Glu to Val in beta-globin), Alzheimer's, Parkinson's, prion diseases, cystic fibrosis"
+       ]
+      },
+      {
+       "id": "pr-p4",
+       "pyq": "b64cedb7658b1cbc",
+       "level": 2,
+       "points": [
+        "Denaturation: loss of secondary, tertiary, quaternary structure; peptide bonds intact",
+        "Agents: heat, extreme pH, organic solvents, urea, heavy metals, reducing agents",
+        "Result: loses activity and may coagulate"
+       ]
+      },
+      {
+       "id": "pr-p5",
+       "pyq": "bcd559f4c0964d06",
+       "level": 3,
+       "points": [
+        "Types: fibrous (keratin, collagen) and globular (enzymes, haemoglobin); functional classes",
+        "Primary sequence determines folding into 2D and 3D shape",
+        "Shape forms the active site or binding site, so structure decides function"
+       ]
+      },
+      {
+       "id": "pr-p6",
+       "pyq": "e2628ceab8a3acf4",
+       "level": 2,
+       "points": [
+        "Primary structure: amino acid sequence decides folding and function",
+        "Mutation changes an amino acid, may alter folding or active site",
+        "Example: sickle-cell anaemia, Glu to Val in beta-globin"
+       ]
+      },
+      {
+       "id": "pr-p7",
+       "pyq": "149d8359765e325c",
+       "level": 2,
+       "points": [
+        "Primary: sequence; secondary: alpha-helix and beta-sheet by H-bonds",
+        "Tertiary: 3-D fold of one chain; quaternary: several chains",
+        "Examples: keratin (helix), silk (sheet), myoglobin (tertiary), haemoglobin (quaternary)"
+       ]
+      }
+     ],
+     "figures": [
+      {
+       "smiles": "NCC(=O)O.NCC(=O)O>>NCC(=O)NCC(=O)O.O",
+       "caption": "Peptide bond: two glycine give glycylglycine + water"
+      }
+     ]
+    },
+    {
+     "id": "nucleic-acids",
+     "title": "DNA, RNA, gene and genome",
+     "theory_md": "**Nucleotide** = sugar + base + phosphate. Nucleotides join by **phosphodiester bonds** (phosphate linking 3' of one sugar to 5' of the next).\n\n**DNA (Watson-Crick):** two **antiparallel** strands in a right-handed double helix; backbone outside, bases inside; A=T (2 H-bonds), G$\\equiv$C (3); 10 bp and 3.4 nm per turn. **Stable store of genetic information** and template for replication.\n\n| | DNA | RNA |\n|---|---|---|\n| Sugar | deoxyribose | ribose |\n| Base | thymine | **uracil** |\n| Strands | double | single |\n\n**RNA types:** **mRNA** carries the code; **tRNA** brings amino acids to the ribosome; **rRNA** forms ribosomes. **Gene** = DNA segment coding for one product; **genome** = complete DNA of an organism.",
+     "basics_md": "DNA is the permanent instruction book, kept safe as a double helix. RNA is a working copy used to build proteins.",
+     "key_points": [
+      "Nucleotide = sugar + base + phosphate; phosphodiester link",
+      "DNA double antiparallel helix with A=T, G≡C",
+      "DNA vs RNA: deoxyribose/ribose, T/U, double/single",
+      "mRNA, tRNA, rRNA roles",
+      "Gene = one product; genome = whole DNA"
+     ],
+     "questions": [
+      {
+       "id": "na-q1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "The base found in RNA but not in DNA is",
+       "options": [
+        "Thymine",
+        "Adenine",
+        "Uracil",
+        "Guanine"
+       ],
+       "answer_index": 2,
+       "why": "Thymine is the DNA base."
+      },
+      {
+       "id": "na-q2",
+       "kind": "mcq",
+       "level": 1,
+       "q": "The phosphodiester bond joins",
+       "options": [
+        "Two bases",
+        "A phosphate and a sugar",
+        "Two amino acids",
+        "A base and a sugar"
+       ],
+       "answer_index": 1,
+       "why": "Phosphate links the 3' of one sugar to the 5' of the next."
+      },
+      {
+       "id": "na-q3",
+       "kind": "short",
+       "level": 2,
+       "marks": 4,
+       "q": "State four differences between DNA and RNA and the role each plays.",
+       "model_answer_md": "| Feature | DNA | RNA |\n|---|---|---|\n| Sugar | deoxyribose | ribose |\n| Base | thymine | uracil |\n| Strands | double | single |\n| Stability | stable | less stable |\n\n**Roles:** DNA stores genetic information and is copied on division. RNA expresses it: mRNA carries the code, tRNA brings amino acids, rRNA forms ribosomes.",
+       "points": [
+        "Sugar difference",
+        "Thymine vs uracil",
+        "Double vs single strand",
+        "Roles: DNA store, RNA expression"
+       ]
+      },
+      {
+       "id": "na-p1",
+       "pyq": "63b5e981433670aa",
+       "level": 1,
+       "points": [
+        "C) Nucleic acids",
+        "DNA stores genetic information in base sequence"
+       ]
+      },
+      {
+       "id": "na-p2",
+       "pyq": "029092833b23cd7f",
+       "level": 2,
+       "points": [
+        "Four differences: sugar, base, strands, stability",
+        "DNA: permanent store of genetic information",
+        "RNA: working copy; mRNA, tRNA, rRNA in protein synthesis"
+       ]
+      },
+      {
+       "id": "na-p3",
+       "pyq": "b5e73a823cee99a9",
+       "level": 1,
+       "points": [
+        "Gene: segment of DNA coding for one protein or RNA, unit of heredity",
+        "Genome: the complete set of DNA of an organism"
+       ]
+      },
+      {
+       "id": "na-p4",
+       "pyq": "36b6e9e294ac14e1",
+       "level": 1,
+       "points": [
+        "Gene: segment of DNA coding for one functional product",
+        "Genome: complete genetic material of an organism"
+       ]
+      },
+      {
+       "id": "na-p5",
+       "pyq": "099b24e5f5d1d8d5",
+       "level": 2,
+       "points": [
+        "mRNA: carries genetic code from DNA to ribosome, template for translation",
+        "tRNA: clover-leaf adaptor with anticodon, brings amino acids",
+        "rRNA: part of ribosomes, catalyses peptide bond formation",
+        "Others: snRNA, miRNA"
+       ]
+      },
+      {
+       "id": "na-p6",
+       "pyq": "7955939c4b84a950",
+       "level": 2,
+       "points": [
+        "Two antiparallel strands, right-handed double helix, sugar-phosphate backbone outside",
+        "A=T (2 H-bonds) and G≡C (3); 10 bp, 3.4 nm per turn",
+        "Stability: H-bonds, base stacking, phosphodiester backbone, deoxyribose",
+        "Replication: complementarity, each strand is a template (semiconservative)"
+       ]
+      },
+      {
+       "id": "na-p7",
+       "pyq": "524d7008cceed3dd",
+       "level": 1,
+       "points": [
+        "C) Uracil",
+        "Thymine is the DNA base"
+       ]
+      },
+      {
+       "id": "na-p8",
+       "pyq": "9220f75c6788aa67",
+       "level": 1,
+       "points": [
+        "C) Transporting amino acids to the ribosome",
+        "mRNA carries information; rRNA forms ribosomes"
+       ]
+      },
+      {
+       "id": "na-p9",
+       "pyq": "498ad4369f81b32c",
+       "level": 1,
+       "points": [
+        "B) A phosphate group and a sugar molecule",
+        "Phosphate links 3' of one sugar to 5' of the next"
+       ]
+      }
+     ],
+     "figures": [
+      {
+       "smiles": "Cc1c[nH]c(=O)[nH]c1=O",
+       "caption": "Thymine (DNA only)"
+      },
+      {
+       "smiles": "O=c1cc[nH]c(=O)[nH]1",
+       "caption": "Uracil (RNA only)"
+      }
+     ]
+    },
+    {
+     "id": "glycolysis",
+     "title": "Glycolysis",
+     "theory_md": "**Glycolysis** (EMP pathway): cytoplasm, no $\\mathrm{O_2}$ needed. **One glucose (6C) gives two pyruvate (3C).**\n\n**Investment:** glucose $\\rightarrow$ G6P (**hexokinase**, $-1$ ATP) $\\rightarrow$ F6P (isomerase) $\\rightarrow$ F1,6BP (**PFK-1**, $-1$ ATP) $\\rightarrow$ G3P + DHAP (aldolase).\n**Pay-off (x2):** G3P $\\rightarrow$ 1,3BPG (G3P dehydrogenase, **NADH**) $\\rightarrow$ 3PG (phosphoglycerate kinase, **ATP**) $\\rightarrow$ 2PG (mutase) $\\rightarrow$ PEP (enolase) $\\rightarrow$ pyruvate (**pyruvate kinase**, ATP).\n\nNet: 2 ATP + 2 NADH ($=8$ ATP with NADH $=3$). Without $\\mathrm{O_2}$: pyruvate $\\rightarrow$ lactate or ethanol.",
+     "basics_md": "Glucose is split into two halves in the cytoplasm. Two ATP are spent to start, four are made, so the net gain is two, plus two NADH for later.",
+     "key_points": [
+      "Cytoplasm; glucose to 2 pyruvate; no O2 needed",
+      "Investment phase uses 2 ATP; pay-off makes 4 ATP + 2 NADH",
+      "Key enzymes: hexokinase, PFK-1, pyruvate kinase",
+      "Net 2 ATP and 2 NADH"
+     ],
+     "figures": [
+      {
+       "smiles": "OCC1OC(O)C(O)C(O)C1O",
+       "caption": "Glucose (pyranose form)"
+      },
+      {
+       "smiles": "CC(=O)C(=O)O",
+       "caption": "Pyruvate, end product of glycolysis"
+      },
+      {
+       "smiles": "CC(=O)C(=O)O>>CC(O)C(=O)O",
+       "caption": "Anaerobic: pyruvate to lactate"
+      }
+     ],
+     "questions": [
+      {
+       "id": "gl-q1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "Glycolysis takes place in the",
+       "options": [
+        "Mitochondrial matrix",
+        "Cytoplasm",
+        "Inner mitochondrial membrane",
+        "Nucleus"
+       ],
+       "answer_index": 1,
+       "why": "It needs no mitochondria or oxygen."
+      },
+      {
+       "id": "gl-q2",
+       "kind": "mcq",
+       "level": 2,
+       "q": "The net ATP from substrate-level phosphorylation in glycolysis is",
+       "options": [
+        "1",
+        "2",
+        "4",
+        "8"
+       ],
+       "answer_index": 1,
+       "why": "4 formed minus 2 used. 8 includes NADH."
+      },
+      {
+       "id": "gl-q3",
+       "kind": "long",
+       "level": 2,
+       "marks": 5,
+       "q": "Write the flow of glycolysis with enzymes and the ATP balance.",
+       "model_answer_md": "**Glycolysis (cytoplasm):**\n1. Glucose $\\rightarrow$ G6P, **hexokinase**, $-$1 ATP\n2. G6P $\\rightarrow$ F6P, phosphoglucose isomerase\n3. F6P $\\rightarrow$ F1,6BP, **PFK-1**, $-$1 ATP\n4. F1,6BP $\\rightarrow$ G3P + DHAP, aldolase\n5. G3P $\\rightarrow$ 1,3BPG, G3P dehydrogenase, +NADH (x2)\n6. 1,3BPG $\\rightarrow$ 3PG, phosphoglycerate kinase, +ATP (x2)\n7. 3PG $\\rightarrow$ 2PG $\\rightarrow$ PEP, mutase, enolase\n8. PEP $\\rightarrow$ pyruvate, **pyruvate kinase**, +ATP (x2)\n\n**Balance:** $-2+4=+2$ ATP, plus 2 NADH.",
+       "points": [
+        "Ten steps with key enzymes",
+        "Investment: 2 ATP used",
+        "Pay-off: 4 ATP and 2 NADH",
+        "Net 2 ATP and 2 NADH, 2 pyruvate"
+       ]
+      },
+      {
+       "id": "gl-p1",
+       "pyq": "82b7f78d39f290d2",
+       "level": 1,
+       "points": [
+        "A) Glycolysis",
+        "Converts glucose to pyruvate, net 2 ATP, 2 NADH"
+       ]
+      },
+      {
+       "id": "gl-p2",
+       "pyq": "7afd65711f6e1ff7",
+       "level": 3,
+       "points": [
+        "Flow chart from glucose to pyruvate with the ten enzymes",
+        "Investment: 2 ATP; pay-off: 4 ATP and 2 NADH; net 2 ATP",
+        "Equation: glucose + 2NAD+ + 2ADP + 2Pi gives 2 pyruvate + 2NADH + 2ATP",
+        "Aerobic: link reaction (2 NADH), Krebs (6 NADH, 2 FADH2, 2 GTP), ETS; total 38 ATP (NCERT)"
+       ]
+      }
+     ]
+    },
+    {
+     "id": "krebs-cycle",
+     "title": "Krebs cycle and energy balance",
+     "theory_md": "**Link reaction** (matrix, pyruvate dehydrogenase): pyruvate $\\rightarrow$ acetyl-CoA + $\\mathrm{CO_2}$ + NADH.\n\n**Krebs cycle** (matrix), per acetyl-CoA: acetyl-CoA (2C) + oxaloacetate (4C) $\\rightarrow$ **citrate** (6C) $\\rightarrow$ isocitrate $\\rightarrow$ $\\alpha$-ketoglutarate (5C; $\\mathrm{CO_2}$, NADH) $\\rightarrow$ succinyl-CoA (4C; $\\mathrm{CO_2}$, NADH) $\\rightarrow$ succinate (GTP) $\\rightarrow$ fumarate ($\\mathrm{FADH_2}$) $\\rightarrow$ malate $\\rightarrow$ oxaloacetate (NADH).\n\nPer turn: **3 NADH, 1 $\\mathrm{FADH_2}$, 1 GTP, 2 $\\mathrm{CO_2}$**. Per glucose, 2 turns.\n\nNCERT (NADH 3, $\\mathrm{FADH_2}$ 2): glycolysis 8 + link 6 + Krebs 24 = **38 ATP**. Modern (2.5, 1.5): about 30 to 32.",
+     "basics_md": "The two-carbon fragment from food is joined to a four-carbon acceptor and then stripped of carbon dioxide and electrons in turn. The carriers (NADH, FADH2) take the electrons to the ETS.",
+     "key_points": [
+      "Matrix; acetyl-CoA + OAA gives citrate; OAA regenerated",
+      "Two CO2 per turn at isocitrate and alpha-KG dehydrogenase",
+      "Per turn: 3 NADH, 1 FADH2, 1 GTP",
+      "Per glucose: 2 turns; total 38 ATP (NCERT)"
+     ],
+     "figures": [
+      {
+       "smiles": "OC(=O)CC(=O)C(=O)O",
+       "caption": "Oxaloacetate (4C), the cycle's acceptor"
+      },
+      {
+       "smiles": "OC(=O)CC(O)(CC(=O)O)C(=O)O",
+       "caption": "Citrate (6C), first product"
+      }
+     ],
+     "questions": [
+      {
+       "id": "kc-q1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "The first product of the Krebs cycle (acetyl-CoA + oxaloacetate) is",
+       "options": [
+        "Isocitrate",
+        "Citrate",
+        "Succinate",
+        "Malate"
+       ],
+       "answer_index": 1,
+       "why": "Citrate, hence the name citric acid cycle."
+      },
+      {
+       "id": "kc-q2",
+       "kind": "mcq",
+       "level": 2,
+       "q": "Per turn of the Krebs cycle the number of NADH, FADH2 and GTP formed is",
+       "options": [
+        "3, 1, 1",
+        "2, 2, 1",
+        "1, 3, 1",
+        "4, 0, 2"
+       ],
+       "answer_index": 0,
+       "why": "NADH at isocitrate, alpha-KG, malate steps; FADH2 at succinate; GTP at succinyl-CoA."
+      },
+      {
+       "id": "kc-q3",
+       "kind": "numerical",
+       "level": 2,
+       "marks": 4,
+       "q": "Calculate the ATP from one glucose through aerobic respiration (NCERT: NADH = 3 ATP, FADH$_2$ = 2 ATP).",
+       "model_answer_md": "- Glycolysis: 2 ATP + 2 NADH ($\\times3=6$) $=8$\n- Link reaction: 2 NADH $=6$\n- Krebs (2 turns): 6 NADH (18) + 2 FADH$_2$ (4) + 2 GTP (2) $=24$\n\n**Total $=8+6+24=\\mathbf{38}$ ATP.** (With 2.5 and 1.5: $7+5+20=32$.)",
+       "points": [
+        "Glycolysis 8",
+        "Link reaction 6",
+        "Krebs 24",
+        "Total 38 ATP; modern about 32"
+       ]
+      },
+      {
+       "id": "kc-p1",
+       "pyq": "f900416bd4b619b6",
+       "level": 3,
+       "points": [
+        "Link reaction: pyruvate to acetyl-CoA, CO2, NADH",
+        "Eight steps with enzymes: citrate synthase, aconitase, isocitrate dehydrogenase, alpha-KG dehydrogenase, succinyl-CoA synthetase, succinate dehydrogenase, fumarase, malate dehydrogenase",
+        "Per turn: 3 NADH, 1 FADH2, 1 GTP, 2 CO2",
+        "Energetics: 12 ATP per turn, 24 per glucose; total 38 ATP"
+       ]
+      }
+     ]
+    }
+   ]
+  }
+ ]
+}

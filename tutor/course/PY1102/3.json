@@ -1,0 +1,1079 @@
+{
+ "code": "PY1102",
+ "unit": "Quantum Mechanics",
+ "written": "2026-10-19",
+ "by": "claude-sonnet-5-5, in a Claude Code session",
+ "topics": [
+  {
+   "topic": "Schrodinger wave equation",
+   "subtopics": [
+    {
+     "id": "de-broglie",
+     "title": "de Broglie waves and wavelength",
+     "theory_md": "**de Broglie hypothesis:** every moving particle has a wave of wavelength $\\lambda=\\dfrac{h}{p}=\\dfrac{h}{mv}$, $h=6.626\\times10^{-34}$ J s. (Davisson-Germer: electron diffraction from a nickel crystal confirmed it.)\n\nFor a charge $q$ accelerated from rest through $V$: $qV=\\dfrac{p^2}{2m}$, so $\\lambda=\\dfrac{h}{\\sqrt{2mqV}}$.\n- Electron: $\\lambda=\\dfrac{12.27}{\\sqrt V}$ Å\n- Proton: $\\lambda\\approx\\dfrac{0.286}{\\sqrt V}$ Å\n\nEqual $\\lambda$ means equal momentum. Large $m$ or $v$ gives a tiny $\\lambda$, so everyday objects show no wave nature.",
+     "basics_md": "Light is both wave and particle. de Broglie said matter is too: the faster or heavier the thing, the shorter its wave, which is why a cricket ball shows no waves but an electron does.",
+     "key_points": [
+      "Matter wave: $\\lambda=h/p=h/mv$",
+      "Through potential $V$: $\\lambda=h/\\sqrt{2mqV}$",
+      "Electron: $\\lambda=12.27/\\sqrt V$ Å",
+      "Same $\\lambda$ means same momentum",
+      "Confirmed by Davisson-Germer electron diffraction"
+     ],
+     "figures": [],
+     "questions": [
+      {
+       "id": "db-q1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "The de Broglie wavelength of a particle of mass $m$ and speed $v$ is",
+       "options": [
+        "$\\dfrac{mv}{h}$",
+        "$\\dfrac{h}{mv}$",
+        "$\\dfrac{hv}{m}$",
+        "$\\dfrac{h}{m v^2}$"
+       ],
+       "answer_index": 1,
+       "why": "$\\lambda=h/p$ and $p=mv$."
+      },
+      {
+       "id": "db-q2",
+       "kind": "mcq",
+       "level": 1,
+       "q": "An electron and a proton are accelerated through the same potential difference. The shorter de Broglie wavelength belongs to the",
+       "options": [
+        "electron, as it is lighter",
+        "proton, as its momentum is larger",
+        "both are equal",
+        "electron, as it has more charge"
+       ],
+       "answer_index": 1,
+       "why": "$\\lambda=h/\\sqrt{2mqV}$: same $q$ and $V$, larger $m$ gives smaller $\\lambda$. Students wrongly think a lighter particle has a shorter wave."
+      },
+      {
+       "id": "db-q3",
+       "kind": "numerical",
+       "level": 2,
+       "marks": 3,
+       "q": "An electron is accelerated from rest through 50 V. Find its de Broglie wavelength.",
+       "model_answer_md": "**Formula.** $\\lambda=\\dfrac{12.27}{\\sqrt V}$ Å\n\n$\\lambda=\\dfrac{12.27}{\\sqrt{50}}=1.73$ Å $=1.73\\times10^{-10}$ m",
+       "points": [
+        "Uses $eV=p^2/2m$ so $\\lambda=h/\\sqrt{2meV}$",
+        "Substitutes $V=50$ V",
+        "$\\lambda=1.73$ Å with units"
+       ]
+      },
+      {
+       "id": "db-q4",
+       "kind": "numerical",
+       "level": 3,
+       "marks": 3,
+       "q": "What potential difference is needed to give an electron a de Broglie wavelength of 1.0 Å? What is its kinetic energy?",
+       "model_answer_md": "**Formula.** $\\lambda=\\dfrac{12.27}{\\sqrt V}$ Å, so $\\sqrt V=12.27$ for $\\lambda=1.0$ Å.\n\n$V=(12.27)^2=150.6$ V $\\approx 1.5\\times10^2$ V\n\n**Kinetic energy** $=eV\\approx150$ eV.",
+       "points": [
+        "Rearranges to $V=(12.27/\\lambda)^2$",
+        "$V\\approx150$ V",
+        "KE $=eV\\approx150$ eV"
+       ]
+      },
+      {
+       "id": "db-p1",
+       "pyq": "ebe02fa3e4792f43",
+       "level": 2,
+       "points": [
+        "Hypothesis: moving particle has a wave, $\\lambda=h/p=h/mv$ (1)",
+        "$\\lambda=h/\\sqrt{2meV}=12.27/\\sqrt V$ Å",
+        "$\\lambda\\approx1.23$ Å at 100 V"
+       ]
+      },
+      {
+       "id": "db-p2",
+       "pyq": "7d32907204dd9680",
+       "level": 3,
+       "points": [
+        "Electron: $\\lambda=h/\\sqrt{2m_eeV}=12.27/\\sqrt{V}$ Å $=1.23$ Å at 100 V",
+        "Equal $\\lambda$ means equal momentum, so $m_pV_p=m_eV_e$",
+        "$V_p=100/1836\\approx0.0545$ V"
+       ]
+      },
+      {
+       "id": "db-p3",
+       "pyq": "1a4505e835769c96",
+       "level": 2,
+       "points": [
+        "$\\lambda=h/\\sqrt{2meV}$ with proton mass $1.67\\times10^{-27}$ kg",
+        "$p=5.17\\times10^{-22}$ kg m/s",
+        "$\\lambda\\approx1.28\\times10^{-12}$ m"
+       ]
+      }
+     ]
+    },
+    {
+     "id": "wave-packet",
+     "title": "Wave packet, phase and group velocity",
+     "theory_md": "A particle is a **wave packet**: a group of waves of slightly different $k$ that interfere constructively only in a small region $\\Delta x$ and cancel elsewhere. A single plane wave fills all space, so it cannot describe a localised particle.\n\n- Phase velocity $v_p=\\dfrac{\\omega}{k}$ (speed of one crest).\n- Group velocity $v_g=\\dfrac{d\\omega}{dk}$ (speed of the packet envelope, equals particle velocity $v$).\n\nFrom $\\omega=kv_p$: $v_g=v_p+k\\dfrac{dv_p}{dk}=v_p-\\lambda\\dfrac{dv_p}{d\\lambda}$. With no dispersion $v_g=v_p$.\n\nMatter wave: $\\hbar\\omega=mc^2$, $\\hbar k=mv$, so $v_p=\\dfrac{c^2}{v}$ and $v_pv_g=c^2$. Since $v<c$, $v_p>c$, allowed because no energy travels at $v_p$.",
+     "basics_md": "A crowd doing a wave in a stadium: the pattern travels at one speed (phase), while a bunch of tall people in the pattern, the packet, can move at another (group). The particle goes with the bunch.",
+     "key_points": [
+      "Wave packet: superposition of waves of nearby $k$, localised in $\\Delta x$",
+      "$v_p=\\omega/k$, $v_g=d\\omega/dk$",
+      "$v_g=v_p-\\lambda\\,dv_p/d\\lambda$; equal when non-dispersive",
+      "Matter wave: $v_p=c^2/v$, $v_pv_g=c^2$",
+      "$v_g$ equals the particle velocity"
+     ],
+     "figures": [],
+     "questions": [
+      {
+       "id": "wp-q1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "Group velocity of a wave packet is",
+       "options": [
+        "$\\omega/k$",
+        "$d\\omega/dk$",
+        "$dk/d\\omega$",
+        "$k\\omega$"
+       ],
+       "answer_index": 1,
+       "why": "$v_g=d\\omega/dk$; $\\omega/k$ is the phase velocity."
+      },
+      {
+       "id": "wp-q2",
+       "kind": "mcq",
+       "level": 1,
+       "q": "For a de Broglie wave of a particle moving at speed $v<c$, the phase velocity is",
+       "options": [
+        "$v$",
+        "$c$",
+        "$c^2/v$, which exceeds $c$",
+        "$v^2/c$"
+       ],
+       "answer_index": 2,
+       "why": "$v_p=\\omega/k=mc^2/mv=c^2/v$. It exceeds $c$ but carries no energy, so relativity is not violated."
+      },
+      {
+       "id": "wp-q3",
+       "kind": "short",
+       "level": 2,
+       "marks": 3,
+       "q": "What is a wave packet? Why is a single plane wave not enough to represent a particle?",
+       "model_answer_md": "**Wave packet.** A group of waves with slightly different wave numbers $k$ (a spread $\\Delta k$) that superpose, reinforcing in a small region $\\Delta x$ and cancelling outside it.\n\n**Why not a plane wave.** A plane wave $e^{i(kx-\\omega t)}$ has a definite $k$ and $|\\psi|^2$ is constant everywhere, so the particle would be equally likely to be anywhere ($\\Delta x=\\infty$). A particle is localised, so it needs a packet. Localising it makes $\\Delta k$ large, consistent with $\\Delta x\\,\\Delta k\\ge\\tfrac12$.",
+       "points": [
+        "Definition: superposition of waves of nearby $k$, localised",
+        "Plane wave has definite $k$ and uniform $|\\psi|^2$, not localised",
+        "Packet moves with $v_g$; $\\Delta x\\,\\Delta k\\ge1/2$"
+       ]
+      },
+      {
+       "id": "wp-q4",
+       "kind": "numerical",
+       "level": 3,
+       "marks": 3,
+       "q": "An electron moves at $2\\times10^6$ m/s. Find the phase velocity of its de Broglie wave. Take $c=3\\times10^8$ m/s. Comment on the result.",
+       "model_answer_md": "**Formula.** $v_p=\\dfrac{c^2}{v}$\n\n$v_p=\\dfrac{(3\\times10^8)^2}{2\\times10^6}=4.5\\times10^{10}$ m/s\n\n**Comment.** $v_p>c$ (150 times). This is allowed: the energy and the particle travel at the group velocity $v_g=v=2\\times10^6$ m/s, and $v_pv_g=c^2$.",
+       "points": [
+        "Uses $v_p=c^2/v$",
+        "$v_p=4.5\\times10^{10}$ m/s",
+        "$v_p>c$ but the particle moves at $v_g=v<c$"
+       ]
+      },
+      {
+       "id": "wp-p1",
+       "pyq": "bdfef272b823e1d1",
+       "level": 2,
+       "points": [
+        "Definitions $v_p=\\omega/k$, $v_g=d\\omega/dk$",
+        "$\\omega=kv_p$ differentiated: $v_g=v_p+k\\,dv_p/dk$",
+        "Using $k=2\\pi/\\lambda$: $v_g=v_p-\\lambda\\,dv_p/d\\lambda$",
+        "Non-dispersive: $v_g=v_p$; normal dispersion: $v_g<v_p$"
+       ]
+      },
+      {
+       "id": "wp-p2",
+       "pyq": "bba7945e44501f59",
+       "level": 2,
+       "points": [
+        "$v_p=\\omega/k$, $v_g=d\\omega/dk$",
+        "$v_g=v_p+k\\,dv_p/dk=v_p-\\lambda\\,dv_p/d\\lambda$",
+        "$v_g=v_p$ when $dv_p/d\\lambda=0$"
+       ]
+      },
+      {
+       "id": "wp-p3",
+       "pyq": "d2188f1cbc3a6707",
+       "level": 3,
+       "points": [
+        "Wave packet defined (1)",
+        "Two close waves added: envelope $\\cos\\frac{\\Delta\\omega t-\\Delta kx}{2}$ moves at $\\Delta\\omega/\\Delta k\\to d\\omega/dk$",
+        "$v_g=v_p-\\lambda\\,dv_p/d\\lambda$",
+        "$v_g=v_p$ without dispersion"
+       ]
+      },
+      {
+       "id": "wp-p4",
+       "pyq": "d5cc17d1cddee798",
+       "level": 2,
+       "points": [
+        "Wave packet: group of waves, moves at $v_g$ equal to particle velocity",
+        "$E=mc^2=\\hbar\\omega$, $p=mv=\\hbar k$",
+        "$v_p=\\omega/k=c^2/v$"
+       ]
+      }
+     ]
+    },
+    {
+     "id": "uncertainty",
+     "title": "Heisenberg uncertainty principle",
+     "theory_md": "Position and momentum cannot both be known exactly:\n$$\\Delta x\\,\\Delta p\\ge\\frac{\\hbar}{2}=\\frac{h}{4\\pi}$$\nand similarly $\\Delta E\\,\\Delta t\\ge\\hbar/2$. It is a property of waves (a narrow packet needs a wide spread of $k$), not a flaw of the instrument.\n\n**Estimate type:** a particle confined to a region of size $\\Delta x$ has $\\Delta p_{min}=\\dfrac{h}{4\\pi\\,\\Delta x}$ and $\\Delta v=\\Delta p/m$.\n\nUse $h=6.626\\times10^{-34}$ J s, $m_e=9.11\\times10^{-31}$ kg. Note: some books use $\\Delta x\\Delta p\\ge h/2\\pi$ or $h$; the paper's answer used $h/4\\pi$.",
+     "basics_md": "Pin a wave down to a tiny spot and it must be made of many different wavelengths, so its momentum becomes uncertain. Squeezing position always costs certainty in momentum.",
+     "key_points": [
+      "$\\Delta x\\,\\Delta p\\ge\\hbar/2=h/4\\pi$",
+      "$\\Delta E\\,\\Delta t\\ge\\hbar/2$",
+      "Smaller region gives larger $\\Delta p$ and $\\Delta v=\\Delta p/m$",
+      "Consequence of wave nature, forces zero-point energy"
+     ],
+     "figures": [],
+     "questions": [
+      {
+       "id": "un-q1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "If the position of an electron is known more precisely, the uncertainty in its momentum",
+       "options": [
+        "decreases",
+        "increases",
+        "stays the same",
+        "becomes zero"
+       ],
+       "answer_index": 1,
+       "why": "$\\Delta p\\ge\\hbar/2\\Delta x$: smaller $\\Delta x$ forces larger $\\Delta p$."
+      },
+      {
+       "id": "un-q2",
+       "kind": "mcq",
+       "level": 1,
+       "q": "Which pair obeys an uncertainty relation?",
+       "options": [
+        "mass and charge",
+        "energy and time",
+        "speed and mass",
+        "charge and spin"
+       ],
+       "answer_index": 1,
+       "why": "$\\Delta E\\,\\Delta t\\ge\\hbar/2$."
+      },
+      {
+       "id": "un-q3",
+       "kind": "numerical",
+       "level": 2,
+       "marks": 2,
+       "q": "An electron is confined to a region of width 0.1 nm. Estimate the minimum uncertainty in its momentum and velocity.",
+       "model_answer_md": "**Given.** $\\Delta x=10^{-10}$ m.\n\n$\\Delta p_{min}=\\dfrac{h}{4\\pi\\Delta x}=\\dfrac{6.626\\times10^{-34}}{4\\pi\\times10^{-10}}=5.27\\times10^{-25}$ kg m/s\n\n$\\Delta v=\\dfrac{\\Delta p}{m}=\\dfrac{5.27\\times10^{-25}}{9.11\\times10^{-31}}=5.8\\times10^{5}$ m/s",
+       "points": [
+        "Uses $\\Delta x\\Delta p\\ge h/4\\pi$",
+        "$\\Delta p=5.27\\times10^{-25}$ kg m/s",
+        "$\\Delta v=5.8\\times10^5$ m/s"
+       ]
+      },
+      {
+       "id": "un-p1",
+       "pyq": "f3381ee542766bd3",
+       "level": 2,
+       "points": [
+        "Heisenberg: $\\Delta x\\Delta p\\ge h/4\\pi$",
+        "$\\Delta p=4.39\\times10^{-26}$ kg m/s",
+        "$\\Delta v=\\Delta p/m\\approx4.8\\times10^4$ m/s"
+       ]
+      }
+     ]
+    },
+    {
+     "id": "schrodinger-eq",
+     "title": "Schrodinger equation and the wave function",
+     "theory_md": "The wave function $\\psi$ carries everything about the particle. **Born interpretation:** $|\\psi|^2$ is the probability density; $P(a<x<b)=\\int_a^b|\\psi|^2dx$.\n\n**Time-dependent:** $i\\hbar\\dfrac{\\partial\\psi}{\\partial t}=-\\dfrac{\\hbar^2}{2m}\\dfrac{\\partial^2\\psi}{\\partial x^2}+V\\psi$\n\n**Time-independent** (steady states, $\\psi(x,t)=\\psi(x)e^{-iEt/\\hbar}$):\n$$\\frac{d^2\\psi}{dx^2}+\\frac{2m}{\\hbar^2}(E-V)\\psi=0$$\nIt comes from $E=\\dfrac{p^2}{2m}+V$ with $p\\to-i\\hbar\\,\\partial/\\partial x$ and $E\\to i\\hbar\\,\\partial/\\partial t$.",
+     "basics_md": "Newton's law tells a ball's path. For an electron, Schrodinger's equation tells its wave, and the square of the wave tells where you are likely to find it.",
+     "key_points": [
+      "$|\\psi|^2$ = probability density",
+      "Time-independent: $\\psi''+\\frac{2m}{\\hbar^2}(E-V)\\psi=0$",
+      "Time-dependent form has $i\\hbar\\,\\partial\\psi/\\partial t$",
+      "Obtained from $E=p^2/2m+V$ with operators"
+     ],
+     "figures": [],
+     "questions": [
+      {
+       "id": "se-q1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "The physical meaning of $|\\psi(x)|^2$ is",
+       "options": [
+        "the energy of the particle",
+        "the probability per unit length of finding the particle at $x$",
+        "the momentum of the particle",
+        "the amplitude of the force"
+       ],
+       "answer_index": 1,
+       "why": "Born interpretation."
+      },
+      {
+       "id": "se-q2",
+       "kind": "mcq",
+       "level": 1,
+       "q": "In the time-independent Schrodinger equation, $E-V$ is the particle's",
+       "options": [
+        "potential energy",
+        "kinetic energy",
+        "momentum",
+        "wavelength"
+       ],
+       "answer_index": 1,
+       "why": "$E=T+V$, so $E-V=T$."
+      },
+      {
+       "id": "se-q3",
+       "kind": "long",
+       "level": 3,
+       "marks": 5,
+       "q": "Derive the one-dimensional time-independent Schrodinger equation for a particle of mass $m$ in a potential $V(x)$.",
+       "model_answer_md": "**1. Wave function.** A free particle: $\\psi=Ae^{i(kx-\\omega t)}$, with $p=\\hbar k$, $E=\\hbar\\omega$.\n\n**2. Differentiate.** $\\dfrac{\\partial^2\\psi}{\\partial x^2}=-k^2\\psi=-\\dfrac{p^2}{\\hbar^2}\\psi$, so $p^2\\psi=-\\hbar^2\\dfrac{\\partial^2\\psi}{\\partial x^2}$.\n\n**3. Energy.** Total energy $E=\\dfrac{p^2}{2m}+V$. Multiply by $\\psi$:\n$$E\\psi=-\\frac{\\hbar^2}{2m}\\frac{\\partial^2\\psi}{\\partial x^2}+V\\psi$$\n\n**4. Steady state.** For a stationary state $\\psi(x,t)=\\psi(x)e^{-iEt/\\hbar}$, the time factor cancels:\n$$\\boxed{\\frac{d^2\\psi}{dx^2}+\\frac{2m}{\\hbar^2}(E-V)\\psi=0}$$",
+       "points": [
+        "Start from $\\psi=Ae^{i(kx-\\omega t)}$, $p=\\hbar k$",
+        "$p^2\\psi=-\\hbar^2\\psi''$",
+        "Use $E=p^2/2m+V$",
+        "Final equation with time factor removed"
+       ]
+      }
+     ]
+    },
+    {
+     "id": "wavefunction",
+     "title": "Acceptable wave functions and normalisation",
+     "theory_md": "An acceptable $\\psi$ must be **single-valued, finite, continuous** (with continuous $d\\psi/dx$ except where $V=\\infty$) and **square-integrable**.\n\n**Normalisation:** $\\int_{-\\infty}^{\\infty}|\\psi|^2dx=1$ (particle is somewhere). Find the constant $A$ from this.\n\n**Probability** in $a<x<b$: $\\int_a^b|\\psi|^2dx$ with $\\psi$ normalised.\n\nTests: $e^{x^2}$ blows up at infinity; $\\tan x$, $\\cot x$ have infinities; $e^{-x}$ on $0<x<\\infty$ is fine. Useful: $\\int\\cos^2x\\,dx=\\frac x2+\\frac{\\sin2x}{4}$.",
+     "basics_md": "All the probability must add up to 1, like slices of a pie. If the wave function is infinite somewhere or never dies away, you cannot scale it to total 1, so it cannot describe a real particle.",
+     "key_points": [
+      "Single-valued, finite, continuous, square-integrable",
+      "Normalisation $\\int|\\psi|^2dx=1$ fixes $A$",
+      "$P=\\int_a^b|\\psi|^2dx$",
+      "State which condition fails and give the reason"
+     ],
+     "figures": [],
+     "questions": [
+      {
+       "id": "wf-q1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "Which function is an acceptable wave function on $-\\infty<x<\\infty$?",
+       "options": [
+        "$e^{x}$",
+        "$\\tan x$",
+        "$e^{-x^2}$",
+        "$x$"
+       ],
+       "answer_index": 2,
+       "why": "Only $e^{-x^2}$ is finite and square-integrable. $x$ and $e^x$ diverge; $\\tan x$ has infinities."
+      },
+      {
+       "id": "wf-q2",
+       "kind": "mcq",
+       "level": 2,
+       "q": "A particle has $\\psi=Ax$ for $0<x<1$ and 0 elsewhere. The normalisation constant $A$ is",
+       "options": [
+        "1",
+        "$\\sqrt3$",
+        "$1/\\sqrt3$",
+        "3"
+       ],
+       "answer_index": 1,
+       "why": "$A^2\\int_0^1x^2dx=A^2/3=1$, so $A=\\sqrt3$. The common error is to forget the square."
+      },
+      {
+       "id": "wf-q3",
+       "kind": "numerical",
+       "level": 2,
+       "marks": 3,
+       "q": "For $\\psi=Ax$ ($0<x<1$, zero elsewhere) find $A$ and the probability of finding the particle between $x=0$ and $x=0.5$.",
+       "model_answer_md": "**Normalise.** $A^2\\int_0^1x^2dx=\\dfrac{A^2}{3}=1\\Rightarrow A=\\sqrt3$\n\n**Probability.** $P=3\\int_0^{0.5}x^2dx=\\left[x^3\\right]_0^{0.5}=0.125$ (12.5%)",
+       "points": [
+        "$A^2/3=1$",
+        "$A=\\sqrt3$",
+        "$P=0.125$"
+       ]
+      },
+      {
+       "id": "wf-p1",
+       "pyq": "afbbd4f4343af708",
+       "level": 1,
+       "points": [
+        "Needs finite, single-valued, continuous, square-integrable",
+        "$\\tan x$ is infinite at $\\pm\\pi/2,\\dots$ and cannot be normalised",
+        "Not allowed"
+       ]
+      },
+      {
+       "id": "wf-p2",
+       "pyq": "53068c3456a01c94",
+       "level": 2,
+       "points": [
+        "Conditions listed",
+        "(i) $e^{x^2}\\to\\infty$, $\\int|\\psi|^2$ diverges: not acceptable",
+        "(ii) $\\cot x$ infinite at $0,\\pm\\pi,\\dots$: not acceptable"
+       ]
+      },
+      {
+       "id": "wf-p3",
+       "pyq": "552827cd6f20e983",
+       "level": 2,
+       "points": [
+        "On $0<x<\\infty$, $\\Psi=Ae^{-x}$ is finite, continuous, single-valued",
+        "$\\int A^2e^{-2x}dx=A^2/2=1$, finite, $A=\\sqrt2$",
+        "Acceptable"
+       ]
+      },
+      {
+       "id": "wf-p4",
+       "pyq": "4361489437156832",
+       "level": 2,
+       "points": [
+        "$A^2\\int_0^1(2-x^2)^2dx=1$",
+        "$\\int=4-4/3+1/5=43/15$",
+        "$A=\\sqrt{15/43}\\approx0.59$"
+       ]
+      },
+      {
+       "id": "wf-p5",
+       "pyq": "46f08fe0826d6387",
+       "level": 3,
+       "points": [
+        "$P=A^2\\int_{0.5}^1(2-x^2)^2dx$",
+        "Integral $=493/480=1.027$",
+        "$P=\\frac{15}{43}\\times1.027\\approx0.358$"
+       ]
+      },
+      {
+       "id": "wf-p6",
+       "pyq": "e27bc6c5ed0c3533",
+       "level": 3,
+       "points": [
+        "(i) $A^2\\int_{-\\pi/2}^{\\pi/2}\\cos^2x\\,dx=A^2\\pi/2=1$, $A=\\sqrt{2/\\pi}$",
+        "(ii) $P=\\frac2\\pi\\left[\\frac x2+\\frac{\\sin2x}{4}\\right]_0^{\\pi/4}=\\frac14+\\frac1{2\\pi}$",
+        "$P\\approx0.409$"
+       ]
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "topic": "Particle in a box",
+   "subtopics": [
+    {
+     "id": "box-derivation",
+     "title": "Particle in a box: levels and wave function",
+     "theory_md": "**Setup:** $V=0$ for $0<x<L$, $V=\\infty$ outside, so $\\psi=0$ at $x=0$ and $x=L$.\n\nInside: $\\psi''+k^2\\psi=0$, $k^2=\\dfrac{2mE}{\\hbar^2}$, so $\\psi=A\\sin kx+B\\cos kx$.\n- $\\psi(0)=0\\Rightarrow B=0$\n- $\\psi(L)=0\\Rightarrow kL=n\\pi$, $n=1,2,3,\\dots$ ($n=0$ gives $\\psi=0$)\n\n$$E_n=\\frac{n^2h^2}{8mL^2},\\qquad p_n=\\frac{nh}{2L}$$\nNormalising, $A^2\\dfrac L2=1$: $\\psi_n=\\sqrt{\\dfrac2L}\\sin\\dfrac{n\\pi x}{L}$. Levels go as $n^2$ (spacing grows), $\\psi_n$ has $n-1$ nodes, $E\\propto1/L^2$.",
+     "basics_md": "A guitar string pinned at both ends can only vibrate with whole numbers of half-waves. A confined particle's wave is pinned the same way, so only certain wavelengths, hence certain energies, are allowed.",
+     "key_points": [
+      "Boundary conditions $\\psi(0)=\\psi(L)=0$ give $kL=n\\pi$",
+      "$E_n=n^2h^2/8mL^2$: quantised, $E_n\\propto n^2$",
+      "$\\psi_n=\\sqrt{2/L}\\sin(n\\pi x/L)$ after normalisation",
+      "$n=0$ excluded; $n-1$ nodes",
+      "Narrower box: larger energies and spacing"
+     ],
+     "figures": [],
+     "questions": [
+      {
+       "id": "bd-q1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "The energy levels of a particle in an infinite 1-D well are proportional to",
+       "options": [
+        "$n$",
+        "$n^2$",
+        "$1/n$",
+        "$1/n^2$"
+       ],
+       "answer_index": 1,
+       "why": "$E_n=n^2h^2/8mL^2$."
+      },
+      {
+       "id": "bd-q2",
+       "kind": "mcq",
+       "level": 2,
+       "q": "The width of an infinite well is doubled. The ground-state energy becomes",
+       "options": [
+        "half",
+        "double",
+        "one-quarter",
+        "four times"
+       ],
+       "answer_index": 2,
+       "why": "$E_1\\propto1/L^2$, so doubling $L$ divides $E_1$ by 4. Students often say half."
+      },
+      {
+       "id": "bd-q3",
+       "kind": "short",
+       "level": 2,
+       "marks": 3,
+       "q": "State the boundary conditions for a particle in a 1-D infinite well and show how they lead to $E_n=n^2h^2/8mL^2$.",
+       "model_answer_md": "**Boundary conditions.** $\\psi(0)=0$ and $\\psi(L)=0$ (infinite walls, particle cannot be outside).\n\n**Solution.** Inside, $\\psi=A\\sin kx+B\\cos kx$ with $k^2=2mE/\\hbar^2$.\n- $\\psi(0)=0\\Rightarrow B=0$.\n- $\\psi(L)=0\\Rightarrow\\sin kL=0\\Rightarrow k=n\\pi/L$.\n\n$$E_n=\\frac{\\hbar^2k^2}{2m}=\\frac{n^2\\pi^2\\hbar^2}{2mL^2}=\\frac{n^2h^2}{8mL^2}$$",
+       "points": [
+        "States $\\psi(0)=\\psi(L)=0$",
+        "$B=0$ and $kL=n\\pi$",
+        "$E_n=n^2h^2/8mL^2$"
+       ]
+      },
+      {
+       "id": "bd-q4",
+       "kind": "numerical",
+       "level": 3,
+       "marks": 3,
+       "q": "The ground-state wave function of a well is $\\psi_1=\\sqrt{2/L}\\sin(\\pi x/L)$. Find the probability of finding the particle in the middle third, $L/3<x<2L/3$.",
+       "model_answer_md": "$P=\\dfrac2L\\int_{L/3}^{2L/3}\\sin^2\\dfrac{\\pi x}{L}dx=\\left[\\dfrac xL-\\dfrac{1}{2\\pi}\\sin\\dfrac{2\\pi x}{L}\\right]_{L/3}^{2L/3}$\n\n$=\\dfrac13-\\dfrac{1}{2\\pi}\\left[\\sin\\dfrac{4\\pi}{3}-\\sin\\dfrac{2\\pi}{3}\\right]=\\dfrac13+\\dfrac{1}{2\\pi}(1.732)=0.609$\n\nSo $P\\approx0.61$ (61%).",
+       "points": [
+        "Integral of $|\\psi_1|^2$ over the limits",
+        "Antiderivative $x/L-\\sin(2\\pi x/L)/2\\pi$",
+        "$P=0.609$"
+       ]
+      },
+      {
+       "id": "bd-p1",
+       "pyq": "ddd7ba85b67dd83d",
+       "level": 3,
+       "points": [
+        "Set-up: $V=0$ inside, $\\psi=0$ outside",
+        "$\\psi''+k^2\\psi=0$, $B=0$, $kL=n\\pi$",
+        "$E_n=n^2h^2/8mL^2$, discrete so quantised",
+        "Normalisation $A=\\sqrt{2/L}$",
+        "Zero-point energy $E_1=h^2/8mL^2$ ($n=0$ not allowed)"
+       ]
+      },
+      {
+       "id": "bd-p2",
+       "pyq": "d5e32577dc013e00",
+       "level": 2,
+       "points": [
+        "Boundary conditions $\\psi(0)=\\psi(L)=0$",
+        "$\\psi=A\\sin kx$, $kL=n\\pi$",
+        "$E_n=n^2h^2/8mL^2$; levels $E_1,4E_1,9E_1$: quantised by the boundary conditions"
+       ]
+      },
+      {
+       "id": "bd-p3",
+       "pyq": "7616cd643305c882",
+       "level": 3,
+       "points": [
+        "Schrodinger equation inside, boundary conditions, $kL=n\\pi$",
+        "$E_n=n^2\\pi^2\\hbar^2/2mL^2$: quantised",
+        "Zero energy not allowed: $n=0$ gives $\\psi\\equiv0$",
+        "Uncertainty principle: confinement forces $\\Delta p\\ge\\hbar/2L$, minimum $E_1=h^2/8mL^2$"
+       ]
+      },
+      {
+       "id": "bd-p4",
+       "pyq": "7c8d27010dd8b978",
+       "level": 3,
+       "points": [
+        "Schrodinger equation $\\psi''+\\frac{2m}{\\hbar^2}(E-V)\\psi=0$",
+        "Infinite well: $\\psi=A\\sin kx$, $k=n\\pi/L$",
+        "$E_n=n^2h^2/8mL^2$; $\\psi_n=\\sqrt{2/L}\\sin(n\\pi x/L)$",
+        "Discussion: quantised, $E\\propto n^2$, $E_1\\ne0$, $n-1$ nodes, $E\\propto1/L^2$"
+       ]
+      },
+      {
+       "id": "bd-p5",
+       "pyq": "497363f0919eea45",
+       "level": 3,
+       "points": [
+        "$\\psi''+k^2\\psi=0$, $B=0$, $k=n\\pi/L$ so $\\psi_n=A\\sin(n\\pi x/L)$",
+        "Normalisation $A^2\\int_0^L\\sin^2(n\\pi x/L)dx=1$",
+        "$A^2L/2=1$, $A=\\sqrt{2/L}$"
+       ]
+      },
+      {
+       "id": "bd-p6",
+       "pyq": "698bddaf7948a657",
+       "level": 1,
+       "points": [
+        "$A^2\\int_0^L\\sin^2(n\\pi x/L)dx=A^2L/2=1$",
+        "$A=\\sqrt{2/L}$"
+       ]
+      }
+     ]
+    },
+    {
+     "id": "zero-point",
+     "title": "Zero-point energy",
+     "theory_md": "**Zero-point energy** is the minimum, non-zero energy of a bound particle. In the box, $E_1=\\dfrac{h^2}{8mL^2}>0$. The state $n=0$ would give $\\psi\\equiv0$, i.e. no particle.\n\n**Uncertainty-principle reason:** confinement to $\\Delta x\\approx L$ gives $\\Delta p\\ge\\dfrac{\\hbar}{2L}$, so the particle cannot be at rest and has kinetic energy.\n\nHarmonic oscillator: $E_0=\\tfrac12\\hbar\\omega$.\n\n**Importance:** atoms and molecules keep vibrating at 0 K; liquid helium does not freeze at atmospheric pressure even at 0 K; the electron does not fall into the nucleus (that would need tiny $\\Delta x$ and huge $\\Delta p$).",
+     "basics_md": "If a particle sat perfectly still in a small room, you would know both where it is and that its momentum is zero. Nature forbids that, so there is always some leftover motion.",
+     "key_points": [
+      "$E_1=h^2/8mL^2\\ne0$",
+      "$n=0$ gives $\\psi=0$: no particle",
+      "Uncertainty principle forces motion: $\\Delta p\\ge\\hbar/2L$",
+      "Harmonic oscillator $E_0=\\hbar\\omega/2$",
+      "Consequences: vibration at 0 K, helium liquid, atomic stability"
+     ],
+     "figures": [],
+     "questions": [
+      {
+       "id": "zp-q1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "The zero-point energy of a particle in an infinite 1-D well of width $L$ is",
+       "options": [
+        "0",
+        "$h^2/8mL^2$",
+        "$h^2/2mL^2$",
+        "$h^2/4mL^2$"
+       ],
+       "answer_index": 1,
+       "why": "The lowest state is $n=1$."
+      },
+      {
+       "id": "zp-q2",
+       "kind": "mcq",
+       "level": 2,
+       "q": "Why can a particle in an infinite well not have zero energy?",
+       "options": [
+        "energy is always positive by definition",
+        "$n=0$ makes the wave function zero everywhere",
+        "the walls repel it",
+        "its mass is too small"
+       ],
+       "answer_index": 1,
+       "why": "With $n=0$, $\\psi=A\\sin0=0$, so the particle would not exist. The uncertainty principle gives the physical reason."
+      },
+      {
+       "id": "zp-q3",
+       "kind": "short",
+       "level": 2,
+       "marks": 3,
+       "q": "Explain, using the uncertainty principle, why an electron confined in a box has non-zero minimum energy. Estimate it for width $L$.",
+       "model_answer_md": "**Argument.** Confining the electron to width $L$ gives $\\Delta x\\approx L$. Then $\\Delta p\\ge\\dfrac{\\hbar}{2L}$, so the electron cannot be at rest.\n\n**Estimate.** $E_{min}\\sim\\dfrac{(\\Delta p)^2}{2m}=\\dfrac{\\hbar^2}{8mL^2}$ (same $1/L^2$ dependence as the exact $E_1=\\dfrac{h^2}{8mL^2}$).\n\nNarrower box gives larger $\\Delta p$ and larger zero-point energy.",
+       "points": [
+        "$\\Delta x\\approx L$ gives $\\Delta p\\ge\\hbar/2L$",
+        "$E\\sim(\\Delta p)^2/2m\\propto1/L^2$",
+        "Cannot be at rest, so $E>0$"
+       ]
+      },
+      {
+       "id": "zp-p1",
+       "pyq": "ffe6d953d43f46db",
+       "level": 2,
+       "points": [
+        "No, zero energy is not allowed",
+        "$n=0$ gives $\\psi=0$ everywhere, no particle",
+        "Lowest state $n=1$, $E_1=h^2/8mL^2$",
+        "Uncertainty principle: $\\Delta p\\ge\\hbar/2L$"
+       ]
+      },
+      {
+       "id": "zp-p2",
+       "pyq": "4ff0a1fc3d217384",
+       "level": 2,
+       "points": [
+        "Zero-point energy is the minimum non-zero energy, $E_1=h^2/8mL^2$, $E_0=\\hbar\\omega/2$",
+        "From uncertainty principle: cannot be at rest",
+        "Consequences: vibration at 0 K, liquid helium, electron does not collapse into nucleus"
+       ]
+      }
+     ]
+    },
+    {
+     "id": "box-numericals",
+     "title": "Particle in a box: numericals",
+     "theory_md": "Work in SI, convert at the end ($1$ eV $=1.602\\times10^{-19}$ J).\n\n- Energy: $E_n=\\dfrac{n^2h^2}{8mL^2}$; momentum $p_n=\\dfrac{nh}{2L}$.\n- Ratio problems: $E\\propto n^2$ and $E\\propto1/L^2$, so $\\dfrac{E_2}{E_1}=\\dfrac{L_1^2}{L_2^2}$ for the same state.\n- Photon from a jump $n_i\\to n_f$: $h\\nu=E_i-E_f$, $\\lambda=\\dfrac{hc}{\\Delta E}=\\dfrac{1240\\ \\text{eV nm}}{\\Delta E\\ (\\text{eV})}$.\n- Probability: $P=\\dfrac2L\\int\\sin^2\\dfrac{n\\pi x}{L}dx$; the antiderivative is $\\dfrac xL-\\dfrac{1}{2n\\pi}\\sin\\dfrac{2n\\pi x}{L}$. A symmetric state gives $1/2$ for either half.\n\nElectron in a 1 nm box: $E_1=0.376$ eV.",
+     "basics_md": "Plug into $E_n=n^2h^2/8mL^2$, keep units straight (metres, kilograms), and for probabilities integrate $|\\psi|^2$ over the interval.",
+     "key_points": [
+      "Use $E_n=n^2h^2/8mL^2$ and $p_n=nh/2L$ in SI units",
+      "Ratios: $E\\propto n^2$, $E\\propto1/L^2$",
+      "Photon wavelength from $\\Delta E$",
+      "Probability $=\\int|\\psi_n|^2dx$ over the interval"
+     ],
+     "figures": [],
+     "questions": [
+      {
+       "id": "bn-q1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "The ground-state energy of an electron in a 1 nm infinite well is about",
+       "options": [
+        "0.038 eV",
+        "0.376 eV",
+        "3.76 eV",
+        "37.6 eV"
+       ],
+       "answer_index": 1,
+       "why": "$E_1=h^2/8mL^2=6.02\\times10^{-20}$ J $=0.376$ eV. Wrong options come from slipping a power of ten in $L$."
+      },
+      {
+       "id": "bn-q2",
+       "kind": "mcq",
+       "level": 2,
+       "q": "In a symmetric infinite well, the probability of finding the particle in the first half ($0<x<L/2$) for any state $n$ is",
+       "options": [
+        "0",
+        "$1/4$",
+        "$1/2$",
+        "$1$"
+       ],
+       "answer_index": 2,
+       "why": "$|\\psi_n|^2$ is symmetric about $L/2$ for every $n$."
+      },
+      {
+       "id": "bn-q3",
+       "kind": "numerical",
+       "level": 2,
+       "marks": 4,
+       "q": "An electron is in an infinite well of width 1 nm. Find $E_1$, $E_2$ and the wavelength of the photon emitted in the $n=2\\to n=1$ transition.",
+       "model_answer_md": "**Given.** $L=10^{-9}$ m, $m=9.11\\times10^{-31}$ kg, $h=6.626\\times10^{-34}$ J s.\n\n$E_1=\\dfrac{h^2}{8mL^2}=\\dfrac{4.390\\times10^{-67}}{7.288\\times10^{-49}}=6.02\\times10^{-20}$ J $=0.376$ eV\n\n$E_2=4E_1=1.50$ eV\n\n$\\Delta E=E_2-E_1=1.128$ eV\n\n$\\lambda=\\dfrac{1240\\ \\text{eV nm}}{1.128\\ \\text{eV}}=1.10\\times10^{3}$ nm $\\approx1.1\\ \\mu$m (infrared).",
+       "points": [
+        "$E_1=0.376$ eV",
+        "$E_2=4E_1=1.50$ eV",
+        "$\\Delta E=1.13$ eV",
+        "$\\lambda\\approx1.1\\ \\mu$m"
+       ]
+      },
+      {
+       "id": "bn-q4",
+       "kind": "numerical",
+       "level": 3,
+       "marks": 3,
+       "q": "An electron in an infinite well has $E_1=1.50$ eV for width $L_1$. The well is narrowed to $L_1/2$. What are the new $E_1$ and the new $E_3$?",
+       "model_answer_md": "$E_1\\propto\\dfrac1{L^2}$: halving $L$ gives $E_1'=4\\times1.50=6.02$ eV.\n\n$E_3'=9E_1'=9\\times6.02=54.2$ eV.",
+       "points": [
+        "$E\\propto1/L^2$, so factor 4",
+        "$E_1'=6.0$ eV",
+        "$E_3=9E_1'=54$ eV"
+       ]
+      },
+      {
+       "id": "bn-p1",
+       "pyq": "c137348810ee610b",
+       "level": 3,
+       "points": [
+        "$P=\\int_0^{a/2}\\frac2a\\sin^2(2\\pi x/a)dx$",
+        "Reduces to $\\frac1a\\left[x-\\frac{a}{4\\pi}\\sin\\frac{4\\pi x}{a}\\right]_0^{a/2}$",
+        "$P=1/2$ (50%)"
+       ]
+      },
+      {
+       "id": "bn-p2",
+       "pyq": "81b922479e315aa0",
+       "level": 2,
+       "points": [
+        "$E_1=h^2/8mL^2\\propto1/L^2$",
+        "$E_2/E_1=L_1^2/L_2^2=0.5$",
+        "$L_2/L_1=\\sqrt2\\approx1.41$"
+       ]
+      },
+      {
+       "id": "bn-p3",
+       "pyq": "63afe8ac2a8c45e7",
+       "level": 3,
+       "points": [
+        "$p_n=nh/2L$, $E_n=n^2h^2/8mL^2$ (1)",
+        "$p_1=1.66\\times10^{-24}$, $p_2=3.32\\times10^{-24}$ kg m/s",
+        "$E_1=1.51\\times10^{-18}$ J $=9.4$ eV; $E_2=6.04\\times10^{-18}$ J $=37.7$ eV"
+       ]
+      },
+      {
+       "id": "bn-p4",
+       "pyq": "1e80645af1dee9e8",
+       "level": 3,
+       "points": [
+        "$\\psi_1=\\sqrt{2/L}\\sin(\\pi x/L)$",
+        "$P=\\left[x/L-\\frac1{2\\pi}\\sin(2\\pi x/L)\\right]_{0.45L}^{0.55L}$",
+        "$P=0.1+0.618/2\\pi\\approx0.198$"
+       ]
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "topic": "Harmonic oscillator",
+   "subtopics": [
+    {
+     "id": "ho-levels",
+     "title": "Quantum harmonic oscillator: energy levels",
+     "theory_md": "Potential $V=\\tfrac12kx^2=\\tfrac12m\\omega^2x^2$, $\\omega=\\sqrt{k/m}$. Solving the Schrodinger equation $\\psi''+\\dfrac{2m}{\\hbar^2}\\left(E-\\tfrac12m\\omega^2x^2\\right)\\psi=0$ gives\n$$E_n=\\left(n+\\tfrac12\\right)\\hbar\\omega=\\left(n+\\tfrac12\\right)h\\nu,\\quad n=0,1,2,\\dots$$\n- Levels are **equally spaced** by $\\hbar\\omega$ (box: spacing grows).\n- **Zero-point energy** $E_0=\\tfrac12\\hbar\\omega$ (lowest, not zero).\n- Ground state $\\psi_0\\propto e^{-m\\omega x^2/2\\hbar}$ (Gaussian); $\\psi_n$ has $n$ nodes.\n- Selection rule for transitions: $\\Delta n=\\pm1$.",
+     "basics_md": "A mass on a spring, but quantised: it can only have energies half a step, one and a half steps, two and a half steps, and so on, with equal steps of $\\hbar\\omega$. It never fully stops.",
+     "key_points": [
+      "$V=\\frac12m\\omega^2x^2$",
+      "$E_n=(n+\\frac12)\\hbar\\omega$",
+      "Equal spacing $\\hbar\\omega$",
+      "Zero-point energy $E_0=\\hbar\\omega/2$",
+      "Ground state is a Gaussian"
+     ],
+     "figures": [],
+     "questions": [
+      {
+       "id": "hl-q1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "The ground-state energy of a quantum harmonic oscillator of angular frequency $\\omega$ is",
+       "options": [
+        "0",
+        "$\\hbar\\omega/2$",
+        "$\\hbar\\omega$",
+        "$3\\hbar\\omega/2$"
+       ],
+       "answer_index": 1,
+       "why": "$E_0=(0+\\frac12)\\hbar\\omega$."
+      },
+      {
+       "id": "hl-q2",
+       "kind": "mcq",
+       "level": 2,
+       "q": "The energy difference between adjacent levels of a harmonic oscillator is",
+       "options": [
+        "increases with $n$",
+        "decreases with $n$",
+        "$\\hbar\\omega$, the same for all $n$",
+        "$\\hbar\\omega/2$"
+       ],
+       "answer_index": 2,
+       "why": "Equal spacing is the signature; students confuse it with the box, where spacing grows with $n$."
+      },
+      {
+       "id": "hl-q3",
+       "kind": "numerical",
+       "level": 2,
+       "marks": 3,
+       "q": "A molecule vibrates as a harmonic oscillator with $\\omega=2.0\\times10^{14}$ rad/s. Find its zero-point energy and the energy of the first excited state in eV.",
+       "model_answer_md": "$\\hbar=1.0546\\times10^{-34}$ J s\n\n$E_0=\\tfrac12\\hbar\\omega=\\tfrac12(1.0546\\times10^{-34})(2.0\\times10^{14})=1.05\\times10^{-20}$ J $=0.066$ eV\n\n$E_1=\\tfrac32\\hbar\\omega=0.197$ eV\n\n(Spacing $\\hbar\\omega=0.132$ eV.)",
+       "points": [
+        "$E_n=(n+\\frac12)\\hbar\\omega$",
+        "$E_0=0.066$ eV",
+        "$E_1=0.197$ eV"
+       ]
+      },
+      {
+       "id": "hl-q4",
+       "kind": "short",
+       "level": 3,
+       "marks": 4,
+       "q": "Write the energy of a linear harmonic oscillator and discuss its zero-point energy and spacing. How does it differ from the infinite well?",
+       "model_answer_md": "**Energy.** $E_n=(n+\\tfrac12)\\hbar\\omega$, $n=0,1,2,\\dots$\n\n**Zero-point energy.** $E_0=\\tfrac12\\hbar\\omega\\ne0$: from the uncertainty principle, the oscillator cannot sit at rest at $x=0$ (that would fix both $x$ and $p$).\n\n**Spacing.** Equal, $\\hbar\\omega$.\n\n**Contrast with the well.**\n- Box: $E_n\\propto n^2$, spacing grows with $n$; oscillator: $E_n$ linear in $n$, spacing constant.\n- Box: lowest level $h^2/8mL^2$; oscillator: $\\hbar\\omega/2$.",
+       "points": [
+        "$E_n=(n+\\frac12)\\hbar\\omega$",
+        "$E_0=\\hbar\\omega/2$ with uncertainty-principle reason",
+        "Equal spacing vs box $n^2$"
+       ]
+      }
+     ]
+    },
+    {
+     "id": "ho-compare",
+     "title": "Quantum vs classical oscillator",
+     "theory_md": "**Classical:** energy is continuous, can be zero (particle at rest at $x=0$); the particle never goes beyond the turning points $x=\\pm A$ where $\\tfrac12kA^2=E$; it is fastest at the centre, so most likely found near the ends.\n\n**Quantum:**\n- Energy is discrete, $E_n=(n+\\tfrac12)\\hbar\\omega$; never zero.\n- $\\psi$ extends **beyond the classical turning points** (it decays exponentially there): the particle can be found in a classically forbidden region.\n- Ground state: highest probability at the centre. For large $n$ the quantum probability averages to the classical one (correspondence principle).\n\nLink to spring: $\\omega=\\sqrt{k/m}$, $\\nu=\\omega/2\\pi$.",
+     "basics_md": "Classically a swing can have any energy and can rest at the bottom. Quantum mechanically it only takes specific energy steps, and its wave leaks slightly past where a classical swing would have to turn back.",
+     "key_points": [
+      "Classical: continuous energy, can be zero, confined to $|x|\\le A$",
+      "Quantum: discrete, $E_0\\ne0$",
+      "$\\psi$ penetrates classically forbidden region",
+      "Large $n$ approaches classical behaviour",
+      "$\\omega=\\sqrt{k/m}$"
+     ],
+     "figures": [],
+     "questions": [
+      {
+       "id": "hc-q1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "Compared with a classical oscillator, the quantum oscillator's ground state",
+       "options": [
+        "has zero energy",
+        "can be found outside the classical turning points",
+        "has zero probability at the centre",
+        "has continuous energy"
+       ],
+       "answer_index": 1,
+       "why": "$\\psi_0$ is Gaussian and extends beyond the turning points."
+      },
+      {
+       "id": "hc-q2",
+       "kind": "mcq",
+       "level": 2,
+       "q": "A spring-mass oscillator has $k=500$ N/m and $m=2.0$ kg. Its angular frequency is",
+       "options": [
+        "250 rad/s",
+        "15.8 rad/s",
+        "500 rad/s",
+        "1000 rad/s"
+       ],
+       "answer_index": 1,
+       "why": "$\\omega=\\sqrt{k/m}=\\sqrt{250}=15.8$ rad/s. Option 1 forgets the square root."
+      },
+      {
+       "id": "hc-q3",
+       "kind": "short",
+       "level": 2,
+       "marks": 3,
+       "q": "Distinguish between a classical and a quantum harmonic oscillator.",
+       "model_answer_md": "| | Classical | Quantum |\n|---|---|---|\n| Energy | continuous, can be 0 | $E_n=(n+\\frac12)\\hbar\\omega$, discrete |\n| Lowest energy | 0 (at rest) | $\\hbar\\omega/2$ |\n| Motion limits | within $\\pm A$ only | $\\psi$ extends beyond $\\pm A$ |\n| Probability | highest near the ends | ground state highest at centre |\n\nFor large $n$ the quantum behaviour approaches the classical one.",
+       "points": [
+        "Continuous vs discrete energy",
+        "Zero vs zero-point energy $\\hbar\\omega/2$",
+        "Cannot vs can penetrate beyond turning points"
+       ]
+      },
+      {
+       "id": "hc-q4",
+       "kind": "numerical",
+       "level": 3,
+       "marks": 3,
+       "q": "A diatomic molecule has effective spring constant $k=516$ N/m and reduced mass $1.67\\times10^{-27}$ kg. Find its vibrational frequency $\\nu$ and zero-point energy in eV.",
+       "model_answer_md": "$\\omega=\\sqrt{\\dfrac km}=\\sqrt{\\dfrac{516}{1.67\\times10^{-27}}}=5.56\\times10^{14}$ rad/s\n\n$\\nu=\\dfrac{\\omega}{2\\pi}=8.85\\times10^{13}$ Hz\n\n$E_0=\\tfrac12\\hbar\\omega=\\tfrac12(1.0546\\times10^{-34})(5.56\\times10^{14})=2.93\\times10^{-20}$ J $=0.183$ eV",
+       "points": [
+        "$\\omega=\\sqrt{k/m}$",
+        "$\\nu=8.85\\times10^{13}$ Hz",
+        "$E_0=0.183$ eV"
+       ]
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "topic": "Tunnel effect",
+   "subtopics": [
+    {
+     "id": "tunnel-barrier",
+     "title": "Quantum tunnelling through a barrier",
+     "theory_md": "A particle of energy $E$ meets a barrier of height $V_0>E$ and width $a$. Classically it is always reflected. Quantum mechanically $\\psi$ **decays exponentially** inside the barrier, does not vanish, and a small part emerges on the other side: **tunnelling**.\n\nInside the barrier: $\\psi\\propto e^{-\\kappa x}$, $\\kappa=\\dfrac{\\sqrt{2m(V_0-E)}}{\\hbar}$.\n\nTransmission probability (thick barrier): $T\\approx e^{-2\\kappa a}$.\n$T$ falls rapidly with larger $a$, larger $m$, larger $V_0-E$.\n\nApplications: alpha decay, tunnel diode, scanning tunnelling microscope (STM), field emission, Josephson junction.",
+     "basics_md": "Throw a ball at a wall and it bounces. A wave, however, leaks a little way into the wall, and if the wall is thin enough some of the wave comes out the other side.",
+     "key_points": [
+      "$E<V_0$: classically forbidden, quantum allowed",
+      "$\\psi$ decays as $e^{-\\kappa x}$ inside",
+      "$T\\approx e^{-2\\kappa a}$, $\\kappa=\\sqrt{2m(V_0-E)}/\\hbar$",
+      "Depends on $a$, $m$, $V_0-E$",
+      "Uses: alpha decay, tunnel diode, STM"
+     ],
+     "figures": [],
+     "questions": [
+      {
+       "id": "tb-q1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "Quantum tunnelling occurs when a particle crosses a barrier",
+       "options": [
+        "with $E>V_0$",
+        "with $E<V_0$ through the barrier",
+        "by gaining energy from the barrier",
+        "only if its mass is large"
+       ],
+       "answer_index": 1,
+       "why": "The wave function penetrates the barrier, giving non-zero transmission."
+      },
+      {
+       "id": "tb-q2",
+       "kind": "mcq",
+       "level": 2,
+       "q": "If the barrier width is doubled, the transmission probability $T\\approx e^{-2\\kappa a}$",
+       "options": [
+        "is halved",
+        "is doubled",
+        "falls to the square of its old value",
+        "stays the same"
+       ],
+       "answer_index": 2,
+       "why": "$T_{new}=e^{-4\\kappa a}=(e^{-2\\kappa a})^2$."
+      },
+      {
+       "id": "tb-q3",
+       "kind": "numerical",
+       "level": 3,
+       "marks": 4,
+       "q": "An electron of energy 2 eV meets a rectangular barrier of height 5 eV and width 0.5 nm. Estimate the transmission probability using $T\\approx e^{-2\\kappa a}$.",
+       "model_answer_md": "$\\kappa=\\dfrac{\\sqrt{2m(V_0-E)}}{\\hbar}=\\dfrac{\\sqrt{2(9.11\\times10^{-31})(3\\times1.602\\times10^{-19})}}{1.0546\\times10^{-34}}=8.87\\times10^{9}$ m$^{-1}$\n\n$2\\kappa a=2(8.87\\times10^{9})(0.5\\times10^{-9})=8.87$\n\n$T\\approx e^{-8.87}=1.4\\times10^{-4}$\n\n(For 1 nm width, $T\\approx2\\times10^{-8}$: very sensitive to width, which is why STM works.)",
+       "points": [
+        "$\\kappa=8.87\\times10^9$ m$^{-1}$ with $V_0-E=3$ eV",
+        "$2\\kappa a=8.87$",
+        "$T\\approx1.4\\times10^{-4}$"
+       ]
+      },
+      {
+       "id": "tb-q4",
+       "kind": "short",
+       "level": 2,
+       "marks": 3,
+       "q": "Explain quantum tunnelling and state the factors on which the transmission probability depends.",
+       "model_answer_md": "**Tunnelling.** A particle of energy $E<V_0$ has a non-zero probability to cross a barrier. In the barrier $\\psi$ decays exponentially, $\\psi\\propto e^{-\\kappa x}$; if the barrier is thin the amplitude is still non-zero on the far side, so the particle appears there with probability $T$.\n\n**Dependence.** $T\\approx e^{-2\\kappa a}$, $\\kappa=\\sqrt{2m(V_0-E)}/\\hbar$:\n- decreases with barrier width $a$,\n- decreases with barrier height $V_0$ (increases with $E$),\n- decreases with particle mass $m$.",
+       "points": [
+        "$E<V_0$ yet crosses with non-zero probability",
+        "$\\psi$ decays inside, non-zero outside",
+        "$T\\approx e^{-2\\kappa a}$",
+        "Depends on $a$, $V_0-E$, $m$"
+       ]
+      }
+     ]
+    },
+    {
+     "id": "alpha-decay",
+     "title": "Alpha decay by tunnelling",
+     "theory_md": "Inside a heavy nucleus (radius $R$) an alpha particle feels the strong nuclear attraction. Outside $R$ it feels the Coulomb repulsion $V(r)=\\dfrac{2Ze^2}{4\\pi\\varepsilon_0r}$, about 25 to 30 MeV high at $R$, while the alpha energy is only 4 to 9 MeV. Classically it can never escape.\n\n**Gamow's theory:** it tunnels from $r=R$ to $r_0$, where $V(r_0)=E$:\n$$T\\approx e^{-2G},\\quad G=\\frac1\\hbar\\int_R^{r_0}\\sqrt{2m[V(r)-E]}\\,dr$$\nIt hits the barrier $f\\approx v/2R$ times per second, so decay constant $\\lambda=f\\,e^{-2G}$.\n\n$T$ is exponentially sensitive to $E$: half-lives range from $10^{-7}$ s to $10^{10}$ y (Geiger-Nuttall law).",
+     "basics_md": "The alpha is a prisoner rattling inside the nucleus. It does not have the energy to climb out, but its wave leaks through the wall, and each attempt has a tiny chance of success. Many attempts per second add up to the half-life.",
+     "key_points": [
+      "Alpha energy (4-9 MeV) is below the Coulomb barrier (25-30 MeV)",
+      "Escapes by tunnelling (Gamow)",
+      "$T\\approx e^{-2G}$",
+      "$\\lambda=f\\,e^{-2G}$, $f=v/2R$",
+      "Explains Geiger-Nuttall law"
+     ],
+     "figures": [],
+     "questions": [
+      {
+       "id": "ad-q1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "Alpha decay is explained as",
+       "options": [
+        "alpha particle gaining energy from the electrons",
+        "tunnelling through the Coulomb barrier",
+        "classical escape over the barrier",
+        "emission of a neutron"
+       ],
+       "answer_index": 1,
+       "why": "The alpha energy is below the barrier top."
+      },
+      {
+       "id": "ad-q2",
+       "kind": "mcq",
+       "level": 2,
+       "q": "A small increase in the alpha particle energy changes the half-life",
+       "options": [
+        "slightly",
+        "enormously, since $T$ depends exponentially on $E$",
+        "not at all",
+        "by a factor equal to the energy ratio"
+       ],
+       "answer_index": 1,
+       "why": "$T\\approx e^{-2G}$ with $G$ falling quickly as $E$ rises, hence the Geiger-Nuttall law."
+      },
+      {
+       "id": "ad-q3",
+       "kind": "short",
+       "level": 3,
+       "marks": 4,
+       "q": "Explain why alpha decay cannot be understood classically, and how quantum tunnelling explains it.",
+       "model_answer_md": "**Classical failure.** The Coulomb barrier at the nuclear surface is about 25 to 30 MeV but the alpha energy is only 4 to 9 MeV, so it cannot climb over.\n\n**Quantum explanation.** The alpha's wave function decays inside the barrier but does not vanish, so there is a small probability $T\\approx e^{-2G}$ to emerge at $r_0$ where $V=E$.\n\n**Rate.** Decay constant $\\lambda=f\\,e^{-2G}$ with $f=v/2R$ attempts per second. $T$ is very sensitive to $E$, which explains the huge range of half-lives.",
+       "points": [
+        "Barrier 25-30 MeV vs alpha 4-9 MeV",
+        "Tunnelling probability $T\\approx e^{-2G}$",
+        "$\\lambda=f\\,e^{-2G}$, sensitivity to $E$"
+       ]
+      },
+      {
+       "id": "ad-p1",
+       "pyq": "b9d6e4be4919e4f8",
+       "level": 3,
+       "points": [
+        "Tunnelling defined: particle crosses $V_0>E$ with non-zero probability, $\\psi$ decays inside",
+        "Alpha in nucleus: nuclear attraction inside, Coulomb barrier $2Ze^2/4\\pi\\varepsilon_0r$ outside; barrier 25-30 MeV vs $E$ 4-9 MeV",
+        "Gamow: $T\\approx e^{-2G}$, $G=\\frac1\\hbar\\int\\sqrt{2m(V-E)}dr$",
+        "$\\lambda=f\\,e^{-2G}$; Geiger-Nuttall sensitivity to energy"
+       ]
+      }
+     ]
+    }
+   ]
+  }
+ ]
+}

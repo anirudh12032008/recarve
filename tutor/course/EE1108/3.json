@@ -1,0 +1,1982 @@
+{
+ "code": "EE1108",
+ "unit": "Electrical Machines",
+ "written": "2026-10-19",
+ "by": "claude-sonnet-5-5, in a Claude Code session",
+ "topics": [
+  {
+   "topic": "Faraday's law of electromagnetic induction",
+   "subtopics": [
+    {
+     "id": "laws",
+     "title": "Faraday's and Lenz's laws",
+     "theory_md": "**First law:** whenever the flux linked with a circuit changes, an EMF is induced in it. **Second law:** the magnitude of the EMF equals the rate of change of flux linkage, $e = N\\,d\\Phi/dt$.\n\n**Lenz's law:** the direction of the induced EMF (and current) is such that it opposes the change that produced it, so $e = -N\\,d\\Phi/dt$. The minus sign is conservation of energy.\n\nUnits: flux in Wb (1 mWb $= 10^{-3}$ Wb), time in s.",
+     "basics_md": "Flux linkage is the number of turns times the flux through them. Change it, in any way, and a voltage appears across the coil. The voltage pushes a current that fights the change.",
+     "key_points": [
+      "Faraday's first law: changing flux linkage induces an EMF",
+      "Second law: $e = N\\,d\\Phi/dt$ (rate of change of flux linkage)",
+      "Lenz's law fixes the direction: opposes the cause, hence the minus sign",
+      "Lenz's law is a consequence of conservation of energy"
+     ],
+     "questions": [
+      {
+       "id": "l-q1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "Lenz's law is a consequence of the law of conservation of",
+       "options": [
+        "charge",
+        "energy",
+        "momentum",
+        "mass"
+       ],
+       "answer_index": 1,
+       "why": "If the induced current aided the change, energy would be created from nothing."
+      },
+      {
+       "id": "l-q2",
+       "kind": "mcq",
+       "level": 1,
+       "q": "According to Faraday's second law the induced EMF is proportional to",
+       "options": [
+        "the flux",
+        "the rate of change of flux linkage",
+        "the resistance of the coil",
+        "the current in the coil"
+       ],
+       "answer_index": 1,
+       "why": "$e = N\\,d\\Phi/dt$; a large steady flux induces nothing."
+      },
+      {
+       "id": "l-q3",
+       "kind": "short",
+       "level": 2,
+       "marks": 3,
+       "q": "State Faraday's laws of electromagnetic induction and Lenz's law.",
+       "model_answer_md": "**Faraday's first law:** whenever the magnetic flux linked with a circuit changes, an EMF is induced in it.\n\n**Faraday's second law:** the magnitude of the induced EMF equals the rate of change of flux linkages: $e = N\\,\\dfrac{d\\Phi}{dt}$.\n\n**Lenz's law:** the direction of the induced EMF is such that the current it drives opposes the change of flux that produced it, so $e = -N\\,\\dfrac{d\\Phi}{dt}$.",
+       "points": [
+        "First law: changing flux linked with a circuit induces an EMF",
+        "Second law: $e = N\\,d\\Phi/dt$, rate of change of flux linkage",
+        "Lenz's law: induced current opposes the change producing it, minus sign"
+       ]
+      },
+      {
+       "id": "l-q4",
+       "kind": "numerical",
+       "level": 2,
+       "marks": 2,
+       "q": "A coil of 500 turns links a flux that changes uniformly from 2 mWb to 0.5 mWb in 0.05 s. Find the average induced EMF.",
+       "model_answer_md": "$d\\Phi = 0.5 - 2 = -1.5$ mWb $= -1.5\\times10^{-3}$ Wb, $dt = 0.05$ s\n\n$|e| = N\\dfrac{|d\\Phi|}{dt} = 500\\times\\dfrac{1.5\\times10^{-3}}{0.05} = 15$ V\n\nThe EMF acts to maintain the falling flux (Lenz's law).",
+       "points": [
+        "Converts mWb to Wb",
+        "$e = N\\,d\\Phi/dt$ with $d\\Phi = 1.5\\times10^{-3}$ Wb",
+        "$e = 15$ V"
+       ]
+      }
+     ]
+    },
+    {
+     "id": "induced-emf",
+     "title": "Dynamically and statically induced EMF, inductance",
+     "theory_md": "**Dynamically induced EMF:** conductor moves in a stationary field (generator): $e = Blv\\sin\\theta$, direction by **Fleming's right-hand rule**. $\\theta$ is the angle between motion and field; $e = 0$ if the motion is along the field.\n\n**Statically induced EMF:** coil stationary, flux changes with current (transformer).\n- *Self-induced:* $e = -L\\,di/dt$, $L = N\\Phi/I = N^2/S$.\n- *Mutually induced:* $e_2 = -M\\,di_1/dt$, $M = k\\sqrt{L_1L_2}$, $0\\le k\\le1$.\n\nEnergy stored: $\\tfrac12LI^2$.",
+     "basics_md": "Two ways to change the flux a coil sees: move the coil through the field, or keep the coil still and let the field strength change. The first is a generator; the second is a transformer.",
+     "key_points": [
+      "Dynamic EMF: $e = Blv\\sin\\theta$, Fleming's right-hand rule, generator action",
+      "Static EMF: flux changes in a stationary coil, self or mutual, transformer action",
+      "$L = N\\Phi/I$, $e = -L\\,di/dt$",
+      "$M = k\\sqrt{L_1L_2}$"
+     ],
+     "questions": [
+      {
+       "id": "i-q1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "A straight conductor moves parallel to a uniform magnetic field. The EMF induced in it is",
+       "options": [
+        "maximum",
+        "zero",
+        "$Blv/2$",
+        "$Blv/\\sqrt2$"
+       ],
+       "answer_index": 1,
+       "why": "$\\theta = 0$ so $\\sin\\theta = 0$: no flux is cut."
+      },
+      {
+       "id": "i-q2",
+       "kind": "mcq",
+       "level": 1,
+       "q": "Fleming's right-hand rule gives the direction of",
+       "options": [
+        "force on a motor conductor",
+        "EMF induced in a moving conductor",
+        "flux in a core",
+        "back EMF only"
+       ],
+       "answer_index": 1,
+       "why": "Right hand: generator (EMF). Left hand: motor (force)."
+      },
+      {
+       "id": "i-q3",
+       "kind": "numerical",
+       "level": 2,
+       "marks": 3,
+       "q": "A conductor 0.5 m long moves at 10 m/s at 30 degrees to a uniform field of 0.8 T. Find the induced EMF, and the EMF if it moves perpendicular to the field.",
+       "model_answer_md": "$e = Blv\\sin\\theta = 0.8\\times0.5\\times10\\times\\sin30^\\circ = 2$ V\n\nPerpendicular: $e = 0.8\\times0.5\\times10\\times1 = 4$ V",
+       "points": [
+        "Uses $e = Blv\\sin\\theta$",
+        "$e = 2$ V at 30 degrees",
+        "$e = 4$ V when perpendicular"
+       ]
+      },
+      {
+       "id": "i-q4",
+       "kind": "numerical",
+       "level": 2,
+       "marks": 4,
+       "q": "A coil of 1000 turns produces a flux of 0.5 mWb when carrying 2 A. Find its self-inductance and the average EMF if the current reverses in 0.1 s. Two coils with $L_1 = 0.4$ H, $L_2 = 0.9$ H and $k = 0.5$: find $M$.",
+       "model_answer_md": "$L = \\dfrac{N\\Phi}{I} = \\dfrac{1000\\times0.5\\times10^{-3}}{2} = 0.25$ H\n\nCurrent changes from $+2$ to $-2$ A, $di = 4$ A in 0.1 s: $|e| = L\\dfrac{di}{dt} = 0.25\\times\\dfrac{4}{0.1} = 10$ V\n\n$M = k\\sqrt{L_1L_2} = 0.5\\sqrt{0.4\\times0.9} = 0.5\\times0.6 = 0.3$ H",
+       "points": [
+        "$L = N\\Phi/I = 0.25$ H",
+        "Change in current is 4 A (reversal), $e = 10$ V",
+        "$M = 0.3$ H"
+       ]
+      }
+     ]
+    },
+    {
+     "id": "hysteresis-terms",
+     "title": "Magnetic terms: retentivity, residual magnetism, coercive force, hysteresis",
+     "theory_md": "On the B-H loop of a ferromagnet:\n- **Magnetic hysteresis:** lag of $B$ behind $H$ over a magnetising cycle; the loop area is the energy lost per cycle per unit volume.\n- **Residual magnetism:** $B_r$, the flux density left when $H$ is reduced to zero.\n- **Retentivity:** the ability of a material to retain magnetism after $H$ is removed.\n- **Coercive force:** $H_c$, the reverse $H$ (A/m) needed to bring $B$ to zero.\n\nSoft iron and silicon steel: narrow loop, low $B_r$ and $H_c$, used for cores. Hard steel: wide loop, used for permanent magnets.",
+     "basics_md": "Push a nail with a magnet and it stays a little magnetic. To demagnetise it you must push the other way. That memory and the reverse push are what the loop shows.",
+     "key_points": [
+      "Hysteresis: $B$ lags $H$; loop area = energy lost per cycle",
+      "Residual magnetism: $B$ left at $H = 0$",
+      "Retentivity: ability to retain magnetism",
+      "Coercive force: reverse $H$ that makes $B$ zero",
+      "Cores need a narrow loop, permanent magnets a wide one"
+     ],
+     "questions": [
+      {
+       "id": "h-q1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "The coercive force of a magnetic material is the",
+       "options": [
+        "flux density left at $H = 0$",
+        "reverse magnetising force needed to reduce $B$ to zero",
+        "maximum flux density reached",
+        "area of the B-H loop"
+       ],
+       "answer_index": 1,
+       "why": "Option A is residual magnetism; coercive force is the intercept on the $H$ axis."
+      },
+      {
+       "id": "h-q2",
+       "kind": "mcq",
+       "level": 1,
+       "q": "The best material for a transformer core has",
+       "options": [
+        "wide loop, high retentivity",
+        "narrow loop, low retentivity and low coercive force",
+        "no hysteresis loop at all",
+        "high coercive force"
+       ],
+       "answer_index": 1,
+       "why": "A narrow loop means little energy lost per cycle."
+      },
+      {
+       "id": "h-q3",
+       "kind": "short",
+       "level": 2,
+       "marks": 2,
+       "q": "What does the area of the hysteresis loop represent? Name the material used to reduce it in transformer cores.",
+       "model_answer_md": "The area of the B-H loop is the **energy lost as heat per cycle per unit volume** of the core (hysteresis loss), $P_h = \\eta B_m^{1.6} f V$.\n\nIt is reduced by using **silicon steel (CRGO)**, which has a narrow loop.",
+       "points": [
+        "Loop area = energy lost per cycle per unit volume",
+        "$P_h = \\eta B_m^{1.6}fV$",
+        "Silicon steel, narrow loop"
+       ]
+      },
+      {
+       "id": "h-p1",
+       "pyq": "35085769d141dab0",
+       "level": 1,
+       "points": [
+        "Residual magnetism: magnetism (flux density $B_r$) that remains in a ferromagnetic material after the magnetising force is reduced to zero",
+        "Value of $B$ at $H = 0$ on the B-H loop"
+       ]
+      },
+      {
+       "id": "h-p2",
+       "pyq": "b6c294b0c4f3a236",
+       "level": 1,
+       "points": [
+        "Retentivity: ability of a magnetic material to retain magnetism after the magnetising force is removed",
+        "Measured by residual flux density $B_r$; high for hard steel, low for soft iron"
+       ]
+      },
+      {
+       "id": "h-p3",
+       "pyq": "18950fb9bd1c4f9c",
+       "level": 1,
+       "points": [
+        "Coercive force $H_c$: reverse magnetising force needed to reduce the residual flux density to zero",
+        "Intercept on the $H$ axis of the loop, unit A/m"
+       ]
+      },
+      {
+       "id": "h-p4",
+       "pyq": "65ab8bf48ced5ba1",
+       "level": 2,
+       "points": [
+        "Hysteresis: lagging of $B$ behind $H$ in a magnetising cycle",
+        "$B$ does not return to zero when $H$ is removed; B-H curve is a closed loop",
+        "Loop area = hysteresis loss per cycle per unit volume"
+       ]
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "topic": "Transformer construction and principle",
+   "subtopics": [
+    {
+     "id": "principle",
+     "title": "Working principle, ratio and DC supply",
+     "theory_md": "A transformer is a static device that transfers electrical energy between two circuits at the **same frequency** by **mutual induction**. Alternating $V_1$ on the primary sets up an alternating flux in a common laminated core, inducing $E_1$ and $E_2$ in the two windings.\n\n**Transformation ratio** (take $K = N_2/N_1$): $\\dfrac{E_2}{E_1}=\\dfrac{V_2}{V_1}=\\dfrac{N_2}{N_1}=K=\\dfrac{I_1}{I_2}$. Ideal: $V_1I_1=V_2I_2$. Rated in **kVA**, so $I_{FL}=\\text{VA}/V$.\n\nOn **DC** the flux is constant, $d\\Phi/dt=0$, so no EMF is induced. Only the small $R_1$ limits the current, $I_1=V/R_1$: the winding burns.",
+     "basics_md": "A transformer needs a changing flux to pass energy across. Alternating current gives a changing flux. DC gives a steady one, which induces nothing.",
+     "key_points": [
+      "Principle: mutual induction, same frequency on both sides",
+      "$E_2/E_1=N_2/N_1=K$ and $I_1/I_2=K$ (ideal), $V_1I_1=V_2I_2$",
+      "Rated in kVA because loss depends on current and core loss on voltage, independent of pf",
+      "On DC: $d\\Phi/dt=0$, no EMF, $I=V/R_1$ very large, winding burns"
+     ],
+     "questions": [
+      {
+       "id": "p-q1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "A transformer works on the principle of",
+       "options": [
+        "self-induction",
+        "mutual induction",
+        "electrostatic induction",
+        "Fleming's left-hand rule"
+       ],
+       "answer_index": 1,
+       "why": "Flux set up by the primary links the secondary."
+      },
+      {
+       "id": "p-q2",
+       "kind": "mcq",
+       "level": 1,
+       "q": "If the primary of a transformer is connected to a DC supply of rated voltage, the primary",
+       "options": [
+        "gives normal output",
+        "draws a very large current and may burn",
+        "draws no current",
+        "works at lower efficiency"
+       ],
+       "answer_index": 1,
+       "why": "No back EMF, only $R_1$ limits the current."
+      },
+      {
+       "id": "p-q3",
+       "kind": "numerical",
+       "level": 2,
+       "marks": 4,
+       "q": "A 25 kVA, 2200/220 V, 50 Hz single-phase transformer has 50 secondary turns. Find the primary turns, the full-load primary and secondary currents and the maximum core flux.",
+       "model_answer_md": "$K=\\dfrac{220}{2200}=0.1$, so $N_1=\\dfrac{N_2}{K}=\\dfrac{50}{0.1}=500$ turns\n\n$I_1=\\dfrac{25000}{2200}=11.36$ A, $I_2=\\dfrac{25000}{220}=113.6$ A\n\n$\\Phi_m=\\dfrac{E_2}{4.44fN_2}=\\dfrac{220}{4.44\\times50\\times50}=0.0198$ Wb $=19.8$ mWb",
+       "points": [
+        "$K=0.1$, $N_1=500$ turns",
+        "$I_1=11.36$ A, $I_2=113.6$ A",
+        "$\\Phi_m=19.8$ mWb from $E=4.44fN\\Phi_m$"
+       ]
+      },
+      {
+       "id": "p-p1",
+       "pyq": "e366eb7f580d2a16",
+       "level": 2,
+       "points": [
+        "On DC the flux is constant, so $d\\Phi/dt=0$ and $e_1=e_2=0$: no transformer action, no secondary voltage",
+        "$X_L=2\\pi fL=0$, no back EMF, so $I_1=V_{dc}/R_1$ is very large (example $230/0.5=460$ A)",
+        "Huge $I_1^2R_1$ heating burns the winding and insulation; core may saturate"
+       ]
+      }
+     ]
+    },
+    {
+     "id": "emf-equation",
+     "title": "EMF equation",
+     "theory_md": "Let $\\Phi=\\Phi_m\\sin\\omega t$. Then $e_1=-N_1\\dfrac{d\\Phi}{dt}=N_1\\omega\\Phi_m\\sin(\\omega t-90^\\circ)$: the EMF **lags the flux by 90 degrees**, with $E_{max}=2\\pi fN_1\\Phi_m$.\n\n$$E_1=\\dfrac{E_{max}}{\\sqrt2}=4.44\\,fN_1\\Phi_m,\\qquad E_2=4.44\\,fN_2\\Phi_m$$\n\nWith $\\Phi_m=B_mA_i$ (net core area, m$^2$): $E=4.44fNB_mA_i$. EMF per turn is the same in both windings. Alternative: average EMF per turn $=4f\\Phi_m$, times form factor $1.11$.",
+     "basics_md": "Flux rises from zero to its peak in a quarter cycle. That fixes the average rate of change, and the sine wave's form factor 1.11 turns average into RMS.",
+     "key_points": [
+      "$e=-N\\,d\\Phi/dt$ with $\\Phi=\\Phi_m\\sin\\omega t$; EMF lags flux by 90 degrees",
+      "$E_{max}=2\\pi fN\\Phi_m$, RMS $E=4.44fN\\Phi_m$",
+      "$E_1/N_1=E_2/N_2$",
+      "$\\Phi_m=B_mA$ with area in m$^2$"
+     ],
+     "questions": [
+      {
+       "id": "e-q1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "The RMS EMF induced in a transformer winding of $N$ turns is",
+       "options": [
+        "$2.22fN\\Phi_m$",
+        "$4.44fN\\Phi_m$",
+        "$6.28fN\\Phi_m$",
+        "$1.11fN\\Phi_m$"
+       ],
+       "answer_index": 1,
+       "why": "$2\\pi/\\sqrt2=4.44$."
+      },
+      {
+       "id": "e-q2",
+       "kind": "mcq",
+       "level": 1,
+       "q": "The induced EMF in the primary with respect to the core flux",
+       "options": [
+        "leads it by 90 degrees",
+        "lags it by 90 degrees",
+        "is in phase",
+        "lags by 180 degrees"
+       ],
+       "answer_index": 1,
+       "why": "$e=-N\\,d\\Phi/dt$ gives a 90 degree lag."
+      },
+      {
+       "id": "e-q3",
+       "kind": "numerical",
+       "level": 2,
+       "marks": 5,
+       "q": "A single-phase transformer has 400 primary and 1000 secondary turns. Net core area is 60 cm$^2$. The primary is on a 500 V, 50 Hz supply. Find the peak flux density and the secondary EMF.",
+       "model_answer_md": "$A=60\\times10^{-4}$ m$^2$, $E_1\\approx V_1=500$ V\n\n$\\Phi_m=\\dfrac{500}{4.44\\times50\\times400}=5.63\\times10^{-3}$ Wb\n\n$B_m=\\dfrac{\\Phi_m}{A}=\\dfrac{5.63\\times10^{-3}}{60\\times10^{-4}}=0.938$ T\n\n$K=\\dfrac{1000}{400}=2.5$, $E_2=KE_1=2.5\\times500=1250$ V",
+       "points": [
+        "Converts 60 cm$^2$ to m$^2$",
+        "$\\Phi_m=5.63$ mWb",
+        "$B_m=0.938$ T",
+        "$E_2=1250$ V"
+       ]
+      },
+      {
+       "id": "e-p1",
+       "pyq": "c98b807dc6b9f032",
+       "level": 2,
+       "points": [
+        "Flux $\\Phi=\\Phi_m\\sin\\omega t$; $e_1=-N_1\\,d\\Phi/dt$",
+        "$E_{max}=2\\pi fN_1\\Phi_m$",
+        "RMS: $E_1=4.44fN_1\\Phi_m$ V"
+       ]
+      },
+      {
+       "id": "e-p2",
+       "pyq": "47aec996a668e9c0",
+       "level": 2,
+       "points": [
+        "Derivation: $\\Phi=\\Phi_m\\sin\\omega t$, $E_{max}=2\\pi fN\\Phi_m$, $E_1=4.44fN_1\\Phi_m$, $E_2=4.44fN_2\\Phi_m$",
+        "Equivalent circuit referred to one side: $R_{01}$, $X_{01}$ in series, $R_0\\parallel X_0$ shunt branch across the input",
+        "Labelled diagram with $V_1$, $I_0$, $I_1$, $V_2'$"
+       ]
+      }
+     ]
+    },
+    {
+     "id": "construction",
+     "title": "Construction, core and shell type, classification",
+     "theory_md": "**Parts:** laminated **CRGO silicon-steel** core (silicon cuts hysteresis loss, laminations cut eddy loss); primary and secondary copper windings (LV next to core, HV outside); insulation; for oil-cooled units tank, oil, **conservator** and **breather** (silica gel dries the air entering as oil breathes), Buchholz relay.\n\n**Core type:** windings surround the core, two limbs, single magnetic circuit, cylindrical coils, suits high voltage, easy to repair. **Shell type:** core surrounds the windings, three limbs, centre limb twice as wide, double magnetic circuit, **sandwich** (interleaved) coils, lower leakage, better short-circuit strength, suits low voltage.\n\n**Sandwich winding** reduces leakage flux and reactance, giving better regulation.\n\n**Classification:** core/shell; step-up/step-down; 1-phase/3-phase; power, distribution, instrument; dry/oil cooled.",
+     "basics_md": "Two ways to wrap copper around iron: wires around iron (core) or iron around wires (shell). Shell gives better magnetic coupling; core is easier to build and insulate.",
+     "key_points": [
+      "Core: laminated CRGO silicon steel; laminations cut eddy loss",
+      "Core type: windings surround core, 2 limbs. Shell type: core surrounds windings, 3 limbs",
+      "Sandwich coils: lower leakage flux and reactance, better regulation",
+      "Breather with silica gel absorbs moisture from air entering the conservator",
+      "Classify by construction, voltage, phases, use, cooling"
+     ],
+     "questions": [
+      {
+       "id": "c-q1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "The core of a transformer is laminated mainly to reduce",
+       "options": [
+        "hysteresis loss",
+        "eddy-current loss",
+        "copper loss",
+        "leakage reactance"
+       ],
+       "answer_index": 1,
+       "why": "Silicon content reduces hysteresis; lamination reduces eddy current."
+      },
+      {
+       "id": "c-q2",
+       "kind": "mcq",
+       "level": 1,
+       "q": "In a shell-type transformer",
+       "options": [
+        "the windings surround the core",
+        "the core surrounds the windings",
+        "there are two limbs",
+        "the magnetic circuit is single"
+       ],
+       "answer_index": 1,
+       "why": "Core type: windings surround the core. Shell type: the reverse, with a double magnetic circuit."
+      },
+      {
+       "id": "c-q3",
+       "kind": "short",
+       "level": 2,
+       "marks": 3,
+       "q": "Compare core type and shell type transformers in three points.",
+       "model_answer_md": "| Core type | Shell type |\n|---|---|\n| Windings surround the core; 2 limbs | Core surrounds the windings; 3 limbs |\n| Single magnetic circuit | Double magnetic circuit |\n| Higher leakage reactance, easy to insulate and repair | Lower leakage, better short-circuit strength, harder to repair |\n| Used for high voltage | Used for low voltage, high current |",
+       "points": [
+        "Windings surround core vs core surrounds windings",
+        "Single vs double magnetic circuit",
+        "Leakage, repair, application difference"
+       ]
+      },
+      {
+       "id": "c-p1",
+       "pyq": "77e02df2349511d7",
+       "level": 2,
+       "points": [
+        "Core type: two limbs, windings surround the core; shell type: three limbs, core surrounds windings, centre limb twice as wide",
+        "Advantages/disadvantages: core easier to insulate and repair, higher leakage; shell lower leakage, strong, harder to repair",
+        "Sandwich winding: low leakage flux and reactance, better regulation, half LV coils next to the core reduce insulation",
+        "Neat sketches of both"
+       ]
+      },
+      {
+       "id": "c-p2",
+       "pyq": "703f85a422dcefcc",
+       "level": 2,
+       "points": [
+        "Core and shell type with sketches, advantages and disadvantages",
+        "Equivalent circuit: $R_0\\parallel X_0$ shunt branch, series $R_{01}$, $X_{01}$",
+        "Phasor diagram for lagging pf: $V_1$, $-E_1$, $I_1R_{01}$, $I_1X_{01}$, $I_0$, $I_2'$ in order"
+       ]
+      },
+      {
+       "id": "c-p3",
+       "pyq": "40a1493c2a0e33f1",
+       "level": 2,
+       "points": [
+        "Core type and shell type with neat sketches and comparison",
+        "Advantages and disadvantages of each",
+        "Sandwich arrangement reduces leakage flux and reactance, improves regulation, cuts insulation need"
+       ]
+      },
+      {
+       "id": "c-p4",
+       "pyq": "7d0fd32273aa9902",
+       "level": 2,
+       "points": [
+        "Classification: construction, voltage, phases, application, cooling",
+        "Core and shell type sketches",
+        "Advantages and disadvantages of each"
+       ]
+      },
+      {
+       "id": "c-p5",
+       "pyq": "3b7b4ba8d5efbf9e",
+       "level": 2,
+       "points": [
+        "Construction: laminated CRGO core, windings, insulation, tank, oil, conservator, breather",
+        "Working principle: mutual induction, $E=4.44fN\\Phi_m$, $V_2/V_1=N_2/N_1$, no action on DC",
+        "Classification by construction, voltage, phases, application, cooling"
+       ]
+      },
+      {
+       "id": "c-p6",
+       "pyq": "6e5318d2028ae3a5",
+       "level": 1,
+       "points": [
+        "Breather (silica gel) absorbs moisture from air entering the conservator as oil expands and contracts",
+        "Keeps the oil dry so its insulation strength is retained"
+       ]
+      },
+      {
+       "id": "c-p7",
+       "pyq": "f8fc3d912ce54aaa",
+       "level": 1,
+       "points": [
+        "Breather filled with silica gel dries the air breathed in by the conservator",
+        "Prevents moisture entering the transformer oil"
+       ]
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "topic": "Transformer phasor diagrams and equivalent circuit",
+   "subtopics": [
+    {
+     "id": "no-load",
+     "title": "No-load operation and phasor diagram",
+     "theory_md": "With the secondary open, the primary draws a small $I_0$ (2 to 5 % of rated). It has two components: **magnetising** $I_\\mu=I_0\\sin\\phi_0$ (in phase with $\\Phi$, makes the flux) and **working** $I_w=I_0\\cos\\phi_0$ (in phase with $V_1$, supplies iron loss). $I_0=\\sqrt{I_w^2+I_\\mu^2}$, $P_i=V_1I_0\\cos\\phi_0$, pf about 0.1 to 0.3 lagging.\n\n**Phasor construction:** $\\Phi$ horizontal reference; $E_1$, $E_2$ lag it by 90 degrees; $V_1=-E_1$; $I_\\mu$ along $\\Phi$, $I_w$ along $V_1$, $I_0$ their resultant, lagging $V_1$ by $\\phi_0$ and leading $\\Phi$ by the hysteretic angle $\\alpha=90^\\circ-\\phi_0$.",
+     "basics_md": "An iron-cored coil on AC behaves like a big inductor. Almost all its current just builds the flux (reactive); a thin slice pays for the iron loss (active).",
+     "key_points": [
+      "$I_0$ has $I_\\mu$ (along $\\Phi$) and $I_w$ (along $V_1$)",
+      "$I_0=\\sqrt{I_w^2+I_\\mu^2}$, $\\cos\\phi_0=I_w/I_0$ is low",
+      "$E_1,E_2$ lag $\\Phi$ by 90 degrees; $V_1=-E_1$",
+      "Input power at no load is the iron loss $V_1I_0\\cos\\phi_0$"
+     ],
+     "questions": [
+      {
+       "id": "n-q1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "At no load the current drawn by a transformer",
+       "options": [
+        "lags $V_1$ by nearly 90 degrees",
+        "is in phase with $V_1$",
+        "leads $V_1$",
+        "is zero"
+       ],
+       "answer_index": 0,
+       "why": "It is mostly magnetising current; pf is about 0.2."
+      },
+      {
+       "id": "n-q2",
+       "kind": "mcq",
+       "level": 1,
+       "q": "The working component $I_w$ of the no-load current is in phase with",
+       "options": [
+        "the flux",
+        "$V_1$",
+        "$E_1$",
+        "$I_\\mu$"
+       ],
+       "answer_index": 1,
+       "why": "$I_w$ supplies power, so it is in phase with $V_1$. $I_\\mu$ is in phase with the flux."
+      },
+      {
+       "id": "n-q3",
+       "kind": "numerical",
+       "level": 2,
+       "marks": 3,
+       "q": "A transformer on 230 V draws a no-load current of 3 A at pf 0.2 lagging. Find $I_w$, $I_\\mu$ and the core loss.",
+       "model_answer_md": "$I_w=I_0\\cos\\phi_0=3\\times0.2=0.6$ A\n\n$I_\\mu=\\sqrt{3^2-0.6^2}=\\sqrt{8.64}=2.94$ A\n\nCore loss $=V_1I_w=230\\times0.6=138$ W",
+       "points": [
+        "$I_w=0.6$ A",
+        "$I_\\mu=2.94$ A",
+        "Core loss $=138$ W"
+       ]
+      },
+      {
+       "id": "n-p1",
+       "pyq": "a29c49920383f653",
+       "level": 2,
+       "points": [
+        "Secondary open, primary draws small $I_0$ which sets up the flux; $E_1\\approx V_1$ opposes it",
+        "$I_0$ has $I_\\mu$ and $I_w$, $\\cos\\phi_0$ low",
+        "Phasor: $\\Phi$ reference, $E_1,E_2$ lag by 90 degrees, $V_1=-E_1$, $I_0$ lags $V_1$ by $\\phi_0$"
+       ]
+      }
+     ]
+    },
+    {
+     "id": "on-load",
+     "title": "On load: MMF balance and constant flux",
+     "theory_md": "Load current $I_2$ gives an MMF $N_2I_2$ that opposes the flux (Lenz). The tiny flux dip lowers $E_1$, so the primary draws an extra **load component** $I_2'$ with $N_1I_2'=N_2I_2$, i.e. $I_2'=KI_2$, in antiphase with $I_2$. Net MMF returns to $N_1I_0$, so the **flux stays constant** from no load to full load ($\\Phi_m\\approx V_1/4.44fN_1$).\n\n$$\\bar I_1=\\bar I_0+\\bar I_2'$$\n\n**Lagging-load phasors:** $V_2$ reference; $I_2$ lags by $\\phi_2$; $E_2=V_2+I_2(R_2+jX_2)$; $I_2'$ drawn from $-I_2$ scaled by $K$; add $I_0$ to get $I_1$; $V_1=-E_1+I_1(R_1+jX_1)$.",
+     "basics_md": "The secondary current tries to demagnetise the core. The primary instantly pulls extra current to cancel that effect, so the core never notices the load.",
+     "key_points": [
+      "$I_2'=KI_2$, antiphase to $I_2$, cancels the secondary MMF",
+      "$\\bar I_1=\\bar I_0+\\bar I_2'$ (phasor sum)",
+      "Flux fixed by $V_1\\approx4.44fN_1\\Phi_m$, so iron loss is constant",
+      "Drops $I_1R_1$, $I_1X_1$ added to $-E_1$ to get $V_1$"
+     ],
+     "questions": [
+      {
+       "id": "o-q1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "When a transformer is loaded, the core flux",
+       "options": [
+        "rises sharply",
+        "falls sharply",
+        "stays nearly constant",
+        "becomes zero"
+       ],
+       "answer_index": 2,
+       "why": "Extra primary MMF $N_1I_2'$ cancels $N_2I_2$."
+      },
+      {
+       "id": "o-q2",
+       "kind": "mcq",
+       "level": 1,
+       "q": "The load component of primary current $I_2'$ is",
+       "options": [
+        "$I_2/K$ in phase with $I_2$",
+        "$KI_2$ in antiphase with $I_2$",
+        "$KI_2$ in phase with $I_0$",
+        "$K^2I_2$"
+       ],
+       "answer_index": 1,
+       "why": "MMF balance: $N_1I_2'=N_2I_2$ and it opposes."
+      },
+      {
+       "id": "o-q3",
+       "kind": "numerical",
+       "level": 2,
+       "marks": 4,
+       "q": "A 2200/220 V transformer takes $I_0=1$ A at pf 0.3 lagging. The secondary supplies 50 A at 0.8 pf lagging. Find the primary current and its pf.",
+       "model_answer_md": "$K=0.1$, $I_2'=0.1\\times50=5$ A at $\\cos^{-1}0.8=36.87^\\circ$ lag\n\nWith $V_1$ as reference:\n- $I_0$: $0.3-j\\,0.954$ A\n- $I_2'$: $4-j\\,3$ A\n- $I_1=4.3-j\\,3.954$ A\n\n$|I_1|=\\sqrt{4.3^2+3.954^2}=5.84$ A, $\\cos\\phi_1=\\dfrac{4.3}{5.84}=0.736$ lagging",
+       "points": [
+        "$I_2'=KI_2=5$ A at 36.87 degrees lag",
+        "Resolves $I_0$ and $I_2'$ into components",
+        "$I_1=5.84$ A, pf $0.736$ lagging"
+       ]
+      },
+      {
+       "id": "o-p1",
+       "pyq": "fd4b9f3f39f9197c",
+       "level": 3,
+       "points": [
+        "No load: $I_0$ with $I_\\mu$, $I_w$; $E_1\\approx V_1$; phasor construction",
+        "Load: $I_2$ lags $V_2$; MMF $N_2I_2$ opposes flux; $I_2'=KI_2$ drawn antiphase; $\\bar I_1=\\bar I_0+\\bar I_2'$",
+        "Flux nearly constant",
+        "Phasor diagram showing no load to full load"
+       ]
+      },
+      {
+       "id": "o-p2",
+       "pyq": "739cc0d4e4e135ce",
+       "level": 2,
+       "points": [
+        "No-load phasor: $\\Phi$ reference, $E_1,E_2$ lag 90 degrees, $V_1=-E_1$, $I_\\mu$, $I_w$, $I_0$",
+        "Loaded (lagging): add $I_2$ lagging $V_2$, $I_2'=KI_2$ antiphase, $I_1=I_0+I_2'$",
+        "Show angles $\\phi_0$, $\\phi_2$, $\\phi_1$"
+       ]
+      },
+      {
+       "id": "o-p3",
+       "pyq": "987d50f8d9e41c3d",
+       "level": 3,
+       "points": [
+        "Yes, flux is practically constant: $V_1\\approx E_1=4.44fN_1\\Phi_m$ so $\\Phi_m=V_1/(4.44fN_1)$ is fixed",
+        "On load $N_2I_2$ opposes flux; $E_1$ dips; primary draws $I_2'$ with $N_1I_2'=N_2I_2$",
+        "Net MMF is again $N_1I_0$, so flux restored; iron loss constant"
+       ]
+      },
+      {
+       "id": "o-p4",
+       "pyq": "967dfcf595086938",
+       "level": 2,
+       "points": [
+        "$K=115/230=0.5$, $I_2'=0.5\\times15=7.5$ A at 36.87 degrees lag",
+        "$I_0=2$ A at 78.46 degrees lag: components $0.4$ and $-1.96$",
+        "$I_1=(0.4+6.0)-j(1.96+4.5)=6.4-j6.46$, $|I_1|\\approx9.09$ A at 45.3 degrees lag",
+        "Vector diagram with $V_1$, $I_0$, $I_2'$, $I_1$ and angles"
+       ]
+      }
+     ]
+    },
+    {
+     "id": "equivalent-circuit",
+     "title": "Equivalent circuit and referring",
+     "theory_md": "The model: a **shunt branch** $R_0\\parallel X_0$ (core loss and magnetising) with $R_0=V_1/I_w$, $X_0=V_1/I_\\mu$, and series $R_1,X_1$ and the secondary $R_2,X_2$ referred across an ideal transformer. Neglecting the shunt branch's drop gives the **approximate circuit**.\n\n**Referring** (take $K=N_2/N_1$): secondary to primary divide impedance by $K^2$, voltage by $K$, multiply current by $K$:\n$R_{01}=R_1+R_2/K^2$, $X_{01}=X_1+X_2/K^2$, $Z_{01}=\\sqrt{R_{01}^2+X_{01}^2}$.\nPrimary to secondary multiply by $K^2$: $R_{02}=R_2+K^2R_1=K^2R_{01}$.\n\nMoving to the HV side makes impedance larger.",
+     "basics_md": "Replace the real transformer by an ideal one plus resistors and reactances for the copper, and one parallel branch for the iron. Then move everything to one side so a single circuit remains.",
+     "key_points": [
+      "Shunt branch $R_0\\parallel X_0$ for core; series $R_{01}$, $X_{01}$ for windings",
+      "$R_0=V_1/I_w$, $X_0=V_1/I_\\mu$",
+      "Secondary to primary: $Z/K^2$; primary to secondary: $K^2Z$ (with $K=N_2/N_1$)",
+      "Referring to HV side makes impedances larger"
+     ],
+     "questions": [
+      {
+       "id": "q-q1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "With $K=N_2/N_1$, a secondary impedance $Z_2$ referred to the primary becomes",
+       "options": [
+        "$K\\,Z_2$",
+        "$Z_2/K$",
+        "$Z_2/K^2$",
+        "$K^2Z_2$"
+       ],
+       "answer_index": 2,
+       "why": "Impedance scales as the square of the turns ratio; $/K^2$ moving to the primary."
+      },
+      {
+       "id": "q-q2",
+       "kind": "mcq",
+       "level": 1,
+       "q": "In the equivalent circuit, the shunt branch represents",
+       "options": [
+        "copper loss and leakage",
+        "core loss and magnetising current",
+        "load",
+        "stray loss only"
+       ],
+       "answer_index": 1,
+       "why": "$R_0$ takes $I_w$ (iron loss); $X_0$ takes $I_\\mu$."
+      },
+      {
+       "id": "q-q3",
+       "kind": "numerical",
+       "level": 2,
+       "marks": 4,
+       "q": "A 2200/220 V transformer has $R_1=2\\ \\Omega$, $X_1=4\\ \\Omega$, $R_2=0.02\\ \\Omega$, $X_2=0.04\\ \\Omega$. Find the equivalent resistance and reactance referred to (a) the primary, (b) the secondary.",
+       "model_answer_md": "$K=220/2200=0.1$, $K^2=0.01$\n\n(a) $R_{01}=R_1+R_2/K^2=2+0.02/0.01=4\\ \\Omega$; $X_{01}=4+0.04/0.01=8\\ \\Omega$; $Z_{01}=8.94\\ \\Omega$\n\n(b) $R_{02}=K^2R_{01}=0.04\\ \\Omega$; $X_{02}=0.08\\ \\Omega$; $Z_{02}=0.0894\\ \\Omega$",
+       "points": [
+        "$K^2=0.01$",
+        "$R_{01}=4\\ \\Omega$, $X_{01}=8\\ \\Omega$",
+        "$R_{02}=0.04\\ \\Omega$, $X_{02}=0.08\\ \\Omega$"
+       ]
+      }
+     ]
+    },
+    {
+     "id": "regulation",
+     "title": "Voltage regulation",
+     "theory_md": "**Voltage regulation** is the fall in secondary terminal voltage from no load to full load, as a fraction of the no-load voltage, with $V_1$ constant:\n$$\\%\\text{reg}=\\dfrac{E_2-V_2}{E_2}\\times100\\approx\\dfrac{I_2(R_{02}\\cos\\phi\\pm X_{02}\\sin\\phi)}{E_2}\\times100$$\n**+** for lagging pf, **-** for leading. From the circuit referred to the secondary and its phasor diagram ($V_2$ reference, add $I_2R_{02}$ along $I_2$ and $I_2X_{02}$ at 90 degrees ahead), the approximate drop is $I_2R_{02}\\cos\\phi+I_2X_{02}\\sin\\phi$. Use $I$, $R$, $X$, $V$ all on the same side. Regulation can be negative for a leading load.",
+     "basics_md": "When you load a transformer, its terminal voltage sags because the windings have impedance. Regulation says how much, as a percentage. Smaller is better.",
+     "key_points": [
+      "Regulation $=(E_2-V_2)/E_2$",
+      "Approx: $I_2(R_{02}\\cos\\phi\\pm X_{02}\\sin\\phi)/E_2$",
+      "Plus for lagging, minus for leading",
+      "All quantities on the same side"
+     ],
+     "questions": [
+      {
+       "id": "r-q1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "For a leading power factor load, the voltage regulation of a transformer can be",
+       "options": [
+        "only positive",
+        "zero or negative",
+        "infinite",
+        "always 100 %"
+       ],
+       "answer_index": 1,
+       "why": "The term $-X\\sin\\phi$ can exceed $R\\cos\\phi$."
+      },
+      {
+       "id": "r-q2",
+       "kind": "mcq",
+       "level": 1,
+       "q": "Voltage regulation is computed as change in secondary voltage divided by",
+       "options": [
+        "rated voltage at full load",
+        "no-load secondary voltage",
+        "primary voltage",
+        "load voltage in volts"
+       ],
+       "answer_index": 1,
+       "why": "$(E_2-V_2)/E_2$."
+      },
+      {
+       "id": "r-q3",
+       "kind": "numerical",
+       "level": 2,
+       "marks": 4,
+       "q": "A transformer has $R_{02}=0.1\\ \\Omega$, $X_{02}=0.2\\ \\Omega$, rated $E_2=200$ V and full-load $I_2=25$ A. Find the terminal voltage and regulation at (a) 0.8 pf lagging, (b) 0.8 pf leading.",
+       "model_answer_md": "$\\cos\\phi=0.8$, $\\sin\\phi=0.6$\n\n(a) Drop $=25(0.1\\times0.8+0.2\\times0.6)=25\\times0.2=5$ V. $V_2=195$ V, regulation $=5/200=2.5\\%$\n\n(b) Drop $=25(0.08-0.12)=-1$ V. $V_2=201$ V, regulation $=-0.5\\%$",
+       "points": [
+        "Drop formula with plus for lagging",
+        "(a) 5 V, $V_2=195$ V, 2.5 %",
+        "(b) minus sign, $V_2=201$ V, $-0.5\\%$"
+       ]
+      },
+      {
+       "id": "r-p1",
+       "pyq": "e852ede9d477cff9",
+       "level": 3,
+       "points": [
+        "Equivalent circuit referred to secondary: $R_0\\parallel X_0$ shunt, $R_{02}=R_2+K^2R_1$, $X_{02}=X_2+K^2X_1$ in series",
+        "Phasor diagram: $V_2$, $I_2$ lagging, add $I_2R_{02}$ and $I_2X_{02}$ to reach $E_2$",
+        "Regulation $\\approx I_2(R_{02}\\cos\\phi+X_{02}\\sin\\phi)/E_2$ for lagging"
+       ]
+      },
+      {
+       "id": "r-p2",
+       "pyq": "6f5ea9f15063e704",
+       "level": 3,
+       "points": [
+        "SC parameters: $Z_{01}=60/4=15\\ \\Omega$, $R_{01}=80/16=5\\ \\Omega$, $X_{01}=\\sqrt{15^2-5^2}=14.14\\ \\Omega$",
+        "Rated HV current $=10000/2500=4$ A",
+        "Regulation $=4(5\\times0.8+14.14\\times0.6)/2500=2.0\\%$",
+        "$V_2=250(1-0.02)\\approx245$ V"
+       ]
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "topic": "Tests on transformers",
+   "subtopics": [
+    {
+     "id": "oc-test",
+     "title": "Open-circuit test",
+     "theory_md": "**Open-circuit (no-load) test:** apply **rated voltage at rated frequency to the LV winding** (via a variac) with the **HV winding open**. Meters: voltmeter, ammeter and a low-pf wattmeter on the LV side.\n\n- Wattmeter reads the **iron loss** $P_0=P_i$ (copper loss $I_0^2R_1$ is negligible).\n- $\\cos\\phi_0=\\dfrac{P_0}{V_0I_0}$, $I_w=I_0\\cos\\phi_0$, $I_\\mu=I_0\\sin\\phi_0$, $R_0=V_0/I_w$, $X_0=V_0/I_\\mu$.\n\nWhy LV: rated LV voltage is safe and easy to supply. Why rated voltage: iron loss depends on $B_m$, i.e. on $V$; a lower voltage reads less loss. **pf is low (0.1 to 0.3)** because $I_0$ is mostly magnetising current.",
+     "basics_md": "With the output open, no load current flows, so the only power the transformer takes is what its core wastes. Measure that power at rated voltage and you have the iron loss.",
+     "key_points": [
+      "Done on LV side at rated V and f, HV open",
+      "Wattmeter reads iron loss; gives $R_0$, $X_0$, $I_w$, $I_\\mu$",
+      "pf is low because $I_\\mu\\gg I_w$",
+      "Lower voltage gives lower flux and under-reads the iron loss"
+     ],
+     "questions": [
+      {
+       "id": "oc-q1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "In the open-circuit test, the wattmeter reading gives",
+       "options": [
+        "full-load copper loss",
+        "iron loss",
+        "total loss at full load",
+        "stray loss only"
+       ],
+       "answer_index": 1,
+       "why": "Current is tiny, so copper loss is negligible."
+      },
+      {
+       "id": "oc-q2",
+       "kind": "mcq",
+       "level": 1,
+       "q": "The OC test is usually performed on the LV side because",
+       "options": [
+        "the HV side has low current",
+        "rated LV voltage is easier and safer to supply",
+        "LV gives lower iron loss",
+        "it needs no wattmeter"
+       ],
+       "answer_index": 1,
+       "why": "Rated voltage must be applied, and it is easier at LV."
+      },
+      {
+       "id": "oc-q3",
+       "kind": "numerical",
+       "level": 2,
+       "marks": 3,
+       "q": "OC test on a transformer, LV side: 230 V, 1 A, 80 W. Find $\\cos\\phi_0$, $I_w$, $I_\\mu$, $R_0$, $X_0$.",
+       "model_answer_md": "$\\cos\\phi_0=\\dfrac{80}{230\\times1}=0.348$, $\\sin\\phi_0=0.9376$\n\n$I_w=0.348$ A, $I_\\mu=0.938$ A\n\n$R_0=\\dfrac{230}{0.348}=661\\ \\Omega$, $X_0=\\dfrac{230}{0.938}=245\\ \\Omega$",
+       "points": [
+        "$\\cos\\phi_0=0.348$",
+        "$I_w=0.348$ A, $I_\\mu=0.938$ A",
+        "$R_0=661\\ \\Omega$, $X_0=245\\ \\Omega$"
+       ]
+      },
+      {
+       "id": "oc-p1",
+       "pyq": "fbaa5f23700313c1",
+       "level": 2,
+       "points": [
+        "Connections: LV (400 V) side through wattmeter, ammeter, voltmeter and variac; HV open",
+        "Raise to rated 400 V, note $V_0$, $I_0$, $P_0$; $P_0$ is iron loss; $R_0$, $X_0$ from components",
+        "LV side because rated voltage easy to supply",
+        "pf poor (0.1 to 0.3) because $I_0$ is mostly magnetising $I_\\mu\\gg I_w$"
+       ]
+      },
+      {
+       "id": "oc-p2",
+       "pyq": "4856b23e5f8fa9ad",
+       "level": 1,
+       "points": [
+        "Measure iron loss at rated voltage",
+        "Find no-load current, $I_w$, $I_\\mu$",
+        "Find $R_0$ and $X_0$ of the equivalent circuit"
+       ]
+      },
+      {
+       "id": "oc-p3",
+       "pyq": "83ac5e355a300167",
+       "level": 1,
+       "points": [
+        "$I_0$ is mostly magnetising current $I_\\mu$ (reactive), working component small",
+        "$I_0$ lags $V_1$ by nearly 90 degrees, so $\\cos\\phi_0=I_w/I_0$ about 0.1 to 0.3"
+       ]
+      },
+      {
+       "id": "oc-p4",
+       "pyq": "7a3e278a2bb209ec",
+       "level": 1,
+       "points": [
+        "Rated voltage, 115 V, on the LV side",
+        "Iron loss depends on flux $\\propto V/f$; only at rated voltage is it the true core loss",
+        "115 V is easier and safer to supply"
+       ]
+      },
+      {
+       "id": "oc-p5",
+       "pyq": "dc8f319f022877f1",
+       "level": 2,
+       "points": [
+        "100 V is below rated 115 V, so flux and $B_m$ fall",
+        "Iron loss falls ($B_m^{1.6}$ and $B_m^2$), wattmeter under-reads",
+        "$R_0$, $X_0$ and efficiency obtained are wrong (over-estimated efficiency)"
+       ]
+      }
+     ]
+    },
+    {
+     "id": "sc-test",
+     "title": "Short-circuit test",
+     "theory_md": "**Short-circuit test:** short the **LV winding** and supply the **HV winding** from a variac with a **low voltage (5 to 10 % of rated)**, raised until **rated current** flows in the HV winding.\n\n- Flux is tiny, so iron loss is negligible. The wattmeter reads the **full-load copper loss** $P_{sc}=I_{rated}^2R_{eq}$.\n- $Z_{eq}=V_{sc}/I_{sc}$, $R_{eq}=P_{sc}/I_{sc}^2$, $X_{eq}=\\sqrt{Z_{eq}^2-R_{eq}^2}$, all on the HV side.\n\nWhy HV: rated current on the HV side is small, easy to measure. If $I_{sc}\ne I_{rated}$: $P_{cu,fl}=P_{sc}(I_{rated}/I_{sc})^2$. Refer to LV with $\\times K^2$.",
+     "basics_md": "Short the output, and a small voltage drives full current through the windings. The core sees almost no flux, so the meter reads only the winding loss.",
+     "key_points": [
+      "Done on HV side, LV shorted, reduced voltage (5 to 10 %) to reach rated current",
+      "Wattmeter reads full-load copper loss; iron loss negligible",
+      "$Z_{eq}=V_{sc}/I_{sc}$, $R_{eq}=P_{sc}/I_{sc}^2$, $X_{eq}=\\sqrt{Z^2-R^2}$",
+      "Scale $P_{sc}$ by $(I_{rated}/I_{sc})^2$ if the test current is not rated"
+     ],
+     "questions": [
+      {
+       "id": "sc-q1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "In the SC test, the wattmeter reads mainly",
+       "options": [
+        "iron loss",
+        "copper loss at the test current",
+        "no-load loss",
+        "windage loss"
+       ],
+       "answer_index": 1,
+       "why": "Applied voltage is small, so flux and iron loss are negligible."
+      },
+      {
+       "id": "sc-q2",
+       "kind": "mcq",
+       "level": 1,
+       "q": "The SC test is conducted by applying",
+       "options": [
+        "rated voltage to HV",
+        "about 5 to 10 % of rated voltage to the HV side",
+        "rated voltage to LV",
+        "DC to the HV side"
+       ],
+       "answer_index": 1,
+       "why": "Just enough to circulate rated current."
+      },
+      {
+       "id": "sc-q3",
+       "kind": "numerical",
+       "level": 2,
+       "marks": 3,
+       "q": "SC test on a 10 kVA, 1000/100 V transformer, HV side: 40 V, 10 A, 150 W. Find $R_{01}$, $X_{01}$ and the full-load copper loss.",
+       "model_answer_md": "Rated HV current $=10000/1000=10$ A, equal to $I_{sc}$, so $P_{cu,fl}=150$ W\n\n$Z_{01}=\\dfrac{40}{10}=4\\ \\Omega$, $R_{01}=\\dfrac{150}{10^2}=1.5\\ \\Omega$\n\n$X_{01}=\\sqrt{4^2-1.5^2}=3.71\\ \\Omega$",
+       "points": [
+        "Checks $I_{sc}$ equals rated 10 A",
+        "$R_{01}=1.5\\ \\Omega$",
+        "$X_{01}=3.71\\ \\Omega$, $P_{cu,fl}=150$ W"
+       ]
+      }
+     ]
+    },
+    {
+     "id": "test-parameters",
+     "title": "Equivalent circuit from test data",
+     "theory_md": "Combine both tests. **Shunt branch** (from OC, on the side tested): $\\cos\\phi_0=\\dfrac{P_0}{V_0I_0}$, $R_0=V_0/(I_0\\cos\\phi_0)$, $X_0=V_0/(I_0\\sin\\phi_0)$. **Series branch** (from SC, on its side): $R_{eq}=P_{sc}/I_{sc}^2$, $X_{eq}=\\sqrt{Z^2-R^2}$.\n\nThe two sets are on **different sides**; refer one to the other with $K^2$ before drawing (HV to LV: $\\times K^2$, $K=N_{LV}/N_{HV}$). Draw the approximate circuit: $R_0\\parallel X_0$ across the input terminals, then $R_{eq}$, $X_{eq}$ in series, then the load terminals. Label all values with units and the side.",
+     "basics_md": "The two tests give two halves of the circuit, measured on opposite sides. Refer them to the same side, then draw the ladder: shunt branch first, series branch second.",
+     "key_points": [
+      "Shunt branch from OC: $R_0$, $X_0$ on LV side",
+      "Series branch from SC: $R_{eq}$, $X_{eq}$ on HV side",
+      "Refer to one side using $K^2$ before combining",
+      "Check the SC current against the rated current"
+     ],
+     "questions": [
+      {
+       "id": "tp-q1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "If OC data are on the LV side and SC data on the HV side, to draw one circuit referred to LV the SC impedance is",
+       "options": [
+        "multiplied by $K^2$ where $K=V_{LV}/V_{HV}$ (so reduced)",
+        "divided by $K$",
+        "unchanged",
+        "multiplied by $V_{HV}/V_{LV}$"
+       ],
+       "answer_index": 0,
+       "why": "HV to LV: the impedance becomes smaller by $(V_{LV}/V_{HV})^2$."
+      },
+      {
+       "id": "tp-q2",
+       "kind": "mcq",
+       "level": 1,
+       "q": "In the approximate equivalent circuit the shunt branch is placed",
+       "options": [
+        "after the series impedance",
+        "across the input terminals",
+        "in series with the load",
+        "on the secondary side only"
+       ],
+       "answer_index": 1,
+       "why": "The shunt branch is moved to the input."
+      },
+      {
+       "id": "tp-q3",
+       "kind": "numerical",
+       "level": 2,
+       "marks": 5,
+       "q": "A 5 kVA, 200/400 V transformer: OC (LV): 200 V, 1.25 A, 150 W. SC (HV): 20 V, 12.5 A, 175 W. Draw the equivalent circuit referred to the LV side.",
+       "model_answer_md": "**OC (LV):** $\\cos\\phi_0=\\dfrac{150}{200\\times1.25}=0.6$, $I_w=0.75$ A, $I_\\mu=1.0$ A, $R_0=266.7\\ \\Omega$, $X_0=200\\ \\Omega$\n\n**SC (HV):** $Z=\\dfrac{20}{12.5}=1.6$, $R=\\dfrac{175}{12.5^2}=1.12$, $X=\\sqrt{1.6^2-1.12^2}=1.143\\ \\Omega$\n\n**To LV** ($K^2=0.25$): $R_{LV}=0.28\\ \\Omega$, $X_{LV}=0.286\\ \\Omega$\n\n**Circuit:** input 200 V, $R_0=266.7\\ \\Omega\\parallel X_0=200\\ \\Omega$ across it, then $0.28\\ \\Omega$ and $j0.286\\ \\Omega$ in series to the output.",
+       "points": [
+        "OC: $R_0=266.7\\ \\Omega$, $X_0=200\\ \\Omega$",
+        "SC: $R=1.12\\ \\Omega$, $X=1.143\\ \\Omega$ on HV",
+        "Referred to LV: $0.28$ and $0.286\\ \\Omega$",
+        "Circuit with shunt branch at input"
+       ]
+      },
+      {
+       "id": "tp-p1",
+       "pyq": "d2a5150da7f055d9",
+       "level": 2,
+       "points": [
+        "OC (LV): $\\cos\\phi_0=0.2903$, $I_w=1.8$ A, $I_\\mu=5.933$ A, $R_0=111.1\\ \\Omega$, $X_0=33.71\\ \\Omega$",
+        "SC (HV): $Z=4.167$, $R=1.852$, $X=3.733\\ \\Omega$",
+        "Referred to LV ($K^2=100$): $R=0.01852$, $X=0.03733\\ \\Omega$",
+        "Circuit drawn with shunt branch at input"
+       ]
+      },
+      {
+       "id": "tp-p2",
+       "pyq": "875faab6134294c6",
+       "level": 2,
+       "points": [
+        "OC (LV): $\\cos\\phi_0=0.25$, $I_w=0.2$ A, $I_\\mu=0.775$ A, $R_0=1250\\ \\Omega$, $X_0=322.7\\ \\Omega$",
+        "SC (HV): $Z=15$, $R=5$, $X=14.14\\ \\Omega$",
+        "Referred to LV ($\\times0.01$): $R=0.05$, $X=0.1414\\ \\Omega$, circuit drawn"
+       ]
+      },
+      {
+       "id": "tp-p3",
+       "pyq": "2ef2e937a83044af",
+       "level": 2,
+       "points": [
+        "OC: $\\cos\\phi_0=0.6$, $I_w=0.75$ A, $I_\\mu=1$ A, $R_0=266.7\\ \\Omega$, $X_0=200\\ \\Omega$ (LV)",
+        "SC at rated HV current 12.5 A: $R=1.12\\ \\Omega$, $X=1.143\\ \\Omega$ (HV); LV: $0.28$, $0.286\\ \\Omega$",
+        "Equivalent circuit drawn"
+       ]
+      },
+      {
+       "id": "tp-p4",
+       "pyq": "76cfa2f95250e0f8",
+       "level": 3,
+       "points": [
+        "OC (LV): $\\cos\\phi_0=0.32$, $R_0=625\\ \\Omega$, $X_0=211.1\\ \\Omega$",
+        "SC (HV, rated 10 A): $R=0.8$, $X=1.269\\ \\Omega$; to LV ($\\times0.25$): $0.2$, $0.317\\ \\Omega$",
+        "$I_2=4000/200=20$ A; drop $=20(0.2\\times0.8+0.317\\times0.6)=7.0$ V; $V_2\\approx193$ V"
+       ]
+      },
+      {
+       "id": "tp-p5",
+       "pyq": "37270417b0b96314",
+       "level": 3,
+       "points": [
+        "OC (LV): $\\cos\\phi_0=0.5165$, $R_0=387.2\\ \\Omega$, $X_0=233.6\\ \\Omega$; to HV $\\times100$",
+        "SC (HV): $R_{01}=4.067\\ \\Omega$, $X_{01}=4.777\\ \\Omega$",
+        "Rated HV current $=9.09$ A; regulation $=9.09(4.067\\times0.85+4.777\\times0.527)/2200=2.47\\%$",
+        "Circuit drawn"
+       ]
+      }
+     ]
+    },
+    {
+     "id": "test-performance",
+     "title": "Efficiency and regulation from the tests",
+     "theory_md": "From the tests: $P_i=P_0$ (OC) and $P_{cu,fl}=P_{sc}$ at rated current (SC). Then at load fraction $x$ and pf $\\cos\\phi$:\n$$\\eta=\\dfrac{xS\\cos\\phi}{xS\\cos\\phi+P_i+x^2P_{cu,fl}}$$\nRegulation: $\\dfrac{I(R_{eq}\\cos\\phi\\pm X_{eq}\\sin\\phi)}{V}$ with $I$ the **rated** current and $R_{eq}$, $X_{eq}$, $V$ on the same side (lagging $+$). Secondary terminal voltage $V_2=E_2(1-\\text{reg})$.\n\nSteps: rated current from kVA, scale $P_{sc}$ if needed, then tabulate output, iron loss, copper loss.",
+     "basics_md": "The tests give you the two losses and the impedance. Everything else (efficiency, regulation, voltage on load) is arithmetic on those numbers.",
+     "key_points": [
+      "Iron loss from OC, full-load copper loss from SC at rated current",
+      "$\\eta=xS\\cos\\phi/(xS\\cos\\phi+P_i+x^2P_{cu})$",
+      "Regulation uses rated current and same-side $R$, $X$, $V$",
+      "$V_2=E_2(1-\\text{reg})$"
+     ],
+     "questions": [
+      {
+       "id": "tf-q1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "If the SC test is done at a current lower than rated, the full-load copper loss is",
+       "options": [
+        "the wattmeter reading",
+        "reading times $(I_{rated}/I_{sc})^2$",
+        "reading times $(I_{sc}/I_{rated})$",
+        "reading divided by 2"
+       ],
+       "answer_index": 1,
+       "why": "Copper loss varies as current squared."
+      },
+      {
+       "id": "tf-q2",
+       "kind": "mcq",
+       "level": 1,
+       "q": "Iron loss at half load is",
+       "options": [
+        "one quarter of full-load value",
+        "half of full-load value",
+        "the same as at full load",
+        "zero"
+       ],
+       "answer_index": 2,
+       "why": "Flux is fixed by supply voltage."
+      },
+      {
+       "id": "tf-q3",
+       "kind": "numerical",
+       "level": 2,
+       "marks": 4,
+       "q": "A 20 kVA transformer has $P_i=300$ W and $P_{cu,fl}=400$ W. Find the efficiency at full load, 0.8 pf and at half load, 0.8 pf.",
+       "model_answer_md": "Full load: output $=20000\\times0.8=16000$ W; losses $=300+400=700$ W\n\n$\\eta=\\dfrac{16000}{16000+700}=95.81\\%$\n\nHalf load: output $=8000$ W; copper loss $=0.25\\times400=100$ W; losses $=400$ W\n\n$\\eta=\\dfrac{8000}{8000+400}=95.24\\%$",
+       "points": [
+        "Output $=xS\\cos\\phi$",
+        "Full load $\\eta=95.81\\%$",
+        "Half load copper loss $=100$ W, $\\eta=95.24\\%$"
+       ]
+      },
+      {
+       "id": "tf-p1",
+       "pyq": "fbe4fb5e2e5f2c28",
+       "level": 3,
+       "points": [
+        "Rated HV current $=50000/2400=20.83$ A; $P_i=186$ W; $P_{cu,fl}=617(20.83/20.8)^2\\approx619$ W (about 617 W)",
+        "Output $=50000\\times0.8=40$ kW; $\\eta=40000/(40000+186+619)=98.0\\%$",
+        "SC: $Z=2.308$, $R=1.426$, $X=1.814\\ \\Omega$ (HV); regulation $=20.83(1.426\\times0.8+1.814\\times0.6)/2400=1.93\\%$"
+       ]
+      },
+      {
+       "id": "tf-p2",
+       "pyq": "4485e48684a15b72",
+       "level": 3,
+       "points": [
+        "(a) $\\cos\\phi_0=0.25$: $I_w=0.2$ A, $I_\\mu=0.775$ A",
+        "(b) SC at 3 A, rated HV 4 A: $P_{cu,fl}=45(4/3)^2=80$ W; $\\eta=97.32\\%$ (1/4), $98.28\\%$ (1/2), $98.40\\%$ (full)",
+        "(c) $R_{01}=5$, $X_{01}=19.365\\ \\Omega$; reg $=4(5\\times0.8+19.365\\times0.6)/2500=2.50\\%$; $V_2=243.75$ V"
+       ]
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "topic": "Transformer losses and efficiency",
+   "subtopics": [
+    {
+     "id": "losses",
+     "title": "Iron and copper losses",
+     "theory_md": "A transformer is static: no friction or windage. Only two losses.\n\n**Iron (core) loss $P_i$**, constant at all loads (flux fixed by $V_1$):\n- *Hysteresis:* $P_h=\\eta B_m^{1.6}fV$. Depends on $B_m$, $f$, volume and material. Cut by **silicon steel**.\n- *Eddy current:* $P_e=K_eB_m^2f^2t^2V$. Depends on $B_m$, $f$, lamination thickness $t$, volume, resistivity. Cut by **thin insulated laminations**.\n\n**Copper loss:** $I_1^2R_1+I_2^2R_2=I_2^2R_{02}$, varies as load squared, $P_{cu}=x^2P_{cu,fl}$. Depends on current and winding resistance (temperature).\n\nSmall stray and dielectric losses also exist. OC test gives $P_i$; SC test gives $P_{cu}$.",
+     "basics_md": "Iron loss is the price of keeping the flux alive; it does not care about load. Copper loss is the price of pushing current through wire; it grows with the square of current.",
+     "key_points": [
+      "Iron loss (hysteresis + eddy) is constant; copper loss varies as $x^2$",
+      "$P_h=\\eta B_m^{1.6}fV$, reduced by silicon steel",
+      "$P_e=K_eB_m^2f^2t^2V$, reduced by thin laminations",
+      "No mechanical losses; OC test gives $P_i$, SC test gives $P_{cu}$"
+     ],
+     "questions": [
+      {
+       "id": "ls-q1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "Eddy-current loss in a core varies as",
+       "options": [
+        "$f$",
+        "$f^2$",
+        "$f^{1.6}$",
+        "$1/f$"
+       ],
+       "answer_index": 1,
+       "why": "$P_e\\propto B_m^2f^2t^2$; hysteresis loss varies as $f$."
+      },
+      {
+       "id": "ls-q2",
+       "kind": "mcq",
+       "level": 1,
+       "q": "When the load on a transformer is halved, copper loss becomes",
+       "options": [
+        "half",
+        "one quarter",
+        "double",
+        "unchanged"
+       ],
+       "answer_index": 1,
+       "why": "Copper loss $\\propto I^2$."
+      },
+      {
+       "id": "ls-q3",
+       "kind": "numerical",
+       "level": 2,
+       "marks": 3,
+       "q": "A transformer's hysteresis loss is 100 W at 50 Hz and flux density $B_m$. Find it at 60 Hz with $B_m$ raised by 10 %. Also find the eddy loss ratio at 60 Hz for the same $B_m$.",
+       "model_answer_md": "$P_h\\propto B_m^{1.6}f$: $P_h'=100\\times1.1^{1.6}\\times\\dfrac{60}{50}=100\\times1.1647\\times1.2=139.8$ W\n\nEddy loss at the same $B_m$: $P_e\\propto f^2$, ratio $=(60/50)^2=1.44$",
+       "points": [
+        "Uses $B_m^{1.6}f$ for hysteresis",
+        "$P_h'\\approx139.8$ W",
+        "Eddy ratio $=1.44$"
+       ]
+      },
+      {
+       "id": "ls-p1",
+       "pyq": "baa9ac1d25acf811",
+       "level": 2,
+       "points": [
+        "No mechanical losses; iron loss (hysteresis, eddy) constant, copper loss variable",
+        "$P_h=\\eta B_m^{1.6}fV$ factors: $B_m$, $f$, volume, material; $P_e=K_eB_m^2f^2t^2V$ factors: $B_m$, $f$, thickness, resistivity",
+        "Reduced by silicon steel and laminations",
+        "Copper loss $\\propto I^2$, depends on resistance; stray and dielectric small"
+       ]
+      },
+      {
+       "id": "ls-p2",
+       "pyq": "bc2f013135ac67ec",
+       "level": 1,
+       "points": [
+        "$P_h=\\eta B_m^{1.6}fV$ depends on $B_m$, frequency, volume of core",
+        "Material (hysteresis coefficient, loop area); silicon steel gives low loss"
+       ]
+      }
+     ]
+    },
+    {
+     "id": "efficiency",
+     "title": "Efficiency at any load",
+     "theory_md": "**Efficiency** $\\eta=\\dfrac{\\text{output}}{\\text{input}}=\\dfrac{\\text{output}}{\\text{output}+\\text{losses}}$.\n\nAt load fraction $x$ of rated kVA $S$ and power factor $\\cos\\phi$:\n$$\\eta=\\dfrac{xS\\cos\\phi}{xS\\cos\\phi+P_i+x^2P_{cu,fl}}$$\nOutput is $xS\\cos\\phi$, **not** $xS$. Iron loss is the same at all loads; copper loss scales as $x^2$. Full-load $P_{cu}=I^2R$ (e.g. $250^2\\times0.006=375$ W). Keep W and kW consistent.\n\nIf two efficiencies at known loads are given, write the loss $=\\text{output}(1/\\eta-1)$ for each and solve the two equations in $P_i$ and $P_{cu,fl}$.",
+     "basics_md": "Efficiency is just output divided by output plus whatever is lost. Only the copper loss changes with load; the iron loss stays put.",
+     "key_points": [
+      "$\\eta=\\text{output}/(\\text{output}+P_i+x^2P_{cu})$",
+      "Output $=xS\\cos\\phi$",
+      "Iron loss constant, copper loss $\\propto x^2$",
+      "Two given efficiencies: solve simultaneous equations for $P_i$ and $P_{cu}$"
+     ],
+     "questions": [
+      {
+       "id": "ef-q1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "Output power of a 100 kVA transformer at 80 % load and 0.9 pf is",
+       "options": [
+        "80 kW",
+        "72 kW",
+        "90 kW",
+        "100 kW"
+       ],
+       "answer_index": 1,
+       "why": "$0.8\\times100\\times0.9=72$ kW."
+      },
+      {
+       "id": "ef-q2",
+       "kind": "mcq",
+       "level": 1,
+       "q": "The efficiency of a transformer at lower power factor is",
+       "options": [
+        "higher",
+        "lower",
+        "same",
+        "zero"
+       ],
+       "answer_index": 1,
+       "why": "Losses are unchanged but output falls."
+      },
+      {
+       "id": "ef-q3",
+       "kind": "numerical",
+       "level": 2,
+       "marks": 4,
+       "q": "A 25 kVA transformer has $P_i=300$ W and $P_{cu,fl}=400$ W. Find the efficiency at full load, 0.8 pf.",
+       "model_answer_md": "Output $=25000\\times0.8=20000$ W\n\nLosses $=300+400=700$ W\n\n$\\eta=\\dfrac{20000}{20000+700}=96.62\\%$",
+       "points": [
+        "Output $=20$ kW",
+        "Losses $=700$ W",
+        "$\\eta=96.62\\%$"
+       ]
+      },
+      {
+       "id": "ef-p1",
+       "pyq": "05c8d72ca0443350",
+       "level": 2,
+       "points": [
+        "Full-load copper loss $=250^2\\times0.006=375$ W; $P_i=200$ W",
+        "Unity pf: full load $\\eta=50000/(50000+575)=98.86\\%$; half load $\\eta=25000/(25000+200+93.75)=98.84\\%$",
+        "0.8 pf: full load $\\eta=40000/(40000+575)=98.58\\%$; half load $\\eta=20000/(20000+293.75)=98.55\\%$"
+       ]
+      },
+      {
+       "id": "ef-p2",
+       "pyq": "757d44fadca835f9",
+       "level": 3,
+       "points": [
+        "Full load 0.8 pf: output $320$ kW, losses $=320/0.9877-320=3.985$ kW so $P_i+P_c=3.985$",
+        "Half load unity: output $200$ kW, losses $=1.755$ kW so $P_i+P_c/4=1.755$",
+        "Solve: $P_c=2.973$ kW, $P_i=1.012$ kW"
+       ]
+      }
+     ]
+    },
+    {
+     "id": "max-efficiency",
+     "title": "Condition for maximum efficiency",
+     "theory_md": "$\\eta=1-\\dfrac{P_i}{V_1I_1\\cos\\phi_1}-\\dfrac{I_1R_{01}}{V_1\\cos\\phi_1}$. For fixed $V_1$ and pf, $\\dfrac{d\\eta}{dI_1}=\\dfrac{P_i}{V_1I_1^2\\cos\\phi_1}-\\dfrac{R_{01}}{V_1\\cos\\phi_1}=0$, so\n$$I_1^2R_{01}=P_i$$\n**Efficiency is maximum when variable copper loss equals constant iron loss.**\n\nLoad fraction $x=\\sqrt{P_i/P_{cu,fl}}$; kVA at $\\eta_{max}=x\\times$ rated kVA. Total loss there $=2P_i$, so $\\eta_{max}=\\dfrac{xS\\cos\\phi}{xS\\cos\\phi+2P_i}$. $\\eta_{max}$ is higher at unity pf, and the load for $\\eta_{max}$ does not depend on pf.",
+     "basics_md": "Copper loss grows with load, iron loss does not. At light load iron loss dominates; at heavy load copper dominates. The best point is where they are equal.",
+     "key_points": [
+      "Max efficiency when $P_{cu}=P_i$ (derive from $d\\eta/dI=0$)",
+      "$x=\\sqrt{P_i/P_{cu,fl}}$, load $=x\\times$ rated kVA",
+      "$\\eta_{max}=xS\\cos\\phi/(xS\\cos\\phi+2P_i)$",
+      "Load at $\\eta_{max}$ is independent of pf"
+     ],
+     "questions": [
+      {
+       "id": "mx-q1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "A transformer has $P_i=1$ kW and $P_{cu,fl}=4$ kW. Efficiency is maximum at what fraction of full load?",
+       "options": [
+        "0.25",
+        "0.5",
+        "0.75",
+        "1.0"
+       ],
+       "answer_index": 1,
+       "why": "$\\sqrt{1/4}=0.5$."
+      },
+      {
+       "id": "mx-q2",
+       "kind": "mcq",
+       "level": 1,
+       "q": "At maximum efficiency the total loss equals",
+       "options": [
+        "$P_i$",
+        "$2P_i$",
+        "$P_i+P_{cu,fl}$",
+        "$P_{cu,fl}$"
+       ],
+       "answer_index": 1,
+       "why": "Copper loss equals iron loss there."
+      },
+      {
+       "id": "mx-q3",
+       "kind": "numerical",
+       "level": 2,
+       "marks": 5,
+       "q": "A 100 kVA transformer has $P_i=1$ kW and $P_{cu,fl}=1.5$ kW. Find the kVA at maximum efficiency and the maximum efficiency at (a) unity pf and (b) 0.8 pf.",
+       "model_answer_md": "$x=\\sqrt{1/1.5}=0.8165$, load $=81.65$ kVA, losses $=2\\times1=2$ kW\n\n(a) Unity pf: $\\eta=\\dfrac{81.65}{81.65+2}=97.61\\%$\n\n(b) 0.8 pf: output $=65.32$ kW; $\\eta=\\dfrac{65.32}{65.32+2}=97.03\\%$",
+       "points": [
+        "$x=0.8165$, 81.65 kVA",
+        "Losses at $\\eta_{max}=2$ kW",
+        "(a) 97.61 %, (b) 97.03 %"
+       ]
+      },
+      {
+       "id": "mx-p1",
+       "pyq": "1c07fe8addd565cf",
+       "level": 3,
+       "points": [
+        "Efficiency: output/input; voltage regulation: fall in secondary voltage from no load to full load as fraction of no-load voltage",
+        "$\\eta=1-P_i/(V_1I_1\\cos\\phi_1)-I_1R_{01}/(V_1\\cos\\phi_1)$; $d\\eta/dI_1=0$",
+        "Condition: $I_1^2R_{01}=P_i$, copper loss = iron loss; $x=\\sqrt{P_i/P_{cu,fl}}$"
+       ]
+      },
+      {
+       "id": "mx-p2",
+       "pyq": "b651a723c6f32066",
+       "level": 3,
+       "points": [
+        "Full-load copper loss $=4\\times1.5=6$ kW",
+        "50 %: output $85$ kW, copper $1.5$ kW, $\\eta=85/(85+1+1.5)=97.14\\%$",
+        "75 %: output $127.5$ kW, copper $3.375$ kW, $\\eta=96.68\\%$",
+        "Max: $x=\\sqrt{1/6}=0.408$ (81.65 kVA), $\\eta_{max}=97.20\\%$"
+       ]
+      },
+      {
+       "id": "mx-p3",
+       "pyq": "fee837a80b02edaa",
+       "level": 3,
+       "points": [
+        "Output at 60 %, 0.8 pf: $28.8$ kW; copper loss $0.36\\times34.78=12.52$ kW; $\\eta=28.8/(28.8+17.39+12.52)=49.05\\%$",
+        "Max efficiency at $x=\\sqrt{17.39/34.78}=0.707$, 42.43 kVA",
+        "$\\eta_{max}=33.94/(33.94+34.78)=49.39\\%$ at 0.8 pf (losses most likely in W; method unchanged)"
+       ]
+      },
+      {
+       "id": "mx-p4",
+       "pyq": "1b600890203a2ca5",
+       "level": 3,
+       "points": [
+        "$P_i=50$ W, $P_{cu,fl}=80$ W (rated HV current $=4$ A)",
+        "1/4 load, 0.8 pf: $\\eta=2000/(2000+50+5)=97.32\\%$",
+        "Max at $x=\\sqrt{50/80}=0.79$, i.e. 7.91 kVA; $\\eta_{max}=6.325/(6.325+0.1)=98.44\\%$"
+       ]
+      },
+      {
+       "id": "mx-p5",
+       "pyq": "c71f294a440abdfc",
+       "level": 2,
+       "points": [
+        "Half load unity pf: $\\eta=25000/(25000+350+106.25)=98.21\\%$",
+        "Full load 0.8 pf: $\\eta=40000/(40000+350+425)=98.10\\%$",
+        "Max: $x=\\sqrt{350/425}=0.9075$, 45.4 kVA, $\\eta_{max}=45.37/(45.37+0.7)=98.48\\%$"
+       ]
+      },
+      {
+       "id": "mx-p6",
+       "pyq": "ffd9bb9c45c17dfb",
+       "level": 2,
+       "points": [
+        "Load for max efficiency: $100\\sqrt{1/1.5}=81.65$ kVA",
+        "(a) Unity pf: $\\eta=81.65/(81.65+2)=97.61\\%$",
+        "(b) 0.8 pf: $\\eta=65.32/(65.32+2)=97.03\\%$"
+       ]
+      },
+      {
+       "id": "mx-p7",
+       "pyq": "4d54d11db6f64051",
+       "level": 2,
+       "points": [
+        "$P_i=150$ W from OC; $P_{cu,fl}=175$ W from SC (12.5 A is rated HV current)",
+        "$x=\\sqrt{150/175}=0.926$",
+        "Load $=0.926\\times5=4.63$ kVA"
+       ]
+      },
+      {
+       "id": "mx-p8",
+       "pyq": "51042c3fc94aa38e",
+       "level": 2,
+       "points": [
+        "Losses at max efficiency $=2\\times150=300$ W",
+        "Unity pf: output $4629$ W, $\\eta=4629/(4629+300)=93.9\\%$",
+        "(0.8 pf would give 92.5 %)"
+       ]
+      }
+     ]
+    },
+    {
+     "id": "all-day",
+     "title": "All-day efficiency",
+     "theory_md": "A distribution transformer is energised 24 h but loaded for part of the day. Its performance is judged by **all-day (energy) efficiency**:\n$$\\eta_{all\\ day}=\\dfrac{\\text{output energy in 24 h (kWh)}}{\\text{input energy in 24 h (kWh)}}$$\nIron loss acts for the **full 24 h**: $24P_i$. Copper loss acts only while loaded: $\\sum x_k^2P_{cu,fl}t_k$.\n\nSo distribution transformers are designed with **low iron loss** (maximum efficiency at a light load), while power transformers, loaded most of the time, can be designed for efficiency near full load.",
+     "basics_md": "Ordinary efficiency is a snapshot; all-day efficiency is energy out over energy in across a daily load cycle. Iron loss is paid every hour, copper loss only when you load it.",
+     "key_points": [
+      "All-day efficiency = output kWh / input kWh in 24 h",
+      "Iron loss counted for 24 h; copper loss only for loaded hours",
+      "Distribution transformers need low iron loss"
+     ],
+     "questions": [
+      {
+       "id": "ad-q1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "In all-day efficiency calculations, the iron loss is multiplied by",
+       "options": [
+        "hours of full load",
+        "24 hours",
+        "hours of light load",
+        "zero"
+       ],
+       "answer_index": 1,
+       "why": "The core is energised all day."
+      },
+      {
+       "id": "ad-q2",
+       "kind": "mcq",
+       "level": 1,
+       "q": "Distribution transformers are designed for",
+       "options": [
+        "low copper loss only",
+        "low iron loss",
+        "high iron loss",
+        "maximum efficiency at full load"
+       ],
+       "answer_index": 1,
+       "why": "They are lightly loaded for long periods."
+      },
+      {
+       "id": "ad-q3",
+       "kind": "numerical",
+       "level": 2,
+       "marks": 4,
+       "q": "A 100 kVA transformer ($P_i=1$ kW, $P_{cu,fl}=1.5$ kW) supplies full load at unity pf for 6 h, half load at unity pf for 6 h and is on no load for 12 h. Find the all-day efficiency.",
+       "model_answer_md": "Output $=100\\times6+50\\times6=900$ kWh\n\nIron loss $=24\\times1=24$ kWh\n\nCopper loss $=1.5\\times6+(0.5)^2\\times1.5\\times6=9+2.25=11.25$ kWh\n\n$\\eta=\\dfrac{900}{900+24+11.25}=96.23\\%$",
+       "points": [
+        "Output $=900$ kWh",
+        "Iron loss $24$ kWh, copper loss $11.25$ kWh",
+        "$\\eta=96.23\\%$"
+       ]
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "topic": "Introduction to DC machines",
+   "subtopics": [
+    {
+     "id": "dc-construction",
+     "title": "Construction and the commutator",
+     "theory_md": "| Part | Function | Material |\n|---|---|---|\n| **Yoke** | support, flux return path | cast iron / cast steel |\n| **Poles and shoes** | carry field winding, spread flux in air gap | laminated steel |\n| **Field winding** | produces main flux | copper |\n| **Armature core** | slots hold conductors, low-reluctance path | laminated silicon steel |\n| **Armature winding** | EMF induced / torque produced (lap or wave) | copper |\n| **Commutator** | mechanical rectifier (generator), keeps torque unidirectional (motor) | hard-drawn copper segments with mica |\n| **Brushes** | sliding contact with commutator | carbon / graphite |\n\nEMF in each armature coil is **alternating**; the commutator reverses the connections at the instant the EMF reverses, giving DC at the brushes.",
+     "basics_md": "A DC machine is a magnet (poles) around a spinning coil (armature). The commutator is a rotating switch that keeps the output or the torque in one direction.",
+     "key_points": [
+      "Parts: yoke, poles, field winding, armature core and winding, commutator, brushes",
+      "Armature core laminated silicon steel; commutator copper segments with mica; brushes carbon",
+      "Armature EMF is alternating; commutator rectifies it (generator)",
+      "In a motor the commutator reverses coil current so torque stays one way"
+     ],
+     "questions": [
+      {
+       "id": "dcn-q1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "The commutator of a DC generator acts as a",
+       "options": [
+        "transformer",
+        "mechanical rectifier",
+        "inverter",
+        "filter"
+       ],
+       "answer_index": 1,
+       "why": "It converts the alternating armature EMF to unidirectional."
+      },
+      {
+       "id": "dcn-q2",
+       "kind": "mcq",
+       "level": 1,
+       "q": "The armature core is laminated to reduce",
+       "options": [
+        "copper loss",
+        "eddy-current loss",
+        "brush drop",
+        "armature reaction"
+       ],
+       "answer_index": 1,
+       "why": "Silicon steel laminations cut eddy and hysteresis loss."
+      },
+      {
+       "id": "dcn-q3",
+       "kind": "short",
+       "level": 2,
+       "marks": 3,
+       "q": "Why are a commutator and brushes necessary in a DC machine?",
+       "model_answer_md": "- The EMF (and current) in each armature coil is **alternating**, because a coil side passes under N and S poles in turn.\n- **Generator:** the commutator reverses the coil connections to the brushes at the instant the coil EMF reverses, so the external output is **unidirectional DC** (mechanical rectifier).\n- **Motor:** it reverses the current in a coil as it passes from one pole to the next, so torque stays in **one direction** and rotation is continuous.\n- **Brushes** give the sliding contact between the rotating armature and the stationary circuit.",
+       "points": [
+        "Armature EMF is alternating",
+        "Commutator rectifies in a generator",
+        "Keeps torque unidirectional in a motor",
+        "Brushes give sliding contact"
+       ]
+      },
+      {
+       "id": "dcn-p1",
+       "pyq": "df3e9710fda3d783",
+       "level": 2,
+       "points": [
+        "Construction: yoke, poles and shoes, field winding, armature core and winding, commutator, brushes, shaft",
+        "Generator principle: EMF induced by cutting flux, Fleming's right-hand rule; motor: force $BIl$, left-hand rule",
+        "Commutator and brushes: rectify armature AC in a generator, keep torque unidirectional in a motor"
+       ]
+      },
+      {
+       "id": "dcn-p2",
+       "pyq": "dfa13eb673d54160",
+       "level": 2,
+       "points": [
+        "Yoke, poles with shoes, field winding, armature core (laminated silicon steel) with slots",
+        "Armature winding, commutator (copper segments, mica), brushes (carbon), shaft and bearings",
+        "Function of each part; neat diagram"
+       ]
+      },
+      {
+       "id": "dcn-p3",
+       "pyq": "d4d013c1e67f26af",
+       "level": 2,
+       "points": [
+        "Table of parts with function: yoke, poles, field winding, armature core, winding, commutator, brushes, shaft",
+        "Material: yoke cast iron/steel, poles laminated steel, core silicon steel, conductors copper, commutator hard-drawn copper with mica, brushes carbon"
+       ]
+      }
+     ]
+    },
+    {
+     "id": "generator-emf",
+     "title": "Generator action and EMF equation",
+     "theory_md": "**Generator:** the armature is driven; conductors cut flux, EMF is induced (Faraday, direction by **right-hand rule**).\n\nEach conductor cuts $P\\Phi$ per revolution, in $60/N$ s: EMF per conductor $=P\\Phi N/60$. With $Z/A$ conductors in series per path:\n$$E_g=\\dfrac{P\\Phi ZN}{60A}$$\n$N$ in rpm, $\\Phi$ in Wb. **Lap:** $A=P$. **Wave:** $A=2$. $Z=$ slots $\\times$ conductors per slot.\n\nTerminal voltage: $V=E_g-I_aR_a-V_{brush}$ (total brush drop, two brushes). Generator armature current $I_a=I_L+I_{sh}$ for a shunt generator.",
+     "basics_md": "Each conductor makes a little voltage as it sweeps through the field. Wiring them in series paths adds the voltages. Lap winding gives many parallel paths; wave gives only two.",
+     "key_points": [
+      "$E_g=P\\Phi ZN/60A$ with $N$ in rpm and $\\Phi$ in Wb",
+      "Lap: $A=P$; wave: $A=2$",
+      "$Z=$ slots $\\times$ conductors per slot",
+      "$V=E_g-I_aR_a-V_{brush}$"
+     ],
+     "questions": [
+      {
+       "id": "g-q1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "In a wave-wound armature the number of parallel paths is",
+       "options": [
+        "$P$",
+        "2",
+        "$P/2$",
+        "$2P$"
+       ],
+       "answer_index": 1,
+       "why": "Wave always has two paths, lap has $P$."
+      },
+      {
+       "id": "g-q2",
+       "kind": "mcq",
+       "level": 1,
+       "q": "In the EMF equation $E=P\\Phi ZN/60A$, the speed $N$ is in",
+       "options": [
+        "rad/s",
+        "rpm",
+        "rev/s",
+        "m/s"
+       ],
+       "answer_index": 1,
+       "why": "The 60 converts rpm to rev/s."
+      },
+      {
+       "id": "g-q3",
+       "kind": "numerical",
+       "level": 2,
+       "marks": 3,
+       "q": "A 4-pole wave-wound generator has 500 conductors and flux 0.02 Wb per pole. Find the EMF at 1200 rpm.",
+       "model_answer_md": "$A=2$ (wave)\n\n$E_g=\\dfrac{P\\Phi ZN}{60A}=\\dfrac{4\\times0.02\\times500\\times1200}{60\\times2}=\\dfrac{48000}{120}=400$ V",
+       "points": [
+        "$A=2$ for wave",
+        "Substitutes values correctly",
+        "$E_g=400$ V"
+       ]
+      },
+      {
+       "id": "g-p1",
+       "pyq": "80a2eb4d4dcb5b4a",
+       "level": 2,
+       "points": [
+        "Each conductor cuts flux $P\\Phi$ per revolution in $60/N$ s, EMF per conductor $=P\\Phi N/60$",
+        "$Z/A$ conductors in series per path",
+        "$E_g=P\\Phi ZN/60A$; lap $A=P$, wave $A=2$"
+       ]
+      },
+      {
+       "id": "g-p2",
+       "pyq": "be23f0c62a1d78ab",
+       "level": 2,
+       "points": [
+        "Construction (yoke, poles, armature, commutator, brushes) and principle: Faraday's law",
+        "Lap: $A=P$, $E=P\\Phi ZN/60P=\\Phi ZN/60$",
+        "Wave: $A=2$, $E=P\\Phi ZN/120$"
+       ]
+      },
+      {
+       "id": "g-p3",
+       "pyq": "5877847835844d09",
+       "level": 2,
+       "points": [
+        "Lap: $A=P=6$, $Z=720$, $\\Phi=0.04$ Wb",
+        "$E=6\\times0.04\\times720\\times400/(60\\times6)=192$ V"
+       ]
+      },
+      {
+       "id": "g-p4",
+       "pyq": "664e41cafb6ca2fc",
+       "level": 2,
+       "points": [
+        "$Z=50\\times16=800$, lap $A=4$, $\\Phi=0.03$ Wb",
+        "$N=60AE/(P\\Phi Z)=60\\times4\\times240/(4\\times0.03\\times800)=600$ rpm"
+       ]
+      },
+      {
+       "id": "g-p5",
+       "pyq": "b1509dca23374945",
+       "level": 2,
+       "points": [
+        "$Z=65\\times15=975$, wave $A=2$, $\\Phi=0.008$ Wb",
+        "$E=6\\times0.008\\times975\\times1000/(60\\times2)=390$ V"
+       ]
+      },
+      {
+       "id": "g-p6",
+       "pyq": "a342b5bcc5afdae8",
+       "level": 3,
+       "points": [
+        "Constant excitation: $E_g\\propto N$; load is a constant resistance $R=500/120=4.17\\ \\Omega$",
+        "Initial $E_{g1}=500+120\\times0.1+2=514$ V",
+        "At 60 A: $V=250$ V; $E_{g2}=250+60\\times0.1+2=258$ V",
+        "$N_2=1200\\times258/514=602$ rpm"
+       ]
+      }
+     ]
+    },
+    {
+     "id": "motor-speed",
+     "title": "Motor action, back EMF and speed",
+     "theory_md": "**Motor principle:** a current-carrying conductor in a field feels a force $F=BIl$ (Fleming's **left-hand rule**); the commutator keeps the torque one way.\n\n**Back EMF:** rotating conductors also generate an EMF that opposes the supply (Lenz). $E_b=\\dfrac{P\\Phi ZN}{60A}=V-I_aR_a-V_{brush}$. It limits the armature current; a heavier load slows the motor, $E_b$ falls and $I_a$ rises. At start $E_b=0$, so a starter is needed.\n\n**Speed:** $N=\\dfrac{60A}{PZ}\\cdot\\dfrac{E_b}{\\Phi}$, i.e. $N\\propto E_b/\\Phi$, so $\\dfrac{N_2}{N_1}=\\dfrac{E_{b2}}{E_{b1}}\\cdot\\dfrac{\\Phi_1}{\\Phi_2}$.\n\nShunt motor: $I_a=I_L-I_{sh}$, $I_{sh}=V/R_{sh}$. Torque $T=9.55E_bI_a/N$ N m.",
+     "basics_md": "A spinning armature in a field is a generator even when it is running as a motor. That unwanted voltage opposes the supply, and it settles the speed at which the motor draws just enough current for its load.",
+     "key_points": [
+      "Motor: force $BIl$, left-hand rule",
+      "$E_b=V-I_aR_a$ (motor) opposes the supply; $E_g=V+I_aR_a$ (generator)",
+      "$N\\propto E_b/\\Phi$",
+      "Shunt motor: $I_a=I_L-I_{sh}$, shunt flux constant so $N\\propto E_b$"
+     ],
+     "questions": [
+      {
+       "id": "m-q1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "In a DC motor the back EMF is",
+       "options": [
+        "greater than the supply voltage",
+        "$V-I_aR_a$",
+        "$V+I_aR_a$",
+        "zero at full speed"
+       ],
+       "answer_index": 1,
+       "why": "Back EMF opposes the supply; the drop is $I_aR_a$."
+      },
+      {
+       "id": "m-q2",
+       "kind": "mcq",
+       "level": 1,
+       "q": "If the flux of a shunt motor is reduced slightly, its speed",
+       "options": [
+        "rises",
+        "falls",
+        "stays same",
+        "becomes zero"
+       ],
+       "answer_index": 0,
+       "why": "$N\\propto1/\\Phi$."
+      },
+      {
+       "id": "m-q3",
+       "kind": "numerical",
+       "level": 2,
+       "marks": 4,
+       "q": "A 220 V shunt motor has $R_a=0.5\\ \\Omega$ and runs at 1000 rpm with $I_a=20$ A. Find the back EMF and the torque developed.",
+       "model_answer_md": "$E_b=V-I_aR_a=220-20\\times0.5=210$ V\n\n$T=9.55\\dfrac{E_bI_a}{N}=9.55\\times\\dfrac{210\\times20}{1000}=40.1$ N m",
+       "points": [
+        "$E_b=210$ V",
+        "Uses $T=9.55E_bI_a/N$",
+        "$T=40.1$ N m"
+       ]
+      },
+      {
+       "id": "m-p1",
+       "pyq": "a53dfd0c889f3567",
+       "level": 2,
+       "points": [
+        "Principle: current-carrying conductor in field experiences force $F=BIl$ (left-hand rule); commutator keeps torque one way",
+        "Back EMF: rotating armature induces EMF opposing supply, $E_b=P\\Phi ZN/60A=V-I_aR_a$",
+        "Self-regulation; zero at start, hence starter"
+       ]
+      },
+      {
+       "id": "m-p2",
+       "pyq": "7d8afdc93396f891",
+       "level": 2,
+       "points": [
+        "$E_b=P\\Phi ZN/60A$ and $V=E_b+I_aR_a$",
+        "Equate: $N=(60A/PZ)(V-I_aR_a)/\\Phi$",
+        "$N\\propto E_b/\\Phi$; $N_2/N_1=(E_{b2}/E_{b1})(\\Phi_1/\\Phi_2)$"
+       ]
+      },
+      {
+       "id": "m-p3",
+       "pyq": "44f9a249f0fa16f4",
+       "level": 3,
+       "points": [
+        "Brush drop $=2\\times2=4$ V; $E_b=360-50\\times0.3-4=341$ V",
+        "Wave $A=2$, $P=8$",
+        "$N=60\\times2\\times341/(8\\times0.05\\times640)=159.8$ rpm"
+       ]
+      },
+      {
+       "id": "m-p4",
+       "pyq": "56c6695f028fecb6",
+       "level": 3,
+       "points": [
+        "$I_{sh}=120/60=2$ A; $I_{a1}=60-2=58$ A; $E_{b1}=120-58\\times0.2-3=105.4$ V",
+        "Half load: $I_{a2}=29$ A; $E_{b2}=120-29\\times0.2-3=111.2$ V",
+        "$N_2=1800\\times111.2/105.4=1899$ rpm"
+       ]
+      },
+      {
+       "id": "m-p5",
+       "pyq": "1c9bad7d68819a16",
+       "level": 3,
+       "points": [
+        "$I_{sh}=230/230=1$ A; $I_a=41-1=40$ A",
+        "$E_b=230-40\\times0.1-2=224$ V (two brushes)",
+        "Lap $A=P=6$: $N=60\\times6\\times224/(6\\times0.05\\times410)=655.6$ rpm"
+       ]
+      }
+     ]
+    },
+    {
+     "id": "dc-types",
+     "title": "Types of DC machines and self-excitation",
+     "theory_md": "**Classified by field excitation.**\n- **Separately excited:** field from an independent source.\n- **Self-excited** (field from own armature): **shunt** (many thin turns, high $R_{sh}$, in parallel), **series** (few thick turns, in series, $I_L=I_a=I_{se}$), **compound** (both; **long shunt** shunt-field across armature + series field, **short shunt** across armature only; cumulative or differential).\n\nMotor currents: shunt $I_a=I_L-I_{sh}$; series $E_b=V-I_a(R_a+R_{se})$.\n\n**Self-excitation (generator):** residual magnetism gives a small EMF, which drives field current that, if it aids the residual flux, raises the EMF until it builds up. Needs residual magnetism, correct field polarity and field resistance below the critical value.",
+     "basics_md": "The only difference between the types is how the field coil gets its current: from outside, from the armature in parallel, or from the armature in series.",
+     "key_points": [
+      "Basis: method of field excitation",
+      "Shunt field in parallel, series field in series with the armature",
+      "Compound: long shunt and short shunt, cumulative and differential",
+      "Self-excitation needs residual magnetism, aiding field and field R below critical"
+     ],
+     "questions": [
+      {
+       "id": "t-q1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "The series field winding of a DC machine has",
+       "options": [
+        "many turns of thin wire",
+        "few turns of thick wire",
+        "only one turn",
+        "no resistance"
+       ],
+       "answer_index": 1,
+       "why": "It carries the full armature current."
+      },
+      {
+       "id": "t-q2",
+       "kind": "mcq",
+       "level": 1,
+       "q": "For a self-excited generator to build up voltage, it needs",
+       "options": [
+        "residual magnetism",
+        "a separate DC source",
+        "a load connected",
+        "brush shift"
+       ],
+       "answer_index": 0,
+       "why": "Residual flux gives the initial EMF."
+      },
+      {
+       "id": "t-q3",
+       "kind": "short",
+       "level": 2,
+       "marks": 3,
+       "q": "Classify DC machines on the basis of excitation and name the field connection of each.",
+       "model_answer_md": "**Basis:** how the field winding is excited.\n1. **Separately excited:** field from an independent DC source.\n2. **Shunt:** field in parallel with the armature (high resistance, many turns).\n3. **Series:** field in series with the armature (low resistance, few thick turns).\n4. **Compound:** both fields; long shunt (shunt across armature + series) or short shunt (shunt across armature only); cumulative or differential.",
+       "points": [
+        "Basis is field excitation",
+        "Separately excited, shunt, series",
+        "Compound: long/short shunt, cumulative/differential"
+       ]
+      },
+      {
+       "id": "t-p1",
+       "pyq": "6dc2fc4f15e2047e",
+       "level": 2,
+       "points": [
+        "Basis of classification: method of field excitation",
+        "Separately excited, shunt, series, compound (long and short shunt)",
+        "Circuit descriptions with $I_L$, $I_a$, $I_{sh}$ relations; circuit diagrams drawn"
+       ]
+      },
+      {
+       "id": "t-p2",
+       "pyq": "04998102f44140c9",
+       "level": 2,
+       "points": [
+        "Constructional features with diagram: yoke, poles, field winding, armature core and winding, commutator, brushes",
+        "Classification: separately excited and self-excited (shunt, series, compound)",
+        "Short/long shunt, cumulative/differential"
+       ]
+      },
+      {
+       "id": "t-p3",
+       "pyq": "6e074fb00cda7884",
+       "level": 3,
+       "points": [
+        "Self-excited: field supplied from own armature; residual magnetism builds up EMF; conditions",
+        "Series motor: $E_b=230-40\\times0.75=200$ V",
+        "Wave $A=2$: $N=60\\times2\\times200/(4\\times0.025\\times782)=306.9$ rpm"
+       ]
+      }
+     ]
+    },
+    {
+     "id": "speed-control",
+     "title": "Speed control and characteristics",
+     "theory_md": "From $N\\propto\\dfrac{V-I_aR_a}{\\Phi}$, speed is changed by $\\Phi$, $R_a$ or $V$.\n\n- **Field (flux) control:** rheostat in series with shunt field; more resistance, weaker $\\Phi$, speed **above** rated. Efficient, smooth.\n- **Armature resistance control:** resistance in series with armature; speed **below** rated, wasteful ($I_a^2R$), poor regulation.\n- **Armature voltage control (Ward-Leonard):** variable $V$, smooth both ways, costly.\n\n**Shunt motor:** $\\Phi$ constant, so $T\\propto I_a$ (straight line) and $N$ falls only 5 to 15 % with load: **constant-speed motor**. **Series motor:** $T\\propto I_a^2$ (then $\\propto I_a$), $N\\propto1/I_a$ (hyperbola); never start on no load.",
+     "basics_md": "Speed depends on the back EMF over flux. Weaken the flux and it speeds up; add series resistance and it slows down. A shunt motor hardly changes because its flux and drop are tiny.",
+     "key_points": [
+      "Three methods: flux, armature resistance, armature voltage",
+      "Flux control: above rated speed, efficient; armature resistance: below rated, lossy",
+      "Shunt motor nearly constant speed ($\\Phi$ fixed, $I_aR_a$ small)",
+      "Series motor: $T\\propto I_a^2$, $N\\propto1/I_a$, dangerous at no load"
+     ],
+     "questions": [
+      {
+       "id": "s-q1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "Field-flux control of a shunt motor gives speeds",
+       "options": [
+        "below rated only",
+        "above rated only",
+        "both above and below",
+        "no change"
+       ],
+       "answer_index": 1,
+       "why": "Weakening the field raises the speed."
+      },
+      {
+       "id": "s-q2",
+       "kind": "mcq",
+       "level": 1,
+       "q": "The speed of a series motor at very light load is",
+       "options": [
+        "very low",
+        "very high",
+        "constant",
+        "zero"
+       ],
+       "answer_index": 1,
+       "why": "$N\\propto1/I_a$ and flux is tiny."
+      },
+      {
+       "id": "s-q3",
+       "kind": "numerical",
+       "level": 2,
+       "marks": 4,
+       "q": "A 220 V shunt motor ($R_a=0.5\\ \\Omega$) runs at 1000 rpm with $I_a=20$ A. A 2 $\\Omega$ resistance is added in series with the armature (field unchanged, $I_a$ the same). Find the new speed.",
+       "model_answer_md": "$E_{b1}=220-20\\times0.5=210$ V\n\n$E_{b2}=220-20\\times(0.5+2)=170$ V\n\n$\\Phi$ constant: $N_2=1000\\times\\dfrac{170}{210}=809.5$ rpm\n\nSpeed falls, as expected for armature resistance control.",
+       "points": [
+        "$E_{b1}=210$ V",
+        "$E_{b2}=170$ V",
+        "$N_2=809.5$ rpm"
+       ]
+      },
+      {
+       "id": "s-p1",
+       "pyq": "a0d0f4e57a7feb83",
+       "level": 3,
+       "points": [
+        "$N\\propto(V-I_aR_a)/\\Phi$: flux control (field rheostat, speed above rated), armature resistance control (speed below rated, lossy)",
+        "Armature voltage (Ward-Leonard) control",
+        "Constant speed: $\\Phi$ constant, $I_aR_a$ small (2 to 5 % of $V$), speed drop 5 to 15 %"
+       ]
+      },
+      {
+       "id": "s-p2",
+       "pyq": "0952ab271d149015",
+       "level": 2,
+       "points": [
+        "Armature resistance: series resistance, speed below rated, $I_a^2R$ loss, poor regulation",
+        "Field flux: rheostat in field, $N\\propto1/\\Phi$, speed above rated, efficient",
+        "Comparison of range and efficiency"
+       ]
+      },
+      {
+       "id": "s-p3",
+       "pyq": "6f7294a8d1600d9f",
+       "level": 3,
+       "points": [
+        "Shunt: circuit with field across supply; $T\\propto I_a$ straight line; $N$ nearly flat, slight droop",
+        "Series: circuit in series; $T\\propto I_a^2$ then linear; $N\\propto1/I_a$ hyperbola",
+        "Shunt speed falls with $I_a$ because $E_b=V-I_aR_a$ falls while $\\Phi$ is nearly constant"
+       ]
+      }
+     ]
+    }
+   ]
+  }
+ ]
+}

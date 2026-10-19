@@ -1,0 +1,1274 @@
+{
+ "code": "BS1111",
+ "unit": "Biology in Industry",
+ "written": "2026-10-19",
+ "by": "claude-sonnet-5-5, in a Claude Code session",
+ "topics": [
+  {
+   "topic": "Biofuels",
+   "subtopics": [
+    {
+     "id": "generations",
+     "title": "Biofuels and their generations",
+     "theory_md": "**Biofuels** are fuels made from **biomass**, so they are renewable and nearly carbon-neutral: the $\\mathrm{CO_2}$ released on burning was recently fixed by photosynthesis. Fossil fuels add old carbon, and $\\mathrm{CO_2}$ is the main greenhouse gas.\n- **1st generation:** food crops. Ethanol from sugarcane, corn; biodiesel from soybean, palm oil. Food vs fuel conflict.\n- **2nd generation:** non-food lignocellulose (rice straw, bagasse, wood) and non-edible oil (*Jatropha*). Needs pretreatment and cellulase.\n- **3rd generation:** algae (*Chlorella*). High yield, no farmland, captures $\\mathrm{CO_2}$; costly harvesting.\n- **4th generation:** genetically engineered algae or cyanobacteria with carbon capture.",
+     "basics_md": "A biofuel is a fuel grown rather than dug up. Plants take CO2 from the air as they grow and give it back when the fuel burns, so the loop is nearly closed. Generations are just a ladder of feedstocks: food crop, farm waste, algae, engineered microbe.",
+     "key_points": [
+      "Biofuel = fuel from biomass; renewable, near carbon-neutral",
+      "1st generation: food crops, food vs fuel problem",
+      "2nd generation: lignocellulosic or non-edible feedstock, needs pretreatment",
+      "3rd generation: algae; 4th: genetically engineered organisms"
+     ],
+     "questions": [
+      {
+       "id": "g-q1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "Biofuels produced from microalgae belong to the",
+       "options": [
+        "First generation",
+        "Second generation",
+        "Third generation",
+        "Fourth generation"
+       ],
+       "answer_index": 2,
+       "why": "Algae are the third-generation feedstock; first is food crops, second is lignocellulosic biomass."
+      },
+      {
+       "id": "g-q2",
+       "kind": "long",
+       "level": 2,
+       "marks": 5,
+       "q": "Classify biofuels into generations with feedstock, examples, one advantage and one limitation of each.",
+       "model_answer_md": "| Generation | Feedstock | Examples | Advantage | Limitation |\n|---|---|---|---|---|\n| 1st | Food crops: sugar, starch, edible oil | Ethanol from sugarcane, corn; biodiesel from soybean, palm | Simple, established technology | Food vs fuel; land and water use |\n| 2nd | Lignocellulose, non-edible oil | Ethanol from rice straw, bagasse; Jatropha biodiesel | Uses waste, no food competition | Lignin pretreatment and cellulase are costly |\n| 3rd | Algae | Algal biodiesel from *Chlorella*, *Botryococcus* | High yield per hectare, no arable land, absorbs $\\mathrm{CO_2}$ | Harvesting and drying are expensive |\n| 4th | Genetically engineered algae, cyanobacteria | Engineered strains that secrete fuel | High yield, carbon capture | Early stage, biosafety |",
+       "points": [
+        "Four generations named in order with feedstock",
+        "Example for each generation",
+        "Advantage of each",
+        "Limitation of each",
+        "Table or clear headings"
+       ]
+      },
+      {
+       "id": "g-q3",
+       "kind": "mcq",
+       "level": 2,
+       "q": "Biodiesel from *Jatropha* seed oil is usually classed as",
+       "options": [
+        "First generation, because it is an oil",
+        "Second generation, because the feedstock is non-edible",
+        "Third generation, because it is a plant oil",
+        "Fourth generation"
+       ],
+       "answer_index": 1,
+       "why": "Jatropha does not compete with food, so it is placed in the second generation."
+      },
+      {
+       "id": "g-p1",
+       "pyq": "9d27220f6c67c7ae",
+       "level": 1,
+       "points": [
+        "D) Carbon dioxide",
+        "Main greenhouse gas by quantity and lifetime; methane is more potent per molecule but less abundant"
+       ]
+      }
+     ]
+    },
+    {
+     "id": "ethanol-biodiesel",
+     "title": "Bioethanol and biodiesel",
+     "theory_md": "**Bioethanol:** yeast (*Saccharomyces cerevisiae*) ferments sugar anaerobically, then the ethanol is distilled and blended with petrol (India: E20).\n$\\mathrm{C_6H_{12}O_6 \\rightarrow 2C_2H_5OH + 2CO_2}$; 180 g glucose gives 92 g ethanol, so the theoretical yield is $92/180 = 0.511$ g per g. Starch and lignocellulose are first hydrolysed to glucose (amylase, cellulase).\n\n**Biodiesel:** **transesterification** of triglyceride (vegetable oil, used oil) with **methanol** and NaOH or KOH catalyst at about 60 °C gives **FAME** (biodiesel) and **glycerol**. Glycerol settles out; the ester is washed.",
+     "basics_md": "Ethanol: yeast eat sugar and leave alcohol and gas. Biodiesel: oil is a fat with three long tails on glycerol; methanol swaps the glycerol for methyl groups, giving thinner liquid esters that a diesel engine can burn.",
+     "key_points": [
+      "Bioethanol: yeast fermentation of glucose, then distillation",
+      "Equation $\\mathrm{C_6H_{12}O_6 \\rightarrow 2C_2H_5OH + 2CO_2}$",
+      "Biodiesel: transesterification of oil with methanol, NaOH/KOH catalyst",
+      "Products FAME and glycerol (by-product)"
+     ],
+     "figures": [
+      {
+       "smiles": "OCC1OC(O)C(O)C(O)C1O>>CCO.CCO.O=C=O.O=C=O",
+       "caption": "Glucose to 2 ethanol + 2 CO2 (yeast)"
+      },
+      {
+       "smiles": "CCCCCCCCCCCCCCCC(=O)OC",
+       "caption": "Methyl palmitate, a typical FAME (biodiesel)"
+      },
+      {
+       "smiles": "OCC(O)CO",
+       "caption": "Glycerol, the by-product"
+      }
+     ],
+     "questions": [
+      {
+       "id": "e-q1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "The microorganism used for industrial ethanol fermentation is",
+       "options": [
+        "Acetobacter aceti",
+        "Saccharomyces cerevisiae",
+        "Methanobacterium",
+        "Aspergillus niger"
+       ],
+       "answer_index": 1,
+       "why": "Yeast converts glucose to ethanol and $\\mathrm{CO_2}$; Acetobacter makes acetic acid."
+      },
+      {
+       "id": "e-q2",
+       "kind": "numerical",
+       "level": 2,
+       "marks": 3,
+       "q": "How much ethanol can be obtained theoretically from 1000 kg of glucose? A plant achieves 90% of this. Find the mass and the volume of ethanol obtained (density 0.789 kg/L).",
+       "model_answer_md": "$\\mathrm{C_6H_{12}O_6 \\rightarrow 2C_2H_5OH + 2CO_2}$: 180 g glucose gives $2\\times46 = 92$ g ethanol.\n\n- Theoretical: $1000 \\times 92/180 = 511$ kg\n- At 90%: $0.90 \\times 511 = 460$ kg\n- Volume: $460/0.789 = 583$ L",
+       "points": [
+        "Balanced equation, 180 g gives 92 g",
+        "Theoretical yield 511 kg",
+        "Actual mass 460 kg",
+        "Volume 583 L"
+       ]
+      },
+      {
+       "id": "e-q3",
+       "kind": "short",
+       "level": 2,
+       "marks": 3,
+       "q": "How is biodiesel produced? Write the reaction in words.",
+       "model_answer_md": "- Feedstock: vegetable oil (soybean, palm), non-edible oil (*Jatropha*), used cooking oil, algal oil.\n- **Transesterification:** triglyceride + 3 methanol, with NaOH or KOH catalyst at about 60 °C.\n- Products: 3 **fatty acid methyl esters (FAME) = biodiesel** + **glycerol**.\n- Glycerol settles and is separated; biodiesel is washed and dried; used neat (B100) or blended (B20).",
+       "points": [
+        "Triglyceride reacts with methanol",
+        "Catalyst NaOH or KOH",
+        "Products FAME (biodiesel) and glycerol",
+        "Separation and blending"
+       ]
+      },
+      {
+       "id": "e-q4",
+       "kind": "mcq",
+       "level": 2,
+       "q": "In biodiesel production, the by-product is",
+       "options": [
+        "Ethanol",
+        "Glycerol",
+        "Methane",
+        "Lactic acid"
+       ],
+       "answer_index": 1,
+       "why": "Transesterification replaces glycerol by methyl groups, releasing glycerol."
+      }
+     ]
+    },
+    {
+     "id": "biogas",
+     "title": "Biogas production",
+     "theory_md": "**Biogas** is made by **anaerobic digestion** of cattle dung, sewage sludge or food waste: about 50-70% $\\mathrm{CH_4}$, 30-40% $\\mathrm{CO_2}$, traces of $\\mathrm{H_2S}$.\n\nFour stages: **hydrolysis** (polymers to sugars, amino acids), **acidogenesis** (fatty acids, alcohols), **acetogenesis** (acetate, $\\mathrm{H_2}$), **methanogenesis** by methanogens (*Methanobacterium*): $\\mathrm{CH_3COOH \\rightarrow CH_4 + CO_2}$, $\\mathrm{CO_2 + 4H_2 \\rightarrow CH_4 + 2H_2O}$.\n\n**Plant (floating gas-holder, KVIC):** inlet tank (dung + water 1:1), underground digester (30-37 °C), floating gas holder, gas outlet pipe, outlet for spent slurry used as manure.",
+     "basics_md": "Bacteria in a sealed tank without air chew waste in a relay: big molecules, then acids, then acetate, then methane. The gas collects under a floating drum that rises as it fills.",
+     "key_points": [
+      "Anaerobic digestion of dung or organic waste by bacteria and methanogens",
+      "Four stages: hydrolysis, acidogenesis, acetogenesis, methanogenesis",
+      "Composition: CH4 50-70%, CO2 30-40%",
+      "Plant parts: inlet, digester, gas holder, gas outlet, slurry outlet (manure)"
+     ],
+     "figures": [
+      {
+       "smiles": "C",
+       "caption": "Methane, the fuel gas of biogas"
+      },
+      {
+       "smiles": "CC(=O)O>>C.O=C=O",
+       "caption": "Acetate to methane (methanogenesis)"
+      }
+     ],
+     "questions": [
+      {
+       "id": "bg-q1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "Methane in biogas is produced by",
+       "options": [
+        "Aerobic bacteria",
+        "Methanogens under anaerobic conditions",
+        "Yeast fermentation",
+        "Cyanobacteria"
+       ],
+       "answer_index": 1,
+       "why": "Methanogens (archaea) work only without oxygen."
+      },
+      {
+       "id": "bg-q2",
+       "kind": "long",
+       "level": 2,
+       "marks": 5,
+       "q": "Explain the production of biogas. Describe a biogas plant with its parts.",
+       "model_answer_md": "**Biogas** is a gas mixture (CH4 50-70%, CO2 30-40%, traces of H2S) produced by **anaerobic digestion** of cattle dung, sewage and organic waste.\n\n**Stages**\n1. Hydrolysis: carbohydrates, proteins, fats to sugars, amino acids, fatty acids\n2. Acidogenesis: volatile fatty acids, alcohols, H2, CO2\n3. Acetogenesis: acetic acid, H2, CO2\n4. Methanogenesis: methanogens give $\\mathrm{CH_4}$\n\n**Plant (floating gas-holder type)**\n- Inlet/mixing tank: dung and water 1:1 slurry\n- Digester: underground tank at 30-37 °C\n- Floating gas holder: rises as gas collects\n- Gas outlet pipe to stove or lamp\n- Outlet: spent slurry used as manure\n\n**Benefits:** clean cooking fuel, sanitation, rich manure.",
+       "points": [
+        "Definition and composition",
+        "Anaerobic digestion by methanogens",
+        "Four stages in order",
+        "Labelled parts: inlet, digester, gas holder, gas pipe, slurry outlet",
+        "Slurry used as manure"
+       ]
+      },
+      {
+       "id": "bg-q3",
+       "kind": "mcq",
+       "level": 2,
+       "q": "Which statement about biogas is correct?",
+       "options": [
+        "It is mostly CO2",
+        "It is produced aerobically",
+        "It is mostly methane and made anaerobically",
+        "Methanogens are eukaryotic fungi"
+       ],
+       "answer_index": 2,
+       "why": "Students confuse CO2 and CH4 shares; the digester is sealed from air."
+      },
+      {
+       "id": "bg-q4",
+       "kind": "mcq",
+       "level": 3,
+       "q": "Which step of anaerobic digestion directly forms methane?",
+       "options": [
+        "Hydrolysis",
+        "Acidogenesis",
+        "Acetogenesis",
+        "Methanogenesis"
+       ],
+       "answer_index": 3,
+       "why": "Only methanogens form CH4, from acetate or from H2 + CO2."
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "topic": "Tissue engineering",
+   "subtopics": [
+    {
+     "id": "triad-process",
+     "title": "Definition, triad and process",
+     "theory_md": "**Tissue engineering** (Langer and Vacanti) uses cells, scaffolds and signals to build biological substitutes that restore, maintain or improve tissue function.\n\n**Triad:**\n1. **Cells:** autologous or allogeneic; chondrocytes, keratinocytes, stem cells (MSCs, iPSCs).\n2. **Scaffold:** 3D porous support that mimics the extracellular matrix (ECM).\n3. **Growth factors (signals):** VEGF (vessels), BMP (bone), TGF-$\\beta$.\n\n**Process:** biopsy, isolate and expand cells, seed on scaffold, culture in a **bioreactor**, implant; scaffold degrades as tissue forms. Examples: skin for burns, cartilage, bladder. Main challenge: **vascularisation**. It is not gene therapy or cloning.",
+     "basics_md": "Think of building a wall: bricks are the cells, scaffolding holds them in shape, and the builder's instructions are the growth factors. Take the scaffolding away once the wall stands.",
+     "key_points": [
+      "Definition: cells + scaffold + signals to restore tissue function",
+      "Triad: cells, scaffold, growth factors",
+      "Process: biopsy, expansion, seeding, bioreactor culture, implantation",
+      "Examples: skin, cartilage, bone; challenge vascularisation"
+     ],
+     "questions": [
+      {
+       "id": "tp-p1",
+       "pyq": "517ec253476c0e7b",
+       "level": 1,
+       "points": [
+        "B) Scaffolds, cells, and growth factors",
+        "The triad; enzymes alone or only genetic modification miss scaffold and cells"
+       ]
+      },
+      {
+       "id": "tp-q1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "Which growth factor mainly promotes blood vessel formation in engineered tissue?",
+       "options": [
+        "BMP",
+        "VEGF",
+        "Insulin",
+        "Interferon"
+       ],
+       "answer_index": 1,
+       "why": "VEGF drives angiogenesis; BMP is for bone."
+      },
+      {
+       "id": "tp-q2",
+       "kind": "long",
+       "level": 2,
+       "marks": 5,
+       "q": "What is tissue engineering? Explain its key components and the process.",
+       "model_answer_md": "**Definition:** application of engineering and life-science principles to make biological substitutes that restore, maintain or improve tissue function.\n\n**Components (triad)**\n1. Cells: autologous (patient's own) or stem cells\n2. Scaffold: porous, biodegradable ECM-like support\n3. Growth factors: VEGF, BMP, TGF-$\\beta$\n\n**Process**\n1. Biopsy and isolation of cells\n2. Expansion in culture\n3. Seeding on the scaffold\n4. Maturation in a bioreactor with nutrients, $\\mathrm{O_2}$, mechanical stimulus\n5. Implantation; scaffold degrades as new tissue forms\n\n**Applications:** skin (burns), cartilage, bone, bladder. **Challenge:** vascularisation of thick tissue.",
+       "points": [
+        "Definition",
+        "Three components named",
+        "Stepwise process incl. bioreactor",
+        "Applications and challenge"
+       ]
+      },
+      {
+       "id": "tp-q3",
+       "kind": "mcq",
+       "level": 2,
+       "q": "An autologous cell source means cells taken from",
+       "options": [
+        "A donor of the same species",
+        "The patient himself",
+        "An animal",
+        "A cell bank of cancer lines"
+       ],
+       "answer_index": 1,
+       "why": "Autologous cells carry no rejection risk."
+      }
+     ]
+    },
+    {
+     "id": "scaffold",
+     "title": "Scaffolds: properties, materials, fabrication",
+     "theory_md": "**Ideal scaffold:** biocompatible; **biodegradable** at a rate matched to new tissue, with harmless products; **porous with interconnected pores** (about 100-500 $\\mu$m for bone) for cell migration and nutrient flow; mechanical strength matched to the tissue; surface that supports cell adhesion; sterilisable.\n\n**Materials:** natural (collagen, gelatin, chitosan, alginate, silk, hyaluronic acid) are bioactive but weak; synthetic (PLA, PGA, PLGA, PCL) are strong, reproducible but bio-inert; ceramics (hydroxyapatite, $\\beta$-TCP) for bone.\n\n**Fabrication:** electrospinning (nanofibres), solvent casting with particulate leaching (pores), freeze-drying, gas foaming, 3D printing.",
+     "basics_md": "The scaffold is a temporary house for the cells. It must let them in, feed them, hold them up, and leave when the real tissue arrives.",
+     "key_points": [
+      "Biocompatible and biodegradable at matched rate",
+      "Interconnected porosity for cells and nutrients",
+      "Mechanical properties like the tissue; supports adhesion",
+      "Natural (bioactive, weak) vs synthetic (strong, inert) materials",
+      "Fabrication: electrospinning, particulate leaching, freeze-drying, gas foaming, 3D printing"
+     ],
+     "figures": [
+      {
+       "smiles": "CC(O)C(=O)O",
+       "caption": "Lactic acid"
+      },
+      {
+       "smiles": "OCC(=O)O",
+       "caption": "Glycolic acid (PLGA is a copolymer of these two)"
+      }
+     ],
+     "questions": [
+      {
+       "id": "sc-q1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "PLGA, widely used for scaffolds, is a",
+       "options": [
+        "Natural protein",
+        "Bioceramic",
+        "Synthetic biodegradable copolymer of lactic and glycolic acid",
+        "Metal alloy"
+       ],
+       "answer_index": 2,
+       "why": "PLGA degrades by hydrolysis to lactic and glycolic acids."
+      },
+      {
+       "id": "sc-q2",
+       "kind": "mcq",
+       "level": 2,
+       "q": "Which is NOT a desirable property of a tissue-engineering scaffold?",
+       "options": [
+        "Biocompatibility",
+        "Interconnected pores",
+        "Degradation rate matched to tissue growth",
+        "Non-degradable, permanent structure"
+       ],
+       "answer_index": 3,
+       "why": "Students pick permanent; most scaffolds must degrade as tissue forms."
+      },
+      {
+       "id": "sc-q3",
+       "kind": "short",
+       "level": 2,
+       "marks": 3,
+       "q": "List the properties of an ideal scaffold for tissue engineering.",
+       "model_answer_md": "1. **Biocompatible:** no toxic or immune reaction\n2. **Biodegradable** at a rate matching new tissue, harmless products\n3. **Highly porous, interconnected pores** (100-500 $\\mu$m for bone) for cell migration, $\\mathrm{O_2}$ and nutrient flow\n4. **Mechanical strength** matched to the host tissue\n5. **Surface chemistry** that allows cell adhesion and growth\n6. Sterilisable and easy to fabricate",
+       "points": [
+        "Biocompatible",
+        "Biodegradable at matched rate",
+        "Porous, interconnected",
+        "Mechanical match",
+        "Supports cell adhesion"
+       ]
+      },
+      {
+       "id": "sc-q4",
+       "kind": "long",
+       "level": 3,
+       "marks": 5,
+       "q": "Compare natural and synthetic scaffold materials, and name three fabrication methods with one feature each.",
+       "model_answer_md": "| Property | Natural (collagen, chitosan, alginate, silk) | Synthetic (PLA, PGA, PLGA, PCL) |\n|---|---|---|\n| Bioactivity | High, cell-binding sites | Low, bio-inert |\n| Strength | Weak | Strong, tunable |\n| Reproducibility | Batch variation | High |\n| Immunogenicity | Some risk | Low |\n| Degradation | Enzymatic, fast | Hydrolytic, controlled |\n\n**Fabrication**\n- Electrospinning: nanofibre mats like ECM\n- Solvent casting + particulate leaching: controlled pore size\n- Freeze-drying or gas foaming: highly porous sponges",
+       "points": [
+        "Natural: bioactive but weak",
+        "Synthetic: strong, reproducible, inert",
+        "At least three comparison rows",
+        "Three fabrication methods with feature"
+       ]
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "topic": "Artificial limbs, joints and body parts",
+   "subtopics": [
+    {
+     "id": "biomaterials",
+     "title": "Biomaterials: requirements and classes",
+     "theory_md": "A **biomaterial** is a material that interfaces with biological systems to treat, augment or replace tissue. A **prosthesis** replaces a part; an **orthosis** supports one.\n\n**Requirements:** biocompatible (no toxic or immune reaction), corrosion and wear resistant, adequate strength and fatigue life, modulus close to bone, low friction, sterilisable; **osseointegration** (bonding to bone) for titanium implants.\n\n**Classes:**\n- Metals: **Ti-6Al-4V**, 316L stainless steel, Co-Cr alloy.\n- Ceramics: alumina, zirconia, **hydroxyapatite**, bioglass.\n- Polymers: **UHMWPE**, **PMMA** (bone cement, lens), silicone, PEEK, Dacron.\n- Composites: carbon fibre limbs.",
+     "basics_md": "Body fluid is warm salty water that corrodes metal and attacks plastics, and a hip moves a million times a year. A biomaterial has to survive that without upsetting the body.",
+     "key_points": [
+      "Biomaterial definition; prosthesis vs orthosis",
+      "Requirements: biocompatibility, corrosion/wear resistance, strength, fatigue life",
+      "Metals: Ti-6Al-4V, 316L steel, Co-Cr",
+      "Ceramics: alumina, zirconia, hydroxyapatite; polymers: UHMWPE, PMMA, silicone"
+     ],
+     "figures": [
+      {
+       "smiles": "C=C(C)C(=O)OC",
+       "caption": "Methyl methacrylate, monomer of PMMA bone cement"
+      },
+      {
+       "smiles": "C=C",
+       "caption": "Ethylene, monomer of UHMWPE"
+      }
+     ],
+     "questions": [
+      {
+       "id": "bm-q1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "An orthosis is a device that",
+       "options": [
+        "Replaces a missing limb",
+        "Supports or braces an existing body part",
+        "Is implanted in bone",
+        "Is made only of metal"
+       ],
+       "answer_index": 1,
+       "why": "Replacement is a prosthesis; support is an orthosis."
+      },
+      {
+       "id": "bm-q2",
+       "kind": "long",
+       "level": 2,
+       "marks": 5,
+       "q": "What are biomaterials? Classify them with examples and state the properties required.",
+       "model_answer_md": "**Biomaterial:** a material that interacts with biological systems to treat, augment or replace tissue or organ.\n\n**Classification**\n| Class | Examples | Use |\n|---|---|---|\n| Metals | Ti-6Al-4V, 316L steel, Co-Cr | Hip stem, plates, screws |\n| Ceramics | Alumina, zirconia, hydroxyapatite, bioglass | Femoral head, bone coating |\n| Polymers | UHMWPE, PMMA, silicone, PEEK | Cup liner, bone cement, implants |\n| Composites | Carbon fibre | Limbs |\n\n**Required properties:** biocompatibility, corrosion and wear resistance, strength and fatigue life, modulus close to bone, low friction, sterilisability, osseointegration.",
+       "points": [
+        "Definition",
+        "Four classes with examples",
+        "Required properties listed"
+       ]
+      },
+      {
+       "id": "bm-q3",
+       "kind": "mcq",
+       "level": 2,
+       "q": "Which pairing is correct?",
+       "options": [
+        "PMMA: metal for hip stem",
+        "UHMWPE: cup liner",
+        "Hydroxyapatite: polymer",
+        "Ti-6Al-4V: ceramic"
+       ],
+       "answer_index": 1,
+       "why": "PMMA is a polymer (bone cement), hydroxyapatite a ceramic, Ti alloy a metal."
+      }
+     ]
+    },
+    {
+     "id": "hip-joint",
+     "title": "Joint replacement and stress shielding",
+     "theory_md": "**Total hip replacement** has three parts:\n- **Femoral stem:** titanium alloy (Ti-6Al-4V) or Co-Cr, fixed in the thigh bone.\n- **Head (ball):** Co-Cr, alumina or zirconia for hardness and low wear.\n- **Acetabular cup** with a **UHMWPE** liner, low friction.\n\nFixation: **PMMA bone cement**, or cementless porous or hydroxyapatite-coated press-fit for bone ingrowth.\n\n**Stress shielding:** a stiff implant (steel $\\approx$ 200 GPa, Ti $\\approx$ 110 GPa vs bone $\\approx$ 10-30 GPa) carries the load, so bone is under-loaded and resorbs (Wolff's law), loosening the implant. Reduce by using lower-modulus alloys (Ti), porous or composite stems.",
+     "basics_md": "Bone stays strong only if it is used. If a very stiff rod takes all the load, the bone round it is left idle and wastes away.",
+     "key_points": [
+      "Hip: femoral stem (Ti/Co-Cr), head (Co-Cr/ceramic), cup with UHMWPE liner",
+      "Fixation: PMMA cement or porous/HA-coated press-fit",
+      "Stress shielding: stiff implant takes load, bone resorbs (Wolff's law)",
+      "Remedy: modulus close to bone, porous or composite stem"
+     ],
+     "questions": [
+      {
+       "id": "hj-q1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "The acetabular cup liner in a total hip replacement is usually",
+       "options": [
+        "Titanium alloy",
+        "UHMWPE",
+        "PMMA",
+        "Hydroxyapatite"
+       ],
+       "answer_index": 1,
+       "why": "UHMWPE gives low friction and wear against the metal or ceramic head."
+      },
+      {
+       "id": "hj-q2",
+       "kind": "short",
+       "level": 2,
+       "marks": 3,
+       "q": "What is stress shielding? How can it be reduced?",
+       "model_answer_md": "**Stress shielding:** when an implant is much stiffer than bone, it carries most of the load and the surrounding bone is under-stressed. By **Wolff's law** bone then resorbs, and the implant loosens.\n\n**Reduction**\n- Use low-modulus materials (Ti alloy rather than Co-Cr or steel)\n- Porous or composite stems that match bone modulus\n- Shorter stems and bioactive coatings",
+       "points": [
+        "Definition: stiff implant carries load, bone under-loaded",
+        "Bone resorption (Wolff's law), loosening",
+        "Remedy: modulus matched, porous or composite stems"
+       ]
+      },
+      {
+       "id": "hj-q3",
+       "kind": "long",
+       "level": 3,
+       "marks": 5,
+       "q": "Describe the design of a total hip replacement and the materials used.",
+       "model_answer_md": "**Parts and materials**\n1. Femoral stem: Ti-6Al-4V or Co-Cr; strong, corrosion resistant\n2. Femoral head: Co-Cr, alumina or zirconia; hard, low wear\n3. Acetabular cup: metal shell with **UHMWPE** liner; low friction\n\n**Fixation**\n- Cemented: PMMA bone cement\n- Cementless: porous or hydroxyapatite coating for bone ingrowth (osseointegration)\n\n**Issues:** wear debris, stress shielding, loosening; life about 15-20 years.",
+       "points": [
+        "Three parts with materials",
+        "Fixation: cemented and cementless",
+        "Problems: wear, stress shielding"
+       ]
+      }
+     ]
+    },
+    {
+     "id": "limbs-organs",
+     "title": "Artificial limbs and other body parts",
+     "theory_md": "**Limbs:** passive (cosmetic); **body-powered** (cables and shoulder harness); **myoelectric** (EMG signals from residual muscles drive motors); bionic (sensors, feedback).\n\n**Jaipur Foot** (1968, Dr P.K. Sethi and Ram Chandra Sharma): low-cost rubber and wood foot, allows squatting, walking barefoot and on uneven ground.\n\n**Other parts:** pacemaker (heart rhythm), heart valves (mechanical or bioprosthetic), stents, cochlear implant (hearing), intraocular lens (PMMA), dialyser (artificial kidney), dental implants (Ti), LVAD.",
+     "basics_md": "A limb replacement is judged by what the wearer can do: cheap and robust for villages, fast and controllable for athletes.",
+     "key_points": [
+      "Limb types: passive, body-powered, myoelectric (EMG), bionic",
+      "Jaipur Foot: 1968, low cost, rubber, squatting and barefoot walking",
+      "Other parts: pacemaker, valves, stents, cochlear implant, IOL, dialyser"
+     ],
+     "questions": [
+      {
+       "id": "lo-q1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "A myoelectric prosthetic hand is controlled by",
+       "options": [
+        "Cables on a shoulder harness",
+        "Electrical signals from residual muscles (EMG)",
+        "Air pressure",
+        "Voice only"
+       ],
+       "answer_index": 1,
+       "why": "Myoelectric = muscle electrical signal; cables are body-powered."
+      },
+      {
+       "id": "lo-q2",
+       "kind": "short",
+       "level": 2,
+       "marks": 3,
+       "q": "Write a short note on the Jaipur Foot.",
+       "model_answer_md": "- Developed in Jaipur in **1968** by Dr P.K. Sethi and Ram Chandra Sharma\n- Made of rubber and wood with a vulcanised sole, not metal and plastic\n- **Low cost**, waterproof, durable\n- Allows squatting, sitting cross-legged, walking barefoot and on uneven ground, which suits Indian conditions",
+       "points": [
+        "Year 1968, Jaipur, Sethi and Sharma",
+        "Rubber-based, low cost",
+        "Allows squatting and barefoot walking"
+       ]
+      },
+      {
+       "id": "lo-q3",
+       "kind": "short",
+       "level": 2,
+       "marks": 3,
+       "q": "Differentiate body-powered and myoelectric prosthetic arms. Name two other artificial organs and their function.",
+       "model_answer_md": "| Body-powered | Myoelectric |\n|---|---|\n| Cables and shoulder harness | EMG from residual muscle drives motors |\n| No battery, cheap | Battery, costly |\n| Limited grip force | Finer, stronger control |\n\nOthers: **pacemaker** keeps heart rhythm with electrical pulses; **dialyser** removes urea and wastes from blood in kidney failure.",
+       "points": [
+        "Cable-driven vs EMG-driven",
+        "Cost and battery difference",
+        "Two organs with functions"
+       ]
+      },
+      {
+       "id": "lo-q4",
+       "kind": "mcq",
+       "level": 2,
+       "q": "Which is NOT an artificial organ or implant?",
+       "options": [
+        "Cochlear implant",
+        "Dialyser",
+        "Intraocular lens",
+        "Bioreactor for beer"
+       ],
+       "answer_index": 3,
+       "why": "A fermenter is a vessel for microbes, not a body replacement."
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "topic": "Bioprinting",
+   "subtopics": [
+    {
+     "id": "process-techniques",
+     "title": "Bioprinting steps, techniques and uses",
+     "theory_md": "**3D bioprinting** deposits a **bioink** layer by layer from a digital model to build tissue-like structures.\n\n**Steps:** (1) **Pre-printing:** CT or MRI, CAD model, slicing, cell expansion, bioink. (2) **Printing.** (3) **Post-printing:** cross-linking, then **maturation in a bioreactor**.\n\n**Techniques:** **extrusion** (high viscosity, high cell density; low resolution, shear stress); **inkjet** (fast, cheap, low viscosity); **laser-assisted** (nozzle-free, high resolution, costly); **stereolithography/DLP** (light, high resolution).\n\n**Regenerative use:** skin for burns (even in situ), cartilage, bone, vessels, patient-specific implants with own cells, and disease models for drug testing. Whole organs remain a goal.",
+     "basics_md": "A bioprinter is an ordinary 3D printer whose ink is living cells in jelly, so it must be sterile, gentle and followed by time for the cells to grow into real tissue.",
+     "key_points": [
+      "Three stages: pre-bioprinting, bioprinting, post-bioprinting (cross-linking, bioreactor)",
+      "Techniques: extrusion, inkjet, laser-assisted, SLA/DLP with trade-offs",
+      "Uses: skin, cartilage, bone, vessels, patient-specific implants, drug-testing models",
+      "Challenge: vascularisation; whole organs still research"
+     ],
+     "questions": [
+      {
+       "id": "pt-q1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "Which technique suits high-viscosity bioinks with high cell density?",
+       "options": [
+        "Inkjet",
+        "Extrusion",
+        "Laser-assisted",
+        "Thermal inkjet"
+       ],
+       "answer_index": 1,
+       "why": "Extrusion pushes viscous ink through a nozzle; inkjet needs low viscosity."
+      },
+      {
+       "id": "pt-q2",
+       "kind": "long",
+       "level": 2,
+       "marks": 5,
+       "q": "What is 3D bioprinting? Explain the steps and compare the main techniques.",
+       "model_answer_md": "**Bioprinting:** layer-by-layer deposition of cell-laden bioink from a digital model to fabricate tissue constructs.\n\n**Steps**\n1. Pre-bioprinting: CT/MRI, CAD, slicing, cells and bioink prepared\n2. Bioprinting: deposition of layers\n3. Post-bioprinting: cross-linking and maturation in a bioreactor\n\n| Technique | Ink | Merit | Demerit |\n|---|---|---|---|\n| Extrusion | High viscosity | High cell density | Low resolution, shear stress |\n| Inkjet | Low viscosity | Fast, cheap, viable | Clogging, low density |\n| Laser-assisted | Wide range | Nozzle-free, high resolution | Costly |\n| SLA/DLP | Photocurable | High resolution and speed | Needs light-safe cells |",
+       "points": [
+        "Definition",
+        "Three stages",
+        "Four techniques compared",
+        "Merit and demerit of each"
+       ]
+      },
+      {
+       "id": "pt-q3",
+       "kind": "mcq",
+       "level": 2,
+       "q": "Which is the real reason a printed construct is not implanted straight away?",
+       "options": [
+        "The printer leaves it wet",
+        "Cells must mature in a bioreactor to form functional tissue",
+        "Ink is poisonous",
+        "Printing is not sterile"
+       ],
+       "answer_index": 1,
+       "why": "Students forget maturation; the printed shape is not yet functional tissue."
+      },
+      {
+       "id": "pt-p1",
+       "pyq": "f3200af1510b3d37",
+       "level": 2,
+       "points": [
+        "Definition: layer-by-layer bioink deposition from CT/MRI based CAD model",
+        "Skin, cartilage, bone, vessels, patches",
+        "Patient-specific implants with own cells reduce rejection and donor shortage",
+        "Vascularised tissue; disease models and drug testing",
+        "Process: imaging, CAD, bioink, print, cross-link, bioreactor maturation"
+       ]
+      }
+     ]
+    },
+    {
+     "id": "bioinks",
+     "title": "Bioinks: properties, natural vs synthetic",
+     "theory_md": "A **bioink** is living cells suspended in a biomaterial carrier (usually a hydrogel), often with growth factors.\n\n**Ideal bioink:** **printability** (shear-thinning, then recovers; shape fidelity); fast **cross-linking** (alginate + $\\mathrm{Ca^{2+}}$, GelMA + UV, gelatin by cooling); biocompatibility and cell viability; bioactivity (RGD sites); mechanical strength; controlled biodegradation; porosity for $\\mathrm{O_2}$ and nutrients.\n\n**Natural hydrogels** (alginate, gelatin, collagen, fibrin, hyaluronic acid): bioactive, but weak and variable. **Synthetic** (PEG, Pluronic F127, PVA): strong, reproducible, bio-inert. Best: **hybrids** such as GelMA or alginate with a PCL frame.\n\n**Challenges:** vascularisation, viability under shear, maturation time.",
+     "basics_md": "The ink has two jobs that pull against each other: be soft enough for cells to live in, and firm enough to hold its shape after printing.",
+     "key_points": [
+      "Bioink = cells + hydrogel carrier (+ growth factors)",
+      "Shear-thinning, shape fidelity, fast cross-linking",
+      "Biocompatible, bioactive, biodegradable, porous",
+      "Natural: bioactive but weak; synthetic: strong but inert; hybrid is best"
+     ],
+     "questions": [
+      {
+       "id": "bi-q1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "Alginate bioink is commonly cross-linked by",
+       "options": [
+        "UV light",
+        "Calcium ions",
+        "Heating to 90 °C",
+        "Glutaraldehyde vapour"
+       ],
+       "answer_index": 1,
+       "why": "Ionic gelation: $\\mathrm{Ca^{2+}}$ bridges the alginate chains."
+      },
+      {
+       "id": "bi-q2",
+       "kind": "mcq",
+       "level": 2,
+       "q": "Shear-thinning of a bioink means its viscosity",
+       "options": [
+        "Rises when pushed through the nozzle",
+        "Falls under shear and recovers after deposition",
+        "Is constant",
+        "Falls permanently"
+       ],
+       "answer_index": 1,
+       "why": "It flows in the nozzle then regains stiffness to hold shape."
+      },
+      {
+       "id": "bi-q3",
+       "kind": "short",
+       "level": 2,
+       "marks": 3,
+       "q": "What is a bioink? List the properties of a good bioink.",
+       "model_answer_md": "**Bioink:** living cells in a printable biomaterial (hydrogel), with growth factors if needed.\n\n**Properties**\n1. Printability: shear-thinning, shape fidelity\n2. Rapid cross-linking without harming cells\n3. Biocompatibility, high cell viability\n4. Bioactivity: cell adhesion sites (RGD)\n5. Adequate mechanical strength\n6. Controlled biodegradability\n7. Porosity for nutrient diffusion",
+       "points": [
+        "Definition",
+        "Printability and cross-linking",
+        "Biocompatibility and bioactivity",
+        "Mechanical strength and degradability"
+       ]
+      },
+      {
+       "id": "bi-p1",
+       "pyq": "05e35fc45c5a979b",
+       "level": 3,
+       "points": [
+        "Bioink: cells in biomaterial carrier (hydrogel); biomaterial ink is without cells",
+        "Characteristics: printability and shear-thinning, rapid cross-linking, biocompatibility and viability, bioactivity (RGD), strength, controlled biodegradability, porosity",
+        "Comparison table: natural is bioactive, weak, variable; synthetic is strong, reproducible, bio-inert",
+        "Evaluation: natural more suitable for functional tissue because cells need bioactivity",
+        "Conclusion: hybrid or modified natural (GelMA, alginate-gelatin, PCL frame)"
+       ]
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "topic": "Bioremediation",
+   "subtopics": [
+    {
+     "id": "in-ex-situ",
+     "title": "Bioremediation: in situ, ex situ, phytoremediation",
+     "theory_md": "**Bioremediation** uses living organisms, mainly microbes (also plants, fungi), to degrade, transform or immobilise pollutants (oil, pesticides, dyes, metals).\n\n**In situ** (at the site, no excavation): **biostimulation** (add N, P, $\\mathrm{O_2}$ for native microbes), **bioaugmentation** (add specialised microbes), bioventing, biosparging. Cheap; slow, less control.\n\n**Ex situ** (soil excavated or water pumped): **landfarming, biopiles, composting, slurry-phase bioreactor**. Faster and controllable; costly.\n\n**Phytoremediation:** phytoextraction (*Brassica juncea* absorbs metals), phytostabilisation, rhizofiltration, phytovolatilisation, rhizodegradation. Metals are not destroyed, only removed or immobilised.\n\nExample: *Pseudomonas putida* superbug (Chakrabarty) for oil.",
+     "basics_md": "Clean the spill where it lies using the microbes already there, or dig it up and treat it in a controlled heap. Plants can also be used as living pumps for metals.",
+     "key_points": [
+      "Definition: living organisms degrade or immobilise pollutants",
+      "In situ: biostimulation, bioaugmentation, bioventing, biosparging",
+      "Ex situ: landfarming, biopiles, composting, slurry bioreactor",
+      "Phytoremediation types; metals accumulated, not degraded"
+     ],
+     "questions": [
+      {
+       "id": "is-p1",
+       "pyq": "b848078c673c2ada",
+       "level": 1,
+       "points": [
+        "B) Microorganisms",
+        "Bacteria and fungi (and plants) degrade or immobilise pollutants; robots, radiation and pressure are physical"
+       ]
+      },
+      {
+       "id": "is-p2",
+       "pyq": "99987e85739a6dc9",
+       "level": 2,
+       "points": [
+        "In situ: treated at the site, no excavation; ex situ: removed and treated elsewhere",
+        "In situ cheaper and less disturbing; ex situ costlier",
+        "Ex situ better control and faster; in situ slower",
+        "Examples: bioventing, biostimulation vs landfarming, biopiles"
+       ]
+      },
+      {
+       "id": "is-q1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "Adding N and P fertiliser to an oil-polluted beach so native bacteria grow faster is",
+       "options": [
+        "Bioaugmentation",
+        "Biostimulation",
+        "Phytoextraction",
+        "Landfarming"
+       ],
+       "answer_index": 1,
+       "why": "Biostimulation feeds native microbes; bioaugmentation adds new ones."
+      },
+      {
+       "id": "is-q2",
+       "kind": "short",
+       "level": 2,
+       "marks": 3,
+       "q": "What is phytoremediation? Name three types with an example.",
+       "model_answer_md": "**Phytoremediation:** use of plants to clean polluted soil or water.\n- **Phytoextraction:** roots take metals into shoots, e.g. Indian mustard (*Brassica juncea*)\n- **Phytostabilisation:** plants immobilise pollutants in roots or soil\n- **Rhizofiltration:** roots filter metals from water\n- **Phytovolatilisation:** pollutant converted to a volatile form (Se, Hg)\n\nMetals are removed or stabilised, not degraded.",
+       "points": [
+        "Definition",
+        "Three types named",
+        "Example plant",
+        "Metals not destroyed"
+       ]
+      },
+      {
+       "id": "is-q3",
+       "kind": "mcq",
+       "level": 2,
+       "q": "Landfarming is classed as",
+       "options": [
+        "In situ, because soil stays on the land",
+        "Ex situ, because soil is excavated and spread",
+        "Phytoremediation",
+        "Bioaugmentation only"
+       ],
+       "answer_index": 1,
+       "why": "Students call it in situ; the soil is dug up and treated."
+      }
+     ]
+    },
+    {
+     "id": "compare",
+     "title": "Aerobic and anaerobic, and bioremediation vs physicochemical",
+     "theory_md": "**Aerobic:** $\\mathrm{O_2}$ is the electron acceptor; end products $\\mathrm{CO_2}$, $\\mathrm{H_2O}$, biomass; faster, best for petroleum hydrocarbons; needs aeration (activated sludge, bioventing).\n\n**Anaerobic:** no $\\mathrm{O_2}$; acceptors $\\mathrm{NO_3^-}$, $\\mathrm{SO_4^{2-}}$, $\\mathrm{Fe^{3+}}$, $\\mathrm{CO_2}$; products $\\mathrm{CH_4}$, $\\mathrm{H_2S}$, $\\mathrm{NH_3}$ (biogas); slower; best for chlorinated solvents and sludge.\n\n**Bioremediation vs physicochemical** (incineration, chemical oxidation, soil washing): bioremediation is cheap, low-energy, eco-friendly and slow, mainly for biodegradable organics; physicochemical is fast, costly, may leave secondary waste, handles high concentrations.",
+     "basics_md": "Same job, two styles: living cleaners that are slow, gentle and cheap, or machines and chemicals that are fast, harsh and expensive. Oxygen decides which microbes can work.",
+     "key_points": [
+      "Aerobic: O2 acceptor, CO2 + H2O, faster; anaerobic: no O2, CH4/H2S, slower",
+      "Bioremediation: cheap, eco-friendly, slow; physicochemical: fast, costly, secondary waste",
+      "Match method to pollutant"
+     ],
+     "questions": [
+      {
+       "id": "cp-q1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "The main end products of anaerobic degradation in a digester are",
+       "options": [
+        "CO2 and H2O only",
+        "CH4 and CO2",
+        "O2 and H2",
+        "Nitrates"
+       ],
+       "answer_index": 1,
+       "why": "Anaerobic digestion gives biogas."
+      },
+      {
+       "id": "cp-p1",
+       "pyq": "bf452dec7159c33e",
+       "level": 2,
+       "points": [
+        "Aerobic needs O2; anaerobic does not, uses NO3-, SO4 2-, Fe3+ or CO2",
+        "End products CO2, H2O, biomass vs CH4, CO2, H2S",
+        "Aerobic faster, anaerobic slower",
+        "Aerobic needs aeration (activated sludge); anaerobic yields biogas (digester)"
+       ]
+      },
+      {
+       "id": "cp-p2",
+       "pyq": "83f4596cbd612564",
+       "level": 2,
+       "points": [
+        "Bioremediation uses living organisms; physicochemical uses incineration, chemical oxidation, washing",
+        "Bioremediation cheap, eco-friendly; physicochemical costly, energy intensive, secondary waste",
+        "Bioremediation slow, depends on conditions; physicochemical fast",
+        "Bioremediation for biodegradable organics; physicochemical handles non-biodegradable and high concentration"
+       ]
+      },
+      {
+       "id": "cp-q3",
+       "kind": "mcq",
+       "level": 2,
+       "q": "Which pair is correct?",
+       "options": [
+        "Aerobic: gives CH4",
+        "Anaerobic: needs O2 as acceptor",
+        "Aerobic: CO2 + H2O end products",
+        "Physicochemical: slow, cheap"
+       ],
+       "answer_index": 2,
+       "why": "Aerobic degradation ends in CO2 and H2O; CH4 is anaerobic."
+      },
+      {
+       "id": "cp-q2",
+       "kind": "short",
+       "level": 2,
+       "marks": 2,
+       "q": "Give two reasons why bioremediation is preferred to incineration for an oil-contaminated field, and one limitation.",
+       "model_answer_md": "- Low cost and low energy; no air pollution from burning\n- End products are $\\mathrm{CO_2}$, $\\mathrm{H_2O}$ and biomass, so no secondary waste\n- **Limitation:** slow, and depends on temperature, pH, nutrients and $\\mathrm{O_2}$",
+       "points": [
+        "Cheaper and eco-friendly",
+        "No toxic secondary waste",
+        "Limitation: slow and condition dependent"
+       ]
+      }
+     ]
+    },
+    {
+     "id": "biomining",
+     "title": "Biomining and the sustainability note",
+     "theory_md": "**Biomining (bioleaching):** acidophilic bacteria *Acidithiobacillus ferrooxidans*, *A. thiooxidans* and *Leptospirillum* (pH 1.5-3) extract Cu, U, Zn, Au from low-grade ore.\n\n$\\mathrm{4Fe^{2+} + O_2 + 4H^+ \\rightarrow 4Fe^{3+} + 2H_2O}$\n$\\mathrm{CuS + 2Fe^{3+} \\rightarrow Cu^{2+} + 2Fe^{2+} + S}$\n$\\mathrm{2S + 3O_2 + 2H_2O \\rightarrow 2H_2SO_4}$\n\nMetal is recovered from the leachate by cementation or electrowinning. Methods: heap, dump, tank. Merits: low cost, low-grade ore, less $\\mathrm{SO_2}$ than smelting; in gold ore bacteria break the sulphide matrix.\n\n**Sustainability link:** bioremediation + bioleaching + biofuels + biodegradable polymers (PLA, PHB) + biosensors.",
+     "basics_md": "Some bacteria live on iron and sulphur. Their waste, ferric iron and acid, dissolves the metal out of rock, so we get copper without smelting.",
+     "key_points": [
+      "Organisms: Acidithiobacillus ferrooxidans, A. thiooxidans, Leptospirillum",
+      "Bacteria oxidise Fe2+ to Fe3+ and S to H2SO4; Fe3+ dissolves metal sulphide",
+      "Recovery by cementation or electrowinning; heap, dump, tank leaching",
+      "Advantages: low cost, low-grade ore, less SO2"
+     ],
+     "questions": [
+      {
+       "id": "bmn-q1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "The bacterium commonly used for bioleaching of copper is",
+       "options": [
+        "Rhizobium",
+        "Acidithiobacillus ferrooxidans",
+        "Lactobacillus",
+        "Bacillus thuringiensis"
+       ],
+       "answer_index": 1,
+       "why": "It is an acidophilic iron and sulphur oxidiser."
+      },
+      {
+       "id": "bmn-p1",
+       "pyq": "b18fdf4cafa5a3f5",
+       "level": 2,
+       "points": [
+        "Chemolithotrophic acidophiles: Acidithiobacillus ferrooxidans, A. thiooxidans",
+        "Oxidise Fe2+ to Fe3+; Fe3+ oxidises metal sulphide (CuS) to soluble Cu2+",
+        "Sulphur oxidised to H2SO4 keeps pH low",
+        "Metal recovered by cementation or electrowinning; heap, dump, tank",
+        "Advantages: low cost, low-grade ore, less SO2"
+       ]
+      },
+      {
+       "id": "bmn-p2",
+       "pyq": "892126530866283a",
+       "level": 2,
+       "points": [
+        "Hypothesis: biological agents replace polluting chemical processes",
+        "Bioremediation: Pseudomonas putida, white-rot fungi, phytoremediation; biostimulation and bioaugmentation",
+        "Bioleaching with A. ferrooxidans; biofuels (ethanol, biodiesel, biogas)",
+        "Biomaterials: PLA, PHB, biosensors, aquaporin filters",
+        "Outcome circular bioeconomy; limitation slow, biosafety"
+       ]
+      },
+      {
+       "id": "bmn-q2",
+       "kind": "mcq",
+       "level": 2,
+       "q": "In bioleaching, the ferric ion ($\\mathrm{Fe^{3+}}$) acts as",
+       "options": [
+        "Reducing agent for the metal sulphide",
+        "Oxidising agent for the metal sulphide",
+        "Catalyst that is not consumed",
+        "Nutrient only"
+       ],
+       "answer_index": 1,
+       "why": "Fe3+ oxidises CuS to Cu2+ and is itself reduced to Fe2+ which bacteria re-oxidise."
+      },
+      {
+       "id": "bmn-q3",
+       "kind": "short",
+       "level": 2,
+       "marks": 3,
+       "q": "Why is bioleaching preferred to smelting for low-grade copper ore?",
+       "model_answer_md": "- Works on **low-grade ore** that is uneconomic to smelt\n- Low cost and low energy: ambient temperature, bacteria self-replicate\n- No $\\mathrm{SO_2}$ emission, unlike roasting of sulphide ore\n- Metal recovered from leachate by electrowinning\n- Limitation: slow (months)",
+       "points": [
+        "Low-grade ore",
+        "Low energy and cost",
+        "No SO2",
+        "Limitation slow"
+       ]
+      }
+     ]
+    },
+    {
+     "id": "waste-water",
+     "title": "Wastewater treatment, BOD and urban waste",
+     "theory_md": "**Sewage treatment:** primary (settling), **secondary** (aerobic **activated sludge**, trickling filter: flocs of bacteria and protozoa oxidise organics, lowering **BOD**), then **anaerobic sludge digestion** to biogas. Also nitrification-denitrification ($\\mathrm{NH_4^+ \\rightarrow NO_3^- \\rightarrow N_2}$) and constructed wetlands.\n\n**BOD** = oxygen used by microbes in 5 days at 20 °C. High BOD means more organic pollution.\n$$BOD_5 = (DO_i - DO_f)\\times \\frac{\\text{bottle volume}}{\\text{sample volume}}$$\n\n**Urban waste:** segregate, anaerobic digestion (biogas to bio-CNG), composting, PETase for PET, PHA bioplastic from fatty acids.",
+     "basics_md": "Microbes eat the sewage's food and use up oxygen doing it. The more oxygen they use, the dirtier the water was.",
+     "key_points": [
+      "Primary, secondary (activated sludge, flocs, BOD), sludge digestion to biogas",
+      "BOD = O2 used in 5 days; high BOD means more pollution",
+      "BOD5 = (DOi - DOf) x dilution factor",
+      "Urban waste: segregation, anaerobic digestion, composting, enzymes for plastics, PHA"
+     ],
+     "questions": [
+      {
+       "id": "ww-q1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "A high BOD value of a water sample indicates",
+       "options": [
+        "Clean water",
+        "High organic pollution",
+        "High pH",
+        "High salt content"
+       ],
+       "answer_index": 1,
+       "why": "Microbes consumed more oxygen because more organic matter was present."
+      },
+      {
+       "id": "ww-q2",
+       "kind": "numerical",
+       "level": 2,
+       "marks": 3,
+       "q": "6 mL of wastewater is diluted to 300 mL. Initial DO is 8.5 mg/L and the DO after 5 days is 4.5 mg/L. Calculate $BOD_5$.",
+       "model_answer_md": "Dilution factor $= 300/6 = 50$\n\nOxygen drop $= 8.5 - 4.5 = 4.0$ mg/L\n\n$BOD_5 = 4.0 \\times 50 = 200$ mg/L",
+       "points": [
+        "Dilution factor 50",
+        "DO drop 4.0 mg/L",
+        "BOD5 = 200 mg/L"
+       ]
+      },
+      {
+       "id": "ww-q3",
+       "kind": "mcq",
+       "level": 2,
+       "q": "Secondary sewage treatment mainly uses",
+       "options": [
+        "Aerobic flocs of bacteria in activated sludge",
+        "Anaerobic methanogens only",
+        "Filtration through sand only",
+        "Chlorination"
+       ],
+       "answer_index": 0,
+       "why": "Primary is physical settling; secondary is aerobic biological oxidation lowering BOD."
+      },
+      {
+       "id": "ww-p1",
+       "pyq": "04c9a500887c8a45",
+       "level": 2,
+       "points": [
+        "Aerobic secondary treatment: activated sludge or trickling filter, flocs oxidise organics, reduce BOD",
+        "Anaerobic sludge digestion produces biogas",
+        "Nitrification-denitrification and phosphate removal",
+        "Oxidation ponds, constructed wetlands"
+       ]
+      },
+      {
+       "id": "ww-p2",
+       "pyq": "cb2c22ac809f9c0d",
+       "level": 3,
+       "points": [
+        "Problem: wet organic waste 50-60% of urban waste, landfill methane",
+        "Segregation, then anaerobic digestion with four stages to biogas / bio-CNG",
+        "Composting or vermicomposting of digestate; co-digestion with sludge",
+        "Enzymatic plastic recycling (PETase) and PHA bioplastic from fatty acids",
+        "Wetland polishing, sensors; benefits and challenges with mitigation"
+       ]
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "topic": "Industrial biomolecules",
+   "subtopics": [
+    {
+     "id": "enzymes-denaturation",
+     "title": "Industrial enzymes and denaturation",
+     "theory_md": "Enzymes are specific biocatalysts that work at mild temperature and pH.\n- **Amylase:** starch liquefaction, desizing, detergents\n- **Protease:** detergents, leather dehairing\n- **Lipase:** detergents, dairy flavour\n- **Cellulase:** biofuel, denim stone-washing\n- **Pectinase + protease:** fruit juice clarification\n- **Rennet/chymosin:** cheese\n- **Glucose isomerase:** high-fructose syrup; **streptokinase:** clot buster\n\n**Denaturation** (heat, extreme pH, solvents, heavy metals, urea) breaks H bonds, ionic and hydrophobic interactions and S-S bridges; shape of active site is lost, activity falls. Primary structure stays intact.\n\n**Michaelis-Menten:** $v = \\dfrac{V_{max}[S]}{K_m + [S]}$; at $[S]=K_m$, $v = V_{max}/2$.",
+     "basics_md": "An enzyme works like a key in a lock, and heat or acid bends the lock. Industry uses that: boil it to kill spoilage enzymes, or choose heat-stable enzymes where heat is needed.",
+     "key_points": [
+      "Enzyme-application pairs: amylase, protease, lipase, cellulase, pectinase, rennet",
+      "Denaturation: loss of 3D shape of active site, peptide bonds intact",
+      "Causes: heat, pH, solvents, heavy metals, urea",
+      "v = Vmax[S]/(Km+[S]); v = Vmax/2 when [S] = Km"
+     ],
+     "questions": [
+      {
+       "id": "en-q1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "Bottled fruit juices are clarified using",
+       "options": [
+        "Lipases and amylases",
+        "Pectinases and proteases",
+        "Cellulase only",
+        "Rennet"
+       ],
+       "answer_index": 1,
+       "why": "Pectinase breaks pectin that makes juice cloudy."
+      },
+      {
+       "id": "en-q2",
+       "kind": "mcq",
+       "level": 2,
+       "q": "Denaturation of an enzyme breaks",
+       "options": [
+        "Peptide bonds in the primary structure",
+        "Weak bonds that maintain 3D shape, leaving peptide bonds",
+        "Only the substrate",
+        "The gene"
+       ],
+       "answer_index": 1,
+       "why": "Students think peptide bonds are cleaved; that is hydrolysis, not denaturation."
+      },
+      {
+       "id": "en-q3",
+       "kind": "numerical",
+       "level": 2,
+       "marks": 3,
+       "q": "An enzyme has $K_m = 2$ mM and $V_{max} = 50\\ \\mu$mol/min. Find the rate at $[S] = 2$ mM and 8 mM.",
+       "model_answer_md": "$v = \\dfrac{V_{max}[S]}{K_m+[S]}$\n\n- $[S]=2$ mM: $v = \\dfrac{50\\times2}{2+2} = 25\\ \\mu$mol/min, which is $V_{max}/2$\n- $[S]=8$ mM: $v = \\dfrac{50\\times8}{2+8} = 40\\ \\mu$mol/min",
+       "points": [
+        "Formula stated",
+        "25 umol/min at 2 mM",
+        "40 umol/min at 8 mM"
+       ]
+      },
+      {
+       "id": "en-p1",
+       "pyq": "c1d80b06a0d1083a",
+       "level": 2,
+       "points": [
+        "Activity depends on 3D shape of active site",
+        "Denaturation breaks H bonds, ionic, hydrophobic, S-S; primary structure intact; substrate cannot bind, activity lost",
+        "Optimum temperature and pH",
+        "Industrial control: pasteurisation, thermostable enzymes (Taq, amylase), immobilisation, cold chain"
+       ]
+      }
+     ]
+    },
+    {
+     "id": "microbial-products",
+     "title": "Microbial products and immobilised enzymes",
+     "theory_md": "**Organic acids:** citric acid, *Aspergillus niger*; acetic acid, *Acetobacter aceti*; butyric acid, *Clostridium butylicum*; lactic acid, *Lactobacillus*.\n**Ethanol:** *Saccharomyces cerevisiae*.\n**Drugs:** penicillin, *Penicillium notatum*; **cyclosporin A**, *Trichoderma polysporum* (immunosuppressant); **statins**, *Monascus purpureus* (cholesterol). \n**Biopolymers:** PHA/PHB bioplastic.\n\n**Immobilised enzymes** are fixed on a support by adsorption, entrapment, covalent binding or cross-linking. Advantages: reuse, better stability, easy product separation, continuous operation.\n\nFermentation: batch, fed-batch, continuous in a stirred-tank bioreactor.",
+     "basics_md": "Name the microbe, name the product. Immobilising an enzyme is like gluing it to beads so it can be fished out and reused.",
+     "key_points": [
+      "Citric acid: A. niger; acetic: Acetobacter aceti; butyric: C. butylicum; lactic: Lactobacillus",
+      "Penicillin: Penicillium notatum; cyclosporin A: Trichoderma polysporum; statins: Monascus purpureus",
+      "Immobilisation: adsorption, entrapment, covalent, cross-linking",
+      "Advantages: reuse, stability, easy separation"
+     ],
+     "figures": [
+      {
+       "smiles": "CC(O)C(=O)O",
+       "caption": "Lactic acid"
+      },
+      {
+       "smiles": "OC(=O)CC(O)(CC(=O)O)C(=O)O",
+       "caption": "Citric acid"
+      },
+      {
+       "smiles": "CC(O)CC(=O)O",
+       "caption": "3-hydroxybutyric acid, unit of PHB"
+      }
+     ],
+     "questions": [
+      {
+       "id": "mp-q1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "Citric acid is produced industrially by",
+       "options": [
+        "Acetobacter aceti",
+        "Aspergillus niger",
+        "Clostridium butylicum",
+        "Lactobacillus"
+       ],
+       "answer_index": 1,
+       "why": "A. niger is the fungus for citric acid."
+      },
+      {
+       "id": "mp-q2",
+       "kind": "mcq",
+       "level": 2,
+       "q": "The immunosuppressant cyclosporin A is obtained from",
+       "options": [
+        "Monascus purpureus",
+        "Trichoderma polysporum",
+        "Streptococcus",
+        "Penicillium notatum"
+       ],
+       "answer_index": 1,
+       "why": "Statins come from Monascus, which students confuse."
+      },
+      {
+       "id": "mp-q3",
+       "kind": "short",
+       "level": 2,
+       "marks": 4,
+       "q": "Name the microorganism and the use of each: citric acid, acetic acid, butyric acid, penicillin, statins.",
+       "model_answer_md": "| Product | Microbe | Use |\n|---|---|---|\n| Citric acid | *Aspergillus niger* | Food, drinks, preservative |\n| Acetic acid | *Acetobacter aceti* | Vinegar |\n| Butyric acid | *Clostridium butylicum* | Flavours, chemicals |\n| Penicillin | *Penicillium notatum* | Antibiotic |\n| Statins | *Monascus purpureus* | Lower blood cholesterol |",
+       "points": [
+        "Five microbes correct",
+        "Use of each"
+       ]
+      },
+      {
+       "id": "mp-q4",
+       "kind": "short",
+       "level": 2,
+       "marks": 3,
+       "q": "What are immobilised enzymes? Give methods and advantages.",
+       "model_answer_md": "**Immobilised enzymes:** enzymes fixed on or in an insoluble support.\n\n**Methods:** adsorption, entrapment in gel, covalent binding, cross-linking.\n\n**Advantages:** reusable, more stable to heat and pH, easy separation of product, continuous operation.",
+       "points": [
+        "Definition",
+        "Four methods",
+        "Advantages"
+       ]
+      }
+     ]
+    },
+    {
+     "id": "biotech-role",
+     "title": "Role of biotechnology: economy, health, environment",
+     "theory_md": "**Biotechnology** uses living organisms, cells or enzymes to make products and services.\n\n- **Health:** recombinant insulin, hepatitis B and mRNA vaccines, monoclonal antibodies, PCR/ELISA/biosensors, gene and cell therapy.\n- **Food security:** Bt cotton, Golden Rice, tissue culture, biofertilisers (*Rhizobium*), biopesticide (*Bacillus thuringiensis*).\n- **Energy:** bioethanol, biodiesel, biogas.\n- **Environment:** bioremediation, phytoremediation, wastewater treatment, biodegradable plastics (PLA, PHB).\n- **Industry/economy:** enzymes, organic acids, antibiotics, jobs, exports, bioeconomy.\n\nIt links public health with sustainability: cleaner processes, less fossil fuel, safer food.",
+     "basics_md": "For a long answer, sort what biotechnology does under five headings (health, food, energy, environment, industry) and give two named examples under each.",
+     "key_points": [
+      "Health: insulin, vaccines, diagnostics, therapy",
+      "Food: Bt cotton, Golden Rice, biofertilisers, biopesticides",
+      "Energy: ethanol, biodiesel, biogas",
+      "Environment: bioremediation, wastewater, bioplastics",
+      "Economy: enzymes, antibiotics, jobs, exports"
+     ],
+     "questions": [
+      {
+       "id": "bt-q1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "Golden Rice is genetically modified to produce",
+       "options": [
+        "Vitamin C",
+        "Beta-carotene",
+        "Insulin",
+        "Bt toxin"
+       ],
+       "answer_index": 1,
+       "why": "It addresses vitamin A deficiency."
+      },
+      {
+       "id": "bt-q2",
+       "kind": "mcq",
+       "level": 2,
+       "q": "Which pair is correctly matched?",
+       "options": [
+        "Bt cotton and insect resistance",
+        "Golden Rice and herbicide resistance",
+        "Rhizobium and biogas",
+        "Aspergillus and ethanol"
+       ],
+       "answer_index": 0,
+       "why": "Bt toxin kills bollworm; Golden Rice makes beta-carotene."
+      },
+      {
+       "id": "bt-q3",
+       "kind": "short",
+       "level": 2,
+       "marks": 3,
+       "q": "List three roles of biotechnology in food security and energy security with one example each.",
+       "model_answer_md": "**Food security**\n- GM crops: Bt cotton (insect resistance), Golden Rice (beta-carotene)\n- Biofertiliser: *Rhizobium*\n- Biopesticide: *Bacillus thuringiensis*\n\n**Energy security**\n- Bioethanol by yeast fermentation\n- Biodiesel by transesterification\n- Biogas by methanogens",
+       "points": [
+        "Food security examples",
+        "Energy security examples",
+        "Named organism or product for each"
+       ]
+      },
+      {
+       "id": "bt-p1",
+       "pyq": "49fb753ca963c3ff",
+       "level": 2,
+       "points": [
+        "Biotechnology defined: living organisms, cells, enzymes for products and services",
+        "Economy: agriculture (Bt cotton), health (insulin, vaccines), enzymes, bioenergy, employment",
+        "Environment: bioremediation (Pseudomonas), phytoremediation, wastewater, bioleaching, bioplastics",
+        "Conclusion: sustainable development"
+       ]
+      },
+      {
+       "id": "bt-p2",
+       "pyq": "85739768335eb43f",
+       "level": 2,
+       "points": [
+        "Principles of biology: rDNA, fermentation, enzymes, cell culture",
+        "Public health: vaccines, therapeutics, diagnostics",
+        "Food security: Bt cotton, Golden Rice, biofertilisers, biopesticides",
+        "Energy security: bioethanol, biodiesel, biogas",
+        "Pollution mitigation: bioremediation, wastewater, bioplastics; bio-based industries: enzymes, citric acid, penicillin"
+       ]
+      }
+     ]
+    }
+   ]
+  }
+ ]
+}

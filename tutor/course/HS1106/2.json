@@ -1,0 +1,1862 @@
+{
+ "code": "HS1106",
+ "unit": "Oral and Written Communication",
+ "written": "2026-10-19",
+ "by": "claude-sonnet-5-5, in a Claude Code session",
+ "topics": [
+  {
+   "topic": "Oral presentations",
+   "subtopics": [
+    {
+     "id": "audience",
+     "title": "Audience analysis and interaction",
+     "theory_md": "An oral presentation is a planned, purposeful talk to an audience. Before preparing, do **audience analysis**: who they are, what they know, why they are there, what they expect.\n\nThe audience's **attitude** decides interaction:\n- **Favourable**: asks, comments, high interaction.\n- **Neutral**: low unless prompted by questions or polls.\n- **Hostile or sceptical**: challenges; handle calmly with evidence.\n- **Indifferent**: bored, almost no interaction.\n- **Shy or anxious**: silent even if interested.\n\nAdjust level, tone and examples to the audience; open with a hook and invite questions.",
+     "basics_md": "Think of a shopkeeper. A regular customer chats, a stranger just browses, an angry customer argues. You change how you talk to each.",
+     "key_points": [
+      "Audience analysis comes before content: who, why, what they know",
+      "Attitude types: favourable, neutral, hostile, indifferent, shy",
+      "Favourable audience gives high interaction; indifferent gives almost none",
+      "Presenter adapts level and tone, uses hooks and questions to draw interaction"
+     ],
+     "questions": [
+      {
+       "id": "au-q1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "Audience analysis is done",
+       "options": [
+        "after the presentation",
+        "before preparing the content",
+        "only for large audiences",
+        "only if there is a Q&A"
+       ],
+       "answer_index": 1,
+       "why": "Content, level and examples are chosen from what you know of the audience."
+      },
+      {
+       "id": "au-q2",
+       "kind": "mcq",
+       "level": 2,
+       "q": "Which audience is most likely to interrupt and challenge the speaker?",
+       "options": [
+        "Favourable",
+        "Hostile or sceptical",
+        "Shy",
+        "Neutral"
+       ],
+       "answer_index": 1,
+       "why": "A sceptical audience argues; a shy one stays silent, a neutral one needs prompting."
+      },
+      {
+       "id": "au-q3",
+       "kind": "short",
+       "level": 2,
+       "marks": 3,
+       "q": "Name three audience attitudes and the interaction each produces.",
+       "model_answer_md": "1. **Favourable**: interested, so many questions and comments.\n2. **Neutral**: attends from duty, low interaction unless prompted.\n3. **Hostile**: challenges, interaction high but confrontational.\n\n(Indifferent and shy audiences also give little or no interaction.)",
+       "points": [
+        "Three attitudes named",
+        "Interaction matched to each attitude"
+       ]
+      },
+      {
+       "id": "au-p1",
+       "pyq": "05fd0374c37caf14",
+       "level": 2,
+       "points": [
+        "Attitude decides whether audience takes part or stays silent",
+        "Favourable: high interaction; neutral: low unless prompted",
+        "Hostile: challenging, presenter stays calm and uses evidence",
+        "Indifferent and shy: almost none",
+        "Example and conclusion: analyse audience, hook, invite questions"
+       ]
+      }
+     ]
+    },
+    {
+     "id": "structure",
+     "title": "Planning and structuring a presentation",
+     "theory_md": "Plan with purpose (inform, persuade, motivate), audience and time. Standard structure:\n\n1. **Introduction**: hook, purpose statement, roadmap (about 10-15% of the time).\n2. **Body**: 2-4 main points, each with an example or data.\n3. **Conclusion**: summary of key ideas, closing line, invite questions.\n\nGive times in an outline. A **book summary** names the book and author, then summarises: theme, main events or ideas, message, why you chose it. Speak at about 130 words per minute.",
+     "basics_md": "A talk is like a short journey: tell people where you are going, take them there, then remind them where you reached.",
+     "key_points": [
+      "Three parts: introduction, body, conclusion",
+      "Introduction has hook, purpose and roadmap",
+      "Body points each backed by example or data",
+      "Outline shows timings; book summary gives title, author, summary, message"
+     ],
+     "questions": [
+      {
+       "id": "st-q1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "The correct order of a presentation is",
+       "options": [
+        "body, introduction, conclusion",
+        "introduction, body, conclusion",
+        "conclusion, body, introduction",
+        "hook, conclusion, body"
+       ],
+       "answer_index": 1,
+       "why": "Open, develop, close."
+      },
+      {
+       "id": "st-q2",
+       "kind": "mcq",
+       "level": 2,
+       "q": "A 5-minute talk has an introduction of 45 seconds. What share of the time is that?",
+       "options": [
+        "9%",
+        "15%",
+        "25%",
+        "45%"
+       ],
+       "answer_index": 1,
+       "why": "45/300 = 15%."
+      },
+      {
+       "id": "st-q3",
+       "kind": "short",
+       "level": 2,
+       "marks": 3,
+       "q": "At 130 words per minute, how many words suit a 5-minute talk? Why speak from an outline rather than a script?",
+       "model_answer_md": "$130 \\times 5 = 650$ words.\n\nAn outline keeps the talk natural, lets you keep eye contact and adjust to the audience; a read-out script sounds flat and loses contact.",
+       "points": [
+        "650 words",
+        "Outline gives eye contact and natural delivery"
+       ]
+      },
+      {
+       "id": "st-p1",
+       "pyq": "ac149bcb643e0a3f",
+       "level": 2,
+       "points": [
+        "Introduction with hook, purpose, roadmap and timing",
+        "Body: why it matters, benefits, barriers with examples",
+        "Strategies: clear goals, roles, feedback, listening, tools",
+        "Conclusion: summary, closing line, invite questions; total 5 minutes with times shown"
+       ]
+      },
+      {
+       "id": "st-p2",
+       "pyq": "74d576365c859f56",
+       "level": 2,
+       "points": [
+        "Name of the book and the author stated",
+        "Summary: background, key events, theme (about 300 words)",
+        "Message of the book",
+        "Why it was chosen"
+       ]
+      }
+     ]
+    },
+    {
+     "id": "delivery",
+     "title": "Delivery and handling questions",
+     "theory_md": "Good delivery: clear voice, moderate pace, pauses, **eye contact**, upright posture, natural gestures, no reading from slides. Rehearse and time it. Reduce nerves by preparing, breathing and arriving early.\n\n**Handling questions**: listen fully, repeat or rephrase, answer briefly and honestly; if you do not know, say so and promise to find out. Stay calm with hostile questions. Close with a thank-you.",
+     "basics_md": "Speaking to a crowd is like talking to a friend, only more loudly and slowly.",
+     "key_points": [
+      "Eye contact, posture, pace and pauses",
+      "Rehearse and time the talk",
+      "Listen, rephrase, answer briefly, admit when unsure",
+      "Stay calm with hostile questions"
+     ],
+     "questions": [
+      {
+       "id": "de-q1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "The best response to a question you cannot answer is",
+       "options": [
+        "bluff",
+        "ignore it",
+        "admit it and offer to find out",
+        "change the topic"
+       ],
+       "answer_index": 2,
+       "why": "Honesty keeps credibility."
+      },
+      {
+       "id": "de-q2",
+       "kind": "mcq",
+       "level": 2,
+       "q": "Which spoils delivery most?",
+       "options": [
+        "Occasional pause",
+        "Reading slides word for word",
+        "Eye contact",
+        "Moderate pace"
+       ],
+       "answer_index": 1,
+       "why": "Reading slides breaks contact and bores the audience."
+      },
+      {
+       "id": "de-q3",
+       "kind": "short",
+       "level": 2,
+       "marks": 3,
+       "q": "List six points of good delivery in an oral presentation.",
+       "model_answer_md": "1. Clear, audible voice.\n2. Moderate pace with pauses.\n3. Eye contact with all sections.\n4. Upright posture, natural gestures.\n5. Speak from an outline, not read.\n6. Keep to time and invite questions.",
+       "points": [
+        "Voice and pace",
+        "Eye contact and posture",
+        "Not reading, timing, questions"
+       ]
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "topic": "Multimedia presentations",
+   "subtopics": [
+    {
+     "id": "slides",
+     "title": "Designing slides",
+     "theory_md": "**Multimedia presentation**: a talk supported by text, images, charts, audio or video, usually through PowerPoint or Google Slides.\n\nSlide rules:\n- One idea per slide; **6 x 6 rule** (at most 6 bullets of 6 words).\n- Large readable font (24 pt or more), high contrast, 2 fonts maximum.\n- Visuals and charts over paragraphs; label graphs.\n- Consistent template; limited animation.\n- Title slide, outline, body, conclusion, references or Thank-you.\n\nSlides support the speaker; they do not replace the speaker.",
+     "basics_md": "Slides are a signboard, not the speech. A signboard with a whole paragraph is not read by anyone.",
+     "key_points": [
+      "One idea per slide, 6 x 6 rule",
+      "Readable font and strong contrast",
+      "Visuals and charts instead of long text",
+      "Consistent template, limited animation"
+     ],
+     "questions": [
+      {
+       "id": "sl-q1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "The 6 x 6 rule means at most",
+       "options": [
+        "6 slides of 6 minutes",
+        "6 bullets with 6 words each",
+        "6 fonts and 6 colours",
+        "6 images per slide"
+       ],
+       "answer_index": 1,
+       "why": "It limits text per slide."
+      },
+      {
+       "id": "sl-q2",
+       "kind": "mcq",
+       "level": 2,
+       "q": "Which slide is best?",
+       "options": [
+        "A paragraph of 80 words",
+        "Three short bullets and a labelled chart",
+        "Twenty bullets",
+        "A busy animated background"
+       ],
+       "answer_index": 1,
+       "why": "Short text with visual evidence."
+      },
+      {
+       "id": "sl-q3",
+       "kind": "short",
+       "level": 2,
+       "marks": 4,
+       "q": "State four guidelines for preparing effective slides.",
+       "model_answer_md": "1. One idea per slide and the 6 x 6 rule.\n2. Large font (24 pt or more) and high contrast.\n3. Use labelled charts and images rather than paragraphs.\n4. Consistent template and limited animation; check spelling.",
+       "points": [
+        "Four distinct guidelines"
+       ]
+      }
+     ]
+    },
+    {
+     "id": "tools",
+     "title": "Using multimedia effectively",
+     "theory_md": "**Advantages**: holds attention, explains complex data visually, retains memory, saves time. **Limitations**: technical failure, over-reliance on slides, distraction by effects, needs equipment.\n\nTips: carry a backup (pen drive, PDF); test the projector and sound before; stand beside, not behind, the screen; face the audience, not the slide; run a rehearsal with timing; use video or audio clips sparingly and short.",
+     "basics_md": "A good helper does not talk louder than you. Multimedia should help the message, not become it.",
+     "key_points": [
+      "Advantages: attention, visual clarity, retention",
+      "Limitations: technical failure, distraction, over-reliance",
+      "Backup copy and pre-test of equipment",
+      "Face the audience, not the screen"
+     ],
+     "questions": [
+      {
+       "id": "to-q1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "A common disadvantage of multimedia is",
+       "options": [
+        "better retention",
+        "technical failure",
+        "visual clarity",
+        "attention"
+       ],
+       "answer_index": 1,
+       "why": "Equipment can fail; always keep a backup."
+      },
+      {
+       "id": "to-q2",
+       "kind": "mcq",
+       "level": 2,
+       "q": "During a slide presentation the speaker should",
+       "options": [
+        "read from the screen",
+        "face the audience",
+        "stand behind the projector",
+        "avoid eye contact"
+       ],
+       "answer_index": 1,
+       "why": "The slide is for the audience; you speak to them."
+      },
+      {
+       "id": "to-q3",
+       "kind": "short",
+       "level": 2,
+       "marks": 3,
+       "q": "Give two advantages and two limitations of a multimedia presentation.",
+       "model_answer_md": "**Advantages**: 1. holds attention with visuals; 2. explains data and processes clearly.\n\n**Limitations**: 1. technical failure; 2. speaker may depend on slides or be distracted by effects.",
+       "points": [
+        "Two advantages",
+        "Two limitations"
+       ]
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "topic": "Communication styles",
+   "subtopics": [
+    {
+     "id": "four-styles",
+     "title": "Passive, aggressive, passive-aggressive, assertive",
+     "theory_md": "The four styles:\n- **Passive**: avoids conflict, does not state needs, says \"it is okay\". Others' rights come first.\n- **Aggressive**: loud, blaming, dominating, ignores others. Own rights first.\n- **Passive-aggressive**: seems calm but expresses anger indirectly (sarcasm, silent treatment, delay).\n- **Assertive**: clear, honest, respectful; states needs and listens. Both parties' rights respected. Best style.\n\nAssertive signs: steady voice, eye contact, \"I\" statements (\"I feel ... when ...\"), saying no politely.",
+     "basics_md": "A boy is asked to lend his notes though he needs them. Passive: lends and suffers. Aggressive: shouts \"never\". Passive-aggressive: lends a torn copy. Assertive: \"I need them tonight, you can have them tomorrow.\"",
+     "key_points": [
+      "Passive: avoids conflict, own needs ignored",
+      "Aggressive: dominates, blames, violates others",
+      "Passive-aggressive: indirect anger, sarcasm",
+      "Assertive: clear, honest, respectful; the best style"
+     ],
+     "questions": [
+      {
+       "id": "fs-q1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "Which style respects both your rights and the other person's?",
+       "options": [
+        "Passive",
+        "Aggressive",
+        "Assertive",
+        "Passive-aggressive"
+       ],
+       "answer_index": 2,
+       "why": "Assertive communication is honest and respectful."
+      },
+      {
+       "id": "fs-q2",
+       "kind": "mcq",
+       "level": 2,
+       "q": "A student agrees to a group task with a smile but then deliberately submits it late. This is",
+       "options": [
+        "assertive",
+        "passive",
+        "aggressive",
+        "passive-aggressive"
+       ],
+       "answer_index": 3,
+       "why": "Anger is expressed indirectly, not stated."
+      },
+      {
+       "id": "fs-q3",
+       "kind": "short",
+       "level": 2,
+       "marks": 4,
+       "q": "Differentiate passive, aggressive and assertive styles with one sentence each for the situation: a roommate plays loud music at night.",
+       "model_answer_md": "**Passive**: says nothing and loses sleep.\n**Aggressive**: shouts \"You are so selfish, switch it off!\"\n**Assertive**: \"I have an exam tomorrow; could you lower the volume after 10 pm?\"\n\nAssertive states the need clearly, politely and keeps the relationship.",
+       "points": [
+        "Passive example",
+        "Aggressive example",
+        "Assertive example with 'I' statement"
+       ]
+      }
+     ]
+    },
+    {
+     "id": "formal-informal",
+     "title": "Formal and informal style, and choosing a style",
+     "theory_md": "**Formal style**: official, impersonal, full sentences, no slang or contractions, titles and polite forms (reports, letters, interviews, presentations). **Informal style**: casual, personal, contractions and slang (friends, family, chats).\n\nChoose style by **audience, purpose, context and relationship**. A senior at work needs a formal, assertive tone; a friend allows informal. Mixed-up register, such as slang in an application, makes a bad impression.",
+     "basics_md": "You wear different clothes to a wedding and to a cricket match. Language also dresses to the occasion.",
+     "key_points": [
+      "Formal: impersonal, full forms, polite; informal: casual, slang",
+      "Choose by audience, purpose, context",
+      "Slang in a formal letter is an error of register"
+     ],
+     "questions": [
+      {
+       "id": "fi-q1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "Which is formal?",
+       "options": [
+        "Gimme the file",
+        "Please send me the file",
+        "Send it, bro",
+        "Pass it quick"
+       ],
+       "answer_index": 1,
+       "why": "Polite request in full form."
+      },
+      {
+       "id": "fi-q2",
+       "kind": "mcq",
+       "level": 2,
+       "q": "Which is the best style for a mail to a professor?",
+       "options": [
+        "Informal with slang",
+        "Formal and assertive",
+        "Aggressive",
+        "Passive and vague"
+       ],
+       "answer_index": 1,
+       "why": "Seniors and official matters need formal, clear writing."
+      },
+      {
+       "id": "fi-q3",
+       "kind": "short",
+       "level": 2,
+       "marks": 3,
+       "q": "Rewrite formally: \"Hey sir, can't come tomorrow, got fever, pls excuse.\"",
+       "model_answer_md": "\"Respected Sir, I am unable to attend class tomorrow as I am suffering from fever. I request you to kindly grant me leave for the day. Thanking you.\"\n\nFull forms, polite opening, reason, request, closing.",
+       "points": [
+        "Polite salutation",
+        "No contractions or slang",
+        "Reason and request stated"
+       ]
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "topic": "Voice modulation",
+   "subtopics": [
+    {
+     "id": "modulation",
+     "title": "Voice modulation and its role",
+     "theory_md": "**Voice modulation** is the controlled variation of **pitch** (high/low), **volume**, **pace**, **tone** and **pauses**, with stress and intonation, so speech is expressive, not monotonous.\n\nRole:\n1. Holds attention.\n2. Shows emotion and attitude (\"Come here\" can be kind or angry).\n3. Emphasises key words (*I* did not say that / I did not *say* that).\n4. Improves clarity (pace, pauses).\n5. Builds credibility in interviews and presentations.\n\nIntonation: **rising** for yes/no questions, **falling** for statements and wh-questions.",
+     "basics_md": "A song with one note is boring. Your voice is the same: use high, low, loud, soft, fast, slow.",
+     "key_points": [
+      "Elements: pitch, volume, pace, tone, pause, stress",
+      "Holds attention and conveys emotion",
+      "Stress changes meaning of a sentence",
+      "Rising tone for yes/no questions, falling for statements"
+     ],
+     "questions": [
+      {
+       "id": "mo-q1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "A flat, uniform voice is called",
+       "options": [
+        "modulated",
+        "monotone",
+        "assertive",
+        "fluent"
+       ],
+       "answer_index": 1,
+       "why": "Monotone has no variation in pitch or pace."
+      },
+      {
+       "id": "mo-q2",
+       "kind": "mcq",
+       "level": 2,
+       "q": "Intonation of 'Are you coming?' is normally",
+       "options": [
+        "falling",
+        "rising",
+        "flat",
+        "none"
+       ],
+       "answer_index": 1,
+       "why": "Yes/no questions rise at the end."
+      },
+      {
+       "id": "mo-q3",
+       "kind": "short",
+       "level": 2,
+       "marks": 3,
+       "q": "Show with an example how stress changes the meaning of 'I did not say that.'",
+       "model_answer_md": "Stress on **I**: someone else said it.\nStress on **not**: I definitely did not say it.\nStress on **say**: I implied it, did not say it.\n\nSo emphasis on a different word changes the meaning.",
+       "points": [
+        "At least two stress positions",
+        "Different meanings explained"
+       ]
+      },
+      {
+       "id": "mo-p1",
+       "pyq": "da928ec3ca37243a",
+       "level": 2,
+       "points": [
+        "Definition: controlled variation of pitch, pace, volume, tone, pauses",
+        "Holds attention; conveys emotion",
+        "Gives emphasis and meaning with example",
+        "Clarity and impression in interviews/presentations",
+        "Examples given"
+       ]
+      },
+      {
+       "id": "mo-p2",
+       "pyq": "9c8fc19c7c940df4",
+       "level": 2,
+       "points": [
+        "Definition of voice modulation",
+        "Factors: pitch, volume, pace, pause, stress, tone, clarity",
+        "Examples: rise for question, fall for statement; pause before key point"
+       ]
+      }
+     ]
+    },
+    {
+     "id": "pronunciation",
+     "title": "Pronunciation, sounds and minimal pairs",
+     "theory_md": "**Pronunciation** is how sounds, stress and intonation are produced. It decides **intelligibility**.\n\nA **phoneme** is the smallest sound that changes meaning. A **minimal pair** differs in one phoneme only: *ship* /ʃɪp/, *sheep* /ʃiːp/. Types: vowel length (/ɪ/ and /iː/: bit/beat), vowel quality (/æ/ and /ʌ/: cat/cut), voicing (/p/ and /b/: pat/bat), place or manner (/θ/ and /t/: thin/tin).\n\nWrong pronunciation changes the word (full/fool), stress (DEsert/deSERT), merges /v/ and /w/, or pronounces silent letters (debt, knife).",
+     "basics_md": "Change one sound and you change the word: cat becomes cut. That is why exact sounds matter.",
+     "key_points": [
+      "Phoneme: smallest sound that changes meaning",
+      "Minimal pair differs in one sound only",
+      "Types: length, quality, voicing, place or manner",
+      "Wrong pronunciation reduces intelligibility"
+     ],
+     "questions": [
+      {
+       "id": "pr-q1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "Which is a minimal pair?",
+       "options": [
+        "ship / sheep",
+        "ship / boat",
+        "sheep / goat",
+        "pen / paper"
+       ],
+       "answer_index": 0,
+       "why": "Only the vowel sound differs."
+      },
+      {
+       "id": "pr-q2",
+       "kind": "mcq",
+       "level": 2,
+       "q": "Pronouncing 'vest' as 'west' is an example of",
+       "options": [
+        "wrong stress",
+        "consonant confusion /v/ and /w/",
+        "silent-letter error",
+        "wrong intonation"
+       ],
+       "answer_index": 1,
+       "why": "Common in Indian English."
+      },
+      {
+       "id": "pr-q3",
+       "kind": "long",
+       "level": 2,
+       "marks": 5,
+       "q": "Write five minimal pairs with transcription and a sentence for each.",
+       "model_answer_md": "| Pair | Transcription | Sentence |\n|---|---|---|\n| bit / beat | /bɪt/, /biːt/ | A *bit* of practice helps *beat* the champion. |\n| cat / cut | /kæt/, /kʌt/ | The *cat* got a *cut* on its paw. |\n| pat / bat | /pæt/, /bæt/ | A *pat* on the back for holding the *bat*. |\n| thin / tin | /θɪn/, /tɪn/ | A *thin* sheet of *tin*. |\n| sip / zip | /sɪp/, /zɪp/ | *Sip* water, then *zip* the bag. |\n\nEach pair differs in one phoneme.",
+       "points": [
+        "Five valid minimal pairs",
+        "Correct IPA transcription",
+        "Meaningful sentence for each"
+       ]
+      },
+      {
+       "id": "pr-p1",
+       "pyq": "ff80bbfd0ea956c3",
+       "level": 2,
+       "points": [
+        "Definition: pair differing in one sound with different meaning",
+        "Ten valid pairs, each with correct transcription",
+        "Meaningful sentence using both words",
+        "Variety: vowel length, quality, voicing"
+       ]
+      },
+      {
+       "id": "pr-p2",
+       "pyq": "e19bd46e7250ba40",
+       "level": 2,
+       "points": [
+        "Role: intelligibility, clarity, credibility, saves effort",
+        "Wrong pronunciation changes the word (ship/sheep)",
+        "Wrong stress, consonant confusion, silent letters, intonation",
+        "Examples given"
+       ]
+      }
+     ]
+    },
+    {
+     "id": "word-stress",
+     "title": "Word stress",
+     "theory_md": "**Word stress** is extra force, length and pitch on one syllable of a word of two or more syllables: *TEACH-er*, *be-LIEVE*.\n\nImportance: **intelligibility**, **meaning** (noun/verb), **rhythm and fluency**, listener comfort.\n\nRules of thumb:\n- Two-syllable **nouns and adjectives**: first syllable (TEACHer, ENglish, SOMEthing).\n- Two-syllable **verbs**: second syllable (beLIEVE, sugGEST, proVIDE, preSENT).\n- Same spelling, noun first, verb second: PREsent/preSENT, REcord/reCORD, INcrease/inCREASE.\n- Words with prefix like *per-, pro-, be-*: usually second (perHAPS, proPOSE).",
+     "basics_md": "Say 'present' as a gift and 'present' as to give. The first is PRE-sent, the second pre-SENT. Same letters, different stress.",
+     "key_points": [
+      "Stress: force, length, pitch on one syllable",
+      "Nouns first syllable, verbs second syllable",
+      "Stress separates noun from verb (REcord/reCORD)",
+      "Importance: intelligibility, meaning, rhythm"
+     ],
+     "questions": [
+      {
+       "id": "ws-q1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "Stress in the noun 'increase' is on",
+       "options": [
+        "first syllable",
+        "second syllable",
+        "both",
+        "none"
+       ],
+       "answer_index": 0,
+       "why": "IN-crease as a noun; in-CREASE as a verb."
+      },
+      {
+       "id": "ws-q2",
+       "kind": "mcq",
+       "level": 2,
+       "q": "Stress is on the second syllable in",
+       "options": [
+        "English",
+        "something",
+        "believe",
+        "teacher"
+       ],
+       "answer_index": 2,
+       "why": "be-LIEVE; the others are stressed on the first."
+      },
+      {
+       "id": "ws-q3",
+       "kind": "short",
+       "level": 2,
+       "marks": 3,
+       "q": "Mark stress (first or second syllable): doctor, forget, perhaps, therefore, record (verb).",
+       "model_answer_md": "doctor: **first** (DOC-tor)\nforget: **second** (for-GET)\nperhaps: **second** (per-HAPS)\ntherefore: **first** (THERE-fore)\nrecord (verb): **second** (re-CORD)",
+       "points": [
+        "All five correct"
+       ]
+      },
+      {
+       "id": "ws-p1",
+       "pyq": "79b1ebe5adf64c46",
+       "level": 2,
+       "points": [
+        "Definition: extra force, length and pitch on one syllable",
+        "Importance: intelligibility, noun/verb meaning, rhythm, listener comfort",
+        "English, something, increase (noun), therefore: first",
+        "Believe, suggest, provide, perhaps, present (verb), propose: second"
+       ]
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "topic": "Group discussion",
+   "subtopics": [
+    {
+     "id": "purpose-roles",
+     "title": "Purpose of GD and roles of participants",
+     "theory_md": "A **group discussion (GD)** is a structured exchange of views by a group on a topic, usually 8-12 members for 15-20 minutes, used for selection.\n\n**Purpose**: assess communication and personality together, observe reasoning and reaction to opposing views, test teamwork and leadership, reach consensus.\n\n**Roles**: initiator (opens), leader/coordinator, information giver, opinion giver, clarifier, questioner/critic, peacemaker, summariser, gatekeeper/time keeper.\n**Negative roles**: dominator, interrupter, aggressor, silent observer, off-topic speaker.\n\nOpening confidently with facts and summarising at the end both score well.",
+     "basics_md": "A GD is a team game, not a debate to win. The examiner watches who helps the group move forward.",
+     "key_points": [
+      "Purpose: selection, communication, personality, teamwork",
+      "Roles: initiator, leader, information giver, clarifier, peacemaker, summariser",
+      "Negative roles: dominator, interrupter, aggressor, silent",
+      "Positive contribution, not winning, is assessed"
+     ],
+     "questions": [
+      {
+       "id": "pu-q1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "A participant who gathers the main points at the end is the",
+       "options": [
+        "initiator",
+        "summariser",
+        "dominator",
+        "critic"
+       ],
+       "answer_index": 1,
+       "why": "Summariser."
+      },
+      {
+       "id": "pu-q2",
+       "kind": "mcq",
+       "level": 2,
+       "q": "In a GD, interrupting others repeatedly is seen as",
+       "options": [
+        "leadership",
+        "a negative role",
+        "good initiative",
+        "assertiveness"
+       ],
+       "answer_index": 1,
+       "why": "It shows poor listening and team spirit."
+      },
+      {
+       "id": "pu-q3",
+       "kind": "short",
+       "level": 2,
+       "marks": 4,
+       "q": "State the purpose of a group discussion in four points.",
+       "model_answer_md": "1. Selection: assessing many candidates in a realistic setting.\n2. Testing communication skills: clarity, listening, persuasion.\n3. Observing personality: leadership, teamwork, confidence, emotional control.\n4. Seeing how one reasons and reacts to opposing views.",
+       "points": [
+        "Four purposes"
+       ]
+      },
+      {
+       "id": "pu-p1",
+       "pyq": "cedeedf69d2bd92b",
+       "level": 2,
+       "points": [
+        "Purpose: selection, communication skills, personality, reaction to opposition, sharing ideas",
+        "Positive roles: initiator, leader, information giver, opinion giver, clarifier, questioner, peacemaker, summariser, time keeper",
+        "Negative roles: dominator, interrupter, aggressor, silent observer",
+        "Conclusion, about 300 words"
+       ]
+      }
+     ]
+    },
+    {
+     "id": "traits",
+     "title": "Personality traits assessed in a GD",
+     "theory_md": "The panel judges the whole personality. Traits:\n1. **Communication**: clarity, fluency, voice, language.\n2. **Subject knowledge** and awareness.\n3. **Listening**: refers to others' points.\n4. **Leadership and initiative**.\n5. **Team spirit**: no interruptions, gives chances.\n6. **Confidence and body language**.\n7. **Logical and analytical thinking**.\n8. **Attitude and emotional control**.\n9. **Flexibility and open-mindedness**.\n10. **Creativity, time sense and relevance**.\n\nBe assertive and balanced, neither silent nor aggressive.",
+     "basics_md": "Imagine you are choosing a teammate for a project. You would want someone who knows things, speaks clearly, listens, and stays calm.",
+     "key_points": [
+      "Communication, knowledge, listening",
+      "Leadership, team spirit, confidence",
+      "Analytical thinking, attitude, emotional control",
+      "Flexibility, creativity, time sense"
+     ],
+     "questions": [
+      {
+       "id": "tr-q1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "Which is NOT a GD trait assessed?",
+       "options": [
+        "Listening",
+        "Leadership",
+        "Shouting the loudest",
+        "Team spirit"
+       ],
+       "answer_index": 2,
+       "why": "Aggression is penalised."
+      },
+      {
+       "id": "tr-q2",
+       "kind": "mcq",
+       "level": 2,
+       "q": "A candidate accepting a good point from another shows",
+       "options": [
+        "weakness",
+        "flexibility",
+        "poor knowledge",
+        "aggression"
+       ],
+       "answer_index": 1,
+       "why": "Open-mindedness is a trait."
+      },
+      {
+       "id": "tr-q3",
+       "kind": "short",
+       "level": 2,
+       "marks": 4,
+       "q": "Discuss four personality traits evaluated in a GD with one line each.",
+       "model_answer_md": "1. **Communication**: clear, fluent, correct language.\n2. **Leadership**: starts, steers and summarises without dominating.\n3. **Listening and team spirit**: builds on others' points, no interruption.\n4. **Emotional control**: stays calm and polite when opposed.",
+       "points": [
+        "Four traits",
+        "One-line explanation each"
+       ]
+      },
+      {
+       "id": "tr-p1",
+       "pyq": "67d1c5b9f99b668b",
+       "level": 2,
+       "points": [
+        "Whole personality assessed, not only knowledge",
+        "Communication, knowledge, listening, leadership, team spirit",
+        "Confidence, logical thinking, attitude, flexibility, time sense",
+        "Balanced: neither silent nor aggressive"
+       ]
+      },
+      {
+       "id": "tr-p2",
+       "pyq": "3d8b70fca315b3bf",
+       "level": 2,
+       "points": [
+        "Communication, listening, leadership, team spirit",
+        "Knowledge, reasoning, confidence",
+        "Emotional control, creativity, flexibility, positive attitude"
+       ]
+      }
+     ]
+    },
+    {
+     "id": "grice",
+     "title": "Grice's maxims in GD",
+     "theory_md": "H. P. Grice's **Cooperative Principle**: make your contribution as required by the purpose of the talk. Four maxims:\n\n| Maxim | Rule |\n|---|---|\n| **Quantity** | As informative as required, no more, no less |\n| **Quality** | Be truthful; do not say what you lack evidence for |\n| **Relation** | Be relevant to the topic |\n| **Manner** | Be clear, brief, orderly, avoid ambiguity |\n\nIn GD: crisp points without monologue (Quantity); facts, not invented figures (Quality); link to the previous speaker (Relation); \"two reasons: first ... second ...\" (Manner).",
+     "basics_md": "Four rules of polite chat: say enough, say true, say relevant, say clearly.",
+     "key_points": [
+      "Cooperative Principle by H. P. Grice",
+      "Quantity, Quality, Relation, Manner",
+      "Each applied to GD with a good and a poor example",
+      "Result: concise, credible, relevant, clear"
+     ],
+     "questions": [
+      {
+       "id": "gr-q1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "The maxim that says 'Be relevant' is",
+       "options": [
+        "Quantity",
+        "Quality",
+        "Relation",
+        "Manner"
+       ],
+       "answer_index": 2,
+       "why": "Relation (relevance)."
+      },
+      {
+       "id": "gr-q2",
+       "kind": "mcq",
+       "level": 2,
+       "q": "Quoting an invented statistic in a GD violates the maxim of",
+       "options": [
+        "Quantity",
+        "Quality",
+        "Manner",
+        "Relation"
+       ],
+       "answer_index": 1,
+       "why": "Quality means truthful and evidenced."
+      },
+      {
+       "id": "gr-q3",
+       "kind": "short",
+       "level": 2,
+       "marks": 4,
+       "q": "Name the four Grice maxims and give one GD example each, on 'Should phones be banned in class?'",
+       "model_answer_md": "1. **Quantity**: one crisp point, not a three-minute monologue.\n2. **Quality**: \"Our hostel survey shows most check messages in lectures\" (real data).\n3. **Relation**: \"Building on Riya's point about distraction ...\".\n4. **Manner**: \"Two reasons: distraction and cheating.\"",
+       "points": [
+        "Four maxims named",
+        "Example for each"
+       ]
+      },
+      {
+       "id": "gr-p1",
+       "pyq": "09ffc2de53dec719",
+       "level": 2,
+       "points": [
+        "Cooperative Principle, H. P. Grice",
+        "Quantity, Quality, Relation, Manner defined",
+        "Application to GD with good and poor examples",
+        "Conclusion: concise, credible, relevant, clear"
+       ]
+      },
+      {
+       "id": "gr-p2",
+       "pyq": "fd054b7dc3ca316d",
+       "level": 2,
+       "points": [
+        "Cooperative Principle, H. P. Grice",
+        "Quantity, Quality, Relation, Manner defined",
+        "Application to GD with good and poor examples",
+        "Conclusion: concise, credible, relevant, clear"
+       ]
+      }
+     ]
+    },
+    {
+     "id": "interview",
+     "title": "Interview: preparation and types",
+     "theory_md": "**Preparation (candidate)**: research the organisation and job; self-assessment of strengths, weaknesses, projects; prepare for common questions (\"Tell me about yourself\"); update resume, keep documents ready; mock interview; dress formally, reach 15 minutes early. **During**: greet, listen, answer briefly and honestly, positive body language, thank the panel.\n\n**Planning (interviewer)**: job profile, questions, rating sheet, panel and venue.\n\n**Types**: structured (fixed questions), unstructured (free flow), panel, group, stress (tough questions), behavioural (\"Tell me about a time ...\"), telephonic or video.",
+     "basics_md": "An interview is a match between you and the job. Prepare both sides: know the job and know yourself.",
+     "key_points": [
+      "Research organisation and job; know yourself",
+      "Resume, documents, mock interview, formal dress, punctual",
+      "Types: structured, unstructured, panel, group, stress, behavioural, telephonic/video",
+      "Interviewer plans profile, questions, rating sheet"
+     ],
+     "questions": [
+      {
+       "id": "in-q1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "An interview where several interviewers question one candidate is a",
+       "options": [
+        "panel interview",
+        "group interview",
+        "stress interview",
+        "unstructured interview"
+       ],
+       "answer_index": 0,
+       "why": "Panel."
+      },
+      {
+       "id": "in-q2",
+       "kind": "mcq",
+       "level": 2,
+       "q": "'Tell me about a time when you handled a conflict' is typical of a",
+       "options": [
+        "structured stress test",
+        "behavioural interview",
+        "telephonic interview",
+        "group interview"
+       ],
+       "answer_index": 1,
+       "why": "Behavioural questions ask about past behaviour."
+      },
+      {
+       "id": "in-q3",
+       "kind": "short",
+       "level": 2,
+       "marks": 4,
+       "q": "Give four steps to prepare for a job interview.",
+       "model_answer_md": "1. Research the company and the job description.\n2. Self-assessment: list strengths, projects, achievements and match them to the job.\n3. Prepare answers to common questions and questions to ask.\n4. Keep resume and documents ready; dress formally; reach 15 minutes early.",
+       "points": [
+        "Four preparation steps"
+       ]
+      },
+      {
+       "id": "in-p1",
+       "pyq": "d6540af987927095",
+       "level": 2,
+       "points": [
+        "Candidate preparation: research, self-assessment, answers, resume, mock, dress, punctuality",
+        "Interviewer planning: profile, questions, rating sheet, venue",
+        "Types: structured, unstructured, panel, group, stress, behavioural, telephonic/video"
+       ]
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "topic": "Paragraph writing",
+   "subtopics": [
+    {
+     "id": "structure",
+     "title": "Structure of a paragraph",
+     "theory_md": "A **paragraph** develops one idea. Parts:\n1. **Topic sentence**: states the main idea.\n2. **Supporting sentences**: reasons, examples, facts.\n3. **Concluding sentence**: closes or links.\n\nQualities: **unity** (one idea), **coherence** (logical order, linkers like *moreover, however, therefore*), **completeness**, correct grammar, and the **word limit** (125 words is about 8-10 sentences; stay within 10 percent). Write it as one block, no bullets. Give the title only if asked.",
+     "basics_md": "A paragraph is a small room with one theme. Everything inside belongs to that theme.",
+     "key_points": [
+      "One idea: unity",
+      "Topic sentence, supporting sentences, concluding sentence",
+      "Coherence with linkers",
+      "Stick to the word limit, one block, no bullets"
+     ],
+     "questions": [
+      {
+       "id": "ps-q1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "The sentence that states the main idea of a paragraph is the",
+       "options": [
+        "concluding sentence",
+        "topic sentence",
+        "supporting detail",
+        "example"
+       ],
+       "answer_index": 1,
+       "why": "It opens the paragraph."
+      },
+      {
+       "id": "ps-q2",
+       "kind": "mcq",
+       "level": 2,
+       "q": "For a '125-word paragraph' the best answer is",
+       "options": [
+        "three lines",
+        "bullet points of 125 words",
+        "one block of about 125 words",
+        "two pages"
+       ],
+       "answer_index": 2,
+       "why": "One coherent block near the limit."
+      },
+      {
+       "id": "ps-q3",
+       "kind": "short",
+       "level": 2,
+       "marks": 3,
+       "q": "List the parts of a good paragraph and two qualities.",
+       "model_answer_md": "**Parts**: topic sentence, supporting sentences (reasons, examples), concluding sentence.\n**Qualities**: unity (one idea) and coherence (logical order using linkers).",
+       "points": [
+        "Three parts",
+        "Two qualities"
+       ]
+      },
+      {
+       "id": "ps-p1",
+       "pyq": "3028648cecc6c4aa",
+       "level": 2,
+       "points": [
+        "Topic sentence on a green and clean campus",
+        "Supporting: trees, waste segregation, recycling, rainwater harvesting, solar",
+        "Student role: saplings, cleanliness drives",
+        "Conclusion; about 125 words, one block"
+       ]
+      },
+      {
+       "id": "ps-p2",
+       "pyq": "29b99f22e4dfd2bc",
+       "level": 2,
+       "points": [
+        "Topic sentence on a green and clean campus",
+        "Supporting reasons and examples",
+        "Conclusion; word limit about 125 words"
+       ]
+      }
+     ]
+    },
+    {
+     "id": "opinion",
+     "title": "Opinion and topic paragraphs",
+     "theory_md": "For a **statement or topic** (\"Living in a hostel can be a learning experience\"): topic sentence stating your stand; two or three reasons, each with a specific example; a concluding sentence.\n\nFor an **opinion** (agree/disagree): state the stand in line one, give reasons and a counter-point, end with a balanced conclusion. Use specific instances (ISRO satellites, Swachh Bharat). Positive and negative sides can both appear.\n\n**Hostel life**: independence, tolerance, discipline, friendships, problem-solving; challenges like homesickness.",
+     "basics_md": "Say what you think, give two reasons with real examples, and close neatly.",
+     "key_points": [
+      "Stand in first sentence",
+      "Two or three reasons with specific examples",
+      "Counter-point and balanced conclusion",
+      "About 125 words, within the limit"
+     ],
+     "questions": [
+      {
+       "id": "op-q1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "A good opinion paragraph begins with",
+       "options": [
+        "an example",
+        "the writer's stand",
+        "a question list",
+        "the conclusion"
+       ],
+       "answer_index": 1,
+       "why": "Say your position early."
+      },
+      {
+       "id": "op-q2",
+       "kind": "mcq",
+       "level": 2,
+       "q": "A paragraph should",
+       "options": [
+        "repeat the same point",
+        "support points with examples",
+        "contain slang",
+        "exceed the limit by 50 words"
+       ],
+       "answer_index": 1,
+       "why": "Examples make reasons convincing."
+      },
+      {
+       "id": "op-q3",
+       "kind": "long",
+       "level": 2,
+       "marks": 5,
+       "q": "Write a paragraph (about 100 words) on 'Integrity builds a nation'.",
+       "model_answer_md": "Integrity means honesty in action, even when nobody is watching. A nation prospers when this becomes a shared culture. When citizens pay taxes honestly, officials serve without bribes and companies keep promises, public money reaches roads, schools and hospitals, and investors trust the economy. Corruption, in contrast, wastes resources, widens inequality and destroys faith in institutions. Countries with low corruption, such as Singapore, show high growth and trust. Integrity must begin at home and in school, and engineers especially must refuse shortcuts that endanger lives. Thus, a culture of integrity is the foundation of lasting national prosperity.",
+       "points": [
+        "Topic sentence",
+        "Reasons with example",
+        "Conclusion and word limit"
+       ]
+      },
+      {
+       "id": "op-p1",
+       "pyq": "90053930285251ca",
+       "level": 2,
+       "points": [
+        "Stand stated: disagree with cutting pure science funding",
+        "Examples: satellites, ISRO cyclone warnings, GPS",
+        "Pure science gave X-rays, internet, vaccines",
+        "Small share of budget; improve welfare efficiency",
+        "About 125 words"
+       ]
+      },
+      {
+       "id": "op-p2",
+       "pyq": "f5fdf9130ae252a3",
+       "level": 2,
+       "points": [
+        "Topic sentence: hostel is a school of life",
+        "Independence, tolerance, discipline, problem-solving, friendships",
+        "Challenges and conclusion; about 125 words"
+       ]
+      },
+      {
+       "id": "op-p3",
+       "pyq": "d8c90855c076bb59",
+       "level": 2,
+       "points": [
+        "Topic sentence: hostel is a school of life",
+        "Independence, tolerance, discipline, problem-solving, friendships",
+        "Challenges and conclusion; about 125 words"
+       ]
+      },
+      {
+       "id": "op-p4",
+       "pyq": "eca21410c7f6019f",
+       "level": 2,
+       "points": [
+        "Topic sentence: hostel is a school outside the classroom",
+        "Money and time management, tolerance, confidence, friendships",
+        "Challenge such as homesickness and conclusion"
+       ]
+      },
+      {
+       "id": "op-p5",
+       "pyq": "1043cef427e4c43b",
+       "level": 2,
+       "points": [
+        "Integrity defined; national prosperity needs it as culture",
+        "Honest taxes, services without bribes, trust of investors",
+        "Corruption wastes resources and erodes trust",
+        "Conclusion; about 125 words"
+       ]
+      }
+     ]
+    },
+    {
+     "id": "introduction",
+     "title": "Self-introduction and long compositions",
+     "theory_md": "**Self-introduction paragraph** (100 words): name, age, place; family; education; interests; strengths (and one weakness being improved); goal. Follow instructions: if told not to mention branch or institute, do not. A **career objective** is one or two lines: the role you want, skills you bring, aim to grow.\n\n**Long composition (essay, 1000 words)**: title, introduction, headed body sections with examples, conclusion, in 7-8 paragraphs of about 120-150 words. Plan an outline first.\n\nExample topic: importance of technology in engineering (design and simulation, automation, collaboration, data, sustainability, future impact).",
+     "basics_md": "An introduction is a mini-story of you: who you are, what you like, where you want to go.",
+     "key_points": [
+      "Introduction: background, family, interests, strengths, goal",
+      "Obey the restriction in the question",
+      "Career objective: role, skills, growth",
+      "Essay: introduction, headed sections, conclusion; plan first"
+     ],
+     "questions": [
+      {
+       "id": "in2-q1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "A career objective is",
+       "options": [
+        "a list of marks",
+        "one or two lines stating the role and aim",
+        "an essay",
+        "a reference"
+       ],
+       "answer_index": 1,
+       "why": "Short and focused."
+      },
+      {
+       "id": "in2-q2",
+       "kind": "mcq",
+       "level": 2,
+       "q": "The question says 'do not mention branch and institute'. You should",
+       "options": [
+        "mention the branch only",
+        "leave them out",
+        "mention both in brackets",
+        "mention institute only"
+       ],
+       "answer_index": 1,
+       "why": "Following the instruction is marked."
+      },
+      {
+       "id": "in2-q3",
+       "kind": "short",
+       "level": 2,
+       "marks": 3,
+       "q": "How many 130-word paragraphs approximate a 1000-word essay, and what must it contain?",
+       "model_answer_md": "$1000 / 130 \\approx 7.7$, so about 7 to 8 paragraphs.\n\nIt contains a title, introduction, headed body sections with examples, and a conclusion.",
+       "points": [
+        "About 8 paragraphs",
+        "Introduction, body, conclusion"
+       ]
+      },
+      {
+       "id": "in2-p1",
+       "pyq": "475485c4daaeb39f",
+       "level": 2,
+       "points": [
+        "Topic sentence introducing self",
+        "Family and background, interests, strengths, goal",
+        "About 100 words; no branch or institute mentioned"
+       ]
+      },
+      {
+       "id": "in2-p2",
+       "pyq": "8b3d704b80a6985e",
+       "level": 1,
+       "points": [
+        "Introduction in about 100 words",
+        "Education, interests, strengths",
+        "Career objective stated clearly"
+       ]
+      },
+      {
+       "id": "in2-p3",
+       "pyq": "2d030719c92aec6b",
+       "level": 3,
+       "points": [
+        "Title, introduction, headed sections and conclusion",
+        "Design/simulation, automation, collaboration, data, sustainability with examples",
+        "Future impact: AI, ethics, jobs",
+        "About 1000 words, coherent"
+       ]
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "topic": "Letter writing",
+   "subtopics": [
+    {
+     "id": "format",
+     "title": "Format of a formal letter",
+     "theory_md": "Parts, in order:\n1. **Sender's address** (top right/left)\n2. **Date**\n3. **Receiver's address** (designation, institution)\n4. **Subject line** (short, specific)\n5. **Salutation**: Sir/Madam, Respected Sir/Madam, Dear Dr. Name\n6. **Body**: opening (reference/purpose), details, request/closing\n7. **Complimentary close**: Yours faithfully (name unknown), Yours sincerely (name known)\n8. **Signature, name, designation**\n9. **Enclosures**.\n\nStyle: formal, polite, concise, one purpose, no slang. Block format is preferred.",
+     "basics_md": "A letter is a form with fixed boxes. Fill each box in order and the reader knows where to look.",
+     "key_points": [
+      "Sender address, date, receiver address, subject, salutation",
+      "Body: purpose, details, request, thanks",
+      "Yours faithfully (unknown name), yours sincerely (known name)",
+      "Enclosures listed; formal, polite, concise"
+     ],
+     "questions": [
+      {
+       "id": "fo-q1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "The subject line comes",
+       "options": [
+        "after the signature",
+        "before the salutation",
+        "after the body",
+        "before the date"
+       ],
+       "answer_index": 1,
+       "why": "Between receiver address and salutation."
+      },
+      {
+       "id": "fo-q2",
+       "kind": "mcq",
+       "level": 2,
+       "q": "With 'Dear Sir/Madam' the close is",
+       "options": [
+        "Yours sincerely",
+        "Yours faithfully",
+        "Yours lovingly",
+        "Regards, friend"
+       ],
+       "answer_index": 1,
+       "why": "Yours faithfully when the name is unknown."
+      },
+      {
+       "id": "fo-q3",
+       "kind": "short",
+       "level": 2,
+       "marks": 3,
+       "q": "List the parts of a formal letter in order.",
+       "model_answer_md": "Sender's address; date; receiver's address; subject; salutation; body; complimentary close; signature and name; enclosures.",
+       "points": [
+        "Order correct",
+        "Subject and close present"
+       ]
+      }
+     ]
+    },
+    {
+     "id": "request",
+     "title": "Request, leave and application letters",
+     "theory_md": "**Leave letter**: to the subject coordinator or HOD; state class/section, reason, dates, assurance of covering missed work, enclosure.\n**Medical/attendance condonation**: attendance percentage vs required (75%), illness with dates, documents enclosed, request to appear, assurance.\n**Job application**: reference to the advertisement, qualification, relevant skills, enclosures, request for interview.\n\nTemplate: 1. Introduce yourself. 2. State the request. 3. Give reasons. 4. Assurance. 5. Thanks. Keep the word limit (150 words).",
+     "basics_md": "State who you are, what you ask, why, and promise to make up for it.",
+     "key_points": [
+      "Introduce self, state request, give reason, assure",
+      "Include dates and enclosures",
+      "Attendance: percentage and the reason with medical proof",
+      "Application: refer to the advertisement, qualification, interest"
+     ],
+     "questions": [
+      {
+       "id": "rq-q1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "A leave letter to the coordinator should contain",
+       "options": [
+        "jokes",
+        "dates, reason and an assurance",
+        "only the date",
+        "no reason"
+       ],
+       "answer_index": 1,
+       "why": "Clear dates and reason."
+      },
+      {
+       "id": "rq-q2",
+       "kind": "mcq",
+       "level": 2,
+       "q": "For a shortage of attendance on medical grounds you should enclose",
+       "options": [
+        "nothing",
+        "medical certificate",
+        "a friend's note",
+        "a photograph"
+       ],
+       "answer_index": 1,
+       "why": "Proof supports the request."
+      },
+      {
+       "id": "rq-q3",
+       "kind": "long",
+       "level": 2,
+       "marks": 5,
+       "q": "Write a letter to the HOD asking leave for three days (22 to 24 March) to attend a cousin's wedding. About 100 words.",
+       "model_answer_md": "Rahul Jain\nB.Tech I Sem, Section C\nMANIT Bhopal\n\n18 March 2025\n\nThe Head of the Department\nDepartment of Civil Engineering\nMANIT Bhopal\n\n**Subject: Request for three days' leave**\n\nRespected Sir,\n\nI am a first-year student of your department. My cousin's wedding is on 23 March at Indore and my family wishes me to attend. I therefore request you to kindly grant me leave from 22 to 24 March 2025. I shall complete the missed work and assignments on my return.\n\nThanking you,\nYours sincerely,\nRahul Jain",
+       "points": [
+        "Format with subject",
+        "Reason and dates",
+        "Assurance and closing"
+       ]
+      },
+      {
+       "id": "rq-p1",
+       "pyq": "b093ded065282c3a",
+       "level": 2,
+       "points": [
+        "Format: sender, date, to Subject Coordinator, subject line",
+        "Introduce as first-year B.Tech student, brother's passing-out at NDA Pune",
+        "Request for three days leave with dates",
+        "Assurance to cover work; enclosure; about 150 words"
+       ]
+      },
+      {
+       "id": "rq-p2",
+       "pyq": "a797f4297d78730c",
+       "level": 2,
+       "points": [
+        "Format: sender, date, to Subject Coordinator, subject line",
+        "Introduce as first-year B.Tech student, brother's passing-out at NDA Pune",
+        "Request for three days leave with dates",
+        "Assurance to cover work; about 150 words"
+       ]
+      },
+      {
+       "id": "rq-p3",
+       "pyq": "aa74ce94053c9c23",
+       "level": 2,
+       "points": [
+        "Addressed to the Head of Department",
+        "Introduce as first-year student; brother's passing-out ceremony",
+        "Request for three days leave with dates",
+        "Assurance and thanks"
+       ]
+      },
+      {
+       "id": "rq-p4",
+       "pyq": "468ba5666db3c29c",
+       "level": 3,
+       "points": [
+        "Addressed to Subject Coordinator with subject line",
+        "Attendance percentage below 75% and the medical reason with dates",
+        "Efforts to catch up, assurance for future",
+        "Request to condone shortage and permit exam; enclosures"
+       ]
+      },
+      {
+       "id": "rq-p5",
+       "pyq": "31bb2ad1726455fa",
+       "level": 2,
+       "points": [
+        "Reference to the advertisement for Bird Guide",
+        "Qualification: certificate in Ornithology; interest in bird watching",
+        "Additional skills; enclosures; request for interview",
+        "Correct format, closing Yours faithfully"
+       ]
+      }
+     ]
+    },
+    {
+     "id": "business",
+     "title": "Business letters: invitation, covering and change of arrangements",
+     "theory_md": "**Business letter**: letterhead and reference number, date, inside address, subject, salutation, body, close, signature, enclosures.\n\n- **Invitation**: event, date, venue, time, why this person, request to confirm by a date.\n- **Covering letter** (conference/participants): welcome, event, themes (as a numbered list), enclosures, confirmation deadline.\n- **Change of arrangements** (hotel manager): refer to the earlier confirmation, list changes as numbered points (rooms, hall, meals, dates), ask for a revised quotation by a date.\n\nUse the \"7 Cs\": clear, concise, correct, courteous, complete, concrete, coherent.",
+     "basics_md": "Business letters are checklists in sentences: who, what, when, where, what you want next.",
+     "key_points": [
+      "Letterhead/ref no., date, address, subject, salutation",
+      "Invitation: event, date, venue, confirm by date",
+      "Changes: refer to earlier letter, numbered list, reply deadline",
+      "Enclosures and 7 Cs"
+     ],
+     "questions": [
+      {
+       "id": "bu-q1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "A covering letter normally",
+       "options": [
+        "contains a list of enclosures",
+        "has no subject",
+        "is informal",
+        "omits the date"
+       ],
+       "answer_index": 0,
+       "why": "It introduces what is attached."
+      },
+      {
+       "id": "bu-q2",
+       "kind": "mcq",
+       "level": 2,
+       "q": "To the hotel manager changing bookings you should first",
+       "options": [
+        "demand a refund",
+        "refer to the confirmation letter received",
+        "complain",
+        "ignore details"
+       ],
+       "answer_index": 1,
+       "why": "Link to the earlier correspondence, then list changes."
+      },
+      {
+       "id": "bu-q3",
+       "kind": "long",
+       "level": 2,
+       "marks": 5,
+       "q": "Write an invitation letter (about 120 words) to a professor to be chief guest at a seminar on 15 Feb.",
+       "model_answer_md": "Dr. Anita Rao\nSecretary, Seminar Committee\nABC Institute of Technology, Pune\n\n2 February 2025\n\nProf. R. K. Mehta\nDepartment of Physics, IIT Bombay\n\n**Subject: Invitation to be Chief Guest, Seminar on Renewable Energy, 15 Feb 2025**\n\nDear Prof. Mehta,\n\nWe are organising a one-day seminar on Renewable Energy on 15 February 2025 at 10 am in the college auditorium. Your work on solar cells would inspire our students, and we would be honoured if you would be our chief guest. Travel and stay will be arranged by us. Kindly confirm by 8 February.\n\nYours sincerely,\nDr. Anita Rao",
+       "points": [
+        "Event, date, venue",
+        "Reason for invitation",
+        "Confirmation date",
+        "Format"
+       ]
+      },
+      {
+       "id": "bu-p1",
+       "pyq": "084aab9471318bbb",
+       "level": 2,
+       "points": [
+        "Sender block and date",
+        "Event: conference on 20 July 2022 at Hotel Elite",
+        "Invite as guest/speaker with reason",
+        "Request to confirm by a date; yours sincerely"
+       ]
+      },
+      {
+       "id": "bu-p2",
+       "pyq": "9674e2f7ae208f38",
+       "level": 3,
+       "points": [
+        "Reference number, date, to participants, subject",
+        "Welcome and about 200 participants from academia, research and industry",
+        "Themes as numbered list: biotechnology, energy, telecom, appropriate technology, 21st-century education",
+        "Enclosures, confirmation deadline, yours sincerely"
+       ]
+      },
+      {
+       "id": "bu-p3",
+       "pyq": "ef84891dfd8943fc",
+       "level": 3,
+       "points": [
+        "Refer to the hotel's confirmation letter",
+        "Changes: rooms, hall, meals, dates, transport as numbered points",
+        "Request for reply and revised quotation by a date",
+        "Formal business format"
+       ]
+      }
+     ]
+    },
+    {
+     "id": "resume",
+     "title": "Functional resume and covering letter",
+     "theory_md": "A **resume** (CV): short, one or two pages, for a particular job.\n\n**Functional resume**: organised by **skills and achievements** (project management, sales, communication) rather than by dates of jobs; useful for career changers or freshers. Sections: name and contact, career objective, key skills/achievements grouped under headings, work experience (brief), education, certifications, personal details, references, declaration.\n\n**Chronological** resume: by dates, newest first. **Covering (application) letter**: refers to the advertisement, highlights relevant qualifications and age/experience matching the advertisement, mentions the enclosed resume, requests an interview.\n\nInvent details to match the advertisement (age, experience).",
+     "basics_md": "A resume is your advertisement. Show what you can do, not the whole story of your life.",
+     "key_points": [
+      "Functional: grouped by skills and achievements",
+      "Sections: objective, skills, experience, education, personal details, references",
+      "Chronological: by dates, newest first",
+      "Covering letter refers to the advertisement, matches the requirements"
+     ],
+     "questions": [
+      {
+       "id": "re-q1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "A functional resume is organised by",
+       "options": [
+        "dates only",
+        "skills and achievements",
+        "family details",
+        "school marks only"
+       ],
+       "answer_index": 1,
+       "why": "Skills first."
+      },
+      {
+       "id": "re-q2",
+       "kind": "mcq",
+       "level": 2,
+       "q": "The covering letter with a resume should",
+       "options": [
+        "repeat the whole resume",
+        "refer to the advertisement and request an interview",
+        "be informal",
+        "omit the post name"
+       ],
+       "answer_index": 1,
+       "why": "It introduces and links to the job."
+      },
+      {
+       "id": "re-q3",
+       "kind": "short",
+       "level": 2,
+       "marks": 3,
+       "q": "Distinguish a functional resume from a chronological resume.",
+       "model_answer_md": "**Functional**: groups achievements under skill headings; dates are secondary; good for freshers.\n**Chronological**: lists jobs and education by date, newest first; shows career growth.",
+       "points": [
+        "Functional defined",
+        "Chronological defined"
+       ]
+      },
+      {
+       "id": "re-p1",
+       "pyq": "4f882cdd00e31d62",
+       "level": 3,
+       "points": [
+        "Name, contact, career objective",
+        "Skills grouped by function: sales, customer relations, market research, communication",
+        "Experience of 2 years, education, age under 28 (invented details)",
+        "Achievements, personal details, references, declaration"
+       ]
+      },
+      {
+       "id": "re-p2",
+       "pyq": "bad56e5834261829",
+       "level": 3,
+       "points": [
+        "Covering letter referring to the advertisement for Project Manager, P.O. Box address",
+        "Invented relevant experience (2 years), age within 28, enclosure",
+        "Functional resume with objective, skill headings, experience, education, personal details, declaration"
+       ]
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "topic": "Report writing",
+   "subtopics": [
+    {
+     "id": "basics",
+     "title": "Reports, memos and formats",
+     "theory_md": "A **report** is a factual, objective, organised account of an event, situation or investigation, for a specific reader.\n\nFormat: **Title**, To/From/Date, **Introduction** (purpose), **Findings/Proceedings** (headed points), **Conclusion**, **Recommendations/Suggestions**, signature.\n\nFormats:\n- **Memorandum (memo)**: short internal document: To, From, Date, Subject, then body.\n- **Letter report**: report in letter form to an outsider or authority.\n- **Newsletter report**: with headline, byline, events described.\n\nStyle: past tense, impersonal, facts and figures, no opinions in findings.",
+     "basics_md": "A report answers: what happened or was found, what it means, what should be done.",
+     "key_points": [
+      "Title, To/From/Date, introduction, findings, conclusion, recommendations",
+      "Memo format: To, From, Date, Subject",
+      "Letter report to authority; newsletter report with byline",
+      "Objective, past tense, facts"
+     ],
+     "questions": [
+      {
+       "id": "rb-q1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "Recommendations in a report come",
+       "options": [
+        "before the title",
+        "after the conclusion/findings",
+        "in the heading",
+        "never"
+       ],
+       "answer_index": 1,
+       "why": "They follow the findings."
+      },
+      {
+       "id": "rb-q2",
+       "kind": "mcq",
+       "level": 2,
+       "q": "A memo is usually",
+       "options": [
+        "a long public document",
+        "a short internal communication",
+        "a love letter",
+        "a newspaper article"
+       ],
+       "answer_index": 1,
+       "why": "Within an organisation."
+      },
+      {
+       "id": "rb-q3",
+       "kind": "short",
+       "level": 2,
+       "marks": 4,
+       "q": "Give the structure of a report in about six points.",
+       "model_answer_md": "1. Title.\n2. To/From/Date.\n3. Introduction (purpose).\n4. Findings or proceedings in headed points.\n5. Conclusion.\n6. Recommendations and signature.",
+       "points": [
+        "Six parts in order"
+       ]
+      },
+      {
+       "id": "rb-p1",
+       "pyq": "75a2ab514c6647d6",
+       "level": 3,
+       "points": [
+        "Memorandum format: To, From, Date, Subject",
+        "Purpose",
+        "Findings: crude oil, inflation, defence, trade and rupee, opportunities",
+        "Conclusion and recommendations; copy to HOD"
+       ]
+      },
+      {
+       "id": "rb-p2",
+       "pyq": "c0509032fbf5863c",
+       "level": 2,
+       "points": [
+        "To Faculty In-charge, from, date",
+        "Introduction and findings: classrooms, timetable, Wi-Fi, seating, hygiene",
+        "Suggestions and conclusion"
+       ]
+      },
+      {
+       "id": "rb-p3",
+       "pyq": "86273276ffa7ddae",
+       "level": 2,
+       "points": [
+        "Report in letter form to the Director",
+        "Introduction and purpose of the festival",
+        "Proceedings: lectures, exhibitions, workshops, quiz",
+        "Participation, observations, conclusion and recommendations; about 400 words"
+       ]
+      }
+     ]
+    },
+    {
+     "id": "event",
+     "title": "Event reports for newsletters",
+     "theory_md": "An **event report** (newsletter or notice board) has: **headline**, **byline** (writer, designation, place, date), an opening paragraph (event, dates, place, participants), body with **headed paragraphs** (inauguration, exhibitions, competitions, workshops, artist night, social initiatives), and a closing paragraph (valedictory, impact).\n\nUse numbers (participants, prizes, volunteers) and the clues given in the question in the same order. Word limit: 300 words. Past tense, third person; keep it lively but factual.",
+     "basics_md": "Report the way a good journalist does: when, where, who, what happened, what came out of it.",
+     "key_points": [
+      "Headline and byline",
+      "Opening: event, date, place, participants",
+      "Headed body paragraphs following the clues",
+      "Closing paragraph; about 300 words"
+     ],
+     "questions": [
+      {
+       "id": "ev-q1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "A newsletter report starts with",
+       "options": [
+        "references",
+        "a headline and byline",
+        "an index",
+        "enclosures"
+       ],
+       "answer_index": 1,
+       "why": "Headline and byline."
+      },
+      {
+       "id": "ev-q2",
+       "kind": "mcq",
+       "level": 2,
+       "q": "The tense of an event report is",
+       "options": [
+        "future",
+        "present continuous",
+        "past",
+        "imperative"
+       ],
+       "answer_index": 2,
+       "why": "The event has already taken place."
+      },
+      {
+       "id": "ev-q3",
+       "kind": "short",
+       "level": 2,
+       "marks": 4,
+       "q": "Give the outline of a 300-word report on a college fest.",
+       "model_answer_md": "Headline; byline. Intro: dates, place, participants. Inauguration. Exhibitions. Competitions. Workshops. Cultural/artist night. Social initiatives. Valedictory and conclusion.",
+       "points": [
+        "Headline and byline",
+        "Body headings",
+        "Conclusion"
+       ]
+      },
+      {
+       "id": "ev-p1",
+       "pyq": "dec677c75e8a2a91",
+       "level": 3,
+       "points": [
+        "Headline and byline as Cultural Secretary",
+        "Volunteers, hours of teaching, location, chairs and blackboards, number attending",
+        "Benefits to learners; closing; about 300 words"
+       ]
+      },
+      {
+       "id": "ev-p2",
+       "pyq": "762557e6e8283d93",
+       "level": 2,
+       "points": [
+        "Headline, byline, date",
+        "Inauguration, exhibitions, competitions, workshops, artist night, social initiatives",
+        "Valedictory; about 300 words"
+       ]
+      },
+      {
+       "id": "ev-p3",
+       "pyq": "60c61fcc065c0fe8",
+       "level": 3,
+       "points": [
+        "Headline, byline, date",
+        "Inauguration, exhibitions, competitions, workshops, artist nights",
+        "Participation and prizes; valedictory; about 300 words"
+       ]
+      }
+     ]
+    },
+    {
+     "id": "data",
+     "title": "Describing charts and graphs",
+     "theory_md": "Write 150 words in 3-4 paragraphs:\n1. **Introduction**: what the chart shows (type, subject, unit).\n2. **Main features**: highest and lowest, biggest difference, trends.\n3. **Comparisons** with figures (percent, ratio, gap).\n4. **Overall** summary.\n\nCompute: gap = difference of two values; ratio = value1/value2; percentage change = (new - old)/old x 100. Always state units. Do not give opinions beyond the data; use language like *largest share*, *by contrast*, *whereas*, *almost equal*.",
+     "basics_md": "Describe what the picture shows, compare the big and small bars, and close with the overall message.",
+     "key_points": [
+      "Introduction, main features, comparisons, overall summary",
+      "Quote numbers with units",
+      "Highest, lowest, gaps, ratios",
+      "Linking words: by contrast, whereas, overall"
+     ],
+     "questions": [
+      {
+       "id": "da-q1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "A data description should",
+       "options": [
+        "give personal opinion",
+        "state what the chart shows and compare features",
+        "skip numbers",
+        "copy every value"
+       ],
+       "answer_index": 1,
+       "why": "Select and compare."
+      },
+      {
+       "id": "da-q2",
+       "kind": "mcq",
+       "level": 2,
+       "q": "Sales rose from 40 to 55 units. The percentage rise is",
+       "options": [
+        "15%",
+        "27.3%",
+        "37.5%",
+        "55%"
+       ],
+       "answer_index": 2,
+       "why": "(55-40)/40 = 37.5%."
+      },
+      {
+       "id": "da-q3",
+       "kind": "numerical",
+       "level": 2,
+       "marks": 4,
+       "q": "In a pie chart Vocabulary is 35%, Reading 30%, Grammar 20%, Writing 10%, Speaking 5%. Calculate and state two comparisons.",
+       "model_answer_md": "Vocabulary + Reading = $35 + 30 = 65\\%$.\nWriting + Speaking = $10 + 5 = 15\\%$, less than Grammar (20%).\nVocabulary is $35/5 = 7$ times Speaking.\n\nVocabulary is the largest share; speaking is the smallest.",
+       "points": [
+        "65% computed",
+        "15% compared with grammar",
+        "Ratio 7"
+       ]
+      },
+      {
+       "id": "da-p1",
+       "pyq": "ac6daeb6c4dd8f3f",
+       "level": 3,
+       "points": [
+        "Introduction: pie chart of textbook tasks",
+        "Vocabulary 35% largest, reading 30%; together 65%",
+        "Writing 10% and speaking 5% small; combined 15% below grammar 20%",
+        "Overall: receptive skills dominate; about 150 words"
+       ]
+      },
+      {
+       "id": "da-p2",
+       "pyq": "f411834cd52c1fd0",
+       "level": 3,
+       "points": [
+        "Introduction: bar chart, reasons for home delivery by gender",
+        "Spontaneous mood largest: women 57.5% vs men 41.2%, gap 16.3 points",
+        "Friends/family gathering: men 17.6% vs women 3.8%; dislike home food almost equal 32.4% and 31.3%",
+        "Overall summary; about 150 words"
+       ]
+      }
+     ]
+    },
+    {
+     "id": "references",
+     "title": "References and bibliography",
+     "theory_md": "**References**: only the sources actually **cited** in the text, in a fixed style (APA, IEEE).\n**Bibliography**: all sources **consulted**, cited or not, may include further reading.\n\nEntry: author, year, title, publisher/journal, URL. In a report, sources appear at the end. Always acknowledge borrowed ideas to avoid plagiarism.",
+     "basics_md": "References are the people you quoted. A bibliography is everyone who helped you think.",
+     "key_points": [
+      "References: cited sources only",
+      "Bibliography: all sources consulted",
+      "Entry: author, year, title, source",
+      "Avoids plagiarism"
+     ],
+     "questions": [
+      {
+       "id": "rf-q1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "Sources actually cited in the text are listed in",
+       "options": [
+        "bibliography only",
+        "references",
+        "index",
+        "preface"
+       ],
+       "answer_index": 1,
+       "why": "References."
+      },
+      {
+       "id": "rf-q2",
+       "kind": "mcq",
+       "level": 2,
+       "q": "A list that includes books read but not cited is a",
+       "options": [
+        "reference list",
+        "bibliography",
+        "glossary",
+        "abstract"
+       ],
+       "answer_index": 1,
+       "why": "Bibliography."
+      },
+      {
+       "id": "rf-q3",
+       "kind": "short",
+       "level": 1,
+       "marks": 2,
+       "q": "Differentiate references and bibliography.",
+       "model_answer_md": "**References**: sources cited in the text.\n**Bibliography**: all sources consulted, whether cited or not.",
+       "points": [
+        "References defined",
+        "Bibliography defined"
+       ]
+      },
+      {
+       "id": "rf-p1",
+       "pyq": "68993d061ab4622e",
+       "level": 1,
+       "points": [
+        "References: only sources cited in text, fixed style",
+        "Bibliography: all sources consulted, cited or not, may include further reading"
+       ]
+      }
+     ]
+    }
+   ]
+  }
+ ]
+}

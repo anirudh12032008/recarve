@@ -1,0 +1,1507 @@
+{
+ "code": "PY1102",
+ "unit": "Solid State and Semiconductor Physics",
+ "written": "2026-10-19",
+ "by": "claude-sonnet-5-5, in a Claude Code session",
+ "topics": [
+  {
+   "topic": "Energy bands in solids",
+   "subtopics": [
+    {
+     "id": "bands",
+     "title": "Energy bands and the classification of solids",
+     "theory_md": "In a crystal the energy levels of the atoms broaden into **bands**. The **valence band** (VB) is the highest filled band, the **conduction band** (CB) lies above it, and the gap between them is the **forbidden gap** $E_g$.\n\n- **Metal**: bands overlap or the CB is partly filled, so free electrons are always available.\n- **Insulator**: VB full, CB empty, $E_g > 3$ eV (diamond 5.4 eV).\n- **Semiconductor**: same picture with a small gap: Ge 0.7 eV, Si 1.1 eV.\n\nAt $T=0$ K a semiconductor has a full VB and an empty CB, so it is an insulator. As $T$ rises, electrons jump to the CB leaving **holes** in the VB; conductivity rises with $T$ (a metal's falls). **Intrinsic** = pure; **extrinsic** = doped (donors give n-type, acceptors give p-type).",
+     "basics_md": "Electrons in a full band are like people in a packed lift: nobody can move because there is no empty space. Free a few places (excite electrons across the gap) and movement becomes possible.",
+     "key_points": [
+      "Bands: VB, CB, forbidden gap $E_g$ (Ge 0.7 eV, Si 1.1 eV)",
+      "Metal: overlapping or partly filled band; insulator: large gap; semiconductor: small gap",
+      "At 0 K a semiconductor has a full VB and empty CB, so it does not conduct",
+      "Conductivity of a semiconductor rises with temperature"
+     ],
+     "figures": [],
+     "questions": [
+      {
+       "id": "b-q1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "The forbidden gap of silicon at room temperature is about",
+       "options": [
+        "0.1 eV",
+        "0.7 eV",
+        "1.1 eV",
+        "5.4 eV"
+       ],
+       "answer_index": 2,
+       "why": "Si 1.1 eV, Ge 0.7 eV, diamond 5.4 eV."
+      },
+      {
+       "id": "b-q2",
+       "kind": "mcq",
+       "level": 1,
+       "q": "On heating, the conductivity of a pure semiconductor",
+       "options": [
+        "decreases, as in a metal",
+        "increases, as more electron-hole pairs form",
+        "stays constant",
+        "falls to zero"
+       ],
+       "answer_index": 1,
+       "why": "More electrons cross the gap; the rise in carrier number beats the fall in mobility."
+      },
+      {
+       "id": "b-q3",
+       "kind": "short",
+       "level": 2,
+       "marks": 3,
+       "q": "Distinguish metals, semiconductors and insulators on the basis of the band picture.",
+       "model_answer_md": "| Solid | Band picture | $E_g$ |\n|---|---|---|\n| Metal | CB partly filled or overlapping the VB; free electrons always present | none |\n| Semiconductor | VB full, CB empty at 0 K, narrow gap; carriers created by thermal excitation | about 0.7 to 1.1 eV |\n| Insulator | VB full, CB empty, wide gap; no carriers at ordinary temperature | above 3 eV |\n\nOnly the metal conducts at 0 K; the semiconductor's conductivity rises with $T$.",
+       "points": [
+        "Metal: partly filled or overlapping bands",
+        "Semiconductor: small gap, about 1 eV",
+        "Insulator: large gap, above 3 eV",
+        "Band diagrams or table clearly contrasted"
+       ]
+      },
+      {
+       "id": "b-p1",
+       "pyq": "b6b5e131cf1e5650",
+       "level": 1,
+       "points": [
+        "At 0 K the VB is completely full and the CB completely empty",
+        "No vacant states in the VB and no thermal energy to cross $E_g$",
+        "No carriers in the CB, so conductivity is zero: it behaves as an insulator",
+        "At $T>0$ electrons are excited across the gap and it conducts"
+       ]
+      }
+     ]
+    },
+    {
+     "id": "fermi-dirac",
+     "title": "Fermi-Dirac function and Fermi energy",
+     "theory_md": "The probability that a state of energy $E$ is occupied is\n$$f(E)=\\frac{1}{1+e^{(E-E_F)/k_BT}}$$\n- $T=0$: a **step**, $f=1$ for $E<E_F$ and $f=0$ for $E>E_F$.\n- $T>0$: the step is rounded over about $k_BT$ around $E_F$; **$f(E_F)=\\tfrac12$ at every $T$**. Higher $T$ means more smearing.\n- For $E-E_F\\gg k_BT$: $f\\approx e^{-(E-E_F)/k_BT}$.\n\n**Fermi energy** $E_F$: the energy of the highest occupied state at $T=0$ K (the level where $f=\\tfrac12$ at any $T$). For free electrons $E_F=\\frac{h^2}{8m}\\left(\\frac{3n}{\\pi}\\right)^{2/3}$.\n\nNumericals: $k_B=8.617\\times10^{-5}$ eV/K, so $k_BT=0.0259$ eV at 300 K. Solve $\\frac{E-E_F}{k_BT}=\\ln\\!\\left(\\frac1f-1\\right)$.",
+     "basics_md": "Think of seats filling up from the front row at 0 K. Warming lets some people near the boundary row stand up and take a back seat, so the sharp edge blurs.",
+     "key_points": [
+      "$f(E)=1/(1+e^{(E-E_F)/kT})$, probability of occupation",
+      "At 0 K a step at $E_F$; at $T>0$ rounded, with $f(E_F)=\\frac12$",
+      "$E_F$ = highest occupied energy at 0 K",
+      "Numericals: use $\\ln(1/f-1)=(E-E_F)/kT$ with $k=8.617\\times10^{-5}$ eV/K"
+     ],
+     "figures": [],
+     "questions": [
+      {
+       "id": "fd-q1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "For any temperature above 0 K, the occupation probability at $E=E_F$ is",
+       "options": [
+        "0",
+        "1/4",
+        "1/2",
+        "1"
+       ],
+       "answer_index": 2,
+       "why": "$e^0=1$ so $f=1/2$."
+      },
+      {
+       "id": "fd-q2",
+       "kind": "mcq",
+       "level": 1,
+       "q": "At $T=0$ K, a state with $E>E_F$ has occupation probability",
+       "options": [
+        "0",
+        "1/2",
+        "1",
+        "depends on $E$"
+       ],
+       "answer_index": 0,
+       "why": "The distribution is a step: empty above $E_F$."
+      },
+      {
+       "id": "fd-q3",
+       "kind": "numerical",
+       "level": 2,
+       "marks": 2,
+       "q": "Find the probability that a state 0.1 eV above the Fermi level is occupied at 300 K ($k_B=8.617\\times10^{-5}$ eV/K).",
+       "model_answer_md": "$k_BT=8.617\\times10^{-5}\\times300=0.02585$ eV\n\n$\\dfrac{E-E_F}{k_BT}=\\dfrac{0.1}{0.02585}=3.868$, $e^{3.868}=47.9$\n\n$f=\\dfrac{1}{1+47.9}\\approx0.0205$ (about 2%).",
+       "points": [
+        "$k_BT=0.02585$ eV at 300 K",
+        "Exponent 3.87",
+        "$f\\approx0.020$"
+       ]
+      },
+      {
+       "id": "fd-q4",
+       "kind": "numerical",
+       "level": 3,
+       "marks": 3,
+       "q": "At what temperature is the probability of occupation of a level 0.1 eV above $E_F$ equal to 5%? ($k_B=8.617\\times10^{-5}$ eV/K)",
+       "model_answer_md": "$f=0.05\\Rightarrow e^{x}=\\frac1{0.05}-1=19$, $x=\\ln19=2.944$\n\n$k_BT=\\dfrac{0.1}{2.944}=0.03397$ eV\n\n$T=\\dfrac{0.03397}{8.617\\times10^{-5}}\\approx394$ K.",
+       "points": [
+        "$e^x=19$, $x=2.944$",
+        "$k_BT=0.0340$ eV",
+        "$T\\approx394$ K"
+       ]
+      },
+      {
+       "id": "fd-p1",
+       "pyq": "5ded9248afea0bbb",
+       "level": 2,
+       "points": [
+        "$f(E)=\\frac{1}{1+e^{(E-E_F)/kT}}$",
+        "Plot at 0 K: step, $f=1$ up to $E_F$, then $0$",
+        "Fermi energy: highest occupied level at 0 K, where $f=\\frac12$ at any $T$"
+       ]
+      },
+      {
+       "id": "fd-p2",
+       "pyq": "1ee7f1e98c06b5f9",
+       "level": 2,
+       "points": [
+        "FD function written (1 mark)",
+        "Plot: step at 0 K; for $T_1>T_2>T_3$ curves rounded, all through $f=\\frac12$ at $E_F$, smearing largest for $T_1$ (1 mark)",
+        "Fermi energy defined (1 mark)"
+       ]
+      },
+      {
+       "id": "fd-p3",
+       "pyq": "a7bd9b840d68975a",
+       "level": 1,
+       "points": [
+        "Highest occupied energy level at $T=0$ K",
+        "All levels below filled, above empty; $f(E_F)=\\frac12$ at any $T$"
+       ]
+      },
+      {
+       "id": "fd-p4",
+       "pyq": "f675fac5d05ed3cf",
+       "level": 2,
+       "points": [
+        "$E-E_F=1.5$ eV, $k_BT$ at 1000 K",
+        "$(E-E_F)/k_BT\\approx17.4$",
+        "$f=1/(1+e^{17.4})\\approx2.8\\times10^{-8}$ (about $2.75\\times10^{-8}$ with $k_B=8.617\\times10^{-5}$)"
+       ]
+      },
+      {
+       "id": "fd-p5",
+       "pyq": "b219bb5ee1a26dd3",
+       "level": 3,
+       "points": [
+        "$f=0.01\\Rightarrow e^{x}=99$, $x=\\ln99=4.595$",
+        "$k_BT=0.5/4.595=0.1088$ eV",
+        "$T\\approx1.26\\times10^3$ K"
+       ]
+      },
+      {
+       "id": "fd-p6",
+       "pyq": "7101386a3fa0d6b8",
+       "level": 2,
+       "points": [
+        "$f=0.75\\Rightarrow e^{(E-E_F)/kT}=\\frac13$",
+        "$E-E_F=-kT\\ln3$ with $kT=0.02585$ eV gives $-0.0284$ eV",
+        "$E\\approx3.10$ eV, slightly below $E_F$ since $f>0.5$"
+       ]
+      },
+      {
+       "id": "fd-p7",
+       "pyq": "3893623491e814f5",
+       "level": 2,
+       "points": [
+        "$e^{(E-E_F)/kT}=\\frac1{0.75}-1=\\frac13$",
+        "$E-E_F=-0.0284$ eV",
+        "$E\\approx3.10$ eV"
+       ]
+      }
+     ]
+    },
+    {
+     "id": "intrinsic-conc",
+     "title": "Carrier concentration in an intrinsic semiconductor",
+     "theory_md": "For $E-E_F\\gg k_BT$ the FD function reduces to $e^{-(E-E_F)/kT}$. With density of states $g(E)=\\frac{4\\pi}{h^3}(2m_e^*)^{3/2}\\sqrt{E-E_c}$:\n$$n=\\int_{E_c}^{\\infty}g(E)f(E)\\,dE=N_c\\,e^{-(E_c-E_F)/kT},\\quad N_c=2\\left(\\frac{2\\pi m_e^*kT}{h^2}\\right)^{3/2}$$\nusing $\\int_0^\\infty x^{1/2}e^{-x/kT}dx=\\frac{\\sqrt\\pi}{2}(kT)^{3/2}$. Similarly $p=N_v\\,e^{-(E_F-E_v)/kT}$ with $m_h^*$.\n\nIntrinsic: $n=p=n_i$, so\n$$n_i=\\sqrt{N_cN_v}\\,e^{-E_g/2kT}=2\\left(\\frac{2\\pi kT}{h^2}\\right)^{3/2}(m_e^*m_h^*)^{3/4}e^{-E_g/2kT}$$\n$n_i$ rises steeply with $T$ and falls with $E_g$. Numerically take $m^*=m=9.109\\times10^{-31}$ kg unless told otherwise.",
+     "basics_md": "The number of electrons in the CB is (number of available states) times (probability each is filled). The probability is tiny and drops exponentially with the gap, which is why only a trickle of carriers exists.",
+     "key_points": [
+      "$n=N_c e^{-(E_c-E_F)/kT}$ from $\\int g(E)f(E)dE$, with $g\\propto\\sqrt{E-E_c}$",
+      "$p=N_v e^{-(E_F-E_v)/kT}$",
+      "$n=p=n_i$ gives $n_i\\propto T^{3/2}e^{-E_g/2kT}$",
+      "Numericals: compute $kT$ in joules, then $N_c$, then the exponential"
+     ],
+     "figures": [],
+     "questions": [
+      {
+       "id": "ic-q1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "In an intrinsic semiconductor the electron and hole concentrations satisfy",
+       "options": [
+        "$n>p$",
+        "$n<p$",
+        "$n=p=n_i$",
+        "$n=p=0$"
+       ],
+       "answer_index": 2,
+       "why": "Each electron in the CB leaves a hole in the VB."
+      },
+      {
+       "id": "ic-q2",
+       "kind": "mcq",
+       "level": 1,
+       "q": "The intrinsic carrier density varies with temperature approximately as",
+       "options": [
+        "$T^{-1}$",
+        "$T$",
+        "$T^{3/2}e^{-E_g/2kT}$",
+        "constant"
+       ],
+       "answer_index": 2,
+       "why": "$N_c N_v\\propto T^3$ and the exponential gives the steep rise."
+      },
+      {
+       "id": "ic-q3",
+       "kind": "short",
+       "level": 3,
+       "marks": 5,
+       "q": "Derive the expression for the concentration of electrons in the conduction band of an intrinsic semiconductor.",
+       "model_answer_md": "**Step 1: density of states.** Electrons in the CB: $g(E)\\,dE=\\dfrac{4\\pi}{h^3}(2m_e^*)^{3/2}(E-E_c)^{1/2}dE$.\n\n**Step 2: occupation.** For $E-E_F\\gg kT$: $f(E)\\approx e^{-(E-E_F)/kT}$.\n\n**Step 3: integrate.**\n$$n=\\frac{4\\pi(2m_e^*)^{3/2}}{h^3}e^{-(E_c-E_F)/kT}\\int_0^\\infty x^{1/2}e^{-x/kT}dx,\\ x=E-E_c$$\nWith the integral $=\\frac{\\sqrt\\pi}{2}(kT)^{3/2}$:\n$$n=2\\left(\\frac{2\\pi m_e^*kT}{h^2}\\right)^{3/2}e^{-(E_c-E_F)/kT}=N_ce^{-(E_c-E_F)/kT}$$\n**Step 4:** with $E_F\\approx(E_c+E_v)/2$, $n=p=n_i\\propto e^{-E_g/2kT}$.",
+       "points": [
+        "$g(E)\\propto(E-E_c)^{1/2}$ stated",
+        "$f\\approx e^{-(E-E_F)/kT}$ approximation",
+        "Integral evaluated with $\\frac{\\sqrt\\pi}{2}(kT)^{3/2}$",
+        "Final $n=N_ce^{-(E_c-E_F)/kT}$ and $n_i$ result"
+       ]
+      },
+      {
+       "id": "ic-q4",
+       "kind": "numerical",
+       "level": 3,
+       "marks": 3,
+       "q": "Silicon has $E_g=1.1$ eV. Taking $n_i\\propto T^{3/2}e^{-E_g/2kT}$, find the ratio $n_i(400\\ \\mathrm{K})/n_i(300\\ \\mathrm{K})$. ($k_B=8.617\\times10^{-5}$ eV/K)",
+       "model_answer_md": "$\\dfrac{n_i(400)}{n_i(300)}=\\left(\\dfrac{400}{300}\\right)^{3/2}\\exp\\!\\left[-\\dfrac{E_g}{2k_B}\\left(\\dfrac1{400}-\\dfrac1{300}\\right)\\right]$\n\n$\\left(\\frac43\\right)^{3/2}=1.540$\n\nExponent: $\\dfrac{1.1}{2\\times8.617\\times10^{-5}}=6383$ K, times $\\left(\\frac1{300}-\\frac1{400}\\right)=8.33\\times10^{-4}$ gives $5.319$, $e^{5.319}=204$\n\nRatio $=1.540\\times204\\approx3.1\\times10^{2}$.",
+       "points": [
+        "Uses ratio form of $n_i$",
+        "$T^{3/2}$ factor 1.54",
+        "Exponential factor about 204",
+        "Ratio about 314"
+       ]
+      },
+      {
+       "id": "ic-p1",
+       "pyq": "87ab0585feba1814",
+       "level": 3,
+       "points": [
+        "Density of states $g_c(E)$ and $f\\approx e^{-(E-E_F)/kT}$",
+        "$n=N_ce^{-(E_c-E_F)/kT}$ with $N_c=2(2\\pi m_e^*kT/h^2)^{3/2}$ after integrating",
+        "$p=N_ve^{-(E_F-E_v)/kT}$ and $n=p=n_i$",
+        "$E_F=\\frac{E_c+E_v}{2}+\\frac{3kT}{4}\\ln\\frac{m_h^*}{m_e^*}$: middle of the gap"
+       ]
+      },
+      {
+       "id": "ic-p2",
+       "pyq": "899b87b3f84e76e7",
+       "level": 3,
+       "points": [
+        "FD function defined with $E_F$ meaning ($f=\\frac12$ at $E_F$)",
+        "Integral $\\int g_c f\\,dE$ with $g_c\\propto\\sqrt{E-E_c}$",
+        "$n=2(2\\pi m_e^*kT/h^2)^{3/2}e^{-(E_c-E_F)/kT}$",
+        "$n_i=2(2\\pi kT/h^2)^{3/2}(m_e^*m_h^*)^{3/4}e^{-E_g/2kT}$"
+       ]
+      },
+      {
+       "id": "ic-p3",
+       "pyq": "588d93564a9b4fa7",
+       "level": 2,
+       "points": [
+        "$g(E)\\propto(E-E_c)^{1/2}$ and $f\\approx e^{-(E-E_F)/kT}$",
+        "Integral gives $n=2(2\\pi m_e^*kT/h^2)^{3/2}e^{-(E_c-E_F)/kT}$",
+        "Intrinsic: $E_c-E_F=E_g/2$ so $n_i\\propto e^{-E_g/2kT}$"
+       ]
+      },
+      {
+       "id": "ic-p4",
+       "pyq": "13ef834e39ba0af4",
+       "level": 2,
+       "points": [
+        "$n=p=n_i=2(2\\pi mkT/h^2)^{3/2}e^{-E_g/2kT}$ with $m_e^*=m_h^*=m$",
+        "$kT=4.14\\times10^{-21}$ J at 300 K; prefactor $2.51\\times10^{25}$ m$^{-3}$",
+        "$E_g/2kT=13.53$, $e^{-13.53}=1.33\\times10^{-6}$",
+        "$n=p\\approx3.3\\times10^{19}$ m$^{-3}$"
+       ]
+      }
+     ]
+    },
+    {
+     "id": "intrinsic-fermi",
+     "title": "Fermi level in an intrinsic semiconductor",
+     "theory_md": "Set $n=p$ for the intrinsic crystal:\n$$(m_e^*)^{3/2}e^{-(E_c-E_F)/kT}=(m_h^*)^{3/2}e^{-(E_F-E_v)/kT}$$\nTake logs and solve:\n$$\\boxed{E_F=\\frac{E_c+E_v}{2}+\\frac{3kT}{4}\\ln\\frac{m_h^*}{m_e^*}}$$\n- If $m_h^*=m_e^*$, or at $T=0$ K, $E_F=\\frac{E_c+E_v}{2}$: **exactly mid-gap**.\n- If $m_h^*\\ne m_e^*$ the shift is linear in $T$ and only a few hundredths of an eV, far less than $E_g/2$, so $E_F$ always lies in the forbidden gap near its middle.\n- Because $m_h^*>m_e^*$ usually, $E_F$ rises slightly with $T$.",
+     "basics_md": "Equal numbers of electrons and holes means the level that splits the two populations evenly sits in the middle of the gap. Unequal effective masses tilt it a little.",
+     "key_points": [
+      "Equate $n=p$ with $N_c e^{-(E_c-E_F)/kT}=N_v e^{-(E_F-E_v)/kT}$",
+      "$E_F=\\frac{E_c+E_v}{2}+\\frac{3kT}{4}\\ln(m_h^*/m_e^*)$",
+      "Mid-gap when $m_h^*=m_e^*$ or $T=0$",
+      "Temperature effect: small linear shift, stays in the gap"
+     ],
+     "figures": [],
+     "questions": [
+      {
+       "id": "if-q1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "In an intrinsic semiconductor at $T=0$ K the Fermi level lies",
+       "options": [
+        "in the valence band",
+        "in the conduction band",
+        "at the middle of the forbidden gap",
+        "at the top of the valence band"
+       ],
+       "answer_index": 2,
+       "why": "The log term vanishes at 0 K."
+      },
+      {
+       "id": "if-q2",
+       "kind": "mcq",
+       "level": 2,
+       "q": "If $m_h^*>m_e^*$, then as temperature rises the intrinsic Fermi level",
+       "options": [
+        "moves down sharply into the VB",
+        "moves slightly above the mid-gap",
+        "jumps to the CB",
+        "stays exactly mid-gap"
+       ],
+       "answer_index": 1,
+       "why": "Shift $=\\frac{3kT}{4}\\ln(m_h^*/m_e^*)$ is positive and small."
+      },
+      {
+       "id": "if-q3",
+       "kind": "numerical",
+       "level": 3,
+       "marks": 3,
+       "q": "For Si, $m_h^*/m_e^*=1.5$ at 300 K. Find how far the intrinsic Fermi level lies from the middle of the gap. ($k_BT=0.02585$ eV)",
+       "model_answer_md": "Shift $=\\dfrac{3}{4}kT\\ln\\dfrac{m_h^*}{m_e^*}=0.75\\times0.02585\\times\\ln1.5$\n\n$\\ln1.5=0.4055$, so shift $=0.75\\times0.02585\\times0.4055=7.9\\times10^{-3}$ eV.\n\nThis is about 8 meV above mid-gap, tiny against $E_g/2=0.55$ eV.",
+       "points": [
+        "Uses $\\frac{3kT}{4}\\ln(m_h^*/m_e^*)$",
+        "$\\ln1.5=0.4055$",
+        "Shift about 0.0079 eV above mid-gap"
+       ]
+      },
+      {
+       "id": "if-p1",
+       "pyq": "c7e5c694218b4463",
+       "level": 3,
+       "points": [
+        "Fermi energy defined (1 mark)",
+        "$n$ and $p$ expressions, $n=p$ and logs",
+        "$E_F=\\frac{E_c+E_v}{2}+\\frac{3kT}{4}\\ln\\frac{m_h^*}{m_e^*}$",
+        "Lies between the bands, mid-gap if $m_h^*=m_e^*$; correction small"
+       ]
+      },
+      {
+       "id": "if-p2",
+       "pyq": "fe27fc44cf855410",
+       "level": 3,
+       "points": [
+        "$E_F$: highest occupied level at 0 K; $f=\\frac12$ at any $T$",
+        "$n=N_ce^{-(E_c-E_F)/kT}$, $p=N_ve^{-(E_F-E_v)/kT}$",
+        "$n=p$ and logarithms give $E_F=\\frac{E_c+E_v}{2}+\\frac34kT\\ln\\frac{m_h^*}{m_e^*}$",
+        "Middle of the forbidden gap when $m_h^*=m_e^*$"
+       ]
+      },
+      {
+       "id": "if-p3",
+       "pyq": "3e0eeade5364297a",
+       "level": 3,
+       "points": [
+        "Fermi level defined: $f=\\frac12$ at $E_F$",
+        "$n=p$ gives $e^{(2E_F-E_c-E_v)/kT}=(m_h^*/m_e^*)^{3/2}$",
+        "$E_F=\\frac{E_c+E_v}{2}$ for $m_h^*\\approx m_e^*$: middle of the gap"
+       ]
+      },
+      {
+       "id": "if-p4",
+       "pyq": "21579d8a48e6797f",
+       "level": 3,
+       "points": [
+        "Fermi level definition",
+        "Derivation of $E_F$ from $n=p$",
+        "Temperature effect: mid-gap at 0 K; slight linear rise with $T$ if $m_h^*>m_e^*$, none if masses equal"
+       ]
+      }
+     ]
+    },
+    {
+     "id": "extrinsic",
+     "title": "Doped semiconductors: Fermi level and mass action",
+     "theory_md": "**n-type**: donors (group V: P, As) add a level $E_d$ just below $E_c$; $n\\approx N_D$ (majority electrons).\n**p-type**: acceptors (group III: B, Al) add a level $E_a$ just above $E_v$; $p\\approx N_A$.\n\n**Law of mass action**: $np=n_i^2$ at a given $T$, so minority carriers $p=n_i^2/n$.\n\nFermi level: $E_F=E_i+kT\\ln(n/n_i)$ for n-type, $E_F=E_i-kT\\ln(p/n_i)$ for p-type. So $E_F$ moves **towards the CB for n-type** and **towards the VB for p-type**; at 0 K it lies midway between $E_d$ and $E_c$ (n) or $E_v$ and $E_a$ (p). At high $T$ the crystal turns intrinsic again and $E_F$ returns to mid-gap.",
+     "basics_md": "Doping adds many of one kind of carrier, so the level that balances electrons against holes must move towards the side with more carriers.",
+     "key_points": [
+      "Donor level just below CB (n-type), acceptor level just above VB (p-type)",
+      "$np=n_i^2$ (mass action)",
+      "$E_F$ shifts toward CB in n-type and toward VB in p-type",
+      "At high temperature the extrinsic crystal becomes intrinsic"
+     ],
+     "figures": [],
+     "questions": [
+      {
+       "id": "ex-q1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "In a p-type semiconductor the Fermi level lies",
+       "options": [
+        "near the CB",
+        "mid-gap",
+        "near the VB, below the mid-gap",
+        "inside the CB"
+       ],
+       "answer_index": 2,
+       "why": "Holes are the majority carriers, so $E_F$ shifts toward the VB."
+      },
+      {
+       "id": "ex-q2",
+       "kind": "mcq",
+       "level": 1,
+       "q": "The law of mass action states",
+       "options": [
+        "$n+p=n_i$",
+        "$np=n_i^2$",
+        "$n=p^2$",
+        "$n-p=N_D$"
+       ],
+       "answer_index": 1,
+       "why": "Product of $n$ and $p$ is fixed by temperature."
+      },
+      {
+       "id": "ex-q3",
+       "kind": "numerical",
+       "level": 2,
+       "marks": 3,
+       "q": "Silicon is doped with $N_D=10^{22}$ m$^{-3}$ donors; $n_i=1.5\\times10^{16}$ m$^{-3}$ at 300 K. Find the hole concentration and the shift of the Fermi level above the intrinsic level. ($k_BT=0.0259$ eV)",
+       "model_answer_md": "$n\\approx N_D=10^{22}$ m$^{-3}$\n\n$p=\\dfrac{n_i^2}{n}=\\dfrac{(1.5\\times10^{16})^2}{10^{22}}=2.25\\times10^{10}$ m$^{-3}$\n\n$E_F-E_i=kT\\ln\\dfrac{n}{n_i}=0.0259\\times\\ln(6.67\\times10^5)=0.0259\\times13.41=0.347$ eV above $E_i$ (towards the CB).",
+       "points": [
+        "$n\\approx N_D$",
+        "$p=n_i^2/n=2.25\\times10^{10}$ m$^{-3}$",
+        "$E_F-E_i=kT\\ln(n/n_i)\\approx0.347$ eV"
+       ]
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "topic": "Electron and hole mobility",
+   "subtopics": [
+    {
+     "id": "drift-mobility",
+     "title": "Drift velocity and mobility",
+     "theory_md": "Under a field $E$ carriers drift with **drift velocity** $v_d=\\mu E$. The **mobility** $\\mu=v_d/E=\\dfrac{q\\tau}{m^*}$ is the drift velocity per unit field; unit m$^2$/V s ($1\\ \\mathrm{m^2/Vs}=10^4\\ \\mathrm{cm^2/Vs}$).\n\nCurrent density $J=nqv_d=nq\\mu E$.\n\nTypical values (m$^2$/V s): Ge $\\mu_e=0.39$, $\\mu_h=0.19$; Si $\\mu_e=0.135$, $\\mu_h=0.048$. Electrons are more mobile than holes (smaller effective mass). Mobility **falls** with temperature (lattice scattering, $\\mu\\propto T^{-3/2}$) and with doping (impurity scattering).",
+     "basics_md": "A carrier is pushed by the field but keeps bumping into the lattice, so it settles at a steady average speed. Mobility says how quickly that average speed grows with the push.",
+     "key_points": [
+      "$v_d=\\mu E$, $\\mu=q\\tau/m^*$, unit m$^2$/Vs",
+      "$J=nq\\mu E$",
+      "$\\mu_e>\\mu_h$ (lighter effective mass)",
+      "Mobility decreases with temperature and doping (scattering)"
+     ],
+     "figures": [],
+     "questions": [
+      {
+       "id": "dm-q1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "The SI unit of mobility is",
+       "options": [
+        "m/s",
+        "V/m",
+        "m$^2$/V s",
+        "A/m$^2$"
+       ],
+       "answer_index": 2,
+       "why": "$\\mu=v_d/E$: (m/s)/(V/m)."
+      },
+      {
+       "id": "dm-q2",
+       "kind": "mcq",
+       "level": 1,
+       "q": "Electron mobility in a semiconductor is usually larger than hole mobility because",
+       "options": [
+        "electrons have more charge",
+        "electrons have smaller effective mass",
+        "holes are not real particles",
+        "electrons are heavier"
+       ],
+       "answer_index": 1,
+       "why": "$\\mu=q\\tau/m^*$."
+      },
+      {
+       "id": "dm-q3",
+       "kind": "short",
+       "level": 2,
+       "marks": 2,
+       "q": "Define drift velocity and mobility and give the relation between them. How does mobility change with temperature?",
+       "model_answer_md": "**Drift velocity** $v_d$: the average velocity a carrier gains along the applied field, in steady state.\n\n**Mobility** $\\mu$: drift velocity per unit electric field, $\\mu=\\dfrac{v_d}{E}=\\dfrac{q\\tau}{m^*}$.\n\nRelation: $v_d=\\mu E$.\n\nMobility decreases as temperature rises because lattice scattering shortens $\\tau$.",
+       "points": [
+        "Drift velocity defined",
+        "$\\mu=v_d/E$ and $v_d=\\mu E$",
+        "Decreases with $T$ (scattering)"
+       ]
+      },
+      {
+       "id": "dm-q4",
+       "kind": "numerical",
+       "level": 2,
+       "marks": 2,
+       "q": "Find the drift velocity of electrons in Ge ($\\mu_e=0.39$ m$^2$/Vs) in a field of 100 V/m, and the mobility if electrons drift at 70 m/s in 500 V/m.",
+       "model_answer_md": "$v_d=\\mu E=0.39\\times100=39$ m/s.\n\n$\\mu=\\dfrac{v_d}{E}=\\dfrac{70}{500}=0.14$ m$^2$/V s.",
+       "points": [
+        "$v_d=\\mu E=39$ m/s",
+        "$\\mu=v_d/E=0.14$ m$^2$/Vs"
+       ]
+      }
+     ]
+    },
+    {
+     "id": "conductivity",
+     "title": "Conductivity and resistivity of semiconductors",
+     "theory_md": "Total conductivity: $\\sigma=q(n\\mu_e+p\\mu_h)$, and $\\rho=1/\\sigma$.\n- Intrinsic: $n=p=n_i$, $\\sigma=n_iq(\\mu_e+\\mu_h)$.\n- n-type: $\\sigma\\approx N_Dq\\mu_e$. p-type: $\\sigma\\approx N_Aq\\mu_h$ (the minority term is negligible since $p\\ll n$ or $n\\ll p$).\n\n**Convert units first**: cm$^{-3}$ to m$^{-3}$ is $\\times10^6$; cm$^2$/Vs to m$^2$/Vs is $\\times10^{-4}$. Resistivity: $\\Omega\\,\\mathrm{cm}=10^{-2}\\ \\Omega\\,\\mathrm{m}$.",
+     "basics_md": "Every free charge adds to the current. So conductivity is just (charge) times (how many) times (how easily each moves), added for electrons and holes.",
+     "key_points": [
+      "$\\sigma=q(n\\mu_e+p\\mu_h)$, $\\rho=1/\\sigma$",
+      "p-type: $\\sigma\\approx pq\\mu_h$ with $p\\approx N_A$",
+      "Intrinsic: $\\sigma=n_iq(\\mu_e+\\mu_h)$",
+      "Check units: cm to m conversions, unit of $\\rho$"
+     ],
+     "figures": [],
+     "questions": [
+      {
+       "id": "cd-q1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "The conductivity of a p-type semiconductor is mainly",
+       "options": [
+        "$nq\\mu_e$",
+        "$pq\\mu_h$",
+        "$q(\\mu_e-\\mu_h)$",
+        "$n_i/q$"
+       ],
+       "answer_index": 1,
+       "why": "Holes are the majority carriers."
+      },
+      {
+       "id": "cd-q2",
+       "kind": "mcq",
+       "level": 1,
+       "q": "Resistivity of a semiconductor is",
+       "options": [
+        "$\\sigma$",
+        "$1/\\sigma$",
+        "$\\sigma q$",
+        "$\\sigma/n$"
+       ],
+       "answer_index": 1,
+       "why": "$\\rho=1/\\sigma$."
+      },
+      {
+       "id": "cd-q3",
+       "kind": "numerical",
+       "level": 2,
+       "marks": 3,
+       "q": "n-type silicon has $N_D=10^{21}$ m$^{-3}$ and $\\mu_e=0.14$ m$^2$/Vs. Find its resistivity.",
+       "model_answer_md": "$\\sigma\\approx N_Dq\\mu_e=10^{21}\\times1.6\\times10^{-19}\\times0.14=22.4\\ (\\Omega\\,\\mathrm m)^{-1}$\n\n$\\rho=\\dfrac1\\sigma=\\dfrac{1}{22.4}=0.0446\\ \\Omega\\,\\mathrm m$ ($=4.46\\ \\Omega\\,\\mathrm{cm}$).",
+       "points": [
+        "$\\sigma=nq\\mu_e=22.4$ S/m",
+        "$\\rho=1/\\sigma=0.0446\\ \\Omega$ m"
+       ]
+      },
+      {
+       "id": "cd-q4",
+       "kind": "numerical",
+       "level": 3,
+       "marks": 3,
+       "q": "Intrinsic Ge has $n_i=2.4\\times10^{19}$ m$^{-3}$, $\\mu_e=0.39$ and $\\mu_h=0.19$ m$^2$/Vs. Find $\\sigma$ and $\\rho$.",
+       "model_answer_md": "$\\sigma=n_iq(\\mu_e+\\mu_h)=2.4\\times10^{19}\\times1.6\\times10^{-19}\\times0.58=2.23\\ \\mathrm{S/m}$\n\n$\\rho=\\dfrac{1}{2.23}=0.449\\ \\Omega\\,\\mathrm m$.",
+       "points": [
+        "Both carriers counted",
+        "$\\sigma=2.23$ S/m",
+        "$\\rho=0.449\\ \\Omega$ m"
+       ]
+      },
+      {
+       "id": "cd-p1",
+       "pyq": "08d5c34a2298f846",
+       "level": 2,
+       "points": [
+        "$p\\approx N_A=10^{15}$ cm$^{-3}$ for acceptor doping; electron term negligible",
+        "$\\sigma=pq\\mu_p=10^{15}\\times1.6\\times10^{-19}\\times1800=0.288\\ (\\Omega\\,\\mathrm{cm})^{-1}$",
+        "$\\rho=1/\\sigma=3.47\\ \\Omega\\,\\mathrm{cm}\\approx3.5\\times10^{-2}\\ \\Omega\\,\\mathrm m$"
+       ]
+      }
+     ]
+    },
+    {
+     "id": "diffusion-einstein",
+     "title": "Diffusion current and the Einstein relation",
+     "theory_md": "Carriers also move by **diffusion** from high to low concentration. Diffusion current density (electrons): $J_n=qD_n\\dfrac{dn}{dx}$; holes: $J_p=-qD_p\\dfrac{dp}{dx}$, with $D$ the diffusion coefficient (m$^2$/s).\n\n**Einstein relation** connecting the two transport processes:\n$$\\frac{D}{\\mu}=\\frac{k_BT}{q}$$\nAt 300 K $k_BT/q=0.0259$ V (the **thermal voltage**). Total current in a semiconductor = drift + diffusion.",
+     "basics_md": "Drift is a push by a field; diffusion is a spreading out from a crowded region. Both are caused by random thermal motion, so $D$ and $\\mu$ are tied together by temperature.",
+     "key_points": [
+      "Diffusion current $\\propto$ concentration gradient",
+      "Einstein relation $D/\\mu=k_BT/q$",
+      "Thermal voltage 0.0259 V at 300 K",
+      "Total current = drift + diffusion"
+     ],
+     "figures": [],
+     "questions": [
+      {
+       "id": "de-q1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "The Einstein relation is",
+       "options": [
+        "$D=\\mu qE$",
+        "$D/\\mu=k_BT/q$",
+        "$D\\mu=k_BT$",
+        "$D=\\mu/T$"
+       ],
+       "answer_index": 1,
+       "why": "Ratio of diffusion coefficient to mobility is the thermal voltage."
+      },
+      {
+       "id": "de-q2",
+       "kind": "mcq",
+       "level": 1,
+       "q": "Diffusion current arises because of",
+       "options": [
+        "an electric field",
+        "a concentration gradient",
+        "a magnetic field",
+        "light"
+       ],
+       "answer_index": 1,
+       "why": "Carriers flow from high to low concentration."
+      },
+      {
+       "id": "de-q3",
+       "kind": "numerical",
+       "level": 2,
+       "marks": 2,
+       "q": "Find the diffusion coefficient of electrons in Ge at 300 K if $\\mu_e=0.39$ m$^2$/Vs. ($k_BT/q=0.0259$ V)",
+       "model_answer_md": "$D=\\mu\\dfrac{k_BT}{q}=0.39\\times0.0259=1.01\\times10^{-2}\\ \\mathrm{m^2/s}$.",
+       "points": [
+        "Einstein relation used",
+        "$D\\approx1.0\\times10^{-2}$ m$^2$/s"
+       ]
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "topic": "Hall effect",
+   "subtopics": [
+    {
+     "id": "hall-effect",
+     "title": "Hall effect: derivation, sign and applications",
+     "theory_md": "A current $I$ along $x$ in a slab, with field $B$ along $z$ (perpendicular to $I$): a transverse **Hall voltage** $V_H$ appears across the faces perpendicular to both.\n\nDerivation: the magnetic force $qv_dB$ piles charge on one face until the Hall field balances it, $qE_H=qv_dB$, with $J=nqv_d$:\n$$E_H=\\frac{JB}{nq},\\quad R_H=\\frac{E_H}{JB}=\\frac{1}{nq},\\quad V_H=\\frac{IB}{nqt}=\\frac{R_HIB}{t}$$\n($t$ = dimension **along $B$**; width does not appear.)\n\n- Sign: $R_H<0$ for electrons (n-type), $R_H>0$ for holes (p-type).\n- Mobility $\\mu=\\sigma|R_H|$; Hall angle $\\tan\\theta_H=\\mu B$.\n- Uses: type and density of carriers, mobility, measuring $B$ (Hall probe), current sensors.",
+     "basics_md": "A magnet sideways pushes moving charges to one edge. The pile-up makes a voltage across the strip that grows with the field and shrinks with the number of carriers.",
+     "key_points": [
+      "Setup: $I\\perp B$, transverse $V_H$ across the third direction",
+      "Balance $qE_H=qv_dB$ gives $R_H=1/nq$, $V_H=IB/nqt$",
+      "Sign of $R_H$ gives carrier type (negative n-type, positive p-type)",
+      "$\\mu=\\sigma|R_H|$, $\\tan\\theta_H=\\mu B$; applications: carrier type, density, mobility, B-meter"
+     ],
+     "figures": [],
+     "questions": [
+      {
+       "id": "he-q1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "The Hall coefficient of a p-type semiconductor is",
+       "options": [
+        "$-1/ne$",
+        "$+1/pe$",
+        "zero",
+        "$\\mu/\\sigma$"
+       ],
+       "answer_index": 1,
+       "why": "Holes are positive carriers."
+      },
+      {
+       "id": "he-q2",
+       "kind": "mcq",
+       "level": 1,
+       "q": "In $V_H=IB/(nqt)$, $t$ is the dimension of the specimen",
+       "options": [
+        "along the current",
+        "along the magnetic field",
+        "along the Hall voltage, in the width direction",
+        "any one of the three"
+       ],
+       "answer_index": 1,
+       "why": "Along $B$; the width drops out."
+      },
+      {
+       "id": "he-q3",
+       "kind": "short",
+       "level": 2,
+       "marks": 2,
+       "q": "State two applications of the Hall effect and write the relation for the Hall angle.",
+       "model_answer_md": "**Applications:** (1) find whether a semiconductor is n- or p-type and its carrier density $n=IB/(eV_Ht)$; (2) measure a magnetic field with a Hall probe (also mobility, current sensors).\n\n**Hall angle:** $\\tan\\theta_H=\\dfrac{E_H}{E_x}=\\sigma R_HB=\\mu B$.",
+       "points": [
+        "Carrier type and density",
+        "Magnetic field measurement or mobility",
+        "$\\tan\\theta_H=\\mu B$"
+       ]
+      },
+      {
+       "id": "he-p1",
+       "pyq": "c33a6dbf5a29fb00",
+       "level": 2,
+       "points": [
+        "Hall effect: transverse voltage in a current-carrying specimen placed in a transverse magnetic field",
+        "Force $q\\vec v\\times\\vec B$ pushes electrons and holes to the same face, which becomes negative (electrons) or positive (holes)",
+        "Sign of $V_H$ or $R_H$ gives the carrier type; $n=IB/(qtV_H)$"
+       ]
+      },
+      {
+       "id": "he-p2",
+       "pyq": "1c00317682129ffa",
+       "level": 3,
+       "points": [
+        "Hall effect stated",
+        "n-type derivation: $eE_H=ev_dB$, $J=nev_d$ gives $E_H=JB/ne$",
+        "$V_H=IB/(net)$ so $n=IB/(eV_Ht)$, $R_H=-1/ne$",
+        "Applications: type and density of carriers, mobility, magnetic field measurement"
+       ]
+      },
+      {
+       "id": "he-p3",
+       "pyq": "9ba35e5ed9a8699c",
+       "level": 3,
+       "points": [
+        "Hall effect defined",
+        "$E_H=JB/nq$, $R_H=1/nq$, $V_H=R_HIB/t$",
+        "Mobility $\\mu=\\sigma R_H$",
+        "Hall angle $\\tan\\theta_H=\\mu B$",
+        "Two applications (carrier type and density, Hall probe for B)"
+       ]
+      }
+     ]
+    },
+    {
+     "id": "hall-numericals",
+     "title": "Hall effect numericals",
+     "theory_md": "All Hall numericals use one formula and unit care:\n$$V_H=\\frac{IB}{net}\\ \\Rightarrow\\ n=\\frac{IB}{eV_Ht},\\qquad R_H=\\frac{1}{ne},\\qquad V_H=E_Hw=\\frac{JBw}{ne}$$\n- $t$ is the dimension along $B$; if only one dimension is given use it.\n- **Convert**: gauss $\\to$ tesla ($1\\ \\mathrm T=10^4$ G, so 2000 G $=0.2$ T); mm $\\to$ m; mA $\\to$ A; mV $\\to$ V.\n- $e=1.6\\times10^{-19}$ C.\n- Link to transport: $J=\\sigma E=ne\\mu E$, $\\mu=\\sigma|R_H|=|R_H|/\\rho$.\n- Free-electron metals: $n=$ (atoms per cell)$\\times$(electrons per atom)$/a^3$; bcc has 2 atoms per cell.",
+     "basics_md": "Write down the formula, convert every quantity to SI first, then substitute. Most lost marks are unit slips such as gauss or millimetres.",
+     "key_points": [
+      "$n=IB/(eV_Ht)$ with SI units",
+      "Convert gauss to tesla, mm to m, mV to V",
+      "$R_H=1/ne$, $\\mu=\\sigma|R_H|$, $\\tan\\theta_H=\\mu B$",
+      "Metals: $n=\\text{atoms per cell}/a^3$"
+     ],
+     "figures": [],
+     "questions": [
+      {
+       "id": "hn-q1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "1 tesla equals how many gauss?",
+       "options": [
+        "$10^2$",
+        "$10^4$",
+        "$10^{-4}$",
+        "$10^6$"
+       ],
+       "answer_index": 1,
+       "why": "2000 G is 0.2 T."
+      },
+      {
+       "id": "hn-q2",
+       "kind": "mcq",
+       "level": 1,
+       "q": "SI unit of the Hall coefficient is",
+       "options": [
+        "V/m",
+        "m$^3$/C",
+        "C/m$^3$",
+        "m$^2$/Vs"
+       ],
+       "answer_index": 1,
+       "why": "$R_H=1/ne$."
+      },
+      {
+       "id": "hn-q3",
+       "kind": "numerical",
+       "level": 2,
+       "marks": 3,
+       "q": "A specimen 0.5 mm thick carries 20 mA in a transverse field of 0.5 T. The carrier concentration is $2.5\\times10^{21}$ m$^{-3}$. Find the Hall voltage.",
+       "model_answer_md": "$V_H=\\dfrac{IB}{net}=\\dfrac{0.02\\times0.5}{2.5\\times10^{21}\\times1.6\\times10^{-19}\\times0.5\\times10^{-3}}=\\dfrac{0.01}{0.2}=0.05$ V $=50$ mV.",
+       "points": [
+        "SI conversions",
+        "$V_H=IB/net$",
+        "$V_H=50$ mV"
+       ]
+      },
+      {
+       "id": "hn-q4",
+       "kind": "numerical",
+       "level": 3,
+       "marks": 3,
+       "q": "For a semiconductor, $n=5\\times10^{21}$ m$^{-3}$ and resistivity $\\rho=0.01\\ \\Omega$ m. Find $R_H$, the mobility and the Hall angle in a field of 0.5 T.",
+       "model_answer_md": "$R_H=\\dfrac{1}{ne}=\\dfrac{1}{5\\times10^{21}\\times1.6\\times10^{-19}}=1.25\\times10^{-3}\\ \\mathrm{m^3/C}$\n\n$\\sigma=1/\\rho=100$ S/m, $\\mu=\\sigma R_H=100\\times1.25\\times10^{-3}=0.125\\ \\mathrm{m^2/Vs}$\n\n$\\tan\\theta_H=\\mu B=0.125\\times0.5=0.0625$, $\\theta_H=3.6^\\circ$.",
+       "points": [
+        "$R_H=1.25\\times10^{-3}$ m$^3$/C",
+        "$\\mu=\\sigma R_H=0.125$ m$^2$/Vs",
+        "$\\theta_H\\approx3.6^\\circ$"
+       ]
+      },
+      {
+       "id": "hn-p1",
+       "pyq": "875306cea8ed155c",
+       "level": 2,
+       "points": [
+        "Convert: $t=2\\times10^{-4}$ m, $B=2000$ G $=0.2$ T",
+        "$n=BI/(eV_Ht)$",
+        "$n=\\frac{0.2\\times0.25}{1.6\\times10^{-19}\\times0.15\\times2\\times10^{-4}}\\approx1.04\\times10^{22}$ m$^{-3}$"
+       ]
+      },
+      {
+       "id": "hn-p2",
+       "pyq": "9688b92f725fa8b0",
+       "level": 2,
+       "points": [
+        "Convert: $t=10^{-3}$ m, $I=10^{-2}$ A, $V_H=2\\times10^{-2}$ V",
+        "$n=IB/(eV_Ht)$",
+        "$n\\approx6.25\\times10^{20}$ m$^{-3}$"
+       ]
+      },
+      {
+       "id": "hn-p3",
+       "pyq": "4ac51d5e41bb9a7a",
+       "level": 2,
+       "points": [
+        "Same data as above; dimension along $B$ taken as 1 mm",
+        "$n=IB/(etV_H)$",
+        "$n\\approx6.25\\times10^{20}$ m$^{-3}$"
+       ]
+      },
+      {
+       "id": "hn-p4",
+       "pyq": "030b9d51402d0c46",
+       "level": 3,
+       "points": [
+        "$R_H=1/ne$, $E_H=R_HJB$, $V_H=E_Hw$",
+        "$V_H=\\frac{JBw}{ne}=\\frac{500\\times0.5\\times3\\times10^{-3}}{10^{20}\\alpha\\times1.6\\times10^{-19}}$",
+        "$V_H=0.0469/\\alpha$ V (46.9 mV for $\\alpha=1$); sign negative for n-type"
+       ]
+      },
+      {
+       "id": "hn-p5",
+       "pyq": "63f011a040d2a526",
+       "level": 3,
+       "points": [
+        "n-type: $|R_H|=1/ne$ so $ne=1/0.0125=80$ C/m$^3$",
+        "$J=\\sigma E=ne\\mu_eE$",
+        "$J=80\\times0.36\\times100=2880$ A/m$^2$"
+       ]
+      },
+      {
+       "id": "hn-p6",
+       "pyq": "0904dd39a47f416f",
+       "level": 2,
+       "points": [
+        "bcc: 2 atoms per cell, 1 free electron per atom, $n=2/a^3$",
+        "$n=2/(4.28\\times10^{-10})^3=2.55\\times10^{28}$ m$^{-3}$",
+        "$R_H=-1/ne\\approx-2.45\\times10^{-10}$ m$^3$/C, negative for electrons"
+       ]
+      },
+      {
+       "id": "hn-p7",
+       "pyq": "30b5818366bf3fab",
+       "level": 2,
+       "points": [
+        "Convert $B=2000$ G $=0.2$ T, $t=2\\times10^{-4}$ m, $I=0.25$ A",
+        "$n=IB/(eV_Ht)$ (width not needed)",
+        "Put $V_H$ in volts and substitute; answer left in terms of the roll number $R$"
+       ]
+      },
+      {
+       "id": "hn-p8",
+       "pyq": "301f83b246c69748",
+       "level": 3,
+       "points": [
+        "Convert $B=0.2$ T, $t=2\\times10^{-4}$ m, $V_H=R\\times10^{-6}$ V",
+        "$n=IB/(eV_Ht)=0.05/(3.2\\times10^{-29}R)$",
+        "$n=1.56\\times10^{27}/R$ m$^{-3}$"
+       ]
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "topic": "PN junction transistor",
+   "subtopics": [
+    {
+     "id": "pn-junction",
+     "title": "The p-n junction and its bias",
+     "theory_md": "Where p and n meet, electrons and holes diffuse across and leave fixed ions: the **depletion region**, with a built-in field and **barrier potential**\n$$V_0=\\frac{k_BT}{e}\\ln\\frac{N_AN_D}{n_i^2}$$\n(about 0.3 V Ge, 0.7 V Si).\n- **Forward bias** (p to +): barrier falls, depletion narrows, current rises exponentially.\n- **Reverse bias**: barrier rises, depletion widens, only a tiny reverse saturation current (minority carriers) flows.\n\nDiode equation: $I=I_0\\left(e^{eV/k_BT}-1\\right)$.",
+     "basics_md": "Carriers leak across the border until the ions left behind build a hill that stops further crossing. Forward bias flattens the hill; reverse bias raises it.",
+     "key_points": [
+      "Depletion region and barrier potential ($V_0\\approx0.3$ V Ge, 0.7 V Si)",
+      "$V_0=(k_BT/e)\\ln(N_AN_D/n_i^2)$",
+      "Forward bias narrows the depletion layer; reverse widens it",
+      "$I=I_0(e^{eV/kT}-1)$; tiny reverse current"
+     ],
+     "figures": [],
+     "questions": [
+      {
+       "id": "pj-q1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "Under forward bias the depletion region",
+       "options": [
+        "widens",
+        "narrows",
+        "is unchanged",
+        "disappears at any voltage"
+       ],
+       "answer_index": 1,
+       "why": "Applied field opposes the built-in field."
+      },
+      {
+       "id": "pj-q2",
+       "kind": "mcq",
+       "level": 1,
+       "q": "The barrier potential of silicon is about",
+       "options": [
+        "0.3 V",
+        "0.7 V",
+        "1.1 V",
+        "5 V"
+       ],
+       "answer_index": 1,
+       "why": "Ge 0.3 V, Si 0.7 V."
+      },
+      {
+       "id": "pj-q3",
+       "kind": "short",
+       "level": 2,
+       "marks": 3,
+       "q": "Explain the formation of the depletion layer and the barrier potential in a p-n junction.",
+       "model_answer_md": "1. Electrons diffuse from n to p, holes from p to n, and recombine near the junction.\n2. This leaves **uncovered donor ions (+)** on the n side and **acceptor ions (-)** on the p side: the **depletion region**, free of mobile carriers.\n3. The ions create a built-in field from n to p that opposes further diffusion.\n4. Equilibrium is reached when the drift current balances the diffusion current; the potential difference across the layer is the **barrier potential** $V_0=\\frac{kT}{e}\\ln\\frac{N_AN_D}{n_i^2}$ (0.7 V Si, 0.3 V Ge).",
+       "points": [
+        "Diffusion and recombination near the junction",
+        "Uncovered ions form the depletion region",
+        "Built-in field opposes diffusion; drift balances diffusion",
+        "Barrier potential value and expression"
+       ]
+      },
+      {
+       "id": "pj-q4",
+       "kind": "numerical",
+       "level": 3,
+       "marks": 3,
+       "q": "Find the barrier potential of a Si junction at 300 K with $N_A=N_D=10^{22}$ m$^{-3}$ and $n_i=1.5\\times10^{16}$ m$^{-3}$. ($k_BT/e=0.02585$ V)",
+       "model_answer_md": "$V_0=\\dfrac{k_BT}{e}\\ln\\dfrac{N_AN_D}{n_i^2}=0.02585\\times\\ln\\dfrac{10^{44}}{2.25\\times10^{32}}$\n\n$\\ln(4.44\\times10^{11})=26.82$, so $V_0=0.02585\\times26.82\\approx0.69$ V.",
+       "points": [
+        "Formula for $V_0$",
+        "$\\ln(4.44\\times10^{11})=26.8$",
+        "$V_0\\approx0.69$ V"
+       ]
+      }
+     ]
+    },
+    {
+     "id": "transistor-action",
+     "title": "Transistor structure and action",
+     "theory_md": "A bipolar junction transistor has three doped regions: **emitter** (heavily doped, emits carriers), **base** (very thin, lightly doped), **collector** (wider, collects). Two types: n-p-n and p-n-p.\n\n**Active region**: emitter-base **forward** biased, collector-base **reverse** biased. Emitter injects carriers into the base; because the base is thin and lightly doped, only about 1 to 5% recombine (base current) and the rest reach the collector.\n$$I_E=I_B+I_C$$\nIn n-p-n the main carriers are electrons, in p-n-p holes. Other modes: cut-off (both junctions reverse) and saturation (both forward).",
+     "basics_md": "The emitter throws carriers at a very thin base; almost all fly through to the collector's strong pull, and a few get caught and form the small base current.",
+     "key_points": [
+      "Emitter heavily doped, base thin and lightly doped, collector large",
+      "Active region: EB forward, CB reverse",
+      "$I_E=I_B+I_C$; most carriers cross the base",
+      "Cut-off: both reverse; saturation: both forward"
+     ],
+     "figures": [],
+     "questions": [
+      {
+       "id": "ta-q1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "For a transistor in the active region",
+       "options": [
+        "both junctions forward biased",
+        "both junctions reverse biased",
+        "EB forward and CB reverse biased",
+        "EB reverse and CB forward biased"
+       ],
+       "answer_index": 2,
+       "why": "That biasing gives amplification."
+      },
+      {
+       "id": "ta-q2",
+       "kind": "mcq",
+       "level": 1,
+       "q": "Which region of a transistor is the thinnest and lightly doped?",
+       "options": [
+        "emitter",
+        "base",
+        "collector",
+        "all equal"
+       ],
+       "answer_index": 1,
+       "why": "A thin base lets most carriers reach the collector."
+      },
+      {
+       "id": "ta-q3",
+       "kind": "short",
+       "level": 2,
+       "marks": 2,
+       "q": "Why is the base of a transistor made thin and lightly doped?",
+       "model_answer_md": "A thin, lightly doped base gives few chances for recombination, so most of the carriers injected by the emitter diffuse across and are swept into the collector. This keeps the base current small and the current gain ($\\alpha$ close to 1, $\\beta$ large) high.",
+       "points": [
+        "Few recombinations in the base",
+        "Most carriers reach the collector",
+        "Small $I_B$, high gain"
+       ]
+      }
+     ]
+    },
+    {
+     "id": "configurations",
+     "title": "CB, CE and CC configurations",
+     "theory_md": "The same transistor can be wired with the base, emitter or collector as the common terminal.\n\n| | CB | CE | CC |\n|---|---|---|---|\n| Input / output | E-B / C-B | B-E / C-E | B-C / E-C |\n| Current gain | $\\alpha=I_C/I_E<1$ | $\\beta=I_C/I_B$ (20-500) | $\\gamma=I_E/I_B$ |\n| Input resistance | low | medium | high |\n| Output resistance | high | medium | low |\n| Phase shift | 0 | 180 degrees | 0 |\n\nCE is the usual amplifier (large current and voltage gain); CC (emitter follower) is used for impedance matching; CB for high-frequency use.",
+     "basics_md": "Which terminal is shared decides what is the input and what is the output, and so how big the gains and resistances turn out.",
+     "key_points": [
+      "Common terminal names the configuration",
+      "CB: gain $\\alpha<1$; CE: $\\beta$ large; CC: $\\gamma=1+\\beta$",
+      "CE inverts the signal (180 degrees)",
+      "CC has highest input resistance and lowest output resistance"
+     ],
+     "figures": [],
+     "questions": [
+      {
+       "id": "cf-q1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "The configuration with a 180 degree phase shift between input and output is",
+       "options": [
+        "CB",
+        "CE",
+        "CC",
+        "none"
+       ],
+       "answer_index": 1,
+       "why": "CE amplifier inverts the signal."
+      },
+      {
+       "id": "cf-q2",
+       "kind": "mcq",
+       "level": 1,
+       "q": "The emitter follower (high input resistance, low output resistance) is the",
+       "options": [
+        "CB amplifier",
+        "CE amplifier",
+        "CC amplifier",
+        "diode"
+       ],
+       "answer_index": 2,
+       "why": "CC is used for impedance matching."
+      },
+      {
+       "id": "cf-q3",
+       "kind": "short",
+       "level": 2,
+       "marks": 3,
+       "q": "Compare the CB, CE and CC configurations of a transistor.",
+       "model_answer_md": "| | CB | CE | CC |\n|---|---|---|---|\n| Current gain | $\\alpha<1$ | $\\beta$ (high) | $\\gamma=1+\\beta$ |\n| Voltage gain | high | high | less than 1 |\n| Input resistance | low (about 100 ohm) | medium (about 1 kilo-ohm) | high (about 100 kilo-ohm) |\n| Output resistance | high | medium | low |\n| Phase shift | 0 | 180 degrees | 0 |\n| Use | high frequency | general amplifier | impedance matching |",
+       "points": [
+        "Current gain of each",
+        "Input and output resistances",
+        "Phase relation (CE inverts)",
+        "Typical use"
+       ]
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "topic": "Transistor parameters",
+   "subtopics": [
+    {
+     "id": "gain-relations",
+     "title": "Current gains alpha, beta, gamma and their relations",
+     "theory_md": "$$\\alpha=\\frac{I_C}{I_E}\\ (\\text{CB}),\\qquad \\beta=\\frac{I_C}{I_B}\\ (\\text{CE}),\\qquad \\gamma=\\frac{I_E}{I_B}\\ (\\text{CC})$$\nwith $I_E=I_B+I_C$. Divide by $I_E$: $1=\\dfrac{I_B}{I_E}+\\alpha$, so $\\dfrac{I_B}{I_E}=1-\\alpha$. Then\n$$\\beta=\\frac{\\alpha}{1-\\alpha},\\quad \\alpha=\\frac{\\beta}{1+\\beta},\\quad \\gamma=\\frac{I_E}{I_B}=1+\\beta=\\frac{1}{1-\\alpha}$$\nTypical $\\alpha$ = 0.95 to 0.99, $\\beta$ = 20 to 500.",
+     "basics_md": "Everything follows from one fact: the emitter current splits into collector and base current. Dividing by the right current gives each gain.",
+     "key_points": [
+      "$\\alpha=I_C/I_E$, $\\beta=I_C/I_B$, $\\gamma=I_E/I_B$",
+      "Start from $I_E=I_B+I_C$",
+      "$\\beta=\\alpha/(1-\\alpha)$, $\\alpha=\\beta/(1+\\beta)$",
+      "$\\gamma=1+\\beta=1/(1-\\alpha)$"
+     ],
+     "figures": [],
+     "questions": [
+      {
+       "id": "gr-q1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "If $\\alpha=0.98$, then $\\beta$ is",
+       "options": [
+        "0.02",
+        "9.8",
+        "49",
+        "98"
+       ],
+       "answer_index": 2,
+       "why": "$\\beta=0.98/0.02=49$."
+      },
+      {
+       "id": "gr-q2",
+       "kind": "mcq",
+       "level": 1,
+       "q": "The CC current gain $\\gamma$ equals",
+       "options": [
+        "$\\beta$",
+        "$1+\\beta$",
+        "$\\alpha\\beta$",
+        "$1/\\beta$"
+       ],
+       "answer_index": 1,
+       "why": "$I_E/I_B=(I_B+I_C)/I_B$."
+      },
+      {
+       "id": "gr-q3",
+       "kind": "numerical",
+       "level": 2,
+       "marks": 2,
+       "q": "A transistor has $\\beta=100$. Find $\\alpha$ and $\\gamma$.",
+       "model_answer_md": "$\\alpha=\\dfrac{\\beta}{1+\\beta}=\\dfrac{100}{101}=0.990$\n\n$\\gamma=1+\\beta=101$.",
+       "points": [
+        "$\\alpha=\\beta/(1+\\beta)=0.990$",
+        "$\\gamma=101$"
+       ]
+      },
+      {
+       "id": "gr-p1",
+       "pyq": "af1e78d6443836f5",
+       "level": 2,
+       "points": [
+        "Definitions of $\\alpha,\\beta,\\gamma$",
+        "$I_E=I_B+I_C$",
+        "$\\beta=\\alpha/(1-\\alpha)$",
+        "$\\gamma=1+\\beta=1/(1-\\alpha)$"
+       ]
+      },
+      {
+       "id": "gr-p2",
+       "pyq": "12d6810b612c477f",
+       "level": 2,
+       "points": [
+        "$\\alpha=I_C/I_E$, $\\beta=I_C/I_B$",
+        "$I_E=I_B+I_C$ gives $\\beta=\\frac{I_C/I_E}{1-I_C/I_E}$",
+        "$\\beta=\\frac{\\alpha}{1-\\alpha}$, $\\alpha=\\frac{\\beta}{1+\\beta}$"
+       ]
+      },
+      {
+       "id": "gr-p3",
+       "pyq": "45d90f2e8acb141b",
+       "level": 2,
+       "points": [
+        "$\\alpha$ (CB, below 1, 0.95 to 0.99), $\\beta$ (CE, 20 to 500), $\\gamma$ (CC) defined",
+        "$\\beta=\\alpha/(1-\\alpha)$ derived from $I_E=I_B+I_C$",
+        "$\\gamma=1/(1-\\alpha)=1+\\beta$"
+       ]
+      }
+     ]
+    },
+    {
+     "id": "leakage-numericals",
+     "title": "Leakage current and transistor numericals",
+     "theory_md": "The collector junction is reverse biased, so a small **reverse saturation (leakage) current** $I_{CBO}$ flows with the emitter open.\n- **CB**: $I_C=\\alpha I_E+I_{CBO}$, and $I_B=I_E-I_C$.\n- **CE**: $I_C=\\beta I_B+(1+\\beta)I_{CBO}$, with $I_{CEO}=(1+\\beta)I_{CBO}$.\n- $I_E=I_B+I_C$ always.\n\nSteps: write the given values in the same unit (mA or $\\mu$A), choose the CB or CE formula, then use $I_E=I_B+I_C$. In CE the leakage is amplified by $(1+\\beta)$.",
+     "basics_md": "The leakage current rides on top of the useful current. In CE it is multiplied up, which is why it matters for biasing.",
+     "key_points": [
+      "CB: $I_C=\\alpha I_E+I_{CBO}$",
+      "CE: $I_C=\\beta I_B+(1+\\beta)I_{CBO}$, $I_{CEO}=(1+\\beta)I_{CBO}$",
+      "$I_E=I_B+I_C$",
+      "Same units throughout; $\\beta=\\alpha/(1-\\alpha)$"
+     ],
+     "figures": [],
+     "questions": [
+      {
+       "id": "lk-q1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "In CE mode the leakage current $I_{CEO}$ equals",
+       "options": [
+        "$I_{CBO}$",
+        "$\\beta I_{CBO}$",
+        "$(1+\\beta)I_{CBO}$",
+        "$\\alpha I_{CBO}$"
+       ],
+       "answer_index": 2,
+       "why": "Leakage is amplified by $(1+\\beta)$."
+      },
+      {
+       "id": "lk-q2",
+       "kind": "mcq",
+       "level": 1,
+       "q": "In CB mode, with leakage included, the collector current is",
+       "options": [
+        "$\\alpha I_E$",
+        "$\\alpha I_E+I_{CBO}$",
+        "$\\beta I_B$",
+        "$I_E-I_{CBO}$"
+       ],
+       "answer_index": 1,
+       "why": "$I_C=\\alpha I_E+I_{CBO}$."
+      },
+      {
+       "id": "lk-q3",
+       "kind": "numerical",
+       "level": 2,
+       "marks": 3,
+       "q": "A transistor in CB mode has $\\alpha=0.99$, $I_E=5$ mA and $I_{CBO}=10\\ \\mu$A. Find $I_C$ and $I_B$.",
+       "model_answer_md": "$I_C=\\alpha I_E+I_{CBO}=0.99\\times5+0.01=4.96$ mA\n\n$I_B=I_E-I_C=5-4.96=0.04$ mA $=40\\ \\mu$A.",
+       "points": [
+        "Formula $I_C=\\alpha I_E+I_{CBO}$",
+        "$I_C=4.96$ mA",
+        "$I_B=0.04$ mA"
+       ]
+      },
+      {
+       "id": "lk-q4",
+       "kind": "numerical",
+       "level": 3,
+       "marks": 3,
+       "q": "A CE transistor has $\\beta=99$, $I_B=40\\ \\mu$A and $I_{CBO}=5\\ \\mu$A. Find $I_C$ and $I_E$.",
+       "model_answer_md": "$I_C=\\beta I_B+(1+\\beta)I_{CBO}=99\\times40+100\\times5=3960+500=4460\\ \\mu$A $=4.46$ mA\n\n$I_E=I_B+I_C=40+4460=4500\\ \\mu$A $=4.5$ mA.",
+       "points": [
+        "CE leakage term $(1+\\beta)I_{CBO}=500\\ \\mu$A",
+        "$I_C=4.46$ mA",
+        "$I_E=4.5$ mA"
+       ]
+      },
+      {
+       "id": "lk-p1",
+       "pyq": "39da096c9ca8f41e",
+       "level": 2,
+       "points": [
+        "$I_C=\\alpha I_E+I_{CBO}$ with $I_{CBO}=0.01$ mA",
+        "$I_C=0.98\\times2+0.01=1.97$ mA",
+        "$I_B=I_E-I_C=0.03$ mA $=30\\ \\mu$A"
+       ]
+      },
+      {
+       "id": "lk-p2",
+       "pyq": "7c48660d5926adda",
+       "level": 3,
+       "points": [
+        "$\\beta=\\alpha/(1-\\alpha)=0.975/0.025=39$",
+        "$I_C=\\beta I_B+(1+\\beta)I_{CO}=39\\times250+40\\times10=10150\\ \\mu$A $\\approx10.15$ mA",
+        "$I_E=I_B+I_C=10400\\ \\mu$A $=10.4$ mA"
+       ]
+      }
+     ]
+    },
+    {
+     "id": "resistance-gain",
+     "title": "Dynamic resistances and voltage gain",
+     "theory_md": "In CE:\n- **Input resistance** $r_i=\\dfrac{\\Delta V_{BE}}{\\Delta I_B}$ at constant $V_{CE}$.\n- **Output resistance** $r_o=\\dfrac{\\Delta V_{CE}}{\\Delta I_C}$ at constant $I_B$.\n- **Current gain** $\\beta=\\dfrac{\\Delta I_C}{\\Delta I_B}$.\n- **Voltage gain** $A_v=\\dfrac{\\Delta V_{out}}{\\Delta V_{in}}=\\beta\\dfrac{R_L}{r_i}$, **power gain** $=A_v\\times\\beta=\\beta^2\\dfrac{R_L}{r_i}$.",
+     "basics_md": "Gain in voltage is gain in current times the ratio of the load to the input resistance.",
+     "key_points": [
+      "$r_i=\\Delta V_{BE}/\\Delta I_B$ and $r_o=\\Delta V_{CE}/\\Delta I_C$ from characteristics",
+      "$A_v=\\beta R_L/r_i$",
+      "Power gain $=A_v\\beta$"
+     ],
+     "figures": [],
+     "questions": [
+      {
+       "id": "rg-q1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "Voltage gain of a CE amplifier is",
+       "options": [
+        "$\\beta r_i/R_L$",
+        "$\\beta R_L/r_i$",
+        "$\\alpha R_L/r_i$",
+        "$R_L/\\beta r_i$"
+       ],
+       "answer_index": 1,
+       "why": "$A_v=\\beta R_L/r_i$."
+      },
+      {
+       "id": "rg-q2",
+       "kind": "short",
+       "level": 2,
+       "marks": 2,
+       "q": "Define the dynamic input and output resistance of a CE transistor.",
+       "model_answer_md": "**Input resistance:** $r_i=\\dfrac{\\Delta V_{BE}}{\\Delta I_B}$ at constant $V_{CE}$, the slope of the input characteristic.\n\n**Output resistance:** $r_o=\\dfrac{\\Delta V_{CE}}{\\Delta I_C}$ at constant $I_B$, the inverse slope of the output characteristic.",
+       "points": [
+        "$r_i=\\Delta V_{BE}/\\Delta I_B$ at constant $V_{CE}$",
+        "$r_o=\\Delta V_{CE}/\\Delta I_C$ at constant $I_B$"
+       ]
+      },
+      {
+       "id": "rg-q3",
+       "kind": "numerical",
+       "level": 2,
+       "marks": 3,
+       "q": "A CE amplifier has $\\beta=50$, $r_i=1\\ \\mathrm{k\\Omega}$ and $R_L=4\\ \\mathrm{k\\Omega}$. Find the voltage and power gain.",
+       "model_answer_md": "$A_v=\\beta\\dfrac{R_L}{r_i}=50\\times\\dfrac{4}{1}=200$\n\nPower gain $=A_v\\beta=200\\times50=10\\,000$.",
+       "points": [
+        "$A_v=200$",
+        "Power gain $=10^4$"
+       ]
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "topic": "Photo cell and solar cell",
+   "subtopics": [
+    {
+     "id": "photocell",
+     "title": "Photocell",
+     "theory_md": "A **photocell** converts light into an electric current by the **photoelectric effect**.\n\nPhotoemissive type: an evacuated glass tube with a photosensitive cathode (Cs, K) and a positive anode. Light with $h\\nu>\\phi$ ejects electrons; the anode collects them, giving a **photocurrent proportional to intensity**.\n$$h\\nu=\\phi+\\tfrac12mv_{max}^2=\\phi+eV_s,\\quad \\lambda_0=\\frac{hc}{\\phi}$$\n(use $hc=1240$ eV nm.) Semiconductor types: **photoconductive** (LDR; light creates pairs so resistance falls) and **photovoltaic** (junction, EMF directly).\n\nUses: automatic doors, burglar alarms, light meters, street-light control.",
+     "basics_md": "A photon knocks out an electron only if it carries enough energy. Brighter light knocks out more electrons, which means more current, not faster electrons.",
+     "key_points": [
+      "Principle: photoelectric effect, needs $h\\nu>\\phi$",
+      "Cathode emits, anode collects, current $\\propto$ intensity",
+      "$h\\nu=\\phi+eV_s$, $\\lambda_0=hc/\\phi$",
+      "Types: photoemissive, photoconductive, photovoltaic"
+     ],
+     "figures": [],
+     "questions": [
+      {
+       "id": "pc-q1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "A photoemissive cell works on",
+       "options": [
+        "the Hall effect",
+        "the photoelectric effect",
+        "thermionic emission",
+        "tunnelling"
+       ],
+       "answer_index": 1,
+       "why": "Photons eject electrons from the cathode."
+      },
+      {
+       "id": "pc-q2",
+       "kind": "mcq",
+       "level": 1,
+       "q": "In a photocell, doubling the light intensity (frequency fixed above threshold) doubles the",
+       "options": [
+        "maximum kinetic energy of electrons",
+        "stopping potential",
+        "photocurrent",
+        "threshold frequency"
+       ],
+       "answer_index": 2,
+       "why": "Number of photons doubles; energy per photon is unchanged."
+      },
+      {
+       "id": "pc-q3",
+       "kind": "numerical",
+       "level": 2,
+       "marks": 3,
+       "q": "The work function of caesium is 2.1 eV. Find the threshold wavelength, and the stopping potential for light of wavelength 400 nm. ($hc=1239.8$ eV nm)",
+       "model_answer_md": "$\\lambda_0=\\dfrac{hc}{\\phi}=\\dfrac{1239.8}{2.1}=590$ nm\n\nPhoton energy at 400 nm $=\\dfrac{1239.8}{400}=3.10$ eV\n\n$eV_s=h\\nu-\\phi=3.10-2.1=1.0$ eV, so $V_s=1.0$ V.",
+       "points": [
+        "$\\lambda_0=590$ nm",
+        "Photon energy 3.10 eV",
+        "$V_s=1.0$ V"
+       ]
+      },
+      {
+       "id": "pc-p1",
+       "pyq": "91090df2d16554bd",
+       "level": 2,
+       "points": [
+        "Photoelectric effect: electrons emitted when $h\\nu>\\phi$ (threshold frequency)",
+        "Cathode emits, positive anode in an evacuated tube collects, giving a photocurrent",
+        "Current proportional to light intensity; light converted to an electrical signal"
+       ]
+      }
+     ]
+    },
+    {
+     "id": "solar-cell",
+     "title": "Solar cell",
+     "theory_md": "A **solar cell** is a p-n junction with no external bias that turns sunlight into electrical power.\n\nPrinciple: photons with $h\\nu\\ge E_g$ create electron-hole pairs in and near the depletion region; the **built-in field** sweeps electrons to n and holes to p, so a photovoltage appears and current flows through an external load. Si cell: $V_{oc}\\approx0.5$ to 0.6 V, so cells are put in series for higher voltage and in parallel for current.\n\n$$FF=\\frac{V_mI_m}{V_{oc}I_{sc}},\\qquad \\eta=\\frac{V_mI_m}{P_{in}}=\\frac{FF\\,V_{oc}I_{sc}}{P_{in}}$$\nOpen-circuit voltage $V_{oc}$, short-circuit current $I_{sc}$, maximum power point $(V_m,I_m)$.",
+     "basics_md": "Light makes pairs and the junction's own field pulls them apart; that separation is the cell's battery.",
+     "key_points": [
+      "p-n junction, no bias; photons with $h\\nu\\ge E_g$ make pairs",
+      "Built-in field separates carriers, giving $V_{oc}$ and $I_{sc}$",
+      "$FF=V_mI_m/(V_{oc}I_{sc})$, $\\eta=P_{max}/P_{in}$",
+      "Cells in series for voltage (one Si cell about 0.5 V)"
+     ],
+     "figures": [],
+     "questions": [
+      {
+       "id": "sc-q1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "A solar cell works on",
+       "options": [
+        "forward-biased p-n junction",
+        "reverse-biased Zener action",
+        "photovoltaic effect at a p-n junction",
+        "thermionic emission"
+       ],
+       "answer_index": 2,
+       "why": "Light-generated pairs separated by the built-in field."
+      },
+      {
+       "id": "sc-q2",
+       "kind": "mcq",
+       "level": 1,
+       "q": "The fill factor is",
+       "options": [
+        "$V_{oc}I_{sc}/V_mI_m$",
+        "$V_mI_m/V_{oc}I_{sc}$",
+        "$V_m/V_{oc}$",
+        "$I_{sc}/I_m$"
+       ],
+       "answer_index": 1,
+       "why": "Ratio of maximum power to $V_{oc}I_{sc}$."
+      },
+      {
+       "id": "sc-q3",
+       "kind": "short",
+       "level": 2,
+       "marks": 3,
+       "q": "Explain the principle and working of a solar cell.",
+       "model_answer_md": "1. A p-n junction (usually Si) with a thin p layer exposed to light.\n2. Photons with $h\\nu\\ge E_g$ create electron-hole pairs in and near the depletion region.\n3. The built-in field moves electrons to the n side and holes to the p side.\n4. Charge collects at the two contacts, giving a photovoltage $V_{oc}$; with a load connected, a photocurrent flows.\n5. Output is limited to the power at the maximum power point: $P_m=V_mI_m$.",
+       "points": [
+        "p-n junction exposed to light",
+        "Pair generation by photons with $h\\nu\\ge E_g$",
+        "Built-in field separates carriers",
+        "Photovoltage and current through external load"
+       ]
+      },
+      {
+       "id": "sc-q4",
+       "kind": "numerical",
+       "level": 3,
+       "marks": 3,
+       "q": "A solar cell of area 4 cm$^2$ in sunlight of 1000 W/m$^2$ has $V_{oc}=0.6$ V, $I_{sc}=30$ mA, $V_m=0.5$ V, $I_m=28$ mA. Find the fill factor and the efficiency.",
+       "model_answer_md": "$FF=\\dfrac{V_mI_m}{V_{oc}I_{sc}}=\\dfrac{0.5\\times28}{0.6\\times30}=0.778$\n\n$P_m=0.5\\times0.028=0.014$ W\n\n$P_{in}=1000\\times4\\times10^{-4}=0.4$ W\n\n$\\eta=\\dfrac{0.014}{0.4}=3.5\\%$.",
+       "points": [
+        "$FF=0.778$",
+        "$P_m=14$ mW, $P_{in}=0.4$ W",
+        "$\\eta=3.5\\%$"
+       ]
+      },
+      {
+       "id": "sc-p1",
+       "pyq": "19219e4e41e49591",
+       "level": 2,
+       "points": [
+        "Built-in potential (about 0.3 to 0.7 V) exists only across the depletion region in equilibrium; no net current, no power",
+        "A diode alone cannot charge a phone: contacts cancel the potential",
+        "Only with light (solar cell) is a photovoltage and current produced; many cells in series needed for 5 V"
+       ]
+      }
+     ]
+    }
+   ]
+  }
+ ]
+}

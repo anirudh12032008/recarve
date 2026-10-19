@@ -1,0 +1,1572 @@
+{
+ "code": "CY1110",
+ "unit": "Environmental Management",
+ "written": "2026-10-19",
+ "by": "claude-sonnet-5-5, in a Claude Code session",
+ "topics": [
+  {
+   "topic": "Carbon footprint",
+   "subtopics": [
+    {
+     "id": "cf-meaning",
+     "title": "Carbon footprint, CO2e and GWP",
+     "theory_md": "A **carbon footprint** is the total greenhouse gas (GHG) emission caused directly and indirectly by a person, organisation, product or country, expressed as **$\\mathrm{CO_2}$-equivalent ($\\mathrm{CO_2e}$)**, usually in t per year.\n\nOther gases are converted with their **global warming potential (GWP)**, 100-year values (IPCC AR5): $\\mathrm{CO_2}=1$, $\\mathrm{CH_4}=28$, $\\mathrm{N_2O}=265$.\n\n$$CF=\\sum (\\text{activity data}\\times\\text{emission factor}),\\quad \\mathrm{CO_2e}=\\sum m_j\\times GWP_j$$\n\nEmission factors: Indian grid about 0.8 kg $\\mathrm{CO_2}$/kWh, petrol about 2.3 kg $\\mathrm{CO_2}$/L. Burning 1 kg carbon gives $44/12=3.67$ kg $\\mathrm{CO_2}$.",
+     "basics_md": "Every activity that burns fuel or uses electricity sends gases into the air. Add them all up, and count the stronger warming gases as more than CO2, and you get the footprint.",
+     "key_points": [
+      "Definition: total direct and indirect GHG emissions, in CO2e",
+      "GWP converts each gas to CO2e (CO2 = 1, CH4 = 28, N2O = 265, AR5)",
+      "Footprint = sum of activity data x emission factor",
+      "Name the source of GWP values; textbooks differ"
+     ],
+     "questions": [
+      {
+       "id": "cm-q1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "Carbon footprint is expressed in",
+       "options": [
+        "kg of carbon only",
+        "tonnes of $\\mathrm{CO_2}$-equivalent",
+        "global hectares",
+        "ppm of $\\mathrm{CO_2}$"
+       ],
+       "answer_index": 1,
+       "why": "All GHGs are converted to CO2e with their GWP. Global hectares measure the ecological footprint."
+      },
+      {
+       "id": "cm-q2",
+       "kind": "numerical",
+       "level": 2,
+       "marks": 3,
+       "q": "A house uses 250 kWh of electricity per month. Taking 0.8 kg $\\mathrm{CO_2}$/kWh, find its yearly footprint from electricity. A car there runs 3000 km per month at 15 km/L on petrol (2.3 kg $\\mathrm{CO_2}$/L); find the car's monthly emission.",
+       "model_answer_md": "**Electricity**: $250\\times0.8=200$ kg $\\mathrm{CO_2}$ per month, so $200\\times12=2400$ kg $=2.4$ t $\\mathrm{CO_2}$ per year.\n\n**Car**: petrol used $=3000/15=200$ L per month; emission $=200\\times2.3=460$ kg $\\mathrm{CO_2}$ per month.\n\nFormula used: $CF=\\text{activity}\\times\\text{emission factor}$.",
+       "points": [
+        "Formula: activity data x emission factor",
+        "Electricity 200 kg per month, 2.4 t per year",
+        "Petrol 200 L, car 460 kg CO2 per month"
+       ]
+      },
+      {
+       "id": "cm-q3",
+       "kind": "numerical",
+       "level": 3,
+       "marks": 3,
+       "q": "A farm emits 10 kg of methane and 2 kg of nitrous oxide in a year. Find the $\\mathrm{CO_2e}$ using GWP of 28 and 265 (100-year). Why is this larger than the mass of gas emitted?",
+       "model_answer_md": "$\\mathrm{CO_2e}=10\\times28+2\\times265=280+530=810$ kg $\\mathrm{CO_2e}$.\n\nThe mass of gas is only 12 kg, but $\\mathrm{CH_4}$ and $\\mathrm{N_2O}$ trap far more heat per kg than $\\mathrm{CO_2}$ over 100 years, so each kg counts as 28 or 265 kg of $\\mathrm{CO_2}$.",
+       "points": [
+        "CO2e = sum of mass x GWP",
+        "280 + 530 = 810 kg CO2e",
+        "Reason: higher heat trapping per kg than CO2"
+       ]
+      }
+     ]
+    },
+    {
+     "id": "cf-scopes",
+     "title": "Scope 1, 2 and 3 emissions",
+     "theory_md": "The GHG Protocol splits an organisation's footprint into three scopes.\n- **Scope 1**: direct emissions from sources it owns or controls: boilers, furnaces, company vehicles, DG sets.\n- **Scope 2**: indirect emissions from **purchased electricity**, heat or steam.\n- **Scope 3**: all other indirect emissions in the value chain: purchased goods, business travel, employee commuting, waste, use of sold products. Usually the largest.\n\nCarbon footprint is not the same as **ecological footprint**, which is land area in global hectares.",
+     "basics_md": "Ask where the burning happens. In your own boiler is Scope 1; at the power station that supplies you is Scope 2; everywhere else along the chain is Scope 3.",
+     "key_points": [
+      "Scope 1 = direct, owned sources",
+      "Scope 2 = purchased electricity, heat, steam",
+      "Scope 3 = other value-chain emissions, usually largest",
+      "Examples for each scope"
+     ],
+     "questions": [
+      {
+       "id": "sc-q1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "Emissions from electricity bought from the grid are",
+       "options": [
+        "Scope 1",
+        "Scope 2",
+        "Scope 3",
+        "not counted"
+       ],
+       "answer_index": 1,
+       "why": "Purchased electricity is the standard Scope 2 example. Scope 1 is only what the organisation burns itself."
+      },
+      {
+       "id": "sc-q2",
+       "kind": "short",
+       "level": 2,
+       "marks": 3,
+       "q": "Explain Scope 1, 2 and 3 emissions of a factory with one example each.",
+       "model_answer_md": "**Scope 1 (direct)**: emissions from sources the factory owns, e.g. coal burnt in its boiler, diesel in its DG set.\n\n**Scope 2 (indirect, energy)**: emissions at the power station for the electricity the factory purchases.\n\n**Scope 3 (other indirect)**: emissions in the value chain, e.g. raw-material production, transport by suppliers, employee commuting, customers' use of the product. Usually the largest share.",
+       "points": [
+        "Scope 1: direct, owned, example",
+        "Scope 2: purchased electricity or heat, example",
+        "Scope 3: other value-chain emissions, example, largest"
+       ]
+      },
+      {
+       "id": "sc-q3",
+       "kind": "mcq",
+       "level": 2,
+       "q": "A company's delivery vans are owned by a courier firm it hires. Their diesel emissions are the company's",
+       "options": [
+        "Scope 1",
+        "Scope 2",
+        "Scope 3",
+        "Scope 0"
+       ],
+       "answer_index": 2,
+       "why": "Vehicles not owned or controlled by the company make it a Scope 3 emission; only owned vehicles are Scope 1."
+      }
+     ]
+    },
+    {
+     "id": "cf-reduce-plastics",
+     "title": "Reducing the footprint; plastics and climate",
+     "theory_md": "**Reducing a footprint**: energy efficiency (LEDs, star-rated appliances), rooftop solar and renewables, public transport and EVs, less food waste, 3Rs, afforestation. **Offsetting** buys carbon credits (1 credit = 1 t $\\mathrm{CO_2e}$ avoided or removed).\n\n**Plastics and climate**: about 3-4% of global GHG. About 99% of plastic is made from petroleum and gas, so GHG arise in (1) extraction (methane leaks), (2) refining and steam cracking at 750-900 °C, the largest share, (3) incineration: 1 kg polyethylene gives $44/14=3.1$ kg $\\mathrm{CO_2}$, and (4) microplastics weakening ocean carbon uptake.",
+     "basics_md": "Plastic is made from oil and gas. Getting it, cooking it into plastic, and burning it at the end all release GHG.",
+     "key_points": [
+      "Plastics are about 3-4% of global GHG",
+      "Fossil feedstock extraction leaks CH4",
+      "Cracking and manufacture are the largest share",
+      "Incineration: 1 kg PE gives about 3.1 kg CO2",
+      "Remedies: reduce, recycle, bio-based plastics, renewable energy"
+     ],
+     "questions": [
+      {
+       "id": "rp-q1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "Which is the largest source of plastics' GHG emissions?",
+       "options": [
+        "Rain on landfills",
+        "Refining, steam cracking and manufacture",
+        "Transport by sea",
+        "Use by consumers"
+       ],
+       "answer_index": 1,
+       "why": "Cracking at 750-900 °C with fossil energy and polymerisation account for most of the footprint."
+      },
+      {
+       "id": "rp-q2",
+       "kind": "numerical",
+       "level": 2,
+       "marks": 2,
+       "q": "Find the $\\mathrm{CO_2}$ released on complete burning of 5 kg of polyethylene $\\mathrm{(CH_2)_n}$. (C = 12, H = 1, O = 16)",
+       "model_answer_md": "Each $\\mathrm{CH_2}$ unit (14 g) gives one $\\mathrm{CO_2}$ (44 g): $\\mathrm{CH_2+1.5\\,O_2\\rightarrow CO_2+H_2O}$.\n\n$\\mathrm{CO_2}=5\\times44/14=15.7$ kg.",
+       "points": [
+        "Each CH2 (14) gives one CO2 (44)",
+        "5 x 44/14 = 15.7 kg CO2"
+       ]
+      },
+      {
+       "id": "rp-q3",
+       "kind": "mcq",
+       "level": 2,
+       "q": "Which is NOT a way to cut a household carbon footprint?",
+       "options": [
+        "rooftop solar",
+        "using LEDs and star-rated appliances",
+        "buying carbon credits to offset what remains",
+        "running the AC with the doors open"
+       ],
+       "answer_index": 3,
+       "why": "Wasted cooling raises electricity use and Scope 2 emissions; the other three reduce or offset the footprint."
+      },
+      {
+       "id": "rp-p1",
+       "pyq": "08680c00aea29533",
+       "level": 2,
+       "points": [
+        "Plastics cause about 3-4% of global GHG",
+        "Fossil feedstock extraction: CO2 and methane leaks",
+        "Steam cracking at 750-900 °C and manufacture are the largest share",
+        "Incineration: 1 kg PE gives about 3.1 kg CO2; open burning gives black carbon",
+        "Microplastics harm phytoplankton and the ocean carbon pump",
+        "Remedies: reduce, recycle, bio-based plastics, renewable energy"
+       ]
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "topic": "Life cycle assessment",
+   "subtopics": [
+    {
+     "id": "lca-meaning",
+     "title": "LCA, life-cycle stages and boundaries",
+     "theory_md": "**Life cycle assessment (LCA)** evaluates the environmental impact of a product, process or service over its whole life, **cradle to grave** (ISO 14040 and 14044).\n\n**Life-cycle stages**: raw-material extraction, processing and manufacture, packaging and transport, use and maintenance, end of life (reuse, recycling, incineration, landfill).\n\n**Boundaries**: cradle-to-grave (all stages); cradle-to-gate (up to the factory gate); gate-to-gate (one process); **cradle-to-cradle** (closed loop where waste becomes a new raw material).",
+     "basics_md": "Follow one product, say a plastic bottle, from the oil well to the dustbin. LCA counts the damage at every step, not only in the factory.",
+     "key_points": [
+      "Definition: cradle-to-grave assessment of impacts; ISO 14040/14044",
+      "Five stages from raw material to disposal",
+      "Cradle-to-gate, gate-to-gate, cradle-to-cradle",
+      "Covers use and disposal, not only manufacturing"
+     ],
+     "questions": [
+      {
+       "id": "lm-q1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "A cradle-to-cradle approach means",
+       "options": [
+        "ignoring the use phase",
+        "waste is recycled into new raw material in a closed loop",
+        "assessing only the factory",
+        "disposal in landfill"
+       ],
+       "answer_index": 1,
+       "why": "Cradle-to-cradle replaces the grave (disposal) with recycling into a new product."
+      },
+      {
+       "id": "lm-q2",
+       "kind": "short",
+       "level": 2,
+       "marks": 3,
+       "q": "Define LCA. List the stages of a product's life cycle that it covers and differentiate cradle-to-grave from cradle-to-gate.",
+       "model_answer_md": "**LCA**: a standard method (ISO 14040/14044) to assess the environmental impacts of a product over its whole life.\n\n**Stages**: 1. raw-material extraction, 2. processing and manufacture, 3. packaging and transport, 4. use and maintenance, 5. end of life (reuse, recycling, incineration, landfill).\n\n**Cradle-to-grave** covers all five stages; **cradle-to-gate** stops at the factory gate and omits use and disposal.",
+       "points": [
+        "Definition with ISO 14040",
+        "Five life-cycle stages",
+        "Cradle-to-grave covers everything; cradle-to-gate ends at factory gate"
+       ]
+      },
+      {
+       "id": "lm-q3",
+       "kind": "mcq",
+       "level": 2,
+       "q": "A student says LCA only studies emissions during manufacture. This is wrong because LCA",
+       "options": [
+        "ignores manufacture",
+        "also covers raw materials, use and disposal",
+        "is done after disposal only",
+        "counts only costs"
+       ],
+       "answer_index": 1,
+       "why": "LCA spans the entire life, from extraction to end of life."
+      }
+     ]
+    },
+    {
+     "id": "lca-phases",
+     "title": "Four phases of an LCA study; functional unit",
+     "theory_md": "ISO 14040 gives four phases (not to be confused with the life-cycle stages):\n1. **Goal and scope**: purpose, **functional unit**, system boundary.\n2. **Life cycle inventory (LCI)**: quantify all inputs (energy, water, materials) and outputs (emissions, waste).\n3. **Life cycle impact assessment (LCIA)**: convert inventory into impact categories (global warming in kg $\\mathrm{CO_2e}$, acidification in kg $\\mathrm{SO_2e}$, eutrophication, ozone depletion, resource use).\n4. **Interpretation**: hotspots, sensitivity, conclusions.\n\nThe **functional unit** is the measured function that products are compared on, e.g. 'carrying 1000 L of milk'.",
+     "basics_md": "Decide what to compare (goal), count everything going in and out (inventory), turn the counts into harm (impact), then read the result (interpretation).",
+     "key_points": [
+      "Four phases in order: goal and scope, inventory, impact assessment, interpretation",
+      "Functional unit = basis for fair comparison",
+      "LCI counts flows; LCIA converts flows to effects",
+      "Impact categories with units"
+     ],
+     "questions": [
+      {
+       "id": "ph-q1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "The correct order of the phases of an LCA study is",
+       "options": [
+        "inventory, goal and scope, interpretation, impact assessment",
+        "goal and scope, inventory, impact assessment, interpretation",
+        "impact assessment, inventory, goal and scope, interpretation",
+        "goal and scope, impact assessment, inventory, interpretation"
+       ],
+       "answer_index": 1,
+       "why": "Goal and scope first; interpretation last."
+      },
+      {
+       "id": "ph-q2",
+       "kind": "long",
+       "level": 2,
+       "marks": 5,
+       "q": "What is LCA? Explain its four phases.",
+       "model_answer_md": "**LCA** is the cradle-to-grave assessment of a product's environmental impacts (ISO 14040/14044).\n\n**1. Goal and scope**: purpose, audience, **functional unit**, system boundary and assumptions.\n\n**2. Life cycle inventory (LCI)**: quantify energy, water and material inputs and emissions and waste outputs for every stage.\n\n**3. Life cycle impact assessment (LCIA)**: group the inventory into impact categories (global warming, acidification, eutrophication, ozone depletion, toxicity, resource depletion) and quantify each.\n\n**4. Interpretation**: find hotspots, check sensitivity and uncertainty, draw conclusions and recommendations.\n\nThe phases are iterative.",
+       "points": [
+        "Definition with ISO standard",
+        "Goal and scope with functional unit",
+        "Inventory: inputs and outputs",
+        "Impact assessment: categories",
+        "Interpretation: hotspots, conclusions"
+       ]
+      },
+      {
+       "id": "ph-q3",
+       "kind": "short",
+       "level": 3,
+       "marks": 3,
+       "q": "A paper bag is used once; a cloth bag is used 200 times. Why must an LCA compare them per functional unit, and what is a suitable unit?",
+       "model_answer_md": "Comparing one bag with one bag is unfair because the cloth bag does the job 200 times. The **functional unit** puts both on the same function, e.g. 'carrying 1000 shopping trips of groceries'.\n\nThat needs 1000 paper bags but only $1000/200=5$ cloth bags, and the impacts are compared per that unit.",
+       "points": [
+        "Functional unit gives the same function for comparison",
+        "Example unit: 1000 shopping trips",
+        "1000 paper bags against 5 cloth bags"
+       ]
+      }
+     ]
+    },
+    {
+     "id": "lca-uses",
+     "title": "Uses and limitations of LCA",
+     "theory_md": "**Uses**: compare products (paper, plastic or cloth bags), find hotspots, **eco-design**, eco-labelling, policy making, and avoid **burden shifting** (cutting one impact by raising another).\n\n**Limitations**: needs large amounts of data, costly and time-consuming, results depend on chosen boundary and assumptions, different studies can disagree, and it does not weigh social or economic factors.\n\nEIA differs: it assesses a proposed *project* before approval; LCA assesses a *product* over its life.",
+     "basics_md": "LCA is a tool for fair comparison, but it is only as good as the data and the boundary someone chose.",
+     "key_points": [
+      "Uses: compare products, find hotspots, eco-design, labelling",
+      "Avoids burden shifting",
+      "Limitations: data-hungry, costly, assumption dependent",
+      "LCA is product-level; EIA is project-level"
+     ],
+     "questions": [
+      {
+       "id": "us-q1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "Which is a limitation of LCA?",
+       "options": [
+        "it ignores the use phase",
+        "results depend on the chosen boundary and assumptions",
+        "it cannot compare products",
+        "it is done before every project approval"
+       ],
+       "answer_index": 1,
+       "why": "Boundary and assumption choices change the result; LCA does include use and compare products."
+      },
+      {
+       "id": "us-q2",
+       "kind": "short",
+       "level": 2,
+       "marks": 3,
+       "q": "State three applications and two limitations of LCA.",
+       "model_answer_md": "**Applications**: 1. compare alternative products or processes (e.g. paper vs plastic bags); 2. identify hotspots for eco-design; 3. eco-labelling and policy support, avoiding burden shifting.\n\n**Limitations**: 1. data-intensive, time-consuming and costly; 2. results depend on boundary and assumptions, so studies may disagree.",
+       "points": [
+        "Three applications",
+        "Data-intensive and costly",
+        "Depends on boundary and assumptions"
+       ]
+      },
+      {
+       "id": "us-q3",
+       "kind": "mcq",
+       "level": 2,
+       "q": "Which assessment is done on a proposed dam before it is approved?",
+       "options": [
+        "LCA",
+        "EIA",
+        "cradle-to-cradle",
+        "carbon credit"
+       ],
+       "answer_index": 1,
+       "why": "EIA is the pre-approval, project-level assessment; LCA is for products."
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "topic": "Environmental impact assessment",
+   "subtopics": [
+    {
+     "id": "eia-meaning",
+     "title": "Meaning, objectives and legal basis of EIA",
+     "theory_md": "**EIA** is the process of identifying, predicting and evaluating the environmental, social and economic effects of a proposed project **before** approval, so impacts can be avoided or mitigated.\n\n**Objectives**: predict impacts early, choose better sites and technology, suggest mitigation, involve the public, support sustainable development.\n\n**India**: made mandatory by the **EIA Notification 1994** under the Environment (Protection) Act 1986, replaced by the **EIA Notification 2006**. Environmental clearance comes from the MoEFCC (Category A) or the State Level EIA Authority, SEIAA (Category B).",
+     "basics_md": "Before building a big factory or dam, ask what harm it will cause and how to reduce it. That asking, done properly and early, is EIA.",
+     "key_points": [
+      "Definition: predictive, before approval",
+      "Objectives: predict, mitigate, choose alternatives, public participation",
+      "Legal base: EP Act 1986; Notifications 1994 and 2006",
+      "Category A central (MoEFCC), Category B state (SEIAA)"
+     ],
+     "questions": [
+      {
+       "id": "em-q1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "In India the present EIA Notification is of the year",
+       "options": [
+        "1986",
+        "1994",
+        "2006",
+        "2010"
+       ],
+       "answer_index": 2,
+       "why": "1986 is the EP Act; 1994 notification was replaced by the 2006 one."
+      },
+      {
+       "id": "em-q2",
+       "kind": "short",
+       "level": 2,
+       "marks": 3,
+       "q": "Define EIA. Write its objectives and distinguish Category A from Category B projects.",
+       "model_answer_md": "**EIA** is a systematic process to identify, predict and evaluate the likely environmental effects of a proposed project before it is approved, and to suggest mitigation.\n\n**Objectives**: predict impacts early; compare alternatives; recommend mitigation and an Environmental Management Plan; involve the public; support sustainable development.\n\n**Category A**: large projects, appraised centrally by the MoEFCC's Expert Appraisal Committee. **Category B**: smaller projects, appraised by the SEIAA (B1 need EIA, B2 are exempt).",
+       "points": [
+        "Definition: before approval",
+        "Objectives (any 3)",
+        "Category A: central, MoEFCC",
+        "Category B: state, SEIAA; B1 and B2"
+       ]
+      },
+      {
+       "id": "em-q3",
+       "kind": "mcq",
+       "level": 2,
+       "q": "Category B projects are appraised by",
+       "options": [
+        "CPCB",
+        "SEIAA",
+        "Supreme Court",
+        "Gram Sabha"
+       ],
+       "answer_index": 1,
+       "why": "The State Level EIA Authority. CPCB is not an appraisal body for clearance."
+      }
+     ]
+    },
+    {
+     "id": "eia-steps",
+     "title": "Steps of the EIA process",
+     "theory_md": "**Steps in order**:\n1. **Screening**: is an EIA needed, and at what level?\n2. **Scoping**: key issues, alternatives, terms of reference.\n3. **Baseline data**: present air, water, soil, noise, ecology, socio-economic state.\n4. **Impact prediction and evaluation**: magnitude, extent, duration, significance.\n5. **Alternatives and mitigation**: Environmental Management Plan (EMP).\n6. **EIA report and public hearing** (by the SPCB).\n7. **Appraisal and decision**: clearance with conditions, or rejection.\n8. **Monitoring** after the project starts.\n\nThe 2006 notification names four stages: screening, scoping, public consultation, appraisal.",
+     "basics_md": "Like planning a trip: decide whether you need a plan, list what matters, check the starting situation, predict problems, fix them, ask people, then get approval and keep checking.",
+     "key_points": [
+      "Screening, then scoping, then baseline data",
+      "Impact prediction and evaluation",
+      "Mitigation and Environmental Management Plan",
+      "Public hearing, appraisal, clearance with conditions",
+      "Post-project monitoring"
+     ],
+     "questions": [
+      {
+       "id": "st-q1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "The first step of the EIA process is",
+       "options": [
+        "public hearing",
+        "scoping",
+        "screening",
+        "monitoring"
+       ],
+       "answer_index": 2,
+       "why": "Screening decides whether an EIA is needed at all; scoping comes next."
+      },
+      {
+       "id": "st-q2",
+       "kind": "long",
+       "level": 2,
+       "marks": 5,
+       "q": "What is EIA? Describe the steps involved in the EIA process.",
+       "model_answer_md": "**EIA** is the pre-approval assessment of a proposed project's environmental effects.\n\n**Steps**\n1. **Screening**: decide if the project needs EIA.\n2. **Scoping**: identify important issues, alternatives and terms of reference.\n3. **Baseline data collection**: existing air, water, soil, noise, ecology and social conditions.\n4. **Impact prediction and evaluation**: size, extent, duration and significance of impacts.\n5. **Mitigation and EMP**: measures to avoid or reduce impacts, with alternatives.\n6. **EIA report and public hearing**.\n7. **Appraisal and decision**: environmental clearance with conditions, or rejection.\n8. **Monitoring and audit** after commissioning.",
+       "points": [
+        "Definition",
+        "Screening then scoping",
+        "Baseline data",
+        "Impact prediction",
+        "Mitigation and EMP",
+        "Public hearing, appraisal, monitoring"
+       ]
+      },
+      {
+       "id": "st-q3",
+       "kind": "mcq",
+       "level": 2,
+       "q": "Which sequence is correct?",
+       "options": [
+        "scoping, screening, baseline",
+        "screening, scoping, baseline",
+        "baseline, screening, scoping",
+        "appraisal, scoping, screening"
+       ],
+       "answer_index": 1,
+       "why": "Screen first to see if EIA applies, then scope its content, then collect baseline data."
+      }
+     ]
+    },
+    {
+     "id": "eia-methods",
+     "title": "EIA methods, benefits and limitations",
+     "theory_md": "**Methods** to identify and rate impacts: **checklists** (list of impacts), **Leopold matrix** (project activities against environmental components, each cell scored for magnitude and importance on 1 to 10), **networks** (chains of cause and effect), and GIS **overlays** (maps stacked).\n\n**Benefits**: avoids costly mistakes, better design, public acceptance, legal compliance.\n\n**Limitations**: consultant bias, weak public participation, poor monitoring, data gaps.\n\nEIA is not an environmental audit, which is done on a running plant.",
+     "basics_md": "A matrix is a simple table: activities down the side, environmental parts across the top, and a score in each box.",
+     "key_points": [
+      "Methods: checklist, matrix (Leopold), network, overlay",
+      "Leopold matrix scores magnitude and importance (1-10)",
+      "Benefits: avoids damage, better design",
+      "Limitations: bias, weak monitoring"
+     ],
+     "questions": [
+      {
+       "id": "me-q1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "The Leopold matrix scores each cell for",
+       "options": [
+        "cost and time",
+        "magnitude and importance",
+        "colour and size",
+        "owner and location"
+       ],
+       "answer_index": 1,
+       "why": "Magnitude and importance, each on a 1 to 10 scale."
+      },
+      {
+       "id": "me-q2",
+       "kind": "short",
+       "level": 2,
+       "marks": 3,
+       "q": "Name three EIA methods and write two limitations of EIA.",
+       "model_answer_md": "**Methods**: 1. checklist (list of possible impacts), 2. Leopold matrix (activities against environmental components with magnitude and importance scores), 3. network or GIS overlay.\n\n**Limitations**: consultant bias and poor quality reports; weak public participation and monitoring after clearance.",
+       "points": [
+        "Three methods named with a line each",
+        "Two limitations"
+       ]
+      },
+      {
+       "id": "me-q3",
+       "kind": "mcq",
+       "level": 2,
+       "q": "Which is the key difference between EIA and an environmental audit?",
+       "options": [
+        "EIA is done before the project, audit on an existing one",
+        "EIA is done after closure",
+        "both are the same",
+        "audit is done only by the public"
+       ],
+       "answer_index": 0,
+       "why": "EIA predicts for a proposed project; an audit checks a running one."
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "topic": "Important environmental laws",
+   "subtopics": [
+    {
+     "id": "law-chronology",
+     "title": "Constitution and the five main acts",
+     "theory_md": "**Constitution**: **Art. 48A** (Directive Principle: State protects environment) and **Art. 51A(g)** (Fundamental Duty of citizens), both added by the **42nd Amendment, 1976**. Courts read a right to a clean environment into **Art. 21**.\n\n**Acts in order (mnemonic W-W-F-A-E)**:\n- **Wildlife (Protection) Act 1972**\n- **Water (Prevention and Control of Pollution) Act 1974**: created CPCB and SPCBs\n- **Forest (Conservation) Act 1980**: prior Central approval to divert forest land\n- **Air (Prevention and Control of Pollution) Act 1981**\n- **Environment (Protection) Act 1986**: umbrella act after Bhopal (1984)",
+     "basics_md": "India has one law for each part of nature, with the 1986 Act on top of all of them.",
+     "key_points": [
+      "Art. 48A (Directive Principle) and 51A(g) (Fundamental Duty), 42nd Amendment 1976",
+      "Wildlife 1972, Water 1974, Forest 1980, Air 1981, EP Act 1986",
+      "Water Act 1974 created CPCB and SPCBs",
+      "EP Act 1986 is the umbrella act, after Bhopal"
+     ],
+     "questions": [
+      {
+       "id": "ch-q1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "The Water (Prevention and Control of Pollution) Act was passed in",
+       "options": [
+        "1972",
+        "1974",
+        "1981",
+        "1986"
+       ],
+       "answer_index": 1,
+       "why": "1972 is Wildlife, 1981 Air, 1986 the EP Act."
+      },
+      {
+       "id": "ch-q2",
+       "kind": "mcq",
+       "level": 2,
+       "q": "Which statement is correct?",
+       "options": [
+        "Art. 51A(g) is a Directive Principle",
+        "Art. 48A is a Fundamental Duty",
+        "Art. 48A is a Directive Principle and 51A(g) a Fundamental Duty",
+        "both were added in 1950"
+       ],
+       "answer_index": 2,
+       "why": "Both were added in 1976; the common mistake is to swap the two."
+      },
+      {
+       "id": "ch-q3",
+       "kind": "short",
+       "level": 2,
+       "marks": 3,
+       "q": "List the five main environmental acts of India with their years, and state which is the umbrella act and why.",
+       "model_answer_md": "1. Wildlife (Protection) Act, **1972**\n2. Water (Prevention and Control of Pollution) Act, **1974**\n3. Forest (Conservation) Act, **1980**\n4. Air (Prevention and Control of Pollution) Act, **1981**\n5. Environment (Protection) Act, **1986**\n\nThe **EP Act 1986** is the umbrella act. Passed after the Bhopal gas tragedy (1984), it gives the Centre wide powers to coordinate and to make rules (EIA, noise, waste rules) on all aspects of the environment.",
+       "points": [
+        "Five acts with correct years",
+        "EP Act 1986 is the umbrella act",
+        "Reason: after Bhopal; wide powers and rules"
+       ]
+      }
+     ]
+    },
+    {
+     "id": "law-air-act",
+     "title": "Air (Prevention and Control of Pollution) Act, 1981",
+     "theory_md": "Passed to implement the **Stockholm Conference (1972)** decisions.\n\n**Salient features**:\n1. The **Central and State Pollution Control Boards** of the Water Act 1974 also run it.\n2. **Air pollutant**: any solid, liquid or gaseous substance (**noise added in 1987**) in a harmful concentration.\n3. State Governments declare **air pollution control areas** and ban polluting fuels there.\n4. **Prior consent** of the SPCB for industries in control areas.\n5. CPCB sets ambient air quality standards; SPCBs set emission standards.\n6. Boards can inspect, sample and (1987) order **closure**.\n7. Citizens may sue after 60 days' notice (1987).\n8. Penalty: fine and imprisonment.",
+     "basics_md": "The Air Act gave the same boards that policed water the job of policing air, with permission needed before polluting industries run.",
+     "key_points": [
+      "Enacted 1981 after Stockholm 1972",
+      "CPCB and SPCBs, no new board",
+      "Air pollution control areas and consent",
+      "Standards, inspection, closure powers",
+      "1987 amendment: noise, citizen suits"
+     ],
+     "questions": [
+      {
+       "id": "aa-q1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "Noise was added to the definition of air pollutant in",
+       "options": [
+        "1981",
+        "1987",
+        "1986",
+        "2002"
+       ],
+       "answer_index": 1,
+       "why": "The 1987 amendment also added closure powers and citizen suits."
+      },
+      {
+       "id": "aa-q2",
+       "kind": "mcq",
+       "level": 2,
+       "q": "Which board was created by the Air Act 1981?",
+       "options": [
+        "CPCB",
+        "SPCB",
+        "both",
+        "neither; the boards already existed under the Water Act 1974"
+       ],
+       "answer_index": 3,
+       "why": "The Air Act gave air functions to the existing Boards."
+      },
+      {
+       "id": "aa-q3",
+       "kind": "short",
+       "level": 2,
+       "marks": 4,
+       "q": "State the main provisions of the Air Act 1981 that apply to an industry setting up a plant in an air pollution control area.",
+       "model_answer_md": "1. The State Government declares the **air pollution control area** and may ban polluting fuels.\n2. The industry needs **prior consent** from the SPCB to establish and operate, with conditions such as stacks and control equipment.\n3. It must meet the SPCB's **emission standards**.\n4. The Board can inspect, take samples and, after 1987, order closure or cut off power and water.\n5. Violation is punishable by fine and imprisonment.",
+       "points": [
+        "Control area declared by State",
+        "Prior consent from SPCB",
+        "Emission standards",
+        "Inspection and closure",
+        "Penalty"
+       ]
+      },
+      {
+       "id": "aa-p1",
+       "pyq": "25a7851f37bd6d8b",
+       "level": 2,
+       "points": [
+        "Enacted 1981 to implement Stockholm 1972 decisions",
+        "CPCB and SPCBs of Water Act 1974 given air functions",
+        "Air pollutant defined (noise added 1987)",
+        "Air pollution control areas declared by State",
+        "Prior consent of SPCB; standards set by CPCB and SPCB",
+        "Powers of inspection, sampling, closure; citizen suits after 1987; penalties"
+       ]
+      }
+     ]
+    },
+    {
+     "id": "law-water-ep",
+     "title": "Water Act 1974, EP Act 1986 and the other acts",
+     "theory_md": "**Water Act 1974**: first pollution law. Set up **CPCB and SPCBs**, requires **consent** to discharge, allows sampling, standards and closure.\n\n**EP Act 1986**: umbrella act after Bhopal. **Sec. 3** gives the Centre power to take all measures; **Sec. 5** lets it issue directions including closure; **Sec. 7** bars discharges above standards. EIA Notification, Noise Rules 2000 and waste rules are made under it.\n\n**Forest (Conservation) Act 1980**: no de-reservation or diversion of forest land without **prior Central approval**; compensatory afforestation.\n\n**Wildlife Act 1972**: bans hunting of scheduled animals, creates sanctuaries and national parks.",
+     "basics_md": "Water Act made the boards. EP Act gave the Centre one big power to act on anything environmental. Forest and Wildlife Acts protect land and animals.",
+     "key_points": [
+      "Water Act 1974: CPCB, SPCB, consent, standards",
+      "EP Act 1986: Sec. 3, 5, 7; rules made under it",
+      "Forest Act 1980: Central approval for diversion",
+      "Wildlife Act 1972: hunting ban, protected areas"
+     ],
+     "questions": [
+      {
+       "id": "we-q1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "Prior Central Government approval is required to divert forest land under the",
+       "options": [
+        "Forest (Conservation) Act 1980",
+        "Wildlife Act 1972",
+        "Air Act 1981",
+        "Water Act 1974"
+       ],
+       "answer_index": 0,
+       "why": "Wildlife Act protects animals; the Forest Act controls forest land."
+      },
+      {
+       "id": "we-q2",
+       "kind": "short",
+       "level": 2,
+       "marks": 4,
+       "q": "Write the salient features of the Environment (Protection) Act 1986.",
+       "model_answer_md": "1. Enacted in **1986** after the **Bhopal gas tragedy (1984)**, as an **umbrella act** covering air, water and land.\n2. **Sec. 3**: Centre may take all measures to protect and improve the environment, set standards and restrict industrial locations.\n3. **Sec. 5**: directions to any person or authority, including closure or stopping power and water.\n4. **Sec. 7**: no person may discharge pollutants above prescribed standards.\n5. Rules framed under it: EIA Notification, Noise Pollution Rules 2000, hazardous waste rules.\n6. Penalty: imprisonment and fine.",
+       "points": [
+        "Enacted 1986 after Bhopal; umbrella act",
+        "Sec. 3 Central powers",
+        "Sec. 5 directions and closure",
+        "Sec. 7 standards",
+        "Rules made under it"
+       ]
+      },
+      {
+       "id": "we-q3",
+       "kind": "mcq",
+       "level": 2,
+       "q": "Which Act first created the Central and State Pollution Control Boards?",
+       "options": [
+        "Air Act 1981",
+        "EP Act 1986",
+        "Water Act 1974",
+        "Forest Act 1980"
+       ],
+       "answer_index": 2,
+       "why": "The Water Act created them; the Air Act only added air functions."
+      }
+     ]
+    },
+    {
+     "id": "law-international",
+     "title": "International conventions: Stockholm and others",
+     "theory_md": "**Stockholm Convention on Persistent Organic Pollutants (POPs)**: adopted **22 May 2001**, in force **17 May 2004**, India ratified 2006. POPs persist, bioaccumulate and travel far. The initial 'dirty dozen' (DDT, aldrin, dieldrin, PCBs, dioxins, furans) must be eliminated (Annex A), restricted (Annex B, DDT allowed for malaria control) or reduced in unintentional release (Annex C).\n\nOthers: **Montreal Protocol 1987** (ozone-depleting substances), **Basel Convention 1989** (hazardous waste movement), **Kyoto Protocol 1997**, **Paris Agreement 2015**.\n\nNot the same as the **Stockholm Conference of 1972**.",
+     "basics_md": "Some chemicals never break down and drift across the world. The Stockholm Convention is the treaty to remove them.",
+     "key_points": [
+      "Stockholm Convention: POPs, adopted 2001, in force 2004",
+      "Dirty dozen; Annex A eliminate, B restrict, C unintentional release",
+      "Montreal 1987, Basel 1989, Kyoto 1997, Paris 2015",
+      "Different from the 1972 Stockholm Conference"
+     ],
+     "questions": [
+      {
+       "id": "in-q1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "The Stockholm Convention (2001) deals with",
+       "options": [
+        "ozone-depleting substances",
+        "persistent organic pollutants",
+        "hazardous waste trade",
+        "biodiversity"
+       ],
+       "answer_index": 1,
+       "why": "Ozone is the Montreal Protocol; hazardous waste is Basel."
+      },
+      {
+       "id": "in-q2",
+       "kind": "short",
+       "level": 2,
+       "marks": 3,
+       "q": "Write a short note on the Stockholm Convention (about 65 words).",
+       "model_answer_md": "The **Stockholm Convention on Persistent Organic Pollutants** is a global treaty adopted on 22 May 2001 and in force from 17 May 2004. It protects health and the environment from POPs, which persist, bioaccumulate and travel long distances. The initial 'dirty dozen' (DDT, aldrin, dieldrin, PCBs, dioxins, furans) must be eliminated (Annex A), restricted (Annex B) or their unintentional release reduced (Annex C). India ratified it in 2006.",
+       "points": [
+        "Treaty on POPs, 2001, in force 2004",
+        "POPs persist, bioaccumulate, travel far",
+        "Dirty dozen; Annexes A, B, C"
+       ]
+      },
+      {
+       "id": "in-q3",
+       "kind": "mcq",
+       "level": 2,
+       "q": "Match: the Montreal Protocol (1987) controls",
+       "options": [
+        "persistent organic pollutants",
+        "ozone-depleting substances",
+        "hazardous waste trade",
+        "greenhouse gas targets of 1997"
+       ],
+       "answer_index": 1,
+       "why": "POPs are Stockholm 2001, hazardous waste Basel 1989, 1997 targets Kyoto."
+      },
+      {
+       "id": "in-p1",
+       "pyq": "f6ffb83d175a9d58",
+       "level": 2,
+       "points": [
+        "Global treaty on persistent organic pollutants, adopted 22 May 2001, in force 17 May 2004",
+        "POPs persist, bioaccumulate and travel long distances",
+        "Dirty dozen, e.g. DDT, aldrin, dieldrin, PCBs, dioxins, furans",
+        "Annex A eliminate, Annex B restrict (DDT for malaria), Annex C unintentional release"
+       ]
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "topic": "Green chemistry",
+   "subtopics": [
+    {
+     "id": "gc-principles",
+     "title": "Green chemistry and its 12 principles",
+     "theory_md": "**Green chemistry** (Anastas and Warner, 1998) is the design of chemical products and processes that **reduce or eliminate the use and generation of hazardous substances**: pollution prevention at source, not end-of-pipe treatment.\n\n**12 principles**: 1 Prevention; 2 Atom economy; 3 Less hazardous syntheses; 4 Safer chemicals; 5 Safer solvents; 6 Energy efficiency; 7 Renewable feedstocks; 8 Reduce derivatives; 9 Catalysis; 10 Design for degradation; 11 Real-time analysis; 12 Inherently safer chemistry (Bhopal).\n\n**Advantages**: less waste and pollution, safer workers, energy and cost saving, resource conservation, safer products, supports sustainability.",
+     "basics_md": "Instead of cleaning up a mess, do not make it. Each principle is a rule for chemists to avoid waste, poison and wasted energy from the start.",
+     "key_points": [
+      "Definition: reduce or eliminate hazardous substances; Anastas and Warner 1998",
+      "All 12 principles in order, one line each",
+      "Prevention at source, not treatment",
+      "Advantages: less waste, safety, energy and cost saving",
+      "A relevant example for each principle asked"
+     ],
+     "questions": [
+      {
+       "id": "pr-q1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "Which principle says it is better to prevent waste than to treat it?",
+       "options": [
+        "Atom economy",
+        "Prevention",
+        "Catalysis",
+        "Design for degradation"
+       ],
+       "answer_index": 1,
+       "why": "That is the first principle. Atom economy is about incorporating atoms in the product."
+      },
+      {
+       "id": "pr-q2",
+       "kind": "mcq",
+       "level": 2,
+       "q": "Catalytic reagents are preferred over stoichiometric ones because they",
+       "options": [
+        "are consumed in the reaction",
+        "are used in small amounts, recycled and cut waste",
+        "need higher temperature",
+        "increase the number of steps"
+       ],
+       "answer_index": 1,
+       "why": "A catalyst is not consumed and lowers energy; the common mistake is to think it is used up."
+      },
+      {
+       "id": "pr-q3",
+       "kind": "long",
+       "level": 3,
+       "marks": 5,
+       "q": "Discuss the principles of green chemistry. What are its advantages?",
+       "model_answer_md": "**Green chemistry** (Anastas and Warner, 1998): design of products and processes that reduce or eliminate hazardous substances.\n\n**Principles**\n1. Prevention of waste\n2. Atom economy\n3. Less hazardous chemical syntheses\n4. Designing safer chemicals\n5. Safer solvents and auxiliaries (water, supercritical $\\mathrm{CO_2}$)\n6. Design for energy efficiency (ambient conditions)\n7. Renewable feedstocks (biomass)\n8. Reduce derivatives (no protecting groups)\n9. Catalysis over stoichiometric reagents\n10. Design for degradation\n11. Real-time analysis for pollution prevention\n12. Inherently safer chemistry for accident prevention\n\n**Advantages**: less waste and pollution; safer for workers and public; energy saving; lower cost; conserves petroleum; safer biodegradable products; supports sustainable development.",
+       "points": [
+        "Definition with Anastas and Warner",
+        "All 12 principles named in order",
+        "Advantages: less waste",
+        "Advantages: safety, energy, cost, sustainability"
+       ]
+      },
+      {
+       "id": "pr-p1",
+       "pyq": "056674ae2f8aa418",
+       "level": 1,
+       "points": [
+        "Reduce or eliminate use and generation of hazardous substances",
+        "Prevent pollution at source rather than treat waste",
+        "Saves energy and raw materials"
+       ]
+      },
+      {
+       "id": "pr-p2",
+       "pyq": "e24c2ae291307f65",
+       "level": 1,
+       "points": [
+        "Design of products and processes that reduce or eliminate hazardous substances",
+        "Anastas and Warner 1998; prevention at source",
+        "12 principles; example: BHC ibuprofen"
+       ]
+      },
+      {
+       "id": "pr-p3",
+       "pyq": "6ce0344a10cb549c",
+       "level": 2,
+       "points": [
+        "Prevention: prevent waste rather than treat; E-factor; ibuprofen BHC",
+        "Atom economy: maximise atoms in product; formula; Diels-Alder 100%",
+        "Catalysis: catalytic over stoichiometric; zeolite, enzymes, Pd",
+        "Each principle stated, explained and with an example"
+       ]
+      },
+      {
+       "id": "pr-p4",
+       "pyq": "5164063334be651b",
+       "level": 2,
+       "points": [
+        "Green chemistry defined (Anastas and Warner 1998)",
+        "Prevention at source, not end of pipe",
+        "All 12 principles listed with a line each"
+       ]
+      },
+      {
+       "id": "pr-p5",
+       "pyq": "0ac5bdc1f057282f",
+       "level": 3,
+       "points": [
+        "Definition of green chemistry",
+        "12 principles listed",
+        "Advantages: less waste and pollution, safer, energy saving",
+        "Advantages: economic benefit, conserves resources, safer products, sustainability"
+       ]
+      }
+     ]
+    },
+    {
+     "id": "gc-goals",
+     "title": "Goals, sustainable chemistry and its principles",
+     "theory_md": "**Goals** (what we want): minimise waste, reduce hazard, safer reaction media, save energy, conserve resources, protect people and environment. The **principles** are the design rules that achieve them:\n\n| Goal | Principles |\n|---|---|\n| less waste | 1, 2 |\n| less toxicity | 3, 4 |\n| safer media | 5 |\n| save energy | 6, 9 |\n| conserve resources | 7, 8 |\n| protect environment and people | 10, 11, 12 |\n\n**Sustainable chemistry** meets present chemical needs without harming health, environment or future generations. Green chemistry is sustainable chemistry: same 12 principles across the whole life cycle.",
+     "basics_md": "A goal is the destination; the principles are the roads. Sustainable chemistry is simply green chemistry applied to everything a chemical goes through.",
+     "key_points": [
+      "Six goals mapped to principles",
+      "Sustainable chemistry = green chemistry over the whole life cycle",
+      "Serves environmental, economic and social pillars",
+      "Primary objective: prevent pollution at source"
+     ],
+     "questions": [
+      {
+       "id": "go-q1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "Principles 7 and 8 (renewable feedstocks, reduce derivatives) serve the goal of",
+       "options": [
+        "minimising waste",
+        "conserving resources",
+        "safer solvents",
+        "accident prevention"
+       ],
+       "answer_index": 1,
+       "why": "Biomass saves petroleum and avoiding protecting groups saves reagents."
+      },
+      {
+       "id": "go-q2",
+       "kind": "short",
+       "level": 2,
+       "marks": 3,
+       "q": "Is green chemistry sustainable chemistry? Justify in three points.",
+       "model_answer_md": "**Yes.** Sustainable chemistry meets today's chemical needs without harming health, environment or future generations; green chemistry does this through its principles:\n1. **Environment**: prevention and atom economy cut waste and pollution.\n2. **Economy**: catalysis, fewer steps and energy saving cut cost.\n3. **Society and future**: safer chemicals, accident prevention, renewable feedstocks and biodegradable products protect people and save petroleum.",
+       "points": [
+        "Yes, with definition",
+        "Environmental benefit",
+        "Economic benefit",
+        "Social and future benefit"
+       ]
+      },
+      {
+       "id": "go-q3",
+       "kind": "mcq",
+       "level": 2,
+       "q": "Using water or supercritical $\\mathrm{CO_2}$ instead of benzene serves which principle?",
+       "options": [
+        "Prevention",
+        "Safer solvents and auxiliaries",
+        "Reduce derivatives",
+        "Real-time analysis"
+       ],
+       "answer_index": 1,
+       "why": "Principle 5; safer media is the goal it serves."
+      },
+      {
+       "id": "go-p1",
+       "pyq": "49232418ea3e6dd1",
+       "level": 2,
+       "points": [
+        "Yes: green chemistry is sustainable chemistry",
+        "Supports environment, economy and society",
+        "All 12 principles listed"
+       ]
+      },
+      {
+       "id": "go-p2",
+       "pyq": "ba173554d63388c8",
+       "level": 2,
+       "points": [
+        "Minimise waste: P1, P2 (BHC ibuprofen)",
+        "Reduce toxicity: P3, P4 (dimethyl carbonate for phosgene)",
+        "Safer media: P5 (water, sc-CO2)",
+        "Save energy: P6, P9 (enzymes, zeolites)",
+        "Conserve resources: P7, P8 (PLA from starch)",
+        "Protect environment and people: P10, P11, P12 (biodegradable PLA, in-line monitoring, Bhopal)"
+       ]
+      },
+      {
+       "id": "go-p3",
+       "pyq": "45b1cb068b514e02",
+       "level": 2,
+       "points": [
+        "Primary objective: prevent pollution at source by reducing hazardous substances",
+        "Less waste via atom economy",
+        "Safer reagents and solvents",
+        "Energy efficiency, catalysis, renewable feedstocks",
+        "Degradation, accident prevention, economic benefit"
+       ]
+      },
+      {
+       "id": "go-p4",
+       "pyq": "b1057aa3bb5667b2",
+       "level": 1,
+       "points": [
+        "Design, production and use of chemicals meeting present needs without harming health, environment or future generations",
+        "Applies green chemistry principles over the life cycle",
+        "Balances environmental, economic and social aspects; example PLA"
+       ]
+      },
+      {
+       "id": "go-p5",
+       "pyq": "abf509d0b03a0268",
+       "level": 3,
+       "points": [
+        "Sustainable chemistry defined",
+        "12 principles listed in order",
+        "Examples: BHC ibuprofen, PLA from corn starch"
+       ]
+      },
+      {
+       "id": "go-p6",
+       "pyq": "e06302877c11016b",
+       "level": 1,
+       "points": [
+        "Goal 1: prevent waste at source",
+        "Goal 2: reduce hazard, safer solvents",
+        "Goal 3: save energy and resources, catalysts, renewable feedstocks"
+       ]
+      }
+     ]
+    },
+    {
+     "id": "gc-atom-economy",
+     "title": "Atom economy, yield and E-factor",
+     "theory_md": "$$\\%\\ AE=\\frac{M_{\\text{desired product}}}{\\sum M_{\\text{reactants}}}\\times100$$\n(use stoichiometric coefficients; from the balanced equation only).\n\n$$\\%\\ \\text{yield}=\\frac{\\text{actual}}{\\text{theoretical}}\\times100,\\qquad E\\text{-factor}=\\frac{\\text{kg waste}}{\\text{kg product}}$$\n\nAtom economy is **fixed by the equation**; yield changes with conditions. A reaction can give 100% yield and poor atom economy. Additions and rearrangements: 100% AE; substitutions and eliminations: lower.\n\nSteps: balance, find desired product, add reactant masses, divide. Atomic masses: C 12, H 1, O 16, N 14, Cl 35.5, Fe 56.",
+     "basics_md": "Atom economy asks how much of what you put in ends up in what you want. Yield asks how much of the possible product you actually got. They are different questions.",
+     "key_points": [
+      "AE formula with coefficients",
+      "Yield and AE are different; AE does not depend on yield",
+      "Show the molar mass table and the final percentage",
+      "Addition 100%, substitution and elimination less",
+      "E-factor = kg waste / kg product"
+     ],
+     "figures": [
+      {
+       "smiles": "CCO>>C=C.O",
+       "caption": "Ethanol to ethylene + water: AE = 28/46 = 60.9%"
+      },
+      {
+       "smiles": "CC(=O)O.CO>>CC(=O)OC.O",
+       "caption": "Esterification: AE = 74/92 = 80.4%"
+      }
+     ],
+     "questions": [
+      {
+       "id": "ae-q1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "Changing the percentage yield of a reaction from 40% to 60% changes its atom economy",
+       "options": [
+        "from 40% to 60%",
+        "by the same ratio",
+        "not at all",
+        "to 100%"
+       ],
+       "answer_index": 2,
+       "why": "AE depends only on the balanced equation."
+      },
+      {
+       "id": "ae-q2",
+       "kind": "numerical",
+       "level": 2,
+       "marks": 3,
+       "q": "Calculate the atom economy of $\\mathrm{CH_3Cl+NaOH\\rightarrow CH_3OH+NaCl}$ (desired product $\\mathrm{CH_3OH}$; C 12, H 1, O 16, Na 23, Cl 35.5). Is it a good green reaction?",
+       "model_answer_md": "$M(\\mathrm{CH_3Cl})=12+3+35.5=50.5$; $M(\\mathrm{NaOH})=23+16+1=40$; total reactants $=90.5$.\n$M(\\mathrm{CH_3OH})=32$.\n\n$$\\%\\ AE=\\frac{32}{90.5}\\times100=35.4\\%$$\n\nNo: a substitution wastes NaCl (58.5 g of every 90.5 g), so about 65% of the reactant mass is waste.",
+       "points": [
+        "Reactant masses 50.5 + 40 = 90.5",
+        "Product 32",
+        "AE = 35.4%",
+        "Substitution wastes NaCl"
+       ]
+      },
+      {
+       "id": "ae-q3",
+       "kind": "numerical",
+       "level": 2,
+       "marks": 2,
+       "q": "12.0 g of Mg burns in excess oxygen to give MgO (Mg 24, MgO 40) and 16 g of MgO is obtained. Find the percentage yield.",
+       "model_answer_md": "$\\mathrm{2Mg+O_2\\rightarrow 2MgO}$. Moles Mg $=12.0/24=0.5$, so theoretical MgO $=0.5\\times40=20$ g.\n\n$$\\%\\ \\text{yield}=\\frac{16}{20}\\times100=80\\%$$",
+       "points": [
+        "0.5 mol Mg gives 0.5 mol MgO",
+        "Theoretical 20 g",
+        "Yield = 80%"
+       ]
+      },
+      {
+       "id": "ae-p1",
+       "pyq": "66af164abf53e0ed",
+       "level": 2,
+       "points": [
+        "Atom economy defined with formula",
+        "M(ethanol) = 46, M(ethylene) = 28",
+        "AE = 28/46 x 100 = 60.9%",
+        "Yield (75%) does not change atom economy; overall 45.7% if asked"
+       ]
+      },
+      {
+       "id": "ae-p2",
+       "pyq": "c977dca4d2088283",
+       "level": 2,
+       "points": [
+        "Atom economy defined with formula",
+        "AE = 28/46 x 100 = 60.9%",
+        "65% yield does not change AE; overall 39.6% if asked"
+       ]
+      },
+      {
+       "id": "ae-p3",
+       "pyq": "82096eca5625d3c7",
+       "level": 2,
+       "points": [
+        "Definition [1]",
+        "Masses 60 + 32 = 92; methyl acetate 74",
+        "AE = 74/92 x 100 = 80.4% [2]",
+        "No effect of 40% or 60% yield [1]"
+       ]
+      },
+      {
+       "id": "ae-p4",
+       "pyq": "26a284985a6d032d",
+       "level": 2,
+       "points": [
+        "Importance: less waste, less raw material, principle 2 serves principle 1",
+        "Atom economy theoretical from equation; yield experimental",
+        "Masses 31 + 99 = 130; CH3NCO 57",
+        "AE = 57/130 x 100 = 43.8%"
+       ]
+      },
+      {
+       "id": "ae-p5",
+       "pyq": "522e7110ba1c8aab",
+       "level": 2,
+       "points": [
+        "AE formula with coefficients",
+        "3 CO = 84, Fe2O3 = 160, total 244",
+        "2 Fe = 112",
+        "AE = 112/244 x 100 = 45.9%"
+       ]
+      },
+      {
+       "id": "ae-p6",
+       "pyq": "b182216116c89ec6",
+       "level": 2,
+       "points": [
+        "Moles CaCO3 = 10/100 = 0.1; theoretical CaO = 5.6 g",
+        "% yield = actual/theoretical x 100",
+        "4.2/5.6 x 100 = 75%"
+       ]
+      },
+      {
+       "id": "ae-p7",
+       "pyq": "503ea3d12018eba7",
+       "level": 1,
+       "points": [
+        "Percentage yield = actual / theoretical x 100",
+        "Says nothing about waste by-products"
+       ]
+      }
+     ]
+    },
+    {
+     "id": "gc-syntheses",
+     "title": "Green syntheses and reagents; green vs conventional",
+     "theory_md": "**BHC ibuprofen** (3 catalytic steps): isobutylbenzene + acetic anhydride, **HF** catalyst; hydrogenation, **Raney Ni**/$\\mathrm{H_2}$; carbonylation, **Pd**/CO. AE $=206/266=77.4\\%$ (Boots route: 6 steps, $\\mathrm{AlCl_3}$, about 40%).\n\n**Adipic acid**: cyclohexene + 30% $\\mathrm{H_2O_2}$, $\\mathrm{Na_2WO_4}$ catalyst, no solvent, by-product water; avoids $\\mathrm{N_2O}$ of the $\\mathrm{HNO_3}$ route. AE $=146/218=67.0\\%$.\n\n**Dimethyl carbonate (DMC)**: replaces toxic $\\mathrm{CH_3I}$/phosgene. With zeolite, $\\mathrm{ArNH_2\\rightarrow ArNHCH_3+CH_3OH+CO_2}$.\n\n**Polymer-supported peracid** epoxidises alkenes; by-product acid is filtered off and reused.",
+     "basics_md": "A green synthesis swaps poisonous or wasteful reagents for catalysts, water or hydrogen peroxide so that very little is left over.",
+     "key_points": [
+      "BHC: three catalytic steps, AE 77.4% against about 40%",
+      "Adipic acid by H2O2 and tungstate, by-product water",
+      "DMC replaces phosgene and methyl halides",
+      "Comparison: prevention vs treatment, catalytic vs stoichiometric, safe solvents",
+      "Name reagents, catalysts and conditions"
+     ],
+     "figures": [
+      {
+       "smiles": "CC(C)Cc1ccccc1>>CC(C)Cc1ccc(cc1)C(C)=O",
+       "caption": "BHC step 1: acylation of isobutylbenzene (acetic anhydride, HF)"
+      },
+      {
+       "smiles": "CC(C)Cc1ccc(cc1)C(C)=O>>CC(C)Cc1ccc(cc1)C(C)O",
+       "caption": "BHC step 2: hydrogenation (H2, Raney Ni)"
+      },
+      {
+       "smiles": "CC(C)Cc1ccc(cc1)C(C)O>>CC(C)Cc1ccc(cc1)C(C)C(=O)O",
+       "caption": "BHC step 3: carbonylation (CO, Pd) to ibuprofen"
+      },
+      {
+       "smiles": "C1=CCCCC1>>OC(=O)CCCCC(=O)O",
+       "caption": "Adipic acid from cyclohexene (30% H2O2, Na2WO4)"
+      },
+      {
+       "smiles": "COC(=O)OC",
+       "caption": "Dimethyl carbonate (DMC), a green methylating agent"
+      },
+      {
+       "smiles": "Nc1ccccc1.COC(=O)OC>>CNc1ccccc1.CO.O=C=O",
+       "caption": "N-methylation of aniline with DMC over zeolite"
+      },
+      {
+       "smiles": "C=C>>C1CO1",
+       "caption": "Epoxidation of an alkene (ethene shown) with a peracid"
+      }
+     ],
+     "questions": [
+      {
+       "id": "sy-q1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "The green synthesis of adipic acid oxidises cyclohexene with",
+       "options": [
+        "conc. $\\mathrm{HNO_3}$",
+        "$\\mathrm{H_2O_2}$ and sodium tungstate",
+        "$\\mathrm{KMnO_4}$ in benzene",
+        "$\\mathrm{CrO_3}$"
+       ],
+       "answer_index": 1,
+       "why": "HNO3 is the old route that releases N2O."
+      },
+      {
+       "id": "sy-q2",
+       "kind": "numerical",
+       "level": 3,
+       "marks": 3,
+       "q": "Calculate the atom economy of the green adipic acid synthesis $\\mathrm{C_6H_{10}+4H_2O_2\\rightarrow HOOC(CH_2)_4COOH+4H_2O}$ (C 12, H 1, O 16).",
+       "model_answer_md": "$M(\\mathrm{C_6H_{10}})=82$; $M(\\mathrm{H_2O_2})=34$, so $4\\times34=136$; total reactants $=218$.\n$M(\\mathrm{adipic\\ acid})=6(12)+10(1)+4(16)=146$.\n\n$$\\%\\ AE=\\frac{146}{218}\\times100=67.0\\%$$",
+       "points": [
+        "Reactants 82 + 136 = 218",
+        "Adipic acid 146",
+        "AE = 67.0%"
+       ]
+      },
+      {
+       "id": "sy-q3",
+       "kind": "mcq",
+       "level": 2,
+       "q": "Compared with the Boots route, the BHC route to ibuprofen has",
+       "options": [
+        "more steps and stoichiometric $\\mathrm{AlCl_3}$",
+        "3 catalytic steps and higher atom economy",
+        "lower atom economy",
+        "no catalyst"
+       ],
+       "answer_index": 1,
+       "why": "BHC: 3 steps, about 77% AE; Boots: 6 steps, about 40%."
+      },
+      {
+       "id": "sy-p1",
+       "pyq": "c65788a22e0893de",
+       "level": 2,
+       "points": [
+        "Boots route: 6 steps, AlCl3, AE about 40%",
+        "BHC step 1: Friedel-Crafts acylation, acetic anhydride, HF",
+        "Step 2: hydrogenation, H2, Raney Ni; step 3: carbonylation, CO, Pd",
+        "AE = 206/266 x 100 = 77.4%",
+        "Green principles: prevention, atom economy, catalysis"
+       ]
+      },
+      {
+       "id": "sy-p2",
+       "pyq": "58449125bdc44593",
+       "level": 2,
+       "points": [
+        "Conventional: HNO3 oxidation gives N2O",
+        "Green: cyclohexene + 30% H2O2, Na2WO4 catalyst, no organic solvent",
+        "Equation balanced; by-product water; AE = 146/218 = 67%",
+        "Principles followed: prevention, safer reagents, catalysis, no solvent"
+       ]
+      },
+      {
+       "id": "sy-p3",
+       "pyq": "3430949db1e5b949",
+       "level": 2,
+       "points": [
+        "Green: prevention; conventional: end-of-pipe treatment",
+        "Catalytic and non-toxic reagents vs stoichiometric and toxic",
+        "Safer solvents and mild conditions vs VOCs and high T and P",
+        "Renewable vs petroleum feedstock; fewer vs many steps",
+        "Examples: ibuprofen, adipic acid, dry cleaning"
+       ]
+      },
+      {
+       "id": "sy-p4",
+       "pyq": "6e0d2b472cdf194b",
+       "level": 2,
+       "points": [
+        "(i) N-methylation with dimethyl carbonate: X = ArNHCH3, X' = CH3OH (zeolite catalyst)",
+        "(ii) Epoxidation of the alkene with the polymer-supported peracid",
+        "Y = epoxide, Y' = polymer-supported benzoic acid, removed by filtration and reused"
+       ]
+      }
+     ]
+    },
+    {
+     "id": "gc-zero-waste",
+     "title": "Zero waste technology and green computing",
+     "theory_md": "**Zero waste technology**: processes designed so **no waste goes to landfill, incinerator or water**; every output is a product or a raw material for another process. Hierarchy: refuse, reduce, reuse, recycle, recover; closed-loop (cradle-to-cradle). Examples: fly ash in bricks and cement, bagasse as fuel, spent wash to biogas, composting.\n\n**Green computing** is environmentally responsible design, use and disposal of IT. **Cost savings**: lower electricity (Energy Star, sleep modes), virtualisation and fewer servers, lower cooling cost, cloud sharing, longer equipment life and recycling, paperless work.",
+     "basics_md": "If one factory's waste is another's raw material, nothing is thrown away. In computing, using less power and fewer machines also means a smaller bill.",
+     "key_points": [
+      "Zero waste: no waste to landfill; outputs reused as inputs",
+      "Examples: fly ash bricks, bagasse, biogas",
+      "Green computing: efficient design, use and disposal of IT",
+      "Savings: electricity, servers, cooling, paper, e-waste"
+     ],
+     "questions": [
+      {
+       "id": "zw-q1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "Which is an example of zero waste technology?",
+       "options": [
+        "dumping fly ash in a pond",
+        "using fly ash in bricks and cement",
+        "burning plastic",
+        "landfilling kitchen waste"
+       ],
+       "answer_index": 1,
+       "why": "The waste becomes a raw material for another process."
+      },
+      {
+       "id": "zw-q2",
+       "kind": "short",
+       "level": 2,
+       "marks": 3,
+       "q": "Explain how green computing saves cost.",
+       "model_answer_md": "Green computing is the environmentally responsible design, use and disposal of IT. Savings come from:\n1. **Electricity**: Energy Star hardware, sleep and auto shut-down.\n2. **Virtualisation**: fewer physical servers to buy and run.\n3. **Cooling**: efficient hardware and data-centre design cut air-conditioning load.\n4. **Cloud and longer life**: shared hardware, upgrading not replacing, recycling.\n5. **Paperless work**: less paper and toner.",
+       "points": [
+        "Definition",
+        "Electricity and cooling saving",
+        "Virtualisation and fewer servers",
+        "Longer life, recycling, paperless"
+       ]
+      },
+      {
+       "id": "zw-q3",
+       "kind": "mcq",
+       "level": 2,
+       "q": "Virtualisation saves money because",
+       "options": [
+        "more servers are needed",
+        "many virtual servers run on one machine, cutting hardware and power",
+        "it increases cooling",
+        "it prints less"
+       ],
+       "answer_index": 1,
+       "why": "Server consolidation reduces purchase, power and cooling cost."
+      },
+      {
+       "id": "zw-p1",
+       "pyq": "b5ab1ed8484e3399",
+       "level": 1,
+       "points": [
+        "No waste to landfill, incinerator or water",
+        "Outputs are product or raw material for another process; closed loop",
+        "Examples: fly ash, bagasse, spent wash to biogas"
+       ]
+      },
+      {
+       "id": "zw-p2",
+       "pyq": "02a27db15d6abe38",
+       "level": 1,
+       "points": [
+        "No waste to landfill, incinerator or water",
+        "Outputs are product or raw material for another process; closed loop",
+        "Examples: fly ash, bagasse, spent wash to biogas"
+       ]
+      },
+      {
+       "id": "zw-p3",
+       "pyq": "9b63ef901bc625c8",
+       "level": 2,
+       "points": [
+        "Green computing defined",
+        "Lower electricity and cooling cost",
+        "Virtualisation, consolidation, cloud",
+        "Longer life, recycling, paperless"
+       ]
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "topic": "Sustainability and its ten commandments",
+   "subtopics": [
+    {
+     "id": "su-concept",
+     "title": "Concept, pillars and milestones",
+     "theory_md": "**Sustainable development** is 'development that meets the needs of the present without compromising the ability of future generations to meet their own needs' (**Brundtland Report, *Our Common Future*, 1987**).\n\n**Three pillars**: environmental, economic, social (planet, profit, people). Equity **between** generations and **within** one generation. Live within **carrying capacity**: use renewables no faster than they regenerate and produce wastes no faster than nature absorbs them.\n\n**Milestones**: Stockholm 1972, Brundtland 1987, Rio Earth Summit 1992 (Agenda 21), 17 SDGs (2015, target 2030).",
+     "basics_md": "Use the Earth like a bank account: spend only the interest so that your grandchildren still have the savings.",
+     "key_points": [
+      "Brundtland definition, 1987, word for word",
+      "Three pillars: environmental, economic, social",
+      "Inter- and intra-generational equity; carrying capacity",
+      "Stockholm 1972, Rio 1992, SDGs 2015"
+     ],
+     "questions": [
+      {
+       "id": "co-q1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "The definition of sustainable development comes from the",
+       "options": [
+        "Rio Declaration 1992",
+        "Brundtland Report 1987",
+        "Kyoto Protocol 1997",
+        "Paris Agreement 2015"
+       ],
+       "answer_index": 1,
+       "why": "Our Common Future, 1987."
+      },
+      {
+       "id": "co-q2",
+       "kind": "short",
+       "level": 2,
+       "marks": 3,
+       "q": "Define sustainability. Name its three pillars and explain carrying capacity.",
+       "model_answer_md": "**Sustainable development** is development that meets the needs of the present without compromising the ability of future generations to meet their own needs (Brundtland, 1987).\n\n**Pillars**: environmental, economic, social.\n\n**Carrying capacity**: the maximum load the Earth can support indefinitely; renewable resources must be used no faster than they regenerate, and wastes produced no faster than nature absorbs them.",
+       "points": [
+        "Brundtland definition with year",
+        "Three pillars",
+        "Carrying capacity explained"
+       ]
+      },
+      {
+       "id": "co-q3",
+       "kind": "mcq",
+       "level": 2,
+       "q": "A student says sustainability concerns only the environment. The best correction is that it also needs",
+       "options": [
+        "only economic growth",
+        "economic and social pillars and equity",
+        "population growth",
+        "more fossil fuels"
+       ],
+       "answer_index": 1,
+       "why": "All three pillars must be balanced."
+      }
+     ]
+    },
+    {
+     "id": "su-commandments",
+     "title": "The ten commandments of sustainability",
+     "theory_md": "Standard content (match your class slides if worded differently):\n1. **Conserve resources**: efficient use, within carrying capacity.\n2. **Reduce, reuse, recycle.**\n3. **Renewable energy and energy saving.**\n4. **Prevent pollution at source**; polluter pays.\n5. **Protect biodiversity and ecosystems.**\n6. **Stabilise population.**\n7. **Sustainable agriculture and water use.**\n8. **Equity** between and within generations.\n9. **Clean, appropriate technology; precautionary principle.**\n10. **Environmental education, public participation, good governance.**",
+     "basics_md": "Ten rules of thumb: use less, waste less, use clean energy, stop pollution early, protect life, keep population steady, farm and water wisely, be fair, use clean technology, and teach and involve everyone.",
+     "key_points": [
+      "List ten with one explanatory line each",
+      "Include conserve, 3Rs, renewable energy, pollution prevention",
+      "Include biodiversity, population, equity, education",
+      "For 'any three' give three with an example each"
+     ],
+     "questions": [
+      {
+       "id": "tc-q1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "Which is NOT one of the ten commandments of sustainability?",
+       "options": [
+        "Reduce, reuse, recycle",
+        "Use renewable energy",
+        "Maximise use of fossil fuels",
+        "Protect biodiversity"
+       ],
+       "answer_index": 2,
+       "why": "Sustainability asks us to shift away from fossil fuels."
+      },
+      {
+       "id": "tc-q2",
+       "kind": "short",
+       "level": 2,
+       "marks": 4,
+       "q": "What is sustainability? Discuss any three commandments of sustainability.",
+       "model_answer_md": "**Sustainability**: meeting present needs without compromising future generations' ability to meet theirs (Brundtland, 1987); environmental, economic and social pillars.\n\n**Three commandments**\n1. **Conserve and use resources efficiently**: renewables no faster than they regenerate, e.g. water harvesting, efficient irrigation.\n2. **Reduce, reuse, recycle**: minimise waste, e.g. composting, recycling metals and plastics.\n3. **Renewable energy and energy saving**: replace fossil fuels with solar, wind, hydro; use efficient appliances to cut $\\mathrm{CO_2}$.",
+       "points": [
+        "Definition with 1987",
+        "Three commandments named",
+        "Explanation and example for each"
+       ]
+      },
+      {
+       "id": "tc-q3",
+       "kind": "mcq",
+       "level": 2,
+       "q": "'The polluter pays' and prevention at source belong under the commandment",
+       "options": [
+        "protect biodiversity",
+        "prevent pollution at source",
+        "stabilise population",
+        "environmental education"
+       ],
+       "answer_index": 1,
+       "why": "Commandment 4 in the standard list."
+      },
+      {
+       "id": "tc-p1",
+       "pyq": "1c5cf9151b14f1f8",
+       "level": 2,
+       "points": [
+        "Sustainability defined (Brundtland 1987); three pillars",
+        "Commandment 1: conserve and use resources efficiently, with example",
+        "Commandment 2: reduce, reuse, recycle, with example",
+        "Commandment 3: renewable energy and energy saving, with example"
+       ]
+      },
+      {
+       "id": "tc-p2",
+       "pyq": "04e8b7275542b693",
+       "level": 3,
+       "points": [
+        "Concept: Brundtland 1987, carrying capacity, three pillars, equity, milestones",
+        "Ten commandments listed, each with a line",
+        "Resources, 3Rs, renewable energy, pollution prevention, biodiversity",
+        "Population, sustainable agriculture, equity, clean technology, education and governance"
+       ]
+      }
+     ]
+    },
+    {
+     "id": "su-ipat-sdg",
+     "title": "IPAT, SDGs and individual action",
+     "theory_md": "$$I=P\\times A\\times T$$\nImpact = Population x Affluence (consumption per person) x Technology (impact per unit consumed). Cutting impact needs lower consumption, cleaner technology or stable population.\n\n**SDGs**: 17 goals adopted in **2015** for **2030** (not 8, which were the 2000-2015 Millennium goals).\n\n**Individual action**: save energy and water, reuse and recycle, use public transport, avoid single-use plastic, plant trees, buy local.",
+     "basics_md": "Total harm = number of people x what each uses x how harmful the way of making it is. Reduce any one and harm falls.",
+     "key_points": [
+      "IPAT: I = P x A x T with meaning of each",
+      "17 SDGs, 2015, target 2030",
+      "Sustainability needs individual and institutional action"
+     ],
+     "questions": [
+      {
+       "id": "ip-q1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "How many Sustainable Development Goals were adopted in 2015?",
+       "options": [
+        "8",
+        "10",
+        "12",
+        "17"
+       ],
+       "answer_index": 3,
+       "why": "Eight were the Millennium Development Goals."
+      },
+      {
+       "id": "ip-q2",
+       "kind": "numerical",
+       "level": 2,
+       "marks": 2,
+       "q": "In the IPAT equation, population doubles, affluence rises by 50% and technology becomes twice as clean (impact per unit halves). By what factor does impact change?",
+       "model_answer_md": "$I=P\\times A\\times T$. New $I/I_0=2\\times1.5\\times0.5=1.5$.\n\nImpact rises by a factor of 1.5, i.e. by 50%.",
+       "points": [
+        "I = P x A x T",
+        "2 x 1.5 x 0.5 = 1.5",
+        "Impact up 50%"
+       ]
+      },
+      {
+       "id": "ip-q3",
+       "kind": "mcq",
+       "level": 2,
+       "q": "Which change alone lowers the impact in IPAT?",
+       "options": [
+        "higher affluence",
+        "cleaner technology",
+        "faster population growth",
+        "more consumption per person"
+       ],
+       "answer_index": 1,
+       "why": "T is impact per unit of consumption; lowering it lowers I."
+      }
+     ]
+    }
+   ]
+  }
+ ]
+}

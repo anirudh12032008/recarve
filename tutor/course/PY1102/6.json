@@ -1,0 +1,470 @@
+{
+ "code": "PY1102",
+ "unit": "Theory of Relativity",
+ "written": "2026-10-19",
+ "by": "claude-sonnet-5-5, in a Claude Code session",
+ "topics": [
+  {
+   "topic": "Transformation equations",
+   "subtopics": [
+    {
+     "id": "lorentz",
+     "title": "Lorentz transformation equations",
+     "theory_md": "The **Galilean** transformation $x'=x-vt$, $t'=t$ fails at speeds near $c$ because the speed of light is the same in all inertial frames (Einstein's second postulate; the first says the laws of physics are the same in all inertial frames). Frame $S'$ moves with speed $v$ along $x$ relative to $S$ (origins coincide at $t=t'=0$):\n$$x'=\\gamma(x-vt),\\quad y'=y,\\quad z'=z,\\quad t'=\\gamma\\left(t-\\frac{vx}{c^2}\\right),\\quad \\gamma=\\frac{1}{\\sqrt{1-v^2/c^2}}$$\nInverse: replace $v$ by $-v$ and swap primed and unprimed. For $v\\ll c$, $\\gamma\\to1$ and Lorentz becomes Galilean.",
+     "basics_md": "Newton assumed time is the same for everyone. Experiments (Michelson-Morley) show light has the same speed for every observer, so space and time must mix. The factor $\\gamma$ is 1 for everyday speeds and grows without limit as $v\\to c$.",
+     "key_points": [
+      "Postulates: laws same in all inertial frames; speed of light $c$ same in all inertial frames",
+      "$x'=\\gamma(x-vt)$, $t'=\\gamma(t-vx/c^2)$, $y'=y$, $z'=z$",
+      "$\\gamma=1/\\sqrt{1-v^2/c^2}$",
+      "Inverse transformation: $v\\to-v$",
+      "Reduces to Galilean for $v\\ll c$"
+     ],
+     "figures": [],
+     "questions": [
+      {
+       "id": "l-q1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "In the Lorentz transformation, the time in frame $S'$ is",
+       "options": [
+        "$t'=t$",
+        "$t'=\\gamma(t-vx/c^2)$",
+        "$t'=\\gamma(t-vx)$",
+        "$t'=t/\\gamma$"
+       ],
+       "answer_index": 1,
+       "why": "The $vx/c^2$ term (relativity of simultaneity) is what separates it from the Galilean $t'=t$; option C has the wrong units."
+      },
+      {
+       "id": "l-q2",
+       "kind": "mcq",
+       "level": 1,
+       "q": "The Lorentz transformation reduces to the Galilean one when",
+       "options": [
+        "$v\\to c$",
+        "$v\\ll c$",
+        "$v=c$",
+        "$x=0$"
+       ],
+       "answer_index": 1,
+       "why": "For $v\\ll c$, $\\gamma\\to1$ and $vx/c^2\\to0$."
+      },
+      {
+       "id": "l-q3",
+       "kind": "short",
+       "level": 2,
+       "marks": 3,
+       "q": "State the two postulates of special relativity and write the Lorentz transformation equations for a frame $S'$ moving with speed $v$ along $x$ relative to $S$.",
+       "model_answer_md": "**Postulates**\n1. The laws of physics have the same form in all inertial frames.\n2. The speed of light in vacuum is $c$ in all inertial frames, independent of the motion of source or observer.\n\n**Lorentz transformation** ($S'$ moves along $+x$ at speed $v$):\n$$x'=\\gamma(x-vt),\\ y'=y,\\ z'=z,\\ t'=\\gamma\\left(t-\\frac{vx}{c^2}\\right),\\ \\gamma=\\frac{1}{\\sqrt{1-v^2/c^2}}$$\nInverse: $x=\\gamma(x'+vt')$, $t=\\gamma(t'+vx'/c^2)$.",
+       "points": [
+        "Postulate 1: laws of physics same in all inertial frames",
+        "Postulate 2: speed of light same in all inertial frames",
+        "$x'=\\gamma(x-vt)$, $y'=y$, $z'=z$",
+        "$t'=\\gamma(t-vx/c^2)$ with $\\gamma=1/\\sqrt{1-v^2/c^2}$"
+       ]
+      },
+      {
+       "id": "l-q4",
+       "kind": "numerical",
+       "level": 2,
+       "marks": 3,
+       "q": "Frame $S'$ moves at $0.6c$ along $x$ relative to $S$. An event occurs at $x=600$ m, $t=2\\times10^{-6}$ s in $S$. Find $x'$ and $t'$ ($c=3\\times10^8$ m/s).",
+       "model_answer_md": "$\\gamma=\\dfrac{1}{\\sqrt{1-0.36}}=1.25$, $v=0.6c=1.8\\times10^8$ m/s\n\n$x'=\\gamma(x-vt)=1.25\\,(600-1.8\\times10^8\\times2\\times10^{-6})=1.25\\,(600-360)=300$ m\n\n$t'=\\gamma\\left(t-\\dfrac{vx}{c^2}\\right)=1.25\\left(2\\times10^{-6}-\\dfrac{1.8\\times10^8\\times600}{9\\times10^{16}}\\right)=1.25\\,(2-1.2)\\times10^{-6}=1.0\\times10^{-6}$ s\n\n**Result:** $x'=300$ m, $t'=1\\ \\mu$s.",
+       "points": [
+        "$\\gamma=1.25$",
+        "$x'=\\gamma(x-vt)=300$ m",
+        "$t'=\\gamma(t-vx/c^2)=1.0\\times10^{-6}$ s"
+       ]
+      },
+      {
+       "id": "l-q5",
+       "kind": "numerical",
+       "level": 3,
+       "marks": 4,
+       "q": "Two spaceships leave Earth in the same direction at $0.8c$ and $0.9c$. Find the speed of the faster one as seen from the slower, using the relativistic velocity addition rule.",
+       "model_answer_md": "**Rule** (velocity $u$ in $S$, $S'$ moving at $v$): $u'=\\dfrac{u-v}{1-uv/c^2}$.\n\n$u'=\\dfrac{0.9c-0.8c}{1-(0.9)(0.8)}=\\dfrac{0.1c}{1-0.72}=\\dfrac{0.1c}{0.28}=0.357c\\approx1.07\\times10^8$ m/s\n\nGalilean answer $0.1c$ is wrong; the result stays below $c$.",
+       "points": [
+        "Formula $u'=(u-v)/(1-uv/c^2)$",
+        "Substitution with $u=0.9c$, $v=0.8c$",
+        "$u'=0.357c$ ($1.07\\times10^8$ m/s)"
+       ]
+      }
+     ]
+    },
+    {
+     "id": "length-contraction",
+     "title": "Length contraction",
+     "theory_md": "A rod at rest in $S'$ has **proper length** $L_0=x_2'-x_1'$. An observer in $S$ must record both ends at the **same instant** $t$ in $S$, so $t_2=t_1$ and\n$$x_2'-x_1'=\\gamma\\left[(x_2-x_1)-v(t_2-t_1)\\right]=\\gamma L\\ \\Rightarrow\\ L=L_0\\sqrt{1-\\frac{v^2}{c^2}}$$\nThe length **along the motion** is contracted (Lorentz-FitzGerald contraction); lengths perpendicular to the motion are unchanged. Proper length is the longest. The effect is negligible for $v\\ll c$.",
+     "basics_md": "Measuring a moving rod means marking where both ends are at one moment. Because moving observers disagree about 'one moment', the rod measures shorter, only along its direction of travel.",
+     "key_points": [
+      "Proper length $L_0$ is measured in the frame where the rod is at rest",
+      "Ends must be noted simultaneously in the observer's frame ($\\Delta t=0$)",
+      "$L=L_0\\sqrt{1-v^2/c^2}$, so $L<L_0$",
+      "Contraction only along the direction of motion",
+      "Negligible for $v\\ll c$"
+     ],
+     "figures": [],
+     "questions": [
+      {
+       "id": "c-q1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "A metre rod moves along its length at $0.6c$ past an observer. The observer measures its length as",
+       "options": [
+        "1.25 m",
+        "1.00 m",
+        "0.80 m",
+        "0.60 m"
+       ],
+       "answer_index": 2,
+       "why": "$L=1\\times\\sqrt{1-0.36}=0.8$ m; 1.25 m is $\\gamma L_0$, the common slip."
+      },
+      {
+       "id": "c-q2",
+       "kind": "mcq",
+       "level": 1,
+       "q": "Length contraction occurs",
+       "options": [
+        "in all directions",
+        "only perpendicular to the motion",
+        "only along the direction of motion",
+        "only for $v>c/2$"
+       ],
+       "answer_index": 2,
+       "why": "Transverse dimensions ($y,z$) are unchanged since $y'=y$, $z'=z$."
+      },
+      {
+       "id": "c-q3",
+       "kind": "numerical",
+       "level": 2,
+       "marks": 3,
+       "q": "A spaceship of proper length 100 m passes Earth at $0.6c$. What length does an Earth observer measure? At what speed would it appear 50 m long?",
+       "model_answer_md": "$L=L_0\\sqrt{1-v^2/c^2}=100\\sqrt{1-0.36}=100\\times0.8=80$ m\n\nFor $L=50$ m: $\\sqrt{1-v^2/c^2}=0.5\\Rightarrow v^2/c^2=0.75\\Rightarrow v=0.866c=2.60\\times10^8$ m/s.",
+       "points": [
+        "$L=L_0\\sqrt{1-v^2/c^2}$",
+        "$L=80$ m",
+        "$v=0.866c$ ($2.60\\times10^8$ m/s) for 50 m"
+       ]
+      },
+      {
+       "id": "c-q4",
+       "kind": "numerical",
+       "level": 3,
+       "marks": 3,
+       "q": "A rod of proper length 5 m moves lengthwise at $0.9c$. Find its measured length.",
+       "model_answer_md": "$L=5\\sqrt{1-0.81}=5\\times0.4359=2.18$ m",
+       "points": [
+        "$L=L_0\\sqrt{1-v^2/c^2}$",
+        "$\\sqrt{1-0.81}=0.436$",
+        "$L=2.18$ m"
+       ]
+      },
+      {
+       "id": "c-p1",
+       "pyq": "a8dbf2371dc0a9eb",
+       "level": 2,
+       "points": [
+        "Meaning: a rod moving along its length is measured shorter than its proper length $L_0$; perpendicular lengths unchanged",
+        "Frame $S'$ moves at $v$; rod at rest in $S'$ with $L_0=x_2'-x_1'$",
+        "Observer in $S$ measures both ends at the same time, $t_1=t_2$",
+        "$x'=\\gamma(x-vt)$ gives $L_0=L/\\sqrt{1-v^2/c^2}$",
+        "Result $L=L_0\\sqrt{1-v^2/c^2}$, $L<L_0$"
+       ]
+      },
+      {
+       "id": "c-p2",
+       "pyq": "8c51882d47b06582",
+       "level": 2,
+       "points": [
+        "Rod at rest in $S'$, proper length $L_0=x_2'-x_1'$",
+        "Both ends measured at the same instant in $S$",
+        "Lorentz transformation $x'=(x-vt)/\\sqrt{1-v^2/c^2}$ gives $L_0=L/\\sqrt{1-v^2/c^2}$",
+        "$L=L_0\\sqrt{1-v^2/c^2}$: decreased by factor $\\sqrt{1-v^2/c^2}$ along motion"
+       ]
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "topic": "Time dilation",
+   "subtopics": [
+    {
+     "id": "dilation-derivation",
+     "title": "Time dilation and its derivation",
+     "theory_md": "**Proper time** $t_0$ is the interval between two events measured in the frame where both happen at the **same place**. In a frame where that clock moves at speed $v$, the interval is longer: a moving clock runs slow.\n\nDerivation: in $S'$ two events at the same $x'$ have $t_0=t_2'-t_1'$. From $t=\\gamma\\left(t'+vx'/c^2\\right)$ with $x_2'=x_1'$:\n$$t_2-t_1=\\gamma(t_2'-t_1')\\ \\Rightarrow\\ t=\\frac{t_0}{\\sqrt{1-v^2/c^2}}=\\gamma t_0$$\nSince $\\gamma>1$, $t>t_0$. Evidence: cosmic-ray muons (rest lifetime 2.2 $\\mu$s) reach the ground.",
+     "basics_md": "Imagine a clock that ticks by bouncing light between two mirrors. Seen from outside, the light must travel a longer diagonal path at the same speed $c$, so each tick takes longer. Same clock, slower to the outside observer.",
+     "key_points": [
+      "Proper time: events at the same place in the clock's own frame",
+      "Moving clock runs slow: $t=\\gamma t_0$",
+      "Use $t=\\gamma(t'+vx'/c^2)$ with $x_2'=x_1'$",
+      "$\\gamma>1$ so $t>t_0$; noticeable only near $c$",
+      "Muon lifetime extension is the experimental proof"
+     ],
+     "figures": [],
+     "questions": [
+      {
+       "id": "d-q1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "The proper time interval between two events is the interval measured in the frame in which the events",
+       "options": [
+        "occur at the same place",
+        "occur at the same time",
+        "are separated by distance $c\\,t$",
+        "are seen moving at $v$"
+       ],
+       "answer_index": 0,
+       "why": "Proper time is read by one clock present at both events, so same position."
+      },
+      {
+       "id": "d-q2",
+       "kind": "mcq",
+       "level": 1,
+       "q": "To a stationary observer, a clock moving at $0.6c$ ticks",
+       "options": [
+        "faster, by factor 1.25",
+        "slower, interval multiplied by 1.25",
+        "at the same rate",
+        "slower, interval multiplied by 0.8"
+       ],
+       "answer_index": 1,
+       "why": "$t=\\gamma t_0$ with $\\gamma=1.25$; the interval is longer, so the clock is slow. Option D is the length-contraction factor."
+      },
+      {
+       "id": "d-p1",
+       "pyq": "8ea4ca9d9770844e",
+       "level": 2,
+       "points": [
+        "Time dilation: moving clock runs slow; interval seen by an observer for whom the clock moves is longer than proper time",
+        "Frame $S'$ moves at $v$ along $x$; two events at the same $x'$ with $\\Delta t_0=t_2'-t_1'$",
+        "Use $t=\\gamma(t'+vx'/c^2)$, so the $x'$ terms cancel",
+        "$\\Delta t=\\Delta t_0/\\sqrt{1-v^2/c^2}$, $\\gamma>1$ so $\\Delta t>\\Delta t_0$"
+       ]
+      },
+      {
+       "id": "d-p2",
+       "pyq": "4afb6fbbc2bfd65a",
+       "level": 2,
+       "points": [
+        "Meaning: moving clock runs slow; $t_0$ (proper time) appears longer as $t$",
+        "Two events at the same point $x'$ in $S'$, $t_0=t_2'-t_1'$",
+        "$t_2-t_1=\\gamma[(t_2'-t_1')+v(x'-x')/c^2]$",
+        "$t=t_0/\\sqrt{1-v^2/c^2}=\\gamma t_0$",
+        "Noticeable only for $v$ near $c$ (muon example)"
+       ]
+      },
+      {
+       "id": "d-q3",
+       "kind": "short",
+       "level": 3,
+       "marks": 3,
+       "q": "Why does time dilation not show up in everyday life? Give the experimental evidence that it is real.",
+       "model_answer_md": "- For everyday speeds $v\\ll c$, $\\gamma=1/\\sqrt{1-v^2/c^2}\\approx1+v^2/2c^2$, which differs from 1 by about $10^{-12}$ even at jet speeds, so the effect is unmeasurable without atomic clocks.\n- **Muon decay:** muons made in the upper atmosphere have rest lifetime $2.2\\ \\mu$s and would travel only about 660 m at nearly $c$, yet they reach the ground, because in the Earth frame their lifetime is $\\gamma t_0$.\n- Atomic clocks flown on aircraft also run slow by the predicted amount.",
+       "points": [
+        "$\\gamma\\approx1$ for $v\\ll c$, effect negligible",
+        "Muons reach the ground because lifetime is extended to $\\gamma t_0$",
+        "Atomic clocks on aircraft confirm it"
+       ]
+      }
+     ]
+    },
+    {
+     "id": "dilation-numericals",
+     "title": "Time dilation numericals",
+     "theory_md": "Identify which time is **proper** (the clock travels with the event, so it is the shorter one) and apply $t=\\gamma t_0$, with $\\gamma=1/\\sqrt{1-v^2/c^2}$.\n\nCommon types: time elapsed on Earth for a given ship time; the speed needed for a given dilation factor; distance covered by a fast particle before decay, $d=vt$ with the **dilated** $t$ (Earth frame); the same distance in the particle's own frame uses the contracted length and $t_0$, giving the same answer.",
+     "basics_md": "Always ask: whose clock sits at both events? That reading is $t_0$. The other observer measures a longer time. Never divide when you should multiply: the time on the moving clock is the smaller.",
+     "key_points": [
+      "Proper time $t_0$ is the smaller reading",
+      "$t=\\gamma t_0$",
+      "Write $v$ as a fraction of $c$ so $v^2/c^2$ is a pure number",
+      "Distance in the Earth frame is $v\\,t$ with the dilated $t$"
+     ],
+     "figures": [],
+     "questions": [
+      {
+       "id": "n-q1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "A particle's proper lifetime is 2 $\\mu$s. At $v=0.8c$ the lifetime seen in the lab is",
+       "options": [
+        "1.2 $\\mu$s",
+        "2.0 $\\mu$s",
+        "3.33 $\\mu$s",
+        "5.0 $\\mu$s"
+       ],
+       "answer_index": 2,
+       "why": "$\\gamma=1/0.6=1.667$, so $t=1.667\\times2=3.33\\ \\mu$s; 1.2 $\\mu$s comes from multiplying by 0.6."
+      },
+      {
+       "id": "n-p1",
+       "pyq": "63ed8ac6070f232b",
+       "level": 2,
+       "points": [
+        "$t_0=1$ h is the proper time (ship clock)",
+        "$t=t_0/\\sqrt{1-v^2/c^2}$",
+        "$\\sqrt{1-0.64}=0.6$",
+        "$t=1.67$ h on Earth (1 h 40 min)"
+       ]
+      },
+      {
+       "id": "n-q2",
+       "kind": "numerical",
+       "level": 2,
+       "marks": 4,
+       "q": "Muons have proper mean lifetime $2\\ \\mu$s. A beam moves at $0.8c$. Find the lifetime in the lab and the average distance travelled before decay, and compare with the classical value.",
+       "model_answer_md": "$\\gamma=\\dfrac{1}{\\sqrt{1-0.64}}=1.667$\n\nLab lifetime $t=\\gamma t_0=1.667\\times2=3.33\\ \\mu$s\n\nDistance $d=vt=0.8\\times3\\times10^8\\times3.33\\times10^{-6}=800$ m\n\nClassical (no dilation): $d_0=vt_0=0.8\\times3\\times10^8\\times2\\times10^{-6}=480$ m.\n\n**Result:** 3.33 $\\mu$s and 800 m, against 480 m classically.",
+       "points": [
+        "$\\gamma=1.667$",
+        "$t=3.33\\ \\mu$s",
+        "$d=vt=800$ m",
+        "Classical value 480 m, so dilation increases the range"
+       ]
+      },
+      {
+       "id": "n-q3",
+       "kind": "numerical",
+       "level": 3,
+       "marks": 3,
+       "q": "At what speed must a clock move for it to run slow by a factor of 2, i.e. $t=2t_0$?",
+       "model_answer_md": "$\\gamma=2\\Rightarrow\\sqrt{1-v^2/c^2}=\\tfrac12\\Rightarrow v^2/c^2=\\tfrac34$\n\n$v=0.866c=2.60\\times10^8$ m/s",
+       "points": [
+        "$\\gamma=2$ so $\\sqrt{1-v^2/c^2}=0.5$",
+        "$v^2/c^2=0.75$",
+        "$v=0.866c=2.60\\times10^8$ m/s"
+       ]
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "topic": "Mass-energy equation",
+   "subtopics": [
+    {
+     "id": "mass-variation",
+     "title": "Variation of mass with velocity",
+     "theory_md": "Relativistic mass of a particle of rest mass $m_0$ moving at speed $v$:\n$$m=\\frac{m_0}{\\sqrt{1-v^2/c^2}}=\\gamma m_0$$\nMass rises with speed and tends to infinity as $v\\to c$, so no particle with rest mass can reach $c$. It is the relativistic form of momentum, $p=mv=\\gamma m_0v$, that keeps momentum conserved in every inertial frame. For $v\\ll c$, $m\\approx m_0$.",
+     "basics_md": "The faster something goes, the harder it is to speed up further. Relativity records this as growing mass: the push you give adds energy, and energy has mass. At $0.6c$ the mass is already 1.25 times the rest mass.",
+     "key_points": [
+      "$m=m_0/\\sqrt{1-v^2/c^2}$",
+      "$m\\to\\infty$ as $v\\to c$, so $c$ is the speed limit for matter",
+      "$m_0$ is rest mass, same in all frames",
+      "$p=mv$ with relativistic $m$"
+     ],
+     "figures": [],
+     "questions": [
+      {
+       "id": "m-q1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "As the speed of a particle approaches $c$, its relativistic mass",
+       "options": [
+        "approaches $m_0$",
+        "approaches zero",
+        "becomes infinite",
+        "stays constant"
+       ],
+       "answer_index": 2,
+       "why": "$\\gamma\\to\\infty$ as $v\\to c$."
+      },
+      {
+       "id": "m-q2",
+       "kind": "numerical",
+       "level": 2,
+       "marks": 3,
+       "q": "At what speed is the mass of a particle double its rest mass? What is the mass at $0.6c$?",
+       "model_answer_md": "$m=2m_0\\Rightarrow\\sqrt{1-v^2/c^2}=\\tfrac12\\Rightarrow v=0.866c=2.60\\times10^8$ m/s\n\nAt $0.6c$: $m=\\dfrac{m_0}{\\sqrt{1-0.36}}=\\dfrac{m_0}{0.8}=1.25\\,m_0$",
+       "points": [
+        "$m=m_0/\\sqrt{1-v^2/c^2}$",
+        "$v=0.866c$ ($2.60\\times10^8$ m/s) for $m=2m_0$",
+        "$m=1.25\\,m_0$ at $0.6c$"
+       ]
+      },
+      {
+       "id": "m-q3",
+       "kind": "short",
+       "level": 2,
+       "marks": 3,
+       "q": "State how mass varies with velocity and explain why a particle with non-zero rest mass cannot reach the speed of light.",
+       "model_answer_md": "$m=\\dfrac{m_0}{\\sqrt{1-v^2/c^2}}$, where $m_0$ is the rest mass.\n\nAs $v\\to c$, $\\sqrt{1-v^2/c^2}\\to0$ so $m\\to\\infty$: the energy $mc^2$ needed to accelerate it grows without limit. Hence $c$ is the upper speed limit for matter.",
+       "points": [
+        "$m=m_0/\\sqrt{1-v^2/c^2}$",
+        "$m\\to\\infty$ as $v\\to c$",
+        "Infinite energy needed, so $c$ cannot be reached"
+       ]
+      }
+     ]
+    },
+    {
+     "id": "energy-equivalence",
+     "title": "Mass-energy equivalence, E = mc^2",
+     "theory_md": "Work done raises kinetic energy: $dK=F\\,dx=v\\,d(mv)=mv\\,dv+v^2dm$. Differentiating $m^2(c^2-v^2)=m_0^2c^2$ gives $c^2dm=v^2dm+mv\\,dv$, so $dK=c^2dm$. Integrating from $m_0$ to $m$:\n$$K=(m-m_0)c^2,\\qquad E=K+m_0c^2=mc^2$$\nRest energy $E_0=m_0c^2$. A mass change $\\Delta m$ releases or needs $\\Delta E=\\Delta m\\,c^2$. For electrons, $m_0c^2=0.511$ MeV; $1$ eV $=1.6\\times10^{-19}$ J.",
+     "basics_md": "Energy has inertia. Adding kinetic energy adds mass in the ratio $1/c^2$, and even a body at rest holds energy $m_0c^2$. Because $c^2$ is huge, a tiny mass is a vast energy.",
+     "key_points": [
+      "$dK=F\\,dx=v\\,d(mv)$",
+      "Differentiate $m^2(c^2-v^2)=m_0^2c^2$ to get $c^2dm=v^2dm+mv\\,dv$",
+      "$dK=c^2dm\\Rightarrow K=(m-m_0)c^2$",
+      "$E=mc^2$, rest energy $m_0c^2$",
+      "$\\Delta E=\\Delta m\\,c^2$"
+     ],
+     "figures": [],
+     "questions": [
+      {
+       "id": "e-q1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "The relativistic kinetic energy of a particle is",
+       "options": [
+        "$\\tfrac12m_0v^2$",
+        "$mc^2$",
+        "$(m-m_0)c^2$",
+        "$m_0c^2$"
+       ],
+       "answer_index": 2,
+       "why": "Total energy $mc^2$ minus rest energy $m_0c^2$; $\\tfrac12m_0v^2$ is the low-speed limit."
+      },
+      {
+       "id": "e-p1",
+       "pyq": "9eeb4f23a0fda17e",
+       "level": 2,
+       "points": [
+        "Work done = gain in kinetic energy: $dK=F\\,dx=v\\,d(mv)$ with $m=m_0/\\sqrt{1-v^2/c^2}$",
+        "Differentiate $m^2(c^2-v^2)=m_0^2c^2$ to get $c^2dm=v^2dm+mv\\,dv$",
+        "Hence $dK=mv\\,dv+v^2dm=c^2dm$",
+        "Integrate: $K=(m-m_0)c^2$",
+        "Total energy $E=K+m_0c^2=mc^2$; $\\Delta E=\\Delta m\\,c^2$"
+       ]
+      },
+      {
+       "id": "e-q2",
+       "kind": "numerical",
+       "level": 2,
+       "marks": 3,
+       "q": "How much energy is equivalent to 1 mg of mass? ($c=3\\times10^8$ m/s)",
+       "model_answer_md": "$m=1\\ \\text{mg}=10^{-6}$ kg\n\n$E=mc^2=10^{-6}\\times(3\\times10^8)^2=9\\times10^{10}$ J",
+       "points": [
+        "$E=mc^2$",
+        "$m=10^{-6}$ kg",
+        "$E=9\\times10^{10}$ J"
+       ]
+      },
+      {
+       "id": "e-q3",
+       "kind": "numerical",
+       "level": 3,
+       "marks": 4,
+       "q": "Find the kinetic energy of an electron moving at $0.8c$ (rest energy 0.511 MeV). Compare it with the classical $\\tfrac12m_0v^2$.",
+       "model_answer_md": "$\\gamma=\\dfrac{1}{\\sqrt{1-0.64}}=1.667$\n\nRelativistic: $K=(\\gamma-1)m_0c^2=0.667\\times0.511=0.341$ MeV\n\nClassical: $\\tfrac12m_0c^2(0.8)^2=0.5\\times0.511\\times0.64=0.164$ MeV\n\n**Result:** $K=0.341$ MeV, about twice the classical 0.164 MeV, so the classical formula fails near $c$.",
+       "points": [
+        "$K=(\\gamma-1)m_0c^2$ with $\\gamma=1.667$",
+        "$K=0.341$ MeV",
+        "Classical value 0.164 MeV, relativistic is about twice"
+       ]
+      }
+     ]
+    }
+   ]
+  }
+ ]
+}

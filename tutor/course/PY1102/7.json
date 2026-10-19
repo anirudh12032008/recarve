@@ -1,0 +1,691 @@
+{
+ "code": "PY1102",
+ "unit": "Electron Ballistics",
+ "written": "2026-10-19",
+ "by": "claude-sonnet-5-5, in a Claude Code session",
+ "topics": [
+  {
+   "topic": "Motion of charged particles in electric and magnetic fields",
+   "subtopics": [
+    {
+     "id": "electric-field",
+     "title": "Electron in a uniform electric field",
+     "theory_md": "Electron (charge $-e$, mass $m$) in a uniform field $E$: force $F=eE$ opposite to $E$, so $a=eE/m$.\n- **Accelerated through $V$:** $\\tfrac12mv^2=eV$, $v=\\sqrt{2eV/m}=5.93\\times10^5\\sqrt V$ m/s.\n- **Entering perpendicular to $E$** (speed $v_0$ along $x$): $x=v_0t$, $y=\\tfrac12\\frac{eE}{m}t^2$, so $y=\\frac{eE}{2mv_0^2}x^2$, a **parabola**. On leaving plates of length $l$: $y=\\frac{eEl^2}{2mv_0^2}$, $\\tan\\theta=\\frac{eEl}{mv_0^2}$.\n- **Projected at angle $\\theta$** with speed $u$ (force along $-y$): $H=\\frac{mu^2\\sin^2\\theta}{2eE}$, $T=\\frac{2mu\\sin\\theta}{eE}$, $R=\\frac{mu^2\\sin2\\theta}{eE}$.",
+     "basics_md": "Same as a stone thrown in gravity: constant sideways speed, constant pull in one direction. Here the pull is $eE/m$ instead of $g$, so every projectile formula carries over with $g\\to eE/m$.",
+     "key_points": [
+      "Force on electron $eE$ opposite to field; $a=eE/m$ is constant",
+      "Perpendicular entry: $x=v_0t$, $y=\\frac12 at^2$, parabola $y=\\frac{eE}{2mv_0^2}x^2$",
+      "Oblique projection: $H=\\frac{mu^2\\sin^2\\theta}{2eE}$, $T=\\frac{2mu\\sin\\theta}{eE}$, $R=\\frac{mu^2\\sin2\\theta}{eE}$",
+      "Range is maximum at $\\theta=45^\\circ$"
+     ],
+     "questions": [
+      {
+       "id": "e-q1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "The path of an electron entering a uniform electric field perpendicular to the field is",
+       "options": [
+        "a circle",
+        "a straight line",
+        "a parabola",
+        "a helix"
+       ],
+       "answer_index": 2,
+       "why": "Constant velocity along $x$ and constant acceleration along $y$ give $y\\propto x^2$."
+      },
+      {
+       "id": "e-q2",
+       "kind": "mcq",
+       "level": 1,
+       "q": "An electron is accelerated from rest through a potential difference $V$. Its speed is",
+       "options": [
+        "$\\sqrt{eV/m}$",
+        "$\\sqrt{2eV/m}$",
+        "$2eV/m$",
+        "$eV/2m$"
+       ],
+       "answer_index": 1,
+       "why": "$\\tfrac12mv^2=eV$ gives $v=\\sqrt{2eV/m}$; the first option forgets the factor 2."
+      },
+      {
+       "id": "e-q3",
+       "kind": "numerical",
+       "level": 2,
+       "marks": 3,
+       "q": "An electron accelerated through 500 V enters midway between two parallel plates, perpendicular to a uniform field $E=1.0\\times10^4$ V/m. The plates are 5.0 cm long. Find the speed on entry, the deflection on leaving the plates and the angle of deviation. ($e/m=1.76\\times10^{11}$ C/kg)",
+       "model_answer_md": "**Speed:** $v_0=\\sqrt{2eV/m}=\\sqrt{2\\times1.76\\times10^{11}\\times500}=1.33\\times10^7$ m/s\n\n**Deflection:** $y=\\dfrac{eEl^2}{2mv_0^2}=\\dfrac{El^2}{4V}=\\dfrac{1.0\\times10^4\\times(0.05)^2}{4\\times500}=1.25\\times10^{-2}$ m $=1.25$ cm\n\n**Angle:** $\\tan\\theta=\\dfrac{eEl}{mv_0^2}=\\dfrac{El}{2V}=\\dfrac{1.0\\times10^4\\times0.05}{2\\times500}=0.5\\Rightarrow\\theta=26.6^\\circ$",
+       "points": [
+        "Uses $v_0=\\sqrt{2eV/m}$ giving $1.33\\times10^7$ m/s",
+        "Deflection $y=\\frac{eEl^2}{2mv_0^2}=1.25$ cm",
+        "$\\tan\\theta=\\frac{eEl}{mv_0^2}=0.5$, $\\theta=26.6^\\circ$"
+       ]
+      },
+      {
+       "id": "e-q4",
+       "kind": "numerical",
+       "level": 2,
+       "marks": 3,
+       "q": "An electron is projected at $30^\\circ$ to the $x$-axis with speed $2.0\\times10^6$ m/s in a uniform field $E=1000$ V/m that pulls it back along $-y$. Find the maximum height, time of flight and range.",
+       "model_answer_md": "$a=\\dfrac{eE}{m}=1.76\\times10^{11}\\times1000=1.76\\times10^{14}$ m/s$^2$\n\n**Maximum height:** $H=\\dfrac{u^2\\sin^2\\theta}{2a}=\\dfrac{(2\\times10^6)^2(0.5)^2}{2\\times1.76\\times10^{14}}=2.84\\times10^{-3}$ m $=2.84$ mm\n\n**Time of flight:** $T=\\dfrac{2u\\sin\\theta}{a}=\\dfrac{2\\times2\\times10^6\\times0.5}{1.76\\times10^{14}}=1.14\\times10^{-8}$ s\n\n**Range:** $R=\\dfrac{u^2\\sin2\\theta}{a}=\\dfrac{(2\\times10^6)^2\\times0.866}{1.76\\times10^{14}}=1.97\\times10^{-2}$ m $\\approx1.97$ cm",
+       "points": [
+        "Acceleration $a=eE/m=1.76\\times10^{14}$ m/s$^2$",
+        "$H=2.84$ mm",
+        "$T=1.14\\times10^{-8}$ s",
+        "$R\\approx1.97$ cm"
+       ]
+      },
+      {
+       "id": "e-p1",
+       "pyq": "714f7cfc9d067e3f",
+       "level": 2,
+       "points": [
+        "Force $eE$ along the field axis only; no force along the initial direction, so $x=v_0t$",
+        "$v_y=\\frac{eE}{m}t$ and $y=\\frac12\\frac{eE}{m}t^2$",
+        "Eliminating $t$: $y=\\frac{eE}{2mv_0^2}x^2$, a parabola",
+        "Deflection at exit $\\frac{eEl^2}{2mv_0^2}$ and $\\tan\\theta=\\frac{eEl}{mv_0^2}$; straight line after leaving the field"
+       ]
+      },
+      {
+       "id": "e-p2",
+       "pyq": "bdaeb78100d31fdb",
+       "level": 3,
+       "points": [
+        "Components: $u_x=u\\cos\\theta$ constant, $u_y=u\\sin\\theta$ with $a_y=-eE/m$",
+        "Maximum height $H=\\frac{mu^2\\sin^2\\theta}{2eE}$ from $v_y=0$",
+        "Time of flight $T=\\frac{2mu\\sin\\theta}{eE}$ from $y=0$",
+        "Range $R=u\\cos\\theta\\,T=\\frac{mu^2\\sin2\\theta}{eE}$, maximum at $45^\\circ$, path is a parabola"
+       ]
+      }
+     ]
+    },
+    {
+     "id": "bethes-law",
+     "title": "Bethe's law: electron refraction",
+     "theory_md": "At a surface separating regions of potential $V_1$ and $V_2$ the field is **normal** to the surface, so the **tangential velocity is unchanged**: $v_1\\sin\\theta_1=v_2\\sin\\theta_2$ (angles from the normal). With $v=\\sqrt{2eV/m}\\propto\\sqrt V$:\n$$\\frac{\\sin\\theta_1}{\\sin\\theta_2}=\\frac{v_2}{v_1}=\\sqrt{\\frac{V_2}{V_1}}$$\nThis is **Bethe's law**. Comparing with Snell's law $\\frac{\\sin i}{\\sin r}=\\frac{\\mu_2}{\\mu_1}$, the electron refractive index is $\\mu\\propto\\sqrt V$. Into higher potential the electron bends **towards the normal**. In a non-uniform field it holds locally; this is the basis of electron lenses. Unlike light, $\\mu\\propto v$, not $1/v$.",
+     "basics_md": "Think of a ball rolling over a ramp edge that only pushes it sideways-free: the push is straight across the boundary, so its sideways speed cannot change. Only the across-the-boundary speed changes, and that tilts the direction.",
+     "key_points": [
+      "Field is normal to the surface, so tangential velocity is conserved: $v_1\\sin\\theta_1=v_2\\sin\\theta_2$",
+      "$v\\propto\\sqrt V$, hence $\\sin\\theta_1/\\sin\\theta_2=\\sqrt{V_2/V_1}$",
+      "Analogy: $\\mu\\propto\\sqrt V$, bends towards the normal into higher potential",
+      "Difference from light: $\\mu\\propto v$ here, whereas $\\mu\\propto1/v$ for light",
+      "Basis of electron lenses; holds locally in a non-uniform field"
+     ],
+     "questions": [
+      {
+       "id": "b-q1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "In Bethe's law the electron refractive index of a region at potential $V$ is proportional to",
+       "options": [
+        "$V$",
+        "$\\sqrt V$",
+        "$1/\\sqrt V$",
+        "$V^2$"
+       ],
+       "answer_index": 1,
+       "why": "$\\mu\\propto v\\propto\\sqrt V$."
+      },
+      {
+       "id": "b-q2",
+       "kind": "mcq",
+       "level": 2,
+       "q": "An electron moves from a region at 100 V into a region at 400 V. At the boundary it",
+       "options": [
+        "bends towards the normal",
+        "bends away from the normal",
+        "goes straight, no bending",
+        "is always reflected"
+       ],
+       "answer_index": 0,
+       "why": "Higher potential means higher index, so $\\sin\\theta_2<\\sin\\theta_1$: towards the normal."
+      },
+      {
+       "id": "b-q3",
+       "kind": "numerical",
+       "level": 2,
+       "marks": 3,
+       "q": "An electron crosses a plane boundary from a region at 100 V into a region at 400 V, striking at $30^\\circ$ to the normal. Find the angle of refraction.",
+       "model_answer_md": "$\\dfrac{\\sin\\theta_1}{\\sin\\theta_2}=\\sqrt{\\dfrac{V_2}{V_1}}=\\sqrt{\\dfrac{400}{100}}=2$\n\n$\\sin\\theta_2=\\dfrac{\\sin30^\\circ}{2}=0.25\\Rightarrow\\theta_2=14.5^\\circ$ (towards the normal)",
+       "points": [
+        "Uses $\\sin\\theta_1/\\sin\\theta_2=\\sqrt{V_2/V_1}=2$",
+        "$\\sin\\theta_2=0.25$",
+        "$\\theta_2=14.5^\\circ$, towards the normal"
+       ]
+      },
+      {
+       "id": "b-q4",
+       "kind": "mcq",
+       "level": 3,
+       "q": "An electron moves from a region at 400 V into a region at 100 V and strikes the boundary at $60^\\circ$ to the normal. What happens?",
+       "options": [
+        "It refracts at $30^\\circ$",
+        "It refracts at $14.5^\\circ$",
+        "It is totally reflected, since $\\sin\\theta_2=1.73>1$",
+        "It passes undeviated"
+       ],
+       "answer_index": 2,
+       "why": "$\\sin\\theta_2=\\sin60^\\circ\\times\\sqrt{400/100}=0.866\\times2=1.73>1$, so no refraction is possible (critical angle $30^\\circ$)."
+      },
+      {
+       "id": "b-p1",
+       "pyq": "29c378ddd41fc349",
+       "level": 2,
+       "points": [
+        "Statement: $\\sin\\theta_1/\\sin\\theta_2=\\sqrt{V_2/V_1}$",
+        "Tangential velocity conserved, $v_1\\sin\\theta_1=v_2\\sin\\theta_2$",
+        "$v=\\sqrt{2eV/m}$ substituted",
+        "Analogy with Snell: $\\mu\\propto\\sqrt V$"
+       ]
+      },
+      {
+       "id": "b-p2",
+       "pyq": "0bdd5a34256bd3e3",
+       "level": 3,
+       "points": [
+        "Statement of the law with $V_1,V_2$, angles from the normal",
+        "Derivation: force normal to surface, so $v_1\\sin\\theta_1=v_2\\sin\\theta_2$",
+        "Uses $v_1=\\sqrt{2eV_1/m}$, $v_2=\\sqrt{2eV_2/m}$ to get $\\sqrt{V_2/V_1}$",
+        "Analogy: $\\sqrt V$ plays the role of $\\mu$, bends towards the normal into higher potential, basis of electron lenses"
+       ]
+      },
+      {
+       "id": "b-p3",
+       "pyq": "cfec4cf134817ee9",
+       "level": 2,
+       "points": [
+        "Bethe's law explains electron refraction at a potential boundary: tangential velocity unchanged",
+        "$\\sin\\theta_1/\\sin\\theta_2=\\sqrt{V_2/V_1}=\\mu_2/\\mu_1$",
+        "Comparison with Snell: $\\mu\\propto\\sqrt V$ here, ratio is $v_2/v_1$ not $v_1/v_2$",
+        "Application: electrostatic electron lenses, microscope, CRT focusing; index can vary gradually"
+       ]
+      },
+      {
+       "id": "b-p4",
+       "pyq": "6a3d8dd0cffc20b3",
+       "level": 2,
+       "points": [
+        "Field acts normal to the surface so tangential velocity is unchanged",
+        "$v\\propto\\sqrt V$ gives $\\sin\\theta_1/\\sin\\theta_2=\\sqrt{V_2/V_1}$",
+        "In a non-uniform field the relation holds locally at each point; bends towards the normal into higher potential"
+       ]
+      }
+     ]
+    },
+    {
+     "id": "magnetic-field",
+     "title": "Electron in a magnetic field",
+     "theory_md": "Force $\\mathbf F=-e(\\mathbf v\\times\\mathbf B)$ is perpendicular to $\\mathbf v$: it does **no work**, so speed is constant.\n- **$\\mathbf v\\perp\\mathbf B$:** circle, $\\frac{mv^2}{r}=evB\\Rightarrow r=\\frac{mv}{eB}=\\frac1B\\sqrt{\\frac{2mV}{e}}$. Period $T=\\frac{2\\pi m}{eB}$, independent of $v$ and $r$; frequency $\\frac{eB}{2\\pi m}$.\n- **$\\mathbf v$ at angle $\\phi$ to $\\mathbf B$:** **helix**, radius $\\frac{mv\\sin\\phi}{eB}$, pitch $\\frac{2\\pi mv\\cos\\phi}{eB}$.\n- **Crossed $E$ and $B$:** the electron goes undeflected when $eE=evB$, i.e. $v=E/B$.",
+     "basics_md": "The magnetic push always acts sideways to the motion, like a string pulling a ball round in a circle: it turns the ball but never speeds it up. Along the field there is no push, so that part of the motion stays straight.",
+     "key_points": [
+      "Magnetic force is perpendicular to velocity, does no work, speed is constant",
+      "$v\\perp B$: circle of radius $r=mv/eB$, period $2\\pi m/eB$ independent of speed",
+      "Oblique entry: helix, pitch $2\\pi mv\\cos\\phi/eB$",
+      "Crossed $E$ and $B$: undeflected when $v=E/B$"
+     ],
+     "questions": [
+      {
+       "id": "m-q1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "The work done by a magnetic field on a moving electron is",
+       "options": [
+        "positive",
+        "negative",
+        "zero",
+        "equal to $evB$"
+       ],
+       "answer_index": 2,
+       "why": "The force is always perpendicular to the velocity."
+      },
+      {
+       "id": "m-q2",
+       "kind": "mcq",
+       "level": 2,
+       "q": "If the speed of an electron circling in a uniform magnetic field is doubled, its time period",
+       "options": [
+        "doubles",
+        "halves",
+        "stays the same",
+        "becomes four times"
+       ],
+       "answer_index": 2,
+       "why": "$T=2\\pi m/eB$ does not contain $v$; the radius doubles instead."
+      },
+      {
+       "id": "m-q3",
+       "kind": "numerical",
+       "level": 2,
+       "marks": 3,
+       "q": "An electron accelerated through 1000 V enters a uniform magnetic field of $1.0$ mT perpendicular to its velocity. Find the radius of its circular path and its cyclotron frequency. ($e/m=1.76\\times10^{11}$ C/kg)",
+       "model_answer_md": "$v=\\sqrt{2(e/m)V}=\\sqrt{2\\times1.76\\times10^{11}\\times1000}=1.88\\times10^7$ m/s\n\n**Radius:** $r=\\dfrac{mv}{eB}=\\dfrac{1.88\\times10^7}{1.76\\times10^{11}\\times10^{-3}}=0.107$ m $\\approx10.7$ cm\n\n**Frequency:** $f=\\dfrac{eB}{2\\pi m}=\\dfrac{1.76\\times10^{11}\\times10^{-3}}{2\\pi}=2.80\\times10^7$ Hz $=28.0$ MHz",
+       "points": [
+        "$v=1.88\\times10^7$ m/s from $\\frac12mv^2=eV$",
+        "$r=mv/eB=10.7$ cm",
+        "$f=eB/2\\pi m=28.0$ MHz"
+       ]
+      },
+      {
+       "id": "m-q4",
+       "kind": "numerical",
+       "level": 3,
+       "marks": 4,
+       "q": "An electron with speed $1.0\\times10^7$ m/s enters a uniform field $B=2.0$ mT at $30^\\circ$ to the field. Describe the path and find the radius and the pitch. ($m=9.11\\times10^{-31}$ kg, $e=1.60\\times10^{-19}$ C)",
+       "model_answer_md": "**Path:** a **helix** along $B$: circular motion from the component $v\\sin\\phi$ perpendicular to $B$, uniform drift from the component $v\\cos\\phi$ along $B$.\n\n**Radius:** $r=\\dfrac{mv\\sin\\phi}{eB}=\\dfrac{9.11\\times10^{-31}\\times10^7\\times0.5}{1.60\\times10^{-19}\\times2\\times10^{-3}}=1.42\\times10^{-2}$ m $=1.42$ cm\n\n**Pitch:** $p=v\\cos\\phi\\cdot T=\\dfrac{2\\pi mv\\cos\\phi}{eB}=\\dfrac{2\\pi\\times9.11\\times10^{-31}\\times10^7\\times0.866}{1.60\\times10^{-19}\\times2\\times10^{-3}}=0.155$ m $=15.5$ cm",
+       "points": [
+        "Path is a helix (circle plus drift along $B$)",
+        "$r=mv\\sin\\phi/eB=1.42$ cm",
+        "Pitch $=2\\pi mv\\cos\\phi/eB=15.5$ cm"
+       ]
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "topic": "Electron microscope",
+   "subtopics": [
+    {
+     "id": "wavelength-resolution",
+     "title": "Electron wavelength and resolving power",
+     "theory_md": "Electrons accelerated through $V$ have de Broglie wavelength\n$$\\lambda=\\frac{h}{\\sqrt{2meV}}=\\frac{12.27}{\\sqrt V}\\ \\text{\\AA}$$\n(non-relativistic). At 100 kV, $\\lambda=0.0388$ Å $=3.88$ pm, about $10^5$ times shorter than visible light. The limit of resolution is $d=\\frac{0.61\\lambda}{\\mu\\sin\\alpha}$, so a smaller $\\lambda$ resolves finer detail. Electron microscopes reach about 0.1 to 0.2 nm; the light microscope is limited to about 200 nm. Practical limit: lens aberrations force a very small aperture $\\alpha$.",
+     "basics_md": "Seeing detail is like feeling a surface with a probe: a probe thicker than the detail cannot feel it. Light waves are the thick probe; electron waves are far thinner, so they feel much finer detail.",
+     "key_points": [
+      "$\\lambda=h/\\sqrt{2meV}=12.27/\\sqrt V$ Å",
+      "Resolution $d=0.61\\lambda/(\\mu\\sin\\alpha)$: smaller $\\lambda$ means better resolution",
+      "Electron $\\lambda$ (picometres) is far below light $\\lambda$ (hundreds of nm)",
+      "Higher accelerating voltage gives shorter $\\lambda$ and higher resolution"
+     ],
+     "questions": [
+      {
+       "id": "r-q1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "The de Broglie wavelength of electrons accelerated through $V$ volts is, in Å,",
+       "options": [
+        "$12.27/V$",
+        "$12.27/\\sqrt V$",
+        "$12.27\\sqrt V$",
+        "$150/\\sqrt V$"
+       ],
+       "answer_index": 1,
+       "why": "$\\lambda=h/\\sqrt{2meV}=12.27/\\sqrt V$ Å. (The $150/V$ form is for $\\lambda^2$.)"
+      },
+      {
+       "id": "r-q2",
+       "kind": "mcq",
+       "level": 2,
+       "q": "To improve the resolving power of an electron microscope one should",
+       "options": [
+        "lower the accelerating voltage",
+        "raise the accelerating voltage",
+        "use a weaker magnetic lens",
+        "raise the pressure inside the column"
+       ],
+       "answer_index": 1,
+       "why": "Higher $V$ gives shorter $\\lambda$ and smaller $d=0.61\\lambda/\\mu\\sin\\alpha$."
+      },
+      {
+       "id": "r-q3",
+       "kind": "numerical",
+       "level": 2,
+       "marks": 3,
+       "q": "Find the de Broglie wavelength of electrons accelerated through 40 kV. By what factor is it shorter than green light of wavelength 550 nm? (Ignore relativistic correction.)",
+       "model_answer_md": "$\\lambda=\\dfrac{12.27}{\\sqrt{V}}=\\dfrac{12.27}{\\sqrt{40000}}=0.0614$ Å $=6.14\\times10^{-12}$ m\n\nFactor $=\\dfrac{550\\times10^{-9}}{6.14\\times10^{-12}}\\approx9.0\\times10^{4}$, so the electron wavelength is about 90 000 times shorter.",
+       "points": [
+        "$\\lambda=12.27/\\sqrt V$ with $V=40000$",
+        "$\\lambda=0.0614$ Å $=6.14$ pm",
+        "Ratio to 550 nm is about $9\\times10^4$"
+       ]
+      },
+      {
+       "id": "r-q4",
+       "kind": "numerical",
+       "level": 3,
+       "marks": 4,
+       "q": "An electron microscope uses electrons accelerated through 40 kV and has an aperture half-angle $\\alpha=5\\times10^{-3}$ rad in vacuum. Find the smallest separation it can resolve using $d=0.61\\lambda/\\sin\\alpha$, and compare it with a light microscope of numerical aperture 1.4 using light of 550 nm.",
+       "model_answer_md": "**Electron microscope:** $\\lambda=6.14\\times10^{-12}$ m (from 40 kV).\n$d=\\dfrac{0.61\\lambda}{\\sin\\alpha}=\\dfrac{0.61\\times6.14\\times10^{-12}}{5\\times10^{-3}}=7.5\\times10^{-10}$ m $=0.75$ nm\n\n**Light microscope:** $d=\\dfrac{0.61\\times550\\text{ nm}}{1.4}=240$ nm\n\nThe electron microscope resolves about $240/0.75=320$ times finer detail.",
+       "points": [
+        "$\\lambda=6.14$ pm at 40 kV",
+        "$d=0.61\\lambda/\\sin\\alpha=0.75$ nm",
+        "Light microscope $d=0.61\\lambda/NA=240$ nm",
+        "Electron microscope is about 320 times better"
+       ]
+      }
+     ]
+    },
+    {
+     "id": "magnetic-lens",
+     "title": "Magnetic lens and electron gun",
+     "theory_md": "**Electron gun:** heated tungsten filament (or LaB$_6$) cathode, Wehnelt cylinder (grid) to shape the beam, anode at 50 to 200 kV.\n\n**Magnetic lens:** a short coil of $N$ turns carrying current $I$, enclosed in soft iron with a narrow gap (pole pieces). The non-uniform axial field makes electrons spiral and converge to a focus; focal length $f\\propto\\frac{V}{(NI)^2}$. Focusing is changed **electrically** by varying $I$, so no moving parts. A magnetic lens is always converging and rotates the image.\n\nEverything is in a **high vacuum** so that electrons are not scattered by air.",
+     "basics_md": "A glass lens bends light because light slows in glass. An electron cannot be bent by glass, but a shaped magnetic field bends its path. More coil current gives a stronger lens and a shorter focus.",
+     "key_points": [
+      "Gun: heated cathode, Wehnelt cylinder, accelerating anode (50 to 200 kV)",
+      "Magnetic lens: coil with iron pole pieces, non-uniform axial field",
+      "Focal length $f\\propto V/(NI)^2$; focus is changed by varying the coil current",
+      "High vacuum avoids scattering of electrons by air molecules"
+     ],
+     "questions": [
+      {
+       "id": "l-q1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "The focal length of a magnetic lens is changed by varying",
+       "options": [
+        "the coil current",
+        "the specimen thickness",
+        "the gas pressure",
+        "the colour of the beam"
+       ],
+       "answer_index": 0,
+       "why": "$f\\propto V/(NI)^2$: more current, shorter focal length."
+      },
+      {
+       "id": "l-q2",
+       "kind": "mcq",
+       "level": 2,
+       "q": "A high vacuum is needed in an electron microscope column because",
+       "options": [
+        "electrons are heavy",
+        "air molecules would scatter the electrons",
+        "the specimen needs cooling",
+        "the lenses are made of glass"
+       ],
+       "answer_index": 1,
+       "why": "Collisions with air molecules scatter and absorb the beam and burn the filament."
+      },
+      {
+       "id": "l-q3",
+       "kind": "short",
+       "level": 2,
+       "marks": 3,
+       "q": "Describe the electron gun and the magnetic lens of an electron microscope. How is the beam focused?",
+       "model_answer_md": "**Electron gun.** A heated tungsten filament (cathode) emits electrons; a negatively biased Wehnelt cylinder shapes them into a narrow beam; the anode at a high positive potential (50 to 200 kV) accelerates them.\n\n**Magnetic lens.** A coil of $N$ turns with current $I$ in an iron casing with a narrow pole-piece gap gives a strong, non-uniform axial magnetic field. Electrons entering at a small angle spiral and converge to a point.\n\n**Focusing.** The focal length $f\\propto V/(NI)^2$, so the beam is focused by changing the coil current $I$, with no moving parts. The whole column is evacuated.",
+       "points": [
+        "Gun: heated filament cathode, Wehnelt cylinder, accelerating anode",
+        "Magnetic lens is a coil with iron pole pieces giving a non-uniform axial field",
+        "Electrons spiral and converge to a focus",
+        "Focus is changed by varying $I$ since $f\\propto V/(NI)^2$",
+        "Column is under high vacuum"
+       ]
+      }
+     ]
+    },
+    {
+     "id": "tem-sem",
+     "title": "Construction and working of TEM and SEM",
+     "theory_md": "**TEM (transmission):** gun, condenser lens (illuminates the specimen), **ultra-thin specimen** (below about 100 nm), objective lens (first magnified image), intermediate and projector lenses (final image) on a fluorescent screen or CCD. Contrast comes from electrons scattered by thicker or denser regions. Magnification up to $10^6$, resolution about 0.1 nm.\n\n**SEM (scanning):** a fine beam is scanned over the surface; **secondary electrons** emitted are collected and displayed in step with the scan. Gives a 3-D-looking surface image of thick specimens, resolution about 1 to 10 nm.",
+     "basics_md": "A TEM is like a shadow-slide projector: electrons pass through a very thin slice and are focused onto a screen. An SEM is like a finger sweeping over a surface: a tiny beam sweeps the sample and the signal is built up point by point.",
+     "key_points": [
+      "TEM column: gun, condenser, specimen, objective, intermediate, projector, screen",
+      "Specimen must be ultra-thin; contrast from scattering in thicker or denser parts",
+      "SEM scans a fine beam and detects secondary electrons from the surface",
+      "TEM gives internal structure at high resolution; SEM gives surface topography of thick specimens"
+     ],
+     "questions": [
+      {
+       "id": "t-q1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "In which instrument do electrons pass through the specimen to form the image?",
+       "options": [
+        "SEM",
+        "TEM",
+        "Optical microscope with a filter",
+        "Bainbridge spectrograph"
+       ],
+       "answer_index": 1,
+       "why": "Transmission electron microscope; the SEM images the surface using secondary electrons."
+      },
+      {
+       "id": "t-q2",
+       "kind": "mcq",
+       "level": 2,
+       "q": "Which statement about the SEM is correct?",
+       "options": [
+        "It needs an ultra-thin specimen",
+        "It forms a 3-D-like surface image from secondary electrons",
+        "It has no vacuum system",
+        "It uses glass lenses"
+       ],
+       "answer_index": 1,
+       "why": "The scanned beam knocks out secondary electrons whose signal builds the image."
+      },
+      {
+       "id": "t-q3",
+       "kind": "long",
+       "level": 2,
+       "marks": 5,
+       "q": "Describe the construction and working of a transmission electron microscope. Why is the image formed on a fluorescent screen?",
+       "model_answer_md": "**Construction** (top to bottom, in a high-vacuum column):\n1. Electron gun: heated filament, Wehnelt cylinder, anode (50 to 200 kV).\n2. Condenser lens: focuses the beam on the specimen.\n3. Specimen: ultra-thin slice (below about 100 nm) on a copper grid.\n4. Objective lens: forms the first magnified image.\n5. Intermediate and projector lenses: magnify further.\n6. Fluorescent screen (or CCD) at the bottom.\n\n**Working.** The accelerated beam of wavelength $\\lambda=12.27/\\sqrt V$ Å passes through the specimen; denser regions scatter more electrons, giving contrast. The magnetic lenses (focused by coil current) form the final enlarged image, up to $10^6\\times$, resolution about 0.1 nm.\n\n**Screen.** The eye cannot see electrons; the fluorescent screen converts them to visible light.",
+       "points": [
+        "Column in high vacuum with gun, condenser, specimen, objective, intermediate and projector lenses",
+        "All lenses are magnetic, focused by coil current",
+        "Specimen ultra-thin, contrast from differential scattering",
+        "Magnification up to $10^6$, resolution about 0.1 nm",
+        "Fluorescent screen converts electrons to visible light"
+       ]
+      },
+      {
+       "id": "t-q4",
+       "kind": "short",
+       "level": 2,
+       "marks": 2,
+       "q": "State two differences between a TEM and an SEM.",
+       "model_answer_md": "| | TEM | SEM |\n|---|---|---|\n| Image from | Electrons transmitted through the specimen | Secondary electrons from the surface |\n| Specimen | Ultra-thin | Thick allowed |\n| Gives | Internal structure, resolution about 0.1 nm | Surface topography, resolution about 1 to 10 nm |",
+       "points": [
+        "TEM uses transmitted electrons, SEM uses secondary electrons",
+        "TEM needs an ultra-thin specimen, SEM does not",
+        "TEM resolution is better than SEM"
+       ]
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "topic": "Mass spectrographs",
+   "subtopics": [
+    {
+     "id": "velocity-selector",
+     "title": "Velocity selector (crossed E and B)",
+     "theory_md": "Positive ions of charge $q$ move through uniform $E$ and $B$, perpendicular to each other and to the velocity. The electric force $qE$ and magnetic force $qvB$ are opposite. They balance when\n$$qE=qvB\\Rightarrow v=\\frac EB$$\nOnly ions of this speed go straight through the slit; slower ions are pushed by $qE$, faster ones by $qvB$, and are stopped. The result **does not depend on $m$ or $q$**, so the exit beam is monoenergetic in speed.",
+     "basics_md": "A turnstile that opens only for walkers at one pace: too slow and one force wins and shoves you aside, too fast and the other wins. Only the exact pace passes straight.",
+     "key_points": [
+      "Crossed uniform $E$ and $B$, both perpendicular to the beam",
+      "Undeflected when $qE=qvB$, so $v=E/B$",
+      "Independent of mass and charge",
+      "Other speeds are deflected and stopped by the next slit"
+     ],
+     "questions": [
+      {
+       "id": "v-q1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "Ions pass undeflected through crossed fields $E$ and $B$ if their speed is",
+       "options": [
+        "$EB$",
+        "$E/B$",
+        "$B/E$",
+        "$\\sqrt{E/B}$"
+       ],
+       "answer_index": 1,
+       "why": "$qE=qvB$ gives $v=E/B$."
+      },
+      {
+       "id": "v-q2",
+       "kind": "mcq",
+       "level": 2,
+       "q": "A heavier ion and a lighter ion of the same charge and speed $E/B$ enter the velocity selector. Then",
+       "options": [
+        "only the lighter ion passes",
+        "only the heavier ion passes",
+        "both pass undeflected",
+        "neither passes"
+       ],
+       "answer_index": 2,
+       "why": "The balance $qE=qvB$ does not contain $m$."
+      },
+      {
+       "id": "v-q3",
+       "kind": "numerical",
+       "level": 2,
+       "marks": 3,
+       "q": "In a velocity selector $B=0.10$ T. What electric field lets ions of speed $2.0\\times10^5$ m/s pass undeflected? Which ions are deflected towards the electric-force side: faster or slower?",
+       "model_answer_md": "$E=vB=2.0\\times10^5\\times0.10=2.0\\times10^4$ V/m $=20$ kV/m\n\nFor **slower** ions $qvB<qE$, so the electric force wins and they are deflected towards the side of the electric force; faster ions are deflected the other way by the magnetic force.",
+       "points": [
+        "$E=vB$",
+        "$E=2.0\\times10^4$ V/m",
+        "Slower ions: electric force dominates and they are deflected out"
+       ]
+      }
+     ]
+    },
+    {
+     "id": "bainbridge",
+     "title": "Bainbridge mass spectrograph",
+     "theory_md": "**Principle:** ions are first made equal in speed by a velocity selector, then deflected in a uniform magnetic field into semicircles whose radius depends on mass.\n\n**Construction:** ion source, slits $S_1,S_2$, velocity selector (plates giving $E$ plus field $B$), slit $S_3$, deflection chamber with a second field $B'$ (no $E$), photographic plate; all evacuated.\n\n**Working:** $v=E/B$ out of the selector. In $B'$: $\\frac{mv^2}{r}=qvB'\\Rightarrow r=\\frac{mE}{qBB'}$. Ions land at $2r$ from $S_3$, so $m=\\frac{qBB'}{E}r$ and $2r\\propto m$: a **linear mass scale**. Line positions give isotopic masses; line darkness gives relative abundance.",
+     "basics_md": "Imagine marbles of different weight all thrown at the same speed into a circular track that bends them: the heavier ones swing out in a bigger circle. The place each lands tells its weight.",
+     "key_points": [
+      "Principle: velocity selection, then semicircular deflection in $B'$",
+      "Construction: source, slits, crossed $E$ and $B$, deflection field $B'$, photographic plate",
+      "$v=E/B$ and $r=mv/qB'=mE/qBB'$",
+      "$m=\\frac{qBB'}{E}r$ so $r\\propto m$: linear mass scale, equally spaced lines",
+      "Line position gives mass, darkness gives abundance"
+     ],
+     "questions": [
+      {
+       "id": "bs-q1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "In the Bainbridge spectrograph the ions are recorded on",
+       "options": [
+        "a fluorescent screen",
+        "a photographic plate",
+        "a Geiger counter",
+        "a thermocouple"
+       ],
+       "answer_index": 1,
+       "why": "The photographic plate shows one line per isotope."
+      },
+      {
+       "id": "bs-q2",
+       "kind": "mcq",
+       "level": 2,
+       "q": "The Bainbridge mass scale is linear because",
+       "options": [
+        "$r\\propto m$ for fixed $q,E,B,B'$",
+        "$r\\propto m^2$",
+        "$r\\propto\\sqrt m$",
+        "$r$ is independent of $m$"
+       ],
+       "answer_index": 0,
+       "why": "$r=mE/(qBB')$."
+      },
+      {
+       "id": "bs-q3",
+       "kind": "short",
+       "level": 2,
+       "marks": 3,
+       "q": "Derive the radius of the path in the Bainbridge spectrograph in terms of $E$, $B$, $B'$, $m$ and $q$.",
+       "model_answer_md": "Velocity selector: $qE=qvB\\Rightarrow v=\\dfrac EB$.\n\nDeflection chamber: magnetic force provides the centripetal force, $\\dfrac{mv^2}{r}=qvB'$, so $r=\\dfrac{mv}{qB'}$.\n\nSubstituting $v$: $\\boxed{r=\\dfrac{mE}{qBB'}}$, so $m=\\dfrac{qBB'}{E}\\,r$.",
+       "points": [
+        "Selector gives $v=E/B$",
+        "Centripetal condition $mv^2/r=qvB'$",
+        "$r=mE/(qBB')$"
+       ]
+      },
+      {
+       "id": "bs-p1",
+       "pyq": "a448b37d42b56e1c",
+       "level": 2,
+       "points": [
+        "Construction: ion source, slits, velocity selector with crossed $E$ and $B$, chamber with $B'$, photographic plate, evacuated",
+        "Velocity selector passes only $v=E/B$",
+        "Semicircle in $B'$: $r=mv/qB'=mE/qBB'$",
+        "Isotopes land at $2r$; $m/q=BB'r/E$ so lines are separate; position gives mass, darkness gives abundance",
+        "Advantage: equal-speed ions give a linear mass scale"
+       ]
+      },
+      {
+       "id": "bs-p2",
+       "pyq": "d06cb9c7f775cf0d",
+       "level": 2,
+       "points": [
+        "Principle: equal-velocity selection then deflection in uniform field",
+        "Labelled diagram: source, $S_1,S_2$, plates $P_1,P_2$ ($E$), field $B$, deflection field $B'$, photographic plate",
+        "$v=E/B$ and $r=mE/qBB'$, so $m=\\frac{qBB'}{E}r$",
+        "$r\\propto m$ for the same charge: lines equally spaced for integral masses, giving isotopic masses and abundances"
+       ]
+      },
+      {
+       "id": "bs-p3",
+       "pyq": "17c857b4cdb99497",
+       "level": 3,
+       "points": [
+        "Construction: velocity selector with $E$ and $B$, slit $S_3$, deflection field $B'$, photographic plate",
+        "Working: $v=E/B$ selected, semicircle radius from $mv^2/r=qvB'$, lands at $2r$",
+        "Proof of linear scale: $m=\\frac{qBB'}{E}r$, so $m\\propto r$ (and to the distance $2r$)",
+        "Hence equal mass differences give equal spacing between lines"
+       ]
+      }
+     ]
+    },
+    {
+     "id": "mass-scale-numericals",
+     "title": "Isotope lines and mass numericals",
+     "theory_md": "Landing distance $x=2r=\\dfrac{2mE}{qBB'}$, so $x\\propto\\dfrac mq$.\n- Separation of two isotopes of mass difference $\\Delta m$ (same $q$): $\\Delta x=\\dfrac{2\\,\\Delta m\\,E}{qBB'}$, the same for every $\\Delta m$ of equal size.\n- A doubly charged ion ($q=2e$) of mass $M$ lands where a singly charged ion of mass $M/2$ lands.\n- Relative abundance is proportional to the **blackening** of the line.\nConvert atomic mass units: $1\\ \\mathrm{u}=1.66\\times10^{-27}$ kg, $e=1.60\\times10^{-19}$ C.",
+     "basics_md": "Position on the plate is a ruler for mass per unit charge. A two-times charged ion looks half as heavy, so it can sit on top of a lighter ion's line.",
+     "key_points": [
+      "Line position $x=2r=2mE/(qBB')\\propto m/q$",
+      "Equal mass differences give equal separations (linear scale)",
+      "Doubly charged ion of mass $M$ falls where a singly charged ion of $M/2$ falls",
+      "Line darkness is proportional to isotopic abundance"
+     ],
+     "questions": [
+      {
+       "id": "n-q1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "The darkness of a line on the photographic plate measures the",
+       "options": [
+        "mass of the isotope",
+        "charge of the ion",
+        "relative abundance of the isotope",
+        "speed of the ion"
+       ],
+       "answer_index": 2,
+       "why": "More ions hitting the plate blacken the line more."
+      },
+      {
+       "id": "n-q2",
+       "kind": "numerical",
+       "level": 2,
+       "marks": 4,
+       "q": "Singly ionised neon isotopes of masses 20 u and 22 u pass a Bainbridge spectrograph with $E=1.0\\times10^5$ V/m, $B=0.20$ T and $B'=0.50$ T. Find the speed selected and the distance between the two lines. ($1\\ \\mathrm u=1.66\\times10^{-27}$ kg, $e=1.60\\times10^{-19}$ C)",
+       "model_answer_md": "**Speed:** $v=\\dfrac EB=\\dfrac{1.0\\times10^5}{0.20}=5.0\\times10^5$ m/s\n\n**Positions:** $x=2r=\\dfrac{2mE}{eBB'}$\n- Ne-20: $x=\\dfrac{2\\times20\\times1.66\\times10^{-27}\\times10^5}{1.60\\times10^{-19}\\times0.20\\times0.50}=0.415$ m $=41.5$ cm\n- Ne-22: $x=0.456$ m $=45.6$ cm\n\n**Separation:** $\\Delta x=45.6-41.5=4.1$ cm",
+       "points": [
+        "$v=E/B=5.0\\times10^5$ m/s",
+        "$x=2mE/(eBB')$ used for each isotope",
+        "Ne-20 at 41.5 cm and Ne-22 at 45.6 cm",
+        "Separation about 4.1 cm"
+       ]
+      },
+      {
+       "id": "n-q3",
+       "kind": "numerical",
+       "level": 3,
+       "marks": 4,
+       "q": "With the same instrument ($E=1.0\\times10^5$ V/m, $B=0.20$ T, $B'=0.50$ T), doubly charged Ne-20 ions are also present. Where do they strike the plate, and which singly charged ion line do they coincide with?",
+       "model_answer_md": "For $q=2e$: $x=\\dfrac{2mE}{qBB'}=\\dfrac{2\\times20\\times1.66\\times10^{-27}\\times10^5}{2\\times1.60\\times10^{-19}\\times0.20\\times0.50}=0.207$ m $=20.7$ cm\n\nThis equals the position of a **singly charged ion of mass 10 u**, because $x\\propto m/q=20/2=10$. They would blend with any singly charged ion of mass 10 u.",
+       "points": [
+        "$x\\propto m/q$ so doubling $q$ halves $x$",
+        "$x=20.7$ cm",
+        "Coincides with a singly charged 10 u ion line"
+       ]
+      }
+     ]
+    }
+   ]
+  }
+ ]
+}

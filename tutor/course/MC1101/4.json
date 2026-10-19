@@ -1,0 +1,1722 @@
+{
+ "code": "MC1101",
+ "unit": "Ordinary Differential Equations",
+ "written": "2026-10-19",
+ "by": "claude-sonnet-5-5, in a Claude Code session",
+ "topics": [
+  {
+   "topic": "Formation of ODEs",
+   "subtopics": [
+    {
+     "id": "order-degree",
+     "title": "Order, degree and constants",
+     "theory_md": "**Order** = order of the highest derivative. **Degree** = power of that highest derivative once the equation is a polynomial in the derivatives (clear radicals and fractions first). Degree is not defined if a derivative sits inside $\\sin$, $e^{(\\cdot)}$ or $\\log$.\n\nA family with $n$ independent arbitrary constants gives an ODE of order $n$. Fixed numbers (a given radius $a$) are not arbitrary constants.",
+     "basics_md": "The order is how many times you differentiate; the degree is the exponent on the top derivative after you remove roots.",
+     "key_points": [
+      "Order = highest derivative present",
+      "Degree = its power after clearing radicals and fractions",
+      "Degree undefined if a derivative is inside sin, exp or log",
+      "$n$ arbitrary constants give order $n$"
+     ],
+     "questions": [
+      {
+       "id": "od1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "The order and degree of $\\left(\\dfrac{d^2y}{dx^2}\\right)^3+\\left(\\dfrac{dy}{dx}\\right)^4+y=0$ are",
+       "options": [
+        "2 and 3",
+        "3 and 2",
+        "2 and 4",
+        "4 and 2"
+       ],
+       "answer_index": 0,
+       "why": "Highest derivative is $y''$, with power 3."
+      },
+      {
+       "id": "od2",
+       "kind": "mcq",
+       "level": 1,
+       "q": "The general solution of a third order ODE contains how many arbitrary constants?",
+       "options": [
+        "1",
+        "2",
+        "3",
+        "4"
+       ],
+       "answer_index": 2,
+       "why": "Order equals the number of independent arbitrary constants."
+      },
+      {
+       "id": "od3",
+       "kind": "short",
+       "level": 2,
+       "marks": 2,
+       "q": "Find the order and degree of $\\dfrac{d^2y}{dx^2}=\\left[1+\\left(\\dfrac{dy}{dx}\\right)^2\\right]^{3/2}$.",
+       "model_answer_md": "Clear the fractional power by squaring: $\\left(\\dfrac{d^2y}{dx^2}\\right)^2=\\left[1+\\left(\\dfrac{dy}{dx}\\right)^2\\right]^3$.\n\nHighest derivative is $y''$ (**order 2**) and its power is 2 (**degree 2**).",
+       "points": [
+        "Squares to remove the 3/2 power",
+        "Order 2",
+        "Degree 2"
+       ]
+      },
+      {
+       "id": "od4",
+       "kind": "mcq",
+       "level": 2,
+       "q": "The degree of $\\dfrac{d^3y}{dx^3}+\\sin\\left(\\dfrac{d^2y}{dx^2}\\right)=0$ is",
+       "options": [
+        "1",
+        "2",
+        "3",
+        "not defined"
+       ],
+       "answer_index": 3,
+       "why": "The derivative $y''$ is inside $\\sin$, so the equation is not a polynomial in the derivatives."
+      }
+     ]
+    },
+    {
+     "id": "eliminate",
+     "title": "Eliminating arbitrary constants",
+     "theory_md": "To form the ODE of a family with $n$ constants: differentiate $n$ times, giving $n+1$ equations, and eliminate the $n$ constants.\n\nShortcuts: $y=Ae^{m_1x}+Be^{m_2x}$ gives $y''-(m_1+m_2)y'+m_1m_2y=0$; $y=A\\cos kx+B\\sin kx$ gives $y''+k^2y=0$. Show the elimination if the question says 'eliminate'.\n\nCircles of radius $a$: $(x-h)^2+(y-k)^2=a^2$ has two constants, so $(1+y'^2)^3=a^2y''^2$.",
+     "basics_md": "Each differentiation gives one more equation. With two constants you need the original and two derivatives to remove both.",
+     "key_points": [
+      "Differentiate as many times as there are constants",
+      "Eliminate the constants completely; none may remain",
+      "Count only truly arbitrary constants",
+      "Order of the answer = number of constants"
+     ],
+     "questions": [
+      {
+       "id": "el1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "The differential equation of $y=Ae^{x}+Be^{-x}$ is",
+       "options": [
+        "$y''+y=0$",
+        "$y''-y=0$",
+        "$y'-y=0$",
+        "$y''-2y'+y=0$"
+       ],
+       "answer_index": 1,
+       "why": "$y''=Ae^x+Be^{-x}=y$."
+      },
+      {
+       "id": "el2",
+       "kind": "mcq",
+       "level": 2,
+       "q": "The differential equation of $y=cx+c^2$ is",
+       "options": [
+        "$y=xy'+y'^2$",
+        "$y=xy'+y'$",
+        "$y=xy'+2y'$",
+        "$y'=x+2c$"
+       ],
+       "answer_index": 0,
+       "why": "$y'=c$, so $y=xy'+y'^2$. One constant gives first order, and the answer has degree 2."
+      },
+      {
+       "id": "el3",
+       "kind": "numerical",
+       "level": 2,
+       "marks": 3,
+       "q": "Form the differential equation by eliminating $a,b$ from $y=ae^{2x}+be^{-3x}$.",
+       "model_answer_md": "$y'=2ae^{2x}-3be^{-3x}$, $y''=4ae^{2x}+9be^{-3x}$.\n\nFrom $y,y'$: $ae^{2x}=\\dfrac{y'+3y}{5}$, $be^{-3x}=\\dfrac{2y-y'}{5}$.\n\nSo $y''=\\dfrac{4(y'+3y)+9(2y-y')}{5}=-y'+6y$.\n\n$$\\boxed{y''+y'-6y=0}$$",
+       "points": [
+        "Differentiates twice",
+        "Solves for $ae^{2x}$ and $be^{-3x}$",
+        "Substitutes in $y''$",
+        "$y''+y'-6y=0$"
+       ]
+      },
+      {
+       "id": "el4",
+       "kind": "short",
+       "level": 2,
+       "marks": 2,
+       "q": "Form the differential equation of the parabolas $y^2=4ax$.",
+       "model_answer_md": "Differentiate: $2yy'=4a$. Put $4a=2yy'$ in the family: $y^2=2xyy'$, so $\\boxed{y=2x\\dfrac{dy}{dx}}$ (for $y\\neq0$).",
+       "points": [
+        "Differentiates once (one constant)",
+        "Substitutes $4a=2yy'$",
+        "$y=2xy'$"
+       ]
+      },
+      {
+       "id": "el5",
+       "kind": "long",
+       "level": 3,
+       "marks": 4,
+       "q": "Find the differential equation of all circles of radius $a$.",
+       "model_answer_md": "$(x-h)^2+(y-k)^2=a^2$, with $h,k$ arbitrary, so the ODE is second order.\n\n1. Differentiate: $(x-h)+(y-k)y'=0$.\n2. Again: $1+y'^2+(y-k)y''=0$, so $y-k=-\\dfrac{1+y'^2}{y''}$.\n3. Then $x-h=-(y-k)y'=\\dfrac{(1+y'^2)y'}{y''}$.\n4. Substitute: $\\dfrac{(1+y'^2)^2y'^2}{y''^2}+\\dfrac{(1+y'^2)^2}{y''^2}=a^2$.\n\n$$\\boxed{(1+y'^2)^3=a^2y''^2}$$",
+       "points": [
+        "Two arbitrary constants $h,k$, so two differentiations",
+        "Finds $y-k$ and $x-h$ in terms of $y',y''$",
+        "Substitutes in the circle",
+        "$(1+y'^2)^3=a^2y''^2$"
+       ]
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "topic": "Existence and uniqueness of first order ODEs",
+   "subtopics": [
+    {
+     "id": "picard-theorem",
+     "title": "Picard's theorem and the Lipschitz condition",
+     "theory_md": "For $y'=f(x,y)$, $y(x_0)=y_0$: let $f$ be continuous on $R:|x-x_0|\\le a,\\ |y-y_0|\\le b$ with $|f|\\le M$, and satisfy the **Lipschitz condition** $|f(x,y_1)-f(x,y_2)|\\le K|y_1-y_2|$ on $R$. Then a **unique** solution exists on $|x-x_0|\\le h$, $h=\\min(a,\\,b/M)$.\n\nIf $\\partial f/\\partial y$ is continuous and bounded, Lipschitz holds with $K=\\max|f_y|$. Continuity alone gives existence only. Counter-example: $y'=3y^{2/3}$, $y(0)=0$ has $y=0$ and $y=x^3$, since $f_y=2y^{-1/3}$ is unbounded at $y=0$.",
+     "basics_md": "Picard asks: does a curve through the point exist, and is it the only one? Lipschitz means $f$ cannot change too fast with $y$.",
+     "key_points": [
+      "Statement: $f$ continuous and Lipschitz in $y$ on the rectangle",
+      "Interval $h=\\min(a,b/M)$, $M=\\max|f|$",
+      "Bounded $f_y$ implies Lipschitz",
+      "Continuity alone gives existence, not uniqueness",
+      "Example $y'=3y^{2/3}$, $y(0)=0$: two solutions"
+     ],
+     "questions": [
+      {
+       "id": "pt1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "The IVP $y'=3y^{2/3}$, $y(0)=0$ has",
+       "options": [
+        "no solution",
+        "exactly one solution",
+        "more than one solution",
+        "a solution only for $x<0$"
+       ],
+       "answer_index": 2,
+       "why": "Both $y=0$ and $y=x^3$ satisfy it."
+      },
+      {
+       "id": "pt2",
+       "kind": "mcq",
+       "level": 2,
+       "q": "In Picard's theorem the interval of existence is $|x-x_0|\\le h$ where",
+       "options": [
+        "$h=\\max(a,b/M)$",
+        "$h=\\min(a,b/M)$",
+        "$h=a+b/M$",
+        "$h=M/b$"
+       ],
+       "answer_index": 1,
+       "why": "The solution must stay inside the rectangle, so take the smaller of $a$ and $b/M$."
+      },
+      {
+       "id": "pt3",
+       "kind": "short",
+       "level": 2,
+       "marks": 3,
+       "q": "State Picard's existence and uniqueness theorem for $y'=f(x,y)$, $y(x_0)=y_0$.",
+       "model_answer_md": "Let $f(x,y)$ be continuous on the rectangle $R:|x-x_0|\\le a,\\ |y-y_0|\\le b$, with $|f|\\le M$ on $R$, and let $f$ satisfy the Lipschitz condition $|f(x,y_1)-f(x,y_2)|\\le K|y_1-y_2|$ on $R$.\n\nThen the IVP has a **unique** solution $y=\\phi(x)$ on $|x-x_0|\\le h$, where $h=\\min(a,b/M)$.",
+       "points": [
+        "$f$ continuous on the rectangle with bound $M$",
+        "Lipschitz condition in $y$",
+        "Unique solution exists",
+        "Interval $h=\\min(a,b/M)$"
+       ]
+      },
+      {
+       "id": "pt4",
+       "kind": "short",
+       "level": 2,
+       "marks": 3,
+       "q": "Show that $y'=3y^{2/3}$, $y(0)=0$ has more than one solution. Why does this not contradict Picard's theorem?",
+       "model_answer_md": "$y=0$ satisfies both the equation and $y(0)=0$. $y=x^3$: $y'=3x^2=3(x^3)^{2/3}$, and $y(0)=0$. So two solutions.\n\nHere $f=3y^{2/3}$, $f_y=2y^{-1/3}$ is unbounded near $y=0$, so $f$ is not Lipschitz in any rectangle containing $(0,0)$. The hypothesis fails, so there is no contradiction.",
+       "points": [
+        "$y=0$ is a solution",
+        "$y=x^3$ is a solution",
+        "$f_y=2y^{-1/3}$ unbounded at $y=0$",
+        "Lipschitz condition fails, so no contradiction"
+       ]
+      },
+      {
+       "id": "pt5",
+       "kind": "numerical",
+       "level": 3,
+       "marks": 3,
+       "q": "For $y'=x^2+y^2$, $y(0)=0$ on $R:|x|\\le1,|y|\\le1$, find $M$, a Lipschitz constant $K$ and the interval of existence $h$.",
+       "model_answer_md": "$M=\\max(x^2+y^2)=1+1=2$ on $R$.\n\n$f_y=2y$, so $K=\\max|2y|=2$ (Lipschitz holds).\n\n$h=\\min(a,b/M)=\\min(1,\\tfrac12)=\\tfrac12$ (with $a=b=1$).",
+       "points": [
+        "$M=2$",
+        "$K=2$ from $\\max|f_y|$",
+        "$h=\\min(1,1/2)=1/2$"
+       ]
+      }
+     ]
+    },
+    {
+     "id": "picard-iteration",
+     "title": "Picard's successive approximations",
+     "theory_md": "The solution is the limit of $y_{n+1}(x)=y_0+\\int_{x_0}^{x}f(t,y_n(t))\\,dt$, starting from $y_0(x)=y_0$. Substitute $y_n(t)$, integrate in $t$, then write the answer in $x$.\n\nCompare the terms with the series of the exact solution to see how many are correct. For $y'=y$, $y(0)=1$ the iterates are the partial sums of $e^x$.",
+     "basics_md": "Guess a solution (the constant $y_0$), plug it in the right-hand side, integrate to get a better guess, and repeat.",
+     "key_points": [
+      "Formula $y_{n+1}=y_0+\\int f(t,y_n(t))dt$",
+      "Start with $y_0(x)=y_0$",
+      "Integrate in the dummy variable $t$",
+      "Iterates agree with the exact series in the first terms"
+     ],
+     "questions": [
+      {
+       "id": "pi1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "For $y'=y$, $y(0)=1$, the first approximation $y_1(x)$ is",
+       "options": [
+        "$1$",
+        "$1+x$",
+        "$1+x+\\dfrac{x^2}{2}$",
+        "$e^x$"
+       ],
+       "answer_index": 1,
+       "why": "$y_1=1+\\int_0^x1\\,dt=1+x$."
+      },
+      {
+       "id": "pi2",
+       "kind": "mcq",
+       "level": 2,
+       "q": "In Picard's iteration the integral $\\int_{x_0}^{x}f(t,y_n(t))\\,dt$ is taken with respect to",
+       "options": [
+        "$y$",
+        "$t$, then expressed in $x$",
+        "$y_n$",
+        "$h$"
+       ],
+       "answer_index": 1,
+       "why": "$t$ is the dummy variable; the upper limit $x$ appears in the result."
+      },
+      {
+       "id": "pi3",
+       "kind": "numerical",
+       "level": 2,
+       "marks": 4,
+       "q": "Find the first two Picard approximations of $y'=x+y$, $y(0)=1$, and compare with the exact solution.",
+       "model_answer_md": "$y_0=1$.\n\n$y_1=1+\\int_0^x(t+1)\\,dt=1+x+\\dfrac{x^2}{2}$.\n\n$y_2=1+\\int_0^x\\left(t+1+t+\\dfrac{t^2}{2}\\right)dt=1+x+x^2+\\dfrac{x^3}{6}$.\n\nExact: $y=2e^x-x-1=1+x+x^2+\\dfrac{x^3}{3}+\\dfrac{x^4}{12}+\\cdots$. $y_2$ agrees up to $x^2$ and the later terms improve with each iteration.",
+       "points": [
+        "$y_0=1$",
+        "$y_1=1+x+x^2/2$",
+        "$y_2=1+x+x^2+x^3/6$",
+        "Compares with exact $2e^x-x-1$"
+       ]
+      },
+      {
+       "id": "pi4",
+       "kind": "numerical",
+       "level": 3,
+       "marks": 4,
+       "q": "Find $y_1,y_2,y_3$ for $y'=x+y^2$, $y(0)=0$.",
+       "model_answer_md": "$y_1=\\int_0^xt\\,dt=\\dfrac{x^2}{2}$.\n\n$y_2=\\int_0^x\\left(t+\\dfrac{t^4}{4}\\right)dt=\\dfrac{x^2}{2}+\\dfrac{x^5}{20}$.\n\n$y_3=\\int_0^x\\left(t+\\left(\\dfrac{t^2}{2}+\\dfrac{t^5}{20}\\right)^2\\right)dt=\\dfrac{x^2}{2}+\\dfrac{x^5}{20}+\\dfrac{x^8}{160}+\\dfrac{x^{11}}{4400}$.",
+       "points": [
+        "$y_1=x^2/2$",
+        "$y_2=x^2/2+x^5/20$",
+        "Squares $y_2$ before integrating",
+        "$y_3=x^2/2+x^5/20+x^8/160+x^{11}/4400$"
+       ]
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "topic": "First order first degree equations",
+   "subtopics": [
+    {
+     "id": "separable",
+     "title": "Variables separable and reducible forms",
+     "theory_md": "If $\\dfrac{dy}{dx}=f(x)g(y)$, write $\\dfrac{dy}{g(y)}=f(x)\\,dx$ and integrate both sides, adding one constant.\n\nIf $\\dfrac{dy}{dx}=f(ax+by+c)$, put $v=ax+by+c$; then $\\dfrac{dv}{dx}=a+b\\,f(v)$ is separable.",
+     "basics_md": "Put all the $y$ terms with $dy$ on one side and all the $x$ terms with $dx$ on the other, then integrate each.",
+     "key_points": [
+      "Separate and integrate both sides",
+      "Add one arbitrary constant",
+      "$f(ax+by+c)$: substitute $v=ax+by+c$"
+     ],
+     "questions": [
+      {
+       "id": "sp1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "The solution of $\\dfrac{dy}{dx}=xy$ is",
+       "options": [
+        "$y=Ce^{x^2/2}$",
+        "$y=Ce^{x}$",
+        "$y=x^2/2+C$",
+        "$y=C\\ln x$"
+       ],
+       "answer_index": 0,
+       "why": "$\\int dy/y=\\int x\\,dx$ gives $\\ln y=x^2/2+c$."
+      },
+      {
+       "id": "sp2",
+       "kind": "mcq",
+       "level": 2,
+       "q": "For $\\dfrac{dy}{dx}=(x+y)^2$ the substitution $v=x+y$ gives",
+       "options": [
+        "$\\dfrac{dv}{dx}=v^2$",
+        "$\\dfrac{dv}{dx}=1+v^2$",
+        "$\\dfrac{dv}{dx}=2v$",
+        "$\\dfrac{dv}{dx}=v^2-1$"
+       ],
+       "answer_index": 1,
+       "why": "$dv/dx=1+dy/dx=1+v^2$, so $\\tan^{-1}v=x+c$."
+      },
+      {
+       "id": "sp3",
+       "kind": "short",
+       "level": 2,
+       "marks": 3,
+       "q": "Solve $x\\sqrt{1+y^2}\\,dx+y\\sqrt{1+x^2}\\,dy=0$.",
+       "model_answer_md": "Divide by $\\sqrt{1+x^2}\\sqrt{1+y^2}$: $\\dfrac{x\\,dx}{\\sqrt{1+x^2}}+\\dfrac{y\\,dy}{\\sqrt{1+y^2}}=0$.\n\nIntegrate: $$\\boxed{\\sqrt{1+x^2}+\\sqrt{1+y^2}=C}$$",
+       "points": [
+        "Separates the variables",
+        "Integrates each term",
+        "$\\sqrt{1+x^2}+\\sqrt{1+y^2}=C$"
+       ]
+      },
+      {
+       "id": "sp4",
+       "kind": "short",
+       "level": 3,
+       "marks": 3,
+       "q": "Solve $\\dfrac{dy}{dx}=(x+y)^2$.",
+       "model_answer_md": "Put $v=x+y$: $\\dfrac{dv}{dx}=1+v^2$, so $\\dfrac{dv}{1+v^2}=dx$.\n\n$\\tan^{-1}v=x+c$, i.e. $\\boxed{x+y=\\tan(x+c)}$.",
+       "points": [
+        "Substitution $v=x+y$",
+        "$dv/dx=1+v^2$",
+        "$x+y=\\tan(x+c)$"
+       ]
+      }
+     ]
+    },
+    {
+     "id": "homogeneous",
+     "title": "Homogeneous equations",
+     "theory_md": "$\\dfrac{dy}{dx}=f(x,y)$ is homogeneous if $M,N$ are homogeneous of the same degree. Put $y=vx$, so $\\dfrac{dy}{dx}=v+x\\dfrac{dv}{dx}$; the equation separates in $v$ and $x$. Replace $v=y/x$ at the end.\n\nFor $\\dfrac{dy}{dx}=\\dfrac{a_1x+b_1y+c_1}{a_2x+b_2y+c_2}$: if $a_1b_2\\neq a_2b_1$, shift the origin to the intersection $(h,k)$ of the two lines ($x=X+h$, $y=Y+k$); if $a_1b_2=a_2b_1$, put $v=a_1x+b_1y$.",
+     "basics_md": "A homogeneous equation depends only on the ratio $y/x$, so naming that ratio $v$ removes one variable.",
+     "key_points": [
+      "Check homogeneity (same degree in $M$ and $N$)",
+      "Substitute $y=vx$ and separate",
+      "Resubstitute $v=y/x$",
+      "Apply the initial condition for $C$",
+      "Non-homogeneous linear fractions: shift origin or use $v=a_1x+b_1y$"
+     ],
+     "questions": [
+      {
+       "id": "hm1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "Which equation is homogeneous?",
+       "options": [
+        "$(x^2+y^2)dx-xy\\,dy=0$",
+        "$(x+y+1)dx-dy=0$",
+        "$(x^2+y)dx+x\\,dy=0$",
+        "$y\\,dx-(x+y^2)dy=0$"
+       ],
+       "answer_index": 0,
+       "why": "Both coefficients have degree 2."
+      },
+      {
+       "id": "hm2",
+       "pyq": "bb1bc5843b7d38fe",
+       "level": 2,
+       "points": [
+        "Recognises it as homogeneous of degree 2",
+        "Puts $y=vx$ and gets $x\\,dv/dx=(1-v^2)/(2v)$",
+        "Separates and integrates to $x(1-v^2)=C$, i.e. $x^2-y^2=Cx$",
+        "Uses $y(1)=2$ to get $C=-3$",
+        "$y^2=x^2+3x$"
+       ]
+      },
+      {
+       "id": "hm3",
+       "kind": "short",
+       "level": 2,
+       "marks": 4,
+       "q": "Solve $\\dfrac{dy}{dx}=\\dfrac{x+y}{x-y}$.",
+       "model_answer_md": "Put $y=vx$: $v+x\\dfrac{dv}{dx}=\\dfrac{1+v}{1-v}$, so $x\\dfrac{dv}{dx}=\\dfrac{1+v^2}{1-v}$.\n\n$\\displaystyle\\int\\dfrac{1-v}{1+v^2}dv=\\int\\dfrac{dx}{x}$: $\\tan^{-1}v-\\tfrac12\\ln(1+v^2)=\\ln x+c$.\n\nSince $\\ln x+\\tfrac12\\ln(1+v^2)=\\tfrac12\\ln(x^2+y^2)$: $$\\boxed{\\tan^{-1}\\dfrac yx=\\tfrac12\\ln(x^2+y^2)+c}$$",
+       "points": [
+        "$y=vx$ substitution",
+        "Separates variables",
+        "Integrates both sides",
+        "Resubstitutes $v=y/x$"
+       ]
+      },
+      {
+       "id": "hm4",
+       "kind": "long",
+       "level": 3,
+       "marks": 5,
+       "q": "Solve $\\dfrac{dy}{dx}=\\dfrac{x+2y-3}{2x+y-3}$.",
+       "model_answer_md": "Lines $x+2y=3$, $2x+y=3$ meet at $(1,1)$ ($a_1b_2\\neq a_2b_1$). Put $x=X+1$, $y=Y+1$: $\\dfrac{dY}{dX}=\\dfrac{X+2Y}{2X+Y}$.\n\n$Y=vX$: $X\\dfrac{dv}{dX}=\\dfrac{1+2v}{2+v}-v=\\dfrac{1-v^2}{2+v}$.\n\nPartial fractions: $\\dfrac{2+v}{1-v^2}=\\dfrac{3/2}{1-v}+\\dfrac{1/2}{1+v}$, so $-\\tfrac32\\ln|1-v|+\\tfrac12\\ln|1+v|=\\ln X+c$, i.e. $\\dfrac{1+v}{(1-v)^3}=CX^2$.\n\nWith $v=Y/X$: $X+Y=C(X-Y)^3$. Back to $x,y$: $$\\boxed{x+y-2=C(x-y)^3}$$",
+       "points": [
+        "Finds the intersection $(1,1)$ and shifts origin",
+        "Reduces to homogeneous in $X,Y$",
+        "Separates with partial fractions",
+        "$x+y-2=C(x-y)^3$"
+       ]
+      }
+     ]
+    },
+    {
+     "id": "linear-bernoulli",
+     "title": "Linear and Bernoulli equations",
+     "theory_md": "**Linear:** $\\dfrac{dy}{dx}+Py=Q$, $\\text{IF}=e^{\\int P\\,dx}$, solution $y\\cdot\\text{IF}=\\int Q\\cdot\\text{IF}\\,dx+C$. If the equation is linear in $x$, use $\\dfrac{dx}{dy}+Px=Q$ with $P,Q$ functions of $y$.\n\n**Bernoulli:** $\\dfrac{dy}{dx}+Py=Qy^n$. Divide by $y^n$ and put $v=y^{1-n}$, which gives a linear equation in $v$.",
+     "basics_md": "A linear equation is one where $y$ and $y'$ appear only to the first power. The integrating factor turns the left side into a single derivative.",
+     "key_points": [
+      "Standard form with coefficient of $y'$ equal to 1",
+      "IF $=e^{\\int P}$ and $y\\cdot\\text{IF}=\\int Q\\cdot\\text{IF}$",
+      "Linear in $x$: treat $x$ as the dependent variable",
+      "Bernoulli: $v=y^{1-n}$"
+     ],
+     "questions": [
+      {
+       "id": "lb1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "The integrating factor of $\\dfrac{dy}{dx}+\\dfrac yx=x^2$ is",
+       "options": [
+        "$x$",
+        "$1/x$",
+        "$e^x$",
+        "$x^2$"
+       ],
+       "answer_index": 0,
+       "why": "$e^{\\int dx/x}=x$."
+      },
+      {
+       "id": "lb2",
+       "kind": "mcq",
+       "level": 2,
+       "q": "To solve $y\\,dx+(x-y^3)dy=0$ as a linear equation, the integrating factor is",
+       "options": [
+        "$x$",
+        "$y$",
+        "$1/y$",
+        "$e^{y}$"
+       ],
+       "answer_index": 1,
+       "why": "$\\dfrac{dx}{dy}+\\dfrac xy=y^2$, so IF $=e^{\\int dy/y}=y$ and $xy=\\dfrac{y^4}{4}+C$."
+      },
+      {
+       "id": "lb3",
+       "kind": "short",
+       "level": 2,
+       "marks": 3,
+       "q": "Solve $x\\dfrac{dy}{dx}+2y=x^2\\ln x$.",
+       "model_answer_md": "Standard form: $y'+\\dfrac2xy=x\\ln x$. IF $=e^{2\\ln x}=x^2$.\n\n$yx^2=\\int x^3\\ln x\\,dx=\\dfrac{x^4\\ln x}{4}-\\dfrac{x^4}{16}+C$.\n\n$$\\boxed{y=\\dfrac{x^2\\ln x}{4}-\\dfrac{x^2}{16}+\\dfrac{C}{x^2}}$$",
+       "points": [
+        "Divides by $x$ to get standard form",
+        "IF $=x^2$",
+        "Integrates by parts",
+        "General solution with $C$"
+       ]
+      },
+      {
+       "id": "lb4",
+       "kind": "short",
+       "level": 3,
+       "marks": 4,
+       "q": "Solve $\\dfrac{dy}{dx}+\\dfrac yx=xy^2$.",
+       "model_answer_md": "Bernoulli with $n=2$. Divide by $y^2$ and put $v=1/y$: $-\\dfrac{dv}{dx}+\\dfrac vx=x$, i.e. $\\dfrac{dv}{dx}-\\dfrac vx=-x$.\n\nIF $=e^{-\\ln x}=\\dfrac1x$: $\\dfrac vx=\\int-1\\,dx=-x+C$.\n\n$v=-x^2+Cx$, so $$\\boxed{\\dfrac1y=Cx-x^2}$$",
+       "points": [
+        "Identifies Bernoulli, $v=y^{-1}$",
+        "Linear equation in $v$ with IF $1/x$",
+        "$1/y=Cx-x^2$"
+       ]
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "topic": "Exact ODEs",
+   "subtopics": [
+    {
+     "id": "exact-test",
+     "title": "Test for exactness",
+     "theory_md": "$M\\,dx+N\\,dy=0$ is **exact** if $\\dfrac{\\partial M}{\\partial y}=\\dfrac{\\partial N}{\\partial x}$; then $M\\,dx+N\\,dy=du$ for some $u(x,y)$ and the solution is $u=c$.\n\nUse the test to find an unknown constant, or to decide whether an integrating factor is needed. Check it carefully: $M$ is the coefficient of $dx$.",
+     "basics_md": "Exact means the expression is the total differential $du$ of a function. Then the cross-derivatives must match.",
+     "key_points": [
+      "Condition $M_y=N_x$",
+      "Exact means $M\\,dx+N\\,dy=du$",
+      "Solution $u=c$",
+      "Use the test to find an unknown constant"
+     ],
+     "questions": [
+      {
+       "id": "et1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "$M\\,dx+N\\,dy=0$ is exact if",
+       "options": [
+        "$M_x=N_y$",
+        "$M_y=N_x$",
+        "$M=N$",
+        "$M_y=-N_x$"
+       ],
+       "answer_index": 1,
+       "why": "Equality of the mixed partials of $u$."
+      },
+      {
+       "id": "et2",
+       "kind": "mcq",
+       "level": 2,
+       "q": "Which equation is exact?",
+       "options": [
+        "$y\\,dx-x\\,dy=0$",
+        "$(x^2-y)dx+(x+y^2)dy=0$",
+        "$(x^2+y)dx+(x-y^2)dy=0$",
+        "$y\\,dx+2x\\,dy=0$"
+       ],
+       "answer_index": 2,
+       "why": "$M_y=1=N_x$. In the others $M_y\\neq N_x$."
+      },
+      {
+       "id": "et3",
+       "kind": "numerical",
+       "level": 2,
+       "marks": 3,
+       "q": "Find $k$ so that $(kxy^2+2y)dx+(x^2y+2x)dy=0$ is exact, and solve it.",
+       "model_answer_md": "$M_y=2kxy+2$, $N_x=2xy+2$. Exact when $2k=2$, so $k=1$.\n\nWith $k=1$: $xy^2dx+x^2y\\,dy+2(y\\,dx+x\\,dy)=d\\left(\\tfrac{x^2y^2}{2}\\right)+2\\,d(xy)$.\n\n$$\\boxed{\\dfrac{x^2y^2}{2}+2xy=c}$$",
+       "points": [
+        "$M_y=2kxy+2$",
+        "$N_x=2xy+2$",
+        "$k=1$",
+        "Solution $x^2y^2/2+2xy=c$"
+       ]
+      }
+     ]
+    },
+    {
+     "id": "exact-solve",
+     "title": "Solving an exact equation",
+     "theory_md": "Once $M_y=N_x$: $$u=\\int M\\,dx\\ (y\\text{ constant})+\\int(\\text{terms of }N\\text{ not containing }x)\\,dy=c.$$\n\nFor an initial value problem, put the given point in $u=c$ to find $c$.",
+     "basics_md": "Integrate $M$ with respect to $x$, then add whatever part of $N$ is still missing, the part with no $x$ in it.",
+     "key_points": [
+      "Verify $M_y=N_x$ first",
+      "$\\int M\\,dx$ with $y$ constant",
+      "Add $\\int$ of the terms of $N$ free of $x$",
+      "Write $u=c$ and apply conditions"
+     ],
+     "questions": [
+      {
+       "id": "es1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "In the solution of an exact equation, the second integral is of",
+       "options": [
+        "terms of $M$ free of $y$",
+        "terms of $N$ free of $x$",
+        "all of $N$",
+        "terms of $N$ free of $y$"
+       ],
+       "answer_index": 1,
+       "why": "Only the part of $N$ not already produced by $\\int M\\,dx$."
+      },
+      {
+       "id": "es2",
+       "kind": "short",
+       "level": 2,
+       "marks": 4,
+       "q": "Solve $(2xy+y-\\tan y)dx+(x^2-x\\tan^2y+\\sec^2y)dy=0$.",
+       "model_answer_md": "$M_y=2x+1-\\sec^2y=2x-\\tan^2y=N_x$. Exact.\n\n$\\int M\\,dx=x^2y+xy-x\\tan y$. Terms of $N$ free of $x$: $\\sec^2y$, giving $\\tan y$.\n\n$$\\boxed{x^2y+xy-x\\tan y+\\tan y=c}$$",
+       "points": [
+        "Shows $M_y=N_x$",
+        "$\\int M\\,dx=x^2y+xy-x\\tan y$",
+        "$\\int\\sec^2y\\,dy=\\tan y$",
+        "Solution $=c$"
+       ]
+      },
+      {
+       "id": "es3",
+       "kind": "mcq",
+       "level": 2,
+       "q": "The general solution of $y\\,dx+x\\,dy=0$ is",
+       "options": [
+        "$x+y=c$",
+        "$xy=c$",
+        "$x/y=c$",
+        "$y=cx$"
+       ],
+       "answer_index": 1,
+       "why": "$y\\,dx+x\\,dy=d(xy)$. (Also $y=c/x$.)"
+      },
+      {
+       "id": "es4",
+       "kind": "numerical",
+       "level": 3,
+       "marks": 4,
+       "q": "Solve $(\\sin x\\cos x-xy^2)dx+y(1-x^2)dy=0$ with $y(0)=2$.",
+       "model_answer_md": "$M_y=-2xy=N_x$. Exact.\n\n$\\int M\\,dx=\\tfrac12\\sin^2x-\\tfrac{x^2y^2}{2}$. Terms of $N$ free of $x$: $y$, giving $\\tfrac{y^2}{2}$.\n\n$\\tfrac12\\sin^2x-\\tfrac{x^2y^2}{2}+\\tfrac{y^2}{2}=c$. At $(0,2)$: $c=2$.\n\n$$\\boxed{\\sin^2x+y^2(1-x^2)=4}$$",
+       "points": [
+        "Verifies exactness",
+        "Integrates $M$ and adds $y^2/2$",
+        "Uses $y(0)=2$ to get $c=2$",
+        "$\\sin^2x+y^2(1-x^2)=4$"
+       ]
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "topic": "Integrating factor",
+   "subtopics": [
+    {
+     "id": "if-xy-rule",
+     "title": "Integrating factor from M and N",
+     "theory_md": "If $Mdx+Ndy=0$ is not exact:\n1. $\\dfrac{M_y-N_x}{N}=f(x)$ alone $\\Rightarrow$ $\\text{IF}=e^{\\int f\\,dx}$.\n2. $\\dfrac{N_x-M_y}{M}=g(y)$ alone $\\Rightarrow$ $\\text{IF}=e^{\\int g\\,dy}$.\n\nMultiply through, check exactness, then solve as an exact equation. The sign order matters: $M_y-N_x$ over $N$, but $N_x-M_y$ over $M$.",
+     "basics_md": "An integrating factor is a multiplier that makes a non-exact equation exact. These two rules find it when it depends on one variable only.",
+     "key_points": [
+      "Not exact: $M_y\\neq N_x$",
+      "Rule 1: $(M_y-N_x)/N$ a function of $x$",
+      "Rule 2: $(N_x-M_y)/M$ a function of $y$",
+      "Multiply, verify exactness, then solve"
+     ],
+     "questions": [
+      {
+       "id": "ix1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "If $\\dfrac{M_y-N_x}{N}=f(x)$, the integrating factor is",
+       "options": [
+        "$e^{\\int f(x)dx}$",
+        "$e^{-\\int f(x)dx}$",
+        "$f(x)$",
+        "$e^{\\int f(y)dy}$"
+       ],
+       "answer_index": 0,
+       "why": "Rule 1."
+      },
+      {
+       "id": "ix2",
+       "kind": "mcq",
+       "level": 2,
+       "q": "For $(x^2+y^2+x)dx+xy\\,dy=0$ the integrating factor is",
+       "options": [
+        "$x$",
+        "$1/x$",
+        "$e^{x}$",
+        "$x^2$"
+       ],
+       "answer_index": 0,
+       "why": "$\\dfrac{M_y-N_x}{N}=\\dfrac{2y-y}{xy}=\\dfrac1x$, so IF $=e^{\\ln x}=x$."
+      },
+      {
+       "id": "ix3",
+       "pyq": "3e2218d4da21f9be",
+       "level": 2,
+       "points": [
+        "Shows $M_y=2xy\\neq N_x$, not exact",
+        "$(N_x-M_y)/M=6$, a constant",
+        "IF $=e^{6y}$",
+        "Multiplies and solves as exact",
+        "$e^{6y}(54x^2y^2-36x^3+18y^2-6y+1)=C$"
+       ]
+      },
+      {
+       "id": "ix4",
+       "pyq": "6df550b27e565785",
+       "level": 2,
+       "points": [
+        "Shows not exact: $M_y=1+y^2$, $N_x=(1+y^2)/4$",
+        "$(M_y-N_x)/N=3/x$",
+        "IF $=x^3$",
+        "Multiplies and solves as exact",
+        "$3x^4y+x^4y^3+x^6=C$"
+       ]
+      },
+      {
+       "id": "ix5",
+       "kind": "short",
+       "level": 2,
+       "marks": 3,
+       "q": "Solve $(x^2+y^2+1)dx-2xy\\,dy=0$.",
+       "model_answer_md": "$M_y=2y$, $N_x=-2y$. Not exact.\n\n$\\dfrac{M_y-N_x}{N}=\\dfrac{4y}{-2xy}=-\\dfrac2x$, so IF $=e^{-2\\ln x}=\\dfrac1{x^2}$.\n\nMultiply: $\\left(1+\\dfrac{y^2+1}{x^2}\\right)dx-\\dfrac{2y}{x}dy=0$ is exact. $\\int M\\,dx=x-\\dfrac{y^2+1}{x}$; no term of $N$ is free of $x$.\n\n$$\\boxed{x^2-y^2-1=cx}$$",
+       "points": [
+        "Shows not exact",
+        "IF $=1/x^2$ from Rule 1",
+        "Solves the exact equation",
+        "$x^2-y^2-1=cx$"
+       ]
+      }
+     ]
+    },
+    {
+     "id": "if-homogeneous",
+     "title": "Special rules: homogeneous and xy forms",
+     "theory_md": "1. If $M,N$ are **homogeneous** of the same degree and $Mx+Ny\\neq0$: $\\text{IF}=\\dfrac1{Mx+Ny}$.\n2. If the equation has the form $f_1(xy)\\,y\\,dx+f_2(xy)\\,x\\,dy=0$ and $Mx-Ny\\neq0$: $\\text{IF}=\\dfrac1{Mx-Ny}$.\n\nThen multiply and solve as exact.",
+     "basics_md": "These rules need no differentiation. Recognise the form, compute $Mx\\pm Ny$ and divide by it.",
+     "key_points": [
+      "Homogeneous: IF $=1/(Mx+Ny)$",
+      "Form $f_1(xy)y\\,dx+f_2(xy)x\\,dy$: IF $=1/(Mx-Ny)$",
+      "Both need the denominator to be non-zero",
+      "Multiply and solve as exact"
+     ],
+     "questions": [
+      {
+       "id": "ih1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "For a homogeneous equation $M\\,dx+N\\,dy=0$ with $Mx+Ny\\neq0$, an integrating factor is",
+       "options": [
+        "$1/(Mx-Ny)$",
+        "$1/(Mx+Ny)$",
+        "$1/(M+N)$",
+        "$x^2$"
+       ],
+       "answer_index": 1,
+       "why": "Standard rule for homogeneous equations."
+      },
+      {
+       "id": "ih2",
+       "kind": "mcq",
+       "level": 2,
+       "q": "For $y(1+xy)dx+x(1-xy)dy=0$ the integrating factor $1/(Mx-Ny)$ equals",
+       "options": [
+        "$\\dfrac1{2xy}$",
+        "$\\dfrac1{2x^2y^2}$",
+        "$\\dfrac1{x^2y^2}$",
+        "$\\dfrac1{2xy^2}$"
+       ],
+       "answer_index": 1,
+       "why": "$Mx-Ny=xy+x^2y^2-xy+x^2y^2=2x^2y^2$."
+      },
+      {
+       "id": "ih3",
+       "kind": "short",
+       "level": 2,
+       "marks": 4,
+       "q": "Solve $(x^2y-2xy^2)dx-(x^3-3x^2y)dy=0$.",
+       "model_answer_md": "Homogeneous of degree 3. $Mx+Ny=x^3y-2x^2y^2-x^3y+3x^2y^2=x^2y^2$, so IF $=\\dfrac1{x^2y^2}$.\n\nExact form: $\\left(\\dfrac1y-\\dfrac2x\\right)dx-\\left(\\dfrac x{y^2}-\\dfrac3y\\right)dy=0$ ($M_y=N_x=-1/y^2$).\n\n$\\int M\\,dx=\\dfrac xy-2\\ln x$; terms of $N$ free of $x$: $\\dfrac3y$.\n\n$$\\boxed{\\dfrac xy-2\\ln x+3\\ln y=c}$$",
+       "points": [
+        "Identifies homogeneous, computes $Mx+Ny=x^2y^2$",
+        "IF $=1/(x^2y^2)$",
+        "Checks exactness",
+        "$x/y-2\\ln x+3\\ln y=c$"
+       ]
+      },
+      {
+       "id": "ih4",
+       "kind": "short",
+       "level": 3,
+       "marks": 4,
+       "q": "Solve $y(1+xy)dx+x(1-xy)dy=0$.",
+       "model_answer_md": "Form $f_1(xy)y\\,dx+f_2(xy)x\\,dy$. $Mx-Ny=2x^2y^2$, IF $=\\dfrac1{2x^2y^2}$ (use $\\dfrac1{x^2y^2}$).\n\n$\\left(\\dfrac1{x^2y}+\\dfrac1x\\right)dx+\\left(\\dfrac1{xy^2}-\\dfrac1y\\right)dy=0$, exact (both partials $-\\dfrac1{x^2y^2}$).\n\n$\\int M\\,dx=-\\dfrac1{xy}+\\ln x$; free of $x$ in $N$: $-\\dfrac1y$ gives $-\\ln y$.\n\n$$\\boxed{-\\dfrac1{xy}+\\ln\\dfrac xy=c}$$",
+       "points": [
+        "Recognises the $xy$ form",
+        "$Mx-Ny=2x^2y^2$",
+        "Verifies exactness",
+        "$-1/(xy)+\\ln(x/y)=c$"
+       ]
+      }
+     ]
+    },
+    {
+     "id": "if-inspection",
+     "title": "Integrating factor by inspection",
+     "theory_md": "Group terms that are exact differentials:\n$d(xy)=x\\,dy+y\\,dx$, $\\ d\\!\\left(\\dfrac xy\\right)=\\dfrac{y\\,dx-x\\,dy}{y^2}$, $\\ d\\!\\left(\\dfrac yx\\right)=\\dfrac{x\\,dy-y\\,dx}{x^2}$,\n$d\\!\\left(\\tan^{-1}\\dfrac yx\\right)=\\dfrac{x\\,dy-y\\,dx}{x^2+y^2}$, $\\ d(\\ln xy)=\\dfrac{x\\,dy+y\\,dx}{xy}$, $\\ d\\!\\left(\\tfrac12(x^2+y^2)\\right)=x\\,dx+y\\,dy$.\n\nSpot the group, choose the multiplier ($1/y^2$, $1/x^2$, $1/(x^2+y^2)$, $x^ay^b$), and check it makes the rest exact.",
+     "basics_md": "Look for the pieces $y\\,dx\\pm x\\,dy$ hidden in the equation, and multiply by whatever turns them into a single derivative.",
+     "key_points": [
+      "Learn the standard exact differentials",
+      "Group terms and pick the matching multiplier",
+      "Try $x^ay^b$ if grouping is unclear",
+      "Verify exactness before integrating"
+     ],
+     "questions": [
+      {
+       "id": "in1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "$\\dfrac{x\\,dy-y\\,dx}{x^2}$ equals",
+       "options": [
+        "$d(x/y)$",
+        "$d(y/x)$",
+        "$d(xy)$",
+        "$d(\\ln xy)$"
+       ],
+       "answer_index": 1,
+       "why": "Quotient rule."
+      },
+      {
+       "id": "in2",
+       "kind": "mcq",
+       "level": 2,
+       "q": "$\\dfrac{x\\,dy-y\\,dx}{x^2+y^2}$ is the differential of",
+       "options": [
+        "$\\tan^{-1}(y/x)$",
+        "$\\ln(x^2+y^2)$",
+        "$\\tan^{-1}(x/y)$",
+        "$y/x$"
+       ],
+       "answer_index": 0,
+       "why": "$d\\left(\\tan^{-1}\\dfrac yx\\right)=\\dfrac{x\\,dy-y\\,dx}{x^2+y^2}$."
+      },
+      {
+       "id": "in3",
+       "pyq": "c97dfe8157c8acdc",
+       "level": 3,
+       "points": [
+        "Shows not exact: $M_y\\neq N_x$",
+        "Finds IF $=1/y^3$ (by grouping: $y^3\\,d(x^3e^y)$ and $y(y\\,dx-x\\,dy)$)",
+        "Multiplies: $M_1=3x^2e^y+1+1/y$, $N_1=x^3e^y-x/y^2$, exact",
+        "Integrates $M_1$ w.r.t. $x$; no term of $N_1$ free of $x$",
+        "$x^3e^y+x+x/y=c$"
+       ]
+      },
+      {
+       "id": "in4",
+       "kind": "short",
+       "level": 2,
+       "marks": 3,
+       "q": "Solve $x\\,dy-y\\,dx=(x^2+y^2)\\,dx$.",
+       "model_answer_md": "Divide by $x^2+y^2$: $\\dfrac{x\\,dy-y\\,dx}{x^2+y^2}=dx$.\n\nLeft side is $d\\left(\\tan^{-1}\\dfrac yx\\right)$.\n\n$$\\boxed{\\tan^{-1}\\dfrac yx=x+c}$$",
+       "points": [
+        "IF $=1/(x^2+y^2)$",
+        "Recognises $d(\\tan^{-1}(y/x))$",
+        "$\\tan^{-1}(y/x)=x+c$"
+       ]
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "topic": "Cauchy-Euler equations",
+   "subtopics": [
+    {
+     "id": "euler-homog",
+     "title": "The substitution x = e^z and the complementary function",
+     "theory_md": "$x^2y''+axy'+by=R(x)$ is a Cauchy-Euler equation. Put $x=e^z$, $z=\\ln x$, $\\theta=\\dfrac d{dz}$:\n$xy'=\\theta y$, $\\ x^2y''=\\theta(\\theta-1)y$, $\\ x^3y'''=\\theta(\\theta-1)(\\theta-2)y$.\n\nAuxiliary equation $m^2+(a-1)m+b=0$:\n- real distinct: $y=C_1x^{m_1}+C_2x^{m_2}$\n- equal: $y=(C_1+C_2\\ln x)x^m$\n- $\\alpha\\pm i\\beta$: $y=x^\\alpha[C_1\\cos(\\beta\\ln x)+C_2\\sin(\\beta\\ln x)]$",
+     "basics_md": "Substituting $x=e^z$ turns powers of $x$ times derivatives into constant coefficients in $z$.",
+     "key_points": [
+      "Substitution $x=e^z$, $\\theta=d/dz$",
+      "$x^2y''=\\theta(\\theta-1)y$, $xy'=\\theta y$",
+      "Solve the auxiliary equation in $m$",
+      "Write the CF in $x$ using $z=\\ln x$"
+     ],
+     "questions": [
+      {
+       "id": "eh1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "Putting $x=e^z$ in a Cauchy-Euler equation, $x^2\\dfrac{d^2y}{dx^2}$ becomes",
+       "options": [
+        "$\\theta^2y$",
+        "$\\theta(\\theta-1)y$",
+        "$\\theta(\\theta+1)y$",
+        "$\\theta y$"
+       ],
+       "answer_index": 1,
+       "why": "$x^2y''=\\theta(\\theta-1)y$."
+      },
+      {
+       "id": "eh2",
+       "kind": "mcq",
+       "level": 2,
+       "q": "The general solution of $x^2y''+xy'-y=0$ is",
+       "options": [
+        "$C_1x+C_2/x$",
+        "$C_1x+C_2x^2$",
+        "$C_1e^x+C_2e^{-x}$",
+        "$C_1\\cos\\ln x+C_2\\sin\\ln x$"
+       ],
+       "answer_index": 0,
+       "why": "$m(m-1)+m-1=m^2-1=0$, $m=\\pm1$."
+      },
+      {
+       "id": "eh3",
+       "kind": "short",
+       "level": 2,
+       "marks": 3,
+       "q": "Solve $x^2y''-3xy'+4y=0$.",
+       "model_answer_md": "$x=e^z$: $[\\theta(\\theta-1)-3\\theta+4]y=(\\theta^2-4\\theta+4)y=0$.\n\n$(m-2)^2=0$, $m=2,2$.\n\n$$\\boxed{y=(C_1+C_2\\ln x)\\,x^2}$$",
+       "points": [
+        "Converts to constant coefficients",
+        "Auxiliary equation $(m-2)^2=0$",
+        "Equal roots: $(C_1+C_2\\ln x)x^2$"
+       ]
+      },
+      {
+       "id": "eh4",
+       "kind": "short",
+       "level": 2,
+       "marks": 3,
+       "q": "Solve $x^2y''+xy'+y=0$.",
+       "model_answer_md": "$(\\theta^2+1)y=0$, $m=\\pm i$.\n\n$$\\boxed{y=C_1\\cos(\\ln x)+C_2\\sin(\\ln x)}$$",
+       "points": [
+        "Auxiliary equation $m^2+1=0$",
+        "Complex roots $\\pm i$",
+        "$y=C_1\\cos\\ln x+C_2\\sin\\ln x$"
+       ]
+      }
+     ]
+    },
+    {
+     "id": "euler-rhs",
+     "title": "Non-homogeneous Cauchy-Euler and Legendre form",
+     "theory_md": "With RHS: transform to $\\phi(\\theta)y=R(e^z)$ and find CF + PI in $z$ by the usual operator rules, then replace $z=\\ln x$. Convert the RHS: $x^k\\to e^{kz}$, $\\ln x\\to z$.\n\n**Legendre form:** $(ax+b)^2y''+p(ax+b)y'+qy=R$. Put $ax+b=e^z$; then $(ax+b)y'=a\\theta y$, $(ax+b)^2y''=a^2\\theta(\\theta-1)y$.",
+     "basics_md": "The PI is found exactly as for constant coefficients, but in the variable $z=\\ln x$ instead of $x$.",
+     "key_points": [
+      "Transform, then CF + PI in $z$",
+      "Convert RHS: $x^k\\to e^{kz}$, $\\ln x\\to z$",
+      "PI by operator rules, repeated roots need $z$ factors",
+      "Legendre form: $ax+b=e^z$",
+      "Return to $x$ at the end"
+     ],
+     "questions": [
+      {
+       "id": "er1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "After $x=e^z$, the right side $x^2$ becomes",
+       "options": [
+        "$z^2$",
+        "$e^{2z}$",
+        "$2z$",
+        "$e^{z^2}$"
+       ],
+       "answer_index": 1,
+       "why": "$x^2=(e^z)^2=e^{2z}$."
+      },
+      {
+       "id": "er2",
+       "pyq": "1ea607cb8c14244c",
+       "level": 3,
+       "points": [
+        "Puts $z=\\ln x$: $(D^2-4D+1)y=z\\sin z$",
+        "CF: $m=2\\pm\\sqrt3$, $y_c=C_1x^{2+\\sqrt3}+C_2x^{2-\\sqrt3}$",
+        "PI $=\\operatorname{Im}\\,e^{iz}\\frac1{(D+i)^2-4(D+i)+1}z$ and expands in $D$",
+        "$y_p=\\frac14[(\\ln x+\\frac12)\\cos\\ln x-\\sin\\ln x]$",
+        "General solution = CF + PI"
+       ]
+      },
+      {
+       "id": "er3",
+       "kind": "short",
+       "level": 2,
+       "marks": 4,
+       "q": "Solve $x^2y''-2xy'-4y=x^2$.",
+       "model_answer_md": "$x=e^z$: $(\\theta^2-3\\theta-4)y=e^{2z}$.\n\nCF: $(m-4)(m+1)=0$, $y_c=C_1x^4+\\dfrac{C_2}{x}$.\n\nPI: $\\dfrac{e^{2z}}{4-6-4}=-\\dfrac{e^{2z}}{6}=-\\dfrac{x^2}{6}$.\n\n$$\\boxed{y=C_1x^4+\\dfrac{C_2}{x}-\\dfrac{x^2}{6}}$$",
+       "points": [
+        "Transforms to $(\\theta^2-3\\theta-4)y=e^{2z}$",
+        "CF from $m=4,-1$",
+        "PI $=-x^2/6$",
+        "General solution"
+       ]
+      },
+      {
+       "id": "er4",
+       "kind": "mcq",
+       "level": 2,
+       "q": "To reduce $(2x+3)^2y''-2(2x+3)y'-12y=6x$ to constant coefficients, put",
+       "options": [
+        "$x=e^z$",
+        "$2x+3=e^z$",
+        "$2x+3=z$",
+        "$y=e^z$"
+       ],
+       "answer_index": 1,
+       "why": "Legendre form: $ax+b=e^z$, with $a=2$."
+      },
+      {
+       "id": "er5",
+       "kind": "short",
+       "level": 3,
+       "marks": 3,
+       "q": "Solve $x^2y''-3xy'+4y=x^2\\ln x$.",
+       "model_answer_md": "$(\\theta-2)^2y=ze^{2z}$. CF: $(C_1+C_2\\ln x)x^2$.\n\nPI: $e^{2z}\\dfrac1{D^2}z=e^{2z}\\dfrac{z^3}{6}=\\dfrac{x^2(\\ln x)^3}{6}$.\n\n$$\\boxed{y=(C_1+C_2\\ln x)x^2+\\dfrac{x^2(\\ln x)^3}{6}}$$",
+       "points": [
+        "Transforms: $(\\theta-2)^2y=ze^{2z}$",
+        "CF with equal roots",
+        "Shifts $D\\to D+2$ for the PI",
+        "PI $=x^2(\\ln x)^3/6$"
+       ]
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "topic": "Simultaneous differential equations",
+   "subtopics": [
+    {
+     "id": "simul-elim",
+     "title": "Linear systems with constant coefficients",
+     "theory_md": "For equations in $x(t),y(t)$ with $D=\\dfrac d{dt}$: eliminate one variable by operating (like Cramer's rule) to get a single ODE in the other. Solve it for CF + PI.\n\nGet the second variable from one of the original equations (not by a second elimination, which adds extra constants). The number of independent constants equals the degree of the determinant in $D$, so any extra ones are fixed by substituting back into the other equation.",
+     "basics_md": "Treat $D$ as a number: multiply the equations by suitable operators and add them so one unknown disappears.",
+     "key_points": [
+      "Write the system in operator form",
+      "Eliminate one variable to get one ODE",
+      "Solve for CF + PI",
+      "Find the other variable from an original equation",
+      "Constants = degree of the determinant in $D$"
+     ],
+     "questions": [
+      {
+       "id": "se1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "For $\\dfrac{dx}{dt}=y$, $\\dfrac{dy}{dt}=x$, eliminating $y$ gives",
+       "options": [
+        "$x''+x=0$",
+        "$x''-x=0$",
+        "$x'=x$",
+        "$x''=0$"
+       ],
+       "answer_index": 1,
+       "why": "$x''=y'=x$."
+      },
+      {
+       "id": "se2",
+       "kind": "mcq",
+       "level": 2,
+       "q": "For $\\dfrac{dx}{dt}=y$, $\\dfrac{dy}{dt}=-x$, $x$ equals",
+       "options": [
+        "$C_1e^t+C_2e^{-t}$",
+        "$C_1\\cos t+C_2\\sin t$",
+        "$C_1+C_2t$",
+        "$C_1e^t\\cos t$"
+       ],
+       "answer_index": 1,
+       "why": "$x''+x=0$, roots $\\pm i$."
+      },
+      {
+       "id": "se3",
+       "kind": "short",
+       "level": 2,
+       "marks": 3,
+       "q": "Solve $\\dfrac{dx}{dt}+y=\\sin t$, $\\dfrac{dy}{dt}+x=\\cos t$.",
+       "model_answer_md": "$y=\\sin t-x'$, $y'=\\cos t-x''$. Into the second: $\\cos t-x''+x=\\cos t$, so $x''-x=0$.\n\n$x=C_1e^t+C_2e^{-t}$.\n\n$y=\\sin t-x'$: $$\\boxed{y=\\sin t-C_1e^t+C_2e^{-t}}$$",
+       "points": [
+        "Eliminates $y$ to get $x''-x=0$",
+        "$x=C_1e^t+C_2e^{-t}$",
+        "Finds $y=\\sin t-x'$"
+       ]
+      },
+      {
+       "id": "se4",
+       "pyq": "c4d92ef68ba50cd3",
+       "level": 3,
+       "points": [
+        "Operator form $(D^2-2)x-Dy=2t$, $Dx+(4D-3)y=0$",
+        "Eliminates $y$: $(2D^3-D^2-4D+3)x=4-3t$",
+        "Roots $1,1,-3/2$; CF $(c_1+c_2t)e^t+c_3e^{-3t/2}$; PI $-t$",
+        "$x=(c_1+c_2t)e^t+c_3e^{-3t/2}-t$",
+        "Finds $y$ from the first equation and fixes $c_4=-1/3$ by substituting in the second"
+       ]
+      }
+     ]
+    },
+    {
+     "id": "simul-symmetric",
+     "title": "Symmetrical form dx/P = dy/Q = dz/R",
+     "theory_md": "Solve $\\dfrac{dx}P=\\dfrac{dy}Q=\\dfrac{dz}R$ for two independent integrals $u=c_1$, $v=c_2$.\n\n1. **Pairs:** two ratios that contain only two variables can be integrated directly.\n2. **Multipliers** $l,m,n$: $\\dfrac{l\\,dx+m\\,dy+n\\,dz}{lP+mQ+nR}$. Choose them so the denominator is 0; then $l\\,dx+m\\,dy+n\\,dz=0$ is exact. Or choose them so the numerator is $d(\\text{denominator})$.",
+     "basics_md": "Equal ratios stay equal if you add numerators and denominators. Pick multipliers that make the bottom zero, and the top must then be zero too.",
+     "key_points": [
+      "Try direct pairs first",
+      "Use multipliers $l,m,n$ so that $lP+mQ+nR=0$",
+      "Then $l\\,dx+m\\,dy+n\\,dz=0$ integrates",
+      "Give two independent integrals $u=c_1$, $v=c_2$"
+     ],
+     "questions": [
+      {
+       "id": "ss1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "For $\\dfrac{dx}x=\\dfrac{dy}y=\\dfrac{dz}z$ two independent integrals are",
+       "options": [
+        "$x/y=c_1,\\ y/z=c_2$",
+        "$x+y=c_1,\\ y+z=c_2$",
+        "$xy=c_1,\\ yz=c_2$",
+        "$x-y=c_1,\\ y-z=c_2$"
+       ],
+       "answer_index": 0,
+       "why": "$\\ln x-\\ln y=$ const, and so on."
+      },
+      {
+       "id": "ss2",
+       "kind": "mcq",
+       "level": 2,
+       "q": "For $\\dfrac{dx}{y-z}=\\dfrac{dy}{z-x}=\\dfrac{dz}{x-y}$ two integrals are",
+       "options": [
+        "$x+y+z=c_1,\\ x^2+y^2+z^2=c_2$",
+        "$xyz=c_1,\\ x+y+z=c_2$",
+        "$x-y=c_1,\\ y-z=c_2$",
+        "$xy+yz=c_1,\\ x=c_2$"
+       ],
+       "answer_index": 0,
+       "why": "Multipliers $1,1,1$ and $x,y,z$ both give denominator $0$."
+      },
+      {
+       "id": "ss3",
+       "kind": "short",
+       "level": 2,
+       "marks": 3,
+       "q": "Solve $\\dfrac{dx}{x(y-z)}=\\dfrac{dy}{y(z-x)}=\\dfrac{dz}{z(x-y)}$.",
+       "model_answer_md": "Multipliers $1,1,1$: denominator $x(y-z)+y(z-x)+z(x-y)=0$, so $dx+dy+dz=0$ and $x+y+z=c_1$.\n\nMultipliers $\\dfrac1x,\\dfrac1y,\\dfrac1z$: denominator $0$, so $\\dfrac{dx}x+\\dfrac{dy}y+\\dfrac{dz}z=0$ and $xyz=c_2$.\n\n$$\\boxed{x+y+z=c_1,\\quad xyz=c_2}$$",
+       "points": [
+        "Multipliers $1,1,1$ give $x+y+z=c_1$",
+        "Multipliers $1/x,1/y,1/z$ give $xyz=c_2$",
+        "Two independent integrals"
+       ]
+      },
+      {
+       "id": "ss4",
+       "kind": "short",
+       "level": 3,
+       "marks": 4,
+       "q": "Solve $\\dfrac{dx}{mz-ny}=\\dfrac{dy}{nx-lz}=\\dfrac{dz}{ly-mx}$.",
+       "model_answer_md": "Multipliers $l,m,n$: $l(mz-ny)+m(nx-lz)+n(ly-mx)=0$, so $l\\,dx+m\\,dy+n\\,dz=0$ and $lx+my+nz=c_1$.\n\nMultipliers $x,y,z$: $x(mz-ny)+y(nx-lz)+z(ly-mx)=0$, so $x\\,dx+y\\,dy+z\\,dz=0$ and $x^2+y^2+z^2=c_2$.\n\n$$\\boxed{lx+my+nz=c_1,\\quad x^2+y^2+z^2=c_2}$$",
+       "points": [
+        "Multipliers $l,m,n$ give $lx+my+nz=c_1$",
+        "Multipliers $x,y,z$ give $x^2+y^2+z^2=c_2$",
+        "Checks each denominator is zero"
+       ]
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "topic": "Higher order ODEs with constant coefficients",
+   "subtopics": [
+    {
+     "id": "cf-roots",
+     "title": "Complementary function from the auxiliary equation",
+     "theory_md": "For $\\phi(D)y=R$, $D=\\dfrac d{dx}$, solve $\\phi(m)=0$. The CF has one term per root:\n- distinct real $m$: $Ce^{mx}$\n- real root repeated $r$ times: $(C_1+C_2x+\\dots+C_rx^{r-1})e^{mx}$\n- $\\alpha\\pm i\\beta$: $e^{\\alpha x}(A\\cos\\beta x+B\\sin\\beta x)$\n- complex pair repeated twice: $e^{\\alpha x}[(A_1+A_2x)\\cos\\beta x+(B_1+B_2x)\\sin\\beta x]$",
+     "basics_md": "Try $y=e^{mx}$ in the homogeneous equation; $m$ must satisfy the auxiliary equation.",
+     "key_points": [
+      "Auxiliary equation $\\phi(m)=0$",
+      "Real roots give exponentials",
+      "Repeated roots multiply by powers of $x$",
+      "Complex roots give $e^{\\alpha x}(\\cos,\\sin)$",
+      "General solution = CF + PI"
+     ],
+     "questions": [
+      {
+       "id": "cf1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "If the roots of the auxiliary equation are $2,2$, the CF is",
+       "options": [
+        "$C_1e^{2x}+C_2e^{-2x}$",
+        "$(C_1+C_2x)e^{2x}$",
+        "$C_1e^{2x}+C_2$",
+        "$e^{2x}(C_1\\cos x+C_2\\sin x)$"
+       ],
+       "answer_index": 1,
+       "why": "Repeated real root."
+      },
+      {
+       "id": "cf2",
+       "kind": "mcq",
+       "level": 2,
+       "q": "The solution of $y''+2y'+5y=0$ is",
+       "options": [
+        "$e^{-x}(A\\cos2x+B\\sin2x)$",
+        "$e^{x}(A\\cos2x+B\\sin2x)$",
+        "$Ae^{-x}+Be^{-5x}$",
+        "$e^{-x}(A\\cos x+B\\sin5x)$"
+       ],
+       "answer_index": 0,
+       "why": "$m=-1\\pm2i$."
+      },
+      {
+       "id": "cf3",
+       "kind": "short",
+       "level": 2,
+       "marks": 3,
+       "q": "Solve $(D^3-D^2+D-1)y=0$.",
+       "model_answer_md": "$m^3-m^2+m-1=(m-1)(m^2+1)=0$, $m=1,\\pm i$.\n\n$$\\boxed{y=C_1e^x+C_2\\cos x+C_3\\sin x}$$",
+       "points": [
+        "Factorises $(m-1)(m^2+1)$",
+        "Roots $1,\\pm i$",
+        "CF $C_1e^x+C_2\\cos x+C_3\\sin x$"
+       ]
+      },
+      {
+       "id": "cf4",
+       "kind": "short",
+       "level": 3,
+       "marks": 3,
+       "q": "Solve $(D^4+8D^2+16)y=0$.",
+       "model_answer_md": "$(m^2+4)^2=0$, $m=\\pm2i$ twice.\n\n$$\\boxed{y=(C_1+C_2x)\\cos2x+(C_3+C_4x)\\sin2x}$$",
+       "points": [
+        "$(m^2+4)^2=0$",
+        "Complex roots repeated twice",
+        "$(C_1+C_2x)\\cos2x+(C_3+C_4x)\\sin2x$"
+       ]
+      }
+     ]
+    },
+    {
+     "id": "pi-exp-poly",
+     "title": "Particular integral: e^{ax}, polynomials, e^{ax}V",
+     "theory_md": "- $\\dfrac1{\\phi(D)}e^{ax}=\\dfrac{e^{ax}}{\\phi(a)}$ if $\\phi(a)\\neq0$. If $\\phi(a)=0$ (case of failure): $\\dfrac{x\\,e^{ax}}{\\phi'(a)}$, and again $\\dfrac{x^2e^{ax}}{\\phi''(a)}$ if $\\phi'(a)=0$.\n- Polynomial: $\\dfrac1{\\phi(D)}x^n$: write $\\phi(D)=c(1\\pm\\dots)$ and expand $[\\,]^{-1}$ in powers of $D$ up to $D^n$.\n- $\\dfrac1{\\phi(D)}e^{ax}V=e^{ax}\\dfrac1{\\phi(D+a)}V$.",
+     "basics_md": "The operator $1/\\phi(D)$ undoes $\\phi(D)$. On an exponential $D$ just becomes $a$.",
+     "key_points": [
+      "$e^{ax}/\\phi(a)$ if $\\phi(a)\\neq0$",
+      "Case of failure: multiply by $x$ and differentiate $\\phi$",
+      "Polynomial RHS: binomial expansion in $D$",
+      "$e^{ax}V$: shift $D\\to D+a$"
+     ],
+     "questions": [
+      {
+       "id": "pe1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "The PI of $(D-1)^2y=e^x$ is",
+       "options": [
+        "$e^x$",
+        "$xe^x$",
+        "$\\dfrac{x^2e^x}{2}$",
+        "$x^2e^x$"
+       ],
+       "answer_index": 2,
+       "why": "$\\phi(1)=\\phi'(1)=0$; $\\dfrac{x^2}{\\phi''(1)}e^x=\\dfrac{x^2e^x}{2}$."
+      },
+      {
+       "id": "pe2",
+       "kind": "short",
+       "level": 2,
+       "marks": 3,
+       "q": "Solve $(D^2-3D+2)y=e^x$.",
+       "model_answer_md": "$m=1,2$: CF $=C_1e^x+C_2e^{2x}$.\n\n$\\phi(1)=0$ (failure): PI $=\\dfrac{xe^x}{\\phi'(1)}=\\dfrac{xe^x}{2D-3}\\Big|_{D=1}=-xe^x$.\n\n$$\\boxed{y=C_1e^x+C_2e^{2x}-xe^x}$$",
+       "points": [
+        "CF from $m=1,2$",
+        "Recognises failure, $\\phi(1)=0$",
+        "PI $=-xe^x$"
+       ]
+      },
+      {
+       "id": "pe3",
+       "kind": "short",
+       "level": 2,
+       "marks": 4,
+       "q": "Find the PI of $(D^2-4D+3)y=x^2$.",
+       "model_answer_md": "$\\dfrac1{3(1-\\frac{4D}3+\\frac{D^2}3)}x^2=\\dfrac13\\left[1+\\left(\\frac{4D}3-\\frac{D^2}3\\right)+\\left(\\frac{4D}3\\right)^2+\\cdots\\right]x^2$\n\n$=\\dfrac13\\left[1+\\dfrac{4D}3+\\dfrac{13D^2}9\\right]x^2=\\dfrac13\\left[x^2+\\dfrac{8x}3+\\dfrac{26}9\\right]$\n\n$$\\boxed{\\text{PI}=\\dfrac{x^2}3+\\dfrac{8x}9+\\dfrac{26}{27}}$$",
+       "points": [
+        "Takes out the constant 3",
+        "Expands $[1-u]^{-1}$ up to $D^2$",
+        "Applies to $x^2$",
+        "PI $=x^2/3+8x/9+26/27$"
+       ]
+      },
+      {
+       "id": "pe4",
+       "kind": "mcq",
+       "level": 2,
+       "q": "$\\dfrac1{(D-1)^2}\\,xe^{x}$ equals",
+       "options": [
+        "$\\dfrac{x^3e^x}{6}$",
+        "$\\dfrac{x^2e^x}{2}$",
+        "$x^3e^x$",
+        "$e^x\\dfrac{x^3}{3}$"
+       ],
+       "answer_index": 0,
+       "why": "$e^x\\dfrac1{D^2}x=e^x\\dfrac{x^3}{6}$."
+      },
+      {
+       "id": "pe5",
+       "kind": "short",
+       "level": 3,
+       "marks": 4,
+       "q": "Solve $(D-1)^2y=xe^x$.",
+       "model_answer_md": "CF $=(C_1+C_2x)e^x$.\n\nPI $=e^x\\dfrac1{(D+1-1)^2}x=e^x\\dfrac1{D^2}x=\\dfrac{x^3e^x}{6}$.\n\n$$\\boxed{y=(C_1+C_2x)e^x+\\dfrac{x^3e^x}{6}}$$",
+       "points": [
+        "CF with repeated root",
+        "Shifts $D\\to D+1$",
+        "PI $=x^3e^x/6$"
+       ]
+      }
+     ]
+    },
+    {
+     "id": "pi-trig-mixed",
+     "title": "Particular integral: sin ax, cos ax and mixed right sides",
+     "theory_md": "For $\\sin ax$ or $\\cos ax$ replace $D^2$ by $-a^2$ in $\\phi(D)$, reduce to $pD+q$ and rationalise: $\\dfrac1{pD+q}=\\dfrac{pD-q}{p^2D^2-q^2}$. If $\\phi(-a^2)=0$ (resonance): $\\dfrac1{D^2+a^2}\\sin ax=-\\dfrac{x\\cos ax}{2a}$ and $\\dfrac1{D^2+a^2}\\cos ax=\\dfrac{x\\sin ax}{2a}$.\n\nIf the right side is a sum, the PI is the sum of PIs of each part; handle a repeated factor $D^2$ by operating twice.",
+     "basics_md": "For $\\sin ax$, differentiating twice gives $-a^2\\sin ax$, so $D^2$ acts as the number $-a^2$.",
+     "key_points": [
+      "Replace $D^2\\to-a^2$ for $\\sin ax,\\cos ax$",
+      "Rationalise a remaining $pD+q$",
+      "Resonance: PI has a factor $x$",
+      "PI of a sum is the sum of PIs",
+      "Add CF at the end"
+     ],
+     "questions": [
+      {
+       "id": "pt1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "The PI of $(D^2+4)y=\\sin2x$ is",
+       "options": [
+        "$\\dfrac{\\sin2x}8$",
+        "$-\\dfrac{x\\cos2x}{4}$",
+        "$\\dfrac{x\\sin2x}4$",
+        "$\\dfrac{\\cos2x}{4}$"
+       ],
+       "answer_index": 1,
+       "why": "Resonance: $-\\dfrac{x\\cos2x}{2a}$ with $a=2$."
+      },
+      {
+       "id": "pt2",
+       "kind": "short",
+       "level": 2,
+       "marks": 3,
+       "q": "Solve $(D^2+4)y=\\sin3x$.",
+       "model_answer_md": "CF $=C_1\\cos2x+C_2\\sin2x$.\n\nPI $=\\dfrac{\\sin3x}{-9+4}=-\\dfrac{\\sin3x}5$.\n\n$$\\boxed{y=C_1\\cos2x+C_2\\sin2x-\\dfrac{\\sin3x}5}$$",
+       "points": [
+        "CF from $m=\\pm2i$",
+        "Replaces $D^2$ by $-9$",
+        "PI $=-\\sin3x/5$"
+       ]
+      },
+      {
+       "id": "pt3",
+       "kind": "short",
+       "level": 2,
+       "marks": 3,
+       "q": "Solve $(D^2+1)y=\\cos x$.",
+       "model_answer_md": "CF $=C_1\\cos x+C_2\\sin x$.\n\n$\\phi(-1)=0$: resonance, PI $=\\dfrac{x\\sin x}{2}$.\n\n$$\\boxed{y=C_1\\cos x+C_2\\sin x+\\dfrac{x\\sin x}2}$$",
+       "points": [
+        "CF",
+        "Recognises resonance",
+        "PI $=x\\sin x/2$"
+       ]
+      },
+      {
+       "id": "pt4",
+       "pyq": "349a320510d4d986",
+       "level": 2,
+       "points": [
+        "CF: $m=2,2$, $(c_1+c_2x)e^{2x}$",
+        "PI for $8x^2$: $2x^2+4x+3$ by expansion",
+        "PI for $8e^{2x}$ (failure, repeated root): $4x^2e^{2x}$",
+        "PI for $8\\sin2x$: $D^2=-4$ gives $\\cos2x$",
+        "Sum the PIs and add the CF"
+       ]
+      },
+      {
+       "id": "pt5",
+       "pyq": "8e4ef01a152ff62d",
+       "level": 3,
+       "points": [
+        "Factorises $m^2(m+3)(m-1)=0$, CF $C_1+C_2x+C_3e^{-3x}+C_4e^x$",
+        "PI for $x^2$: $-\\frac{x^4}{36}-\\frac{2x^3}{27}-\\frac{7x^2}{27}$",
+        "PI for $3e^{2x}$: $\\frac{3e^{2x}}{20}$",
+        "PI for $4\\sin x$: $\\frac{4\\sin x+2\\cos x}5$",
+        "Sums CF and the three PIs"
+       ]
+      }
+     ]
+    },
+    {
+     "id": "ivp-const",
+     "title": "Initial value problems",
+     "theory_md": "Find the general solution first (CF + PI). Then use $y(x_0)=a$ and $y'(x_0)=b$ to fix the constants: differentiate the **full** solution, including the PI, before substituting. An $n$th order ODE needs $n$ conditions.",
+     "basics_md": "The general solution is a whole family of curves. The initial conditions pick the one that passes through your point with your slope.",
+     "key_points": [
+      "General solution first, then constants",
+      "Differentiate CF and PI together",
+      "$n$ conditions for order $n$",
+      "Evaluate at the asked point"
+     ],
+     "questions": [
+      {
+       "id": "iv1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "How many conditions are needed to fix all constants in the general solution of a second order ODE?",
+       "options": [
+        "1",
+        "2",
+        "3",
+        "4"
+       ],
+       "answer_index": 1,
+       "why": "One per arbitrary constant."
+      },
+      {
+       "id": "iv2",
+       "kind": "mcq",
+       "level": 2,
+       "q": "The solution of $y''+y=0$ with $y(0)=0$, $y'(0)=1$ is",
+       "options": [
+        "$\\cos x$",
+        "$\\sin x$",
+        "$e^x$",
+        "$\\sin x+\\cos x$"
+       ],
+       "answer_index": 1,
+       "why": "$y=A\\cos x+B\\sin x$; $A=0$, $B=1$."
+      },
+      {
+       "id": "iv3",
+       "pyq": "d48f688d0a5ca322",
+       "level": 2,
+       "points": [
+        "CF $e^{-x}(A\\cos3x+B\\sin3x)$ from $m=-1\\pm3i$",
+        "PI for $-37\\sin3x$: $-\\sin3x+6\\cos3x$",
+        "Uses $y(0)=3$ and $y'(0)=0$: $A=-3$, $B=0$",
+        "$y=-3e^{-x}\\cos3x-\\sin3x+6\\cos3x$",
+        "$y(\\pi/2)=1$"
+       ]
+      },
+      {
+       "id": "iv4",
+       "kind": "numerical",
+       "level": 2,
+       "marks": 4,
+       "q": "Solve $y''-3y'+2y=6e^{3x}$ with $y(0)=1$, $y'(0)=0$.",
+       "model_answer_md": "CF $=c_1e^x+c_2e^{2x}$. PI $=\\dfrac{6e^{3x}}{9-9+2}=3e^{3x}$.\n\n$y=c_1e^x+c_2e^{2x}+3e^{3x}$, $y'=c_1e^x+2c_2e^{2x}+9e^{3x}$.\n\n$y(0)$: $c_1+c_2+3=1$; $y'(0)$: $c_1+2c_2+9=0$. So $c_2=-7$, $c_1=5$.\n\n$$\\boxed{y=5e^x-7e^{2x}+3e^{3x}}$$",
+       "points": [
+        "CF and PI",
+        "General solution and its derivative",
+        "Equations $c_1+c_2=-2$, $c_1+2c_2=-9$",
+        "$y=5e^x-7e^{2x}+3e^{3x}$"
+       ]
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "topic": "Variation of parameters",
+   "subtopics": [
+    {
+     "id": "vop-formula",
+     "title": "The method and the formula",
+     "theory_md": "For $y''+Py'+Qy=R(x)$ (coefficient of $y''$ equal to **1**): find $y_1,y_2$ from the CF, so $y_c=C_1y_1+C_2y_2$. Then\n$W=y_1y_2'-y_2y_1'$, $\\quad y_p=u\\,y_1+v\\,y_2$,\n$u=-\\displaystyle\\int\\frac{y_2R}{W}dx$, $\\quad v=\\displaystyle\\int\\frac{y_1R}{W}dx$.\n\nGeneral solution $y=y_c+y_p$. Arbitrary constants of integration in $u,v$ may be dropped.",
+     "basics_md": "The constants $C_1,C_2$ of the CF are allowed to vary with $x$; two conditions on them give $u$ and $v$.",
+     "key_points": [
+      "Make the coefficient of $y''$ equal to 1",
+      "Find $y_1,y_2$ and the Wronskian $W$",
+      "$u=-\\int y_2R/W$, $v=\\int y_1R/W$",
+      "$y_p=uy_1+vy_2$; $y=y_c+y_p$"
+     ],
+     "questions": [
+      {
+       "id": "vf1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "In variation of parameters, $u$ in $y_p=uy_1+vy_2$ is",
+       "options": [
+        "$\\int y_2R/W\\,dx$",
+        "$-\\int y_2R/W\\,dx$",
+        "$\\int y_1R/W\\,dx$",
+        "$-\\int y_1R/W\\,dx$"
+       ],
+       "answer_index": 1,
+       "why": "$u=-\\int y_2R/W$, $v=+\\int y_1R/W$."
+      },
+      {
+       "id": "vf2",
+       "kind": "mcq",
+       "level": 2,
+       "q": "For $y_1=\\cos x$, $y_2=\\sin x$ the Wronskian $W=y_1y_2'-y_2y_1'$ is",
+       "options": [
+        "$0$",
+        "$1$",
+        "$-1$",
+        "$\\sin2x$"
+       ],
+       "answer_index": 1,
+       "why": "$\\cos^2x+\\sin^2x=1$."
+      },
+      {
+       "id": "vf3",
+       "kind": "short",
+       "level": 2,
+       "marks": 4,
+       "q": "Solve $y''+y=\\tan x$ by variation of parameters.",
+       "model_answer_md": "CF: $y_1=\\cos x$, $y_2=\\sin x$, $W=1$, $R=\\tan x$.\n\n$u=-\\int\\sin x\\tan x\\,dx=-\\int(\\sec x-\\cos x)dx=-\\ln|\\sec x+\\tan x|+\\sin x$.\n$v=\\int\\cos x\\tan x\\,dx=-\\cos x$.\n\n$y_p=\\cos x\\,(\\sin x-\\ln|\\sec x+\\tan x|)-\\sin x\\cos x=-\\cos x\\ln|\\sec x+\\tan x|$.\n\n$$\\boxed{y=C_1\\cos x+C_2\\sin x-\\cos x\\ln|\\sec x+\\tan x|}$$",
+       "points": [
+        "CF, $y_1,y_2$ and $W=1$",
+        "$u$ and $v$ by the formulas",
+        "$y_p=-\\cos x\\ln|\\sec x+\\tan x|$",
+        "General solution"
+       ]
+      },
+      {
+       "id": "vf4",
+       "pyq": "5ab569770188132b",
+       "level": 2,
+       "points": [
+        "CF: $m=-2\\pm2i$, $y_1=e^{-2x}\\cos2x$, $y_2=e^{-2x}\\sin2x$",
+        "$W=2e^{-4x}$",
+        "$u=-4\\ln|\\tan x|$, $v=-4\\operatorname{cosec}2x$",
+        "$y_p=-4e^{-2x}\\cos2x\\ln|\\tan x|-4e^{-2x}$",
+        "General solution = CF + PI"
+       ]
+      },
+      {
+       "id": "vf5",
+       "kind": "short",
+       "level": 3,
+       "marks": 4,
+       "q": "Solve $y''-2y'+y=\\dfrac{e^x}{x}$ by variation of parameters.",
+       "model_answer_md": "$(m-1)^2=0$: $y_1=e^x$, $y_2=xe^x$, $W=e^{2x}$, $R=e^x/x$.\n\n$u=-\\int\\dfrac{xe^x\\cdot e^x/x}{e^{2x}}dx=-x$, $\\quad v=\\int\\dfrac{e^x\\cdot e^x/x}{e^{2x}}dx=\\ln x$.\n\n$y_p=-xe^x+xe^x\\ln x$; the $-xe^x$ merges into $C_2xe^x$.\n\n$$\\boxed{y=(C_1+C_2x)e^x+xe^x\\ln x}$$",
+       "points": [
+        "$y_1=e^x$, $y_2=xe^x$, $W=e^{2x}$",
+        "$u=-x$, $v=\\ln x$",
+        "Absorbs $-xe^x$ into the CF",
+        "General solution"
+       ]
+      }
+     ]
+    },
+    {
+     "id": "vop-euler",
+     "title": "Cauchy-Euler equations: standard form first",
+     "theory_md": "For $x^2y''+axy'+by=R_0(x)$: find the CF by $x=e^z$ (roots $m_1,m_2$, so $y_1=x^{m_1}$, $y_2=x^{m_2}$). **Divide by $x^2$** so the coefficient of $y''$ is 1, and take $R=R_0/x^2$. Then use the formulas with $W$ computed in $x$.\n\nTrap: using $R_0$ instead of $R_0/x^2$ gives a wrong answer.",
+     "basics_md": "The formula assumes $y''$ has coefficient 1. Cauchy-Euler equations do not, until you divide by $x^2$.",
+     "key_points": [
+      "CF by $x=e^z$",
+      "Divide by $x^2$: $R=R_0/x^2$",
+      "$W$ in $x$",
+      "Apply the formulas for $u,v$"
+     ],
+     "questions": [
+      {
+       "id": "ve1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "For $x^2y''-3xy'+3y=x^3$ the $R(x)$ to use in variation of parameters is",
+       "options": [
+        "$x^3$",
+        "$x$",
+        "$x^5$",
+        "$x^3/\\ln x$"
+       ],
+       "answer_index": 1,
+       "why": "Divide by $x^2$: $R=x$."
+      },
+      {
+       "id": "ve2",
+       "kind": "short",
+       "level": 2,
+       "marks": 4,
+       "q": "Solve $x^2y''-2xy'+2y=x^3$ by variation of parameters.",
+       "model_answer_md": "CF: $m(m-1)-2m+2=0$, $m=1,2$: $y_1=x$, $y_2=x^2$, $W=x\\cdot2x-x^2=x^2$.\n\nDivide by $x^2$: $R=x$.\n\n$u=-\\int\\dfrac{x^2\\cdot x}{x^2}dx=-\\dfrac{x^2}2$, $\\quad v=\\int\\dfrac{x\\cdot x}{x^2}dx=x$.\n\n$y_p=-\\dfrac{x^3}2+x^3=\\dfrac{x^3}2$.\n\n$$\\boxed{y=C_1x+C_2x^2+\\dfrac{x^3}2}$$",
+       "points": [
+        "CF $x,x^2$ and $W=x^2$",
+        "Divides by $x^2$ so $R=x$",
+        "$u=-x^2/2$, $v=x$",
+        "$y=C_1x+C_2x^2+x^3/2$"
+       ]
+      },
+      {
+       "id": "ve5",
+       "kind": "mcq",
+       "level": 2,
+       "q": "For $y_1=x^3$, $y_2=x^{-1}$ the Wronskian $W=y_1y_2'-y_2y_1'$ is",
+       "options": [
+        "$-4x$",
+        "$4x$",
+        "$-2x^2$",
+        "$x^2-1$"
+       ],
+       "answer_index": 0,
+       "why": "$x^3(-x^{-2})-x^{-1}\\cdot3x^2=-x-3x=-4x$."
+      },
+      {
+       "id": "ve3",
+       "pyq": "e69b72fe3d5289c6",
+       "level": 2,
+       "points": [
+        "CF by $x=e^t$: $y=c_1x+c_2x^{-1}$",
+        "Standard form: $R=e^x$; $W=-2/x$",
+        "$u$-part gives $xe^x/2$; $v$-part gives $-e^x(x^2-2x+2)/(2x)$",
+        "$y_p=e^x(x-1)/x$",
+        "$y=c_1x+c_2/x+(x-1)e^x/x$"
+       ]
+      },
+      {
+       "id": "ve4",
+       "pyq": "4790c1fbdb7f8307",
+       "level": 3,
+       "points": [
+        "CF: $y=C_1x^3+C_2x^{-1}$, $y_1=x^3$, $y_2=x^{-1}$",
+        "Standard form: $R=\\log x$; $W=-4x$",
+        "Evaluates $\\int y_2R/W$ and $\\int y_1R/W$ by parts",
+        "$y_p=-\\frac{x^2\\log x}3-\\frac{2x^2}9$",
+        "General solution"
+       ]
+      }
+     ]
+    },
+    {
+     "id": "vop-legendre",
+     "title": "Legendre form and variation of parameters",
+     "theory_md": "For $(ax+b)^2y''+p(ax+b)y'+qy=R_0(x)$: put $z=\\log(ax+b)$, giving constant coefficients in $z$. The CF is $y_c=C_1y_1(z)+C_2y_2(z)$. Convert $R_0$ to a function of $z$ (use $x=(e^z-b)/a$), then apply the VoP formulas **in the variable $z$** with $W=y_1y_2'-y_2y_1'$ taken with respect to $z$.",
+     "basics_md": "The same method works in $z$: constant coefficients, $y''$ coefficient 1 after dividing, and everything integrated with respect to $z$.",
+     "key_points": [
+      "Substitute $z=\\log(ax+b)$",
+      "Divide so the coefficient of $y_{zz}$ is 1",
+      "Convert $R_0(x)$ into $R(z)$",
+      "Apply $u,v$ in $z$, then return to $x$"
+     ],
+     "questions": [
+      {
+       "id": "vl1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "For $(3x+2)^2y''+3(3x+2)y'-36y=\\dots$ the substitution is",
+       "options": [
+        "$z=\\log x$",
+        "$z=\\log(3x+2)$",
+        "$z=3x+2$",
+        "$z=e^x$"
+       ],
+       "answer_index": 1,
+       "why": "Legendre form with $ax+b=3x+2$."
+      },
+      {
+       "id": "vl2",
+       "kind": "mcq",
+       "level": 2,
+       "q": "With $z=\\log(3x+2)$, $(3x+2)^2\\dfrac{d^2y}{dx^2}$ equals",
+       "options": [
+        "$D(D-1)y$",
+        "$3D(D-1)y$",
+        "$9D(D-1)y$",
+        "$9D^2y$"
+       ],
+       "answer_index": 2,
+       "why": "$(ax+b)^2y''=a^2D(D-1)y$ with $a=3$."
+      },
+      {
+       "id": "vl3",
+       "kind": "short",
+       "level": 2,
+       "marks": 4,
+       "q": "Solve $(x+1)^2y''+(x+1)y'-y=(x+1)^2$ by variation of parameters.",
+       "model_answer_md": "$z=\\ln(x+1)$: $(D(D-1)+D-1)y=(D^2-1)y=e^{2z}$.\n\nCF: $y_1=e^z$, $y_2=e^{-z}$, $W=-2$, $R=e^{2z}$.\n\n$u=-\\int\\dfrac{e^{-z}e^{2z}}{-2}dz=\\dfrac{e^z}2$, $\\quad v=\\int\\dfrac{e^ze^{2z}}{-2}dz=-\\dfrac{e^{3z}}6$.\n\n$y_p=\\dfrac{e^{2z}}2-\\dfrac{e^{2z}}6=\\dfrac{e^{2z}}3$.\n\n$$\\boxed{y=C_1(x+1)+\\dfrac{C_2}{x+1}+\\dfrac{(x+1)^2}3}$$",
+       "points": [
+        "Substitutes $z=\\ln(x+1)$",
+        "$W=-2$, $R=e^{2z}$",
+        "$u=e^z/2$, $v=-e^{3z}/6$",
+        "$y_p=(x+1)^2/3$"
+       ]
+      },
+      {
+       "id": "vl4",
+       "pyq": "e6a0d9d3708c6691",
+       "level": 3,
+       "points": [
+        "Puts $z=\\log(3x+2)$: LHS $=9(D^2-4)y$",
+        "RHS $=(e^{2z}-1)/3$, so $(D^2-4)y=(e^{2z}-1)/27$",
+        "CF $C_1e^{2z}+C_2e^{-2z}$, $W=-4$",
+        "$u,v$ by the formulas; PI $=\\frac1{108}(ze^{2z}-\\frac{e^{2z}}4+1)$",
+        "$y=C_1(3x+2)^2+C_2(3x+2)^{-2}+\\frac1{108}[(3x+2)^2\\log(3x+2)+1]$"
+       ]
+      }
+     ]
+    }
+   ]
+  }
+ ]
+}

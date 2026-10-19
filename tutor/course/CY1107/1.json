@@ -1,0 +1,1998 @@
+{
+ "code": "CY1107",
+ "unit": "Lubricants",
+ "written": "2026-10-19",
+ "by": "claude-sonnet-5-5, in a Claude Code session",
+ "topics": [
+  {
+   "topic": "Role and effects of friction",
+   "subtopics": [
+    {
+     "id": "friction-effects",
+     "title": "Friction: useful and harmful",
+     "theory_md": "**Friction** is the resistance to relative motion between two surfaces in contact. It arises because the surface peaks (**asperities**) interlock and momentarily weld. Coefficient of friction $\\mu = F/N$ ($F$ frictional force, $N$ normal load).\n\n**Useful:** brakes, clutches, belt drives, walking, tyre grip, nuts and bolts.\n\n**Harmful between moving parts:**\n- **Wear** and loss of dimensions\n- **Heat**, causing expansion and seizure\n- **Loss of energy**, lower efficiency\n- Noise and vibration",
+     "basics_md": "Rub your palms together: they get warm and the skin wears slowly. That resistance is friction. It is helpful when you want a grip and wasteful when you want a machine to spin freely.",
+     "key_points": [
+      "Friction = resistance to relative motion, due to interlocking and welding of asperities",
+      "$\\mu = F/N$",
+      "Useful: brakes, clutches, belts, walking, nuts and bolts",
+      "Harmful: wear, heat and seizure, energy loss, noise"
+     ],
+     "questions": [
+      {
+       "id": "fr-q1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "The coefficient of friction is",
+       "options": [
+        "$N/F$",
+        "$F \\times N$",
+        "$F/N$",
+        "$F/\\text{area}$"
+       ],
+       "answer_index": 2,
+       "why": "It is frictional force divided by normal load."
+      },
+      {
+       "id": "fr-q2",
+       "kind": "mcq",
+       "level": 1,
+       "q": "In which of these is friction wanted?",
+       "options": [
+        "Journal bearing",
+        "Brake",
+        "Piston in cylinder",
+        "Turbine shaft"
+       ],
+       "answer_index": 1,
+       "why": "Brakes work only because of friction; the others want it removed."
+      },
+      {
+       "id": "fr-q3",
+       "kind": "short",
+       "level": 2,
+       "marks": 3,
+       "q": "Why do two polished metal surfaces still show friction? Give three harmful effects.",
+       "model_answer_md": "No surface is perfectly smooth. Under magnification it has peaks (**asperities**). When pressed together the surfaces touch only at the peaks, which interlock and may weld momentarily; shearing these junctions is friction.\n\nHarmful effects:\n1. **Wear and tear** of parts\n2. **Heat** generation, leading to expansion and seizure\n3. **Loss of energy**, so lower efficiency",
+       "points": [
+        "Surfaces have asperities",
+        "Asperities interlock/weld at contact points",
+        "Wear",
+        "Heat and seizure",
+        "Energy loss"
+       ]
+      },
+      {
+       "id": "fr-q4",
+       "kind": "numerical",
+       "level": 2,
+       "marks": 3,
+       "q": "A dry steel block under a normal load of 300 N needs a force of 45 N to slide. After lubrication only 6 N is needed. Find $\\mu$ in each case and the fall in friction.",
+       "model_answer_md": "$\\mu = F/N$\n- Dry: $\\mu = 45/300 = 0.15$\n- Lubricated: $\\mu = 6/300 = 0.02$\n- Friction force falls by $(45-6)/45 \\times 100 = 86.7\\%$.",
+       "points": [
+        "Formula $\\mu = F/N$",
+        "Dry $\\mu = 0.15$",
+        "Lubricated $\\mu = 0.02$",
+        "Fall of 86.7 %"
+       ]
+      }
+     ]
+    },
+    {
+     "id": "lubricant-role",
+     "title": "Lubricant and the three regimes",
+     "theory_md": "A **lubricant** is a substance placed between moving surfaces to reduce friction and wear; **lubrication** is the process. It replaces solid (dry) friction by the much smaller **internal friction** of the lubricant.\n\nSchematic of the three states:\n1. **Dry:** asperities interlock, high friction, wear and heat.\n2. **Thin film (boundary):** a few molecules thick, some peaks touch, $\\mu \\approx 0.05$-$0.15$.\n3. **Thick film (fluid):** film thicker than the peaks, no contact, $\\mu \\approx 0.001$-$0.03$.",
+     "basics_md": "Think of walking on dry ground versus on a wet floor with a thin sheet of water: the sheet takes over the job of the rough ground. A lubricant is that sheet.",
+     "key_points": [
+      "Lubricant reduces friction and wear; lubrication is the process",
+      "Solid friction replaced by internal (fluid) friction of the lubricant",
+      "Schematic: dry, boundary and fluid-film states",
+      "Thick film $\\mu \\approx 0.001$-$0.03$, boundary $\\approx 0.05$-$0.15$"
+     ],
+     "questions": [
+      {
+       "id": "lr-q1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "Lubrication mainly replaces",
+       "options": [
+        "fluid friction by solid friction",
+        "solid friction by fluid friction",
+        "friction by heat",
+        "wear by corrosion"
+       ],
+       "answer_index": 1,
+       "why": "The lubricant layer takes the shear instead of the metal."
+      },
+      {
+       "id": "lr-q2",
+       "kind": "short",
+       "level": 1,
+       "marks": 2,
+       "q": "Distinguish between a lubricant and lubrication.",
+       "model_answer_md": "A **lubricant** is the substance (oil, grease, graphite) placed between moving surfaces. **Lubrication** is the process of reducing friction between them by using it.",
+       "points": [
+        "Lubricant = substance",
+        "Lubrication = process"
+       ]
+      },
+      {
+       "id": "lr-q3",
+       "kind": "mcq",
+       "level": 2,
+       "q": "A film thicker than the asperities, with no metal contact, is",
+       "options": [
+        "boundary lubrication",
+        "extreme pressure lubrication",
+        "fluid film lubrication",
+        "dry friction"
+       ],
+       "answer_index": 2,
+       "why": "Complete separation by a thick film is fluid film (thick film) lubrication."
+      },
+      {
+       "id": "lr-p1",
+       "pyq": "04839ec609e0bcd5",
+       "level": 3,
+       "points": [
+        "Friction defined; $\\mu = F/N$",
+        "Advantages: walking, grip, brakes, clutches, belts, nuts and bolts",
+        "Disadvantages: wear, heat and seizure, energy loss, noise",
+        "Lubricant keeps surfaces apart, replaces solid friction by fluid friction",
+        "Schematic: dry (peaks interlock), thin film (adsorbed layer), thick film (oil thicker than peaks)"
+       ]
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "topic": "Functions of lubricants",
+   "subtopics": [
+    {
+     "id": "functions-list",
+     "title": "Functions of a lubricant",
+     "theory_md": "A lubricant:\n1. **Reduces friction**, so less power is wasted.\n2. **Reduces wear and tear**.\n3. **Acts as a coolant**, carrying frictional heat away.\n4. **Prevents corrosion** by keeping air and moisture off the metal.\n5. **Acts as a seal**, e.g. piston rings and cylinder in an IC engine.\n6. **Reduces noise**, flushes away dirt and debris, **transmits pressure** in hydraulic systems and lowers maintenance cost.\n\nNumber the points and add a few words to each.",
+     "basics_md": "Ask what the oil in a car engine does besides making it slippery: it cools, cleans, seals and stops rust. Each of those is a function.",
+     "key_points": [
+      "Reduces friction and wear",
+      "Coolant: removes frictional heat",
+      "Prevents corrosion",
+      "Seal (piston rings in IC engines)",
+      "Flushes dirt, reduces noise, transmits pressure"
+     ],
+     "questions": [
+      {
+       "id": "fl-q1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "Which is NOT a function of a lubricant?",
+       "options": [
+        "Cooling the moving parts",
+        "Sealing piston rings",
+        "Increasing friction between parts",
+        "Preventing corrosion"
+       ],
+       "answer_index": 2,
+       "why": "A lubricant reduces friction."
+      },
+      {
+       "id": "fl-q2",
+       "kind": "mcq",
+       "level": 1,
+       "q": "In a hydraulic jack the oil mainly",
+       "options": [
+        "transmits pressure",
+        "absorbs moisture",
+        "increases wear",
+        "adds friction"
+       ],
+       "answer_index": 0,
+       "why": "Hydraulic fluids transmit pressure."
+      },
+      {
+       "id": "fl-q3",
+       "kind": "short",
+       "level": 2,
+       "marks": 3,
+       "q": "List any five functions of a lubricant.",
+       "model_answer_md": "1. Reduces friction and so power loss.\n2. Reduces wear and tear.\n3. Acts as a coolant and prevents seizure.\n4. Prevents corrosion by excluding air and moisture.\n5. Acts as a seal (piston rings in an IC engine) and flushes away dirt.",
+       "points": [
+        "Five distinct functions",
+        "Friction/wear",
+        "Coolant",
+        "Corrosion",
+        "Seal or flushing"
+       ]
+      },
+      {
+       "id": "fl-p1",
+       "pyq": "f4617f2864d31a92",
+       "level": 2,
+       "points": [
+        "Definition of lubricant",
+        "Reduces friction, power loss, improves efficiency",
+        "Reduces wear and tear",
+        "Coolant, prevents seizure",
+        "Prevents corrosion; acts as seal",
+        "Reduces noise, removes dirt, transmits pressure, lowers maintenance cost"
+       ]
+      }
+     ]
+    },
+    {
+     "id": "functions-in-use",
+     "title": "Cooling, sealing and corrosion in practice",
+     "theory_md": "- **Coolant:** frictional heat is carried by circulating oil to the sump or radiator, so parts do not expand or seize. Water cools better but cannot lubricate, so cutting fluids combine both.\n- **Seal:** a thin oil film fills the gap between piston rings and cylinder wall and stops combustion gases leaking.\n- **Corrosion:** the film keeps oxygen and moisture off the metal.\n- **Hydraulics:** oil transmits pressure and lubricates pumps and valves.",
+     "basics_md": "Oil in a bike chain does three jobs at once: it eases the links, keeps rain off the steel and carries a little heat away.",
+     "key_points": [
+      "Circulating oil carries heat away",
+      "Oil film seals piston rings against gas leakage",
+      "Film excludes air and moisture, preventing rust",
+      "Hydraulic oil transmits pressure"
+     ],
+     "questions": [
+      {
+       "id": "fu-q1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "The oil film between piston rings and cylinder mainly acts as a",
+       "options": [
+        "coolant only",
+        "seal",
+        "corrosive agent",
+        "solvent"
+       ],
+       "answer_index": 1,
+       "why": "It prevents leakage of gases past the rings."
+      },
+      {
+       "id": "fu-q2",
+       "kind": "short",
+       "level": 2,
+       "marks": 3,
+       "q": "Explain how a lubricant acts as a coolant and as a seal in an IC engine.",
+       "model_answer_md": "**Coolant:** the oil circulating over bearings and piston absorbs the frictional heat and gives it up in the sump or oil cooler, preventing expansion and seizure.\n\n**Seal:** the oil film between piston rings and cylinder wall fills the micro-gaps, so combustion gases cannot leak past into the crankcase and compression is kept.",
+       "points": [
+        "Oil absorbs and carries away heat",
+        "Prevents expansion and seizure",
+        "Film fills gap between rings and cylinder",
+        "Prevents gas leakage"
+       ]
+      },
+      {
+       "id": "fu-q3",
+       "kind": "short",
+       "level": 3,
+       "marks": 3,
+       "q": "Give three reasons why plain water cannot replace oil as a lubricant even though it cools well.",
+       "model_answer_md": "1. **Very low viscosity**: the film is squeezed out under load and metal contact occurs.\n2. **Corrodes** iron and steel.\n3. **Boils at 100 °C and freezes at 0 °C**, so it fails in hot and cold running.\n(Also: no oiliness, it does not adsorb on metal.)",
+       "points": [
+        "Low viscosity, film breaks",
+        "Causes corrosion",
+        "Narrow liquid range",
+        "Poor oiliness"
+       ]
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "topic": "Mechanisms of lubrication: thick layer, thin layer, extreme pressure",
+   "subtopics": [
+    {
+     "id": "thick-film",
+     "title": "Thick film (hydrodynamic and hydrostatic)",
+     "theory_md": "**Thick film (fluid film) lubrication:** a continuous film, at least about $1000\\,\\mathring{A}$ thick, thicker than the asperities, completely separates the surfaces. No metal contact; resistance is only the **viscosity** of the oil, $\\mu \\approx 0.001$-$0.03$. Low load, high speed. Lubricant: mineral oil of correct viscosity.\n\n**Hydrodynamic:** the rotating shaft drags oil into the converging wedge of a journal bearing; the pressure built up lifts the shaft. Needs motion.\n**Hydrostatic:** an external pump forces oil in, so the film exists even at zero speed; for heavy load, low speed, precision.",
+     "basics_md": "A water-skier is lifted by the water only once the boat is moving fast enough. That is hydrodynamic. Pumping water under the ski while standing still would be hydrostatic.",
+     "key_points": [
+      "Film thicker than asperities (about 1000 Å), no metal contact",
+      "Friction only from viscosity; $\\mu \\approx 0.001$-$0.03$",
+      "Low load, high speed; mineral oils",
+      "Hydrodynamic: film pressure from motion (wedge), e.g. journal bearing",
+      "Hydrostatic: pressure from external pump, works at zero speed, e.g. telescope mounts"
+     ],
+     "questions": [
+      {
+       "id": "tf-q1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "In thick film lubrication the property that matters most is",
+       "options": [
+        "oiliness",
+        "viscosity",
+        "flash point",
+        "acid value"
+       ],
+       "answer_index": 1,
+       "why": "Only the internal friction of the oil resists motion."
+      },
+      {
+       "id": "tf-q2",
+       "kind": "mcq",
+       "level": 1,
+       "q": "Which needs an external pump to create the film?",
+       "options": [
+        "Hydrodynamic",
+        "Hydrostatic",
+        "Boundary",
+        "Extreme pressure"
+       ],
+       "answer_index": 1,
+       "why": "Hydrostatic films are pressurised by a pump."
+      },
+      {
+       "id": "tf-q3",
+       "kind": "short",
+       "level": 2,
+       "marks": 3,
+       "q": "Explain the thick layer mechanism. How does it account for hydrodynamic lubrication?",
+       "model_answer_md": "**Thick layer mechanism**\n- A continuous film at least about 1000 Å thick, more than the asperity height, separates the surfaces; no metal contact.\n- Only the internal friction (**viscosity**) of the oil resists motion; $\\mu \\approx 0.001$-$0.03$.\n- Low load, high speed; mineral oils.\n\n**Hydrodynamic lubrication**\n- A shaft at rest touches the bearing. On rotation it drags oil into the **converging wedge**; the pressure generated lifts the shaft onto a film.\n- The film is generated by the motion itself. Example: crankshaft and turbine journal bearings.",
+       "points": [
+        "Film thicker than asperities, about 1000 Å",
+        "No metal contact; friction from viscosity only",
+        "Low load and high speed",
+        "Shaft drags oil into converging wedge",
+        "Pressure lifts shaft; example journal bearing"
+       ]
+      },
+      {
+       "id": "tf-p1",
+       "pyq": "682d097c1232efe4",
+       "level": 2,
+       "points": [
+        "Thick film: continuous film about 1000 Å or more, no contact",
+        "Only viscosity resists motion; $\\mu \\approx 0.001$-$0.03$",
+        "Low load, high speed",
+        "Hydrodynamic: shaft drags oil into wedge, pressure lifts shaft",
+        "Example: journal bearing"
+       ]
+      },
+      {
+       "id": "tf-p2",
+       "pyq": "cb14e3ceb96823f7",
+       "level": 3,
+       "points": [
+        "Hydrodynamic mechanism: wedge action, pressure lifts shaft, thick film, viscosity",
+        "Hydrostatic: external pump supplies pressure",
+        "Hydrostatic gives film at zero speed; hydrodynamic needs speed and has start-stop wear",
+        "Hydrodynamic examples: IC engine crankshaft bearing, turbine bearing",
+        "Hydrostatic examples: telescope bearings, machine-tool spindles/slideways"
+       ]
+      },
+      {
+       "id": "tf-p3",
+       "pyq": "bc7181c2a720808e",
+       "level": 2,
+       "points": [
+        "Both are thick film",
+        "Hydrodynamic: pressure from relative motion; hydrostatic: from external pump",
+        "Hydrostatic works at zero speed, no start-stop wear; hydrodynamic does not",
+        "Hydrostatic needs pump, costly; suits heavy load low speed",
+        "One example each (journal bearing; telescope mount or machine-tool spindle)"
+       ]
+      }
+     ]
+    },
+    {
+     "id": "thin-film",
+     "title": "Thin film (boundary) lubrication",
+     "theory_md": "When load is high, speed low (start-stop) or oil too thin, a full film cannot form and the asperities nearly touch. A layer only **a few molecules thick** is held on each metal surface by **physical or chemical adsorption**. Long-chain polar molecules (fatty acids, esters) stand with the polar head on the metal and the tail outward; the two layers slide over each other and stop welding.\n\nThe key property is **oiliness**, not viscosity. $\\mu \\approx 0.05$-$0.15$.\nLubricants: vegetable and animal oils, fatty acids, soaps, graphite, $\\mathrm{MoS_2}$.\nExamples: gears, cams, rail wheels, slideways.",
+     "basics_md": "Imagine two carpets facing each other: the fibres of one slide over the fibres of the other, so the floors beneath never rub. The oil molecules standing on the metal are the carpet fibres.",
+     "key_points": [
+      "Occurs at high load, low speed, start-stop or thin oil",
+      "Film a few molecules thick, held by adsorption",
+      "Oiliness is the deciding property",
+      "$\\mu \\approx 0.05$-$0.15$",
+      "Lubricants: vegetable/animal oils, fatty acids, graphite, $\\mathrm{MoS_2}$; gears, cams"
+     ],
+     "questions": [
+      {
+       "id": "th-q1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "The coefficient of friction 0.05 to 0.15 belongs to",
+       "options": [
+        "thick film lubrication",
+        "boundary lubrication",
+        "hydrostatic lubrication",
+        "dry friction"
+       ],
+       "answer_index": 1,
+       "why": "This range is typical of thin film (boundary) lubrication."
+      },
+      {
+       "id": "th-q2",
+       "kind": "mcq",
+       "level": 1,
+       "q": "A boundary film is held on the metal by",
+       "options": [
+        "gravity",
+        "adsorption",
+        "welding",
+        "evaporation"
+       ],
+       "answer_index": 1,
+       "why": "Polar molecules are physically or chemically adsorbed."
+      },
+      {
+       "id": "th-q3",
+       "kind": "short",
+       "level": 2,
+       "marks": 3,
+       "q": "Why are vegetable and animal oils good boundary lubricants?",
+       "model_answer_md": "They are esters of long-chain fatty acids with polar ester groups. The polar end adsorbs strongly on the metal while the hydrocarbon tail stands outward, forming an oriented layer a few molecules thick. This gives high **oiliness**, so the film survives high load and low speed.",
+       "points": [
+        "Polar ester groups",
+        "Adsorb on metal, tails outward",
+        "High oiliness",
+        "Film survives high load, low speed"
+       ]
+      },
+      {
+       "id": "th-p1",
+       "pyq": "ab10417b460b34ba",
+       "level": 2,
+       "points": [
+        "0.05-0.15 means thin film (boundary) lubrication",
+        "Occurs at high load, low speed or start-stop; thick film cannot form",
+        "Film a few molecules thick, adsorbed physically/chemically",
+        "Oiliness is the key property",
+        "Lubricants: vegetable/animal oils, fatty acids, graphite, $\\mathrm{MoS_2}$; gears, cams"
+       ]
+      },
+      {
+       "id": "th-p2",
+       "pyq": "a230fc76f3fe3aca",
+       "level": 3,
+       "points": [
+        "When it occurs: high load, low speed, start-stop, thin oil",
+        "Mechanism: layer a few molecules thick adsorbed, polar head on metal, tail outward",
+        "Adsorbed layers slide, prevent asperity welding; $\\mu \\approx 0.05$-$0.15$",
+        "Property needed: oiliness (plus high VI, low pour point, oxidation resistance)",
+        "Lubricants: vegetable/animal oils, fatty acids, graphite, $\\mathrm{MoS_2}$; examples gears, cams, rail axles",
+        "Diagram: two rough surfaces almost touching, oriented molecules on each"
+       ]
+      }
+     ]
+    },
+    {
+     "id": "thick-vs-thin",
+     "title": "Thick film versus thin film",
+     "theory_md": "| Point | Thick film | Thin film |\n|---|---|---|\n| Film | at least about 1000 Å | few molecules |\n| Contact | none | asperities nearly touch |\n| Held by | pressure of motion | adsorption |\n| Load, speed | low, high | high, low |\n| Key property | viscosity | oiliness |\n| $\\mu$ | 0.001-0.03 | 0.05-0.15 |\n| Lubricants | mineral oils | vegetable/animal oils, graphite, $\\mathrm{MoS_2}$ |\n| Examples | journal bearing | gears, cams |\n\nFor 4-5 marks write at least 6 rows and draw both films.",
+     "basics_md": "Think of swimming (thick film: water fully carries you) versus crawling on a wet floor (thin film: a wet skin only reduces the scrape).",
+     "key_points": [
+      "Thickness: 1000 Å vs few molecules",
+      "Contact: none vs partial",
+      "Viscosity vs oiliness",
+      "$\\mu$: 0.001-0.03 vs 0.05-0.15",
+      "Conditions and examples; diagram of both"
+     ],
+     "questions": [
+      {
+       "id": "tt-q1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "Low load and high speed favour",
+       "options": [
+        "thick film",
+        "boundary film",
+        "EP film",
+        "no lubrication"
+       ],
+       "answer_index": 0,
+       "why": "Thick film needs speed to build the film and low load to keep it."
+      },
+      {
+       "id": "tt-q2",
+       "kind": "mcq",
+       "level": 2,
+       "q": "A student writes that boundary lubrication depends on viscosity. This is wrong because it depends on",
+       "options": [
+        "flash point",
+        "oiliness",
+        "pour point",
+        "aniline point"
+       ],
+       "answer_index": 1,
+       "why": "Adsorption and oiliness decide it."
+      },
+      {
+       "id": "tt-q3",
+       "kind": "short",
+       "level": 2,
+       "marks": 4,
+       "q": "Differentiate between thick and thin layer lubrication in six points.",
+       "model_answer_md": "| Point | Thick layer | Thin layer |\n|---|---|---|\n| Film | at least 1000 Å | few molecules |\n| Contact | none | asperities nearly touch |\n| Held by | hydrodynamic pressure | adsorption |\n| Load/speed | low/high | high/low |\n| Property | viscosity | oiliness |\n| $\\mu$ | 0.001-0.03 | 0.05-0.15 |\n| Examples | journal bearing | gears, cams |",
+       "points": [
+        "Six correct points",
+        "Film thickness",
+        "Viscosity vs oiliness",
+        "Friction coefficients",
+        "Conditions",
+        "Examples"
+       ]
+      },
+      {
+       "id": "tt-p1",
+       "pyq": "6dbbff7925f65eb6",
+       "level": 2,
+       "points": [
+        "Table with at least four points",
+        "Thick: 1000 Å, no contact, viscosity, low load high speed",
+        "Thin: few molecules, adsorption, oiliness, high load low speed",
+        "$\\mu$ values",
+        "Examples both"
+       ]
+      },
+      {
+       "id": "tt-p2",
+       "pyq": "3c27325d693aefcd",
+       "level": 2,
+       "points": [
+        "Point-wise table of at least eight points",
+        "Film thickness and contact",
+        "Held by pressure vs adsorption",
+        "Load and speed",
+        "Viscosity vs oiliness",
+        "Coefficient of friction; lubricants; examples",
+        "Diagrams of both films"
+       ]
+      },
+      {
+       "id": "tt-p3",
+       "pyq": "2d12837bfbdf8d3c",
+       "level": 3,
+       "points": [
+        "Thick layer: film, no contact, viscosity, low load high speed, journal bearing",
+        "Diagram: wide oil layer between rough surfaces, peaks not touching, labelled",
+        "Thin layer: few molecules, adsorption, oiliness, high load low speed, gears/cams",
+        "Diagram: surfaces almost touching, oriented adsorbed molecules, plane of sliding"
+       ]
+      },
+      {
+       "id": "tt-p4",
+       "pyq": "5cf2310cfa48bf2c",
+       "level": 2,
+       "points": [
+        "Table with at least four points",
+        "Thickness, contact, mechanism (pressure vs adsorption)",
+        "Load/speed, viscosity vs oiliness",
+        "$\\mu$, lubricants, examples"
+       ]
+      },
+      {
+       "id": "tt-p5",
+       "pyq": "5d630838f3106660",
+       "level": 2,
+       "points": [
+        "Point-wise, at least four points",
+        "Film and contact",
+        "Held by hydrodynamic pressure vs adsorption",
+        "Viscosity vs oiliness; conditions",
+        "$\\mu$ values; examples"
+       ]
+      },
+      {
+       "id": "tt-p6",
+       "pyq": "a1009a969a2c6a1e",
+       "level": 1,
+       "points": [
+        "Thick: film over 1000 Å, no contact, viscosity, low load high speed, journal bearing",
+        "Thin: few molecules adsorbed, oiliness, high load/low speed, gears, cams"
+       ]
+      },
+      {
+       "id": "tt-p7",
+       "pyq": "186b35c73cfccdd0",
+       "level": 3,
+       "points": [
+        "Hydrodynamic: continuous film, wedge in journal bearing lifts shaft, viscosity key, $\\mu$ 0.001-0.03, low load high speed",
+        "Boundary: film breaks at high load/low speed, adsorbed molecular layer, oiliness key, $\\mu$ 0.05-0.15",
+        "Boundary lubricants: vegetable/animal oils, graphite, $\\mathrm{MoS_2}$; examples gears, cams"
+       ]
+      }
+     ]
+    },
+    {
+     "id": "extreme-pressure",
+     "title": "Extreme pressure lubrication",
+     "theory_md": "At **very high load and speed** the contact temperature is so high that even a boundary film desorbs or the oil decomposes, and the metals would weld.\n\n**EP additives:** chlorinated esters, sulphurised oils, tricresyl phosphate. At the hot spots they **react chemically with the metal**, forming a film of metal chloride, sulphide or phosphide:\n$\\mathrm{Fe + S \\rightarrow FeS}$, $\\mathrm{Fe + Cl_2 \\rightarrow FeCl_2}$, $\\mathrm{FePO_4}$.\n\nThe film has a **high melting point and low shear strength**: it survives the heat, shears easily and prevents welding. Used in hypoid gears, rolling mills, heavy cutting.",
+     "basics_md": "If a wax coating melts off a hot pan, a new coating baked on the metal itself keeps working. EP additives bake a protective layer onto the metal when it is hottest.",
+     "key_points": [
+      "For very high load, speed and temperature",
+      "EP additives: chlorinated esters, sulphurised oils, tricresyl phosphate",
+      "They react chemically with metal giving FeCl$_2$, FeS, FePO$_4$ films",
+      "Film: high melting point, low shear strength, prevents welding"
+     ],
+     "figures": [
+      {
+       "smiles": "Cc1ccccc1OP(=O)(Oc1ccccc1C)Oc1ccccc1C",
+       "caption": "Tricresyl phosphate (o-isomer shown), an EP additive"
+      }
+     ],
+     "questions": [
+      {
+       "id": "ep-q1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "Tricresyl phosphate in a lubricant is a(n)",
+       "options": [
+        "pour point depressant",
+        "EP additive",
+        "VI improver",
+        "antioxidant"
+       ],
+       "answer_index": 1,
+       "why": "It forms a phosphide/phosphate film on hot metal."
+      },
+      {
+       "id": "ep-q2",
+       "kind": "mcq",
+       "level": 2,
+       "q": "An EP film differs from a boundary film because it is",
+       "options": [
+        "physically adsorbed",
+        "a chemical reaction product with the metal",
+        "a layer of water",
+        "thicker than the asperities"
+       ],
+       "answer_index": 1,
+       "why": "EP films are formed by reaction, not adsorption."
+      },
+      {
+       "id": "ep-q3",
+       "kind": "short",
+       "level": 2,
+       "marks": 3,
+       "q": "Name three EP additives and say what they form on the metal surface.",
+       "model_answer_md": "- Chlorinated esters form iron chloride, $\\mathrm{FeCl_2}$.\n- Sulphurised oils form iron sulphide, FeS.\n- Tricresyl phosphate forms iron phosphide/phosphate.\nThese films have high melting points and low shear strength.",
+       "points": [
+        "Three additives named",
+        "Chloride, sulphide, phosphide films",
+        "High melting, low shear strength"
+       ]
+      },
+      {
+       "id": "ep-p1",
+       "pyq": "c2b9f75f311dc2f0",
+       "level": 2,
+       "points": [
+        "Used at very high load and speed, high local temperature",
+        "Boundary film desorbs/oil decomposes, risk of welding",
+        "EP additives: chlorinated esters, sulphurised oils, tricresyl phosphate",
+        "They react with metal: FeCl$_2$, FeS, FePO$_4$",
+        "Film high melting, low shear strength; hypoid gears, rolling mills"
+       ]
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "topic": "Liquid, solid and semi-solid lubricants",
+   "subtopics": [
+    {
+     "id": "liquid-oils",
+     "title": "Classification of liquid lubricants",
+     "theory_md": "Lubricants are classed by state: liquid, semi-solid, solid. **Liquid lubricants (oils)** are of four kinds:\n1. **Animal and vegetable oils:** tallow, lard, whale, neatsfoot; castor, palm, olive, coconut, rapeseed. Good oiliness; oxidise, gum, costly.\n2. **Mineral (petroleum) oils:** paraffinic and naphthenic fractions of crude. Cheap, stable; poor oiliness.\n3. **Blended oils:** mineral oil plus additives: oiliness agents (castor oil), VI improvers (polyisobutylene), pour-point depressants, antioxidants, EP agents. E.g. multigrade engine oils.\n4. **Synthetic oils:** silicones, polyglycols, esters, PAO.",
+     "basics_md": "Natural oils are good at sticking to metal but spoil in air. Mineral oils are tough and cheap but slippery in the wrong way. Blending takes the best of both.",
+     "key_points": [
+      "Classes: liquid, semi-solid, solid",
+      "Liquid: animal/vegetable, mineral, blended, synthetic",
+      "Animal/vegetable: oiliness but oxidise",
+      "Mineral: cheap, stable, poor oiliness",
+      "Blended oil = mineral oil + additives (oiliness agent, VI improver, pour-point depressant)"
+     ],
+     "questions": [
+      {
+       "id": "lo-q1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "Castor oil is a",
+       "options": [
+        "mineral oil",
+        "vegetable oil",
+        "synthetic oil",
+        "grease"
+       ],
+       "answer_index": 1,
+       "why": "It is a vegetable oil."
+      },
+      {
+       "id": "lo-q2",
+       "kind": "mcq",
+       "level": 1,
+       "q": "A blended oil is",
+       "options": [
+        "pure mineral oil",
+        "mineral oil with additives",
+        "oil and water",
+        "a solid lubricant"
+       ],
+       "answer_index": 1,
+       "why": "Additives give properties no single oil has."
+      },
+      {
+       "id": "lo-q3",
+       "kind": "short",
+       "level": 2,
+       "marks": 2,
+       "q": "What are blended oils? Give two examples of additives and their purpose.",
+       "model_answer_md": "Blended oils are mineral oils to which additives are added to improve properties.\n1. **Oiliness agent** (castor or rapeseed oil): better adhesion for boundary lubrication.\n2. **VI improver** (polyisobutylene): viscosity changes less with temperature (multigrade oils).",
+       "points": [
+        "Mineral oil plus additives",
+        "Oiliness agent example",
+        "VI improver example"
+       ]
+      },
+      {
+       "id": "lo-p1",
+       "pyq": "9e0b814c63a6b4be",
+       "level": 2,
+       "points": [
+        "Classes: liquid, semi-solid, solid",
+        "Liquid: animal/vegetable, mineral, blended, synthetic with examples",
+        "Semi-solid: greases (Ca, Na, Li soap)",
+        "Solid: graphite, $\\mathrm{MoS_2}$, talc, mica; oildag, aquadag"
+       ]
+      },
+      {
+       "id": "lo-p2",
+       "pyq": "693350646bca4e4f",
+       "level": 2,
+       "points": [
+        "Animal/vegetable oils with examples",
+        "Mineral oils: paraffinic, naphthenic",
+        "Blended oils with additives",
+        "Synthetic oils with examples"
+       ]
+      },
+      {
+       "id": "lo-p3",
+       "pyq": "38b69727d647eff7",
+       "level": 3,
+       "points": [
+        "Four classes of liquid lubricants with examples",
+        "Animal/vegetable: adv oiliness, biodegradable; dis oxidise, gum, costly",
+        "Mineral: adv cheap, stable; dis poor oiliness",
+        "Blended: tailored properties; additives deplete",
+        "Synthetic: adv high VI, wide temperature range; dis expensive"
+       ]
+      },
+      {
+       "id": "lo-p4",
+       "pyq": "9dce4e43c552b4b9",
+       "level": 1,
+       "points": [
+        "Blended oil = mineral oil + additives",
+        "Example: oiliness agent (castor/fatty oil)",
+        "Example: VI improver (polyisobutylene) or pour-point depressant/antioxidant"
+       ]
+      }
+     ]
+    },
+    {
+     "id": "natural-oils",
+     "title": "Vegetable and animal oils versus mineral oils",
+     "theory_md": "Vegetable and animal oils are **triglycerides**: esters of glycerol with long-chain fatty acids (palmitic, stearic, oleic, ricinoleic). The polar ester group adsorbs on metal, giving **high oiliness**; they are **biodegradable and non-toxic**.\n\nDisadvantages: the C=C bonds make them **oxidise** to gum and rancid acids; they **hydrolyse** in moisture to free fatty acids that corrode; costly; poor low-temperature behaviour. Mineral oils are saturated hydrocarbons: stable and cheap but poor in oiliness.\n\nHence natural oils are now used only as **oiliness (blending) agents**.",
+     "basics_md": "Cooking oil left open goes rancid and sticky. The same thing would happen inside a hot machine, which is why natural oils are used only in small amounts as additives.",
+     "key_points": [
+      "Constituents: triglycerides (glycerol + fatty acids)",
+      "Advantage: high oiliness, biodegradable, non-toxic, renewable",
+      "Major disadvantage: poor oxidation stability (gum, rancid)",
+      "Hydrolyse to corrosive fatty acids; costly",
+      "Used now as blending agents"
+     ],
+     "figures": [
+      {
+       "smiles": "OCC(O)CO",
+       "caption": "Glycerol"
+      },
+      {
+       "smiles": "CCCCCCCC/C=C\\CCCCCCCC(=O)O",
+       "caption": "Oleic acid, an unsaturated fatty acid"
+      },
+      {
+       "smiles": "CCCCCCCCCCCCCCCCCC(=O)OCC(OC(=O)CCCCCCCCCCCCCCCCC)COC(=O)CCCCCCCCCCCCCCCCC",
+       "caption": "Tristearin, a triglyceride (three stearic acid residues on glycerol)"
+      }
+     ],
+     "questions": [
+      {
+       "id": "no-q1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "Vegetable oils are chemically",
+       "options": [
+        "hydrocarbons",
+        "triglycerides",
+        "silicones",
+        "soaps"
+       ],
+       "answer_index": 1,
+       "why": "They are esters of glycerol and fatty acids."
+      },
+      {
+       "id": "no-q2",
+       "kind": "mcq",
+       "level": 2,
+       "q": "The main reason natural oils are not used alone as lubricants is",
+       "options": [
+        "high oiliness",
+        "poor oxidation stability",
+        "non-toxicity",
+        "biodegradability"
+       ],
+       "answer_index": 1,
+       "why": "Unsaturated esters oxidise and gum."
+      },
+      {
+       "id": "no-q3",
+       "kind": "short",
+       "level": 2,
+       "marks": 3,
+       "q": "Give two advantages and two disadvantages of vegetable oils over mineral oils.",
+       "model_answer_md": "**Advantages:** (1) better oiliness, as polar ester groups adsorb on metal; (2) biodegradable and non-toxic.\n**Disadvantages:** (1) oxidise, gum and turn rancid; (2) hydrolyse in moisture to corrosive acids, and are costly.",
+       "points": [
+        "Two advantages",
+        "Two disadvantages"
+       ]
+      },
+      {
+       "id": "no-p1",
+       "pyq": "aa2742be09519943",
+       "level": 2,
+       "points": [
+        "Advantages: better oiliness, biodegradable, non-toxic, higher VI/flash point",
+        "Disadvantages: poor oxidation stability, hydrolysis, costly",
+        "Poor low-temperature behaviour",
+        "Used as blending agents"
+       ]
+      },
+      {
+       "id": "no-p2",
+       "pyq": "e8578318e8fcdff8",
+       "level": 1,
+       "points": [
+        "Poor oxidation stability: gummy, rancid",
+        "Hydrolyse to corrosive free fatty acids",
+        "Costly, needed as food; replaced by mineral/synthetic oils"
+       ]
+      },
+      {
+       "id": "no-p3",
+       "pyq": "c09f6b1840702073",
+       "level": 1,
+       "points": [
+        "Triglycerides: esters of glycerol with fatty acids",
+        "Saturated (palmitic, stearic) and unsaturated (oleic, ricinoleic) acids",
+        "Polar ester group gives oiliness; C=C gives oxidation; mineral oils are hydrocarbons"
+       ]
+      },
+      {
+       "id": "no-p4",
+       "pyq": "868056b6ed7c0c88",
+       "level": 1,
+       "points": [
+        "Biodegradable, non-toxic",
+        "Renewable, low sulphur/aromatics",
+        "Limitation: competes with food, oxidised residues need disposal"
+       ]
+      },
+      {
+       "id": "no-p5",
+       "pyq": "25c58095123397df",
+       "level": 1,
+       "points": [
+        "Major disadvantage: poor oxidation stability",
+        "Unsaturated esters oxidise to gum, rancid acids; clog and corrode",
+        "Also hydrolysis and cost; mineral oils saturated and stable"
+       ]
+      }
+     ]
+    },
+    {
+     "id": "synthetic-oils",
+     "title": "Synthetic lubricants",
+     "theory_md": "Synthetic lubricants are man-made fluids for conditions where petroleum oils fail.\n\n| Type | Example use |\n|---|---|\n| Polyalphaolefins (PAO) | engine, gear oils |\n| Esters (diesters, polyol esters) | jet engines |\n| Polyglycols | hydraulics, compressors |\n| Silicones | wide temperature range |\n| Phosphate esters | fire-resistant hydraulics |\n| Fluorocarbons | chemical plant, space |\n\n**Superior because:** high VI, wide temperature range, oxidation stability and long drain intervals, low volatility, fire resistance, chemical inertness. Drawback: cost.",
+     "basics_md": "Petroleum oil is a natural mixture; synthetic oil is built molecule by molecule for one job, like a tailored suit against an off-the-shelf one.",
+     "key_points": [
+      "Types: PAO, esters, polyglycols, silicones, phosphate esters, fluorocarbons",
+      "High VI and wide temperature range",
+      "Oxidation and thermal stability, long oil life, less maintenance",
+      "Low volatility, fire resistance (phosphate esters)",
+      "Drawback: cost"
+     ],
+     "questions": [
+      {
+       "id": "so-q1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "A fire-resistant hydraulic synthetic fluid is",
+       "options": [
+        "phosphate ester",
+        "castor oil",
+        "paraffin oil",
+        "graphite"
+       ],
+       "answer_index": 0,
+       "why": "Phosphate esters are fire-resistant."
+      },
+      {
+       "id": "so-q2",
+       "kind": "mcq",
+       "level": 1,
+       "q": "Compared with mineral oils, synthetic oils have",
+       "options": [
+        "lower VI",
+        "narrower temperature range",
+        "higher oxidation stability",
+        "lower cost"
+       ],
+       "answer_index": 2,
+       "why": "They resist oxidation and are costlier."
+      },
+      {
+       "id": "so-q3",
+       "kind": "short",
+       "level": 2,
+       "marks": 3,
+       "q": "State three advantages of synthetic lubricants over petroleum lubricants.",
+       "model_answer_md": "1. High viscosity index and a wide temperature range (low pour point, high thermal stability).\n2. Better oxidation stability, so less sludge and longer oil life (lower maintenance).\n3. Low volatility, high flash point; some are fire-resistant.",
+       "points": [
+        "Three advantages",
+        "High VI/wide range",
+        "Oxidation stability",
+        "Low volatility or fire resistance"
+       ]
+      },
+      {
+       "id": "so-p1",
+       "pyq": "46de7356b0dca8dc",
+       "level": 2,
+       "points": [
+        "Types: PAO, esters, polyglycols, silicones, phosphate esters, fluorocarbons",
+        "High VI",
+        "Wider temperature range",
+        "Better oxidation stability",
+        "Low volatility; chemical inertness; drawback cost"
+       ]
+      },
+      {
+       "id": "so-p2",
+       "pyq": "e939e53fcb0ccd2c",
+       "level": 2,
+       "points": [
+        "Wide temperature range and high VI",
+        "Oxidation stability, longer drain intervals, lower maintenance",
+        "Low volatility, high flash point, fire resistant",
+        "Reduced friction and wear",
+        "Chemical inertness; limitation cost, seal compatibility"
+       ]
+      }
+     ]
+    },
+    {
+     "id": "greases",
+     "title": "Semi-solid lubricants: greases",
+     "theory_md": "**Grease** = lubricating oil thickened with a **metallic soap** (fillers: graphite, talc).\n- **Calcium (cup) grease:** water-resistant, below about 80 °C.\n- **Sodium grease:** up to about 175 °C, not water-resistant.\n- **Lithium grease:** water-resistant, wide temperature range.\n\n**Used instead of oil** at slow speed and heavy load, intermittent working, where dust or moisture must be sealed out, where oil must not drip, and in inaccessible bearings. Higher friction and poor cooling.\n\n**Consistency:** hardness, by cone penetration (25 °C, 5 s, tenths of mm). **Drop point:** temperature at which the first drop falls (Ubbelohde); upper temperature limit.",
+     "basics_md": "Grease is oil that has been given a skeleton of soap so it stays where you put it, like honey versus water.",
+     "key_points": [
+      "Grease = oil + metallic soap",
+      "Ca: water-resistant, low temperature; Na: high temperature, not water-resistant; Li: both",
+      "Preferred for slow speed/heavy load, intermittent use, sealing, no dripping",
+      "Consistency by cone penetration; drop point by Ubbelohde apparatus"
+     ],
+     "questions": [
+      {
+       "id": "gr-q1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "Which grease is water-resistant but good only below about 80 °C?",
+       "options": [
+        "Sodium",
+        "Calcium",
+        "Aluminium",
+        "None"
+       ],
+       "answer_index": 1,
+       "why": "Calcium (cup) grease."
+      },
+      {
+       "id": "gr-q2",
+       "kind": "mcq",
+       "level": 1,
+       "q": "Drop point of a grease indicates its",
+       "options": [
+        "hardness",
+        "upper working temperature limit",
+        "acidity",
+        "viscosity index"
+       ],
+       "answer_index": 1,
+       "why": "It shows where it melts and runs."
+      },
+      {
+       "id": "gr-q3",
+       "kind": "short",
+       "level": 2,
+       "marks": 3,
+       "q": "What is grease? State three conditions where it is preferred to oil.",
+       "model_answer_md": "Grease is a semi-solid lubricant: lubricating oil thickened with a metallic soap.\nPreferred when: (1) speed is slow and load heavy; (2) operation is intermittent and oil would drain away; (3) dust and moisture must be sealed out, or oil dripping is unwanted.",
+       "points": [
+        "Oil thickened with metallic soap",
+        "Slow speed heavy load",
+        "Intermittent operation",
+        "Sealing/no dripping"
+       ]
+      },
+      {
+       "id": "gr-p1",
+       "pyq": "d3b98a5486e6f732",
+       "level": 2,
+       "points": [
+        "Grease = oil + metallic soap (Ca, Na, Li)",
+        "Slow speed, heavy load",
+        "Intermittent operation",
+        "Seals against dust, moisture; no dripping",
+        "Inaccessible/rarely lubricated bearings"
+       ]
+      },
+      {
+       "id": "gr-p2",
+       "pyq": "1c90ea8f734b209d",
+       "level": 3,
+       "points": [
+        "Grease = oil thickened with metallic soap, used where oil cannot stay",
+        "Examples: Ca, Na, Li greases with temperature/water behaviour",
+        "Drop point: temperature at which grease turns liquid, first drop falls",
+        "Upper temperature limit of use",
+        "Ubbelohde apparatus: grease in cup with orifice on thermometer bulb, heated slowly, note first drop"
+       ]
+      },
+      {
+       "id": "gr-p3",
+       "pyq": "a7de7b90d8231f6d",
+       "level": 2,
+       "points": [
+        "Consistency = hardness/softness, resistance to deformation",
+        "Importance: too soft leaks, too hard raises friction; chosen by speed, load, temperature",
+        "Cone penetration test: 25 °C, standard cone, 5 s",
+        "Depth in tenths of mm is the penetration number; higher = softer"
+       ]
+      },
+      {
+       "id": "gr-p4",
+       "pyq": "c9668cc4616c5598",
+       "level": 2,
+       "points": [
+        "Consistency: hardness; cone penetration at 25 °C for 5 s",
+        "Importance: soft for high speed light load, hard for low speed heavy load",
+        "Drop point: temperature at which semi-solid becomes liquid",
+        "Ubbelohde apparatus; gives upper temperature limit"
+       ]
+      }
+     ]
+    },
+    {
+     "id": "solid-lubricants",
+     "title": "Solid lubricants: graphite and MoS2",
+     "theory_md": "**Solid lubricants** have a layered structure and are used where oil fails: very high load or temperature, or where oil contamination is not allowed (food, textile).\n\n**Graphite:** each C is $sp^2$, in flat hexagonal layers (C-C 1.42 Å) about 3.35 Å apart, held by **weak van der Waals forces**, so layers slide. Used as powder, **oildag** (in oil) or **aquadag** (in water).\n\n**$\\mathrm{MoS_2}$:** sandwich layers S-Mo-S; adjacent sandwiches held by weak van der Waals forces between S layers. Works in **vacuum** and to higher temperature.\n\nOthers: talc, mica, soapstone, PTFE.",
+     "basics_md": "A deck of cards: each card is rigid, but the deck slides because cards only touch loosely. Graphite and MoS2 are decks of atom-thin cards.",
+     "key_points": [
+      "Layered structure, weak interlayer van der Waals forces",
+      "Graphite: hexagonal $sp^2$ layers; oildag and aquadag",
+      "$\\mathrm{MoS_2}$: S-Mo-S sandwich layers; works in vacuum, high temperature",
+      "Used at high load/temperature or where oil contamination is unacceptable"
+     ],
+     "questions": [
+      {
+       "id": "sl-q1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "Graphite in water is called",
+       "options": [
+        "oildag",
+        "aquadag",
+        "cup grease",
+        "soapstone"
+       ],
+       "answer_index": 1,
+       "why": "Aquadag is graphite dispersed in water; oildag in oil."
+      },
+      {
+       "id": "sl-q2",
+       "kind": "mcq",
+       "level": 2,
+       "q": "The layers of graphite slide easily because",
+       "options": [
+        "of strong covalent bonds between layers",
+        "of weak van der Waals forces between layers",
+        "it is liquid",
+        "it contains water only"
+       ],
+       "answer_index": 1,
+       "why": "Interlayer forces are weak; the bonding is strong within a layer."
+      },
+      {
+       "id": "sl-q3",
+       "kind": "short",
+       "level": 2,
+       "marks": 3,
+       "q": "Compare graphite and $\\mathrm{MoS_2}$ as solid lubricants.",
+       "model_answer_md": "- Both are layer lattices with weak van der Waals forces between layers.\n- Graphite: hexagonal carbon layers, used as powder, oildag, aquadag; usable in air to about 500 °C.\n- $\\mathrm{MoS_2}$: S-Mo-S sandwich layers; works in vacuum and to higher temperature.",
+       "points": [
+        "Weak interlayer forces in both",
+        "Graphite structure and forms",
+        "MoS2 structure",
+        "Vacuum/temperature difference"
+       ]
+      },
+      {
+       "id": "sl-p1",
+       "pyq": "4a55e6e5ad40c6e2",
+       "level": 2,
+       "points": [
+        "Solid lubricants: layered solids for high load/temperature or no oil contamination",
+        "Graphite: $sp^2$ hexagonal layers, weak van der Waals forces, slide",
+        "$\\mathrm{MoS_2}$: S-Mo-S sandwich layers, weak forces between S layers",
+        "Graphite as oildag/aquadag; MoS2 works in vacuum"
+       ]
+      },
+      {
+       "id": "sl-p2",
+       "pyq": "76ffe5b87015315c",
+       "level": 2,
+       "points": [
+        "Semi-solid: grease = oil + metallic soap; Ca, Na, Li types; uses slow speed, heavy load, sealing",
+        "Solid: graphite, MoS2, talc, mica",
+        "Properties: layer lattice, weak forces, withstand high load and temperature",
+        "Uses: very high load/temperature, food and textile machinery, vacuum (MoS2)"
+       ]
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "topic": "Physical and chemical properties of lubricants and their testing",
+   "subtopics": [
+    {
+     "id": "viscosity-vi",
+     "title": "Viscosity and viscosity index",
+     "theory_md": "**Viscosity** is resistance to flow, measured by the **Redwood** viscometer (No. 1 thin oils, No. 2 viscous oils) or Saybolt, as seconds for 50 mL. Too low: film breaks, wear; too high: power loss and heat. It falls as temperature rises.\n\n**Viscosity index (VI)** is the rate of change of viscosity with temperature; **high VI = small change**. Dean and Davis scale: Pennsylvanian (paraffinic) oil = 100, Gulf coast (naphthenic) oil = 0.\n$$\\mathrm{VI} = \\frac{L-U}{L-H}\\times 100$$\n$L$, $H$, $U$: viscosities at $100\\,^\\circ$F of the VI 0 oil, VI 100 oil and test oil; all three equal at $210\\,^\\circ$F. Multigrade oils (VI improvers) have high VI. IC engines need high VI.",
+     "basics_md": "Honey is thick when cold and runs when warm; a good engine oil should change much less than honey does. VI is the score for how little it changes.",
+     "key_points": [
+      "Viscosity: resistance to flow; Redwood No. 1 and No. 2 viscometers",
+      "Too low gives wear, too high gives power loss",
+      "VI: rate of change of viscosity with temperature; high VI = small change",
+      "Dean and Davis: Pennsylvanian 100, Gulf coast 0; $\\mathrm{VI}=(L-U)/(L-H)\\times100$",
+      "Viscosity and VI are independent"
+     ],
+     "questions": [
+      {
+       "id": "vi-q1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "On the Dean and Davis scale the VI of Pennsylvanian oil is",
+       "options": [
+        "0",
+        "50",
+        "100",
+        "200"
+       ],
+       "answer_index": 2,
+       "why": "Pennsylvanian (paraffinic) = 100; Gulf coast = 0."
+      },
+      {
+       "id": "vi-q2",
+       "kind": "mcq",
+       "level": 1,
+       "q": "A good IC engine oil should have",
+       "options": [
+        "low VI",
+        "high VI",
+        "zero VI",
+        "VI is irrelevant"
+       ],
+       "answer_index": 1,
+       "why": "Engines run cold and hot, so viscosity must change little."
+      },
+      {
+       "id": "vi-q3",
+       "kind": "numerical",
+       "level": 2,
+       "marks": 3,
+       "q": "A test oil has viscosity 300 cSt at 100 °F. The VI 0 and VI 100 reference oils with the same viscosity at 210 °F have 400 cSt and 200 cSt at 100 °F. Find its VI.",
+       "model_answer_md": "$\\mathrm{VI} = \\dfrac{L-U}{L-H}\\times 100$ with $L = 400$, $H = 200$, $U = 300$\n$= \\dfrac{400-300}{400-200}\\times 100 = \\dfrac{100}{200}\\times 100 = 50$",
+       "points": [
+        "Formula",
+        "Substitution L = 400, H = 200, U = 300",
+        "VI = 50"
+       ]
+      },
+      {
+       "id": "vi-q4",
+       "kind": "numerical",
+       "level": 3,
+       "marks": 3,
+       "q": "Another oil: $L = 350$, $H = 150$, $U = 200$ cSt. Find the VI and say whether it is better than the oil above.",
+       "model_answer_md": "$\\mathrm{VI} = \\dfrac{350-200}{350-150}\\times 100 = \\dfrac{150}{200}\\times 100 = 75$\nVI 75 is higher than 50, so its viscosity changes less with temperature; it is the better lubricant for wide temperature use.",
+       "points": [
+        "VI = 75",
+        "Higher VI = smaller change",
+        "Better oil"
+       ]
+      },
+      {
+       "id": "vi-p1",
+       "pyq": "0bb1610f67ededf3",
+       "level": 1,
+       "points": [
+        "High VI: viscosity changes little with temperature",
+        "Not too thick when cold (hard starting, power loss) nor too thin when hot (film breaks, wear)",
+        "Needed for IC engines working over wide temperature range"
+       ]
+      },
+      {
+       "id": "vi-p2",
+       "pyq": "0c1ac9788f817b3a",
+       "level": 2,
+       "points": [
+        "True",
+        "Viscosity is resistance to flow at one temperature; VI is rate of change with temperature",
+        "$\\mathrm{VI}=(L-U)/(L-H)\\times100$",
+        "A viscous naphthenic oil can have low VI, a thinner paraffinic oil high VI"
+       ]
+      },
+      {
+       "id": "vi-p3",
+       "pyq": "b4c26d3b7859b52f",
+       "level": 2,
+       "points": [
+        "Bottle (B) is the multi-grade lubricant",
+        "VI = how little viscosity changes with temperature; multi-grade has VI improvers, high VI",
+        "Line B falls gently, small change, high VI",
+        "Line A falls steeply, low VI, single grade"
+       ]
+      },
+      {
+       "id": "vi-p4",
+       "pyq": "80a76afae9900a3d",
+       "level": 1,
+       "points": [
+        "Viscosity decides film formation: too low breaks film and wears, too high wastes power",
+        "Emulsification: tendency to form emulsion with water; poor lubrication, sludge",
+        "Low steam emulsion number needed for oils meeting water or steam"
+       ]
+      },
+      {
+       "id": "vi-p5",
+       "pyq": "6a9b23991a9f7d08",
+       "level": 3,
+       "points": [
+        "Viscosity falls with temperature; importance film and power loss",
+        "VI with formula and Dean and Davis scale",
+        "Flash and fire point; importance above working temperature",
+        "Cloud and pour point; importance in cold",
+        "Volatility and oxidation stability"
+       ]
+      },
+      {
+       "id": "vi-p6",
+       "pyq": "8207dde3f1a1cfff",
+       "level": 1,
+       "points": [
+        "Flash point: lowest temperature at which vapours ignite momentarily with a flame (Pensky-Martens)",
+        "VI: rate of change of viscosity with temperature; Pennsylvanian 100, Gulf coast 0; formula"
+       ]
+      }
+     ]
+    },
+    {
+     "id": "flash-fire",
+     "title": "Flash point and fire point",
+     "theory_md": "**Flash point:** lowest temperature at which the oil gives enough vapour to **ignite momentarily** when a small flame is brought near.\n**Fire point:** lowest temperature at which the vapours **burn continuously for at least 5 s**. It is 5-40 °C above the flash point.\n\n**Significance:** both must be well above the working temperature to avoid fire; a low flash point also shows volatile fractions.\n\n**Pensky-Martens (closed cup):** oil cup with lid, shutter, pilot flame, stirrer, thermometer, air bath. Heat at 5-6 °C per minute with stirring; every 1-2 °C dip the flame into the vapour space; the first distinct flash is the flash point. Continue heating to find the fire point. Open cup alternative: Cleveland.",
+     "basics_md": "Petrol gives off vapour at room temperature and flashes easily; diesel needs warming first. A lubricant must not flash anywhere near the heat of the machine it is protecting.",
+     "key_points": [
+      "Flash point: vapour ignites momentarily with flame",
+      "Fire point: burns continuously at least 5 s; 5-40 °C above flash point",
+      "Both should exceed working temperature",
+      "Pensky-Martens closed cup (Cleveland open cup)"
+     ],
+     "questions": [
+      {
+       "id": "ff-q1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "Fire point compared with flash point is",
+       "options": [
+        "lower",
+        "the same",
+        "higher",
+        "unrelated"
+       ],
+       "answer_index": 2,
+       "why": "It is higher, usually by 5-40 °C."
+      },
+      {
+       "id": "ff-q2",
+       "kind": "mcq",
+       "level": 1,
+       "q": "Closed-cup flash point of a lubricant is measured by",
+       "options": [
+        "Redwood viscometer",
+        "Pensky-Martens apparatus",
+        "Ubbelohde apparatus",
+        "Conradson apparatus"
+       ],
+       "answer_index": 1,
+       "why": "Pensky-Martens."
+      },
+      {
+       "id": "ff-q3",
+       "kind": "short",
+       "level": 2,
+       "marks": 2,
+       "q": "Define flash and fire points and state why a lubricant needs high values.",
+       "model_answer_md": "Flash point: lowest temperature at which oil vapour ignites momentarily on bringing a small flame. Fire point: lowest temperature at which the vapour burns for at least 5 s.\nThey must be well above the working temperature, so the oil does not catch fire or lose volatiles in service.",
+       "points": [
+        "Flash point defined",
+        "Fire point defined with 5 s",
+        "Above working temperature"
+       ]
+      },
+      {
+       "id": "ff-p1",
+       "pyq": "2b5a819042c9034b",
+       "level": 1,
+       "points": [
+        "Flash point defined",
+        "Fire point defined, at least 5 s, 5-40 °C higher",
+        "Pensky-Martens or Cleveland",
+        "Must exceed working temperature"
+       ]
+      },
+      {
+       "id": "ff-p2",
+       "pyq": "04fd49fcc41daa86",
+       "level": 3,
+       "points": [
+        "Definitions of flash and fire point",
+        "Fire point 5-40 °C above flash point",
+        "Significance: above operating temperature, safety, shows volatiles",
+        "Pensky-Martens apparatus: cup, lid, shutter, flame exposure device, stirrer, thermometer, air bath",
+        "Procedure: slow heating, stirring, flame dipped every 1-2 °C, flash and fire noted"
+       ]
+      }
+     ]
+    },
+    {
+     "id": "cold-flow-aniline",
+     "title": "Cloud point, pour point and aniline point",
+     "theory_md": "**Cloud point:** temperature at which oil turns cloudy on cooling as wax separates. **Pour point:** temperature at which oil just stops flowing. Cloud point is above pour point. Low values are needed in cold climates, refrigeration and aircraft; pour-point depressants (polymethacrylates) are added.\n\n**Test:** oil in a flat-bottom tube with thermometer, in a jacket in an ice-salt bath. Cloud point: examine at each 1 °C fall. Pour point: tilt every 3 °C; no movement in 5 s means stop; report 3 °C above.\n\n**Aniline point:** lowest temperature at which equal volumes of oil and aniline are completely miscible. **High aniline point = few aromatics = less attack on rubber seals.**",
+     "basics_md": "Butter in a fridge clouds and then stops spreading. Cloud point is when the first haze of wax appears; pour point is when it will no longer run.",
+     "key_points": [
+      "Cloud point: wax haze on cooling; pour point: oil ceases to flow",
+      "Both low for cold use; pour-point depressants",
+      "Test in ice-salt bath; tilt tube, 5 s no movement",
+      "Aniline point: equal volumes miscible; high value = low aromatics = rubber safe"
+     ],
+     "questions": [
+      {
+       "id": "cp-q1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "Which is the higher temperature for an oil?",
+       "options": [
+        "Cloud point",
+        "Pour point",
+        "They are equal",
+        "Neither can be compared"
+       ],
+       "answer_index": 0,
+       "why": "The oil clouds before it stops flowing."
+      },
+      {
+       "id": "cp-q2",
+       "kind": "mcq",
+       "level": 2,
+       "q": "A lubricant used with rubber seals should have a",
+       "options": [
+        "low aniline point",
+        "high aniline point",
+        "low flash point",
+        "high pour point"
+       ],
+       "answer_index": 1,
+       "why": "High aniline point means few aromatics that swell rubber."
+      },
+      {
+       "id": "cp-q3",
+       "kind": "short",
+       "level": 2,
+       "marks": 3,
+       "q": "Define aniline point and explain why a good lubricant needs a high value.",
+       "model_answer_md": "Aniline point is the lowest temperature at which equal volumes of oil and aniline are completely miscible. Aromatics dissolve in aniline readily, so a high aniline point means low aromatic content. Aromatics dissolve and swell rubber seals and packings, so a high aniline point protects them.",
+       "points": [
+        "Definition with equal volumes",
+        "High value means low aromatics",
+        "Aromatics swell rubber"
+       ]
+      },
+      {
+       "id": "cp-p1",
+       "pyq": "c5a9b87e3b4f29e0",
+       "level": 3,
+       "points": [
+        "Cloud point: oil becomes cloudy, wax separates",
+        "Pour point: oil just ceases to flow",
+        "Importance: cold climates, refrigeration, aircraft; low values; filters and passages clog",
+        "Apparatus: tube, air jacket, ice-salt bath, thermometer",
+        "Cloud: observe every 1 °C; pour: tilt every 3 °C, no movement 5 s, report 3 °C above"
+       ]
+      },
+      {
+       "id": "cp-p2",
+       "pyq": "2f9ca37181f5dc13",
+       "level": 1,
+       "points": [
+        "Aniline point: lowest temperature at which equal volumes of oil and aniline are miscible",
+        "Determination: heat to clear, cool, note first turbidity",
+        "High value = low aromatics = no swelling of rubber seals"
+       ]
+      },
+      {
+       "id": "cp-p3",
+       "pyq": "6f2d4d8838159c4c",
+       "level": 1,
+       "points": [
+        "Aniline point defined",
+        "High value means low aromatic content",
+        "Protects rubber seals and packings"
+       ]
+      }
+     ]
+    },
+    {
+     "id": "chemical-values",
+     "title": "Acid, saponification and other chemical values",
+     "theory_md": "- **Acid value:** mg KOH to neutralise the free acids in 1 g oil; $=\\dfrac{V\\times N\\times 56}{W}$. Should be **below 0.1**: free acids corrode metal and catalyse oxidation to gum.\n- **Saponification value:** mg KOH to saponify 1 g oil; $=\\dfrac{(B-S)\\times N\\times 56}{W}$ ($B$ blank, $S$ sample titre). Vegetable/animal oils saponify, mineral oils do not, so it detects fatty oil in a blend.\n- **Carbon residue** (Conradson): % carbon left on heating in limited air; **low** to avoid deposits in engines.\n- **Sligh oxidation number:** sludge formed on oxidation; **low** is good.\n- **Iodine value:** unsaturation; high = poor oxidation stability.",
+     "basics_md": "Each number answers one worry: is the oil acidic, is it natural or mineral, does it leave soot, does it turn to sludge. Learn the worry and the right direction (low or high).",
+     "key_points": [
+      "Acid value: mg KOH/g free acid; should be below 0.1",
+      "Saponification value: mg KOH/g; detects vegetable/animal oil in mineral oil",
+      "Carbon residue (Conradson): should be low",
+      "Sligh oxidation number: sludge; should be low",
+      "Formulas use 56 for KOH"
+     ],
+     "questions": [
+      {
+       "id": "cv-q1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "Mineral oils have saponification value",
+       "options": [
+        "very high",
+        "moderate",
+        "about zero",
+        "negative"
+       ],
+       "answer_index": 2,
+       "why": "Hydrocarbons do not saponify."
+      },
+      {
+       "id": "cv-q2",
+       "kind": "mcq",
+       "level": 2,
+       "q": "A good lubricant should have a Sligh oxidation number that is",
+       "options": [
+        "high",
+        "low",
+        "irrelevant",
+        "negative"
+       ],
+       "answer_index": 1,
+       "why": "High means much sludge and gum."
+      },
+      {
+       "id": "cv-q3",
+       "kind": "numerical",
+       "level": 2,
+       "marks": 3,
+       "q": "10 g of an oil needs 0.20 mL of 0.05 N KOH to neutralise its free acid. Find the acid value and comment.",
+       "model_answer_md": "Acid value $= \\dfrac{0.20\\times 0.05\\times 56}{10} = 0.056$ mg KOH/g.\nThis is below 0.1, so the oil is acceptable.",
+       "points": [
+        "Formula $VN\\times56/W$",
+        "Acid value 0.056 mg KOH/g",
+        "Below 0.1, suitable"
+       ]
+      },
+      {
+       "id": "cv-q4",
+       "kind": "numerical",
+       "level": 3,
+       "marks": 3,
+       "q": "2.0 g of oil was refluxed with 25 mL of 0.5 N alcoholic KOH. The excess needed 15.0 mL of 0.5 N HCl; the blank needed 25.0 mL. Find the saponification value.",
+       "model_answer_md": "$(B-S) = 25.0-15.0 = 10.0$ mL\nSV $= \\dfrac{10.0\\times 0.5\\times 56}{2.0} = 140$ mg KOH/g.",
+       "points": [
+        "B - S = 10.0 mL",
+        "Formula with 56",
+        "SV = 140 mg KOH/g"
+       ]
+      },
+      {
+       "id": "cv-p1",
+       "pyq": "a91ab3b692caeb9b",
+       "level": 1,
+       "points": [
+        "Saponification number: mg KOH to saponify 1 g oil",
+        "Significance: detects/estimates vegetable or animal oil in blend; mineral oils do not saponify"
+       ]
+      },
+      {
+       "id": "cv-p2",
+       "pyq": "40bee95c677244bc",
+       "level": 1,
+       "points": [
+        "Carbon residue: % carbon left on heating (Conradson)",
+        "Low value needed: deposits in cylinders, rings, valves"
+       ]
+      },
+      {
+       "id": "cv-p3",
+       "pyq": "0cf0ccb47d9a78b0",
+       "level": 1,
+       "points": [
+        "Acid value: mg KOH to neutralise free acid in 1 g",
+        "Free acids corrode metal and catalyse oxidation",
+        "Above 0.1 shows deterioration"
+       ]
+      },
+      {
+       "id": "cv-p4",
+       "pyq": "5dcf9cefbf09fdc2",
+       "level": 1,
+       "points": [
+        "False",
+        "Sligh oxidation number = sludge formed on oxidation",
+        "High value means gum and sludge, acids, clogging",
+        "Good oil needs low value"
+       ]
+      }
+     ]
+    },
+    {
+     "id": "steam-emulsion",
+     "title": "Steam emulsion number (demulsibility)",
+     "theory_md": "**Steam emulsion number (SEN):** the time in **seconds** for an oil-water emulsion, made by passing steam through the oil, to separate into two layers.\n\n**Test:** 20 mL of oil in a standard tube is heated by steam bubbling until about 90 °C; the tube is held at about 90 °C and the time for complete separation is noted.\n\n**Low SEN is needed** (good demulsibility) for steam turbines and marine engines, where oil meets water or steam. A stable emulsion lubricates poorly, traps dirt, forms sludge and corrodes. Refined oils have low SEN; oxidised or impure oils have high SEN. (For cutting fluids a stable emulsion is wanted.)",
+     "basics_md": "Oil and vinegar in a salad dressing separate quickly if you leave them: that is low SEN. A lubricant must do the same with water, so that the water can be drained.",
+     "key_points": [
+      "SEN = time (s) for oil-water emulsion to separate",
+      "Steam bubbled into 20 mL oil to about 90 °C, time noted",
+      "Low SEN = good demulsibility",
+      "Needed for steam turbines, marine engines",
+      "Emulsion: poor lubrication, sludge, corrosion"
+     ],
+     "questions": [
+      {
+       "id": "se-q1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "A good turbine oil should have",
+       "options": [
+        "high SEN",
+        "low SEN",
+        "zero viscosity",
+        "high acid value"
+       ],
+       "answer_index": 1,
+       "why": "It must separate from water quickly."
+      },
+      {
+       "id": "se-q2",
+       "kind": "mcq",
+       "level": 1,
+       "q": "SEN is expressed in",
+       "options": [
+        "seconds",
+        "mg KOH/g",
+        "°C",
+        "centipoise"
+       ],
+       "answer_index": 0,
+       "why": "It is the separation time."
+      },
+      {
+       "id": "se-q3",
+       "kind": "short",
+       "level": 2,
+       "marks": 3,
+       "q": "Describe how the steam emulsion number is determined.",
+       "model_answer_md": "1. 20 mL of oil is taken in a standard test tube.\n2. Dry steam at about 100 °C is bubbled through it until the temperature rises to about 90 °C, forming an emulsion.\n3. The tube is held in a bath at about 90 °C and the time in seconds for oil and water to separate completely is noted; this is the SEN.",
+       "points": [
+        "20 mL oil",
+        "Steam passed to 90 °C",
+        "Time of separation in seconds"
+       ]
+      },
+      {
+       "id": "se-p1",
+       "pyq": "3a792744d10af2c3",
+       "level": 2,
+       "points": [
+        "SEN: time for emulsion to separate",
+        "Oil meets water/steam in turbines, engines; stable emulsion lubricates poorly",
+        "Emulsions trap dirt, sludge, corrosion",
+        "Low SEN = quick separation, water can be drained"
+       ]
+      },
+      {
+       "id": "se-p2",
+       "pyq": "abe8030a9fae121b",
+       "level": 1,
+       "points": [
+        "Low SEN = water separates quickly",
+        "Emulsion lubricates poorly, forms sludge, corrosion",
+        "Needed in steam turbines, marine engines"
+       ]
+      },
+      {
+       "id": "se-p3",
+       "pyq": "6989bc20589f9e03",
+       "level": 1,
+       "points": [
+        "SEN: time in seconds for oil-water emulsion to separate",
+        "Low value essential for steam turbines and marine engines"
+       ]
+      },
+      {
+       "id": "se-p4",
+       "pyq": "b8b003543184babb",
+       "level": 2,
+       "points": [
+        "SEN definition and time in seconds",
+        "20 mL oil, steam bubbled to about 90 °C",
+        "Time for separation noted",
+        "Low SEN good (steam turbines)"
+       ]
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "topic": "Lubricating emulsions and cutting fluids",
+   "subtopics": [
+    {
+     "id": "emulsions",
+     "title": "Lubricating emulsions",
+     "theory_md": "An **emulsion** is a dispersion of one liquid as fine droplets in another immiscible liquid, stabilised by an **emulsifier** (soap, sulphonated oil). In lubrication: oil and water.\n- **Oil-in-water (O/W):** oil droplets in water. Water cools, oil lubricates. Examples: cutting fluids (soluble oil), rolling oils for cold rolling.\n- **Water-in-oil (W/O):** oil is the continuous phase, better lubrication, water reduces flammability. Examples: fire-resistant hydraulic fluids (coal mines, steel mills), steam-cylinder and marine lubrication.\n\nThey combine the cooling power of water with the lubricating power of oil.",
+     "basics_md": "Milk is oil droplets in water. A soluble-oil emulsion is the same idea: a milky liquid that cools like water and lubricates like oil.",
+     "key_points": [
+      "Emulsion = oil + water + emulsifier",
+      "O/W: cooling, cutting fluids, rolling oils",
+      "W/O: better lubrication, fire-resistant hydraulic fluids",
+      "Combines cooling of water with lubrication of oil"
+     ],
+     "questions": [
+      {
+       "id": "em-q1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "A lubricating emulsion consists of",
+       "options": [
+        "oil, water and emulsifier",
+        "oil and graphite",
+        "water and soap only",
+        "grease and oil"
+       ],
+       "answer_index": 0,
+       "why": "An emulsifier stabilises the dispersion."
+      },
+      {
+       "id": "em-q2",
+       "kind": "mcq",
+       "level": 2,
+       "q": "Which emulsion type is used as a fire-resistant hydraulic fluid?",
+       "options": [
+        "O/W",
+        "W/O",
+        "Neither",
+        "Both equally"
+       ],
+       "answer_index": 1,
+       "why": "Oil is continuous; water droplets absorb heat and give fire resistance."
+      },
+      {
+       "id": "em-q3",
+       "kind": "short",
+       "level": 2,
+       "marks": 3,
+       "q": "Distinguish between oil-in-water and water-in-oil emulsions as lubricants.",
+       "model_answer_md": "| Point | O/W | W/O |\n|---|---|---|\n| Continuous phase | water | oil |\n| Main action | cooling | lubrication, fire resistance |\n| Uses | cutting fluids, rolling oils | fire-resistant hydraulic fluids, steam cylinders |",
+       "points": [
+        "Continuous phase",
+        "Main action",
+        "Uses"
+       ]
+      },
+      {
+       "id": "em-p1",
+       "pyq": "88c1491dd279459f",
+       "level": 3,
+       "points": [
+        "Emulsion defined with emulsifier",
+        "Types O/W and W/O",
+        "Application 1: cutting fluid (soluble oil, O/W): cooling, lubrication, chip welding, finish",
+        "Application 2: fire-resistant hydraulic fluid (W/O) or rolling oils",
+        "How they lubricate: oil lubricates, water cools"
+       ]
+      },
+      {
+       "id": "em-p2",
+       "pyq": "5b9d9e0664b19fe2",
+       "level": 1,
+       "points": [
+        "Oil + water + emulsifier (soap, sulphonated oil)",
+        "O/W: cutting fluids; W/O: fire resistant hydraulics, steam cylinder",
+        "Cooling of water plus lubrication of oil"
+       ]
+      }
+     ]
+    },
+    {
+     "id": "cutting-fluids",
+     "title": "Cutting fluids",
+     "theory_md": "**Cutting fluids** are applied at the tool-workpiece interface in machining. The commonest is **soluble oil**: mineral oil plus emulsifier, diluted with water to a milky O/W emulsion. For heavy cuts (threading, broaching) use **straight cutting oils**: mineral oil with fatty oil and sulphur or chlorine EP additives.\n\n**Advantages:**\n1. **Cools** tool and work: longer tool life, accurate dimensions\n2. **Lubricates** tool-chip interface, less power\n3. Prevents **chip welding** (built-up edge)\n4. **Washes away chips**\n5. Better **surface finish**; protects against corrosion\n\nGood cutting fluid: high specific heat, non-corrosive, non-toxic, stable, non-foaming.",
+     "basics_md": "A drill bit going into steel gets red hot. A stream of milky coolant keeps it cool and slippery so that the bit lasts and the hole is smooth.",
+     "key_points": [
+      "Cutting fluid = coolant and lubricant at the tool tip",
+      "Soluble oil (O/W emulsion) for general machining",
+      "Straight oils with EP additives for heavy cuts",
+      "Advantages: cooling, lubrication, no chip welding, flushing chips, finish, corrosion protection"
+     ],
+     "questions": [
+      {
+       "id": "cf-q1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "The main role of a soluble oil emulsion in a lathe is",
+       "options": [
+        "cooling and lubrication",
+        "fire proofing",
+        "sealing",
+        "adding friction"
+       ],
+       "answer_index": 0,
+       "why": "Water cools and oil lubricates."
+      },
+      {
+       "id": "cf-q2",
+       "kind": "mcq",
+       "level": 2,
+       "q": "Heavy cuts such as threading usually use",
+       "options": [
+        "pure water",
+        "straight cutting oil with EP additives",
+        "graphite grease",
+        "vegetable oil only"
+       ],
+       "answer_index": 1,
+       "why": "High pressure at the tool needs EP additives."
+      },
+      {
+       "id": "cf-q3",
+       "kind": "short",
+       "level": 2,
+       "marks": 3,
+       "q": "What is a soluble oil? Why is it widely used in machining?",
+       "model_answer_md": "Soluble oil is mineral oil mixed with an emulsifier; diluted with water it forms a milky oil-in-water emulsion. It is cheap and gives both cooling (water) and lubrication (oil) at the tool tip, increasing tool life and surface finish.",
+       "points": [
+        "Mineral oil plus emulsifier",
+        "Diluted with water, O/W emulsion",
+        "Cooling and lubrication; cheap"
+       ]
+      },
+      {
+       "id": "cf-p1",
+       "pyq": "63833bd1e4f44023",
+       "level": 2,
+       "points": [
+        "Lubricant: cutting fluid, soluble oil (O/W emulsion); straight oils for heavy cuts",
+        "Cooling: tool life, accuracy",
+        "Lubrication: less friction and power",
+        "Prevents chip welding; washes chips",
+        "Surface finish and corrosion protection"
+       ]
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "topic": "Selection of lubricants for light and heavy machinery",
+   "subtopics": [
+    {
+     "id": "choice-factors",
+     "title": "Characteristics of a good lubricant",
+     "theory_md": "Selection depends on load, speed, temperature and environment. A good lubricant has:\n1. Adequate **viscosity** and **high VI**\n2. High **oiliness**\n3. High **flash and fire points**\n4. Low **cloud and pour points**\n5. High **oxidation stability** (low Sligh number, low carbon residue)\n6. Low **acid value** and low **SEN**\n7. High **aniline point**, low volatility\n\nWater is unsuitable: very low viscosity, causes corrosion, boils at 100 °C and freezes at 0 °C, and has no oiliness.",
+     "basics_md": "Choosing a lubricant is like choosing shoes: you check the terrain (load and speed), the weather (temperature) and what it will touch (rubber, water, steam).",
+     "key_points": [
+      "Selection factors: load, speed, temperature, environment",
+      "Properties: viscosity, high VI, oiliness, flash point, low pour point",
+      "Oxidation stability, low acid value, low SEN, high aniline point",
+      "Water unsuitable: low viscosity, corrosion, narrow liquid range, no oiliness"
+     ],
+     "questions": [
+      {
+       "id": "cc-q1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "Which does NOT make water a suitable lubricant?",
+       "options": [
+        "Low viscosity",
+        "Corrosion of steel",
+        "Boils at 100 °C",
+        "High oiliness"
+       ],
+       "answer_index": 3,
+       "why": "Water has poor oiliness."
+      },
+      {
+       "id": "cc-q2",
+       "kind": "mcq",
+       "level": 1,
+       "q": "A good lubricant should have a flash point",
+       "options": [
+        "below the working temperature",
+        "above the working temperature",
+        "equal to room temperature",
+        "zero"
+       ],
+       "answer_index": 1,
+       "why": "Otherwise it may catch fire."
+      },
+      {
+       "id": "cc-q3",
+       "kind": "short",
+       "level": 2,
+       "marks": 3,
+       "q": "List the factors on which the choice of a lubricant depends.",
+       "model_answer_md": "1. Load on the bearing\n2. Speed of the moving parts\n3. Operating temperature (hot or cold)\n4. Environment: presence of water, steam, dust, chemicals\n5. Type of machine and cost",
+       "points": [
+        "Load",
+        "Speed",
+        "Temperature",
+        "Environment"
+       ]
+      },
+      {
+       "id": "cc-p1",
+       "pyq": "eef9266cbbee1e04",
+       "level": 2,
+       "points": [
+        "Good lubricant: adequate viscosity and high VI, oiliness",
+        "High flash/fire point, low cloud and pour points",
+        "Oxidation stability, low acid value, low SEN, high aniline point",
+        "Water: very low viscosity, corrosion, boils at 100 °C and freezes at 0 °C, poor oiliness"
+       ]
+      }
+     ]
+    },
+    {
+     "id": "light-heavy",
+     "title": "Light and heavy machinery",
+     "theory_md": "**Light machinery and instruments** (watches, clocks, sewing machines, scientific instruments): low load, moderate speed. Use **low-viscosity** refined mineral oil with high oiliness and no gumming (clock oil, neatsfoot oil, light mineral oil with a little fatty oil).\n\n**Heavy machinery** (rolling mills, crushers, cranes, heavy gears): high load, low speed, so boundary or EP conditions. Use **high-viscosity oils**, **greases**, oils with **EP additives**, or **graphite or MoS$_2$** at very high temperature.\n\nMatch viscosity to load: heavy grease in a watch jams it; thin oil in a rolling mill is squeezed out.",
+     "basics_md": "Thin oil for a delicate hinge, thick grease for a truck axle: viscosity follows the load.",
+     "key_points": [
+      "Light machinery: low viscosity, oiliness, non-gumming",
+      "Heavy machinery: high viscosity oil, grease, EP additives, solid lubricants",
+      "Match viscosity to load and speed"
+     ],
+     "questions": [
+      {
+       "id": "lh-q1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "The best lubricant for a watch is",
+       "options": [
+        "heavy axle grease",
+        "light non-gumming oil",
+        "graphite powder",
+        "straight cutting oil"
+       ],
+       "answer_index": 1,
+       "why": "Delicate parts need a thin, stable oil."
+      },
+      {
+       "id": "lh-q2",
+       "kind": "mcq",
+       "level": 2,
+       "q": "For a rolling mill at very high load, the best choice is",
+       "options": [
+        "thin clock oil",
+        "EP oil or grease",
+        "water",
+        "kerosene"
+       ],
+       "answer_index": 1,
+       "why": "Heavy load needs high viscosity or EP additives."
+      },
+      {
+       "id": "lh-q3",
+       "kind": "long",
+       "level": 2,
+       "marks": 4,
+       "q": "Suggest lubricants, with reasons, for (a) delicate instruments and (b) heavy machinery such as rolling mills.",
+       "model_answer_md": "**(a) Delicate instruments:** light mineral oil or clock oil, blended with a little fatty oil. Reason: small load, so thin film is enough; oiliness for small bearings; must not gum or evaporate.\n\n**(b) Heavy machinery:** high-viscosity oil, grease, or oil with EP additives; graphite or $\\mathrm{MoS_2}$ at very high temperature. Reason: high load and low speed break thin films; EP or solid lubricants prevent welding.",
+       "points": [
+        "(a) light, non-gumming oil, reason",
+        "(b) high viscosity, grease, EP, solid",
+        "Match to load"
+       ]
+      }
+     ]
+    },
+    {
+     "id": "special-machines",
+     "title": "IC engines, turbines, transformers and refrigerators",
+     "theory_md": "- **IC engine:** high VI, high flash point, low pour point, low carbon residue, with detergent and antioxidant additives (multigrade oil).\n- **Steam turbine:** low viscosity, high oxidation stability and **low SEN** (good demulsibility), because the oil meets steam.\n- **Transformer:** refined mineral oil with high dielectric strength, free of moisture, low pour point.\n- **Refrigerator:** low cloud and pour point, so it flows and wax does not separate in the cold.\n- **Food/textile machinery:** solid or food-grade lubricants that do not stain.",
+     "basics_md": "Each machine has one condition that matters most: heat cycle for the engine, steam for the turbine, electricity for the transformer, cold for the refrigerator.",
+     "key_points": [
+      "IC engine: high VI, high flash point, low carbon residue, low pour point",
+      "Steam turbine: low SEN, oxidation stability",
+      "Transformer: high dielectric strength, no moisture",
+      "Refrigerator: low cloud and pour point"
+     ],
+     "questions": [
+      {
+       "id": "sm-q1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "The most suitable lubricant for a transformer is",
+       "options": [
+        "graphite",
+        "refined mineral oil of high dielectric strength",
+        "grease",
+        "vegetable oil"
+       ],
+       "answer_index": 1,
+       "why": "Insulation and cooling need pure mineral oil."
+      },
+      {
+       "id": "sm-q2",
+       "kind": "mcq",
+       "level": 1,
+       "q": "Refrigeration oil needs mainly",
+       "options": [
+        "high pour point",
+        "low cloud and pour point",
+        "high carbon residue",
+        "high SEN"
+       ],
+       "answer_index": 1,
+       "why": "It must flow at low temperature."
+      },
+      {
+       "id": "sm-q3",
+       "kind": "short",
+       "level": 2,
+       "marks": 3,
+       "q": "What properties should an IC engine lubricant have? Why must a steam turbine oil have low SEN?",
+       "model_answer_md": "**IC engine oil:** high VI (cold start to hot running), high flash point, low pour point, low carbon residue, oxidation stability with detergent additives.\n**Steam turbine oil:** the oil meets steam and water; a high SEN gives a stable emulsion that lubricates poorly and forms sludge. Low SEN means water separates quickly and can be drained.",
+       "points": [
+        "High VI, flash point, low carbon residue",
+        "Low pour point",
+        "Turbine meets steam",
+        "Low SEN separates water"
+       ]
+      }
+     ]
+    }
+   ]
+  }
+ ]
+}

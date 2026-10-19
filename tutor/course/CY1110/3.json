@@ -1,0 +1,1746 @@
+{
+ "code": "CY1110",
+ "unit": "Water Pollution",
+ "written": "2026-10-19",
+ "by": "claude-sonnet-5-5, in a Claude Code session",
+ "topics": [
+  {
+   "topic": "Hydrosphere and its importance",
+   "subtopics": [
+    {
+     "id": "hydrosphere-cycle",
+     "title": "Hydrosphere and the water cycle",
+     "theory_md": "The **hydrosphere** is all the water of the Earth: oceans, seas, rivers, lakes, groundwater, ice and water vapour. Oceans hold about **97%**; fresh water is only about **2.5%**, and of that roughly **69% is locked in ice caps and glaciers**, about 30% is groundwater and under 1% is in rivers, lakes and air. Water moves by the **hydrological cycle**: evaporation and transpiration, condensation, precipitation, runoff and infiltration, back to the sea. The cycle is driven by solar energy and renews fresh water.",
+     "basics_md": "Think of all the water on Earth as one tank that is only ever moved around. The sun lifts water from the sea, wind carries it over land, rain drops it, rivers carry it back. Very little of it is drinkable and easy to reach.",
+     "key_points": [
+      "Hydrosphere = all water: ocean, fresh water, groundwater, ice, vapour",
+      "Oceans about 97%; fresh water about 2.5%",
+      "Most fresh water is frozen in ice caps and glaciers",
+      "Hydrological cycle driven by solar energy: evaporation, condensation, precipitation, runoff"
+     ],
+     "questions": [
+      {
+       "id": "hc-q1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "Roughly what fraction of the Earth's water is fresh water?",
+       "options": [
+        "97%",
+        "25%",
+        "2.5%",
+        "0.25%"
+       ],
+       "answer_index": 2,
+       "why": "About 97% is salty ocean water; only about 2.5% is fresh."
+      },
+      {
+       "id": "hc-q2",
+       "kind": "mcq",
+       "level": 1,
+       "q": "Which store holds most of the Earth's fresh water?",
+       "options": [
+        "Rivers and lakes",
+        "Groundwater",
+        "Atmosphere",
+        "Ice caps and glaciers"
+       ],
+       "answer_index": 3,
+       "why": "About 69% of fresh water is ice; groundwater is next at about 30%."
+      },
+      {
+       "id": "hc-q3",
+       "kind": "short",
+       "level": 2,
+       "marks": 3,
+       "q": "Define hydrosphere. Describe the hydrological cycle in short and say why fresh water is a scarce resource.",
+       "model_answer_md": "**Hydrosphere:** the total water of the Earth in all forms: oceans, rivers, lakes, groundwater, ice and vapour.\n\n**Hydrological cycle (driven by solar energy):**\n1. Evaporation from oceans and transpiration from plants.\n2. Condensation of vapour into clouds.\n3. Precipitation as rain or snow.\n4. Runoff to rivers and infiltration to groundwater, returning to the sea.\n\n**Scarcity:** oceans are about 97% (saline); of the 2.5% fresh water about 69% is in ice and about 30% is deep groundwater, so under 1% of fresh water is easily usable.",
+       "points": [
+        "Hydrosphere defined as all water of the Earth",
+        "Cycle steps: evaporation, condensation, precipitation, runoff/infiltration",
+        "Solar energy is the driver",
+        "Fresh water only about 2.5%, most of it frozen or deep, so scarce"
+       ]
+      }
+     ]
+    },
+    {
+     "id": "water-properties",
+     "title": "Why water is special",
+     "theory_md": "Water is a **polar** molecule with a high **dielectric constant (about 78)**, so it pulls apart and dissolves ionic compounds and polar molecules such as glucose. This lets it carry mineral nutrients ($\\mathrm{K^+, Ca^{2+}, NO_3^-, PO_4^{3-}}$) to cells and carry away ionic wastes in urine and sweat. Hydrogen bonding gives a **high specific heat and latent heat**, so oceans and organisms resist temperature change; a boiling point of 100 °C keeps body fluid from evaporating; **ice floats**, so lakes freeze from the top and life survives below. Cohesion and adhesion lift sap in trees.",
+     "basics_md": "Water molecules are a bit like tiny magnets with a positive and a negative end. That is why salt falls apart in water: the ends grab the ions. Acetone has a much weaker grip.",
+     "key_points": [
+      "Polar molecule with high dielectric constant (about 78): dissolves ionic compounds",
+      "Carries nutrients to cells and removes ionic wastes",
+      "High specific and latent heat: stabilises climate and body temperature",
+      "Ice floats, so aquatic life survives under frozen lakes"
+     ],
+     "questions": [
+      {
+       "id": "wp-q1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "Water dissolves ionic salts well mainly because it has",
+       "options": [
+        "a low boiling point",
+        "a high dielectric constant",
+        "a low density",
+        "no hydrogen bonds"
+       ],
+       "answer_index": 1,
+       "why": "The high dielectric constant (about 78) weakens the attraction between ions."
+      },
+      {
+       "id": "wp-q2",
+       "kind": "short",
+       "level": 2,
+       "marks": 2,
+       "q": "Give two reasons why the high specific heat of water is important in nature.",
+       "model_answer_md": "1. Oceans and lakes absorb or release large heat with a small temperature change, so they **moderate the climate** of coastal regions.\n2. Body fluids (mostly water) keep an organism's temperature steady against outside changes.",
+       "points": [
+        "Large heat absorbed for small temperature rise",
+        "Moderates climate / keeps living bodies at steady temperature"
+       ]
+      },
+      {
+       "id": "wp-q3",
+       "kind": "mcq",
+       "level": 2,
+       "q": "Ice is less dense than water. The result for a lake in winter is that",
+       "options": [
+        "the whole lake freezes solid",
+        "ice forms at the surface and life survives below",
+        "water below turns to vapour",
+        "the lake becomes saline"
+       ],
+       "answer_index": 1,
+       "why": "A floating ice layer insulates the water beneath."
+      },
+      {
+       "id": "wp-p1",
+       "pyq": "a867fd21913b13b1",
+       "level": 2,
+       "points": [
+        "Answer (d): both (b) and (c)",
+        "Mineral nutrients reach cells only as dissolved ions, so ionic insolubility would cause lack of nutrients",
+        "Excretion of ionic wastes and salts in urine and sweat would be hampered",
+        "(a) is wrong: sap rises by cohesion, adhesion and transpiration pull, not by dissolving ions"
+       ]
+      },
+      {
+       "id": "wp-p2",
+       "pyq": "4c2a2da065c2e0db",
+       "level": 2,
+       "points": [
+        "Answer (d): both (b) and (c)",
+        "Acetone has a low dielectric constant (about 21 vs 78), so ionic nutrients dissolve poorly",
+        "Boils at 56 °C with high vapour pressure, so body fluid would evaporate easily",
+        "(a) is wrong: acetone freezes near -95 °C, far below 15 °C"
+       ]
+      }
+     ]
+    },
+    {
+     "id": "cryosphere",
+     "title": "The cryosphere and climate",
+     "theory_md": "The **cryosphere** is the frozen part of the Earth: ice sheets (Greenland, Antarctica), glaciers, sea ice, snow cover and permafrost. It regulates climate by:\n1. **Albedo:** snow and ice reflect 80-90% of sunlight (open ocean about 6-10%); melting exposes dark surfaces, so more heat is absorbed and more ice melts (**ice-albedo feedback**).\n2. **Sea level:** ice sheets store about 69% of fresh water.\n3. **Ocean circulation:** sea-ice formation makes cold, dense, salty water that drives thermohaline circulation.\n4. **Permafrost carbon:** thawing releases $\\mathrm{CO_2}$ and $\\mathrm{CH_4}$.\n5. Glaciers feed rivers such as the Ganga and Indus.",
+     "basics_md": "Snow is white and bounces sunlight back to space. When it melts, dark ground or sea shows up, takes in the heat and melts even more snow. That loop is why ice matters for climate.",
+     "key_points": [
+      "Cryosphere = ice sheets, glaciers, sea ice, snow, permafrost",
+      "High albedo reflects sunlight; melting gives positive feedback",
+      "Stores about 69% of fresh water; melting raises sea level",
+      "Sea ice drives ocean circulation; permafrost thaw releases CO2 and CH4"
+     ],
+     "questions": [
+      {
+       "id": "cr-q1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "Which is NOT part of the cryosphere?",
+       "options": [
+        "Glaciers",
+        "Permafrost",
+        "Sea ice",
+        "Groundwater aquifer"
+       ],
+       "answer_index": 3,
+       "why": "Groundwater is liquid; the cryosphere is frozen water."
+      },
+      {
+       "id": "cr-q2",
+       "kind": "mcq",
+       "level": 2,
+       "q": "The ice-albedo feedback means that melting of ice",
+       "options": [
+        "cools the planet further",
+        "exposes darker surfaces, absorbs more heat and speeds up melting",
+        "increases the reflectivity of the Earth",
+        "has no effect on temperature"
+       ],
+       "answer_index": 1,
+       "why": "Less ice means lower albedo, more absorption, more melting."
+      },
+      {
+       "id": "cr-q3",
+       "kind": "short",
+       "level": 3,
+       "marks": 3,
+       "q": "Explain two ways in which melting permafrost and sea-ice loss make global warming worse.",
+       "model_answer_md": "1. **Permafrost thaw:** frozen organic matter decomposes and releases $\\mathrm{CO_2}$ and $\\mathrm{CH_4}$, greenhouse gases that add to warming.\n2. **Sea-ice loss:** the bright ice (albedo 80-90%) is replaced by dark ocean (6-10%), so more solar energy is absorbed (ice-albedo positive feedback), which melts more ice.",
+       "points": [
+        "Permafrost thaw releases CO2 and CH4",
+        "Loss of reflective ice lowers albedo",
+        "Positive feedback: more absorption, more melting"
+       ]
+      },
+      {
+       "id": "cr-p1",
+       "pyq": "b58842d35a31b16a",
+       "level": 2,
+       "points": [
+        "Cryosphere = ice sheets, glaciers, sea ice, snow cover, permafrost",
+        "Albedo: ice reflects 80-90% of sunlight; melting gives ice-albedo positive feedback",
+        "Heat sink: latent heat of melting buffers warming",
+        "Stores about 69% of fresh water; melting raises sea level",
+        "Sea-ice formation drives thermohaline circulation; permafrost holds carbon; glaciers feed rivers"
+       ]
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "topic": "Point and non-point sources",
+   "subtopics": [
+    {
+     "id": "point-vs-nonpoint",
+     "title": "Point versus non-point sources",
+     "theory_md": "A **point source** discharges from a single, identifiable, fixed location (pipe, drain, outfall): factory effluent, sewage-plant outfall, power-plant cooling water. It is continuous, easy to measure and control by treatment and discharge standards.\n\nA **non-point (diffused) source** is spread over a large area with no single outlet; rain or irrigation water picks up pollutants as it runs over land: fertiliser and pesticide runoff, urban storm water, construction sediment, acid rain, mining runoff. It is intermittent (rainfall-linked), hard to measure and controlled by land-use management.",
+     "basics_md": "Pollution from one pipe you can point to is a point source. Pollution that arrives from a whole field or city after rain, with no pipe to point at, is non-point.",
+     "key_points": [
+      "Point: single identifiable fixed outlet; non-point: diffuse, large area",
+      "Point examples: factory pipe, STP outfall, thermal-plant discharge",
+      "Non-point examples: agricultural runoff, urban runoff, acid rain",
+      "Point is continuous and easy to monitor and treat; non-point is rainfall-linked and hard to control"
+     ],
+     "questions": [
+      {
+       "id": "pn-q1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "Which one is a non-point source of water pollution?",
+       "options": [
+        "Tannery effluent pipe",
+        "Sewage-plant outfall",
+        "Fertiliser runoff from farms",
+        "Power-plant cooling-water drain"
+       ],
+       "answer_index": 2,
+       "why": "Runoff from fields has no single outlet."
+      },
+      {
+       "id": "pn-q2",
+       "kind": "mcq",
+       "level": 1,
+       "q": "Which is the main reason non-point pollution is harder to control than point pollution?",
+       "options": [
+        "It is always toxic",
+        "It has no single outlet and varies with rainfall",
+        "It only occurs in oceans",
+        "It contains only nutrients"
+       ],
+       "answer_index": 1,
+       "why": "Diffuse, intermittent sources cannot be collected and treated at one point."
+      },
+      {
+       "id": "pn-q3",
+       "kind": "short",
+       "level": 2,
+       "marks": 3,
+       "q": "Differentiate between point and non-point sources of water pollution with two examples each.",
+       "model_answer_md": "| Basis | Point source | Non-point source |\n|---|---|---|\n| Outlet | Single, identifiable, fixed | Diffuse, large area, no outlet |\n| Examples | Industrial effluent pipe, sewage-plant outfall | Farm fertiliser runoff, urban storm water |\n| Flow | Continuous | Intermittent, depends on rain |\n| Monitoring | Easy | Difficult |\n| Control | Treatment, discharge standards | Land-use practices, buffer strips |",
+       "points": [
+        "Single outlet vs diffuse area",
+        "Two correct examples of each",
+        "Continuous vs rainfall-linked",
+        "Easy treatment vs land-use management"
+       ]
+      },
+      {
+       "id": "pn-p1",
+       "pyq": "0516ffcf4f4c91f1",
+       "level": 2,
+       "points": [
+        "Point source: single identifiable fixed location (pipe, drain, outfall); examples factory effluent, STP outfall, thermal power plant",
+        "Non-point source: diffuse over a large area, runoff picks up pollutants; examples fertiliser and pesticide runoff, urban runoff, construction sediment, acid rain",
+        "Point source can be measured, monitored and regulated; non-point is intermittent and hard to monitor",
+        "Comparison table or clear contrast expected"
+       ]
+      },
+      {
+       "id": "pn-p2",
+       "pyq": "bfec7c0e12c5dc22",
+       "level": 2,
+       "points": [
+        "Point: single identifiable outlet; diffused: scattered area, no single outlet",
+        "Examples: industrial pipe, STP outfall vs agricultural runoff, urban storm water, acid rain, mining runoff",
+        "Point continuous and fixed; diffused intermittent, linked to rainfall",
+        "Point easy to measure and treat; diffused difficult, needs land-use management and controlled fertiliser use"
+       ]
+      }
+     ]
+    },
+    {
+     "id": "sources-sewage",
+     "title": "Sources and nature of sewage",
+     "theory_md": "Major sources of water pollution: **domestic sewage** (organic matter, pathogens, detergent phosphates), **industrial effluents** (heavy metals Hg, Pb, Cd, Cr, acids, alkalis, dyes, oils, toxic organics), **agricultural runoff** (nitrate, phosphate, pesticides), **thermal discharge**, **oil spills**, **mining drainage**, radioactive waste and landfill leachate.\n\n**Domestic sewage** is about 99.9% water, rich in biodegradable organics, N and P, and pathogens, mostly non-toxic and uniform; biological treatment suits it. **Industrial sewage** varies with the industry: toxic, often non-biodegradable (metals, cyanide, phenols, dyes), few pathogens, high COD; it needs pretreatment first.",
+     "basics_md": "Sewage from homes is mostly food, soap and human waste, which microbes can eat. Factory waste can contain metals and chemicals that microbes cannot eat or that even kill them.",
+     "key_points": [
+      "Sources: domestic, industrial, agricultural, thermal, oil spills, mining, radioactive, leachate",
+      "Domestic sewage: biodegradable organics, N and P, pathogens, low toxicity",
+      "Industrial sewage: toxic, variable, non-biodegradable, high COD, few pathogens",
+      "Industrial waste needs pretreatment (neutralisation, metal removal) before biological treatment"
+     ],
+     "questions": [
+      {
+       "id": "ss-q1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "Which pollutant is typical of domestic sewage rather than industrial effluent?",
+       "options": [
+        "Cyanide",
+        "Chromium",
+        "Pathogenic bacteria",
+        "Phenols"
+       ],
+       "answer_index": 2,
+       "why": "Pathogens come from human excreta; the others are industrial."
+      },
+      {
+       "id": "ss-q2",
+       "kind": "short",
+       "level": 2,
+       "marks": 3,
+       "q": "List the important sources of water pollution and name one major pollutant from each.",
+       "model_answer_md": "1. **Domestic sewage:** organic matter and pathogens.\n2. **Industrial effluents:** heavy metals (Hg, Pb, Cd) and toxic organics.\n3. **Agricultural runoff:** nitrate, phosphate and pesticides.\n4. **Thermal discharge:** hot cooling water.\n5. **Oil spills:** crude oil film.\n6. **Mining drainage:** acid and heavy metals.\n7. **Radioactive waste:** $\\mathrm{^{90}Sr}$, $\\mathrm{^{137}Cs}$.",
+       "points": [
+        "At least five sources named",
+        "Matching pollutant for each",
+        "Domestic, industrial and agricultural covered"
+       ]
+      },
+      {
+       "id": "ss-q3",
+       "kind": "mcq",
+       "level": 2,
+       "q": "A COD/BOD ratio much higher than 1 in a wastewater most likely indicates",
+       "options": [
+        "domestic sewage",
+        "a large non-biodegradable or toxic industrial component",
+        "pure water",
+        "only pathogens"
+       ],
+       "answer_index": 1,
+       "why": "COD counts non-biodegradable matter that BOD cannot see."
+      },
+      {
+       "id": "ss-p1",
+       "pyq": "a5d8c6d873fb3e5c",
+       "level": 2,
+       "points": [
+        "Domestic: homes, about 99.9% water, biodegradable organics, excreta, detergents, rich in N and P, many pathogens, non-toxic, uniform composition",
+        "Industrial: varies with industry, acids, alkalis, heavy metals, cyanides, oils, dyes, phenols, few pathogens, often toxic and non-biodegradable, variable",
+        "Domestic has moderate BOD; industrial COD much higher than BOD",
+        "Domestic suits biological treatment; industrial needs pretreatment first"
+       ]
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "topic": "Classification and effects of water pollutants",
+   "subtopics": [
+    {
+     "id": "classification",
+     "title": "Classes of water pollutants",
+     "theory_md": "Water pollutants are classified as:\n1. **Organic:** oxygen-demanding wastes (sewage, food, paper; raise BOD), synthetic organics (DDT, detergents, PCBs, phenols), oil.\n2. **Inorganic:** heavy metals (Hg, Cd, Pb, As, Cr), acids/alkalis/salts, fluoride (above 1.5 mg/L gives fluorosis).\n3. **Plant nutrients:** nitrate, phosphate (eutrophication; blue baby syndrome).\n4. **Pathogens:** bacteria, viruses, protozoa (cholera, typhoid, hepatitis); indicator is coliform count.\n5. **Sediments and suspended solids** (turbidity).\n6. **Radioactive:** $\\mathrm{^{90}Sr}$, $\\mathrm{^{131}I}$, $\\mathrm{^{137}Cs}$.\n7. **Thermal** (heat).",
+     "basics_md": "Ask what the pollutant is made of or does: food for microbes (organic), metals and salts (inorganic), fertiliser (nutrients), germs (pathogens), mud (solids), radiation, or heat.",
+     "key_points": [
+      "Seven classes: organic, inorganic, nutrients, pathogens, sediments, radioactive, thermal",
+      "Organic: oxygen-demanding wastes, synthetic organics, oil",
+      "Inorganic: heavy metals, acids/alkalis/salts, fluoride",
+      "Give a named example and effect for each class"
+     ],
+     "questions": [
+      {
+       "id": "cl-q1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "Coliform count is used as an indicator of",
+       "options": [
+        "heavy metals",
+        "pathogenic contamination",
+        "nutrients",
+        "radioactivity"
+       ],
+       "answer_index": 1,
+       "why": "Coliforms indicate faecal contamination and possible pathogens."
+      },
+      {
+       "id": "cl-q2",
+       "kind": "mcq",
+       "level": 1,
+       "q": "Fluorosis is caused by fluoride in drinking water above about",
+       "options": [
+        "0.1 mg/L",
+        "1.5 mg/L",
+        "15 mg/L",
+        "150 mg/L"
+       ],
+       "answer_index": 1,
+       "why": "The permissible limit is 1.5 mg/L."
+      },
+      {
+       "id": "cl-q3",
+       "kind": "short",
+       "level": 2,
+       "marks": 3,
+       "q": "Classify water pollutants with one example and one effect each (any five classes).",
+       "model_answer_md": "1. **Oxygen-demanding organics** (sewage): raise BOD, kill fish.\n2. **Heavy metals** (Hg): Minamata disease, bioaccumulation.\n3. **Plant nutrients** (nitrate, phosphate): eutrophication.\n4. **Pathogens** (Vibrio cholerae): cholera, typhoid.\n5. **Suspended solids** (silt): turbidity, less light.\n6. **Radioactive** ($\\mathrm{^{90}Sr}$): cancer.\n7. **Thermal** (cooling water): lower DO.",
+       "points": [
+        "Five classes named",
+        "Example for each",
+        "Effect for each"
+       ]
+      },
+      {
+       "id": "cl-p1",
+       "pyq": "dbcfe45c8b7b6e58",
+       "level": 2,
+       "points": [
+        "Organic: oxygen-demanding wastes (BOD), synthetic organics (pesticides DDT, detergents, PCBs), oil",
+        "Inorganic: heavy metals (Hg Minamata, Cd itai-itai, As), acids/alkalis/salts, fluoride",
+        "Plant nutrients: nitrates and phosphates, eutrophication, blue baby syndrome",
+        "Pathogens: cholera, typhoid, hepatitis; sediments: turbidity; radioactive isotopes; thermal pollution",
+        "Also point and non-point classification by source"
+       ]
+      }
+     ]
+    },
+    {
+     "id": "heavy-metals-biomag",
+     "title": "Heavy metals and biomagnification",
+     "theory_md": "**Heavy metals** (Hg, Cd, Pb, As, Cr) and persistent organics (DDT, PCBs) are not metabolised or excreted easily, so they **bioaccumulate** in tissue and **biomagnify**: their concentration rises at each higher trophic level.\n\nBiomagnification needs a pollutant that is **non-biodegradable, fat-soluble and active**. Example (DDT): water 0.000003 ppm, zooplankton 0.04, small fish 0.5, large fish 2, fish-eating birds 25 ppm, a rise of about $8\\times10^{6}$ times. DDT thins bird eggshells; methylmercury caused **Minamata disease**; cadmium causes **itai-itai**.",
+     "basics_md": "A fish eats hundreds of small organisms and keeps their poison. A bird eats many fish. So the top animal carries the most.",
+     "key_points": [
+      "Bioaccumulation: build-up in one organism; biomagnification: rise along the food chain",
+      "Needs non-biodegradable, fat-soluble pollutant",
+      "DDT example with ppm values at each level",
+      "Hg: Minamata disease; Cd: itai-itai; DDT: thin eggshells"
+     ],
+     "questions": [
+      {
+       "id": "hm-q1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "Which pollutant is linked with Minamata disease?",
+       "options": [
+        "Cadmium",
+        "Mercury",
+        "Lead",
+        "Arsenic"
+       ],
+       "answer_index": 1,
+       "why": "Methylmercury in fish caused Minamata disease in Japan."
+      },
+      {
+       "id": "hm-q2",
+       "kind": "mcq",
+       "level": 2,
+       "q": "Which property is essential for a pollutant to biomagnify?",
+       "options": [
+        "Water solubility and easy excretion",
+        "Biodegradability",
+        "Persistence and fat solubility",
+        "Volatility"
+       ],
+       "answer_index": 2,
+       "why": "It must persist and be stored in fat, not excreted."
+      },
+      {
+       "id": "hm-q3",
+       "kind": "numerical",
+       "level": 2,
+       "marks": 2,
+       "q": "If DDT is 0.000003 ppm in water and 25 ppm in fish-eating birds, by what factor is it magnified?",
+       "model_answer_md": "$$\\text{Factor} = \\dfrac{25}{0.000003} \\approx 8.3\\times10^{6}$$\nThe birds carry nearly **8 million times** the concentration in water.",
+       "points": [
+        "Ratio of bird to water concentration",
+        "About 8.3 x 10^6 times"
+       ]
+      },
+      {
+       "id": "hm-p1",
+       "pyq": "3075c98282a41873",
+       "level": 2,
+       "points": [
+        "Biomagnification: increase in pollutant concentration at each higher trophic level",
+        "Conditions: non-biodegradable, fat-soluble, active (DDT, BHC, PCBs, Hg, Cd)",
+        "Mechanism: each level eats many of the level below and retains the load",
+        "DDT example with ppm values at each level, about 8 million times in birds",
+        "Effects: thin eggshells, Minamata disease"
+       ]
+      },
+      {
+       "id": "hm-p2",
+       "pyq": "742797563e59c101",
+       "level": 1,
+       "points": [
+        "Answer (a): both true and R explains A",
+        "Hg, Cd, As are not metabolised or excreted efficiently, so they bioaccumulate and biomagnify up the food chain"
+       ]
+      }
+     ]
+    },
+    {
+     "id": "eutrophication",
+     "title": "Eutrophication, algal bloom and nitrate",
+     "theory_md": "**Eutrophication** is enrichment of a water body with N and P (fertiliser runoff, sewage, detergent phosphate). Sequence: nutrients, **algal bloom**, a surface mat that cuts light, death of algae, bacterial decay using up dissolved oxygen (high BOD), **fish kill**, anaerobic $\\mathrm{H_2S}$ and $\\mathrm{CH_4}$, loss of biodiversity. Warm temperature speeds algal growth and decay, lowers $\\mathrm{O_2}$ solubility and causes stratification, so bottom water turns anoxic. Blue-green algae release toxins.\n\n**Blue baby syndrome:** nitrate (above 45 mg/L) is reduced to nitrite in infants; nitrite turns haemoglobin to **methaemoglobin**, which cannot carry $\\mathrm{O_2}$.\n\nPrevention: treat sewage with nutrient removal, phosphate-free detergents, balanced fertiliser, buffer strips.",
+     "basics_md": "Fertiliser in water is food for algae. A green mat grows, then dies. Bacteria eat the dead algae and use up the oxygen. The fish then have no air.",
+     "key_points": [
+      "Cause: excess N and P from runoff, sewage, detergents",
+      "Chain: bloom, light block, decay, low DO, fish kill",
+      "Warm water speeds growth and decay and lowers oxygen solubility",
+      "Blue baby: nitrate to nitrite, methaemoglobin, limit 45 mg/L",
+      "Prevention: cut nutrient input, buffer strips, remove algae"
+     ],
+     "questions": [
+      {
+       "id": "eu-q1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "Eutrophication is mainly caused by excess",
+       "options": [
+        "heavy metals",
+        "nitrates and phosphates",
+        "chlorides",
+        "suspended solids"
+       ],
+       "answer_index": 1,
+       "why": "N and P feed algae."
+      },
+      {
+       "id": "eu-q2",
+       "kind": "mcq",
+       "level": 2,
+       "q": "Why does dissolved oxygen fall after an algal bloom?",
+       "options": [
+        "Algae release carbon monoxide",
+        "Bacteria decomposing dead algae use up oxygen",
+        "Algae absorb oxygen from air",
+        "Phosphate reacts with oxygen"
+       ],
+       "answer_index": 1,
+       "why": "Decay of the dead bloom causes high BOD."
+      },
+      {
+       "id": "eu-q3",
+       "kind": "short",
+       "level": 2,
+       "marks": 3,
+       "q": "Explain how excess fertiliser in a lake leads to a fish kill.",
+       "model_answer_md": "1. Runoff brings nitrate and phosphate into the lake.\n2. These nutrients cause an **algal bloom**.\n3. The surface mat blocks light, so submerged plants die.\n4. Dead algae are decomposed by bacteria, which consume dissolved oxygen (BOD rises).\n5. DO falls below the 4-5 mg/L fish need, so **fish die**; anaerobic decay gives foul $\\mathrm{H_2S}$.",
+       "points": [
+        "Nutrient input from runoff",
+        "Algal bloom blocks light",
+        "Bacterial decay consumes DO",
+        "Low DO kills fish"
+       ]
+      },
+      {
+       "id": "eu-p1",
+       "pyq": "b8a261c5391e30f0",
+       "level": 2,
+       "points": [
+        "Eutrophication is unhealthy: bloom, decay, DO depletion, fish kill",
+        "Lake A (untreated sewage) eutrophicates faster",
+        "Sewage carries N and P and heavy organic load, so decay also consumes oxygen directly (high BOD)"
+       ]
+      },
+      {
+       "id": "eu-p2",
+       "pyq": "d82a22189ac324b6",
+       "level": 2,
+       "points": [
+        "Natural slow eutrophication is normal ageing; man-made eutrophication is unhealthy",
+        "Lake A with untreated sewage eutrophies faster",
+        "N, P (detergent phosphate) plus organic matter; decomposition raises BOD and depletes oxygen"
+       ]
+      },
+      {
+       "id": "eu-p3",
+       "pyq": "b208465474ecb15e",
+       "level": 2,
+       "points": [
+        "Temperature: warm water speeds algal growth and metabolism, blooms form faster (summer)",
+        "Less O2 solubility plus faster microbial decay gives rapid oxygen depletion",
+        "Thermal stratification stops mixing, bottom turns anoxic and releases phosphate",
+        "Two preventive measures: cut nutrient input (sewage treatment with P removal, phosphate-free detergent, controlled fertiliser); buffer strips, algae removal, aeration/dredging"
+       ]
+      },
+      {
+       "id": "eu-p4",
+       "pyq": "92bf04dfaf5755a6",
+       "level": 2,
+       "points": [
+        "Boon: N, P, K essential for plant growth, higher crop yield",
+        "Curse: runoff causes eutrophication and algal bloom",
+        "Light cut-off, oxygen depletion, BOD rise, fish kill, H2S and CH4",
+        "Toxins from blue-green algae; loss of biodiversity; nitrate causes blue baby syndrome",
+        "Remedy: balanced fertiliser, biofertiliser, buffer strips, nutrient removal, phosphate-free detergents"
+       ]
+      },
+      {
+       "id": "eu-p5",
+       "pyq": "5566e0b565415a14",
+       "level": 1,
+       "points": [
+        "Blue baby syndrome (methaemoglobinaemia): excess nitrate (above 45 mg/L) in drinking water",
+        "Nitrate is reduced to nitrite, which converts haemoglobin to methaemoglobin, so blood cannot carry oxygen and skin turns blue"
+       ]
+      },
+      {
+       "id": "eu-p6",
+       "pyq": "e7a2af98584afcd3",
+       "level": 2,
+       "points": [
+        "Blue baby: nitrate from fertiliser/sewage, infants' stomach reduces to nitrite, methaemoglobin, cyanosis; limit 45 mg/L; prevention",
+        "Algal bloom: dense algal growth from phosphate and nitrate, warm still water",
+        "Effects: light block, high BOD, fish kill, toxins, odour",
+        "Control: cut nutrients, aeration, remove algal mass"
+       ]
+      }
+     ]
+    },
+    {
+     "id": "amd",
+     "title": "Acid mine drainage",
+     "theory_md": "**Acid mine drainage (AMD)** forms when pyrite $\\mathrm{FeS_2}$, exposed by mining, meets air and water:\n1. $\\mathrm{2FeS_2 + 7O_2 + 2H_2O \\rightarrow 2Fe^{2+} + 4SO_4^{2-} + 4H^+}$\n2. $\\mathrm{4Fe^{2+} + O_2 + 4H^+ \\rightarrow 4Fe^{3+} + 2H_2O}$ (catalysed by *Acidithiobacillus ferrooxidans*)\n3. $\\mathrm{Fe^{3+} + 3H_2O \\rightarrow Fe(OH)_3\\downarrow + 3H^+}$ (orange \"yellow boy\")\n4. $\\mathrm{FeS_2 + 14Fe^{3+} + 8H_2O \\rightarrow 15Fe^{2+} + 2SO_4^{2-} + 16H^+}$\n\npH falls to 2-4; toxic metals dissolve; fish die. **Limestone** neutralises it: $\\mathrm{CaCO_3 + 2H^+ \\rightarrow Ca^{2+} + H_2O + CO_2}$, metals precipitate as hydroxides, but $\\mathrm{Fe(OH)_3}$ and gypsum coat (**armour**) the stone.",
+     "basics_md": "Mining breaks open rock that contains iron sulphide. Air and rainwater turn it into sulphuric acid, which runs into streams. Limestone is a base, so it eats the acid.",
+     "key_points": [
+      "Pyrite + O2 + water gives Fe2+, sulphate and H+",
+      "Fe2+ to Fe3+ (bacterial catalysis), Fe3+ hydrolysis gives Fe(OH)3 and more acid",
+      "Fe3+ oxidises more pyrite: self-propagating",
+      "Limestone neutralises acid and precipitates metals but gets armoured"
+     ],
+     "questions": [
+      {
+       "id": "am-q1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "The mineral whose oxidation causes acid mine drainage is",
+       "options": [
+        "calcite",
+        "pyrite",
+        "quartz",
+        "gypsum"
+       ],
+       "answer_index": 1,
+       "why": "FeS2 gives sulphuric acid on oxidation."
+      },
+      {
+       "id": "am-q2",
+       "kind": "mcq",
+       "level": 2,
+       "q": "Why does a limestone bed stop working after some time?",
+       "options": [
+        "Limestone dissolves completely at once",
+        "Fe(OH)3 and gypsum coat the stone surface",
+        "Limestone turns acidic",
+        "Oxygen is absent"
+       ],
+       "answer_index": 1,
+       "why": "Armouring blocks contact between acid and CaCO3."
+      },
+      {
+       "id": "am-q3",
+       "kind": "short",
+       "level": 2,
+       "marks": 3,
+       "q": "Write the chemical reactions showing how pyrite oxidation produces acid mine drainage.",
+       "model_answer_md": "**Step 1:** $\\mathrm{2FeS_2 + 7O_2 + 2H_2O \\rightarrow 2Fe^{2+} + 4SO_4^{2-} + 4H^+}$\n\n**Step 2:** $\\mathrm{4Fe^{2+} + O_2 + 4H^+ \\rightarrow 4Fe^{3+} + 2H_2O}$\n\n**Step 3:** $\\mathrm{Fe^{3+} + 3H_2O \\rightarrow Fe(OH)_3\\downarrow + 3H^+}$\n\n**Overall:** $\\mathrm{4FeS_2 + 15O_2 + 14H_2O \\rightarrow 4Fe(OH)_3 + 8SO_4^{2-} + 16H^+}$, so $\\mathrm{H_2SO_4}$ is effectively formed and pH drops to 2-4.",
+       "points": [
+        "Pyrite oxidation to Fe2+, SO4 2- and H+",
+        "Fe2+ to Fe3+",
+        "Fe(OH)3 precipitate with more H+",
+        "Overall equation and low pH"
+       ]
+      },
+      {
+       "id": "am-p1",
+       "pyq": "b802207c2ed7b287",
+       "level": 2,
+       "points": [
+        "AMD: acidic metal-rich drainage from mines when pyrite meets air and water",
+        "Step 1: 2FeS2 + 7O2 + 2H2O gives 2Fe2+ + 4SO4 2- + 4H+",
+        "Step 2: Fe2+ to Fe3+ (bacteria catalysed); Step 3: Fe3+ hydrolysis to Fe(OH)3 + H+; Fe3+ oxidises more pyrite",
+        "Overall equation; pH 2-4; dissolves toxic metals, kills fish"
+       ]
+      },
+      {
+       "id": "am-p2",
+       "pyq": "ffa6c355741b95e2",
+       "level": 3,
+       "points": [
+        "Yes, CaCO3 reduces AMD but may not remove it fully",
+        "Neutralisation: CaCO3 + 2H+ gives Ca2+ + H2O + CO2",
+        "Metals precipitate as hydroxides as pH rises; buffering by carbonate/bicarbonate",
+        "Limitations: armouring by Fe(OH)3 and gypsum, finite capacity, sludge",
+        "Passive treatment; prevent pyrite oxidation at source"
+       ]
+      }
+     ]
+    },
+    {
+     "id": "solids-heat",
+     "title": "Suspended solids and heat",
+     "theory_md": "**Suspended solids** (silt, clay, organic matter, algae) cause **turbidity**. Effects: less light so less photosynthesis and DO; organic solids raise BOD; particles clog and abrade fish **gills**; **siltation** buries eggs and bottom organisms; dark particles absorb heat; particles carry adsorbed metals, pesticides and pathogens; reservoirs silt up.\n\n**Heat** is a pollutant (thermal pollution from power-plant cooling water, steel mills, refineries): $\\mathrm{O_2}$ solubility falls (about 9.1 mg/L at 20 °C, 7.6 mg/L at 30 °C); metabolism and decay rates rise (about double per 10 °C), so BOD rises when DO is lower; **thermal shock** and loss of spawning; algal blooms; higher toxicity. Control: cooling towers, cooling or spray ponds.",
+     "basics_md": "Mud in water blocks light and clogs gills. Hot water holds less oxygen while fish need more. Both leave water unable to support life.",
+     "key_points": [
+      "Suspended solids: turbidity, less light, gill damage, siltation, carrier of pollutants",
+      "Heat lowers DO (9.1 to 7.6 mg/L from 20 to 30 °C)",
+      "Heat raises metabolism and BOD, causes thermal shock and algal growth",
+      "Control heat by cooling towers/ponds"
+     ],
+     "questions": [
+      {
+       "id": "sh-q1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "Thermal pollution lowers dissolved oxygen because",
+       "options": [
+        "oxygen reacts with heat",
+        "gas solubility falls as temperature rises",
+        "water evaporates",
+        "algae stop growing"
+       ],
+       "answer_index": 1,
+       "why": "Solubility of O2 decreases with temperature."
+      },
+      {
+       "id": "sh-q2",
+       "kind": "mcq",
+       "level": 1,
+       "q": "Turbidity is caused mainly by",
+       "options": [
+        "dissolved salts",
+        "suspended solids",
+        "dissolved gases",
+        "hardness"
+       ],
+       "answer_index": 1,
+       "why": "Suspended particles scatter light."
+      },
+      {
+       "id": "sh-q3",
+       "kind": "short",
+       "level": 2,
+       "marks": 3,
+       "q": "Why is heat considered a water pollutant? Give two control measures.",
+       "model_answer_md": "Heat from power-plant cooling water raises river temperature and harms aquatic life:\n1. **Lower DO:** $\\mathrm{O_2}$ solubility falls (9.1 mg/L at 20 °C to 7.6 mg/L at 30 °C).\n2. **Higher oxygen demand:** metabolism and decay roughly double per 10 °C.\n3. **Thermal shock** and disturbed spawning; heat-tolerant species replace native ones.\n4. **Algal blooms** and higher toxicity of pollutants.\n\n**Control:** cooling towers, cooling ponds, spray ponds before discharge.",
+       "points": [
+        "Lower solubility of oxygen with numbers",
+        "Higher metabolic/oxygen demand",
+        "Thermal shock, algal growth",
+        "Cooling tower and pond as control"
+       ]
+      },
+      {
+       "id": "sh-p1",
+       "pyq": "990e30bed8b092e6",
+       "level": 2,
+       "points": [
+        "Thermal pollution from power-plant, steel mill, refinery cooling water",
+        "Less dissolved oxygen (9.1 mg/L at 20 °C to 7.6 at 30 °C)",
+        "Higher oxygen demand: metabolism and decay double per 10 °C",
+        "Thermal shock, spawning disturbed, algal blooms, higher toxicity",
+        "Control: cooling towers/ponds"
+       ]
+      },
+      {
+       "id": "sh-p2",
+       "pyq": "549fe8e200ab8d4f",
+       "level": 2,
+       "points": [
+        "Suspended solids cause turbidity",
+        "Reduced light, lower photosynthesis and DO",
+        "Organic solids raise BOD; gill damage; siltation buries eggs and benthos",
+        "Heat absorption; carry metals, pesticides, pathogens; reduced visibility, silting of reservoirs"
+       ]
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "topic": "Prevention and control of water pollution",
+   "subtopics": [
+    {
+     "id": "source-control",
+     "title": "Controlling sewage and nutrients",
+     "theory_md": "Prevention is better than cure: reduce pollution at the source.\n- **Treat sewage** (primary, secondary, tertiary with nutrient removal) before discharge; recycle treated water for gardening and industry.\n- **Control nutrients:** balanced, need-based fertiliser, organic manure and biofertilisers, phosphate-free detergents, **vegetated buffer strips** along banks.\n- **Control non-point runoff** by contour farming and storm-water management.\n- **Remedies for a bloom:** remove algae and weeds, aerate, dredge sediment.\n- **Law and awareness:** Water (Prevention and Control of Pollution) Act 1974, discharge standards (BOD 30 mg/L), monitoring by CPCB/SPCB.",
+     "basics_md": "Stopping the leak is cheaper than cleaning the lake. Keep fertiliser, sewage and detergent from reaching water, and treat what must be discharged.",
+     "key_points": [
+      "Treat sewage and reuse treated water",
+      "Balanced fertiliser, phosphate-free detergent, buffer strips",
+      "Control non-point runoff by land-use practices",
+      "Water Act 1974 and discharge standards enforced by CPCB/SPCB"
+     ],
+     "questions": [
+      {
+       "id": "sc-q1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "A vegetated buffer strip along a stream mainly helps by",
+       "options": [
+        "adding oxygen",
+        "trapping runoff nutrients and sediment",
+        "raising temperature",
+        "killing pathogens by UV"
+       ],
+       "answer_index": 1,
+       "why": "Plants and soil trap and take up nutrients and silt before they reach water."
+      },
+      {
+       "id": "sc-q2",
+       "kind": "short",
+       "level": 2,
+       "marks": 3,
+       "q": "State three measures to prevent eutrophication of a lake.",
+       "model_answer_md": "1. **Treat sewage** with phosphate and nitrogen removal before it reaches the lake.\n2. **Use phosphate-free detergents** and balanced, need-based fertiliser (with organic manure or biofertiliser).\n3. **Buffer strips** and controlled runoff around the lake; remove algal mass and weeds, aerate or dredge nutrient-rich sediment.",
+       "points": [
+        "Sewage treatment with nutrient removal",
+        "Phosphate-free detergent and balanced fertiliser",
+        "Buffer strips/runoff control",
+        "Remedial removal of algae"
+       ]
+      },
+      {
+       "id": "sc-q3",
+       "kind": "mcq",
+       "level": 2,
+       "q": "Which law deals with prevention and control of water pollution in India?",
+       "options": [
+        "Air Act 1981",
+        "Water Act 1974",
+        "Wildlife Act 1972",
+        "Forest Act 1980"
+       ],
+       "answer_index": 1,
+       "why": "The Water (Prevention and Control of Pollution) Act was passed in 1974."
+      }
+     ]
+    },
+    {
+     "id": "industrial-control",
+     "title": "Controlling industrial, thermal and oil pollution",
+     "theory_md": "For industry, treat at the source and before discharge:\n- **Neutralise** acidic or alkaline effluent (lime, $\\mathrm{H_2SO_4}$); **precipitate heavy metals** as hydroxides; remove oil with an API separator; coagulate colloids with alum or $\\mathrm{FeCl_3}$.\n- **Cleaner production:** reduce, reuse and recycle water; recover materials; **zero liquid discharge** in water-short plants.\n- **Thermal:** cool water in **cooling towers or ponds** before release.\n- **Oil spills:** booms, skimmers, dispersants.\n- **Mining:** limestone treatment and covering pyrite waste to stop acid drainage.\n- **Effluent treatment plants (ETP)** and **common effluent treatment plants** for small units.",
+     "basics_md": "Factories must clean their own waste before it leaves the gate, and cool it if it is hot. The cheapest option is to make less waste in the first place.",
+     "key_points": [
+      "Neutralise, precipitate metals, remove oil and colloids before discharge",
+      "Cooling towers/ponds for heated water",
+      "Cleaner production and zero liquid discharge",
+      "ETP/CETP; limestone for mine drainage"
+     ],
+     "questions": [
+      {
+       "id": "ic-q1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "Heavy metals in industrial effluent are removed mainly by",
+       "options": [
+        "aeration",
+        "precipitation as hydroxides",
+        "chlorination",
+        "screening"
+       ],
+       "answer_index": 1,
+       "why": "Raising pH with lime precipitates metal hydroxides."
+      },
+      {
+       "id": "ic-q2",
+       "kind": "mcq",
+       "level": 2,
+       "q": "Which device prevents thermal pollution from a power plant?",
+       "options": [
+        "Cooling tower",
+        "Grit chamber",
+        "Trickling filter",
+        "Skimming tank"
+       ],
+       "answer_index": 0,
+       "why": "Cooling towers release heat to air before the water is discharged."
+      },
+      {
+       "id": "ic-q3",
+       "kind": "short",
+       "level": 2,
+       "marks": 3,
+       "q": "How is acidic, metal-bearing effluent from an industry treated before discharge?",
+       "model_answer_md": "1. **Equalisation** evens out flow and strength.\n2. **Neutralisation** with lime to raise the pH to 6.5-8.5.\n3. **Chemical precipitation:** at higher pH the metals settle as hydroxides, e.g. $\\mathrm{Cr^{3+} + 3OH^- \\rightarrow Cr(OH)_3\\downarrow}$.\n4. **Coagulation and sedimentation** (alum or $\\mathrm{FeCl_3}$), then sludge disposal as hazardous waste.",
+       "points": [
+        "Equalisation and neutralisation",
+        "Precipitation of metal hydroxides",
+        "Coagulation and settling",
+        "Sludge handled as hazardous waste"
+       ]
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "topic": "Wastewater treatment: preliminary, primary, secondary",
+   "subtopics": [
+    {
+     "id": "preliminary-primary",
+     "title": "Preliminary and primary treatment",
+     "theory_md": "Plant flow: raw sewage, **screens**, **grit chamber**, **skimming tank**, **primary sedimentation**, **secondary** (ASP or trickling filter), **secondary clarifier**, **tertiary** and disinfection; sludge goes to thickener, **anaerobic digester** and drying beds.\n\n**Preliminary treatment** removes rags, floating objects, grit and oil that would damage pumps, clog pipes and fill tanks. *Screens* remove large floating matter. The *grit chamber* keeps velocity about **0.3 m/s** so sand and gravel settle but organics do not. The *skimming tank* blows air to float oil and grease into side troughs (3-5 min).\n\n**Primary treatment** is physical: **sedimentation** (1.5-2.5 h) removes 50-70% of suspended solids and 25-40% of BOD as primary sludge; scum is skimmed. For industrial waste add equalisation, neutralisation, oil separation, coagulation and metal precipitation.",
+     "basics_md": "Sewage is cleaned in stages. First pick out big things and sand, then let the heavier solids sink. Only after that do microbes get to work on what is dissolved.",
+     "key_points": [
+      "Preliminary: screens, grit chamber (0.3 m/s), skimming tank",
+      "Protects pumps, prevents clogging and abrasion, saves digester volume",
+      "Primary: sedimentation 1.5-2.5 h, 50-70% SS and 25-40% BOD removed",
+      "Industrial waste needs extra equalisation, neutralisation, coagulation, metal precipitation"
+     ],
+     "questions": [
+      {
+       "id": "pp-q1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "The velocity in a grit chamber is kept at about",
+       "options": [
+        "0.03 m/s",
+        "0.3 m/s",
+        "3 m/s",
+        "30 m/s"
+       ],
+       "answer_index": 1,
+       "why": "0.3 m/s settles grit but keeps organic matter suspended."
+      },
+      {
+       "id": "pp-q2",
+       "kind": "mcq",
+       "level": 1,
+       "q": "Oil and grease are removed in the",
+       "options": [
+        "screen",
+        "grit chamber",
+        "skimming tank",
+        "aeration tank"
+       ],
+       "answer_index": 2,
+       "why": "Air bubbles lift them to the surface."
+      },
+      {
+       "id": "pp-q3",
+       "kind": "short",
+       "level": 2,
+       "marks": 3,
+       "q": "Write short notes on the grit chamber.",
+       "model_answer_md": "A narrow channel after the screens where flow velocity is held at about **0.3 m/s** so heavy inorganic particles (sand, gravel, specific gravity about 2.65) settle in 1-2 min while organic matter stays in suspension.\n\n**Significance:** protects pumps from abrasion, prevents clogging, avoids loss of volume in primary tank and digester. Settled grit is used for landfill.",
+       "points": [
+        "Velocity 0.3 m/s",
+        "Removes heavy inorganic grit only",
+        "Protects pumps and equipment from abrasion/clogging",
+        "Placed after screens, before primary tank"
+       ]
+      },
+      {
+       "id": "pp-p1",
+       "pyq": "f0fcace62ade4bc9",
+       "level": 2,
+       "points": [
+        "Preliminary unit after screens, before primary tank; velocity about 0.3 m/s",
+        "Heavy inorganic grit settles, lighter organics stay suspended",
+        "Protects pumps and pipes from abrasion and clogging",
+        "Prevents grit build-up in primary tanks and digesters; more organic sludge"
+       ]
+      },
+      {
+       "id": "pp-p2",
+       "pyq": "c25082518ac95e98",
+       "level": 2,
+       "points": [
+        "Skimming tank removes oil, grease, fats, soap and floating matter",
+        "Narrow rectangular tank, 3-5 min, baffles, compressed air from bottom lifts grease into side troughs",
+        "Needed because oil clogs filters, coats microbes, blocks oxygen transfer",
+        "Position: after screens and grit chamber, before primary sedimentation"
+       ]
+      },
+      {
+       "id": "pp-p3",
+       "pyq": "b1bb9ee157f06550",
+       "level": 2,
+       "points": [
+        "Equalisation of flow and load; neutralisation of acid/alkali",
+        "Oil/grease separation (API separator)",
+        "Coagulation-flocculation (alum, FeCl3) and chemical precipitation of heavy metals"
+       ]
+      },
+      {
+       "id": "pp-p4",
+       "pyq": "840e625a3965d766",
+       "level": 3,
+       "points": [
+        "Preliminary treatment removes rags, grit, oil that damage pumps, clog pipes, reduce tank volume",
+        "Anaerobic digester diagram: sludge inlet, gas dome and biogas outlet, scum layer, supernatant outlet, digesting sludge with heating coil/mixer, digested sludge outlet at bottom",
+        "Primary steps: sedimentation (1.5-2.5 h, 50-70% SS, 25-40% BOD), scum skimming, sludge removal",
+        "Coagulation-flocculation, neutralisation and equalisation for industrial waste"
+       ]
+      }
+     ]
+    },
+    {
+     "id": "trickling-filter",
+     "title": "Trickling filter",
+     "theory_md": "A **trickling filter** is a secondary, **attached-growth aerobic** biological reactor, not a strainer. Construction: circular tank, 1-2.5 m of stone or plastic media (25-75 mm), **rotating distributor arm**, **underdrain** with ventilation, effluent channel to the **secondary clarifier**, optional recirculation.\n\nWorking: settled sewage is sprayed on the bed and trickles down; a **zoogloeal biofilm** of bacteria, fungi, algae and protozoa adsorbs and oxidises organics with air from the voids: organics + $\\mathrm{O_2}$ $\\rightarrow$ $\\mathrm{CO_2}$ + $\\mathrm{H_2O}$ + new cells. Thick film turns anaerobic inside and **sloughs off** to be settled. BOD removal 65-90%.\n\nMerits: simple, low power, shock-resistant. Demerits: odour, filter flies, clogging, large area.",
+     "basics_md": "Imagine stones covered with a slimy layer of microbes. Sewage is sprinkled on top and the microbes eat the dirt as it trickles past, using air that flows through the gaps.",
+     "key_points": [
+      "Attached-growth aerobic biofilm reactor",
+      "Parts: distributor arm, media bed, underdrain, clarifier",
+      "Oxidation of organics to CO2, H2O and new cells; old film sloughs off",
+      "BOD removal 65-90%; merits and demerits"
+     ],
+     "questions": [
+      {
+       "id": "tf-q1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "The slime layer on a trickling filter is",
+       "options": [
+        "a chemical coagulant",
+        "a biofilm of aerobic microorganisms",
+        "precipitated grit",
+        "an oil layer"
+       ],
+       "answer_index": 1,
+       "why": "It is the biofilm that oxidises the organics."
+      },
+      {
+       "id": "tf-q2",
+       "kind": "mcq",
+       "level": 2,
+       "q": "Which is a disadvantage of a trickling filter?",
+       "options": [
+        "High power use",
+        "Filter flies and odour",
+        "Needs sludge recycle",
+        "Cannot withstand shock loads"
+       ],
+       "answer_index": 1,
+       "why": "TF is low power and shock-resistant, but has odour and flies."
+      },
+      {
+       "id": "tf-q3",
+       "kind": "long",
+       "level": 2,
+       "marks": 5,
+       "q": "Describe the trickling filter process with a labelled diagram.",
+       "model_answer_md": "**Objective:** remove dissolved and colloidal biodegradable organics (BOD) from primary effluent.\n\n**Diagram (described):** circular tank; central column with **rotating distributor arm**; **filter media** (stone/plastic, 1-2.5 m) with **biological film**; **underdrain** with ventilation ports; **effluent channel** to **secondary clarifier**; recirculation line.\n\n**Working:**\n1. Settled sewage is sprayed by the arm.\n2. It trickles down as a thin film; air rises by natural draft.\n3. The biofilm oxidises organics: organics + $\\mathrm{O_2}$ $\\rightarrow$ $\\mathrm{CO_2}$ + $\\mathrm{H_2O}$ + new cells.\n4. Film sloughs off and is settled in the clarifier.\n\n**Efficiency:** 65-90% BOD removal.",
+       "points": [
+        "Objective stated",
+        "Labelled diagram with arm, media, underdrain, clarifier",
+        "Biofilm oxidation with equation",
+        "Sloughing and clarifier; efficiency"
+       ]
+      },
+      {
+       "id": "tf-p1",
+       "pyq": "eaeacebd202e677a",
+       "level": 2,
+       "points": [
+        "a) Objective: remove dissolved/colloidal BOD from primary effluent by aerobic oxidation",
+        "b) Principle: attached-growth aerobic oxidation by biofilm, equation",
+        "c) Labelled diagram: feed pipe, rotating distributor, media, biofilm, underdrain, ventilation, effluent to clarifier, recirculation",
+        "d) Functioning: spray, trickle, biofilm oxidises, slough off, settled in clarifier",
+        "e) Advantages vs ASP: simple, low power, shock load, less sludge; disadvantages: lower BOD removal, area, odour, flies, clogging"
+       ]
+      },
+      {
+       "id": "tf-p2",
+       "pyq": "007656c120e6d9c4",
+       "level": 2,
+       "points": [
+        "Objective of secondary treatment: remove dissolved/colloidal biodegradable organics, BOD and SS reduced by 85-95%, effluent BOD below 30 mg/L",
+        "Trickling filter diagram: distributor arm, media with slime, underdrain/vents, clarifier",
+        "Functioning: spraying, biofilm oxidation, sloughing, 65-90% BOD removal"
+       ]
+      },
+      {
+       "id": "tf-p3",
+       "pyq": "eab16613647703ca",
+       "level": 2,
+       "points": [
+        "Objective of trickling filtration",
+        "Diagram: central column, rotating arm, media with slime layer, underdrain, effluent channel to clarifier",
+        "Working: spray, trickle, biofilm oxidises, sloughs, recirculation",
+        "Efficiency 65-90%; advantages and disadvantages"
+       ]
+      },
+      {
+       "id": "tf-p4",
+       "pyq": "a16ae6845ed5e9ea",
+       "level": 2,
+       "points": [
+        "Secondary, attached-growth aerobic unit, a biological reactor",
+        "Construction: tank 1-2.5 m, media 25-75 mm, underdrain, rotating arm",
+        "Working: zoogloeal slime oxidises organics; film sloughs; clarifier; recirculation",
+        "Efficiency 65-90%; merits (simple, low power, shock) and demerits (odour, flies, clogging, area)"
+       ]
+      }
+     ]
+    },
+    {
+     "id": "asp-lagoon",
+     "title": "Activated sludge, lagoon and comparison",
+     "theory_md": "**Activated sludge process (ASP)**: suspended-growth aerobic treatment with sludge recycle. Primary effluent is mixed with 20-30% **return activated sludge** in the **aeration tank** (4-8 h, MLSS 1500-3000 mg/L, diffused or mechanical aeration); bacteria oxidise organics; the **secondary clarifier** settles the flocs; part of the sludge is returned, the **excess goes to the digester**. BOD removal 85-95%; compact but power-hungry, needs skill, **bulking** risk.\n\n**Aerated lagoon:** earthen basin 2.5-5 m deep with surface aerators, **no sludge recycle**, 3-10 days detention, 70-90% BOD removal, large land, high suspended solids in effluent.\n\n**ASP vs TF:** suspended vs attached growth; forced vs natural aeration; recycle vs none; 85-95% vs 65-90%; small vs large area; high vs low power.",
+     "basics_md": "In ASP the microbes float in the tank like a thick soup and are given air from pumps. After the dirt is eaten, the microbes settle out and most are fed back to work again.",
+     "key_points": [
+      "ASP: aeration tank, secondary clarifier, return sludge, excess sludge to digester",
+      "Typical values: 4-8 h, MLSS 1500-3000 mg/L, 85-95% BOD removal",
+      "Lagoon: no recycle, 3-10 days, large land",
+      "TF vs ASP: attached vs suspended growth, natural vs forced aeration, power, area, shock load"
+     ],
+     "questions": [
+      {
+       "id": "as-q1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "The sludge returned to the aeration tank in ASP is called",
+       "options": [
+        "raw sludge",
+        "digested sludge",
+        "return activated sludge",
+        "grit"
+       ],
+       "answer_index": 2,
+       "why": "Recycling the active microbes is what makes the sludge 'activated'."
+      },
+      {
+       "id": "as-q2",
+       "kind": "mcq",
+       "level": 2,
+       "q": "Which process does NOT use sludge recycle?",
+       "options": [
+        "Activated sludge process",
+        "Aerated lagoon",
+        "Both use recycle",
+        "Neither uses recycle"
+       ],
+       "answer_index": 1,
+       "why": "An aerated lagoon relies on long detention time instead."
+      },
+      {
+       "id": "as-q3",
+       "kind": "numerical",
+       "level": 2,
+       "marks": 3,
+       "q": "Calculate the BOD removal efficiency of an ASP that reduces BOD from 300 mg/L to 30 mg/L.",
+       "model_answer_md": "$$\\eta = \\dfrac{S_0 - S}{S_0}\\times 100 = \\dfrac{300-30}{300}\\times 100 = 90\\%$$",
+       "points": [
+        "Formula for efficiency",
+        "Correct substitution",
+        "90%"
+       ]
+      },
+      {
+       "id": "as-p1",
+       "pyq": "43201c10d4bfdd21",
+       "level": 2,
+       "points": [
+        "Attached growth (TF) vs suspended growth (ASP)",
+        "Natural air draft vs forced aeration; no sludge return vs return sludge essential",
+        "BOD removal 65-90% vs 85-95%; TF needs larger area, ASP compact",
+        "Power low vs high; skill low vs high; TF withstands shock, ASP bulking; TF odour/flies/clogging"
+       ]
+      },
+      {
+       "id": "as-p2",
+       "pyq": "fe4c395f1f37772e",
+       "level": 2,
+       "points": [
+        "Aerated lagoon: earthen basin with surface aerators, no sludge recycle, detention 3-10 days, BOD removal 70-90%",
+        "ASP: aeration tank with return sludge (20-30%), MLSS 1500-3000 mg/L, 4-8 h, secondary clarifier, excess sludge to digester",
+        "ASP BOD removal 85-95%; advantages and disadvantages of each"
+       ]
+      },
+      {
+       "id": "as-p3",
+       "pyq": "7dd99022d93c28a8",
+       "level": 2,
+       "points": [
+        "Sources: domestic sewage, industrial effluent, agricultural runoff, thermal, oil, mining, radioactive",
+        "ASP principle: suspended-growth aerobic oxidation with recycle",
+        "Steps: mix with return sludge, aeration tank 4-8 h, secondary clarifier, return and excess sludge",
+        "Schematic and 85-95% efficiency"
+       ]
+      },
+      {
+       "id": "as-p4",
+       "pyq": "ec751edc86ea19ba",
+       "level": 2,
+       "points": [
+        "Why secondary: removes dissolved/colloidal organics, 85-95% BOD removal, effluent does not deplete DO",
+        "Schematic: primary effluent, aeration tank/trickling filter, secondary clarifier, effluent; sludge return/excess",
+        "ASP, trickling filter, oxidation pond/lagoon with working principles"
+       ]
+      },
+      {
+       "id": "as-p5",
+       "pyq": "9a9912223c877223",
+       "level": 3,
+       "points": [
+        "Schematic: screen, grit chamber, skimming tank, primary tank, aeration tank/TF, secondary clarifier, disinfection; sludge thickener, digester, drying beds; return sludge line",
+        "ASP principle, process steps, 85-95%",
+        "Trickling filter construction and working, 65-90%"
+       ]
+      }
+     ]
+    },
+    {
+     "id": "aerobic-anaerobic",
+     "title": "Aerobic and anaerobic decomposition",
+     "theory_md": "**Aerobic** (oxygen present; ASP, TF, ponds): organics oxidised to stable products: $\\mathrm{C_6H_{12}O_6 + 6O_2 \\rightarrow 6CO_2 + 6H_2O}$; N goes $\\mathrm{NH_3 \\rightarrow NO_2^- \\rightarrow NO_3^-}$ (*Nitrosomonas*, *Nitrobacter*); S to $\\mathrm{SO_4^{2-}}$; P to $\\mathrm{PO_4^{3-}}$. Fast, odourless, more sludge.\n\n**Anaerobic** (no oxygen; septic tank, digester): four stages: **hydrolysis**, **acidogenesis**, **acetogenesis**, **methanogenesis**: $\\mathrm{CH_3COOH \\rightarrow CH_4 + CO_2}$, $\\mathrm{CO_2 + 4H_2 \\rightarrow CH_4 + 2H_2O}$. N goes to $\\mathrm{NH_3}$, S to $\\mathrm{H_2S}$ (rotten egg smell). Slow, foul, less sludge, gives **biogas** (about 65% $\\mathrm{CH_4}$).",
+     "basics_md": "With air, microbes burn waste fully and cleanly. Without air, other microbes break it down in steps and give off smelly gases and methane, which can be used as fuel.",
+     "key_points": [
+      "Aerobic: O2 present; end products CO2, H2O, NO3-, SO4 2-, PO4 3-; fast, no odour",
+      "Anaerobic: no O2; end products CH4, CO2, NH3, H2S; slow, odour, biogas",
+      "Anaerobic stages: hydrolysis, acidogenesis, acetogenesis, methanogenesis",
+      "Nitrification: NH3 to NO2- (Nitrosomonas) to NO3- (Nitrobacter)"
+     ],
+     "questions": [
+      {
+       "id": "aa-q1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "The foul smell in anaerobic decomposition is mainly due to",
+       "options": [
+        "CO2",
+        "H2S",
+        "N2",
+        "O2"
+       ],
+       "answer_index": 1,
+       "why": "Sulphate/organic S is reduced to rotten-egg H2S."
+      },
+      {
+       "id": "aa-q2",
+       "kind": "mcq",
+       "level": 2,
+       "q": "The correct order of anaerobic digestion is",
+       "options": [
+        "Methanogenesis, acetogenesis, acidogenesis, hydrolysis",
+        "Hydrolysis, acidogenesis, acetogenesis, methanogenesis",
+        "Acidogenesis, hydrolysis, methanogenesis, acetogenesis",
+        "Hydrolysis, methanogenesis, acetogenesis, acidogenesis"
+       ],
+       "answer_index": 1,
+       "why": "Polymers are broken down first and methane is made last."
+      },
+      {
+       "id": "aa-q3",
+       "kind": "short",
+       "level": 2,
+       "marks": 3,
+       "q": "Differentiate aerobic and anaerobic decomposition of wastewater (any four points).",
+       "model_answer_md": "| Aerobic | Anaerobic |\n|---|---|\n| Needs $\\mathrm{O_2}$ | Absence of $\\mathrm{O_2}$ |\n| End products $\\mathrm{CO_2, H_2O, NO_3^-, SO_4^{2-}}$ | $\\mathrm{CH_4, CO_2, NH_3, H_2S}$ |\n| Fast, no odour | Slow, foul odour |\n| More sludge | Less sludge, biogas produced |",
+       "points": [
+        "Oxygen requirement",
+        "End products",
+        "Rate and odour",
+        "Sludge and biogas"
+       ]
+      },
+      {
+       "id": "aa-p1",
+       "pyq": "9b9143aed84539c2",
+       "level": 2,
+       "points": [
+        "Aerobic: aerobic bacteria with O2, products CO2, H2O, NO3-, SO4 2-; nitrification equations; fast, odourless, more sludge",
+        "Anaerobic: stages hydrolysis, acidogenesis, acetogenesis, methanogenesis; CH4, CO2, NH3, H2S",
+        "Anaerobic slow, foul odour, less sludge, biogas about 65% CH4",
+        "Comparison table"
+       ]
+      }
+     ]
+    },
+    {
+     "id": "sludge",
+     "title": "Sludge treatment and disposal",
+     "theory_md": "**Sludge** from primary and secondary clarifiers is 95-99% water, putrescible and pathogen-laden. Treatment aims to cut volume, stabilise organics and kill pathogens:\n1. **Thickening** (gravity or flotation): solids from about 2% to 5-8%.\n2. **Digestion:** **anaerobic digester** at about 35 °C for 15-30 days, giving biogas; aerobic digestion or lime stabilisation as alternatives.\n3. **Conditioning** with lime, $\\mathrm{FeCl_3}$ or polymer.\n4. **Dewatering:** drying beds, centrifuge, filter press (20-40% solids).\n\n**Disposal:** manure/soil conditioner (if metal-free), sanitary landfill, incineration, composting. Ocean dumping is not acceptable.",
+     "basics_md": "Sludge is the thick mud left over after cleaning. It is mostly water and still smelly, so it is thickened, digested to biogas, dried and then used or buried.",
+     "key_points": [
+      "Sludge is 95-99% water, putrescible, pathogenic",
+      "Steps: thickening, digestion, conditioning, dewatering",
+      "Anaerobic digestion about 35 °C, 15-30 days, gives biogas",
+      "Disposal: manure, landfill, incineration, composting"
+     ],
+     "questions": [
+      {
+       "id": "sl-q1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "Sludge digestion is usually carried out",
+       "options": [
+        "aerobically at 80 °C",
+        "anaerobically at about 35 °C",
+        "by chlorination",
+        "by sedimentation"
+       ],
+       "answer_index": 1,
+       "why": "Anaerobic digesters run at about 35 °C and produce biogas."
+      },
+      {
+       "id": "sl-q2",
+       "kind": "mcq",
+       "level": 2,
+       "q": "Sludge drying beds are used for",
+       "options": [
+        "thickening",
+        "digestion",
+        "dewatering",
+        "conditioning"
+       ],
+       "answer_index": 2,
+       "why": "They remove water to give a handleable cake."
+      },
+      {
+       "id": "sl-q3",
+       "kind": "short",
+       "level": 2,
+       "marks": 3,
+       "q": "Write briefly about sludge treatment and disposal.",
+       "model_answer_md": "**Treatment:**\n1. **Thickening** to 5-8% solids.\n2. **Anaerobic digestion** at about 35 °C for 15-30 days: organics converted to biogas, odour and pathogens reduced.\n3. **Conditioning** with lime, $\\mathrm{FeCl_3}$ or polymers.\n4. **Dewatering** on drying beds, centrifuge or press to 20-40% solids.\n\n**Disposal:** use as manure or soil conditioner, sanitary landfill, incineration, composting.",
+       "points": [
+        "Thickening, digestion, conditioning, dewatering",
+        "Digestion conditions and biogas",
+        "Disposal routes"
+       ]
+      },
+      {
+       "id": "sl-p1",
+       "pyq": "935717217ea72bb7",
+       "level": 2,
+       "points": [
+        "Sludge: settled solids from clarifiers, 95-99% water, putrescible, pathogens",
+        "Treatment: thickening, anaerobic digestion (about 35 °C, 15-30 d, biogas), conditioning, dewatering (drying beds, centrifuge, press)",
+        "Disposal: manure, landfill, incineration, composting"
+       ]
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "topic": "Water quality tests",
+   "subtopics": [
+    {
+     "id": "do-winkler",
+     "title": "Dissolved oxygen and Winkler's method",
+     "theory_md": "**Dissolved oxygen (DO)** is molecular $\\mathrm{O_2}$ dissolved in water, in mg/L; saturation about 9.1 mg/L at 20 °C and falling with temperature and salinity. Fish need above 4-5 mg/L; low DO means organic pollution.\n\n**Winkler's method:** add $\\mathrm{MnSO_4}$ and alkaline KI-azide, then conc. $\\mathrm{H_2SO_4}$; titrate liberated $\\mathrm{I_2}$ with standard thiosulphate (starch indicator).\n$\\mathrm{2Mn(OH)_2 + O_2 \\rightarrow 2MnO(OH)_2}$\n$\\mathrm{MnO(OH)_2 + 4H^+ + 2I^- \\rightarrow Mn^{2+} + I_2 + 3H_2O}$\n$\\mathrm{I_2 + 2S_2O_3^{2-} \\rightarrow 2I^- + S_4O_6^{2-}}$\n$$\\text{DO (mg/L)} = \\frac{V_{thio}\\times N\\times 8\\times 1000}{V_{sample}}$$",
+     "basics_md": "DO tells you how much air fish can breathe. In the test, the oxygen is trapped as a manganese compound, converted to iodine, and the iodine is measured by titration. 8 is the equivalent weight of oxygen.",
+     "key_points": [
+      "DO in mg/L; saturation about 9.1 mg/L at 20 °C",
+      "Fish need above 4-5 mg/L; low DO means pollution",
+      "Winkler: MnSO4, alkaline KI, H2SO4, titrate I2 with thiosulphate, starch",
+      "DO = V x N x 8 x 1000 / V_sample"
+     ],
+     "questions": [
+      {
+       "id": "do-q1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "The indicator used in the thiosulphate titration of Winkler's method is",
+       "options": [
+        "methyl orange",
+        "starch",
+        "ferroin",
+        "phenolphthalein"
+       ],
+       "answer_index": 1,
+       "why": "Starch gives a blue colour with iodine that disappears at the end point."
+      },
+      {
+       "id": "do-q2",
+       "kind": "mcq",
+       "level": 1,
+       "q": "Dissolved oxygen in water decreases when",
+       "options": [
+        "temperature falls",
+        "temperature rises",
+        "pressure rises",
+        "water is aerated"
+       ],
+       "answer_index": 1,
+       "why": "Gas solubility decreases with temperature."
+      },
+      {
+       "id": "do-q3",
+       "kind": "numerical",
+       "level": 2,
+       "marks": 3,
+       "q": "In Winkler's method 200 mL of sample needs 8.4 mL of N/80 sodium thiosulphate. Find the DO.",
+       "model_answer_md": "$$\\text{DO} = \\frac{V\\times N\\times 8\\times 1000}{V_{sample}} = \\frac{8.4\\times\\frac{1}{80}\\times 8\\times 1000}{200} = 4.2\\ \\text{mg/L}$$\nDO is 4.2 mg/L, just below the 4-5 mg/L needed by fish.",
+       "points": [
+        "Formula with the factor 8 and 1000",
+        "Correct substitution of N = 1/80",
+        "4.2 mg/L"
+       ]
+      },
+      {
+       "id": "do-p1",
+       "pyq": "e3266e01c9c90cba",
+       "level": 1,
+       "points": [
+        "DO: amount of molecular O2 dissolved in water, in mg/L (about 8-9 mg/L at 25 °C)",
+        "Determined by Winkler's method; above 4-5 mg/L needed for aquatic life; low DO indicates organic pollution"
+       ]
+      }
+     ]
+    },
+    {
+     "id": "bod",
+     "title": "BOD and its determination",
+     "theory_md": "**BOD** is the oxygen (mg/L) needed by aerobic microorganisms to decompose the **biodegradable** organic matter, measured over **5 days at 20 °C in the dark** ($\\mathrm{BOD_5}$).\n\nMethod: dilute the sample with aerated, nutrient-rich dilution water (seeded if needed); fill two bottles; find DO of one at once ($D_1$, Winkler) and of the other after 5 days ($D_2$).\n$$\\text{BOD} = \\frac{D_1 - D_2}{P},\\quad P=\\frac{\\text{vol. of sample}}{\\text{total diluted volume}}$$\nTypical values: clean water below 3 mg/L, raw sewage 200-400 mg/L, discharge limit 30 mg/L. Limitations: 5 days, only biodegradable matter, toxins inhibit microbes.",
+     "basics_md": "The more food for microbes in the water, the more oxygen they use up in five days. So oxygen used is a measure of how dirty the water is.",
+     "key_points": [
+      "Oxygen used by microbes on biodegradable matter, 5 days at 20 °C",
+      "Two bottles: D1 initial, D2 after 5 days",
+      "BOD = (D1 - D2) / P",
+      "Clean below 3; sewage 200-400; limit 30 mg/L"
+     ],
+     "questions": [
+      {
+       "id": "bo-q1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "BOD is normally measured by incubating the sample at",
+       "options": [
+        "37 °C for 3 days",
+        "20 °C for 5 days",
+        "100 °C for 2 h",
+        "4 °C for 10 days"
+       ],
+       "answer_index": 1,
+       "why": "BOD5 means 5 days at 20 °C."
+      },
+      {
+       "id": "bo-q2",
+       "kind": "mcq",
+       "level": 2,
+       "q": "If 10 mL of sewage is made up to 300 mL, the dilution factor P is",
+       "options": [
+        "10",
+        "30",
+        "1/30",
+        "300"
+       ],
+       "answer_index": 2,
+       "why": "P = 10/300 = 1/30."
+      },
+      {
+       "id": "bo-q3",
+       "kind": "numerical",
+       "level": 2,
+       "marks": 3,
+       "q": "10 mL of sewage is diluted to 300 mL. Initial DO is 8.5 mg/L and the DO after 5 days at 20 °C is 3.1 mg/L. Find the BOD of the sewage.",
+       "model_answer_md": "$P = \\dfrac{10}{300} = \\dfrac{1}{30}$\n\n$$\\text{BOD} = \\frac{D_1 - D_2}{P} = \\frac{8.5-3.1}{1/30} = 5.4\\times 30 = 162\\ \\text{mg/L}$$",
+       "points": [
+        "P = 1/30",
+        "Formula (D1 - D2)/P",
+        "162 mg/L"
+       ]
+      },
+      {
+       "id": "bo-p1",
+       "pyq": "31eff49e8f92f614",
+       "level": 2,
+       "points": [
+        "Definition: oxygen needed by aerobic microbes for biodegradable organics, 5 days at 20 °C",
+        "Determination: dilution, two bottles, Winkler DO before and after, BOD = (D1 - D2)/P",
+        "Significance: strength of organic pollution; clean below 3, discharge limit 30, raw sewage 200-400 mg/L; design of plants",
+        "Limitation: slow, only biodegradable, toxic inhibition"
+       ]
+      },
+      {
+       "id": "bo-p2",
+       "pyq": "d5294f7656c9882b",
+       "level": 2,
+       "points": [
+        "P = 40/1000 = 0.04; N = 1/40; titrated volume 200 mL",
+        "D1 = 20.3 x (1/40) x 8 x 1000 / 200 = 20.3 mg/L; D2 = 2.3 mg/L",
+        "Oxygen consumed = 18.0 mg/L",
+        "BOD = 18.0 / 0.04 = 450 mg/L"
+       ]
+      },
+      {
+       "id": "bo-p3",
+       "pyq": "563057a4518d831b",
+       "level": 2,
+       "points": [
+        "DO: definition, saturation 9.1 mg/L at 20 °C, significance above 4-5 mg/L, Winkler's method with reactions and formula",
+        "BOD: definition (5 days, 20 °C), determination with D1, D2 and P, formula",
+        "Significance: organic load, clean below 3 mg/L, limit 30 mg/L, plant design"
+       ]
+      }
+     ]
+    },
+    {
+     "id": "cod",
+     "title": "COD and its determination",
+     "theory_md": "**COD** is the oxygen equivalent (mg/L) of organic matter oxidised by a strong chemical oxidant, acidic **potassium dichromate**. Method: reflux (open, 2 h) or digest (closed, **150 °C, 2 h**, sealed tube) the sample with a known excess of $\\mathrm{K_2Cr_2O_7}$, conc. $\\mathrm{H_2SO_4}$, $\\mathrm{Ag_2SO_4}$ (catalyst) and $\\mathrm{HgSO_4}$ (masks $\\mathrm{Cl^-}$); run a blank. Back-titrate the leftover dichromate with standard **FAS** using **ferroin** (blue-green to reddish-brown).\n$\\mathrm{Cr_2O_7^{2-} + 14H^+ + 6e^- \\rightarrow 2Cr^{3+} + 7H_2O}$\n$\\mathrm{Cr_2O_7^{2-} + 6Fe^{2+} + 14H^+ \\rightarrow 2Cr^{3+} + 6Fe^{3+} + 7H_2O}$\n$$\\text{COD} = \\frac{(A-B)\\times N\\times 8000}{V_{sample}}$$\n$A$ = FAS for blank, $B$ = FAS for sample (mL). Closed reflux uses less sample and reagent, less toxic waste, and no loss of volatiles.",
+     "basics_md": "Instead of waiting for microbes, strong chemicals burn all the organic matter in about two hours. The dichromate used up tells how much oxygen would be needed. Blank minus sample, because the sample uses up dichromate.",
+     "key_points": [
+      "Oxidant: acidic K2Cr2O7; catalyst Ag2SO4; HgSO4 masks chloride",
+      "Closed reflux: 150 °C, 2 h, sealed tube",
+      "Back titration with FAS, ferroin end point blue-green to reddish-brown",
+      "COD = (A - B) N x 8000 / V"
+     ],
+     "questions": [
+      {
+       "id": "co-q1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "In the COD test, HgSO4 is added to",
+       "options": [
+        "act as catalyst",
+        "mask chloride interference",
+        "oxidise organics",
+        "act as indicator"
+       ],
+       "answer_index": 1,
+       "why": "Hg2+ complexes chloride so it is not oxidised by dichromate."
+      },
+      {
+       "id": "co-q2",
+       "kind": "mcq",
+       "level": 2,
+       "q": "In the COD formula (A - B), A is the FAS volume for the",
+       "options": [
+        "sample",
+        "blank",
+        "standard dichromate",
+        "ferroin"
+       ],
+       "answer_index": 1,
+       "why": "The blank has all the dichromate left, so it needs more FAS."
+      },
+      {
+       "id": "co-q3",
+       "kind": "numerical",
+       "level": 2,
+       "marks": 3,
+       "q": "20 mL of wastewater is refluxed with excess K2Cr2O7. The blank needs 24.0 mL and the sample 14.0 mL of 0.1 N FAS. Find the COD.",
+       "model_answer_md": "$$\\text{COD} = \\frac{(A-B)\\times N\\times 8000}{V_{sample}} = \\frac{(24.0-14.0)\\times 0.1\\times 8000}{20} = 400\\ \\text{mg/L}$$",
+       "points": [
+        "Formula with 8000",
+        "Correct substitution",
+        "400 mg/L"
+       ]
+      },
+      {
+       "id": "co-p1",
+       "pyq": "b27d6ac4b2650963",
+       "level": 2,
+       "points": [
+        "COD definition: oxygen equivalent of organics oxidised by acidic K2Cr2O7",
+        "Closed reflux: sealed tube, K2Cr2O7 + H2SO4 + Ag2SO4 + HgSO4, 150 °C 2 h, blank",
+        "Titrate unreacted dichromate with FAS, ferroin; reactions",
+        "COD = (A - B) N x 8000 / V; advantages of closed method"
+       ]
+      }
+     ]
+    },
+    {
+     "id": "bod-cod",
+     "title": "BOD versus COD",
+     "theory_md": "**COD is always at least BOD** because dichromate oxidises both biodegradable and non-biodegradable organics (and some inorganics like $\\mathrm{Fe^{2+}, S^{2-}}$), while BOD counts only microbial oxidation of biodegradable matter in 5 days (about 70-80% of it).\n\n| BOD | COD |\n|---|---|\n| Microbes oxidise biodegradable matter | Chemical oxidation by dichromate |\n| 5 days at 20 °C | About 2-3 h |\n| Affected by toxins | Not affected |\n| Lower | Higher |\n\nThe **BOD/COD ratio** (usually 0.3-0.8) shows biodegradability: above about 0.5 easily biodegradable, below 0.3 needs chemical treatment. Importance: measure the organic load, design plants, check efficiency $\\eta=(S_0-S)/S_0\\times100$, enforce limits (BOD 30, COD 250 mg/L).",
+     "basics_md": "COD is what chemicals can burn, BOD is what microbes eat. Chemicals burn more, so COD is larger. Their ratio tells you whether biological treatment will work.",
+     "key_points": [
+      "COD >= BOD: dichromate oxidises biodegradable and non-biodegradable matter",
+      "BOD 5 days, microbes, toxin-sensitive; COD about 3 h, chemical",
+      "BOD/COD above 0.5 biodegradable; below 0.3 needs chemical treatment",
+      "Importance: organic load, plant design and efficiency, discharge limits (BOD 30, COD 250 mg/L)"
+     ],
+     "questions": [
+      {
+       "id": "bc-q1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "For a given wastewater",
+       "options": [
+        "BOD is always more than COD",
+        "COD is equal to or more than BOD",
+        "they are always equal",
+        "BOD measures non-biodegradable matter"
+       ],
+       "answer_index": 1,
+       "why": "COD includes the non-biodegradable part as well."
+      },
+      {
+       "id": "bc-q2",
+       "kind": "mcq",
+       "level": 2,
+       "q": "A wastewater with BOD 180 mg/L and COD 400 mg/L has a BOD/COD ratio of 0.45. This means",
+       "options": [
+        "it is completely non-biodegradable",
+        "it is moderately biodegradable, partly suited to biological treatment",
+        "BOD was measured wrongly",
+        "it contains no organics"
+       ],
+       "answer_index": 1,
+       "why": "Around 0.3-0.5 is moderately biodegradable."
+      },
+      {
+       "id": "bc-q3",
+       "kind": "short",
+       "level": 2,
+       "marks": 2,
+       "q": "Why is COD of an industrial effluent much higher than its BOD? Give a use of the BOD/COD ratio.",
+       "model_answer_md": "Industrial effluent contains organics that microbes cannot break down (dyes, phenols, synthetic organics) and toxins that stop microbes working. Dichromate oxidises these, so COD is high while BOD is low.\n\n**Use of ratio:** it indicates biodegradability and so whether biological treatment will work (above 0.5 yes; below 0.3 needs chemical treatment).",
+       "points": [
+        "Non-biodegradable organics counted only by COD",
+        "Toxins inhibit microbes in BOD",
+        "BOD/COD ratio indicates biodegradability"
+       ]
+      },
+      {
+       "id": "bc-p1",
+       "pyq": "f321102074bf0b22",
+       "level": 2,
+       "points": [
+        "BOD: microbial oxidation of biodegradable organics; COD: chemical oxidation by acidic K2Cr2O7",
+        "BOD only biodegradable; COD biodegradable plus non-biodegradable",
+        "BOD 5 days at 20 °C; COD about 2-3 h",
+        "BOD affected by toxins; COD not; COD >= BOD"
+       ]
+      },
+      {
+       "id": "bc-p2",
+       "pyq": "e626636647863184",
+       "level": 2,
+       "points": [
+        "COD is higher than BOD",
+        "BOD counts only biodegradable organics oxidised by microbes in 5 days at 20 °C",
+        "COD oxidises biodegradable and non-biodegradable (and some inorganics) with boiling dichromate/Ag2SO4; equation Cr2O7 2- + 14H+ + 6e- to 2Cr3+ + 7H2O",
+        "Schematic: total oxidisable = biodegradable (BOD) + non-biodegradable; BOD/COD 0.3-0.8"
+       ]
+      },
+      {
+       "id": "bc-p3",
+       "pyq": "96a12d46755d83f2",
+       "level": 3,
+       "points": [
+        "Importance: measure organic load, DO depletion, design and efficiency of plants, discharge standards (BOD 30, COD 250), BOD/COD ratio, COD fast",
+        "BOD determination: dilution, D1 and D2 by Winkler, BOD = (D1 - D2)/P",
+        "COD determination: reflux with K2Cr2O7, H2SO4, Ag2SO4, HgSO4, blank, titrate with FAS and ferroin, COD = (A - B) N x 8000 / V"
+       ]
+      }
+     ]
+    },
+    {
+     "id": "alkalinity-redox",
+     "title": "Alkalinity and dichromate titration numericals",
+     "theory_md": "**Alkalinity** is the acid-neutralising capacity of water, due to $\\mathrm{OH^-}$, $\\mathrm{CO_3^{2-}}$ and $\\mathrm{HCO_3^-}$, expressed as mg/L of $\\mathrm{CaCO_3}$ (eq. wt. 50):\n$$\\text{Alkalinity} = \\text{conc. (mg/L)}\\times\\frac{50}{\\text{eq. wt. of ion}}$$\nEquivalent weights: $\\mathrm{CO_3^{2-}}$ 60/2 = 30; $\\mathrm{HCO_3^-}$ 61/1 = 61; $\\mathrm{OH^-}$ 17. Convert g/L to mg/L first.\n\n**Redox titration with dichromate:** $\\mathrm{Cr_2O_7^{2-} + 6Fe^{2+} + 14H^+ \\rightarrow 2Cr^{3+} + 6Fe^{3+} + 7H_2O}$, so 1 mol dichromate = **6 mol Fe$^{2+}$**. Moles $\\mathrm{Cr_2O_7^{2-}}$ = M x V (L); moles Fe = 6 x that; mass = moles x 55.845; % = mass/sample x 100.",
+     "basics_md": "Convert everything to the same yardstick, calcium carbonate, and add up. For titrations, count moles: one dichromate eats six iron ions.",
+     "key_points": [
+      "Alkalinity as mg/L CaCO3 = conc x 50 / eq. wt.",
+      "Eq. wt: CO3 2- 30, HCO3- 61, OH- 17",
+      "Convert g/L to mg/L first; add contributions for total",
+      "Dichromate: 1 mol = 6 mol Fe2+; % Fe = (6 M V x 55.845 / mass) x 100"
+     ],
+     "questions": [
+      {
+       "id": "ar-q1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "Alkalinity is expressed as mg/L of",
+       "options": [
+        "Na2CO3",
+        "CaCO3",
+        "NaOH",
+        "CaO"
+       ],
+       "answer_index": 1,
+       "why": "CaCO3 with equivalent weight 50 is the standard."
+      },
+      {
+       "id": "ar-q2",
+       "kind": "mcq",
+       "level": 2,
+       "q": "The equivalent weight of the carbonate ion used for alkalinity is",
+       "options": [
+        "60",
+        "30",
+        "61",
+        "50"
+       ],
+       "answer_index": 1,
+       "why": "Carbonate is divalent: 60/2 = 30; 60 is the molar mass (a common slip)."
+      },
+      {
+       "id": "ar-q3",
+       "kind": "numerical",
+       "level": 2,
+       "marks": 2,
+       "q": "A water sample contains 120 mg/L of bicarbonate ion. Find its alkalinity as CaCO3.",
+       "model_answer_md": "Eq. wt. of $\\mathrm{HCO_3^-}$ = 61.\n$$\\text{Alkalinity} = 120\\times\\frac{50}{61} = 98.36\\ \\text{mg/L as CaCO}_3$$",
+       "points": [
+        "Eq. wt. 61",
+        "Multiply by 50/61",
+        "98.36 mg/L"
+       ]
+      },
+      {
+       "id": "ar-q4",
+       "kind": "numerical",
+       "level": 3,
+       "marks": 3,
+       "q": "A 0.50 g iron ore sample, all as Fe2+, needs 10.0 mL of 0.0200 M K2Cr2O7. Find the percent iron.",
+       "model_answer_md": "$n(\\mathrm{Cr_2O_7^{2-}}) = 0.0200\\times 10.0\\times10^{-3} = 2.00\\times10^{-4}$ mol\n\n$n(\\mathrm{Fe}) = 6\\times 2.00\\times10^{-4} = 1.20\\times10^{-3}$ mol\n\nMass $= 1.20\\times10^{-3}\\times 55.845 = 0.0670$ g\n\n$$\\%\\ \\mathrm{Fe} = \\frac{0.0670}{0.50}\\times100 = 13.4\\%$$",
+       "points": [
+        "Reaction ratio 1 : 6",
+        "Moles of dichromate and Fe",
+        "Mass using 55.845",
+        "13.4%"
+       ]
+      },
+      {
+       "id": "ar-p1",
+       "pyq": "f7ebbc5d0e5a2083",
+       "level": 2,
+       "points": [
+        "Convert to mg/L: CO3 2- 250, HCO3- 80",
+        "Alkalinity = conc x 50 / eq. wt; eq. wt CO3 2- = 30, HCO3- = 61",
+        "Carbonate alkalinity = 250 x 50/30 = 416.67 mg/L as CaCO3",
+        "Bicarbonate alkalinity = 80 x 50/61 = 65.57 mg/L; total 482.24 mg/L"
+       ]
+      },
+      {
+       "id": "ar-p2",
+       "pyq": "7a566d660226b388",
+       "level": 3,
+       "points": [
+        "Reaction: Cr2O7 2- + 6Fe2+ + 14H+ gives 2Cr3+ + 6Fe3+ + 7H2O, ratio 1:6",
+        "Moles dichromate = 0.0018 x 2.5e-3 = 4.5e-6 mol",
+        "Moles Fe = 2.7e-5 mol; mass = 2.7e-5 x 55.845 = 1.508e-3 g",
+        "% Fe = 1.508e-3/1.4 x 100 = 0.108%"
+       ]
+      }
+     ]
+    }
+   ]
+  }
+ ]
+}

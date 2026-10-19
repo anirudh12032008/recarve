@@ -1,0 +1,1562 @@
+{
+ "code": "CE1103",
+ "unit": "Analysis of Trusses",
+ "written": "2026-10-19",
+ "by": "claude-sonnet-5-5, in a Claude Code session",
+ "topics": [
+  {
+   "topic": "Classification of force systems",
+   "subtopics": [
+    {
+     "id": "force-systems",
+     "title": "Classification of force systems",
+     "theory_md": "Forces are classified by where their lines of action lie.\n- **Coplanar**: all in one plane. **Non-coplanar** (space): not in one plane.\n- Within each: **collinear** (one common line), **concurrent** (meet at a point), **parallel** (like = same sense, unlike = opposite), **non-concurrent non-parallel** (general).\n\nExamples: forces at a truss joint are coplanar concurrent; loads and reactions on a beam are coplanar parallel; a plane truss with its loads and reactions is coplanar non-concurrent; a tripod's legs are non-coplanar concurrent.\n\nIndependent equations: coplanar concurrent 2 ($\\sum F_x,\\sum F_y$); coplanar general 3 (add $\\sum M$); space concurrent 3; space general 6.",
+     "basics_md": "A force system is just a group of forces on one body. We sort the group by two questions: do the lines lie in one flat plane, and do they cross at one point? The answers decide which equations of equilibrium you may use.",
+     "key_points": [
+      "Coplanar: lines of action in one plane; non-coplanar: not in one plane",
+      "Collinear, concurrent, parallel (like or unlike), non-concurrent non-parallel",
+      "Truss joint = coplanar concurrent; beam under vertical loads = coplanar parallel; plane truss with loads and reactions = coplanar non-concurrent",
+      "Coplanar concurrent needs 2 equations, coplanar general needs 3"
+     ],
+     "questions": [
+      {
+       "id": "fs-q1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "Forces acting at one joint of a plane truss form a",
+       "options": [
+        "coplanar concurrent system",
+        "coplanar parallel system",
+        "non-coplanar concurrent system",
+        "coplanar non-concurrent system"
+       ],
+       "answer_index": 0,
+       "why": "All members at a joint lie in the plane of the truss and meet at the pin."
+      },
+      {
+       "id": "fs-q2",
+       "kind": "mcq",
+       "level": 1,
+       "q": "The number of independent equilibrium equations for a general coplanar force system is",
+       "options": [
+        "2",
+        "3",
+        "4",
+        "6"
+       ],
+       "answer_index": 1,
+       "why": "$\\sum F_x=0$, $\\sum F_y=0$, $\\sum M=0$. Six is for a general space system."
+      },
+      {
+       "id": "fs-q3",
+       "kind": "mcq",
+       "level": 2,
+       "q": "The loads and the two reactions on a simply supported beam carrying only vertical loads form a",
+       "options": [
+        "coplanar parallel system",
+        "coplanar concurrent system",
+        "non-coplanar concurrent system",
+        "collinear system"
+       ],
+       "answer_index": 0,
+       "why": "All forces lie in one vertical plane and are parallel to each other. They are not concurrent because they act at different points along the beam."
+      },
+      {
+       "id": "fs-q4",
+       "kind": "short",
+       "level": 2,
+       "marks": 3,
+       "q": "Name the types of coplanar force systems and give one engineering example of each.",
+       "model_answer_md": "**Coplanar force systems** (all lines of action in one plane):\n1. **Collinear**: all along one line, e.g. forces in a rope in a tug of war.\n2. **Concurrent**: lines meet at a point, e.g. member forces at a truss joint.\n3. **Parallel** (like or unlike): e.g. vertical loads and reactions on a simply supported beam.\n4. **Non-concurrent non-parallel** (general): e.g. the loads and reactions on a plane truss.",
+       "points": [
+        "Collinear with example",
+        "Concurrent with example",
+        "Parallel (like and unlike) with example",
+        "General non-concurrent non-parallel with example"
+       ]
+      },
+      {
+       "id": "fs-p1",
+       "pyq": "4a052a4a47b61d60",
+       "level": 2,
+       "points": [
+        "Coplanar: collinear, concurrent, parallel (like/unlike), non-concurrent non-parallel, each with an example",
+        "Non-coplanar: concurrent, parallel, non-concurrent non-parallel, with examples (tripod, table legs, crane)",
+        "Also external/internal and contact/body forces"
+       ]
+      },
+      {
+       "id": "fs-p2",
+       "pyq": "865527c394a6c7f6",
+       "level": 2,
+       "points": [
+        "Coplanar non-concurrent: lines of action in one plane but not meeting at a point",
+        "Causes translation and rotation; needs $\\sum F_x=0$, $\\sum F_y=0$, $\\sum M=0$",
+        "Examples: simply supported beam with loads and reactions, ladder against a wall, plane truss"
+       ]
+      }
+     ]
+    },
+    {
+     "id": "perfect-imperfect",
+     "title": "Perfect, deficient and redundant frames",
+     "theory_md": "A **frame** (truss) is a pin-jointed assembly of members. With $m$ members and $j$ joints:\n- **Perfect frame**: $m=2j-3$. Just enough members to keep its shape; statically determinate. Example: triangle ($j=3,m=3$).\n- **Imperfect frame**: $m\\neq 2j-3$.\n  - **Deficient**: $m<2j-3$, too few members, unstable, collapses like a mechanism (square of 4 bars: $4<5$).\n  - **Redundant**: $m>2j-3$, extra members, statically indeterminate (square with both diagonals: $6>5$).\n\nCheck with supports: $m+r=2j$ with $r=3$ reaction components (one hinge + one roller).",
+     "basics_md": "A triangle cannot change shape without changing a side, so it is rigid. Each new joint added with two new members keeps it rigid, which is why every new joint adds 2 members: $m=3+2(j-3)=2j-3$.",
+     "key_points": [
+      "Perfect frame: $m=2j-3$, rigid and statically determinate",
+      "Imperfect frame: $m\\neq 2j-3$, either deficient or redundant",
+      "Deficient: $m<2j-3$, unstable, collapses under load",
+      "Redundant: $m>2j-3$, stable but statically indeterminate",
+      "Examples: triangle (perfect), square of 4 bars (deficient), square with 2 diagonals (redundant)"
+     ],
+     "questions": [
+      {
+       "id": "pi-q1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "The condition for a perfect plane frame is",
+       "options": [
+        "$m=2j-3$",
+        "$m=j-2$",
+        "$m=3j-2$",
+        "$m=2j+3$"
+       ],
+       "answer_index": 0,
+       "why": "$m$ is members and $j$ is joints."
+      },
+      {
+       "id": "pi-q2",
+       "kind": "mcq",
+       "level": 1,
+       "q": "A frame with $m=7$ members and $j=5$ joints is",
+       "options": [
+        "perfect",
+        "deficient",
+        "redundant",
+        "unstable mechanism only"
+       ],
+       "answer_index": 0,
+       "why": "$2j-3=7=m$. A common slip is to use $2j-2$."
+      },
+      {
+       "id": "pi-q3",
+       "kind": "numerical",
+       "level": 2,
+       "marks": 3,
+       "q": "Classify the following plane frames as perfect, deficient or redundant: (a) $j=6$, $m=8$; (b) $j=8$, $m=13$; (c) $j=7$, $m=12$.",
+       "model_answer_md": "Use $2j-3$:\n(a) $2(6)-3=9$; $m=8<9$, so **deficient** (one member short).\n(b) $2(8)-3=13$; $m=13$, so **perfect**.\n(c) $2(7)-3=11$; $m=12>11$, so **redundant** (one extra member).",
+       "points": [
+        "Uses $m=2j-3$",
+        "(a) deficient, 9 needed",
+        "(b) perfect, 13 needed",
+        "(c) redundant, 11 needed"
+       ]
+      },
+      {
+       "id": "pi-q4",
+       "kind": "numerical",
+       "level": 3,
+       "marks": 3,
+       "q": "A truss has 9 joints and 14 members. It is supported on a hinge and a roller. Is it stable and determinate? How many members must be added or removed?",
+       "model_answer_md": "$2j-3=2(9)-3=15$. Here $m=14<15$, so the frame is **deficient** by one member. With $r=3$ reactions, $m+r=17<2j=18$, so there are fewer unknowns than equations: it is a mechanism, not determinate. **Add one member** (suitably placed) to make it perfect.",
+       "points": [
+        "$2j-3=15$",
+        "$m=14<15$, deficient by 1",
+        "$m+r=17<18=2j$, mechanism",
+        "Add one member"
+       ]
+      },
+      {
+       "id": "pi-p1",
+       "pyq": "d487fc72d86c6034",
+       "level": 2,
+       "points": [
+        "Deficient: $m<2j-3$, fewer members than needed, unstable, changes shape under load",
+        "Redundant: $m>2j-3$, more members than needed, stable but statically indeterminate",
+        "Sketch: square with 4 sides only (deficient); square with both diagonals (redundant)"
+       ]
+      },
+      {
+       "id": "pi-p2",
+       "pyq": "6e8c432afedf6706",
+       "level": 2,
+       "points": [
+        "Perfect frame: $m=2j-3$, just enough members to keep its shape; statically determinate; example triangle",
+        "Imperfect frame: $m\\neq 2j-3$, deficient or redundant"
+       ]
+      },
+      {
+       "id": "pi-p3",
+       "pyq": "ae108bed933561cb",
+       "level": 2,
+       "points": [
+        "Deficient: $m<2j-3$, cannot retain shape, collapses; example square with 4 sides",
+        "Redundant: $m>2j-3$, extra members, statically indeterminate; example square with 2 diagonals"
+       ]
+      },
+      {
+       "id": "pi-p4",
+       "pyq": "5bd3aac4fc457777",
+       "level": 1,
+       "points": [
+        "Perfect frame has just the number of members to keep equilibrium and shape: $m=2j-3$",
+        "Statically determinate; example triangle or square with one diagonal"
+       ]
+      },
+      {
+       "id": "pi-p5",
+       "pyq": "b685ce4c6bdcab3f",
+       "level": 1,
+       "points": [
+        "Imperfect frame: $m\\neq 2j-3$",
+        "Two types: deficient ($m<2j-3$) and redundant ($m>2j-3$), with examples"
+       ]
+      },
+      {
+       "id": "pi-p6",
+       "pyq": "95aebdc489de72a9",
+       "level": 2,
+       "points": [
+        "Perfect: $m=2j-3$, statically determinate; imperfect: $m\\neq 2j-3$",
+        "Imperfect is deficient (collapses) or redundant (indeterminate)",
+        "Examples: triangle; square of 4 bars or square with two diagonals"
+       ]
+      },
+      {
+       "id": "pi-p7",
+       "pyq": "bc633a2e26a78700",
+       "level": 2,
+       "points": [
+        "Count $m$ and $j$ and compare with $2j-3$",
+        "Deficient $m<2j-3$: unstable, collapses; redundant $m>2j-3$: stable but statically indeterminate",
+        "Examples: square of 4 sides ($4<5$); square with both diagonals ($6>5$)"
+       ]
+      }
+     ]
+    },
+    {
+     "id": "truss-types",
+     "title": "Types of trusses and assumptions",
+     "theory_md": "A **truss** is a perfect frame of straight members joined at pins to carry loads at joints.\n\n**Assumptions**: (1) the frame is perfect, $m=2j-3$; (2) joints are frictionless pins; (3) loads act only at joints; (4) members are straight and carry only axial force, tension or compression; (5) self-weight is neglected.\n\n**Types**: *Pratt* (diagonals slope down to the centre, in tension); *Howe* (opposite, diagonals in compression); *Warren* (equilateral triangles, no verticals); *K-truss*; *Fink* and *king-post / queen-post* (roofs); *north-light* (factory roofs). **Plane** truss: all members in one plane; **space** truss: 3-D.\n\nA **determinate** structure: reactions and member forces follow from statics alone.",
+     "basics_md": "Every member of an ideal truss has a pin at each end and no load in between, so it can only be pulled or pushed along its own length. That is why we can solve each joint by two force equations alone.",
+     "key_points": [
+      "Assumptions: perfect frame, frictionless pins, loads at joints only, axial force only, negligible self-weight",
+      "Pratt: diagonals in tension; Howe: diagonals in compression; Warren: equilateral triangles",
+      "Roof trusses: Fink, king-post, queen-post, north-light",
+      "Determinate: found from $\\sum F_x=0,\\sum F_y=0,\\sum M=0$ alone; indeterminate if unknowns exceed equations"
+     ],
+     "questions": [
+      {
+       "id": "tt-q1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "In an ideal truss each member carries",
+       "options": [
+        "axial force only",
+        "bending moment and shear",
+        "torque",
+        "axial force and bending moment"
+       ],
+       "answer_index": 0,
+       "why": "Pin joints transmit no moment and loads are applied only at joints."
+      },
+      {
+       "id": "tt-q2",
+       "kind": "mcq",
+       "level": 1,
+       "q": "A truss with parallel chords, no vertical members and equilateral triangles is a",
+       "options": [
+        "Pratt truss",
+        "Howe truss",
+        "Warren truss",
+        "Fink truss"
+       ],
+       "answer_index": 2,
+       "why": "Warren has only inclined members forming alternate up and down triangles."
+      },
+      {
+       "id": "tt-q3",
+       "kind": "mcq",
+       "level": 2,
+       "q": "In a Pratt truss under gravity load, the diagonals slope down towards the centre and are in",
+       "options": [
+        "tension",
+        "compression",
+        "zero force",
+        "bending"
+       ],
+       "answer_index": 0,
+       "why": "The diagonals of a Pratt truss are in tension and the verticals in compression. Howe is the reverse."
+      },
+      {
+       "id": "tt-q4",
+       "kind": "short",
+       "level": 2,
+       "marks": 4,
+       "q": "State the assumptions made in the analysis of a perfect truss. Why must loads be applied at the joints?",
+       "model_answer_md": "**Assumptions**\n1. The frame is **perfect**, $m=2j-3$.\n2. Joints are **frictionless pins**, so no moment is transmitted.\n3. Loads and reactions act **only at joints**.\n4. Members are straight and carry only **axial force** (tension or compression).\n5. **Self-weight** is neglected.\n\nA load between joints would bend the member, so it would no longer be a two-force axial member.",
+       "points": [
+        "Perfect frame $m=2j-3$",
+        "Frictionless pin joints",
+        "Loads only at joints",
+        "Axial force only",
+        "Self-weight neglected"
+       ]
+      },
+      {
+       "id": "tt-p1",
+       "pyq": "19ab1bfce05e4839",
+       "level": 2,
+       "points": [
+        "Pratt, Howe, Warren, K-truss, Fink, north-light, king/queen-post, each with sketch described and use",
+        "Also perfect, deficient, redundant; plane and space trusses"
+       ]
+      },
+      {
+       "id": "tt-p2",
+       "pyq": "90e2744b66503c70",
+       "level": 2,
+       "points": [
+        "List and sketch Pratt, Howe, Warren, K, Fink, north-light, king and queen post",
+        "Roof trusses vs bridge trusses"
+       ]
+      },
+      {
+       "id": "tt-p3",
+       "pyq": "c133bc8f005b0d97",
+       "level": 2,
+       "points": [
+        "Determinate structure: reactions and internal forces found from $\\sum F_x=0$, $\\sum F_y=0$, $\\sum M=0$ alone",
+        "Unknowns equal equations; examples: simply supported beam, cantilever, perfect truss",
+        "Otherwise indeterminate (fixed beam, redundant truss)"
+       ]
+      },
+      {
+       "id": "tt-p4",
+       "pyq": "19b90c1e1259ea95",
+       "level": 2,
+       "points": [
+        "Perfect frame, pin joints, loads at joints only",
+        "Members carry axial force only",
+        "Self-weight neglected"
+       ]
+      },
+      {
+       "id": "tt-p5",
+       "pyq": "99141463a732dbb5",
+       "level": 2,
+       "points": [
+        "Perfect frame, frictionless pin joints, loads only at joints",
+        "Axial force only in straight members, self-weight neglected"
+       ]
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "topic": "Combination of forces and moments",
+   "subtopics": [
+    {
+     "id": "resultant-concurrent",
+     "title": "Resultant of concurrent forces and moment of a force",
+     "theory_md": "Resolve each force into components, add, recombine:\n$$\\sum F_x=\\sum F_i\\cos\\theta_i,\\quad \\sum F_y=\\sum F_i\\sin\\theta_i$$\n$$R=\\sqrt{(\\sum F_x)^2+(\\sum F_y)^2},\\quad \\tan\\alpha=\\frac{\\sum F_y}{\\sum F_x}$$\n($\\theta$ from the $+x$ axis anticlockwise; fix the quadrant from the signs.) Two forces: parallelogram law, $R=\\sqrt{P^2+Q^2+2PQ\\cos\\theta}$.\n\n**Moment** of a force about a point $=F\\times d$ ($d$ perpendicular distance), anticlockwise positive. **Varignon**: the moment of the resultant about a point equals the sum of the moments of the components.",
+     "basics_md": "Think of pulling a ring with several strings. Each pull has a left-right part and an up-down part. Add the left-right parts together and the up-down parts together, and you get one single pull that does the same job.",
+     "key_points": [
+      "Resultant from $\\sum F_x$ and $\\sum F_y$: $R=\\sqrt{\\sum F_x^2+\\sum F_y^2}$",
+      "Direction $\\tan\\alpha=\\sum F_y/\\sum F_x$, check the quadrant from signs",
+      "Moment = force times perpendicular distance, with sign",
+      "Varignon: moment of resultant = sum of moments of components"
+     ],
+     "questions": [
+      {
+       "id": "rc-q1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "Varignon's theorem states that the moment of a force about a point equals",
+       "options": [
+        "the sum of the moments of its components about that point",
+        "the product of force and its component",
+        "the moment of its larger component",
+        "zero for concurrent forces"
+       ],
+       "answer_index": 0,
+       "why": "This lets us take moments of the easy horizontal and vertical components."
+      },
+      {
+       "id": "rc-q2",
+       "kind": "mcq",
+       "level": 2,
+       "q": "Two forces of 30 N and 40 N act at a point at right angles. The resultant is",
+       "options": [
+        "70 N",
+        "50 N",
+        "10 N",
+        "35 N"
+       ],
+       "answer_index": 1,
+       "why": "$\\sqrt{30^2+40^2}=50$ N. Adding magnitudes (70 N) is the common mistake."
+      },
+      {
+       "id": "rc-q3",
+       "kind": "numerical",
+       "level": 2,
+       "marks": 5,
+       "q": "Three forces act at a point: 100 N along $0^\\circ$, 150 N at $60^\\circ$ and 200 N at $135^\\circ$ (all measured anticlockwise from the $+x$ axis). Find the magnitude and direction of the resultant.",
+       "model_answer_md": "$\\sum F_x=100+150\\cos60^\\circ+200\\cos135^\\circ=100+75-141.42=33.58$ N\n$\\sum F_y=0+150\\sin60^\\circ+200\\sin135^\\circ=129.90+141.42=271.33$ N\n$R=\\sqrt{33.58^2+271.33^2}=273.4$ N\n$\\alpha=\\tan^{-1}(271.33/33.58)=82.95^\\circ$ with the $+x$ axis (both components positive, first quadrant).",
+       "points": [
+        "$\\sum F_x=33.58$ N",
+        "$\\sum F_y=271.33$ N",
+        "$R=273.4$ N",
+        "$\\alpha=82.95^\\circ$ from the +x axis"
+       ]
+      },
+      {
+       "id": "rc-q4",
+       "kind": "short",
+       "level": 2,
+       "marks": 3,
+       "q": "State Varignon's theorem and use it to find the moment about O of a 50 N force acting at point (3 m, 4 m) in direction $+x$.",
+       "model_answer_md": "**Varignon's theorem**: the moment of a force about a point equals the algebraic sum of the moments of its components about that point.\n\nThe force is $+50$ N in $x$ at $y=4$ m. Its line of action is 4 m above O, so $M_O=-50\\times4=-200$ N·m (clockwise, 200 N·m).",
+       "points": [
+        "Statement of theorem",
+        "Moment arm 4 m",
+        "$M_O=200$ N·m clockwise"
+       ]
+      }
+     ]
+    },
+    {
+     "id": "couple-resultant",
+     "title": "Couple and resultant of a force system",
+     "theory_md": "A **couple** is two equal, opposite, parallel forces: moment $M=F\\times d$ ($d$ between the lines), same about every point; it causes rotation only.\n\nA force $F$ at a point can be moved to a point O if a couple $F\\times d$ is added (**force-couple system**).\n\n**Resultant of parallel forces**: $R=\\sum F$ and its position from a reference point, $\\bar x=\\dfrac{\\sum F x}{\\sum F}$ (Varignon).\n\n**Equilibrium** of a coplanar system: $\\sum F_x=0,\\ \\sum F_y=0,\\ \\sum M=0$.",
+     "basics_md": "A couple is the twist you apply to a steering wheel: two hands, equal and opposite pushes. It turns the wheel but does not push the car sideways.",
+     "key_points": [
+      "Couple: equal opposite parallel forces, $M=Fd$, free vector (same about every point)",
+      "A force moved parallel to itself needs a couple of moment $F\\times d$",
+      "Resultant of parallel forces $R=\\sum F$, position $\\bar x=\\sum Fx/\\sum F$",
+      "Equilibrium: $\\sum F_x=\\sum F_y=\\sum M=0$"
+     ],
+     "questions": [
+      {
+       "id": "cr-q1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "A couple consists of two forces which are",
+       "options": [
+        "equal, opposite and parallel with different lines of action",
+        "equal, opposite and collinear",
+        "equal and concurrent",
+        "unequal and parallel"
+       ],
+       "answer_index": 0,
+       "why": "Collinear equal opposite forces cancel and give no moment."
+      },
+      {
+       "id": "cr-q2",
+       "kind": "mcq",
+       "level": 2,
+       "q": "Two forces of 50 N each, opposite and 0.4 m apart, form a couple of moment",
+       "options": [
+        "20 N·m",
+        "100 N·m",
+        "0 N·m",
+        "25 N·m"
+       ],
+       "answer_index": 0,
+       "why": "$M=Fd=50\\times0.4=20$ N·m."
+      },
+      {
+       "id": "cr-q3",
+       "kind": "numerical",
+       "level": 2,
+       "marks": 4,
+       "q": "Parallel downward loads of 10 kN, 20 kN and 15 kN act on a bar at 0 m, 2 m and 5 m from the left end. Find the resultant and its distance from the left end.",
+       "model_answer_md": "$R=10+20+15=45$ kN downward.\nMoments about the left end: $R\\bar x=10(0)+20(2)+15(5)=115$ kN·m\n$\\bar x=115/45=2.556$ m from the left end.",
+       "points": [
+        "$R=45$ kN",
+        "Moment sum 115 kN·m",
+        "$\\bar x=2.556$ m"
+       ]
+      },
+      {
+       "id": "cr-q4",
+       "kind": "short",
+       "level": 2,
+       "marks": 3,
+       "q": "Replace a 20 N vertical force acting 3 m to the right of point O by an equivalent force-couple system at O.",
+       "model_answer_md": "Move the 20 N force to O (parallel to itself): a **20 N force at O**.\nAdd the couple that makes up the moment of the original force about O: $M=20\\times3=60$ N·m (clockwise for a downward force on the right).\nSo the system is 20 N plus a couple of 60 N·m.",
+       "points": [
+        "Same force acts at O",
+        "Couple $M=Fd=60$ N·m",
+        "Sense of the couple stated"
+       ]
+      }
+     ]
+    },
+    {
+     "id": "truss-reactions",
+     "title": "Support reactions of a truss",
+     "theory_md": "Always find the reactions first, from the whole truss as a free body.\n- **Hinge** (pin): two components, $H$ and $V$.\n- **Roller**: one component, perpendicular to the surface it rolls on.\n- Equations: $\\sum F_x=0$, $\\sum F_y=0$, $\\sum M=0$ (about a support, to eliminate two unknowns). For a perfect truss, $r=3$.\n\nResolve inclined loads into $x$ and $y$ components first; a load normal to a rafter makes angle $\\theta$ with the vertical, giving $P\\sin\\theta$ and $P\\cos\\theta$. Check with a second moment equation.",
+     "basics_md": "The truss is one rigid body held by its supports. Three unknown reactions need three equations. Taking moments about the hinge removes both hinge components at once, leaving only the roller reaction.",
+     "key_points": [
+      "Hinge: 2 reactions (H and V); roller: 1 reaction, perpendicular to the rolling surface",
+      "Take moments about the hinge to get the roller reaction directly",
+      "Resolve inclined loads into components first",
+      "Check $\\sum F_y=0$ at the end"
+     ],
+     "questions": [
+      {
+       "id": "tr-q1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "A roller support on a horizontal surface gives a reaction that is",
+       "options": [
+        "vertical",
+        "horizontal",
+        "inclined at 45 degrees",
+        "a vertical force and a moment"
+       ],
+       "answer_index": 0,
+       "why": "A roller cannot resist motion along the surface, so its reaction is perpendicular to it."
+      },
+      {
+       "id": "tr-q2",
+       "kind": "mcq",
+       "level": 2,
+       "q": "To find the roller reaction of a truss directly, take moments about",
+       "options": [
+        "the hinge",
+        "the roller",
+        "the apex",
+        "the centre of the span only"
+       ],
+       "answer_index": 0,
+       "why": "The two hinge components pass through the hinge and drop out."
+      },
+      {
+       "id": "tr-q3",
+       "kind": "numerical",
+       "level": 2,
+       "marks": 5,
+       "q": "A truss of span 8 m is hinged at A (left) and on a roller at B (right). Vertical loads of 10 kN at 2 m and 16 kN at 5 m from A act at the joints, and a horizontal load of 6 kN acts to the right at the apex, 3 m above AB. Find the reactions.",
+       "model_answer_md": "Take moments about A (anticlockwise positive):\n$R_B(8)-10(2)-16(5)-6(3)=0$ (the horizontal load at 3 m height gives a clockwise moment)\n$R_B=\\dfrac{20+80+18}{8}=14.75$ kN (up)\n\n$\\sum F_y=0$: $V_A=26-14.75=11.25$ kN (up)\n$\\sum F_x=0$: $H_A=6$ kN to the left.",
+       "points": [
+        "Moments about A",
+        "$R_B=14.75$ kN",
+        "$V_A=11.25$ kN",
+        "$H_A=6$ kN to the left"
+       ]
+      },
+      {
+       "id": "tr-q4",
+       "kind": "short",
+       "level": 2,
+       "marks": 3,
+       "q": "A 20 kN load acts at a joint normal to an inclined rafter at $30^\\circ$ to the horizontal, pressing on the roof. Find its horizontal and vertical components.",
+       "model_answer_md": "A load normal to a rafter inclined at $30^\\circ$ makes $30^\\circ$ with the vertical.\nVertical component $=20\\cos30^\\circ=17.32$ kN (downward)\nHorizontal component $=20\\sin30^\\circ=10$ kN (towards the lower side of the rafter, i.e. pushing the roof sideways).",
+       "points": [
+        "Angle with vertical is 30 degrees",
+        "Vertical 17.32 kN",
+        "Horizontal 10 kN",
+        "Directions stated"
+       ]
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "topic": "Method of joints",
+   "subtopics": [
+    {
+     "id": "joint-method",
+     "title": "Procedure, assumptions and limitations",
+     "theory_md": "Isolate each joint as a free body: the member forces and the load at that joint are a **concurrent** system, so only $\\sum F_x=0$ and $\\sum F_y=0$ apply, giving **at most 2 unknowns per joint**.\n\n**Steps**: (1) find the reactions; (2) start at a joint with only 2 unknown members (usually a support); (3) assume every unknown as **tension** (arrow away from the joint); (4) solve, then carry each found force to the next joint (a member's force acts in opposite sense at its two ends); (5) tabulate: $+$ is tension, $-$ is compression; (6) check with a last joint.\n\n**Limitations**: needs a joint with 2 unknowns; errors carry forward; long for large trusses.",
+     "basics_md": "A pin in equilibrium has forces through one point only, so there is no moment equation. Two force equations can solve two unknown members. Walk from joint to joint, each time using the member force you just found.",
+     "key_points": [
+      "Joint forces are concurrent, so only $\\sum F_x=0$ and $\\sum F_y=0$: at most 2 unknowns per joint",
+      "Find reactions first, start at a joint with 2 unknowns",
+      "Assume tension (away from the joint); positive result tension, negative compression",
+      "Assumptions: perfect frame, pins, joint loads, axial forces, no self-weight",
+      "Limitations: errors carry forward, long for big trusses"
+     ],
+     "questions": [
+      {
+       "id": "jm-q1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "The maximum number of unknown member forces at a joint that can be solved at one go in the method of joints is",
+       "options": [
+        "2",
+        "3",
+        "1",
+        "4"
+       ],
+       "answer_index": 0,
+       "why": "Joint forces are concurrent, so only two equations are available."
+      },
+      {
+       "id": "jm-q2",
+       "kind": "mcq",
+       "level": 1,
+       "q": "A force that acts away from the joint on a member means the member is in",
+       "options": [
+        "tension",
+        "compression",
+        "zero force",
+        "shear"
+       ],
+       "answer_index": 0,
+       "why": "A member in tension pulls on the joint, away from it."
+      },
+      {
+       "id": "jm-q3",
+       "kind": "mcq",
+       "level": 2,
+       "q": "A member force comes out negative while solving a joint (all assumed tension). The member is in",
+       "options": [
+        "compression",
+        "tension",
+        "zero force",
+        "the assumption is invalid"
+       ],
+       "answer_index": 0,
+       "why": "Negative means opposite to assumed, so it pushes on the joint."
+      },
+      {
+       "id": "jm-q4",
+       "kind": "short",
+       "level": 2,
+       "marks": 4,
+       "q": "List the steps of the method of joints.",
+       "model_answer_md": "1. Find the **support reactions** from the equilibrium of the whole truss.\n2. Choose a joint with **at most two unknown members** (usually a support joint).\n3. Draw its free body; assume unknown forces as **tension** (away from the joint) and resolve inclined ones.\n4. Apply $\\sum F_x=0$ and $\\sum F_y=0$ and solve.\n5. Move to the next joint using the forces already found (opposite sense at the other end).\n6. Tabulate with $+$ for tension and $-$ for compression; check the last joint.",
+       "points": [
+        "Find reactions first",
+        "Joint with two unknowns",
+        "Assume tension",
+        "Two equations per joint",
+        "Tabulate with nature"
+       ]
+      },
+      {
+       "id": "jm-p1",
+       "pyq": "d50ffdcb34127369",
+       "level": 2,
+       "points": [
+        "Method of joints: each joint is a concurrent system, apply $\\sum F_x=0$ and $\\sum F_y=0$, two unknowns per joint",
+        "Method of sections: cut through at most three members, apply $\\sum F_x=\\sum F_y=\\sum M=0$ on one part",
+        "Tension pulls away from the joint, compression pushes towards it"
+       ]
+      },
+      {
+       "id": "jm-p2",
+       "pyq": "840cd2289d1ea3c1",
+       "level": 2,
+       "points": [
+        "Assumptions: perfect frame, frictionless pins, loads at joints, axial members, self-weight neglected",
+        "Limitations: only two unknowns per joint, forces of earlier joints needed, error carried forward",
+        "Not for redundant frames or loads between joints"
+       ]
+      }
+     ]
+    },
+    {
+     "id": "zero-force",
+     "title": "Zero-force members and special joints",
+     "theory_md": "At an **unloaded** joint (no external load or reaction):\n1. **Two members**, not in line: both carry **zero** force.\n2. **Three members, two collinear**: the third (not in line) carries **zero** force; the two collinear members carry equal force.\n3. **Two members in line, load along the same line**: the force passes through unchanged.\n\nIf a load or reaction acts along one member, that member balances it and the other (non-collinear) member is zero.\n\nRemoving zero-force members first shortens the work. They stay useful for stability and for other loadings.",
+     "basics_md": "If only two bars meet at a pin and they point in different directions, nothing can balance a push in one bar, since the other bar cannot push back sideways. So both must carry nothing.",
+     "key_points": [
+      "Unloaded joint with two non-collinear members: both zero",
+      "Unloaded joint with three members, two collinear: the third is zero",
+      "Collinear members carry equal force",
+      "Zero-force members still needed for stability or other loads"
+     ],
+     "questions": [
+      {
+       "id": "zf-q1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "At an unloaded joint two non-collinear members meet. Their forces are",
+       "options": [
+        "both zero",
+        "equal and opposite",
+        "equal and tensile",
+        "one zero, one not"
+       ],
+       "answer_index": 0,
+       "why": "Neither member can balance a force from the other, since they are not in line."
+      },
+      {
+       "id": "zf-q2",
+       "kind": "mcq",
+       "level": 2,
+       "q": "At an unloaded joint three members meet, two of them collinear. The third member has",
+       "options": [
+        "zero force",
+        "the same force as the collinear ones",
+        "twice the force",
+        "an indeterminate force"
+       ],
+       "answer_index": 0,
+       "why": "There is nothing in its direction to balance a force in the third member."
+      },
+      {
+       "id": "zf-q3",
+       "kind": "short",
+       "level": 2,
+       "marks": 3,
+       "q": "State the two rules used to identify zero-force members in a truss. Why are such members provided?",
+       "model_answer_md": "**Rule 1**: if two non-collinear members meet at an unloaded joint, both carry zero force.\n**Rule 2**: if three members meet at an unloaded joint and two are collinear, the third carries zero force.\n\nZero-force members are provided for **stability** (to keep the truss perfect and prevent buckling of long members) and to carry load when the loading changes.",
+       "points": [
+        "Rule 1 stated",
+        "Rule 2 stated",
+        "Purpose: stability / other loadings"
+       ]
+      },
+      {
+       "id": "zf-q4",
+       "kind": "short",
+       "level": 3,
+       "marks": 3,
+       "q": "In the truss ACE with bottom chord A-B-C and vertical BD up to D, a load acts only at D. Joint B has members AB, BC and BD (AB and BC are collinear); B has no load or support. Find the force in BD and the relation between AB and BC.",
+       "model_answer_md": "Joint B is unloaded with three members, AB and BC collinear. By Rule 2: $F_{BD}=0$ (vertical, nothing to balance it).\nThen $\\sum F_x=0$ at B gives $F_{AB}=F_{BC}$: the two bottom-chord members carry the same force and nature.",
+       "points": [
+        "$F_{BD}=0$ by rule for three members, two collinear",
+        "$F_{AB}=F_{BC}$"
+       ]
+      }
+     ]
+    },
+    {
+     "id": "joints-standard",
+     "title": "Method of joints: standard numericals",
+     "theory_md": "A usual numerical: perfect truss, vertical loads, hinge and roller.\n1. Reactions: $\\sum M_A=0$ for the roller, then $\\sum F_y=0$.\n2. Start at a support joint (2 unknowns); angles of $60^\\circ$ (equilateral) give $\\sin60^\\circ=0.866$, $\\cos60^\\circ=0.5$.\n3. Move along; use symmetry and zero-force rules to skip work.\n4. Tabulate member, magnitude, nature (T or C).\n\nAt each joint: $\\sum F_y=0$ first for the inclined member, then $\\sum F_x=0$ for the horizontal one. A load at the support joint goes straight into the equations. If a joint becomes the third with unknowns, go back to another joint.",
+     "basics_md": "You are solving a chain of small problems, each two equations in two unknowns. Starting at a support is easiest because only two members meet there. Keep a table of what you have found.",
+     "key_points": [
+      "Reactions first: moments about the hinge, then $\\sum F_y=0$",
+      "Start at a joint with 2 unknowns, solve $\\sum F_y$ then $\\sum F_x$",
+      "Equilateral truss: $\\sin60^\\circ=0.866$, $\\cos60^\\circ=0.5$",
+      "Final table with magnitude and nature; check a leftover joint"
+     ],
+     "questions": [
+      {
+       "id": "js-q1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "In a symmetric truss with a symmetric vertical load the two support reactions are",
+       "options": [
+        "equal",
+        "one is zero",
+        "in ratio 2:1",
+        "unrelated"
+       ],
+       "answer_index": 0,
+       "why": "Symmetry gives $R_A=R_B=\\frac{W}{2}$."
+      },
+      {
+       "id": "js-q2",
+       "kind": "mcq",
+       "level": 2,
+       "q": "For the equilateral-triangle truss (side 2 m) with a 12 kN load at the apex and equal reactions, the member force in each inclined member is",
+       "options": [
+        "6.93 kN compression",
+        "6.00 kN tension",
+        "12.0 kN compression",
+        "3.46 kN tension"
+       ],
+       "answer_index": 0,
+       "why": "At support: $F\\sin60^\\circ+6=0$, so $F=-6.93$ kN (C). Using $\\cos60^\\circ$ for the vertical resolution would give a wrong 12 kN."
+      },
+      {
+       "id": "js-q3",
+       "kind": "numerical",
+       "level": 2,
+       "marks": 5,
+       "q": "An equilateral triangle truss ABC of side 2 m is hinged at A and on a roller at B (AB horizontal). A load of 12 kN acts downward at the apex C. Find the force in all members.",
+       "model_answer_md": "**Reactions**: symmetric, $R_A=R_B=6$ kN; $H_A=0$.\n**Joint A**: $\\sum F_y$: $F_{AC}\\sin60^\\circ+6=0\\Rightarrow F_{AC}=-6.93$ kN (C)\n$\\sum F_x$: $F_{AB}+F_{AC}\\cos60^\\circ=0\\Rightarrow F_{AB}=+3.46$ kN (T)\n**Joint B** (by symmetry): $F_{BC}=-6.93$ kN (C), and $F_{AB}=3.46$ kN (T) check.\n\n| Member | Force (kN) | Nature |\n|---|---|---|\n| AB | 3.46 | T |\n| AC | 6.93 | C |\n| BC | 6.93 | C |",
+       "points": [
+        "Reactions 6 kN each",
+        "$F_{AC}=6.93$ kN C",
+        "$F_{AB}=3.46$ kN T",
+        "$F_{BC}=6.93$ kN C",
+        "Table with nature"
+       ]
+      },
+      {
+       "id": "js-q4",
+       "kind": "numerical",
+       "level": 3,
+       "marks": 6,
+       "q": "A truss has bottom joints A, B, C at 0, 2 and 4 m and top joints D and E at (1 m, 1.732 m) and (3 m, 1.732 m). Members AD, DE, EC, AB, BC, DB, EB. Loads: 6 kN at D and 4 kN at E, both downward. A is hinged, C is on a roller. Find all member forces.",
+       "model_answer_md": "**Reactions**: $\\sum M_A=0$: $R_C(4)=6(1)+4(3)=18\\Rightarrow R_C=4.5$ kN; $R_A=10-4.5=5.5$ kN.\n**Joint A**: $F_{AD}\\sin60^\\circ+5.5=0\\Rightarrow F_{AD}=-6.351$ kN (C); $F_{AB}=-F_{AD}\\cos60^\\circ=+3.175$ kN (T)\n**Joint C**: $F_{EC}\\sin60^\\circ+4.5=0\\Rightarrow F_{EC}=-5.196$ kN (C); $F_{BC}=+2.598$ kN (T)\n**Joint D**: $\\sum F_y$: $-F_{AD}\\sin60^\\circ-F_{DB}\\sin60^\\circ-6=0\\Rightarrow F_{DB}=-0.577$ kN (C); $\\sum F_x$: $-0.5F_{AD}+0.5F_{DB}+F_{DE}=0\\Rightarrow F_{DE}=-2.887$ kN (C)\n**Joint E**: $\\sum F_y$ gives $F_{EB}=+0.577$ kN (T).\n\n| Member | Force (kN) | Nature |\n|---|---|---|\n| AD | 6.351 | C |\n| DE | 2.887 | C |\n| EC | 5.196 | C |\n| AB | 3.175 | T |\n| BC | 2.598 | T |\n| DB | 0.577 | C |\n| EB | 0.577 | T |",
+       "points": [
+        "$R_A=5.5$ kN, $R_C=4.5$ kN",
+        "AD 6.351 C, EC 5.196 C",
+        "AB 3.175 T, BC 2.598 T",
+        "DB 0.577 C, EB 0.577 T",
+        "DE 2.887 C"
+       ]
+      },
+      {
+       "id": "js-p1",
+       "pyq": "0f442432438b3287",
+       "level": 2,
+       "points": [
+        "Reactions: $R_D=3.5$ kN, $R_A=2.5$ kN",
+        "AB 2.887 C, AE 1.443 T, BE 0.577 T, BC 1.732 C, EC 0.577 C, CD 4.041 C, ED 2.021 T",
+        "Joint A and D first, then B and C"
+       ]
+      },
+      {
+       "id": "js-p2",
+       "pyq": "2ff8fae88e3a7cad",
+       "level": 2,
+       "points": [
+        "Reactions: $R_A=2.75$ kN, $R_C=2.25$ kN",
+        "AE 3.175 C, AB 1.588 T, EB 0.289 C, ED 1.443 C, BD 0.289 T, BC 1.299 T, DC 2.598 C"
+       ]
+      },
+      {
+       "id": "js-p3",
+       "pyq": "8ccae5af18c4273b",
+       "level": 2,
+       "points": [
+        "Reactions: $R_1=20$ kN, $R_2=10$ kN",
+        "1-3 28.28 C, 1-5 20 T, 3-5 30 T, 5-6 20 T, 6-2 6.67 T, 4-2 12.02 C, 3-6 18.86 C, 4-6 13.33 T, 3-4 7.45 C"
+       ]
+      },
+      {
+       "id": "js-p4",
+       "pyq": "38942fb9ad6d027c",
+       "level": 2,
+       "points": [
+        "Reactions: $R_A=7.167$ kN, $R_B=3.833$ kN",
+        "AC 8.275 C, AE 4.138 T, CE 2.502 T, CD 5.389 C, ED 2.502 C, DB 7.667 C, EB 6.640 T"
+       ]
+      },
+      {
+       "id": "js-p5",
+       "pyq": "608da490680062f0",
+       "level": 2,
+       "points": [
+        "Reactions: $R_A=40$ kN, $R_F=40$ kN",
+        "AB 51.22 C, AC 32 T, BC 2.0 C, BD 32.98 C, CD 2.83 T, CE 30 T, DE 0, DF 50 C, EF 30 T"
+       ]
+      },
+      {
+       "id": "js-p6",
+       "pyq": "3617d5d9a4cabbc9",
+       "level": 2,
+       "points": [
+        "Reactions: $R_A=9$ kN, $R_E=8$ kN",
+        "AH 12.73 C, HG 10.06 C, GI 8.94 C, IE 11.31 C, HB 4.5 T, GB 1.80 T, GC 7 T, GD 0, ID 4 T, AB 9 T, BC 8 T, CD 8 T, DE 8 T"
+       ]
+      },
+      {
+       "id": "js-p7",
+       "pyq": "3c064cc2da4df315",
+       "level": 2,
+       "points": [
+        "Start at E (two unknowns), then D, then C; reactions not needed first",
+        "DE 2236 N C, CE 2000 N T, CD 1000 N T, BD 2000 N C, AC 2236 N T, BC zero"
+       ]
+      },
+      {
+       "id": "js-p8",
+       "pyq": "b9f87e5ed9a12709",
+       "level": 3,
+       "points": [
+        "Reactions: $A_x=19.2$ kN, $G_x=19.2$ kN, $G_y=24$ kN",
+        "GA 24 T, GF 19.2 T, AF 25.85 C, FB 12 T, FE 15.37 T, BE 5.12 C, EC 8 T, ED 10.25 T, AB 9.6 C, BC 6.4 C, CD 6.4 C"
+       ]
+      },
+      {
+       "id": "js-p9",
+       "pyq": "80b755af5baecefa",
+       "level": 3,
+       "points": [
+        "Start at A (two unknowns) so the wall reactions are not needed for A, B, C",
+        "AB 34.64 T, AC 17.32 C, BC 34.64 C, BD 34.64 T, CD 57.74 T, CE 63.51 C; DE needs reactions (11.55 C if D is held by a cable at 30 degrees, per the standard form)"
+       ]
+      }
+     ]
+    },
+    {
+     "id": "joints-inclined",
+     "title": "Method of joints: inclined, horizontal and special loads",
+     "theory_md": "Same method with three extra steps.\n1. **Resolve each inclined load** into $x$ and $y$ components before using it in the reactions or at its joint. A load normal to a rafter at angle $\\theta$ to the horizontal has components $P\\sin\\theta$ (horizontal) and $P\\cos\\theta$ (vertical).\n2. **Horizontal loads** give a horizontal hinge reaction and a moment about the hinge (arm = height).\n3. **Special supports** (roller on a wall, cable): the roller reaction is perpendicular to its surface.\n\nUse the zero-force rules and symmetry. If a load acts along the line of a member, joint equations along and normal to the member are easier than $x$-$y$. Always finish with a check joint.",
+     "basics_md": "Nothing new in principle: reactions first, then joints. The extra work is resolving the slanted loads into straight components, and remembering that a horizontal load pushes the whole truss sideways, so the hinge must push back.",
+     "key_points": [
+      "Resolve inclined loads into components first",
+      "Horizontal load: hinge horizontal reaction plus a moment about the hinge",
+      "A load normal to a rafter is perpendicular to the chord: use axes along and normal to it",
+      "Check with an unused joint"
+     ],
+     "questions": [
+      {
+       "id": "ji-q1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "A 10 kN load is inclined at $30^\\circ$ to the vertical. Its horizontal component is",
+       "options": [
+        "5 kN",
+        "8.66 kN",
+        "10 kN",
+        "17.3 kN"
+       ],
+       "answer_index": 0,
+       "why": "$10\\sin30^\\circ=5$ kN. The $8.66$ kN is the vertical component."
+      },
+      {
+       "id": "ji-q2",
+       "kind": "mcq",
+       "level": 2,
+       "q": "A horizontal load acts at the apex of a triangular truss on a hinge and a roller. The roller reaction",
+       "options": [
+        "has a vertical component equal and opposite to the vertical hinge component",
+        "is horizontal",
+        "is zero",
+        "equals the load"
+       ],
+       "answer_index": 0,
+       "why": "The pair of vertical reactions forms a couple balancing the moment of the horizontal load."
+      },
+      {
+       "id": "ji-q3",
+       "kind": "numerical",
+       "level": 2,
+       "marks": 5,
+       "q": "A triangular truss ABC has A(0,0) hinge, B(4,0) roller, apex C(2,2) m. A 6 kN horizontal load acts to the right at C. Find the reactions and the forces in all members.",
+       "model_answer_md": "**Reactions**: $\\sum F_x$: $H_A=6$ kN to the left.\n$\\sum M_A=0$: $R_B(4)-6(2)=0\\Rightarrow R_B=3$ kN (up); $V_A=-3$ kN (3 kN downward).\n**Joint B**: $\\sum F_y$: $F_{BC}\\sin45^\\circ+3=0\\Rightarrow F_{BC}=-4.243$ kN (C); BA points left and BC points up-left, so $\\sum F_x$: $-F_{AB}-0.707F_{BC}=0\\Rightarrow F_{AB}=+3$ kN (T).\n**Joint A**: $F_{AC}\\sin45^\\circ-3=0\\Rightarrow F_{AC}=+4.243$ kN (T).\n\n| Member | Force (kN) | Nature |\n|---|---|---|\n| AB | 3.00 | T |\n| AC | 4.243 | T |\n| BC | 4.243 | C |",
+       "points": [
+        "$H_A=6$ kN left, $R_B=3$ kN up, $V_A=3$ kN down",
+        "$F_{BC}=4.243$ kN C",
+        "$F_{AB}=3$ kN T",
+        "$F_{AC}=4.243$ kN T"
+       ]
+      },
+      {
+       "id": "ji-q4",
+       "kind": "numerical",
+       "level": 3,
+       "marks": 5,
+       "q": "The same truss carries a 10 kN load at C, inclined at $30^\\circ$ to the vertical, directed downward and to the right. Find the reactions.",
+       "model_answer_md": "Components at C: horizontal $10\\sin30^\\circ=5$ kN (right), vertical $10\\cos30^\\circ=8.66$ kN (down).\n$\\sum F_x$: $H_A=5$ kN to the left.\n$\\sum M_A=0$: $R_B(4)-8.66(2)-5(2)=0\\Rightarrow R_B=6.83$ kN (up)\n$\\sum F_y$: $V_A=8.66-6.83=1.83$ kN (up).\n(Member forces follow joint by joint: AB 6.83 T, AC 2.59 C, BC 9.66 C.)",
+       "points": [
+        "Components 5 kN and 8.66 kN",
+        "$H_A=5$ kN",
+        "$R_B=6.83$ kN",
+        "$V_A=1.83$ kN"
+       ]
+      },
+      {
+       "id": "ji-p1",
+       "pyq": "e1d2f8b5675ec57b",
+       "level": 3,
+       "points": [
+        "Reactions: $R_F=1100$ N, $V_A=1100$ N, $H_A=346.4$ N (the 400 N load at B is normal to AC, components 346.4 and 200 N)",
+        "Joint F first: EF 1700 C, GF 1472 T; then E, D, B, A, G",
+        "AB 981.5 C, AG 837.2 T, BG 400 C, CD 1200 C, EF 1700 C, CG 1097 T, DG and EG 500 C"
+       ]
+      },
+      {
+       "id": "ji-p2",
+       "pyq": "676fd2739ddfbd72",
+       "level": 3,
+       "points": [
+        "Geometry: angle EDA is 90 degrees, loads of 20 kN normal to DA at D, B, A",
+        "Reactions: $R_A=V_E=25.98$ kN, $H_E=30$ kN",
+        "ED 30 C, DB 17.32 C, BA 17.32 C, DC 20 T, CB 20 C, EC 15 C, CA 5 T"
+       ]
+      },
+      {
+       "id": "ji-p3",
+       "pyq": "8e257f0a51a45f80",
+       "level": 3,
+       "points": [
+        "Loads normal to rafter AC resolved into components; $R_E=1.3375$ kN, $V_A=1.4625$ kN, $H_A=2.1$ kN",
+        "Zero-force: DF, CF, CG",
+        "AB and BC 2.438 C, CD and DE 2.229 C, BH 2.0 C, CH 1.923 T, AH 4.05 T, HG, GF, FE 1.783 T"
+       ]
+      },
+      {
+       "id": "ji-p4",
+       "pyq": "507ab0d27883a6db",
+       "level": 3,
+       "points": [
+        "Loads 40 kN and 30 kN at 45 degrees resolved: reactions $H_A=7.07$ kN, $V_A=10.61$ kN, $R_E=38.89$ kN",
+        "CE zero (joint E), DE 38.89 C",
+        "AB 15 C, AC 17.68 T, BC 17.68 C, BD 38.89 C, CD 25 T"
+       ]
+      },
+      {
+       "id": "ji-p5",
+       "pyq": "06b40866823dc67b",
+       "level": 3,
+       "points": [
+        "Equilateral frame of side 4 m with 2 kN horizontal at apex and 2 kN vertical at the mid-bottom joint",
+        "Reactions: $H=2$ kN, $R_{right}=2.732$ kN, $V_{left}=0.732$ kN down",
+        "PT 2 T, TQ 2 C, QR 3.155 C, LP 0.845 T, PQ 1.155 C, PM and QM 1.155 T, LM and MR 1.577 T"
+       ]
+      },
+      {
+       "id": "ji-p6",
+       "pyq": "b1d34c2607ed821c",
+       "level": 3,
+       "points": [
+        "Loads 10 kN normal to the top chord at B, C, D and 8 kN horizontal at B: resolve components",
+        "Reactions: $R_D=18.32$ kN, $V_A=8.51$ kN, $H_A=5.416$ kN",
+        "AB 12.04 C, BF 5.59 T, BC 13.46 C, CD 20.96 C, CE 0, FC 12.5 C, AF 3.10 T, FE and ED 14.28 T"
+       ]
+      },
+      {
+       "id": "ji-p7",
+       "pyq": "54837f4353cd2732",
+       "level": 3,
+       "points": [
+        "Reactions: $R_S=30$ kN, $V_P=10$ kN down, $H_P=40$ kN left",
+        "Zero-force members QU, RW, XV (joint rules)",
+        "PQ 32.83 C, QX and XR 40 C, RS 49.24 C, PU and UV 66.67 T, VR 75 T, QV 33.33 T, VW and WS 25 T"
+       ]
+      },
+      {
+       "id": "ji-p8",
+       "pyq": "a7246c3702fc5e34",
+       "level": 3,
+       "points": [
+        "Pulley is frictionless so cable tension is 200 N on both sides: load at C is the vector sum of 200 N down and 200 N along the pulled cable",
+        "Joint C and joint D equations with 30 degree and 45 degree members",
+        "For a horizontal pull: CD 84.5 T, CB 315.5 T, DA 59.8 C, BD 30.9 C; use the actual angle from the figure"
+       ]
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "topic": "Method of sections",
+   "subtopics": [
+    {
+     "id": "sections-principle",
+     "title": "Principle and procedure",
+     "theory_md": "Cut the truss by an imaginary section through **not more than three members** whose forces are unknown (and not all meeting at one point). Either part is a free body in equilibrium under the loads, reactions and the cut-member forces:\n$$\\sum F_x=0,\\quad \\sum F_y=0,\\quad \\sum M=0$$\n\n**Steps**: (1) find reactions; (2) pass section 1-1 through the required members; (3) assume cut forces as **tension** (away from the cut); (4) take moments about the point where two unknown forces meet, which gives the third directly; (5) negative = compression.\n\n| | Joints | Sections |\n|---|---|---|\n| Free body | one joint, concurrent | a part, non-concurrent |\n| Equations | 2 | 3 |\n| Unknowns | 2 | 3 |\n| Best for | all members | a few chosen members |",
+     "basics_md": "If you cut a loaf of bread, the slice you hold must still be in balance. The knife-cut forces are the unknown member forces. Choose the cut so that only three unknowns appear, then three equations are enough.",
+     "key_points": [
+      "Section passes through at most 3 unknown members, not concurrent",
+      "Apply $\\sum F_x=\\sum F_y=\\sum M=0$ on one part",
+      "Moments about the intersection of two unknowns give the third directly",
+      "Assume tension; negative answer means compression",
+      "Joints: all members; sections: selected members, no error carried forward"
+     ],
+     "questions": [
+      {
+       "id": "sp-q1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "The section in the method of sections should cut at most how many members with unknown force?",
+       "options": [
+        "3",
+        "2",
+        "4",
+        "5"
+       ],
+       "answer_index": 0,
+       "why": "Only three equilibrium equations are available for the free body."
+      },
+      {
+       "id": "sp-q2",
+       "kind": "mcq",
+       "level": 2,
+       "q": "To find the force in a cut top chord member, take moments about the point where",
+       "options": [
+        "the other two cut members meet",
+        "the top chord member itself passes",
+        "the load acts",
+        "the roller is"
+       ],
+       "answer_index": 0,
+       "why": "The other two forces then have zero moment and drop out."
+      },
+      {
+       "id": "sp-q3",
+       "kind": "short",
+       "level": 2,
+       "marks": 4,
+       "q": "Differentiate between the method of joints and the method of sections.",
+       "model_answer_md": "| | Method of joints | Method of sections |\n|---|---|---|\n| Free body | One joint | A part of truss cut by a section |\n| Force system | Concurrent | Non-concurrent |\n| Equations | $\\sum F_x=0,\\ \\sum F_y=0$ | $\\sum F_x=0,\\ \\sum F_y=0,\\ \\sum M=0$ |\n| Unknowns | At most 2 per joint | At most 3 per section |\n| Best for | Forces in all members | Force in a few members directly |\n| Error | Carried forward | Each member independent |",
+       "points": [
+        "Joint vs part as free body",
+        "Concurrent vs non-concurrent",
+        "2 vs 3 equations",
+        "All members vs selected members"
+       ]
+      },
+      {
+       "id": "sp-q4",
+       "kind": "short",
+       "level": 2,
+       "marks": 3,
+       "q": "Explain how a negative sign in the answer is interpreted in the method of sections.",
+       "model_answer_md": "All cut-member forces are first **assumed tensile**, acting away from the cut face. If the solved value is **negative**, the force actually acts in the opposite sense, i.e. towards the cut face, so the member is in **compression**. A positive value confirms tension.",
+       "points": [
+        "Assumed tension, away from the cut",
+        "Negative means compression",
+        "Positive means tension"
+       ]
+      },
+      {
+       "id": "sp-p1",
+       "pyq": "d3f27cd7a9963443",
+       "level": 2,
+       "points": [
+        "Truss cut by a section through not more than three unknown members",
+        "Part of the truss in equilibrium: $\\sum F_x=0,\\sum F_y=0,\\sum M=0$",
+        "Steps: reactions, section, assume tension, moments about the intersection of two unknowns",
+        "Sketch: section line cutting top chord, diagonal and bottom chord with force arrows away from the cut"
+       ]
+      },
+      {
+       "id": "sp-p2",
+       "pyq": "4450fe13938b9b5b",
+       "level": 2,
+       "points": [
+        "Joints: one joint, concurrent system, 2 equations, forces of all members; sections: a part, 3 equations, a few chosen members",
+        "Joints: error carried forward; sections: each member found independently",
+        "Sketch of a joint and of a truss cut by section 1-1"
+       ]
+      }
+     ]
+    },
+    {
+     "id": "sections-numericals",
+     "title": "Method of sections: numericals",
+     "theory_md": "**Choosing the moment centre.**\n- Chord member: moments about the joint where the other two cut members meet, or the point on the opposite chord.\n- Diagonal: usually $\\sum F_y=0$ on the cut part; otherwise moments about the point where the two chords meet when extended.\n- Parallel chords: $\\sum F_y=0$ for the diagonal.\n\nResolve an inclined member at the joint it passes through, with its horizontal and vertical components times their lever arms. If the section leaves a part with no support reaction (like the top of a tower), use that part so reactions are not needed.\n\nUse the zero-force rule first if a joint is unloaded.",
+     "basics_md": "A numerical is: reactions, draw the section, pick the part with fewer forces, write moments about the clever points. Each member needs one equation if you choose the points well.",
+     "key_points": [
+      "Reactions first (unless the cut part has no support)",
+      "Moments about the point where two cut members intersect",
+      "Resolve inclined member at the joint on the moment axis",
+      "Diagonal: $\\sum F_y$ for parallel chords",
+      "Tabulate with nature (T or C)"
+     ],
+     "questions": [
+      {
+       "id": "sn-q1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "A Pratt truss under gravity load has its top chord in",
+       "options": [
+        "compression",
+        "tension",
+        "zero force",
+        "bending only"
+       ],
+       "answer_index": 0,
+       "why": "Top chord compresses, bottom chord stretches, like a simply supported beam."
+      },
+      {
+       "id": "sn-q2",
+       "kind": "mcq",
+       "level": 2,
+       "q": "For parallel chords, the force in a cut diagonal is best found from",
+       "options": [
+        "$\\sum F_y=0$ on the cut part",
+        "moments about the diagonal's own end",
+        "moments about the roller",
+        "$\\sum F_x=0$ only"
+       ],
+       "answer_index": 0,
+       "why": "Chords are horizontal, so only the diagonal and the shear carry vertical force."
+      },
+      {
+       "id": "sn-q3",
+       "kind": "numerical",
+       "level": 2,
+       "marks": 6,
+       "q": "A Pratt truss of span 12 m has three panels of 4 m and a height of 3 m. Bottom joints A, B, C, D at 0, 4, 8, 12 m; top joints E above B and F above C; members AE, EF, FD, AB, BC, CD, BE, CF, EC. Loads 18 kN at E and 6 kN at F (downward). A is hinged, D is on a roller. Find the forces in EF, EC and BC by the method of sections.",
+       "model_answer_md": "**Reactions**: $R_D(12)=18(4)+6(8)=120\\Rightarrow R_D=10$ kN; $R_A=24-10=14$ kN; $H_A=0$.\n\n**Section 1-1** cuts EF, EC and BC; take the left part (A, B, E).\n$\\sum M_C=0$ (EC and BC pass through C; anticlockwise positive): $-14(8)+18(4)-3F_{EF}=0\\Rightarrow F_{EF}=-13.33$ kN (C).\n$\\sum M_E=0$ (EF and EC pass through E): $-14(4)+3F_{BC}=0\\Rightarrow F_{BC}=+18.67$ kN (T).\n$\\sum F_y=0$: $14-18-0.6F_{EC}=0\\Rightarrow F_{EC}=-6.67$ kN (C) (EC has $\\sin\\theta=3/5$).\n\n| Member | Force (kN) | Nature |\n|---|---|---|\n| EF | 13.33 | C |\n| EC | 6.67 | C |\n| BC | 18.67 | T |",
+       "points": [
+        "Reactions $R_A=14$ kN, $R_D=10$ kN",
+        "Moments about C give EF 13.33 kN C",
+        "Moments about E give BC 18.67 kN T",
+        "$\\sum F_y$ gives EC 6.67 kN C"
+       ]
+      },
+      {
+       "id": "sn-p1",
+       "pyq": "de0f0f218dff168f",
+       "level": 2,
+       "points": [
+        "Reactions: $R_B=27.5$ kN up, $V_A=12.5$ kN down",
+        "Section through CD, BD, BE with the right part: $F_{CD}=17.68$ kN T (moments about B), $F_{BE}=25$ kN C (moments about D), $F_{BD}=5.85$ kN C ($\\sum F_y$)",
+        "Section through AB, BC, CD with moments about A: BC zero-force",
+        "Table: BC 0, BD 5.85 C, BE 25.00 C"
+       ]
+      },
+      {
+       "id": "sn-p2",
+       "pyq": "2397b137f4ec4188",
+       "level": 2,
+       "points": [
+        "Same truss and 15 kN load: reactions $R_B=27.5$ kN, $V_A=12.5$ kN down",
+        "BC 0, BD 5.85 C, BE 25 C, CD 17.68 T",
+        "DE from a section around joint E by moments about B: 14.16 kN T",
+        "Tabulated with nature"
+       ]
+      },
+      {
+       "id": "sn-p3",
+       "pyq": "50e8fb2d0fed35a1",
+       "level": 3,
+       "points": [
+        "Roller of weight 1000 N: cable tension $T=1000\\sin\\alpha=600$ N, normal reaction $N=1000\\cos\\alpha=800$ N with $\\sin\\alpha=0.6$",
+        "Reactions: $R_B=250$ N, $A_y=750$ N",
+        "Section through ID, IF, GF: ID 1016.7 N C, IF 500 N T, GF 333.3 N T (as read from the figure)"
+       ]
+      },
+      {
+       "id": "sn-p4",
+       "pyq": "e531653d4fde895a",
+       "level": 2,
+       "points": [
+        "Reactions: $R_B=6$ kN, $R_A=0$",
+        "Section through DE, DB, CB with the left part",
+        "$F_{DE}=1.887$ kN T (moments about B); $F_{CB}=0$ (moments about D); $F_{DB}=1.887$ kN C ($\\sum F_y$)"
+       ]
+      },
+      {
+       "id": "sn-p5",
+       "pyq": "802544acbaa455cb",
+       "level": 3,
+       "points": [
+        "Reactions: $R_A=18.33$ kN, $R_G=11.67$ kN",
+        "Sections cutting CD, CJ, KJ and DE, EJ, JI: $F_{CD}=F_{DE}=18.63$ kN C (moments about J)",
+        "Third section around D: $F_{DJ}=16.67$ kN T"
+       ]
+      },
+      {
+       "id": "sn-p6",
+       "pyq": "fdcef09cba07eb99",
+       "level": 3,
+       "points": [
+        "Joint E has two non-collinear members and no load, so CE and ED are zero",
+        "Section through AC, BC, BD with the upper part (no reactions needed)",
+        "$F_{AC}=2.828$ kN T (moments about B), $F_{BD}=2.828$ kN C ($\\sum F_x$), $F_{BC}=2$ kN C ($\\sum F_y$)"
+       ]
+      },
+      {
+       "id": "sn-p7",
+       "pyq": "c1a0fce224e9fbb9",
+       "level": 2,
+       "points": [
+        "Section just below CD cutting CE, CF, DF; use the upper part so no reactions are needed",
+        "Moments about C: $-2(3)-4F_{DF}=0$",
+        "$F_{DF}=1.5$ kN compression"
+       ]
+      },
+      {
+       "id": "sn-p8",
+       "pyq": "dfd99f9af1f5295e",
+       "level": 3,
+       "points": [
+        "Reactions: $R_F=52.5$ kN downward, $V_H=262.5$ kN (support H hinge)",
+        "Section through DE, HE, HG with the right part",
+        "$F_{DE}=240$ kN T (moments about H), $F_{HG}=100$ kN C (moments about E), $F_{HE}=186.0$ kN C ($\\sum F_y$)"
+       ]
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "topic": "Method of tension coefficients",
+   "subtopics": [
+    {
+     "id": "tc-definition",
+     "title": "Tension coefficient and joint equations",
+     "theory_md": "The **tension coefficient** of a member of length $L$ and tension $T$ is\n$$t=\\frac{T}{L}\\quad(\\text{force per unit length};\\ t>0\\ \\text{tension},\\ t<0\\ \\text{compression})$$\n\nFor a member from joint 1 $(x_1,y_1,z_1)$ to joint 2, its pull on joint 1 has components\n$$X=t(x_2-x_1),\\quad Y=t(y_2-y_1),\\quad Z=t(z_2-z_1)$$\nSo no angles are needed, only coordinates.\n\n**At each joint**: $\\sum t\\,\\Delta x+P_x=0,\\ \\sum t\\,\\Delta y+P_y=0,\\ \\sum t\\,\\Delta z+P_z=0$. Solve for $t$'s, then $T=tL$, with $L=\\sqrt{\\Delta x^2+\\Delta y^2+\\Delta z^2}$.\n\nMainly used for **space trusses** (3 equations per joint, so up to 3 unknowns).",
+     "basics_md": "Instead of finding angles and sines, we scale the force by the member length. Then each force component is just the coordinate difference times t. The equations look the same for every joint, which is why it suits computers and 3-D trusses.",
+     "key_points": [
+      "Tension coefficient $t=T/L$: positive tension, negative compression",
+      "Force components on a joint: $t\\Delta x,\\ t\\Delta y,\\ t\\Delta z$",
+      "Joint equilibrium: $\\sum t\\Delta x+P_x=0$ etc.",
+      "Member force $T=tL$ with $L$ from coordinates",
+      "Space truss: 3 equations per joint"
+     ],
+     "questions": [
+      {
+       "id": "tc-q1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "The tension coefficient of a member is defined as",
+       "options": [
+        "tension divided by length",
+        "tension times length",
+        "length divided by tension",
+        "tension per unit area"
+       ],
+       "answer_index": 0,
+       "why": "$t=T/L$."
+      },
+      {
+       "id": "tc-q2",
+       "kind": "mcq",
+       "level": 1,
+       "q": "A negative tension coefficient means the member is in",
+       "options": [
+        "compression",
+        "tension",
+        "zero force",
+        "shear"
+       ],
+       "answer_index": 0,
+       "why": "$t$ has the sign of $T$."
+      },
+      {
+       "id": "tc-q3",
+       "kind": "mcq",
+       "level": 2,
+       "q": "For a joint of a space truss, the number of independent equilibrium equations is",
+       "options": [
+        "3",
+        "2",
+        "6",
+        "1"
+       ],
+       "answer_index": 0,
+       "why": "$\\sum F_x,\\sum F_y,\\sum F_z=0$ (concurrent forces)."
+      },
+      {
+       "id": "tc-q4",
+       "kind": "short",
+       "level": 2,
+       "marks": 3,
+       "q": "Derive the components of a member force in terms of its tension coefficient.",
+       "model_answer_md": "Let a member of length $L$ run from joint 1 to joint 2 with tension $T$. Its direction cosines are $(x_2-x_1)/L$ etc., so the pull on joint 1 along the member has components\n$X=T\\dfrac{x_2-x_1}{L}=t(x_2-x_1)$, $Y=t(y_2-y_1)$, $Z=t(z_2-z_1)$ where $t=T/L$.\nThe force on joint 2 is equal and opposite.",
+       "points": [
+        "Direction cosines $\\Delta x/L$",
+        "$X=T\\Delta x/L=t\\Delta x$",
+        "Same for $Y$ and $Z$"
+       ]
+      }
+     ]
+    },
+    {
+     "id": "tc-numericals",
+     "title": "Tension coefficients: plane and space numericals",
+     "theory_md": "**Plane joint** (2 equations): write $\\sum t\\Delta x+P_x=0$ and $\\sum t\\Delta y+P_y=0$ using coordinates of the other ends, then $T=tL$.\n\n**Space joint**: with 3 members meeting at a loaded joint, solve the three equations for the three $t$'s.\n\nTake $\\Delta$ as (far end minus the joint under study). Include external load components with their sign; a downward load is $-P$ in $z$ or $y$.\n\n**Worked plane example**: load 10 kN down at O(0,0); members to A(-3,4) and B(3,4). $-3t_A+3t_B=0$ and $4t_A+4t_B-10=0$, so $t_A=t_B=1.25$ and $T=1.25\\times5=6.25$ kN each (tension).",
+     "basics_md": "Write the joint equations, plug in the coordinate differences, solve like simultaneous equations, then multiply by length. The only trap is the sign of the load and the order of subtracting coordinates.",
+     "key_points": [
+      "Set up $\\sum t\\Delta x+P_x=0$ and the $y$, $z$ equations at the joint",
+      "$\\Delta$ = far end minus joint; include load with sign",
+      "$T=tL$ for the magnitude and nature",
+      "Symmetry reduces unknowns in a tripod"
+     ],
+     "questions": [
+      {
+       "id": "tn-q1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "A joint O at the origin has a member to A(4, 3). Length $L$ of the member is",
+       "options": [
+        "5",
+        "7",
+        "1",
+        "25"
+       ],
+       "answer_index": 0,
+       "why": "$\\sqrt{4^2+3^2}=5$."
+      },
+      {
+       "id": "tn-q2",
+       "kind": "numerical",
+       "level": 2,
+       "marks": 4,
+       "q": "A load of 10 kN hangs downward from joint O at the origin, supported by two members OA and OB going up to A(-3, 4) m and B(3, 4) m. Using tension coefficients, find the forces in OA and OB.",
+       "model_answer_md": "Equilibrium of joint O (coordinates of A and B relative to O):\n$\\sum X=0$: $t_{OA}(-3)+t_{OB}(3)=0\\Rightarrow t_{OA}=t_{OB}=t$\n$\\sum Y=0$: $t_{OA}(4)+t_{OB}(4)-10=0\\Rightarrow 8t=10\\Rightarrow t=1.25$ kN/m\n$L=\\sqrt{3^2+4^2}=5$ m, so $T_{OA}=T_{OB}=1.25\\times5=6.25$ kN (tension).",
+       "points": [
+        "$\\sum X$ gives equal $t$",
+        "$\\sum Y$ gives $t=1.25$",
+        "$L=5$ m",
+        "$T=6.25$ kN tension in each"
+       ]
+      },
+      {
+       "id": "tn-q3",
+       "kind": "numerical",
+       "level": 3,
+       "marks": 6,
+       "q": "A tripod has its apex O at the origin and its feet at A(2, 0, -4), B(-1, 1.732, -4) and C(-1, -1.732, -4) m (z upward). A vertical load of 30 kN acts downward at O. Find the force in each leg.",
+       "model_answer_md": "By symmetry $t_{OA}=t_{OB}=t_{OC}=t$.\n$\\sum Z=0$: $t(-4)+t(-4)+t(-4)-30=0\\Rightarrow t=-2.5$ kN/m\n$\\sum X=0$: $t(2-1-1)=0$ is satisfied; $\\sum Y=0$: $t(1.732-1.732)=0$ is satisfied.\nLength of each leg $L=\\sqrt{2^2+4^2}=\\sqrt{20}=4.472$ m (check B: $1+3+16=20$).\n$T=tL=-2.5\\times4.472=-11.18$ kN, so **each leg carries 11.18 kN in compression**.",
+       "points": [
+        "Symmetry gives equal $t$",
+        "$\\sum Z$ gives $t=-2.5$",
+        "$L=4.472$ m",
+        "$T=-11.18$ kN, compression"
+       ]
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "topic": "Graphical approach",
+   "subtopics": [
+    {
+     "id": "force-funicular",
+     "title": "Force polygon and funicular polygon",
+     "theory_md": "**Force polygon**: draw the forces to scale, head to tail in order. The closing line (start to end) is the **resultant** in magnitude and direction. If it closes, the resultant force is zero. (Law of polygon of forces.)\n\n**Funicular (link) polygon**: for non-concurrent forces. On the space diagram, draw links parallel to the rays joining a pole O to the vertices of the force polygon. The first and last links, extended, meet on the line of action of the resultant, which fixes its **position**.\n\n**Equilibrium**: force polygon closes (no resultant force) and funicular polygon closes (no resultant couple).\n\nUse: resultant of non-concurrent forces and **reactions of a beam** (closing line of the funicular polygon). **Bow's notation** letters the spaces; a force is named by the spaces on its two sides.",
+     "basics_md": "The force polygon tells you how big the resultant is and which way it points. The funicular polygon, drawn like a hanging rope, tells you where it sits. You need both to replace a set of loads by a single equivalent force.",
+     "key_points": [
+      "Force polygon: forces head to tail, closing line is the resultant in magnitude and direction",
+      "Funicular polygon: links parallel to the rays from a pole; fixes the line of action of the resultant",
+      "Closed force polygon: no resultant force; closed funicular: no couple",
+      "Bow's notation: name forces by the spaces on both sides",
+      "Used for resultant of non-concurrent forces and reactions of beams"
+     ],
+     "questions": [
+      {
+       "id": "ff-q1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "The funicular polygon is used to find",
+       "options": [
+        "the line of action of the resultant",
+        "only its magnitude",
+        "only its direction",
+        "the pole position"
+       ],
+       "answer_index": 0,
+       "why": "The force polygon gives magnitude and direction; the funicular polygon gives position."
+      },
+      {
+       "id": "ff-q2",
+       "kind": "mcq",
+       "level": 2,
+       "q": "For equilibrium of a coplanar system, graphically",
+       "options": [
+        "both polygons must close",
+        "only the force polygon must close",
+        "only the funicular polygon must close",
+        "the pole must lie at the centre"
+       ],
+       "answer_index": 0,
+       "why": "Force polygon closes: $\\sum F=0$; funicular closes: $\\sum M=0$."
+      },
+      {
+       "id": "ff-q3",
+       "kind": "numerical",
+       "level": 2,
+       "marks": 4,
+       "q": "Parallel vertical loads of 20 kN, 30 kN and 10 kN act at 1 m, 3 m and 6 m from the left end. Find the resultant and its position (check of the graphical answer), and describe the graphical construction.",
+       "model_answer_md": "**Analytical check**: $R=20+30+10=60$ kN downward; $R\\bar x=20(1)+30(3)+10(6)=170$ kN·m, $\\bar x=170/60=2.833$ m from the left end.\n\n**Graphical**: (1) draw the loads on a space diagram and letter the spaces A, B, C, D; (2) draw the force polygon $abcd$ on a vertical line (length 60 kN to scale); (3) choose a pole O and draw rays $oa,ob,oc,od$; (4) draw links parallel to the rays across the spaces on the space diagram; (5) extend the first and last links: they meet on the line of the resultant, which is vertical through that point (at 2.833 m).",
+       "points": [
+        "$R=60$ kN",
+        "$\\bar x=2.833$ m",
+        "Force polygon then rays from a pole",
+        "Links parallel to rays; first and last links meet on the resultant"
+       ]
+      },
+      {
+       "id": "ff-q4",
+       "kind": "short",
+       "level": 2,
+       "marks": 3,
+       "q": "Explain how the reactions of a simply supported beam are found graphically.",
+       "model_answer_md": "Draw the load line $abc\\ldots$ to scale, choose a pole O and draw the rays. On the space diagram draw the funicular polygon, starting from the line of one support. Join the first and last points of the polygon by a **closing line**. Draw a ray through O parallel to the closing line; it cuts the load line into two parts which are the reactions $R_A$ and $R_B$ to scale.",
+       "points": [
+        "Load line and rays from the pole",
+        "Funicular polygon from the first support",
+        "Closing line",
+        "Parallel ray through the pole divides load line into reactions"
+       ]
+      },
+      {
+       "id": "ff-p1",
+       "pyq": "d1e24e4bfabda79e",
+       "level": 2,
+       "points": [
+        "Force polygon: forces drawn head to tail to scale; the closing line is the resultant; closed means zero resultant (law of polygon of forces)",
+        "Funicular polygon: non-concurrent forces, links parallel to rays from a pole, fixes the line of action of the resultant (construction steps)",
+        "Closed force polygon: no force; closed funicular polygon: no couple; used to find resultant and reactions"
+       ]
+      }
+     ]
+    },
+    {
+     "id": "stress-diagram",
+     "title": "Graphical analysis of a truss",
+     "theory_md": "The **stress (Maxwell-Bow) diagram** gives all member forces of a truss in one drawing.\n1. Draw the truss to scale; letter the **spaces** (Bow's notation); each member is named by the two spaces on its sides.\n2. Find the reactions (analytically or by the funicular polygon).\n3. Draw the external force polygon (loads and reactions) in order, going clockwise round the truss.\n4. Start at a joint with two unknown members: draw the force polygon of that joint (closed), lines parallel to the members.\n5. Move joint to joint; each new member adds a point to the diagram.\n6. **Nature**: transfer the arrow from the diagram to the joint. Arrow **towards** the joint is compression, **away** from the joint is tension. Magnitude by the scale.",
+     "basics_md": "Every joint is a closed polygon of forces. Bow's notation draws all of them in one picture so that each member force appears once as a single line, to scale.",
+     "key_points": [
+      "Letter spaces by Bow's notation; member named by the two spaces beside it",
+      "Reactions first; external force polygon drawn clockwise",
+      "Each joint is a closed force polygon: start where two unknowns remain",
+      "Arrow towards the joint: compression; away from the joint: tension",
+      "Member forces read off to scale"
+     ],
+     "questions": [
+      {
+       "id": "sd-q1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "In Bow's notation a force is named by",
+       "options": [
+        "the two spaces on its sides",
+        "its joint number",
+        "its length",
+        "its slope"
+       ],
+       "answer_index": 0,
+       "why": "For example the member between spaces A and B is AB."
+      },
+      {
+       "id": "sd-q2",
+       "kind": "mcq",
+       "level": 2,
+       "q": "In the stress diagram the arrow of a member force, transferred to the joint, points towards the joint. The member is in",
+       "options": [
+        "compression",
+        "tension",
+        "zero force",
+        "bending"
+       ],
+       "answer_index": 0,
+       "why": "A push on the joint means compression."
+      },
+      {
+       "id": "sd-q3",
+       "kind": "numerical",
+       "level": 2,
+       "marks": 4,
+       "q": "The apex joint of a symmetrical truss carries a 20 kN vertical load and two members each inclined at $60^\\circ$ to the horizontal meet there. Find the force in each member using the force triangle (sine rule).",
+       "model_answer_md": "Each member pushes up on the joint along a line at $60^\\circ$ to the horizontal. The closed force triangle (the 20 kN load and the two member forces) is isosceles with base angles $30^\\circ$ and apex angle $120^\\circ$.\nSine rule: $\\dfrac{F}{\\sin30^\\circ}=\\dfrac{20}{\\sin120^\\circ}\\Rightarrow F=\\dfrac{20(0.5)}{0.866}=11.55$ kN.\nThe arrows point towards the joint, so both members are in **compression**, 11.55 kN each.",
+       "points": [
+        "Closed force triangle at the joint",
+        "$2F\\sin60^\\circ=20$",
+        "$F=11.55$ kN each",
+        "Nature: compression"
+       ]
+      },
+      {
+       "id": "sd-q4",
+       "kind": "short",
+       "level": 3,
+       "marks": 4,
+       "q": "Describe the steps of the graphical method of finding member forces of a truss and how the nature of each force is decided.",
+       "model_answer_md": "1. Draw the truss to scale and letter the spaces by **Bow's notation**.\n2. Find the **reactions** and draw the external force polygon clockwise.\n3. Begin at a joint with **two unknowns**; draw its closed polygon with lines parallel to the members.\n4. Proceed joint to joint until all members are drawn.\n5. Measure the lengths to scale for the magnitudes.\n6. **Nature**: transfer the arrow to the joint: towards the joint is compression, away from the joint is tension.",
+       "points": [
+        "Bow's notation",
+        "Reactions and external polygon",
+        "Start joint with two unknowns",
+        "Progress joint by joint",
+        "Arrow rule for nature"
+       ]
+      }
+     ]
+    }
+   ]
+  }
+ ]
+}

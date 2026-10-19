@@ -1,0 +1,868 @@
+{
+ "code": "ME1104",
+ "unit": "Projection of Solids",
+ "written": "2026-10-19",
+ "by": "claude-sonnet-5-5, in a Claude Code session",
+ "topics": [
+  {
+   "topic": "Projection of polyhedrons",
+   "subtopics": [
+    {
+     "id": "solids-and-terms",
+     "title": "Solids, polyhedra and terms",
+     "theory_md": "A **polyhedron** is a solid bounded by plane faces. **Prism**: two equal parallel bases joined by rectangular faces. **Pyramid**: one base, triangular faces meeting at the **apex**. **Solids of revolution**: cylinder, cone (generators join apex to the base circle), sphere. **Regular polyhedra** (equal regular faces): tetrahedron 4, cube 6, octahedron 8, dodecahedron 12, icosahedron 20 faces; Euler $F+V=E+2$.\n\nThe **axis** joins the centres of the two ends (base centre to apex for a pyramid). The **slant edge** runs from the apex to a base corner. A **right** solid has its axis perpendicular to the base.",
+     "basics_md": "Every solid here is fixed by two numbers: the size of its base (side of a regular polygon, or diameter of a circle) and the length of its axis. Prisms and cylinders keep the same base at both ends; pyramids and cones come to a point.",
+     "key_points": [
+      "Prism: two equal parallel bases; pyramid: one base plus an apex",
+      "Cylinder and cone are solids of revolution",
+      "Axis joins base centre to the opposite end or apex; slant edge joins apex to a corner",
+      "Regular polyhedra: 4, 6, 8, 12, 20 faces; F + V = E + 2"
+     ],
+     "questions": [
+      {
+       "id": "t-q1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "A pyramid differs from a prism in having",
+       "options": [
+        "two bases",
+        "one base and an apex",
+        "only curved faces",
+        "a circular base"
+       ],
+       "answer_index": 1,
+       "why": "A pyramid has one base and triangular faces meeting at the apex."
+      },
+      {
+       "id": "t-q2",
+       "kind": "mcq",
+       "level": 1,
+       "q": "A regular hexahedron is the",
+       "options": [
+        "tetrahedron",
+        "cube",
+        "octahedron",
+        "triangular prism"
+       ],
+       "answer_index": 1,
+       "why": "Hexa means six: the cube has 6 equal square faces."
+      },
+      {
+       "id": "t-q3",
+       "kind": "mcq",
+       "level": 2,
+       "q": "The line joining the apex of a pyramid to a corner of its base is the",
+       "options": [
+        "axis",
+        "generator",
+        "slant edge",
+        "altitude of the base"
+       ],
+       "answer_index": 2,
+       "why": "The axis goes to the base centre; the line to a corner is a slant edge. 'Generator' is the word for a cone."
+      },
+      {
+       "id": "t-q4",
+       "kind": "short",
+       "level": 2,
+       "marks": 2,
+       "q": "Define a polyhedron and name the five regular polyhedra with their number of faces.",
+       "model_answer_md": "**Polyhedron:** a solid bounded by plane (flat) faces.\n\n**Regular polyhedra:** tetrahedron (4 triangles), cube or hexahedron (6 squares), octahedron (8 triangles), dodecahedron (12 pentagons), icosahedron (20 triangles).",
+       "points": [
+        "Polyhedron = solid bounded by plane faces",
+        "Tetrahedron 4, cube 6, octahedron 8",
+        "Dodecahedron 12, icosahedron 20"
+       ]
+      },
+      {
+       "id": "t-q5",
+       "kind": "numerical",
+       "level": 2,
+       "marks": 2,
+       "q": "A hexagonal pyramid has 7 faces and 7 vertices. Find its number of edges using Euler's formula and check by counting.",
+       "model_answer_md": "$F+V=E+2$, so $E=7+7-2=12$.\nCheck: 6 base edges + 6 slant edges = 12.",
+       "points": [
+        "Formula F + V = E + 2",
+        "E = 12, checked by counting 6 + 6"
+       ]
+      }
+     ]
+    },
+    {
+     "id": "simple-positions",
+     "title": "Solid in simple positions",
+     "theory_md": "In the **simple position** the axis is perpendicular to one reference plane, and the base is parallel to it.\n\n- **Axis perpendicular to HP** (base on HP): top view (TV) is the **true shape of the base**; front view (FV) is a rectangle (prism, cylinder) or triangle (pyramid, cone) of height = axis length.\n- **Axis perpendicular to VP**: FV is the true base; TV is the rectangle or triangle.\n- **Axis parallel to both planes**: both views are rectangles (prism) or triangles (pyramid).\n\nResting on a **rectangular face** (prism) means the axis is parallel to HP and a base edge is perpendicular to the plane of the views. Draw the view that shows the true shape first, then project the other.",
+     "basics_md": "When a face is parallel to a plane, its view on that plane is its true shape. Make the base parallel to the plane you are looking at, draw the true shape, then project the second view by drawing projector lines and measuring the axis length.",
+     "key_points": [
+      "Axis perpendicular to HP: TV is the true base, FV height = axis length",
+      "Axis perpendicular to VP: FV is the true base, TV is rectangle or triangle",
+      "Draw the view with the true shape first, then project",
+      "Hidden edges dashed, corners labelled"
+     ],
+     "questions": [
+      {
+       "id": "s-q1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "A pentagonal prism stands with its axis perpendicular to the HP. Its top view is a",
+       "options": [
+        "rectangle",
+        "pentagon",
+        "triangle",
+        "circle"
+       ],
+       "answer_index": 1,
+       "why": "The base is parallel to HP, so the TV is the true pentagon."
+      },
+      {
+       "id": "s-q2",
+       "kind": "mcq",
+       "level": 1,
+       "q": "A square pyramid has its axis perpendicular to the VP. Its front view is a",
+       "options": [
+        "triangle",
+        "square with diagonals",
+        "rectangle",
+        "pentagon"
+       ],
+       "answer_index": 1,
+       "why": "The base is parallel to VP, so FV shows the square with the apex at the centre and edges drawn to the corners."
+      },
+      {
+       "id": "s-q3",
+       "kind": "mcq",
+       "level": 2,
+       "q": "A cone stands on its base on HP with axis 60 mm. The front view is",
+       "options": [
+        "a circle",
+        "a triangle of height 60 mm",
+        "an ellipse",
+        "a rectangle"
+       ],
+       "answer_index": 1,
+       "why": "FV is a triangle: base diameter on XY and apex 60 mm above."
+      },
+      {
+       "id": "s-q4",
+       "kind": "long",
+       "level": 3,
+       "marks": 4,
+       "q": "A hexagonal pyramid of base side 30 mm and axis 60 mm stands on its base on HP with one base edge parallel to VP. Draw and describe the top and front views. State the dimensions.",
+       "model_answer_md": "**Given:** hexagonal pyramid, side 30 mm, axis 60 mm, base on HP.\n**Top view:** regular hexagon of side 30 mm (width across corners 60 mm, across flats $30\\sqrt3=51.96$ mm), centre $o$; join $o$ to all six corners (visible slant edges).\n**Front view:** draw $XY$. Project the six corners down to $XY$ to get the 60 mm base line (and the nearer corners). Mark the apex $o'$ 60 mm above the base centre. Join $o'$ to the base points.\n**Visibility:** all edges seen from the front are drawn solid; the rear corner edges coincide in FV. Label corners $a, b, \\ldots, f$ and apex $o$.\n**Result:** TV a hexagon with lines to the centre; FV a triangle 60 mm base by 60 mm high.",
+       "points": [
+        "Base on HP gives TV as true hexagon of side 30 mm",
+        "Join apex (centre) to all corners in TV",
+        "FV: base line on XY, apex 60 mm above centre",
+        "Mark dimensions, label corners",
+        "Hidden edges dashed"
+       ]
+      },
+      {
+       "id": "s-p1",
+       "pyq": "428f4f404b80a9e2",
+       "level": 2,
+       "points": [
+        "Axis perpendicular to VP, so the base hexagon is parallel to VP and FV shows the true hexagon of side 25 mm",
+        "Resting on a rectangular face on HP: one side of the hexagon lies on XY in the FV",
+        "TV is a rectangle 70 mm long (axis length) by 50 mm wide (across corners), divided by two longitudinal lines at 12.5 mm and 37.5 mm",
+        "Hidden lines dashed; centre lines marked; dimensions and labels"
+       ]
+      }
+     ]
+    },
+    {
+     "id": "stage-method",
+     "title": "Changing position: the stage rule",
+     "theory_md": "Every inclined position is built from the simple position in **stages**; the same views are only redrawn, never changed in shape.\n\n- **Inclination to HP**: the FV is tilted (rotated about the resting point or edge). **The TV is then projected**, with horizontal distances taken from the previous TV and projectors from the new FV.\n- **Inclination to VP**: the TV is rotated (its shape does not change). **The FV is then projected**, keeping **heights** from the previous FV.\n- **Rule:** while a tilt or turn is made, the other view's measures (heights or plan lengths) stay constant.\n\nOrder: first the condition that fixes the axis to HP, then the one to VP (for HP-based solids). True inclinations to a plane appear true only in the view on the plane parallel to the line.",
+     "basics_md": "Imagine the solid lying flat on the table, then lifting one end (tilt: the front view changes) and then turning the whole thing about a vertical line (turn: the top view just rotates). A rotation keeps the height of every point the same, so the front view heights carry over.",
+     "key_points": [
+      "Tilt to HP: redraw the FV tilted, then project the TV",
+      "Turn to VP: rotate the TV, then project the FV",
+      "Heights stay fixed during a turn, plan distances stay fixed during a tilt",
+      "Each view in a stage is the same shape as in the previous stage until projected anew"
+     ],
+     "questions": [
+      {
+       "id": "m-q1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "To turn a solid so that its edge makes an angle with the VP, the view that is rotated unchanged is the",
+       "options": [
+        "front view",
+        "top view",
+        "side view",
+        "both views"
+       ],
+       "answer_index": 1,
+       "why": "Rotation about a vertical axis does not alter the TV shape; the FV is then projected."
+      },
+      {
+       "id": "m-q2",
+       "kind": "mcq",
+       "level": 1,
+       "q": "While the TV is being rotated in the final stage, which quantity stays the same in the FV?",
+       "options": [
+        "Width of each point",
+        "Height of each point above XY",
+        "Slope of the axis in FV",
+        "Nothing"
+       ],
+       "answer_index": 1,
+       "why": "Points move horizontally in the FV, so their heights above XY are unchanged."
+      },
+      {
+       "id": "m-q3",
+       "kind": "mcq",
+       "level": 2,
+       "q": "A solid has its axis inclined to the HP and its plan of the axis inclined to the VP. The stage order is",
+       "options": [
+        "VP first, then HP",
+        "HP inclination first (tilt FV), then rotate TV",
+        "TV rotated, then FV tilted",
+        "any order gives the same result"
+       ],
+       "answer_index": 1,
+       "why": "Tilt the FV for the HP angle first, then rotate the TV for the VP angle."
+      },
+      {
+       "id": "m-q4",
+       "kind": "short",
+       "level": 2,
+       "marks": 3,
+       "q": "State the rule for drawing a solid with its axis inclined to the HP and its plan of axis inclined to the VP. Why can it not be done in one step?",
+       "model_answer_md": "**Rule (three stages):**\n1. **Stage I:** draw the solid in the simple position (base parallel to HP), TV and FV.\n2. **Stage II:** redraw the FV with the axis tilted to the given angle with $XY$ (resting point or edge kept on $XY$); project the TV.\n3. **Stage III:** rotate the Stage II TV so the plan of the axis (or the resting edge) makes the given angle with $XY$; project the final FV with heights from Stage II.\nIt cannot be done in one step because both inclinations are measured in different planes; the second is measured on the TV which exists only after the first tilt.",
+       "points": [
+        "Stage I simple position",
+        "Stage II tilt FV, project TV",
+        "Stage III rotate TV, project FV with heights from Stage II",
+        "Second angle can only be set on the TV after the first tilt"
+       ]
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "topic": "Prisms and pyramids",
+   "subtopics": [
+    {
+     "id": "prism-edge-on-hp",
+     "title": "Prism resting on an edge: axis to HP, edge to VP",
+     "theory_md": "Data: base edge on HP, axis at $\\theta$ to HP, the resting edge at $\\varphi$ to VP.\n\n1. **Stage I:** TV = true base with the resting edge **perpendicular to $XY$** (a point in the FV if axis is vertical). FV = rectangle (height = axis).\n2. **Stage II:** redraw the FV with the axis at $\\theta$ to $XY$, resting edge (a point) on $XY$. Project TV: axis length in TV $=L\\cos\\theta$, height of the far end $=L\\sin\\theta$.\n3. **Stage III:** rotate the TV so the **resting edge** makes $\\varphi$ with $XY$. Project FV, heights from Stage II.\n\nExample: axis 100 mm, $\\theta=45^\\circ$: height $=100\\sin45^\\circ=70.71$ mm, TV length $=70.71$ mm. If the *edge* is given as inclined to the HP instead, the data are contradictory; read it as inclined to the VP.",
+     "basics_md": "To rest a prism on an edge, picture it standing on its base, then lean it over the base edge like a falling box. Leaning (tilt) is the HP angle; then you turn the box on the floor (turn) for the VP angle.",
+     "key_points": [
+      "Stage I: resting edge perpendicular to XY in the TV",
+      "Stage II: tilt the FV so axis is at theta; heights L sin(theta), plan length L cos(theta)",
+      "Stage III: rotate TV so the resting edge makes phi with XY",
+      "Project FV with Stage II heights; dashed hidden lines"
+     ],
+     "questions": [
+      {
+       "id": "p-q1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "A prism rests on a base edge on HP with axis at 30 degrees to HP. In Stage II the resting edge is drawn",
+       "options": [
+        "parallel to XY in the FV",
+        "as a point on XY in the FV",
+        "at 30 degrees to XY",
+        "at 90 degrees to XY in the TV"
+       ],
+       "answer_index": 1,
+       "why": "The resting edge is perpendicular to the VP in Stage I, so it appears as a point on XY."
+      },
+      {
+       "id": "p-q2",
+       "kind": "mcq",
+       "level": 2,
+       "q": "A prism with axis 75 mm is tilted to 45 degrees to HP. The height of the top end above HP is",
+       "options": [
+        "75 mm",
+        "53.03 mm",
+        "37.5 mm",
+        "106 mm"
+       ],
+       "answer_index": 1,
+       "why": "$75\\sin45^\\circ=53.03$ mm. Using $\\cos$ or $\\tan$ gives the plan length or another wrong value."
+      },
+      {
+       "id": "p-q3",
+       "kind": "numerical",
+       "level": 2,
+       "marks": 3,
+       "q": "A square prism, base 40 mm, axis 100 mm, rests on a base edge on HP with its axis at 45 degrees to HP. Find the height of the highest point of the axis and the length of the axis in the TV.",
+       "model_answer_md": "Height of far end of axis $=L\\sin\\theta=100\\sin45^\\circ=\\mathbf{70.71\\ mm}$.\nPlan length of axis $=L\\cos\\theta=100\\cos45^\\circ=\\mathbf{70.71\\ mm}$.\n",
+       "points": [
+        "Height = L sin(theta) = 70.71 mm",
+        "Plan length = L cos(theta) = 70.71 mm"
+       ]
+      },
+      {
+       "id": "p-q4",
+       "kind": "long",
+       "level": 3,
+       "marks": 10,
+       "q": "A square prism, base side 40 mm and axis 80 mm, rests on a base edge on HP. The axis is inclined at 30 degrees to HP and the resting edge is at 60 degrees to VP. Describe the construction of the projections.",
+       "model_answer_md": "**Given:** square prism, side 40 mm, axis 80 mm; base edge on HP; axis $30^\\circ$ to HP; edge $60^\\circ$ to VP.\n**Stage I:** TV: a square $abcd$ of side 40 mm with edge $ab$ perpendicular to $XY$, so in the FV $a'b'$ is a point. FV: rectangle $40\\times80$ on $XY$.\n**Stage II:** redraw the FV with the axis at $30^\\circ$ to $XY$ and $a'(b')$ on $XY$. Height of the top end $=80\\sin30^\\circ=40$ mm. Project the TV: plan length of the axis $=80\\cos30^\\circ=69.28$ mm; horizontal widths from the Stage I TV.\n**Stage III:** rotate the Stage II TV so that the edge $ab$ makes $60^\\circ$ with $XY$. Project the final FV (vertical lines from the new TV, horizontals from the Stage II FV).\n**Finish:** join corners, dash hidden edges, label all corners.",
+       "points": [
+        "Given data and stages named",
+        "Stage I: edge perpendicular to XY, rectangle 40 by 80",
+        "Stage II: axis 30 degrees, height 40 mm, plan length 69.28 mm",
+        "Stage III: edge 60 degrees to XY in TV, heights from Stage II",
+        "Hidden edges dashed, corners labelled"
+       ]
+      },
+      {
+       "id": "p-p1",
+       "pyq": "e19ee94fcb223ca7",
+       "level": 2,
+       "points": [
+        "Hexagonal prism edge 30 mm, axis 60 mm; one base edge on HP; axis 30 degrees to HP, 45 degrees to VP",
+        "Stage I: hexagon in TV with the resting edge perpendicular to XY; FV rectangle 60 mm high",
+        "Stage II: tilt FV so axis is 30 degrees to XY with resting edge on XY (height of top end 60 sin30 = 30 mm); project TV",
+        "Stage III: rotate TV so the axis (plan) is at 45 degrees to XY; project final FV using Stage II heights; hidden edges dashed"
+       ]
+      },
+      {
+       "id": "p-p2",
+       "pyq": "997a2dfcbfc5daa9",
+       "level": 2,
+       "points": [
+        "Square prism 40 mm side, 100 mm axis; base edge on HP, edge 30 degrees to VP, axis 45 degrees to HP",
+        "Stage 1: TV square with the resting edge perpendicular to XY, FV rectangle 40 by 100",
+        "Stage 2: tilt FV so axis is 45 degrees to XY, edge on XY (top at 100 sin45 = 70.71 mm); project TV",
+        "Stage 3: rotate TV so the resting edge makes 30 degrees with XY; project FV with Stage 2 heights; hidden lines, labels"
+       ]
+      },
+      {
+       "id": "p-p3",
+       "pyq": "ea559ef67944a775",
+       "level": 2,
+       "points": [
+        "Pentagonal prism 30 mm side, 75 mm axis; edge on HP inclined 45 degrees to VP; axis 45 degrees to HP",
+        "Stage I: pentagon in TV with the resting edge perpendicular to XY; FV rectangle 75 mm high",
+        "Stage II: tilt FV so the axis makes 45 degrees with XY, resting edge on XY (top height 75 sin45 = 53.03 mm); project TV",
+        "Stage III: rotate TV so the resting edge makes 45 degrees with XY; project final FV with Stage II heights"
+       ]
+      },
+      {
+       "id": "p-p4",
+       "pyq": "06b80e1e02aa1ddd",
+       "level": 3,
+       "points": [
+        "Given data: pentagonal prism 30 mm side, 75 mm axis; edge on HP; axis 45 degrees to HP; as printed the edge is 30 degrees to HP, which is inconsistent for a right prism, so it is read as 30 degrees to VP",
+        "Stage I: pentagon in TV with edge perpendicular to XY, FV rectangle 75 mm high",
+        "Stage II: tilt FV so axis is 45 degrees to XY with the edge on XY; project TV",
+        "Stage III: rotate TV so the edge makes 30 degrees with XY; project final FV; hidden edges dashed"
+       ]
+      }
+     ]
+    },
+    {
+     "id": "pyramid-edge-on-hp",
+     "title": "Pyramid resting on an edge: axis to HP, edge to VP",
+     "theory_md": "Same three stages as the prism, with the pyramid's apex.\n\n1. **Stage I:** TV = true base with the resting edge perpendicular to $XY$ and the apex at the centre joined to every corner. FV = triangle on $XY$ with apex at axis height.\n2. **Stage II:** tilt the FV so the **axis** makes $\\theta$ with $XY$ and the base edge rests on $XY$ (the edge is a point on $XY$). The apex height $=L\\sin\\theta$ plus the base-centre height. Project TV.\n3. **Stage III:** rotate the TV so the resting edge makes $\\varphi$ with $XY$, project FV with Stage II heights.\n\nFor a regular polygon, the circumradius is $R=\\dfrac{s}{2\\sin(180^\\circ/n)}$ and the inradius (centre to side) is $r=\\dfrac{s}{2\\tan(180^\\circ/n)}$. Pentagon, $s=20$: $R=17.01$ mm, $r=13.76$ mm.",
+     "basics_md": "A pyramid leaning on a base edge: first draw it standing on its base, then tilt it over the edge until the axis is at the given angle, then turn it on the table to the required direction.",
+     "key_points": [
+      "Stage I: base edge perpendicular to XY in the TV, apex at base centre",
+      "Stage II: tilt FV so the axis is theta to XY, edge on XY",
+      "Stage III: rotate TV so the edge is phi to XY; project FV with Stage II heights",
+      "Circumradius R = s / (2 sin(180/n)), inradius r = s / (2 tan(180/n))"
+     ],
+     "questions": [
+      {
+       "id": "y-q1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "When a pyramid rests on a base edge on HP and the axis is inclined at an angle, the angle is set in the",
+       "options": [
+        "TV",
+        "FV in Stage II",
+        "FV in Stage III",
+        "side view only"
+       ],
+       "answer_index": 1,
+       "why": "The inclination to HP is set by tilting the FV in Stage II."
+      },
+      {
+       "id": "y-q2",
+       "kind": "mcq",
+       "level": 2,
+       "q": "For a regular pentagon of side 20 mm the distance from centre to a corner is",
+       "options": [
+        "20 mm",
+        "13.76 mm",
+        "17.01 mm",
+        "10 mm"
+       ],
+       "answer_index": 2,
+       "why": "$R=20/(2\\sin36^\\circ)=17.01$ mm; 13.76 mm is the distance to the side midpoint."
+      },
+      {
+       "id": "y-q3",
+       "kind": "numerical",
+       "level": 2,
+       "marks": 3,
+       "q": "A pentagonal pyramid of base side 20 mm and axis 60 mm rests on a base edge on HP with its axis at 30 degrees to HP. Find the rise of the apex above the base centre and the plan length of the axis.",
+       "model_answer_md": "Rise of apex above the base centre $=L\\sin\\theta=60\\sin30^\\circ=\\mathbf{30\\ mm}$.\nPlan length of axis $=L\\cos\\theta=60\\cos30^\\circ=\\mathbf{51.96\\ mm}$.\n(The base centre itself lies above $XY$ because the base is tilted; its height is added to 30 mm to get the apex height above HP.)",
+       "points": [
+        "Rise = L sin(theta) = 30 mm",
+        "Plan length = L cos(theta) = 51.96 mm"
+       ]
+      },
+      {
+       "id": "y-q4",
+       "kind": "short",
+       "level": 2,
+       "marks": 4,
+       "q": "State the stages of drawing a hexagonal pyramid with a base edge on the ground, the axis at a given angle to HP and the edge at a given angle to VP.",
+       "model_answer_md": "1. **Stage I:** hexagon in TV with the resting edge perpendicular to $XY$; join the centre to all corners; draw the triangular FV on $XY$ with apex height equal to the axis.\n2. **Stage II:** redraw the FV with the axis at the given angle to $XY$ and the resting edge (a point) on $XY$; project the TV.\n3. **Stage III:** rotate the TV so the resting edge makes the given angle with $XY$; project the final FV with Stage II heights.\n4. Show hidden edges dashed and label corners.",
+       "points": [
+        "Stage I true base TV and triangle FV",
+        "Stage II tilt FV for the axis angle, project TV",
+        "Stage III rotate TV for the edge angle, project FV",
+        "Dashed hidden edges, labels"
+       ]
+      },
+      {
+       "id": "y-p1",
+       "pyq": "31f1b84c12a167e7",
+       "level": 2,
+       "points": [
+        "Pentagonal pyramid, base side 20 mm, axis 60 mm; base edge on ground; axis 30 degrees to HP; edge 45 degrees to VP",
+        "Stage I: TV regular pentagon with the resting edge perpendicular to XY, FV triangle with apex 60 mm high",
+        "Stage II: tilt FV so axis is 30 degrees to XY and the base edge is on XY; project TV",
+        "Stage III: rotate TV so the resting edge makes 45 degrees with XY; project final FV with Stage II heights; hidden edges dashed, corners a to e and o labelled"
+       ]
+      },
+      {
+       "id": "y-p2",
+       "pyq": "5574c852d0de2358",
+       "level": 2,
+       "points": [
+        "Hexagonal pyramid, base side 30 mm, axis 60 mm; base edge on ground at 45 degrees to VP; axis 30 degrees to HP",
+        "Stage I: hexagon TV with the resting edge perpendicular to XY; FV triangle height 60 mm",
+        "Stage II: tilt FV so axis is 30 degrees to XY with the edge on XY; project TV",
+        "Stage III: rotate TV so the edge makes 45 degrees with XY; project FV with Stage II heights; outlines, hidden edges dashed"
+       ]
+      }
+     ]
+    },
+    {
+     "id": "plan-of-axis",
+     "title": "Axis to HP and its plan to VP",
+     "theory_md": "Data: a corner or edge on HP, **axis at $\\theta$ to HP**, **plan (top view) of the axis at $\\varphi$ to the VP**.\n\n- In **Stage III** you rotate the TV so the line representing the **axis in the TV** (from the base centre to the apex, or along the prism's axis) makes $\\varphi$ with $XY$. This differs from the \"edge at $\\varphi$\" problems, where the resting edge is rotated.\n- Stage I: TV with the resting edge perpendicular to $XY$ (an edge) or the resting corner at the correct place (a corner); Stage II: tilt FV to $\\theta$; project TV.\n- **True angle to VP**: $\\sin\\psi=\\cos\\theta\\,\\sin\\varphi$. For $\\theta=30^\\circ$, $\\varphi=45^\\circ$: $\\sin\\psi=0.612$, $\\psi=37.76^\\circ$.",
+     "basics_md": "'Plan of the axis' just means the shadow of the axis on the ground. Once the solid is tilted, the shadow of the axis is a line in the top view; you turn the top view until that shadow line makes the given angle with the XY line.",
+     "key_points": [
+      "Plan of axis angle is set by rotating the TV so the axis line in the TV makes phi with XY",
+      "Resting edge or corner is on HP in Stage II",
+      "True angle to VP: sin(psi) = cos(theta) sin(phi)",
+      "Heights come from Stage II"
+     ],
+     "questions": [
+      {
+       "id": "a-q1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "The 'plan of the axis' means the axis as seen in the",
+       "options": [
+        "front view",
+        "top view",
+        "left side view",
+        "sectional view"
+       ],
+       "answer_index": 1,
+       "why": "Plan is another word for the top view."
+      },
+      {
+       "id": "a-q2",
+       "kind": "mcq",
+       "level": 2,
+       "q": "In Stage III of a problem with 'plan of axis at 30 degrees to VP', the line that is made 30 degrees to XY is",
+       "options": [
+        "the resting edge",
+        "the FV of the axis",
+        "the TV of the axis",
+        "the base diagonal"
+       ],
+       "answer_index": 2,
+       "why": "The TV of the axis, not the resting edge, takes the angle."
+      },
+      {
+       "id": "a-q3",
+       "kind": "numerical",
+       "level": 3,
+       "marks": 3,
+       "q": "A line (axis) is at 45 degrees to HP and its plan is at 30 degrees to the VP. Find the true angle between the axis and the VP.",
+       "model_answer_md": "$\\sin\\psi=\\cos\\theta\\,\\sin\\varphi=\\cos45^\\circ\\sin30^\\circ=0.7071\\times0.5=0.3536$.\n$\\psi=\\sin^{-1}(0.3536)=\\mathbf{20.7^\\circ}$.",
+       "points": [
+        "Relation sin(psi) = cos(theta) sin(phi)",
+        "psi = 20.7 degrees"
+       ]
+      },
+      {
+       "id": "a-q4",
+       "kind": "long",
+       "level": 3,
+       "marks": 10,
+       "q": "A hexagonal pyramid of base side 25 mm and axis 60 mm rests on a base corner on HP with the axis at 45 degrees to HP and the plan of the axis at 30 degrees to the VP. Describe the stages.",
+       "model_answer_md": "**Stage I:** TV: hexagon of side 25 mm with centre $o$, corners $a$ to $f$; corner $a$ is to rest on HP. FV: triangle on $XY$ with apex $o'$ at 60 mm.\n**Stage II:** redraw the FV with the base tilted so the axis $o'$ to the base centre is $45^\\circ$ to $XY$ and corner $a'$ is on $XY$. Height of apex above $XY$ is $60\\sin45^\\circ=42.43$ mm (plus base-centre height). Project the TV from Stage I horizontals and the new FV projectors.\n**Stage III:** rotate the Stage II TV about its centre so the plan of the axis makes $30^\\circ$ with $XY$. Project the final FV (vertical from the new TV, horizontals from the Stage II FV).\nJoin all edges, dash hidden ones and label.",
+       "points": [
+        "Stage I true base TV and FV",
+        "Stage II FV tilted with corner on XY, axis 45 degrees, TV projected",
+        "Stage III TV rotated so the plan of axis makes 30 degrees to XY",
+        "FV projected with Stage II heights; hidden dashed"
+       ]
+      },
+      {
+       "id": "a-p1",
+       "pyq": "bd35b86fdaf0b01f",
+       "level": 2,
+       "points": [
+        "Pentagonal prism, base edge 25 mm, axis 65 mm, a base edge on HP, axis 45 degrees to HP, plan of axis 30 degrees to VP",
+        "Stage I: pentagon TV with the resting edge perpendicular to XY; FV rectangle 65 mm high",
+        "Stage II: tilt FV so the axis is 45 degrees to XY with the edge on XY (top height 65 sin45 = 45.96 mm); project TV",
+        "Stage III: rotate TV so the plan of the axis makes 30 degrees with XY; project final FV with Stage II heights; hidden dashed, labelled"
+       ]
+      },
+      {
+       "id": "a-p2",
+       "pyq": "e3769f39930ac6af",
+       "level": 2,
+       "points": [
+        "Pentagonal pyramid, base side 30 mm, axis 60 mm; a base corner on HP; axis 45 degrees to HP; plan of axis 30 degrees to VP",
+        "Stage I: pentagon with centre o in TV, FV triangle on XY with apex 60 mm high",
+        "Stage II: tilt FV so the axis is 45 degrees with XY and the chosen corner is on XY; project TV",
+        "Stage III: rotate TV so the plan of the axis is 30 degrees to XY; project FV with Stage II heights; hidden edges dashed, labels a to e and o"
+       ]
+      },
+      {
+       "id": "a-p3",
+       "pyq": "53964e4fbebe27e7",
+       "level": 2,
+       "points": [
+        "Hexagonal pyramid, base side 30 mm, axis 60 mm; a corner on HP; axis 45 degrees to HP; plan of axis 30 degrees to VP",
+        "Stage 1: hexagon TV, FV triangle with apex 60 mm high",
+        "Stage 2: tilt FV about corner a' until the axis is 45 degrees to XY; project TV",
+        "Stage 3: rotate TV so the plan of the axis makes 30 degrees with XY; project FV; hidden edges dashed, corners a to f and apex o labelled"
+       ]
+      }
+     ]
+    },
+    {
+     "id": "slant-edge-and-corner",
+     "title": "Slant edge on HP, and resting on a corner",
+     "theory_md": "When a pyramid rests on a **slant edge** or a **corner**, Stage II is set by the slant geometry.\n\n- **Slant edge length:** $l=\\sqrt{h^2+R^2}$ with $R$ the circumradius. Hexagon, $s=30$ ($R=30$), $h=60$: $l=67.08$ mm.\n- **Slant edge on HP** (hexagonal pyramid): tilt the Stage I FV about the base corner until the **slant edge $o'a'$ lies on $XY$**. The axis then makes $\\tan^{-1}(R/h)=\\tan^{-1}(30/60)=26.57^\\circ$ with HP. Stage III: rotate TV so the TV of the slant edge makes the given angle with $XY$.\n- **Prism on a corner:** the long edge through the corner (parallel to the axis) is inclined at $\\theta$; the opposite base side is turned to $\\varphi$ in Stage III; \"vertex towards VP\" fixes the TV orientation.\n- \"Base visible\" means the base shows in the TV (apex on the far side).",
+     "basics_md": "A pyramid resting on a slant edge lies on one of its sloping edges like a tent lying on one pole. Make that pole lie flat on the ground line and everything else follows from the standard stages.",
+     "key_points": [
+      "Slant edge l = sqrt(h squared + R squared)",
+      "Slant edge on HP: tilt FV until o'a' lies on XY; axis angle = tan inverse (R/h)",
+      "Stage III: rotate TV so the stated edge makes phi with XY",
+      "Corner on HP: long edge at theta; vertex towards VP sets the orientation"
+     ],
+     "questions": [
+      {
+       "id": "e-q1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "In Stage II of a pyramid with a slant edge on HP, the edge that lies along XY in the FV is",
+       "options": [
+        "a base edge",
+        "the axis",
+        "the slant edge o'a'",
+        "the altitude"
+       ],
+       "answer_index": 2,
+       "why": "The slant edge o'a' is made to lie on XY."
+      },
+      {
+       "id": "e-q2",
+       "kind": "mcq",
+       "level": 2,
+       "q": "The slant edge of a hexagonal pyramid, side 30 mm and axis 60 mm, is",
+       "options": [
+        "60 mm",
+        "67.08 mm",
+        "90 mm",
+        "52.9 mm"
+       ],
+       "answer_index": 1,
+       "why": "$\\sqrt{60^2+30^2}=67.08$ mm (R = 30 for a regular hexagon)."
+      },
+      {
+       "id": "e-q3",
+       "kind": "numerical",
+       "level": 2,
+       "marks": 3,
+       "q": "A hexagonal pyramid, base side 30 mm and axis 60 mm, rests on a slant edge on HP. Find the length of the slant edge and the inclination of the axis to HP.",
+       "model_answer_md": "Circumradius of hexagon $R=s=30$ mm.\nSlant edge $l=\\sqrt{h^2+R^2}=\\sqrt{60^2+30^2}=\\mathbf{67.08\\ mm}$.\nThe slant edge makes $\\tan^{-1}(R/h)$ with the axis at the apex: $\\tan^{-1}(30/60)=\\mathbf{26.57^\\circ}$. With the slant edge on HP the axis is inclined at $26.57^\\circ$ to HP.",
+       "points": [
+        "l = sqrt(60 squared + 30 squared) = 67.08 mm",
+        "Axis inclination to HP = tan inverse (30/60) = 26.57 degrees"
+       ]
+      },
+      {
+       "id": "e-q4",
+       "kind": "short",
+       "level": 2,
+       "marks": 3,
+       "q": "What does 'base visible' mean when the pyramid is drawn on a slant edge?",
+       "model_answer_md": "It means the base is seen from above in the top view, so the apex is on the far side of the base; the base edges in the TV are solid and the edges seen only through the pyramid are dashed. The FV hidden edges are dashed.",
+       "points": [
+        "Base visible = base seen in the TV, apex behind it",
+        "Hidden edges dashed"
+       ]
+      },
+      {
+       "id": "e-p1",
+       "pyq": "2448836f001ae3c2",
+       "level": 2,
+       "points": [
+        "Hexagonal pyramid, side 30 mm, axis 60 mm; a slant edge on HP and at 45 degrees to VP; base visible",
+        "Slant edge length sqrt(60 squared + 30 squared) = 67.08 mm",
+        "Stage 1: hexagon TV with centre o, FV triangle height 60 mm; Stage 2: tilt FV about a' until the slant edge o'a' lies on XY, project TV",
+        "Stage 3: rotate TV so the TV of the slant edge oa makes 45 degrees with XY; project FV with Stage 2 heights; base visible, hidden edges dashed"
+       ]
+      },
+      {
+       "id": "e-p2",
+       "pyq": "e0d42e2d1491c6a0",
+       "level": 3,
+       "points": [
+        "Pentagonal prism 30 mm side, 75 mm height; rests on a base corner on HP; long edge through the corner 60 degrees to HP; opposite base side 30 degrees to VP; vertex towards VP",
+        "Stage I: TV pentagon with the resting corner towards the VP so the opposite side is parallel to XY; FV rectangle 75 mm high with the corner on XY",
+        "Stage II: tilt FV so the long edge through the corner is at 60 degrees to XY and the corner on XY (top height 75 sin60 = 64.95 mm); project TV",
+        "Stage III: rotate TV so the base side opposite the corner makes 30 degrees with XY with the vertex towards the VP; project FV with Stage II heights; hidden dashed"
+       ]
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "topic": "Solids of revolution in different positions",
+   "subtopics": [
+    {
+     "id": "cone-geometry",
+     "title": "Cylinder and cone: resting on a generator",
+     "theory_md": "A cylinder or cone is fixed by base diameter $d$ and axis $h$. The cone's **generator** (slant length) is $L=\\sqrt{h^2+(d/2)^2}$ and the **semi-apex angle** $\\alpha=\\tan^{-1}\\big(\\tfrac{d/2}{h}\\big)$.\n\n- **Cone on a generator on HP, axis parallel to VP:** the axis makes angle $\\alpha$ with HP (the generator lies on $XY$ in the FV). Stage I: TV circle (12 equal parts), FV triangle. Stage II: tilt the FV about the base point so the generator $o'a'$ lies on $XY$; project TV. The TV is an ellipse (base) with tangents to the apex.\n- **Cylinder** on a generator (line) on HP: the axis is parallel to HP; both views rectangles, TV circle if axis perpendicular to VP.\n\nExample: $d=50$, $h=65$: $L=69.64$ mm, $\\alpha=21.04^\\circ$.",
+     "basics_md": "A cone lying on its side rests on one straight line (generator) touching the floor. Tilting the cone about its base edge until that line is flat on the ground lets you find the angle between the axis and the floor: it equals the half angle at the apex.",
+     "key_points": [
+      "Generator L = sqrt(h squared + r squared); semi-apex angle alpha = tan inverse (r/h)",
+      "Cone on a generator: FV generator lies on XY, axis at alpha to HP",
+      "Divide the TV base circle into 12 equal parts; project points",
+      "TV: ellipse for the base with tangents to the apex; hidden edges dashed"
+     ],
+     "questions": [
+      {
+       "id": "c-q1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "A cone rests with a generator on HP and its axis parallel to VP. The inclination of its axis to HP is",
+       "options": [
+        "90 degrees",
+        "the semi-apex angle",
+        "twice the semi-apex angle",
+        "45 degrees"
+       ],
+       "answer_index": 1,
+       "why": "With the generator on HP the axis makes the semi-apex angle with HP."
+      },
+      {
+       "id": "c-q2",
+       "kind": "mcq",
+       "level": 2,
+       "q": "For a cone with d = 50 mm and h = 65 mm, the semi-apex angle is nearest to",
+       "options": [
+        "21 degrees",
+        "25 degrees",
+        "37 degrees",
+        "69 degrees"
+       ],
+       "answer_index": 0,
+       "why": "$\\tan^{-1}(25/65)=21.04^\\circ$. 69 degrees is the complement $90^\\circ-\\alpha$, a common slip."
+      },
+      {
+       "id": "c-q3",
+       "kind": "numerical",
+       "level": 2,
+       "marks": 3,
+       "q": "Find the generator length and semi-apex angle of a cone with base diameter 50 mm and axis 65 mm.",
+       "model_answer_md": "$r=25$ mm, $h=65$ mm.\n$L=\\sqrt{65^2+25^2}=\\sqrt{4850}=\\mathbf{69.64\\ mm}$.\n$\\alpha=\\tan^{-1}(25/65)=\\mathbf{21.04^\\circ}$.",
+       "points": [
+        "L = 69.64 mm",
+        "alpha = 21.04 degrees"
+       ]
+      },
+      {
+       "id": "c-p1",
+       "pyq": "e394849169ff1fbd",
+       "level": 2,
+       "points": [
+        "Cone base 50 mm diameter, axis 65 mm; resting on a generator on HP, axis parallel to VP",
+        "Stage I: TV circle 50 mm divided into 12 parts; FV triangle with base on XY and apex 65 mm above the centre",
+        "Stage II: rotate the FV about the base end until the generator o'a' lies on XY; axis angle with HP = tan inverse (25/65) = 21 degrees; project TV from new FV and Stage I TV",
+        "TV: base ellipse with tangents to the apex; hidden edges dashed; dimensions marked"
+       ]
+      }
+     ]
+    },
+    {
+     "id": "generator-in-vp",
+     "title": "Generator in the VP",
+     "theory_md": "**A generator in the VP** inclined at $\\theta$ to HP with the apex above HP: that generator appears **true length on the FV** and lies on $XY$ in the TV (it is in the VP, so its TV is on the line $XY$).\n\n- Axis inclination to HP $=\\theta+\\alpha$ (for the usual apex-up case), where $\\alpha=\\tan^{-1}(r/h)$.\n- Stage I: TV circle, FV triangle. Stage II: tilt the FV so the **left (or right) generator makes $\\theta$ with $XY$** (the axis therefore makes $\\theta+\\alpha$). Project TV: the generator's TV lies along $XY$ at the VP.\n\nExample: $d=50$, $h=60$: $L=65$ mm, $\\alpha=22.62^\\circ$; $\\theta=30^\\circ$ gives axis at $52.62^\\circ$.",
+     "basics_md": "Standing a cone on its side and tilting it so one straight edge of the cone lies against the back wall (the VP). Because the wall is parallel to the front view, that edge shows its real length and its real angle to the floor there.",
+     "key_points": [
+      "Generator in VP is true length in FV and lies on XY in the TV",
+      "Axis inclination to HP = theta + alpha (apex up)",
+      "Tilt FV so that generator makes theta with XY",
+      "Project TV; base circle becomes an ellipse"
+     ],
+     "questions": [
+      {
+       "id": "g-q1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "A generator lying in the VP appears in the top view",
+       "options": [
+        "as an ellipse",
+        "on the XY line",
+        "as a circle",
+        "at 90 degrees to XY"
+       ],
+       "answer_index": 1,
+       "why": "Every point of a line in the VP has zero distance from the VP, so its TV lies on XY."
+      },
+      {
+       "id": "g-q2",
+       "kind": "mcq",
+       "level": 2,
+       "q": "A cone has a generator in the VP inclined at 30 degrees to HP; semi-apex angle 22.62 degrees. The axis inclination to HP is",
+       "options": [
+        "7.38 degrees",
+        "30 degrees",
+        "52.62 degrees",
+        "60 degrees"
+       ],
+       "answer_index": 2,
+       "why": "$30^\\circ+22.62^\\circ=52.62^\\circ$ for apex-up."
+      },
+      {
+       "id": "g-q3",
+       "kind": "numerical",
+       "level": 2,
+       "marks": 3,
+       "q": "A cone of base diameter 40 mm and axis 50 mm has a generator in the VP inclined at 30 degrees to HP (apex up). Find the axis inclination to HP.",
+       "model_answer_md": "$\\alpha=\\tan^{-1}(20/50)=21.80^\\circ$.\nAxis inclination $=30^\\circ+21.80^\\circ=\\mathbf{51.80^\\circ}$.",
+       "points": [
+        "alpha = 21.80 degrees",
+        "Axis inclination = 51.80 degrees"
+       ]
+      },
+      {
+       "id": "g-p1",
+       "pyq": "bd19439bbe231316",
+       "level": 2,
+       "points": [
+        "Generator length L = sqrt(25 squared + 60 squared) = 65 mm; semi-apex angle alpha = tan inverse (25/60) = 22.62 degrees",
+        "Axis inclination to HP = 30 + 22.62 = 52.62 degrees with the axis parallel to VP",
+        "Stage I: TV circle 50 mm, FV triangle 50 base by 60 height; Stage II: tilt FV so the extreme generator makes 30 degrees with XY, apex above; project TV",
+        "Generator in VP lies on XY in TV; base ellipse with tangent lines to the apex; hidden edges dashed"
+       ]
+      }
+     ]
+    },
+    {
+     "id": "point-of-base-circle",
+     "title": "Resting on a point of the base circle",
+     "theory_md": "When the solid rests on **one point of the base circle** (point touching HP or VP), the axis is inclined to the reference plane and then turned.\n\n- **Axis at $\\theta$ to HP and $\\varphi$ to VP** (HP-based): Stage I: TV circle, FV on $XY$. Stage II: tilt the FV so the axis makes $\\theta$ with $XY$ and a base point is on $XY$; project TV. Stage III: rotate TV so the axis makes $\\varphi$ with $XY$; project FV (Stage II heights).\n- **Resting point on the VP** (VP-based): do the same with the planes swapped: axis perpendicular to VP in Stage I (FV a circle); tilt the **TV**; then rotate the **FV**.\n- **Relation:** if the axis is at $\\theta$ to HP and its plan at $\\varphi$ to VP, the true angle to VP is $\\sin\\psi=\\cos\\theta\\sin\\varphi$.",
+     "basics_md": "A cone or cylinder resting on one point of its rim is like a coin tilted on its edge. Tilt it for the first angle, then turn it about the vertical for the second.",
+     "key_points": [
+      "HP-based: tilt FV for theta, rotate TV for phi",
+      "VP-based: tilt TV for the VP angle, rotate FV for the HP-plane angle",
+      "Base circle becomes an ellipse in the inclined views",
+      "Tangent generators for outlines; hidden edges dashed"
+     ],
+     "questions": [
+      {
+       "id": "b-q1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "A cone rests on a point of its base circle on HP. Its axis is",
+       "options": [
+        "vertical",
+        "parallel to HP",
+        "inclined to HP",
+        "perpendicular to VP"
+       ],
+       "answer_index": 2,
+       "why": "With only one point of the base touching, the axis is inclined to HP."
+      },
+      {
+       "id": "b-q2",
+       "kind": "mcq",
+       "level": 2,
+       "q": "For a solid resting on a point on the VP with axis inclined to the VP, the first tilt is made in the",
+       "options": [
+        "FV",
+        "TV",
+        "side view",
+        "both"
+       ],
+       "answer_index": 1,
+       "why": "For a VP-based solid the TV is tilted for the VP angle, then the FV is rotated."
+      },
+      {
+       "id": "b-q3",
+       "kind": "numerical",
+       "level": 3,
+       "marks": 3,
+       "q": "A cone of axis 50 mm rests on a point of its base circle with the axis at 30 degrees to HP. Find the rise of the apex above the base centre and the plan length of the axis.",
+       "model_answer_md": "Rise of apex above the base centre $=h\\sin30^\\circ=50\\times0.5=\\mathbf{25\\ mm}$.\nPlan length of axis $=h\\cos30^\\circ=\\mathbf{43.30\\ mm}$.\nStage III turns the TV only, so heights stay as in Stage II.",
+       "points": [
+        "Rise = h sin(theta) = 25 mm",
+        "Plan length = h cos(theta) = 43.30 mm",
+        "Heights unchanged in Stage III"
+       ]
+      },
+      {
+       "id": "b-q4",
+       "kind": "numerical",
+       "level": 3,
+       "marks": 3,
+       "q": "A cylinder of axis 65 mm is inclined at 45 degrees to the VP and the front view of the axis is at 45 degrees to XY. Find its true inclination to HP.",
+       "model_answer_md": "Plan or front view length of axis in Stage II: $65\\cos45^\\circ=45.96$ mm.\nHeight component: $45.96\\sin45^\\circ=32.5$ mm.\n$\\sin\\theta=32.5/65=0.5$, so $\\theta=\\mathbf{30^\\circ}$ to HP.",
+       "points": [
+        "FV length 65 cos45 = 45.96 mm",
+        "Height 32.5 mm",
+        "True angle to HP 30 degrees"
+       ]
+      },
+      {
+       "id": "b-p1",
+       "pyq": "e49e532c3bcaad86",
+       "level": 2,
+       "points": [
+        "Cylinder base 50 mm, axis 65 mm; a point of the base circle on VP; axis 45 degrees to VP; FV of axis 45 degrees to XY",
+        "Stage I: axis perpendicular to VP: FV circle 50 mm, TV rectangle 50 by 65",
+        "Stage II: tilt the TV so the axis is 45 degrees to XY with the base point on XY; project FV",
+        "Stage III: rotate the FV so the FV of the axis makes 45 degrees with XY; project the new TV keeping distances; tangent generators, hidden edges dashed"
+       ]
+      },
+      {
+       "id": "b-p2",
+       "pyq": "1c1117643c98734e",
+       "level": 2,
+       "points": [
+        "Cone base 45 mm diameter, axis 50 mm; resting on a point of the base circle; axis 30 degrees to HP and 45 degrees to VP",
+        "Stage I: TV circle 45 mm, FV triangle 45 base by 50 height",
+        "Stage II: tilt FV about the base point so axis is 30 degrees to XY; project TV (apex height 50 sin30 = 25 mm)",
+        "Stage III: rotate TV so the axis makes 45 degrees with XY; project final FV with Stage II heights; base ellipse, tangent generators, hidden edges dashed"
+       ]
+      }
+     ]
+    }
+   ]
+  }
+ ]
+}

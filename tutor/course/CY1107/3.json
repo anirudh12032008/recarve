@@ -1,0 +1,3159 @@
+{
+ "code": "CY1107",
+ "unit": "Water",
+ "written": "2026-10-19",
+ "by": "claude-sonnet-5-5, in a Claude Code session",
+ "topics": [
+  {
+   "topic": "Sources and specifications of drinking water",
+   "subtopics": [
+    {
+     "id": "sources-impurities",
+     "title": "Sources of water and its impurities",
+     "theory_md": "**Surface water**\n- **Rain**: purest natural water, but dissolves $\\mathrm{CO_2}$, $\\mathrm{SO_2}$, $\\mathrm{NO_2}$ and dust from the air.\n- **River**: more dissolved salts (chlorides, sulphates, bicarbonates of Ca, Mg, Na) and silt; composition varies with season.\n- **Lake**: clearer, constant composition, less dissolved mineral but more organic matter.\n- **Sea**: about 3.5% salts, mostly NaCl.\n\n**Underground** (spring, well): filtered by soil so clear and nearly germ-free, but dissolves minerals and is **harder**.\n\n**Impurities**: dissolved (salts, $\\mathrm{CO_2}$, $\\mathrm{O_2}$, $\\mathrm{NH_3}$, $\\mathrm{H_2S}$), suspended (sand, clay, silt), colloidal (clay, silica, organic colloids) and biological (bacteria, algae, fungi, viruses).",
+     "basics_md": "Water picks up whatever it touches. Rain touches only air. A river touches soil and rocks, so it carries salts and mud. A well is filtered by the ground, so it is clear but full of dissolved minerals.",
+     "key_points": [
+      "Rain is the purest source but dissolves atmospheric gases",
+      "River water: more dissolved salts and suspended silt, composition varies; lake water: more organic matter, constant composition",
+      "Underground water is clear and germ-free but harder",
+      "Four classes of impurity: dissolved, suspended, colloidal, biological"
+     ],
+     "questions": [
+      {
+       "id": "src-q1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "The purest natural source of water is",
+       "options": [
+        "Rain water",
+        "Well water",
+        "Lake water",
+        "River water"
+       ],
+       "answer_index": 0,
+       "why": "Rain is naturally distilled; the others dissolve minerals from soil and rock."
+      },
+      {
+       "id": "src-q2",
+       "kind": "mcq",
+       "level": 1,
+       "q": "Compared with river water, ground (well) water is usually",
+       "options": [
+        "clearer and harder",
+        "more turbid and softer",
+        "more turbid and harder",
+        "clearer and softer"
+       ],
+       "answer_index": 0,
+       "why": "Soil filters out suspended matter, but contact with rock dissolves Ca and Mg salts."
+      },
+      {
+       "id": "src-q3",
+       "kind": "short",
+       "level": 2,
+       "marks": 2,
+       "q": "Name the four classes of impurities in natural water and give one example of each.",
+       "model_answer_md": "1. **Dissolved**: $\\mathrm{CaCl_2}$, $\\mathrm{MgSO_4}$, bicarbonates, gases such as $\\mathrm{CO_2}$, $\\mathrm{H_2S}$.\n2. **Suspended**: sand, clay, silt.\n3. **Colloidal**: finely divided clay, silica, organic matter (cause colour and turbidity).\n4. **Biological**: bacteria, algae, fungi, viruses.",
+       "points": [
+        "Dissolved: salts and gases",
+        "Suspended: sand, clay, silt",
+        "Colloidal: clay, silica, organic colloids",
+        "Biological: bacteria, algae, fungi, viruses"
+       ]
+      },
+      {
+       "id": "src-p1",
+       "pyq": "a5ad50d631760f95",
+       "level": 2,
+       "points": [
+        "River water: more dissolved minerals, high suspended matter (turbid), composition varies with season, high dissolved oxygen",
+        "Lake water: less dissolved mineral, clearer (suspended matter settles), more organic matter, constant composition",
+        "Present as a point-wise table: at least four points"
+       ]
+      },
+      {
+       "id": "src-q4",
+       "kind": "short",
+       "level": 3,
+       "marks": 3,
+       "q": "Why is sea water unfit for drinking and for boilers, while rain water, though pure, is still not ideal for drinking directly?",
+       "model_answer_md": "- **Sea water** carries about 3.5% dissolved salts (mostly NaCl), far above the TDS limit of 500 ppm, so it is unfit to drink and would deposit scale and cause corrosion in boilers.\n- **Rain water** has almost no dissolved salts, but it absorbs $\\mathrm{CO_2}$, $\\mathrm{SO_2}$, $\\mathrm{NO_2}$, dust and microbes from the air, so it can be acidic and contaminated, and needs treatment and collection from clean surfaces.",
+       "points": [
+        "Sea water has about 3.5% salts, far above the 500 ppm TDS limit",
+        "Salts cause scale and corrosion in boilers",
+        "Rain water dissolves CO2, SO2, NO2, dust and microbes from the air"
+       ]
+      }
+     ]
+    },
+    {
+     "id": "potable-specs",
+     "title": "Specifications of drinking water",
+     "theory_md": "Potable water (WHO / BIS IS 10500) must be:\n- clear, colourless, odourless, pleasant in taste; turbidity below 10 ppm;\n- **pH 6.5 to 8.5**; **TDS below 500 ppm**;\n- total hardness below about 300 ppm as $\\mathrm{CaCO_3}$ (IS 10500 acceptable limit 200 mg/L);\n- chloride below 250 ppm; sulphate below 250 ppm; nitrate below 45 ppm;\n- fluoride about 1 to 1.5 ppm (more causes fluorosis, less causes tooth decay);\n- free from pathogens, $\\mathrm{Pb}$, $\\mathrm{As}$, $\\mathrm{Hg}$, $\\mathrm{H_2S}$; non-corrosive;\n- residual chlorine 0.1 to 0.2 ppm at the tap.\n\n**Municipal steps** (names): screening, sedimentation, coagulation, filtration, disinfection.",
+     "basics_md": "A rule book for safe water. Each number is a ceiling or a window: too much salt is unpleasant and harmful, too much or too little fluoride harms teeth, and any disease germ is not allowed at all.",
+     "key_points": [
+      "pH 6.5 to 8.5, TDS below 500 ppm, turbidity below 10 ppm",
+      "Hardness below about 300 ppm (IS 10500: 200 mg/L acceptable), chloride below 250 ppm, fluoride 1 to 1.5 ppm",
+      "Colourless, odourless, pleasant taste, free from pathogens and toxic metals",
+      "Municipal sequence: screening, sedimentation, coagulation, filtration, disinfection"
+     ],
+     "questions": [
+      {
+       "id": "spec-q1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "The permissible pH range of drinking water is",
+       "options": [
+        "6.5 to 8.5",
+        "4.5 to 6.5",
+        "8.5 to 10.5",
+        "5.0 to 9.5"
+       ],
+       "answer_index": 0,
+       "why": "BIS and WHO limit is 6.5 to 8.5."
+      },
+      {
+       "id": "spec-q2",
+       "kind": "mcq",
+       "level": 1,
+       "q": "Excess fluoride in drinking water causes",
+       "options": [
+        "fluorosis",
+        "dental caries",
+        "goitre",
+        "methaemoglobinaemia"
+       ],
+       "answer_index": 0,
+       "why": "Excess F- mottles teeth and bones (fluorosis); too little causes caries."
+      },
+      {
+       "id": "spec-p1",
+       "pyq": "c4f24374b91dcdb8",
+       "level": 1,
+       "points": [
+        "Clear, colourless, odourless, pleasant taste; turbidity below 10 ppm",
+        "pH 6.5-8.5; TDS below 500 ppm; hardness below about 300 ppm",
+        "Free from pathogens and toxic metals; non-corrosive"
+       ]
+      },
+      {
+       "id": "spec-q3",
+       "kind": "short",
+       "level": 2,
+       "marks": 3,
+       "q": "List any six specifications of potable water with their limits.",
+       "model_answer_md": "1. Colourless, odourless, pleasant taste.\n2. Turbidity below 10 ppm.\n3. pH 6.5 to 8.5.\n4. TDS below 500 ppm.\n5. Total hardness below about 300 ppm as $\\mathrm{CaCO_3}$.\n6. Chloride below 250 ppm; fluoride 1 to 1.5 ppm; nitrate below 45 ppm.\n7. Free from pathogens and toxic metals ($\\mathrm{Pb}$, $\\mathrm{As}$, $\\mathrm{Hg}$).",
+       "points": [
+        "Any six specifications, each with its limit",
+        "pH 6.5-8.5 and TDS below 500 ppm",
+        "Free from pathogens and toxic metals"
+       ]
+      },
+      {
+       "id": "spec-p2",
+       "pyq": "dff25706baa0d8d3",
+       "level": 2,
+       "points": [
+        "Physical: clear, colourless, odourless, pleasant taste",
+        "Chemical limits: pH 6.5-8.5, TDS below 500 ppm, hardness below about 300 ppm (IS 10500: 200), chloride below 250, sulphate below 250, fluoride 1-1.5, nitrate below 45 ppm",
+        "Biological: free from pathogens (no coliform in 100 mL); toxic metals absent",
+        "Residual chlorine 0.1-0.2 ppm at the tap; non-corrosive"
+       ]
+      },
+      {
+       "id": "spec-q4",
+       "kind": "short",
+       "level": 3,
+       "marks": 3,
+       "q": "A water sample has pH 7.2, TDS 650 ppm, turbidity 5 ppm, chloride 180 ppm and no coliform bacteria. Is it potable? Give reasons.",
+       "model_answer_md": "**Not potable.** Compare each value with the limit:\n- pH 7.2 is within 6.5 to 8.5: acceptable.\n- Turbidity 5 ppm is below 10 ppm: acceptable.\n- Chloride 180 ppm is below 250 ppm: acceptable.\n- No coliform: acceptable.\n- **TDS 650 ppm exceeds the 500 ppm limit**: not acceptable.\n\nIt would need TDS reduction (for example reverse osmosis or ion exchange) before drinking.",
+       "points": [
+        "Compares each parameter with its limit",
+        "TDS 650 ppm is above the 500 ppm limit",
+        "Concludes not potable and suggests TDS reduction"
+       ]
+      },
+      {
+       "id": "spec-p3",
+       "pyq": "ad33dd4338ce7e6c",
+       "level": 3,
+       "points": [
+        "(i) Specifications: pH 6.5-8.5, TDS below 500 ppm, turbidity below 10 ppm, hardness, chloride, fluoride limits; free from pathogens and toxic metals",
+        "(ii) Steps: screening, plain sedimentation, coagulation, filtration, disinfection",
+        "(iii) Both alum and sodium aluminate are coagulants giving gelatinous Al(OH)3 floc that neutralises the negative charge on colloids and entraps them",
+        "Alum: Al2(SO4)3 + 3Ca(HCO3)2 -> 2Al(OH)3 + 3CaSO4 + 6CO2, pH 6.5-8.5",
+        "Sodium aluminate: NaAlO2 + 2H2O -> Al(OH)3 + NaOH, used for acidic water; NaOH also precipitates Mg"
+       ]
+      }
+     ]
+    },
+    {
+     "id": "reduce-reuse-recycle",
+     "title": "Reduce, reuse and recycle water at home",
+     "theory_md": "Conserving water at household level:\n- **Reduce**: fix leaks, low-flow taps with aerators, dual-flush toilets, shorter showers.\n- **Reuse**: RO reject water for mopping and gardening; bucket washing instead of a running hose.\n- **Recycle**: **greywater** (washbasin, bath, washing machine, not toilet) settled, filtered through sand and charcoal, and reused for flushing and gardening; **rooftop rainwater harvesting** into a storage tank or a recharge pit to raise the groundwater table.",
+     "basics_md": "Reduce means use less. Reuse means use the same water again for a lesser job. Recycle means clean used water so it can serve again.",
+     "key_points": [
+      "Reduce: low-flow taps, dual-flush toilets, leak repair",
+      "Reuse: RO reject water for mopping or gardening",
+      "Recycle: greywater treatment with settling and sand/charcoal filter; rainwater harvesting for storage or recharge"
+     ],
+     "questions": [
+      {
+       "id": "rrr-q1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "Treating bathroom and washing-machine water with a sand and charcoal filter for toilet flushing is an example of",
+       "options": [
+        "recycling",
+        "reducing",
+        "disinfection",
+        "desalination"
+       ],
+       "answer_index": 0,
+       "why": "Used water is cleaned and returned to service: recycling of greywater."
+      },
+      {
+       "id": "rrr-q2",
+       "kind": "mcq",
+       "level": 2,
+       "q": "Which of these is a method to recharge groundwater?",
+       "options": [
+        "Rooftop rainwater harvesting into a recharge pit",
+        "Dual-flush toilet",
+        "Aerator on a tap",
+        "Boiling of water"
+       ],
+       "answer_index": 0,
+       "why": "Rain collected from the roof and led to a recharge pit or borewell raises the water table."
+      },
+      {
+       "id": "rrr-q3",
+       "kind": "short",
+       "level": 2,
+       "marks": 3,
+       "q": "Distinguish reduce, reuse and recycle of water with one household example each.",
+       "model_answer_md": "| Term | Meaning | Example |\n|---|---|---|\n| **Reduce** | Use less water | Low-flow taps with aerators, dual-flush cistern |\n| **Reuse** | Use the same water again without treatment, for a lesser purpose | RO reject water for mopping or watering plants |\n| **Recycle** | Treat used water so it can be used again | Greywater passed through settling tank and sand-charcoal filter for flushing |",
+       "points": [
+        "Reduce = use less, with example",
+        "Reuse = use again without treatment, with example",
+        "Recycle = treat and use again, with example"
+       ]
+      },
+      {
+       "id": "rrr-p1",
+       "pyq": "cec7603752fb663b",
+       "level": 2,
+       "points": [
+        "Any two technologies with how they work",
+        "Rooftop rainwater harvesting: roof rain led through sand-gravel filter to storage tank or recharge pit (reuse/recharge)",
+        "Greywater recycling: settling tank and sand/charcoal filter, reused for flushing and gardening (recycle)",
+        "Other: low-flow taps and dual-flush toilets (reduce); reuse of RO reject water"
+       ]
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "topic": "Purification of water step by step",
+   "subtopics": [
+    {
+     "id": "treatment-sequence",
+     "title": "Steps from raw water to municipal water",
+     "theory_md": "In order:\n1. **Screening**: bars and screens remove floating matter (leaves, wood, plastic).\n2. **Plain sedimentation**: water stands in large tanks for 2 to 6 h; heavy silt and sand settle (about 70 to 75% of suspended matter).\n3. **Sedimentation with coagulation**: alum or sodium aluminate forms $\\mathrm{Al(OH)_3}$ floc that settles colloids and bacteria.\n4. **Filtration**: sand filter (fine sand on top, coarse sand, then gravel) removes remaining floc, colloids, some bacteria.\n5. **Disinfection**: chlorine, bleaching powder, ozone or UV kills pathogens; a small residual chlorine stays for the mains.",
+     "basics_md": "Clean water is made by removing the biggest dirt first and the smallest last: floating junk, then heavy grit, then the fine cloudy particles, then the germs.",
+     "key_points": [
+      "Order: screening, plain sedimentation, coagulation, filtration, disinfection",
+      "Plain sedimentation removes heavy suspended particles by gravity; coagulation is needed for fine colloids",
+      "Sand filter layers: fine sand, coarse sand, gravel (top to bottom)",
+      "Disinfection kills pathogens and leaves residual chlorine"
+     ],
+     "questions": [
+      {
+       "id": "seq-q1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "Which is the correct order of municipal water treatment?",
+       "options": [
+        "Screening, sedimentation, coagulation, filtration, disinfection",
+        "Screening, coagulation, sedimentation, disinfection, filtration",
+        "Sedimentation, screening, filtration, coagulation, disinfection",
+        "Disinfection, screening, sedimentation, coagulation, filtration"
+       ],
+       "answer_index": 0,
+       "why": "Disinfection is always last so that no pathogens remain."
+      },
+      {
+       "id": "seq-q2",
+       "kind": "mcq",
+       "level": 1,
+       "q": "In a sand filter the top layer is",
+       "options": [
+        "fine sand",
+        "gravel",
+        "coarse sand",
+        "charcoal"
+       ],
+       "answer_index": 0,
+       "why": "Fine sand on top traps the particles; coarse sand and gravel below support it and let the water drain."
+      },
+      {
+       "id": "seq-q3",
+       "kind": "short",
+       "level": 2,
+       "marks": 2,
+       "q": "Why is plain sedimentation alone not enough to make water clear? Which step follows it and why?",
+       "model_answer_md": "Plain sedimentation removes only **heavy suspended particles** (sand, silt) which settle by gravity. Fine **colloidal** particles (clay, silica, organic colloids) carry a negative charge, repel each other and stay suspended.\n\nThe next step is **coagulation**: alum or sodium aluminate forms $\\mathrm{Al(OH)_3}$ floc that neutralises the charge and entraps the colloids so they settle.",
+       "points": [
+        "Plain sedimentation removes only heavy suspended particles",
+        "Colloids are charged and stay dispersed",
+        "Coagulation with alum forms floc which entraps colloids"
+       ]
+      },
+      {
+       "id": "seq-p1",
+       "pyq": "360f47cdac814a8c",
+       "level": 2,
+       "points": [
+        "Five steps in order: screening, plain sedimentation, coagulation, filtration, disinfection",
+        "Screening: removes large floating matter that would damage pumps",
+        "Plain sedimentation: removes heavy suspended particles, about 70-75%",
+        "Coagulation: Al(OH)3 floc entraps colloids and reduces turbidity and colour",
+        "Filtration: sand-gravel filter removes remaining floc, colloids, bacteria; disinfection: Cl2/ozone/UV kills pathogens"
+       ]
+      }
+     ]
+    },
+    {
+     "id": "coagulation-flocculation",
+     "title": "Coagulation and flocculation",
+     "theory_md": "Colloids (clay, silica, organic matter; 1 nm to 1 $\\mu$m) carry a **negative charge**, repel each other and never settle.\n\n- **Coagulation** (rapid mixing in a flash mixer): the coagulant gives $\\mathrm{Al^{3+}}$ ions that **neutralise the charge**, and hydrolyses to gelatinous $\\mathrm{Al(OH)_3}$.\n- **Flocculation** (slow stirring, 20 to 30 min): micro-flocs collide and join into large heavy **flocs** that entrap fine silt, colour and bacteria.\n\nLarge flocs settle fast (settling velocity rises with particle size), so the sedimentation tank gives clear water and the sand filter has less load.\n\nLayout: flash mixer, then flocculator, then sedimentation tank with sludge outlet, then sand filter.",
+     "basics_md": "Colloids are like tiny magnets of the same pole, pushing each other away. A coagulant cancels the push, then gentle stirring lets them stick into lumps heavy enough to sink.",
+     "key_points": [
+      "Colloids are negatively charged and do not settle by themselves",
+      "Coagulation: Al3+ neutralises the charge and forms Al(OH)3",
+      "Flocculation: slow stirring grows large heavy flocs that entrap impurities",
+      "Large flocs settle fast, so clarification is quick and the filter load is low"
+     ],
+     "questions": [
+      {
+       "id": "cf-q1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "Colloidal particles in natural water carry a",
+       "options": [
+        "negative charge",
+        "positive charge",
+        "no charge",
+        "alternate charges"
+       ],
+       "answer_index": 0,
+       "why": "Clay and silica colloids are negatively charged, hence the repulsion; Al3+ neutralises it."
+      },
+      {
+       "id": "cf-q2",
+       "kind": "mcq",
+       "level": 2,
+       "q": "Coagulation does NOT remove",
+       "options": [
+        "dissolved Ca2+ and Mg2+ hardness",
+        "clay colloids",
+        "bacteria entrapped in floc",
+        "turbidity"
+       ],
+       "answer_index": 0,
+       "why": "Coagulation acts on colloids and suspended matter, not on dissolved salts."
+      },
+      {
+       "id": "cf-q3",
+       "kind": "short",
+       "level": 2,
+       "marks": 3,
+       "q": "Distinguish coagulation from flocculation.",
+       "model_answer_md": "| Coagulation | Flocculation |\n|---|---|\n| Rapid mixing for seconds in a flash mixer | Slow stirring for 20 to 30 min with paddles |\n| Charge on colloids neutralised by $\\mathrm{Al^{3+}}$; $\\mathrm{Al(OH)_3}$ forms | Micro-flocs collide and bridge to large flocs |\n| Destabilises the colloids | Grows the particles so they can settle |",
+       "points": [
+        "Coagulation = rapid mixing and charge neutralisation",
+        "Flocculation = slow mixing and floc growth",
+        "Both precede sedimentation"
+       ]
+      },
+      {
+       "id": "cf-p1",
+       "pyq": "808ab745ff1159b5",
+       "level": 2,
+       "points": [
+        "Colloids carry negative charge and stay dispersed",
+        "Coagulation (flash mixer): Al3+ neutralises charge; Al2(SO4)3 + 3Ca(HCO3)2 -> 2Al(OH)3 + 3CaSO4 + 6CO2",
+        "Flocculation (slow paddles): flocs grow large and heavy and entrap bacteria and colour",
+        "Diagram: flash mixer, flocculator, sedimentation tank with sludge outlet",
+        "Large flocs settle fast; clear water goes to the sand filter"
+       ]
+      },
+      {
+       "id": "cf-p2",
+       "pyq": "292c4abe5b910825",
+       "level": 2,
+       "points": [
+        "Need: fine colloids are negatively charged and do not settle",
+        "Coagulant forms gelatinous floc; Al3+/Fe3+ neutralise charge and the floc entraps particles and bacteria",
+        "Example alum: Al2(SO4)3 + 3Ca(HCO3)2 -> 2Al(OH)3 + 3CaSO4 + 6CO2; works at pH 6.5-8.5",
+        "Other coagulants: FeSO4 with lime, sodium aluminate for acidic water"
+       ]
+      }
+     ]
+    },
+    {
+     "id": "alum-sodium-aluminate",
+     "title": "Alum and sodium aluminate as coagulants",
+     "theory_md": "**Alum** (potash alum $\\mathrm{K_2SO_4\\cdot Al_2(SO_4)_3\\cdot 24H_2O}$ or $\\mathrm{Al_2(SO_4)_3}$) needs bicarbonate alkalinity and works at pH 6.5 to 8.5:\n$$\\mathrm{Al_2(SO_4)_3 + 3Ca(HCO_3)_2 \\rightarrow 2Al(OH)_3\\downarrow + 3CaSO_4 + 6CO_2}$$\nIt leaves $\\mathrm{CO_2}$ and lowers pH, making water corrosive.\n\n**Sodium aluminate**:\n$$\\mathrm{NaAlO_2 + 2H_2O \\rightarrow Al(OH)_3\\downarrow + NaOH}$$\nIt needs no alkalinity, so suits **acidic** water; the NaOH raises pH and precipitates Mg ($\\mathrm{MgSO_4 + 2NaOH \\rightarrow Mg(OH)_2 + Na_2SO_4}$); it also removes oil and silica.",
+     "basics_md": "Alum is a coagulant that eats the water's natural alkalinity to work. Sodium aluminate brings its own alkali, so it works where alum cannot.",
+     "key_points": [
+      "Alum: Al2(SO4)3 + 3Ca(HCO3)2 -> 2Al(OH)3 + 3CaSO4 + 6CO2; pH 6.5-8.5; needs alkalinity",
+      "Sodium aluminate: NaAlO2 + 2H2O -> Al(OH)3 + NaOH; works for acidic water over wider pH",
+      "NaOH from aluminate raises pH and removes Mg hardness",
+      "Aluminate is the better coagulant, alum the cheaper"
+     ],
+     "questions": [
+      {
+       "id": "as-q1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "Sodium aluminate is preferred over alum for water that is",
+       "options": [
+        "acidic or low in alkalinity",
+        "highly alkaline",
+        "very hard",
+        "saline"
+       ],
+       "answer_index": 0,
+       "why": "It produces its own NaOH and needs no bicarbonate, unlike alum."
+      },
+      {
+       "id": "as-p2",
+       "pyq": "955bde4d3113605a",
+       "level": 1,
+       "points": [
+        "NaAlO2 + 2H2O -> Al(OH)3 + NaOH",
+        "No alkalinity needed, works for acidic water and wider pH",
+        "NaOH raises pH and removes Mg: MgSO4 + 2NaOH -> Mg(OH)2 + Na2SO4",
+        "Removes oil and silica"
+       ]
+      },
+      {
+       "id": "as-q2",
+       "kind": "mcq",
+       "level": 2,
+       "q": "In the reaction of alum with Ca(HCO3)2, the gas evolved is",
+       "options": [
+        "CO2",
+        "O2",
+        "H2",
+        "SO2"
+       ],
+       "answer_index": 0,
+       "why": "Al2(SO4)3 + 3Ca(HCO3)2 gives 6 CO2 along with Al(OH)3 and CaSO4."
+      },
+      {
+       "id": "as-q3",
+       "kind": "short",
+       "level": 2,
+       "marks": 3,
+       "q": "Write the reaction of (a) alum with Ca(HCO3)2 and (b) sodium aluminate with water. State one advantage of sodium aluminate.",
+       "model_answer_md": "(a) $\\mathrm{Al_2(SO_4)_3 + 3Ca(HCO_3)_2 \\rightarrow 2Al(OH)_3\\downarrow + 3CaSO_4 + 6CO_2}$\n\n(b) $\\mathrm{NaAlO_2 + 2H_2O \\rightarrow Al(OH)_3\\downarrow + NaOH}$\n\n**Advantage**: it works without natural alkalinity (acidic water) and the NaOH formed raises pH and removes Mg hardness as $\\mathrm{Mg(OH)_2}$.",
+       "points": [
+        "Alum reaction balanced",
+        "Sodium aluminate reaction balanced",
+        "One advantage: no alkalinity needed / raises pH / removes Mg"
+       ]
+      },
+      {
+       "id": "as-p1",
+       "pyq": "6709230cc57fccf2",
+       "level": 2,
+       "points": [
+        "True: sodium aluminate is the better coagulant",
+        "It gives Al(OH)3 without needing natural alkalinity, so works over a wider pH range including acidic water",
+        "NaOH raises pH and removes Mg hardness; also removes oil and silica",
+        "Alum lowers pH and gives CO2, making water corrosive"
+       ]
+      },
+      {
+       "id": "as-q4",
+       "kind": "short",
+       "level": 3,
+       "marks": 4,
+       "q": "Compare alum and sodium aluminate as coagulants in four points.",
+       "model_answer_md": "| Point | Alum | Sodium aluminate |\n|---|---|---|\n| Needs bicarbonate alkalinity | Yes | No |\n| Working pH | 6.5 to 8.5 | Wider range, suits acidic water |\n| Effect on pH | Lowers pH, gives $\\mathrm{CO_2}$, water more corrosive | NaOH raises pH |\n| Other action | None | Removes Mg hardness, oil and silica |\n| Cost | Cheaper | Dearer |",
+       "points": [
+        "Alkalinity requirement",
+        "pH range",
+        "Effect on pH and corrosiveness",
+        "Extra action or cost"
+       ]
+      },
+      {
+       "id": "as-p3",
+       "pyq": "6638c6e64bcdc2d2",
+       "level": 3,
+       "points": [
+        "Steps briefly: screening, sedimentation, coagulation, filtration, disinfection",
+        "Sedimentation with coagulation: colloids negatively charged; coagulant floc neutralises and entraps them, then settles",
+        "Alum: Al2(SO4)3 + 3Ca(HCO3)2 -> 2Al(OH)3 + 3CaSO4 + 6CO2",
+        "Sodium aluminate: NaAlO2 + 2H2O -> Al(OH)3 + NaOH",
+        "Floc settles, clear water goes to filter"
+       ]
+      }
+     ]
+    },
+    {
+     "id": "tds-ro",
+     "title": "TDS and its control in RO purifiers",
+     "theory_md": "**TDS** (total dissolved solids) is the mass of dissolved salts ($\\mathrm{Ca^{2+}}$, $\\mathrm{Mg^{2+}}$, $\\mathrm{Na^+}$, $\\mathrm{HCO_3^-}$, $\\mathrm{Cl^-}$, $\\mathrm{SO_4^{2-}}$) per litre, in mg/L (ppm). Desirable limit for drinking: **below 500 ppm**.\n\n**Reverse osmosis (RO)**: pressure higher than the osmotic pressure pushes water through a semipermeable membrane against its natural flow; 90 to 99% of dissolved salts stay behind and leave as reject water. Output TDS is very low (below 30 ppm) and lacks useful minerals.\n\n**Domestic control**: a **TDS controller** (blending valve) mixes a measured part of filtered (non-RO) water with RO water to give 50 to 150 ppm; or a mineraliser cartridge adds Ca and Mg back.",
+     "basics_md": "A membrane with holes so tiny only water gets through. Pressure forces water the 'wrong' way across it. Salts are left behind, so the water becomes too pure and tasteless, and a little untreated water is blended back.",
+     "key_points": [
+      "TDS = dissolved salts in mg/L; limit 500 ppm",
+      "RO: applied pressure greater than osmotic pressure drives water through a semipermeable membrane",
+      "RO removes 90-99% of salts; very low TDS lacks minerals",
+      "TDS controller blends untreated water or mineraliser cartridge restores minerals"
+     ],
+     "questions": [
+      {
+       "id": "ro-q1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "For reverse osmosis to work, the applied pressure must be",
+       "options": [
+        "greater than the osmotic pressure",
+        "equal to the osmotic pressure",
+        "less than the osmotic pressure",
+        "atmospheric pressure"
+       ],
+       "answer_index": 0,
+       "why": "Only above the osmotic pressure does water flow from the concentrated to the dilute side."
+      },
+      {
+       "id": "ro-q2",
+       "kind": "mcq",
+       "level": 2,
+       "q": "The purpose of the TDS controller in a domestic RO purifier is to",
+       "options": [
+        "blend some non-RO water to raise TDS to a desirable level",
+        "remove bacteria",
+        "reduce pH",
+        "increase membrane pressure"
+       ],
+       "answer_index": 0,
+       "why": "RO output is almost salt-free; blending gives 50-150 ppm for taste and minerals."
+      },
+      {
+       "id": "ro-q3",
+       "kind": "short",
+       "level": 2,
+       "marks": 2,
+       "q": "Why is the output of a domestic RO purifier not used directly at TDS below 30 ppm?",
+       "model_answer_md": "Almost all dissolved salts, including useful $\\mathrm{Ca^{2+}}$, $\\mathrm{Mg^{2+}}$ and trace minerals, are removed, so the water is flat in taste and lacks minerals. It is made fit for drinking by blending in a controlled amount of non-RO water (TDS controller) or by a mineraliser cartridge to give about 50 to 150 ppm.",
+       "points": [
+        "RO removes useful minerals as well",
+        "Flat taste",
+        "Fix: TDS controller blending or mineraliser cartridge"
+       ]
+      },
+      {
+       "id": "ro-p1",
+       "pyq": "15bb27d033bf2820",
+       "level": 2,
+       "points": [
+        "TDS: total dissolved inorganic salts and small organic matter in mg/L; limit 500 mg/L",
+        "RO membrane removes 90-99% of salts, leaving very low TDS",
+        "TDS controller / mixing valve blends part of non-RO filtered water to raise TDS to 50-150 ppm",
+        "Or mineraliser cartridge adds Ca and Mg after RO"
+       ]
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "topic": "Disinfection vs sterilization",
+   "subtopics": [
+    {
+     "id": "dis-vs-ster",
+     "title": "Disinfection versus sterilization",
+     "theory_md": "| | Disinfection | Sterilization |\n|---|---|---|\n| Kills | **Pathogenic** micro-organisms only | **All** micro-organisms including spores |\n| Control | Partial | Complete |\n| Agents | $\\mathrm{Cl_2}$, bleaching powder, chloramine, $\\mathrm{O_3}$, UV | autoclave (steam, 121 $^\\circ$C), dry heat, irradiation, high dose of chemicals |\n| Use | Municipal drinking water | Surgical tools, lab media, injectables |\n| Cost | Cheap, for large volumes | Costly, small scale |\nWater supplies are disinfected, not sterilized.",
+     "basics_md": "Disinfecting makes water safe to drink. Sterilizing makes something completely lifeless, which is overkill for a city's water.",
+     "key_points": [
+      "Disinfection kills pathogens only; sterilization kills all life including spores",
+      "Disinfection partial control, sterilization complete",
+      "Disinfectants: Cl2, bleaching powder, chloramine, O3, UV; sterilization: autoclave, dry heat, irradiation",
+      "Municipal water is disinfected as sterilization of large volumes is uneconomic"
+     ],
+     "questions": [
+      {
+       "id": "ds-q1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "Destruction of all micro-organisms including spores is called",
+       "options": [
+        "sterilization",
+        "disinfection",
+        "coagulation",
+        "chlorination"
+       ],
+       "answer_index": 0,
+       "why": "Sterilization is complete; disinfection kills pathogens only."
+      },
+      {
+       "id": "ds-p2",
+       "pyq": "78f8605d5549a82f",
+       "level": 1,
+       "points": [
+        "Disinfection: destruction of pathogenic organisms only, partial",
+        "Sterilization: destruction of all organisms including spores, complete",
+        "Agents and uses differ: Cl2 for water; autoclave for instruments"
+       ]
+      },
+      {
+       "id": "ds-q2",
+       "kind": "mcq",
+       "level": 2,
+       "q": "Municipal water is disinfected rather than sterilized because",
+       "options": [
+        "it is cheap for large volumes and only pathogens need to be killed",
+        "sterilization leaves harmful residues",
+        "disinfection kills spores",
+        "chlorine cannot sterilize"
+       ],
+       "answer_index": 0,
+       "why": "Sterilization of huge volumes is uneconomic and unnecessary."
+      },
+      {
+       "id": "ds-q3",
+       "kind": "short",
+       "level": 2,
+       "marks": 2,
+       "q": "Give two methods each of disinfection and sterilization of water or materials.",
+       "model_answer_md": "**Disinfection**: (1) chlorination with $\\mathrm{Cl_2}$ or bleaching powder; (2) ozonation or UV treatment.\n\n**Sterilization**: (1) autoclaving, steam at 121 $^\\circ$C for 15 to 20 min; (2) dry heat in a hot-air oven at 160 to 180 $^\\circ$C, or gamma irradiation.",
+       "points": [
+        "Two disinfection methods",
+        "Two sterilization methods"
+       ]
+      },
+      {
+       "id": "ds-p1",
+       "pyq": "5a119a265c016216",
+       "level": 2,
+       "points": [
+        "Disinfection kills pathogens only (partial control); sterilization kills all organisms including spores (complete)",
+        "Compared on effectiveness, application (drinking water vs surgical/lab material), cost, residual effect",
+        "Two disinfection methods: chlorination, ozonation/UV",
+        "Two sterilization methods: autoclaving, dry heat or irradiation"
+       ]
+      },
+      {
+       "id": "ds-p3",
+       "pyq": "50cd432fba91a0e9",
+       "level": 3,
+       "points": [
+        "Disinfection vs sterilization table: pathogens only vs all organisms",
+        "Break-point chlorination: chlorine added until residual is minimum, then free chlorine rises",
+        "Graph: residual chlorine vs chlorine added, with rise (chloramines), fall to break point, then linear rise",
+        "Cl2 + H2O -> HOCl + HCl; 2NH2Cl + HOCl -> N2 + 3HCl + H2O"
+       ]
+      }
+     ]
+    },
+    {
+     "id": "good-disinfectant",
+     "title": "A good disinfectant and common disinfectants",
+     "theory_md": "**Requirements of a good disinfectant**\n1. Kills all pathogens quickly at low dose.\n2. Non-toxic to humans and animals at that dose.\n3. No taste, odour or colour.\n4. Cheap, easy to store and handle.\n5. Stable on storage.\n6. Leaves a small **residual** to protect water in the mains.\n\n**Common disinfectants**: liquid chlorine $\\mathrm{Cl_2}$, bleaching powder $\\mathrm{CaOCl_2}$, chloramine $\\mathrm{NH_2Cl}$, ozone $\\mathrm{O_3}$, sodium hypochlorite $\\mathrm{NaOCl}$, chlorine dioxide $\\mathrm{ClO_2}$, and UV light.",
+     "basics_md": "A good disinfectant must kill germs without harming us, taste, or cost much, and keep working a little after it is added.",
+     "key_points": [
+      "Quick kill of pathogens at low dose, non-toxic, no taste or odour",
+      "Cheap, stable, leaves residual",
+      "Names and formulae: Cl2, CaOCl2, NH2Cl, O3, NaOCl, ClO2",
+      "Ozone and UV leave no residual protection"
+     ],
+     "figures": [
+      {
+       "smiles": "ClCl",
+       "caption": "Chlorine, Cl2"
+      },
+      {
+       "smiles": "OCl",
+       "caption": "Hypochlorous acid, HOCl, the active germicide"
+      },
+      {
+       "smiles": "NCl",
+       "caption": "Chloramine, NH2Cl"
+      },
+      {
+       "smiles": "[O-][O+]=O",
+       "caption": "Ozone, O3"
+      }
+     ],
+     "questions": [
+      {
+       "id": "gd-q1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "The formula of bleaching powder is",
+       "options": [
+        "CaOCl2",
+        "Ca(OH)2",
+        "CaCl2",
+        "NaOCl"
+       ],
+       "answer_index": 0,
+       "why": "Bleaching powder is chlorinated lime, CaOCl2."
+      },
+      {
+       "id": "gd-q2",
+       "kind": "mcq",
+       "level": 1,
+       "q": "Which of these is NOT a chemical disinfectant?",
+       "options": [
+        "Alum",
+        "Ozone",
+        "Chloramine",
+        "Chlorine dioxide"
+       ],
+       "answer_index": 0,
+       "why": "Alum is a coagulant; it entraps germs but does not kill them."
+      },
+      {
+       "id": "gd-p1",
+       "pyq": "e6fb4dc3e018d907",
+       "level": 1,
+       "points": [
+        "Any five with formula: Cl2, CaOCl2, NH2Cl, O3, NaOCl, ClO2"
+       ]
+      },
+      {
+       "id": "gd-q3",
+       "kind": "short",
+       "level": 2,
+       "marks": 2,
+       "q": "Write the name and formula of any five disinfectants.",
+       "model_answer_md": "| Name | Formula |\n|---|---|\n| Chlorine | $\\mathrm{Cl_2}$ |\n| Bleaching powder | $\\mathrm{CaOCl_2}$ |\n| Chloramine | $\\mathrm{NH_2Cl}$ |\n| Ozone | $\\mathrm{O_3}$ |\n| Sodium hypochlorite | $\\mathrm{NaOCl}$ |",
+       "points": [
+        "Five correct names",
+        "Matching formulae"
+       ]
+      },
+      {
+       "id": "gd-p2",
+       "pyq": "424763b765f759c2",
+       "level": 2,
+       "points": [
+        "Kills all pathogens quickly at low dose",
+        "Non-toxic to humans and animals",
+        "No taste, odour or colour",
+        "Cheap, easy to handle, stable",
+        "Leaves residual protection in mains"
+       ]
+      },
+      {
+       "id": "gd-p3",
+       "pyq": "042b4f940525b197",
+       "level": 2,
+       "points": [
+        "Kills pathogens quickly at low dose",
+        "Non-toxic, no taste/odour/colour",
+        "Cheap, stable, easy to store",
+        "Leaves small residual"
+       ]
+      }
+     ]
+    },
+    {
+     "id": "chlorination-methods",
+     "title": "Chlorine, bleaching powder and chloramine",
+     "theory_md": "**Liquid chlorine** (cylinder, via chlorinator): $\\mathrm{Cl_2 + H_2O \\rightarrow HOCl + HCl}$; HOCl enters the cell and inactivates enzymes. Best near pH 6.5. Cheap, no added hardness; excess gives taste and odour.\n\n**Bleaching powder** (small supplies, wells; about 1 kg per 1000 kL): $\\mathrm{CaOCl_2 + H_2O \\rightarrow Ca(OH)_2 + Cl_2}$, then HOCl as above. Cheap and simple but unstable, adds hardness and sludge, gives taste.\n\n**Chloramine**: $\\mathrm{NH_3 + HOCl \\rightarrow NH_2Cl + H_2O}$. It releases HOCl slowly ($\\mathrm{NH_2Cl + H_2O \\rightarrow NH_3 + HOCl}$), so it is more **stable**, gives a **long-lasting residual** and no bad taste or odour.",
+     "basics_md": "All chlorine disinfectants work by making hypochlorous acid, HOCl, which kills the germs. They differ only in how they supply it: directly, from a powder, or slowly from chloramine.",
+     "key_points": [
+      "Active agent is HOCl: Cl2 + H2O -> HOCl + HCl",
+      "Bleaching powder: CaOCl2 + H2O -> Ca(OH)2 + Cl2; adds hardness, unstable",
+      "Chloramine NH2Cl is stable, long residual, no bad taste",
+      "Excess chlorine gives taste and odour"
+     ],
+     "figures": [
+      {
+       "smiles": "OCl",
+       "caption": "HOCl, formed when chlorine dissolves"
+      },
+      {
+       "smiles": "NCl",
+       "caption": "Chloramine, NH2Cl, formed from NH3 and HOCl"
+      }
+     ],
+     "questions": [
+      {
+       "id": "cm-q1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "The actual germicidal agent in chlorination is",
+       "options": [
+        "HOCl",
+        "HCl",
+        "Cl-",
+        "NaCl"
+       ],
+       "answer_index": 0,
+       "why": "Cl2 + H2O gives HOCl, which penetrates the cell wall and inactivates enzymes."
+      },
+      {
+       "id": "cm-q2",
+       "kind": "mcq",
+       "level": 2,
+       "q": "A disadvantage of bleaching powder compared with liquid chlorine is that it",
+       "options": [
+        "adds calcium hardness and is unstable",
+        "gives no HOCl",
+        "cannot kill bacteria",
+        "needs a chlorinator"
+       ],
+       "answer_index": 0,
+       "why": "Ca(OH)2 formed increases hardness and available chlorine falls on storage."
+      },
+      {
+       "id": "cm-q3",
+       "kind": "short",
+       "level": 2,
+       "marks": 2,
+       "q": "Why is chloramine better than chlorine for disinfecting water?",
+       "model_answer_md": "1. It is more **stable** and releases HOCl slowly, $\\mathrm{NH_2Cl + H_2O \\rightarrow NH_3 + HOCl}$, so it gives a long-lasting residual in the distribution mains.\n2. It gives **no unpleasant taste or odour** and fewer chlorinated organic by-products.",
+       "points": [
+        "Stable, slow release of HOCl, long residual",
+        "No bad taste or odour"
+       ]
+      },
+      {
+       "id": "cm-p1",
+       "pyq": "cb4bd7be3d3c5357",
+       "level": 2,
+       "points": [
+        "Liquid chlorine fed through a chlorinator",
+        "Cl2 + H2O -> HOCl + HCl; HOCl + germs -> germs killed",
+        "HOCl penetrates cell wall and inactivates enzymes; best near pH 6.5",
+        "Advantages: cheap, stable, residual, no hardness; limitation: excess gives taste and odour"
+       ]
+      },
+      {
+       "id": "cm-p2",
+       "pyq": "530c3b5a489070f7",
+       "level": 2,
+       "points": [
+        "CaOCl2 for small quantities of water; about 1 kg per 1000 kL",
+        "CaOCl2 + H2O -> Ca(OH)2 + Cl2; Cl2 + H2O -> HCl + HOCl; HOCl kills germs",
+        "Advantages: cheap, simple",
+        "Disadvantages: excess gives taste/smell, adds hardness, unstable, leaves sludge"
+       ]
+      },
+      {
+       "id": "cm-p3",
+       "pyq": "382c55c56ee17529",
+       "level": 2,
+       "points": [
+        "NH3 + HOCl -> NH2Cl + H2O",
+        "Chloramine is more stable and releases HOCl slowly, so long-lasting residual in mains",
+        "No unpleasant taste or odour"
+       ]
+      },
+      {
+       "id": "cm-q4",
+       "kind": "numerical",
+       "level": 3,
+       "marks": 4,
+       "q": "A water supply of 5 million litres is chlorinated with 2.5 ppm of Cl2 and a residual of 0.5 ppm remains. Find the chlorine demand, and the mass of bleaching powder (30% available chlorine) needed for the dose.",
+       "model_answer_md": "**Chlorine demand** = dose applied $-$ residual $= 2.5 - 0.5 = 2.0$ ppm.\n\n**Chlorine applied** $= 2.5\\ \\mathrm{mg/L} \\times 5\\times10^{6}\\ \\mathrm{L} = 12.5\\times10^{6}\\ \\mathrm{mg} = 12.5\\ \\mathrm{kg}$.\n\n**Bleaching powder** $= \\dfrac{12.5}{0.30} = 41.67\\ \\mathrm{kg}$.",
+       "points": [
+        "Demand = 2.0 ppm",
+        "Chlorine applied = 12.5 kg",
+        "Bleaching powder = 41.67 kg"
+       ]
+      }
+     ]
+    },
+    {
+     "id": "break-point",
+     "title": "Break-point chlorination",
+     "theory_md": "**Break-point chlorination** is adding chlorine until all reducing substances, ammonia and organic matter are oxidised, so any further chlorine appears as **free residual chlorine**.\n\nGraph (residual chlorine against chlorine added):\n- **A to B**: reducing agents ($\\mathrm{Fe^{2+}}$, $\\mathrm{H_2S}$, organics) consume chlorine; residual nil.\n- **B to C**: chloramines form ($\\mathrm{NH_3 + HOCl \\rightarrow NH_2Cl + H_2O}$); residual **rises**.\n- **C to D**: chloramines destroyed, $\\mathrm{2NH_2Cl + HOCl \\rightarrow N_2 + 3HCl + H_2O}$; residual **falls** to a minimum at **D, the break point**.\n- **Beyond D**: free chlorine rises linearly with dose.\n\n**Uses**: gives chlorine demand and correct dose (0.1 to 0.2 ppm free residual), removes taste, odour, colour, ammonia, algae. Excess is removed by $\\mathrm{SO_2}$ or $\\mathrm{Na_2S_2O_3}$.",
+     "basics_md": "Chlorine added first gets used up by dirt in the water. Only when everything that can react has reacted does extra chlorine stay behind as free chlorine. The point where that starts is the break point.",
+     "key_points": [
+      "Definition: dose after which all chlorine-consuming substances are oxidised and free residual chlorine appears",
+      "Curve: rises (chloramines), falls to minimum at break point, then rises linearly",
+      "Reactions: NH3 + HOCl -> NH2Cl + H2O; 2NH2Cl + HOCl -> N2 + 3HCl + H2O",
+      "Gives chlorine demand and proper dose; removes taste, odour, ammonia, bacteria completely"
+     ],
+     "questions": [
+      {
+       "id": "bp-q1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "At the break point the residual chlorine is",
+       "options": [
+        "at a minimum, after which free chlorine rises",
+        "at a maximum",
+        "zero forever",
+        "constant"
+       ],
+       "answer_index": 0,
+       "why": "Chloramines are destroyed so residual falls to a minimum; beyond it, free chlorine rises."
+      },
+      {
+       "id": "bp-p1",
+       "pyq": "6948c26b4748b8d2",
+       "level": 1,
+       "points": [
+        "Chlorine added beyond the dose that oxidises all reducing substances, NH3, chloramines and organics",
+        "Residual is minimum at break point; further chlorine is free residual chlorine",
+        "Curve: rises, falls, then rises linearly"
+       ]
+      },
+      {
+       "id": "bp-p4",
+       "pyq": "4f43f26b4a23df1d",
+       "level": 1,
+       "points": [
+        "Complete destruction of pathogenic bacteria",
+        "Oxidises organic matter, ammonia and reducing substances completely",
+        "Removes taste, odour and colour",
+        "Leaves small free residual chlorine to protect water in mains"
+       ]
+      },
+      {
+       "id": "bp-p5",
+       "pyq": "c3cd8dca9af0e07d",
+       "level": 1,
+       "points": [
+        "Chlorine added to the point where residual is minimum and beyond which free residual chlorine appears",
+        "Reactions: NH3 + HOCl -> NH2Cl; destruction of chloramines",
+        "Ensures complete disinfection, removes taste and odour"
+       ]
+      },
+      {
+       "id": "bp-q2",
+       "kind": "mcq",
+       "level": 2,
+       "q": "Between B and C on the break-point curve, the residual rises because",
+       "options": [
+        "chloramines are formed",
+        "free HOCl accumulates",
+        "chlorine is lost as gas",
+        "reducing agents are formed"
+       ],
+       "answer_index": 0,
+       "why": "NH3 and organics combine with HOCl to give combined residual (chloramines)."
+      },
+      {
+       "id": "bp-q3",
+       "kind": "short",
+       "level": 2,
+       "marks": 3,
+       "q": "Explain break-point chlorination with a labelled graph description.",
+       "model_answer_md": "**Definition.** Addition of chlorine just beyond the dose that oxidises all reducing substances, ammonia and organic matter; extra chlorine then stays as **free residual chlorine**.\n\n**Graph.** x-axis: chlorine added (ppm); y-axis: residual chlorine (ppm).\n1. A to B: residual nil, chlorine used by reducing agents.\n2. B to C: residual rises, chloramines form, $\\mathrm{NH_3 + HOCl \\rightarrow NH_2Cl + H_2O}$.\n3. C to D: residual falls, $\\mathrm{2NH_2Cl + HOCl \\rightarrow N_2 + 3HCl + H_2O}$; **D is the break point**.\n4. Beyond D: free residual chlorine rises in a straight line.\n\n**Advantage.** Complete kill of pathogens and removal of taste, odour and colour.",
+       "points": [
+        "Definition with free residual chlorine",
+        "Curve with four regions A-B, B-C, C-D, beyond D",
+        "Chloramine formation and destruction reactions",
+        "Advantage"
+       ]
+      },
+      {
+       "id": "bp-p2",
+       "pyq": "600831ed087e92e6",
+       "level": 2,
+       "points": [
+        "Definition and chemistry: Cl2 + H2O -> HOCl + HCl; NH3 + HOCl -> NH2Cl + H2O; 2NH2Cl + HOCl -> N2 + 3HCl + H2O",
+        "Graph with stages A-B (consumed), B-C (chloramines, rises), C-D (falls to minimum = break point), beyond D (free chlorine rises linearly)",
+        "Advantages: complete pathogen kill, removes organics, taste, odour, colour; residual 0.1-0.2 ppm protects mains",
+        "Excess removed by SO2 or sodium thiosulphate"
+       ]
+      },
+      {
+       "id": "bp-p3",
+       "pyq": "331ff603a9ce3a90",
+       "level": 2,
+       "points": [
+        "Significance: dose at which all chlorine-consuming substances are oxidised; minimum dose guaranteeing complete disinfection",
+        "Information: chlorine demand of the water",
+        "Correct dose to apply (just beyond break point, 0.1-0.2 ppm free)",
+        "Indicates ammonia/organic content; free residual shows protection against recontamination"
+       ]
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "topic": "Hardness: classification and disadvantages",
+   "subtopics": [
+    {
+     "id": "hardness-types",
+     "title": "Hardness and its types",
+     "theory_md": "**Hardness** is the soap-destroying power of water, caused by dissolved Ca and Mg salts (also Fe, Al, Mn). Hard water gives scum instead of lather:\n$$\\mathrm{2C_{17}H_{35}COONa + CaCl_2 \\rightarrow (C_{17}H_{35}COO)_2Ca\\downarrow + 2NaCl}$$\n\n- **Temporary (carbonate) hardness**: bicarbonates of Ca and Mg. Removed by **boiling**:\n$\\mathrm{Ca(HCO_3)_2 \\xrightarrow{\\Delta} CaCO_3\\downarrow + H_2O + CO_2}$; $\\mathrm{Mg(HCO_3)_2 \\xrightarrow{\\Delta} Mg(OH)_2\\downarrow + 2CO_2}$.\n- **Permanent (non-carbonate) hardness**: chlorides, sulphates, nitrates of Ca and Mg. **Not** removed by boiling; needs lime-soda, zeolite or ion exchange.\n\n**Total hardness** = temporary + permanent. Na and K salts cause no hardness.",
+     "basics_md": "Calcium and magnesium ions stick to soap and make it useless. Some arrive as bicarbonates, which boiling breaks down. Others arrive as chlorides or sulphates, which boiling cannot touch.",
+     "key_points": [
+      "Hardness = soap-destroying property due to Ca and Mg salts",
+      "Temporary: bicarbonates, removed by boiling, with reactions",
+      "Permanent: chlorides, sulphates, nitrates; not removed by boiling",
+      "Total = temporary + permanent; Na/K salts do not cause hardness"
+     ],
+     "figures": [
+      {
+       "smiles": "CCCCCCCCCCCCCCCCCC(=O)[O-].[Na+]",
+       "caption": "Sodium stearate, soap: forms insoluble calcium stearate scum with Ca2+"
+      }
+     ],
+     "questions": [
+      {
+       "id": "ht-q1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "Temporary hardness is due to dissolved",
+       "options": [
+        "bicarbonates of Ca and Mg",
+        "chlorides of Ca and Mg",
+        "sulphates of Ca and Mg",
+        "salts of Na and K"
+       ],
+       "answer_index": 0,
+       "why": "Bicarbonates decompose on boiling, so the hardness is temporary."
+      },
+      {
+       "id": "ht-p2",
+       "pyq": "9aadb8be58fa8434",
+       "level": 1,
+       "points": [
+        "Temporary: bicarbonates of Ca/Mg; removed by boiling: Ca(HCO3)2 -> CaCO3 + H2O + CO2; Mg(HCO3)2 -> Mg(OH)2 + 2CO2",
+        "Permanent: chlorides, sulphates, nitrates; not removed by boiling; needs lime-soda/zeolite/ion exchange"
+       ]
+      },
+      {
+       "id": "ht-q2",
+       "kind": "mcq",
+       "level": 2,
+       "q": "On boiling, Mg(HCO3)2 gives",
+       "options": [
+        "Mg(OH)2 and CO2",
+        "MgCO3 only",
+        "MgCl2",
+        "no change"
+       ],
+       "answer_index": 0,
+       "why": "Mg(HCO3)2 -> Mg(OH)2 + 2CO2, because Mg(OH)2 is less soluble than MgCO3."
+      },
+      {
+       "id": "ht-q3",
+       "kind": "short",
+       "level": 2,
+       "marks": 3,
+       "q": "Why is CaCl2 hardness not removed by boiling? How is it removed?",
+       "model_answer_md": "$\\mathrm{CaCl_2}$ is a stable salt that does not decompose on heating, so no insoluble precipitate forms; it is **permanent** hardness.\n\nIt is removed by chemical methods: **lime-soda** ($\\mathrm{CaCl_2 + Na_2CO_3 \\rightarrow CaCO_3\\downarrow + 2NaCl}$), the **zeolite** process or the **ion-exchange** process.",
+       "points": [
+        "CaCl2 does not decompose on boiling",
+        "It is permanent hardness",
+        "Removal by soda/lime-soda, zeolite or ion exchange"
+       ]
+      },
+      {
+       "id": "ht-p1",
+       "pyq": "d00e611797f5ce61",
+       "level": 2,
+       "points": [
+        "Hardness: soap-consuming property due to Ca and Mg salts; scum with soap",
+        "Soap reaction: 2C17H35COONa + CaCl2 -> (C17H35COO)2Ca + 2NaCl",
+        "Temporary: bicarbonates, removed by boiling, with reactions",
+        "Permanent: chlorides, sulphates, nitrates, not removed by boiling",
+        "Total = temporary + permanent, expressed in ppm CaCO3"
+       ]
+      }
+     ]
+    },
+    {
+     "id": "caco3-units",
+     "title": "CaCO3 equivalent and units of hardness",
+     "theory_md": "Hardness is expressed as **$\\mathrm{CaCO_3}$ equivalent** because $M(\\mathrm{CaCO_3}) = 100$ (equivalent weight 50), so any salt converts by a simple ratio and different salts can be added, and $\\mathrm{CaCO_3}$ is the most insoluble salt actually precipitated in treatment.\n$$\\text{Hardness (ppm as CaCO}_3) = \\frac{\\text{mass of salt (mg/L)} \\times 100}{\\text{molar mass of salt}}$$\n\n**Units**\n- 1 ppm = 1 mg/L = 1 part in $10^6$\n- 1 $^\\circ$Fr (degree French) = 1 part in $10^5$ = 10 ppm\n- 1 $^\\circ$Cl (degree Clarke) = 1 part in 70 000 = 14.3 ppm (1 grain per gallon)\n\nSo $1\\ \\mathrm{mg/L} = 1\\ \\mathrm{ppm} = 0.1\\ ^\\circ\\mathrm{Fr} = 0.07\\ ^\\circ\\mathrm{Cl}$.",
+     "basics_md": "To compare apples with oranges you pick one fruit as the standard. Chemists pick CaCO3 because its molar mass is a round 100, so the sum is easy.",
+     "key_points": [
+      "CaCO3 has molar mass exactly 100, so conversions are easy and hardness of different salts can be added",
+      "CaCO3 is the most insoluble salt and is the one that precipitates",
+      "Formula: mass of salt x 100 / molar mass of salt",
+      "1 mg/L = 1 ppm = 0.1 degree Fr = 0.07 degree Cl"
+     ],
+     "questions": [
+      {
+       "id": "cu-q1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "1 degree French (Fr) equals",
+       "options": [
+        "10 ppm",
+        "1 ppm",
+        "14.3 ppm",
+        "100 ppm"
+       ],
+       "answer_index": 0,
+       "why": "1 degree Fr is 1 part in 10^5, which is 10 parts in 10^6."
+      },
+      {
+       "id": "cu-p2",
+       "pyq": "2c5ae90db0d4aaeb",
+       "level": 1,
+       "points": [
+        "x = 1, y = 0.1, z = 0.07",
+        "ppm is 1 part in 10^6; degree Fr is 1 part in 10^5 (so 0.1); degree Cl is 1 part in 70 000 (so 0.07)"
+       ]
+      },
+      {
+       "id": "cu-q2",
+       "kind": "mcq",
+       "level": 2,
+       "q": "Hardness is expressed as CaCO3 equivalent mainly because CaCO3",
+       "options": [
+        "has molar mass 100 and is the most insoluble salt",
+        "is the commonest hardness salt",
+        "is the only salt causing hardness",
+        "has equivalent weight 100"
+       ],
+       "answer_index": 0,
+       "why": "M = 100 makes conversion simple; equivalent weight is 50, not 100."
+      },
+      {
+       "id": "cu-q3",
+       "kind": "numerical",
+       "level": 2,
+       "marks": 2,
+       "q": "A water sample contains 190 mg/L of MgCl2 (molar mass 95). Express its hardness in ppm of CaCO3, degree French and degree Clarke.",
+       "model_answer_md": "$\\text{Hardness} = \\dfrac{190 \\times 100}{95} = 200$ ppm as $\\mathrm{CaCO_3}$\n\n$200 \\times 0.1 = 20\\ ^\\circ\\mathrm{Fr}$; $\\quad 200 \\times 0.07 = 14\\ ^\\circ\\mathrm{Cl}$",
+       "points": [
+        "Formula used with values",
+        "200 ppm",
+        "20 degree Fr",
+        "14 degree Cl"
+       ]
+      },
+      {
+       "id": "cu-p1",
+       "pyq": "724205e44c8419e3",
+       "level": 2,
+       "points": [
+        "Molar mass of CaCO3 is exactly 100 (equivalent weight 50), so conversion is simple multiplication and hardness of different salts can be added",
+        "CaCO3 is the most insoluble salt and is the one precipitated in treatment, so a natural common standard"
+       ]
+      }
+     ]
+    },
+    {
+     "id": "hardness-calc",
+     "title": "Calculating temporary, permanent and total hardness",
+     "theory_md": "1. Convert each Ca/Mg salt to $\\mathrm{CaCO_3}$ equivalent: mass $\\times 100 / M$.\n2. **Temporary** = bicarbonates ($\\mathrm{Ca(HCO_3)_2}$, $\\mathrm{Mg(HCO_3)_2}$).\n3. **Permanent** = chlorides, sulphates, nitrates of Ca and Mg.\n4. **Total** = temporary + permanent.\n\nIgnore salts of Na and K ($\\mathrm{NaCl}$, $\\mathrm{Na_2SO_4}$, $\\mathrm{KCl}$) and $\\mathrm{SiO_2}$: no hardness.\n\nCommon molar masses: $\\mathrm{Ca(HCO_3)_2}$ 162, $\\mathrm{Mg(HCO_3)_2}$ 146, $\\mathrm{CaCl_2}$ 111, $\\mathrm{MgCl_2}$ 95, $\\mathrm{CaSO_4}$ 136, $\\mathrm{MgSO_4}$ 120, $\\mathrm{CaCO_3}$ 100.",
+     "basics_md": "Turn each hardness-causing salt into the same unit (CaCO3), then add up the bicarbonates for temporary and the rest for permanent.",
+     "key_points": [
+      "Convert every Ca/Mg salt to CaCO3 equivalent: mass x 100 / M",
+      "Temporary = bicarbonates; permanent = chlorides, sulphates, nitrates",
+      "Total = temporary + permanent",
+      "Na, K salts and SiO2 are ignored"
+     ],
+     "questions": [
+      {
+       "id": "hc-q1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "Which of the following does NOT contribute to hardness?",
+       "options": [
+        "Na2SO4",
+        "MgSO4",
+        "CaCl2",
+        "Ca(HCO3)2"
+       ],
+       "answer_index": 0,
+       "why": "Only Ca and Mg (and similar multivalent) salts cause hardness."
+      },
+      {
+       "id": "hc-q2",
+       "kind": "mcq",
+       "level": 2,
+       "q": "The hardness of 81 mg/L Ca(HCO3)2 (M = 162) in ppm of CaCO3 is",
+       "options": [
+        "50",
+        "81",
+        "100",
+        "25"
+       ],
+       "answer_index": 0,
+       "why": "81 x 100 / 162 = 50."
+      },
+      {
+       "id": "hc-q3",
+       "kind": "numerical",
+       "level": 2,
+       "marks": 3,
+       "q": "A water sample contains Ca(HCO3)2 = 40.5 mg/L, MgSO4 = 30 mg/L, CaCl2 = 22.2 mg/L and NaCl = 10 mg/L. Find the temporary, permanent and total hardness.",
+       "model_answer_md": "| Salt | mg/L | M | ppm as $\\mathrm{CaCO_3}$ | Type |\n|---|---|---|---|---|\n| $\\mathrm{Ca(HCO_3)_2}$ | 40.5 | 162 | $40.5\\times100/162 = 25$ | temporary |\n| $\\mathrm{MgSO_4}$ | 30 | 120 | $30\\times100/120 = 25$ | permanent |\n| $\\mathrm{CaCl_2}$ | 22.2 | 111 | $22.2\\times100/111 = 20$ | permanent |\n| $\\mathrm{NaCl}$ | 10 | 58.5 | no hardness | none |\n\nTemporary = 25 ppm; permanent = 25 + 20 = 45 ppm; total = 70 ppm.",
+       "points": [
+        "Conversion of each salt to CaCO3",
+        "Temporary 25 ppm",
+        "Permanent 45 ppm",
+        "Total 70 ppm; NaCl ignored"
+       ]
+      },
+      {
+       "id": "hc-p1",
+       "pyq": "59a7c423c9231f20",
+       "level": 2,
+       "points": [
+        "Convert to CaCO3: Mg(HCO3)2 22x100/146 = 15.07; CaCl2 85x100/111 = 76.58; CaSO4 28x100/136 = 20.59; MgCl2 30x100/95 = 31.58 ppm",
+        "Temporary hardness = 15.07 ppm",
+        "Permanent hardness = 76.58 + 20.59 + 31.58 = 128.74 ppm",
+        "Total hardness = 143.8 ppm"
+       ]
+      },
+      {
+       "id": "hc-p2",
+       "pyq": "7a01edc6c0f5252f",
+       "level": 2,
+       "points": [
+        "Molar masses: Ca(HCO3)2 162, Mg(HCO3)2 146, CaSO4 136, MgSO4 120",
+        "Temporary = 6.17 + 5.82 = 11.99 mg/L as CaCO3",
+        "Permanent = 8.82 + 11.67 = 20.49 mg/L",
+        "Total = 32.49 mg/L"
+       ]
+      },
+      {
+       "id": "hc-p3",
+       "pyq": "22cc116e136f609a",
+       "level": 2,
+       "points": [
+        "Mg(HCO3)2 146 mg/L = 100 ppm, Ca(HCO3)2 81 = 50 ppm; temporary = 150 ppm",
+        "MgSO4 80 = 66.67, MgCl2 9.5 = 10; permanent = 76.67 ppm",
+        "Total = 226.67 ppm",
+        "Na2SO4 causes no hardness and is ignored"
+       ]
+      }
+     ]
+    },
+    {
+     "id": "hardness-disadvantages",
+     "title": "Disadvantages of hard water",
+     "theory_md": "**Domestic**\n- **Washing/bathing**: wastes soap, forms sticky scum, poor lather; clothes turn dull; skin becomes rough.\n- **Cooking**: pulses and vegetables cook slowly; tea and coffee taste flat; scale forms in kettles.\n- **Drinking**: may cause digestive disorders.\n\n**Industrial**\n- **Boilers**: scale and sludge (fuel waste, overheating, explosion), corrosion, priming and foaming, caustic embrittlement.\n- **Textile/dyeing**: uneven dyes, stains, spots.\n- **Paper, sugar, laundry, pharmaceuticals**: poor quality of product, crystallisation problems.\n- **Pipes**: deposits narrow and choke them.",
+     "basics_md": "Hardness ions steal soap, bake into crusts on hot surfaces and ruin delicate processes like dyeing.",
+     "key_points": [
+      "Wastes soap and forms scum; clothes dull, skin rough",
+      "Cooking slower, kettle scale",
+      "Boiler troubles: scale, sludge, corrosion, priming, caustic embrittlement",
+      "Industries: textile, paper, sugar, laundry products spoiled"
+     ],
+     "questions": [
+      {
+       "id": "hd-q1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "Hard water wastes soap because Ca2+ and Mg2+ form",
+       "options": [
+        "insoluble scum with soap",
+        "soluble soap",
+        "a lather",
+        "an acid"
+       ],
+       "answer_index": 0,
+       "why": "Insoluble calcium and magnesium stearates precipitate, so no lather until all hardness is used up."
+      },
+      {
+       "id": "hd-q2",
+       "kind": "mcq",
+       "level": 2,
+       "q": "Which boiler trouble is NOT caused by hardness salts directly?",
+       "options": [
+        "Too high steam pressure",
+        "Scale formation",
+        "Sludge formation",
+        "Caustic embrittlement after lime-soda softening"
+       ],
+       "answer_index": 0,
+       "why": "Pressure is an operating condition; the others arise from hardness or its treatment."
+      },
+      {
+       "id": "hd-q3",
+       "kind": "short",
+       "level": 2,
+       "marks": 3,
+       "q": "State three disadvantages of hard water in the home and three in industry.",
+       "model_answer_md": "**Domestic**\n1. Wastes soap and leaves scum.\n2. Cooking is slow; tea and coffee taste flat.\n3. Scale in kettles and geysers; may upset digestion.\n\n**Industrial**\n1. Boiler scale and sludge: fuel loss, overheating, explosion risk.\n2. Textile dyeing is uneven and stained.\n3. Paper, sugar and laundry products are of poor quality; pipes choke.",
+       "points": [
+        "Three domestic disadvantages",
+        "Three industrial disadvantages"
+       ]
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "topic": "Caustic embrittlement",
+   "subtopics": [
+    {
+     "id": "ce-cause",
+     "title": "What caustic embrittlement is and how it arises",
+     "theory_md": "**Caustic embrittlement** is brittleness and intercrystalline cracking of boiler metal at stressed parts (rivets, bends, joints) due to concentrated **NaOH**. It is a stress corrosion of high-pressure boilers.\n\n1. Lime-soda softened water keeps some residual $\\mathrm{Na_2CO_3}$, which hydrolyses at high pressure: $\\mathrm{Na_2CO_3 + H_2O \\rightarrow 2NaOH + CO_2}$.\n2. NaOH seeps into hair cracks at rivets and joints and concentrates as water evaporates.\n3. A **concentration cell** forms: stressed iron in conc. NaOH is the **anode**, plain iron in dilute NaOH the **cathode**.\n4. $\\mathrm{Fe + 2NaOH \\rightarrow Na_2FeO_2 + H_2}$ (sodium ferroate). It decomposes, $\\mathrm{3Na_2FeO_2 + 4H_2O \\rightarrow 6NaOH + Fe_3O_4 + H_2}$, regenerating NaOH, so the attack continues.",
+     "basics_md": "Leftover washing soda in boiler water turns into caustic soda. Caustic soda collects in tiny cracks, eats the iron there, and gives back more caustic soda, so the crack keeps growing.",
+     "key_points": [
+      "Cause: concentrated NaOH at stressed parts of boiler, from Na2CO3 hydrolysis",
+      "Na2CO3 + H2O -> 2NaOH + CO2",
+      "Concentration cell: stressed iron in conc. NaOH is anode",
+      "Fe + 2NaOH -> Na2FeO2 + H2; NaOH regenerated, so attack continues"
+     ],
+     "questions": [
+      {
+       "id": "cec-q1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "Caustic embrittlement is caused by",
+       "options": [
+        "concentrated NaOH in boiler water",
+        "dissolved O2",
+        "dissolved CO2",
+        "MgCl2"
+       ],
+       "answer_index": 0,
+       "why": "NaOH formed from residual Na2CO3 concentrates in cracks."
+      },
+      {
+       "id": "cec-p1",
+       "pyq": "94f6842875c5d4d7",
+       "level": 1,
+       "points": [
+        "Brittleness and cracking at stressed points due to concentrated NaOH",
+        "Na2CO3 + H2O -> 2NaOH + CO2",
+        "Fe + 2NaOH -> Na2FeO2 + H2",
+        "Prevented by sodium phosphate, tannin, lignin or Na2SO4"
+       ]
+      },
+      {
+       "id": "cec-p4",
+       "pyq": "08a859132dfa7683",
+       "level": 1,
+       "points": [
+        "True: caused by highly concentrated NaOH",
+        "Residual Na2CO3 hydrolyses to NaOH at high pressure",
+        "NaOH concentrates in cracks; iron dissolves as sodium ferroate"
+       ]
+      },
+      {
+       "id": "cec-q2",
+       "kind": "mcq",
+       "level": 2,
+       "q": "In the concentration cell of caustic embrittlement the anode is",
+       "options": [
+        "iron at stressed parts in concentrated NaOH",
+        "iron at plane surface in dilute NaOH",
+        "the NaOH solution",
+        "the scale layer"
+       ],
+       "answer_index": 0,
+       "why": "The stressed iron in contact with concentrated alkali dissolves."
+      },
+      {
+       "id": "cec-q3",
+       "kind": "short",
+       "level": 2,
+       "marks": 3,
+       "q": "Explain how softening with lime-soda can lead to caustic embrittlement.",
+       "model_answer_md": "1. Lime-soda softened water retains a little residual $\\mathrm{Na_2CO_3}$.\n2. At high boiler pressure it hydrolyses: $\\mathrm{Na_2CO_3 + H_2O \\rightarrow 2NaOH + CO_2}$.\n3. The alkaline water enters hair-line cracks at rivets and joints, evaporates and the NaOH becomes concentrated.\n4. Stressed iron there is anodic and dissolves: $\\mathrm{Fe + 2NaOH \\rightarrow Na_2FeO_2 + H_2}$, giving intercrystalline cracks.",
+       "points": [
+        "Residual Na2CO3 after lime-soda",
+        "Hydrolysis to NaOH at high pressure",
+        "NaOH concentrates in cracks",
+        "Iron dissolves as sodium ferroate"
+       ]
+      },
+      {
+       "id": "cec-p2",
+       "pyq": "1bcfb83ac83abea4",
+       "level": 2,
+       "points": [
+        "Boiler metal becomes brittle and cracks at stressed parts due to concentrated NaOH",
+        "Na2CO3 hydrolyses at high pressure to NaOH; seeps into cracks and concentrates",
+        "Effect: cracks at rivets and joints, leakage, weakening, explosion risk, shutdown for repair"
+       ]
+      },
+      {
+       "id": "cec-p3",
+       "pyq": "e1c463828722d44b",
+       "level": 2,
+       "points": [
+        "Definition: intercrystalline cracking due to concentrated NaOH, a stress corrosion",
+        "Cause: Na2CO3 + H2O -> 2NaOH + CO2",
+        "Concentration cell, stressed iron anode; Fe + 2NaOH -> Na2FeO2 + H2",
+        "Sodium ferroate decomposes regenerating NaOH"
+       ]
+      }
+     ]
+    },
+    {
+     "id": "ce-prevention",
+     "title": "Effects and prevention of caustic embrittlement",
+     "theory_md": "**Effects**: cracks at rivets, bends and joints; leakage of water and steam; weakening of the shell; sudden failure or boiler explosion; shutdown and repair.\n\n**Prevention**\n1. Soften with **sodium phosphate** ($\\mathrm{Na_3PO_4}$) instead of $\\mathrm{Na_2CO_3}$.\n2. Add **tannin or lignin**, which seal hair cracks so NaOH cannot enter.\n3. Add **$\\mathrm{Na_2SO_4}$**, which also blocks cracks; ratio $\\mathrm{Na_2SO_4 : NaOH}$ = 1:1 up to 10 atm, 2:1 up to 20 atm, 3:1 above 20 atm.\n4. Use welded rather than riveted joints; keep alkali low.",
+     "basics_md": "To stop caustic cracking, either avoid making caustic soda (use a phosphate) or stop it reaching the cracks (tannin or sodium sulphate plug them).",
+     "key_points": [
+      "Effects: cracks, leakage, loss of strength, explosion risk",
+      "Use Na3PO4 instead of Na2CO3 for softening",
+      "Add tannin, lignin or Na2SO4 to block cracks",
+      "Na2SO4:NaOH ratio rises with pressure (1:1, 2:1, 3:1)"
+     ],
+     "questions": [
+      {
+       "id": "cep-q1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "Which compound is added to block hair cracks and prevent caustic embrittlement?",
+       "options": [
+        "Na2SO4",
+        "NaOH",
+        "Na2CO3",
+        "CaCl2"
+       ],
+       "answer_index": 0,
+       "why": "Na2SO4 (and tannin or lignin) is adsorbed in cracks so NaOH cannot concentrate there."
+      },
+      {
+       "id": "cep-q2",
+       "kind": "mcq",
+       "level": 2,
+       "q": "Replacing Na2CO3 by Na3PO4 as softening agent prevents caustic embrittlement because",
+       "options": [
+        "phosphate does not hydrolyse to give NaOH",
+        "phosphate neutralises NaOH",
+        "phosphate removes iron",
+        "it lowers pressure"
+       ],
+       "answer_index": 0,
+       "why": "Na3PO4 gives no free alkali at boiler temperature in the way carbonate does."
+      },
+      {
+       "id": "cep-q3",
+       "kind": "short",
+       "level": 3,
+       "marks": 4,
+       "q": "What is caustic embrittlement? How does it affect boiler operation and how is it prevented?",
+       "model_answer_md": "**Definition.** Brittle intercrystalline cracking of boiler metal at stressed parts caused by concentrated NaOH.\n\n**Cause.** $\\mathrm{Na_2CO_3 + H_2O \\rightarrow 2NaOH + CO_2}$; NaOH concentrates in cracks; stressed iron is anode: $\\mathrm{Fe + 2NaOH \\rightarrow Na_2FeO_2 + H_2}$.\n\n**Effects.** 1. Cracks at rivets and joints. 2. Leakage of steam and water. 3. Weakened shell, risk of explosion. 4. Shutdown and repair.\n\n**Prevention.** 1. Use sodium phosphate instead of sodium carbonate. 2. Add tannin or lignin. 3. Add $\\mathrm{Na_2SO_4}$ in suitable ratio.",
+       "points": [
+        "Definition",
+        "Cause with reactions",
+        "Effects on boiler operation",
+        "Prevention: phosphate, tannin/lignin, Na2SO4"
+       ]
+      },
+      {
+       "id": "cep-p1",
+       "pyq": "f98bfce3dca92051",
+       "level": 3,
+       "points": [
+        "Definition: brittleness and intercrystalline cracking at stressed parts due to NaOH, stress corrosion",
+        "Cause: Na2CO3 + H2O -> 2NaOH + CO2; concentration cell; Fe + 2NaOH -> Na2FeO2 + H2; 3Na2FeO2 + 4H2O -> 6NaOH + Fe3O4 + H2",
+        "Effect on operation: cracks grow, leakage, shutdown, risk of explosion, short boiler life",
+        "Prevention: sodium phosphate for softening; tannin/lignin; Na2SO4 (1:1, 2:1, 3:1 with pressure)"
+       ]
+      },
+      {
+       "id": "cep-p2",
+       "pyq": "b57555b5877038bd",
+       "level": 3,
+       "points": [
+        "Definition, cause Na2CO3 hydrolysis, NaOH concentrates in cracks",
+        "Mechanism by concentration cell: stressed iron anode in conc. NaOH; Fe + 2NaOH -> Na2FeO2 + H2",
+        "Effects: cracking, leakage, failure or explosion",
+        "Prevention: sodium phosphate, tannin, lignin, Na2SO4; welded joints"
+       ]
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "topic": "Boiler corrosion",
+   "subtopics": [
+    {
+     "id": "bc-causes",
+     "title": "Causes of boiler corrosion",
+     "theory_md": "Boiler corrosion is the eating away of boiler metal by chemical or electrochemical attack from the feed water. Three causes:\n\n1. **Dissolved oxygen**, at high temperature:\n$\\mathrm{2Fe + 2H_2O + O_2 \\rightarrow 2Fe(OH)_2}$; $\\mathrm{4Fe(OH)_2 + O_2 + 2H_2O \\rightarrow 4Fe(OH)_3}$ (rust).\n2. **Dissolved $\\mathrm{CO_2}$**, from bicarbonates, $\\mathrm{Mg(HCO_3)_2 \\rightarrow MgCO_3 + H_2O + CO_2}$ or from the air; it gives carbonic acid, $\\mathrm{CO_2 + H_2O \\rightarrow H_2CO_3}$, which attacks iron.\n3. **Dissolved acids from salts**: $\\mathrm{MgCl_2 + 2H_2O \\rightarrow Mg(OH)_2 + 2HCl}$, then $\\mathrm{Fe + 2HCl \\rightarrow FeCl_2 + H_2}$ and $\\mathrm{FeCl_2 + 2H_2O \\rightarrow Fe(OH)_2 + 2HCl}$. The HCl is regenerated, so a little acid corrodes much iron.",
+     "basics_md": "Oxygen rusts iron, carbon dioxide makes a weak acid that dissolves it, and magnesium chloride makes a strong acid that dissolves it again and again.",
+     "key_points": [
+      "Dissolved O2 rusts iron: Fe -> Fe(OH)2 -> Fe(OH)3",
+      "Dissolved CO2 forms carbonic acid, attacks metal",
+      "MgCl2 hydrolyses to HCl; Fe + 2HCl -> FeCl2 + H2",
+      "HCl is regenerated, so small amount causes heavy corrosion"
+     ],
+     "questions": [
+      {
+       "id": "bcc-q1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "Which of these is NOT a cause of boiler corrosion?",
+       "options": [
+        "Dissolved Na2SO4 in traces",
+        "Dissolved oxygen",
+        "Dissolved CO2",
+        "Hydrolysis of MgCl2"
+       ],
+       "answer_index": 0,
+       "why": "Na2SO4 does not generate acid or oxidant."
+      },
+      {
+       "id": "bcc-q2",
+       "kind": "mcq",
+       "level": 2,
+       "q": "MgCl2 in boiler feed water causes corrosion because on hydrolysis it forms",
+       "options": [
+        "HCl",
+        "NaOH",
+        "H2O2",
+        "CaCO3"
+       ],
+       "answer_index": 0,
+       "why": "MgCl2 + 2H2O -> Mg(OH)2 + 2HCl; the acid attacks iron."
+      },
+      {
+       "id": "bcc-q3",
+       "kind": "short",
+       "level": 2,
+       "marks": 3,
+       "q": "Explain how dissolved oxygen and magnesium chloride cause corrosion in boilers, with reactions.",
+       "model_answer_md": "**Dissolved oxygen** (at boiler temperature) rusts iron:\n$\\mathrm{2Fe + 2H_2O + O_2 \\rightarrow 2Fe(OH)_2}$; $\\mathrm{4Fe(OH)_2 + O_2 + 2H_2O \\rightarrow 4Fe(OH)_3}$\n\n**Magnesium chloride** hydrolyses: $\\mathrm{MgCl_2 + 2H_2O \\rightarrow Mg(OH)_2 + 2HCl}$.\nThe acid attacks iron: $\\mathrm{Fe + 2HCl \\rightarrow FeCl_2 + H_2}$, and $\\mathrm{FeCl_2 + 2H_2O \\rightarrow Fe(OH)_2 + 2HCl}$ regenerates HCl, so corrosion continues with a small amount of chloride.",
+       "points": [
+        "Oxygen reactions to Fe(OH)2 and Fe(OH)3",
+        "MgCl2 hydrolysis to HCl",
+        "Fe + 2HCl and regeneration of HCl"
+       ]
+      }
+     ]
+    },
+    {
+     "id": "bc-prevention",
+     "title": "Prevention of boiler corrosion",
+     "theory_md": "**Dissolved $\\mathrm{O_2}$**\n- *Mechanical deaeration*: heat water under reduced pressure in a deaerator.\n- *Chemical*: sodium sulphite, $\\mathrm{2Na_2SO_3 + O_2 \\rightarrow 2Na_2SO_4}$ (adds salt); or **hydrazine**, $\\mathrm{N_2H_4 + O_2 \\rightarrow N_2 + 2H_2O}$ (no solids, best for high pressure).\n\n**Dissolved $\\mathrm{CO_2}$**\n- Deaeration, or ammonia: $\\mathrm{2NH_4OH + CO_2 \\rightarrow (NH_4)_2CO_3 + H_2O}$.\n\n**Acids from $\\mathrm{MgCl_2}$**\n- Soften the water, add a little alkali, and blow down.\n\nMass ratio: 32 g $\\mathrm{O_2}$ needs 252 g $\\mathrm{Na_2SO_3}$ ($2\\times126$) or 32 g $\\mathrm{N_2H_4}$.",
+     "basics_md": "Remove what causes the damage: boil out the gases, or add a chemical that mops up oxygen before the iron can.",
+     "key_points": [
+      "O2: deaeration, Na2SO3 or hydrazine",
+      "Na2SO3 + O2 -> Na2SO4; N2H4 + O2 -> N2 + 2H2O",
+      "CO2: deaeration or NH4OH",
+      "Acids: softening, alkali addition, blow-down"
+     ],
+     "questions": [
+      {
+       "id": "bcp-q1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "Which chemical removes dissolved oxygen without adding any dissolved solid to the boiler water?",
+       "options": [
+        "Hydrazine",
+        "Sodium sulphite",
+        "Sodium chloride",
+        "Calgon"
+       ],
+       "answer_index": 0,
+       "why": "N2H4 + O2 -> N2 + 2H2O gives only nitrogen and water."
+      },
+      {
+       "id": "bcp-q2",
+       "kind": "mcq",
+       "level": 2,
+       "q": "Dissolved CO2 in boiler feed water is neutralised by adding",
+       "options": [
+        "ammonium hydroxide",
+        "NaOH in large excess",
+        "alum",
+        "bleaching powder"
+       ],
+       "answer_index": 0,
+       "why": "2NH4OH + CO2 -> (NH4)2CO3 + H2O."
+      },
+      {
+       "id": "bcp-q3",
+       "kind": "numerical",
+       "level": 2,
+       "marks": 3,
+       "q": "Feed water contains 6.4 mg/L of dissolved oxygen. Find the mass of sodium sulphite needed to remove it from 10 000 L, and the hydrazine needed for the same job. (Na2SO3 = 126, O2 = 32, N2H4 = 32)",
+       "model_answer_md": "$\\mathrm{2Na_2SO_3 + O_2 \\rightarrow 2Na_2SO_4}$: 32 g $\\mathrm{O_2}$ needs $2\\times126 = 252$ g $\\mathrm{Na_2SO_3}$.\n\n$\\mathrm{O_2}$ in 10 000 L $= 6.4 \\times 10^4$ mg $= 64$ g.\n\n$\\mathrm{Na_2SO_3} = 64 \\times \\dfrac{252}{32} = 504$ g.\n\n$\\mathrm{N_2H_4 + O_2 \\rightarrow N_2 + 2H_2O}$: 32 g needs 32 g, so hydrazine $= 64$ g.",
+       "points": [
+        "Stoichiometry 32 g O2 : 252 g Na2SO3",
+        "O2 present = 64 g",
+        "Na2SO3 = 504 g",
+        "Hydrazine = 64 g"
+       ]
+      },
+      {
+       "id": "bcp-q4",
+       "kind": "short",
+       "level": 2,
+       "marks": 3,
+       "q": "Compare sodium sulphite and hydrazine for removing dissolved oxygen.",
+       "model_answer_md": "| Point | $\\mathrm{Na_2SO_3}$ | $\\mathrm{N_2H_4}$ |\n|---|---|---|\n| Reaction | $\\mathrm{2Na_2SO_3 + O_2 \\rightarrow 2Na_2SO_4}$ | $\\mathrm{N_2H_4 + O_2 \\rightarrow N_2 + 2H_2O}$ |\n| Product | $\\mathrm{Na_2SO_4}$ stays dissolved, raises TDS | $\\mathrm{N_2}$ and water, no solids |\n| Pressure | Low and medium pressure boilers | High pressure boilers |\n| Cost | Cheap | Costlier, toxic |",
+       "points": [
+        "Both reactions",
+        "Sulphate adds solids, hydrazine does not",
+        "Pressure suitability"
+       ]
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "topic": "Priming and foaming",
+   "subtopics": [
+    {
+     "id": "pf-meaning",
+     "title": "Priming, foaming and their causes",
+     "theory_md": "**Priming**: carry-over of water droplets with the steam, giving **wet steam**. It happens when steam is produced rapidly and violently.\nCauses: high steam velocity (sudden demand), very high water level, sudden boiling, faulty boiler design (little steam space), high dissolved and suspended solids.\n\n**Foaming**: formation of small **persistent bubbles** on the water surface that do not break.\nCause: **oils, grease and alkalis** (and fine suspended matter) which lower the surface tension of water.\n\nPriming and foaming together are called **carry-over**.",
+     "basics_md": "Priming is water being thrown up into the steam. Foaming is a layer of bubbles that does not collapse. Both leave the steam wet.",
+     "key_points": [
+      "Priming = carry-over of droplets with steam, wet steam",
+      "Priming causes: high steam velocity, high water level, sudden boiling, bad design, high solids",
+      "Foaming = persistent bubbles; cause oil, grease, alkali lowering surface tension",
+      "Together called carry-over"
+     ],
+     "questions": [
+      {
+       "id": "pfm-q1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "Foaming in a boiler is caused mainly by",
+       "options": [
+        "oils, grease and alkalis",
+        "dissolved oxygen",
+        "calcium sulphate",
+        "high water level"
+       ],
+       "answer_index": 0,
+       "why": "These lower the surface tension of water, so bubbles last."
+      },
+      {
+       "id": "pfm-p1",
+       "pyq": "f29f0425b71e29c2",
+       "level": 1,
+       "points": [
+        "Priming: carry-over of water droplets with steam, wet steam",
+        "Foaming: persistent bubbles due to oil and alkali lowering surface tension",
+        "Together called carry-over"
+       ]
+      },
+      {
+       "id": "pfm-q2",
+       "kind": "mcq",
+       "level": 2,
+       "q": "Which of these favours priming?",
+       "options": [
+        "Sudden increase in steam demand",
+        "Use of soft water",
+        "Low water level",
+        "Antifoam agents"
+       ],
+       "answer_index": 0,
+       "why": "High steam velocity carries droplets into the steam."
+      },
+      {
+       "id": "pfm-q3",
+       "kind": "short",
+       "level": 2,
+       "marks": 2,
+       "q": "Distinguish priming from foaming.",
+       "model_answer_md": "| Priming | Foaming |\n|---|---|\n| Carry-over of water **droplets** with steam | Formation of persistent **bubbles** on the water surface |\n| Due to high steam velocity, high water level, sudden boiling, faulty design | Due to oil, grease, alkali which lower surface tension |\n| Prevented by steam purifiers, low water level | Prevented by antifoaming agents, removal of oil |",
+       "points": [
+        "Priming defined as droplets with steam",
+        "Foaming defined as persistent bubbles",
+        "Different causes"
+       ]
+      },
+      {
+       "id": "pfm-p2",
+       "pyq": "4c78f438cf53778c",
+       "level": 2,
+       "points": [
+        "Priming: carrying over of water droplets with steam (wet steam), when steam is produced rapidly",
+        "Foaming: persistent bubbles on the water surface, caused by oils, grease and alkalis lowering surface tension",
+        "Called carry-over together"
+       ]
+      },
+      {
+       "id": "pfm-p3",
+       "pyq": "ed6a82783a217a62",
+       "level": 2,
+       "points": [
+        "Priming: wet steam from rapid, violent steam production",
+        "Foaming: persistent bubbles due to oil and alkali",
+        "Carry-over"
+       ]
+      }
+     ]
+    },
+    {
+     "id": "pf-effects",
+     "title": "Ill effects and prevention of priming and foaming",
+     "theory_md": "**Ill effects**\n1. Salts in the carried-over droplets deposit on **superheater tubes and turbine blades**, reducing efficiency.\n2. Wet steam carries less heat and wastes fuel.\n3. Foam makes the **gauge-glass water level** unreliable, risking overheating.\n4. Corrosion and damage to machinery using the steam.\n\n**Prevention**\n- *Priming*: steam purifiers (anti-priming pipes, baffles), keep water level low, avoid sudden steam demand, use soft water, **blow-down**.\n- *Foaming*: **antifoaming agents** (a little castor oil), remove oil with sodium aluminate or alum, blow-down.",
+     "basics_md": "The trouble is wet steam carrying dissolved salts to turbine blades and false level readings. The cure is to stop the splash (purifiers, lower level) and to break the foam (antifoam agent).",
+     "key_points": [
+      "Ill effects: deposits on turbine blades and superheater, wet steam, wrong level reading, corrosion",
+      "Priming prevented by steam purifiers, low water level, soft water, blow-down",
+      "Foaming prevented by antifoams (castor oil), removing oil, blow-down"
+     ],
+     "questions": [
+      {
+       "id": "pfe-q1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "A chemical used as antifoaming agent in boilers is",
+       "options": [
+        "castor oil",
+        "caustic soda",
+        "alum in large excess",
+        "sodium chloride"
+       ],
+       "answer_index": 0,
+       "why": "A small amount of castor oil spreads on the surface and breaks bubbles."
+      },
+      {
+       "id": "pfe-q2",
+       "kind": "mcq",
+       "level": 2,
+       "q": "Carry-over of salts with wet steam mainly damages",
+       "options": [
+        "turbine blades and superheater",
+        "the feed pump",
+        "the chimney",
+        "the furnace grate"
+       ],
+       "answer_index": 0,
+       "why": "Dissolved salts dry and deposit on the blades and superheater tubes."
+      },
+      {
+       "id": "pfe-q3",
+       "kind": "short",
+       "level": 2,
+       "marks": 3,
+       "q": "State the ill effects of priming and foaming, and how each is prevented.",
+       "model_answer_md": "**Ill effects**\n1. Salts deposit on turbine blades and superheaters, reducing efficiency.\n2. Wet steam holds less heat.\n3. Water-level reading becomes unreliable.\n4. Corrosion of machinery.\n\n**Prevention**\n- Priming: steam purifiers, low water level, steady steam demand, soft water.\n- Foaming: antifoaming agent (castor oil), removal of oil with sodium aluminate, blow-down.",
+       "points": [
+        "Ill effects, at least three",
+        "Priming prevention",
+        "Foaming prevention"
+       ]
+      },
+      {
+       "id": "pfe-p1",
+       "pyq": "5ba0c450be44b4d1",
+       "level": 2,
+       "points": [
+        "Priming: droplets carried with steam; foaming: persistent bubbles",
+        "Causes of priming: high steam velocity, high water level, sudden boiling, faulty design, high solids",
+        "Cause of foaming: oil, grease, alkalis lowering surface tension",
+        "Ill effects: salts deposit on turbine blades, wet steam, wrong water-level reading, machinery damage"
+       ]
+      },
+      {
+       "id": "pfe-p2",
+       "pyq": "9a04b1bcdb4fea54",
+       "level": 3,
+       "points": [
+        "Definitions of priming and foaming; together carry-over",
+        "Causes of priming (5 points) and foaming (oil, grease, alkali)",
+        "Ill effects: deposits on turbine blades and superheater, wet steam, level reading error, damage",
+        "Prevention: steam purifiers, low level, soft water, blow-down; antifoam castor oil, sodium aluminate to remove oil"
+       ]
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "topic": "Scale and sludge: internal and external treatment",
+   "subtopics": [
+    {
+     "id": "sludge-vs-scale",
+     "title": "Sludge and scale: what and why",
+     "theory_md": "As boiler water evaporates, dissolved salts concentrate and precipitate.\n\n**Sludge**: soft, loose, slimy, non-adherent precipitate in the **colder parts** from salts **more soluble in hot water**: $\\mathrm{MgCO_3}$, $\\mathrm{MgCl_2}$, $\\mathrm{CaCl_2}$, $\\mathrm{MgSO_4}$. Poor heat conductor, chokes pipes; removed by **blow-down**.\n\n**Scale**: hard, adherent coating on the **hot surfaces**: $\\mathrm{CaSO_4}$ (less soluble when hot), $\\mathrm{CaCO_3}$ (from $\\mathrm{Ca(HCO_3)_2}$), $\\mathrm{Mg(OH)_2}$, $\\mathrm{CaSiO_3}$/$\\mathrm{MgSiO_3}$. Not removed by blow-down.\n\n**Foam** is different: persistent bubbles on the surface, from oil and alkali.",
+     "basics_md": "Think of tea in a kettle. Some stuff settles as soft mud at the bottom (sludge). Some bakes onto the hot wall as a hard crust (scale).",
+     "key_points": [
+      "Sludge: soft, loose, in cold parts, salts more soluble in hot water (MgCO3, MgCl2, CaCl2, MgSO4)",
+      "Scale: hard, adherent on hot surfaces (CaSO4, CaCO3, Mg(OH)2, silicates)",
+      "Sludge removed by blow-down; scale needs scraping, thermal shock or chemicals",
+      "Scale is far more harmful than sludge"
+     ],
+     "questions": [
+      {
+       "id": "sv-q1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "Sludge is formed by salts which are",
+       "options": [
+        "more soluble in hot water than in cold",
+        "less soluble in hot water",
+        "insoluble in water",
+        "volatile"
+       ],
+       "answer_index": 0,
+       "why": "They separate in the cooler parts of the boiler as soft precipitate."
+      },
+      {
+       "id": "sv-p1",
+       "pyq": "a8a0c22977ef5b05",
+       "level": 1,
+       "points": [
+        "Sludge: soft, loose, slimy precipitate in cold parts; salts more soluble in hot water (MgCO3, MgCl2, CaCl2, MgSO4); removed by blow-down",
+        "Scale: hard adherent deposit on hot walls; CaSO4, CaCO3, Mg(OH)2, silicates"
+       ]
+      },
+      {
+       "id": "sv-p2",
+       "pyq": "db36d1824f6e8005",
+       "level": 1,
+       "points": [
+        "Sludge: soft slimy, colder parts, poor conductor of heat, blow-down",
+        "Scale: hard adherent, CaSO4 less soluble when hot, CaCO3, Mg(OH)2; scraping, thermal shock, chemicals"
+       ]
+      },
+      {
+       "id": "sv-q2",
+       "kind": "mcq",
+       "level": 2,
+       "q": "Which salt is the main cause of scale in high-pressure boilers?",
+       "options": [
+        "CaSO4",
+        "MgCl2",
+        "NaCl",
+        "MgCO3"
+       ],
+       "answer_index": 0,
+       "why": "CaSO4 solubility decreases with temperature, so it deposits on hot surfaces."
+      },
+      {
+       "id": "sv-q3",
+       "kind": "short",
+       "level": 2,
+       "marks": 3,
+       "q": "Differentiate between scale and sludge in four points.",
+       "model_answer_md": "| Point | Sludge | Scale |\n|---|---|---|\n| Nature | Soft, loose, slimy | Hard, adherent |\n| Where | Colder parts, bends | Hot heating surfaces |\n| Formed by | $\\mathrm{MgCO_3}$, $\\mathrm{MgCl_2}$, $\\mathrm{CaCl_2}$, $\\mathrm{MgSO_4}$ | $\\mathrm{CaSO_4}$, $\\mathrm{CaCO_3}$, $\\mathrm{Mg(OH)_2}$, silicates |\n| Removal | Blow-down | Scraping, thermal shock, HCl or EDTA |\n| Harm | Poor heat conductor, chokes pipes | Fuel waste, overheating, explosion |",
+       "points": [
+        "Nature",
+        "Place of formation",
+        "Salts responsible",
+        "Removal"
+       ]
+      },
+      {
+       "id": "sv-p3",
+       "pyq": "2ad8a14d08ffa88b",
+       "level": 2,
+       "points": [
+        "Sludge: salts more soluble in hot water separate in colder parts, removed by blow-down",
+        "Scale: Ca(HCO3)2 -> CaCO3 + H2O + CO2; MgCl2 + 2H2O -> Mg(OH)2 + 2HCl; CaSO4 in high-pressure boilers",
+        "Scale wastes fuel, overheats plates, may cause explosion; removed by scraping, thermal shock, HCl or EDTA"
+       ]
+      },
+      {
+       "id": "sv-p4",
+       "pyq": "caa17a719f437e9c",
+       "level": 2,
+       "points": [
+        "Scale: hard adherent deposit (CaSO4, CaCO3, Mg(OH)2, silicates); sludge: soft loose precipitate (MgCO3, MgCl2, CaCl2, MgSO4); foam: persistent bubbles from oil/alkali lowering surface tension",
+        "Effects: scale fuel waste, overheating, explosion; sludge poor heat conduction, choking; foam wet steam and wrong level",
+        "Removal: scale scraping/chemicals; sludge blow-down; foam antifoams"
+       ]
+      }
+     ]
+    },
+    {
+     "id": "scale-formation",
+     "title": "Scale formation, its disadvantages and removal",
+     "theory_md": "**Causes of scale**\n1. **Decomposition of $\\mathrm{Ca(HCO_3)_2}$** (low-pressure boilers): $\\mathrm{Ca(HCO_3)_2 \\xrightarrow{\\Delta} CaCO_3\\downarrow + H_2O + CO_2}$.\n2. **$\\mathrm{CaSO_4}$** (high-pressure boilers): solubility falls with temperature, so it deposits hot.\n3. **Hydrolysis of Mg salts**: $\\mathrm{MgCl_2 + 2H_2O \\rightarrow Mg(OH)_2\\downarrow + 2HCl}$.\n4. **Silica** gives $\\mathrm{CaSiO_3}$ or $\\mathrm{MgSiO_3}$, very hard scale.\n\n**Disadvantages**: poor heat conductor so **fuel waste** (0.325 mm scale wastes about 10%); overheating and weakening; cracked scale lets water hit hot metal, causing **explosion**; choked valves and pipes.\n\n**Removal**: brush or scraper (loose); thermal shock (hard); 5 to 10% HCl for $\\mathrm{CaCO_3}$; **EDTA** for $\\mathrm{CaSO_4}$; blow-down for sludge only.",
+     "basics_md": "Scale is a rock-hard crust of hardness salts that stops heat reaching the water, so the metal overheats and fuel is wasted.",
+     "key_points": [
+      "Four causes with reactions: Ca(HCO3)2, CaSO4, Mg salt hydrolysis, silica",
+      "Disadvantages: fuel waste, overheating, explosion, choking",
+      "Removal: scraping, thermal shock, 5-10% HCl for CaCO3, EDTA for CaSO4"
+     ],
+     "questions": [
+      {
+       "id": "sf-q1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "Scale is a poor conductor of heat, so it causes",
+       "options": [
+        "wastage of fuel",
+        "increase in steam pressure",
+        "softening of water",
+        "lowering of TDS"
+       ],
+       "answer_index": 0,
+       "why": "Heat does not pass efficiently, so more fuel is burnt."
+      },
+      {
+       "id": "sf-q2",
+       "kind": "mcq",
+       "level": 2,
+       "q": "CaSO4 scale is best removed by",
+       "options": [
+        "EDTA treatment",
+        "5% HCl",
+        "blow-down",
+        "boiling"
+       ],
+       "answer_index": 0,
+       "why": "EDTA forms a soluble complex with Ca2+; HCl is used for CaCO3 scale."
+      },
+      {
+       "id": "sf-q3",
+       "kind": "short",
+       "level": 2,
+       "marks": 4,
+       "q": "What is scale? Explain its formation with reactions and state two disadvantages.",
+       "model_answer_md": "**Scale** is a hard, adherent coating on the inner walls of a boiler formed when hardness salts precipitate on evaporation.\n\n**Formation**\n1. $\\mathrm{Ca(HCO_3)_2 \\xrightarrow{\\Delta} CaCO_3\\downarrow + H_2O + CO_2}$ (low pressure).\n2. $\\mathrm{CaSO_4}$ deposits at high temperature (high pressure).\n3. $\\mathrm{MgCl_2 + 2H_2O \\rightarrow Mg(OH)_2\\downarrow + 2HCl}$.\n4. Silica forms $\\mathrm{CaSiO_3}$ / $\\mathrm{MgSiO_3}$.\n\n**Disadvantages**: (i) fuel wastage as scale is a poor heat conductor; (ii) overheating and danger of explosion if scale cracks.",
+       "points": [
+        "Definition",
+        "Reactions of formation",
+        "Two disadvantages"
+       ]
+      },
+      {
+       "id": "sf-p1",
+       "pyq": "f2b9cc74174b7a42",
+       "level": 2,
+       "points": [
+        "Scale: hard adherent coating on boiler walls, not removed by blow-down",
+        "Formation: Ca(HCO3)2 -> CaCO3 + H2O + CO2; CaSO4 in high-pressure boilers; MgCl2 + 2H2O -> Mg(OH)2 + 2HCl; silica",
+        "Disadvantages: fuel wastage, overheating, explosion, choking",
+        "Removal: scraping, thermal shock, 5-10% HCl, EDTA"
+       ]
+      },
+      {
+       "id": "sf-p2",
+       "pyq": "b0315b50ef8eb56e",
+       "level": 3,
+       "points": [
+        "Sludge and scale defined, with salts responsible",
+        "Sludge removed by blow-down",
+        "Scale formation reactions (bicarbonate decomposition, CaSO4, Mg hydrolysis, silica)",
+        "Disadvantages of scale: fuel waste, lowered safety, explosion, reduced efficiency",
+        "Comparison table; prevention by internal or external treatment"
+       ]
+      },
+      {
+       "id": "sf-p3",
+       "pyq": "61f856c45088a435",
+       "level": 3,
+       "points": [
+        "Sludge: soft precipitate in cold parts from salts more soluble in hot water; blow-down",
+        "Scale: hard adherent; Ca(HCO3)2 decomposition, CaSO4, Mg hydrolysis, silica",
+        "Disadvantages: fuel loss, overheating, explosion",
+        "Prevention by internal and external treatment"
+       ]
+      }
+     ]
+    },
+    {
+     "id": "internal-treatment",
+     "title": "Internal (conditioning) treatment",
+     "theory_md": "Chemicals added **inside the boiler** convert scale-formers into harmless forms.\n\n- **Colloidal conditioning** (low pressure): kerosene, tannin, agar-agar coat the particles so they stay as loose deposits removed by blow-down.\n- **Carbonate conditioning** (low pressure): $\\mathrm{CaSO_4 + Na_2CO_3 \\rightarrow CaCO_3 + Na_2SO_4}$ gives loose sludge. Not for high pressure (NaOH forms).\n- **Phosphate conditioning** (high pressure): $\\mathrm{3CaCl_2 + 2Na_3PO_4 \\rightarrow Ca_3(PO_4)_2\\downarrow + 6NaCl}$ gives soft sludge; $\\mathrm{NaH_2PO_4}$, $\\mathrm{Na_2HPO_4}$ or $\\mathrm{Na_3PO_4}$ chosen by the water's alkalinity.\n- **Calgon conditioning**: calgon is $\\mathrm{Na_2[Na_4(PO_3)_6]}$. $\\mathrm{2CaSO_4 + Na_2[Na_4(PO_3)_6] \\rightarrow Na_2[Ca_2(PO_3)_6] + 2Na_2SO_4}$: a **soluble complex**, so neither scale nor sludge.",
+     "basics_md": "Instead of removing hardness before the boiler, you add a chemical inside that ties up the hardness ions so they cannot crust. Calgon holds calcium in solution; phosphate makes a soft powder.",
+     "key_points": [
+      "Colloidal, carbonate (low pressure), phosphate (high pressure), calgon conditioning",
+      "Phosphate: 3CaCl2 + 2Na3PO4 -> Ca3(PO4)2 + 6NaCl, soft sludge",
+      "Calgon: Ca2+ converted to soluble complex, so no scale and no sludge",
+      "Carbonate conditioning not for high pressure: gives NaOH"
+     ],
+     "questions": [
+      {
+       "id": "it-q1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "Calgon is chemically",
+       "options": [
+        "sodium hexametaphosphate",
+        "sodium carbonate",
+        "calcium phosphate",
+        "sodium aluminate"
+       ],
+       "answer_index": 0,
+       "why": "Calgon is Na2[Na4(PO3)6], sodium hexametaphosphate."
+      },
+      {
+       "id": "it-p1",
+       "pyq": "dda04a9960771d81",
+       "level": 1,
+       "points": [
+        "Calgon = sodium hexametaphosphate Na2[Na4(PO3)6]",
+        "2CaSO4 + Na2[Na4(PO3)6] -> Na2[Ca2(PO3)6] + 2Na2SO4",
+        "Forms soluble complex, so neither scale nor sludge forms"
+       ]
+      },
+      {
+       "id": "it-p3",
+       "pyq": "3c89bc0d6548f677",
+       "level": 1,
+       "points": [
+        "Phosphate: Na3PO4 gives soft Ca3(PO4)2 sludge, for high-pressure boilers, choice of phosphate by alkalinity",
+        "Carbonate: Na2CO3 converts CaSO4 to CaCO3 sludge, low pressure only; at high pressure Na2CO3 gives NaOH, causing embrittlement and corrosion"
+       ]
+      },
+      {
+       "id": "it-q2",
+       "kind": "mcq",
+       "level": 2,
+       "q": "Which conditioning is suitable for high-pressure boilers?",
+       "options": [
+        "Phosphate conditioning",
+        "Carbonate conditioning",
+        "Colloidal conditioning with kerosene",
+        "Blow-down only"
+       ],
+       "answer_index": 0,
+       "why": "Carbonate would hydrolyse to NaOH at high pressure; phosphate is safe."
+      },
+      {
+       "id": "it-q3",
+       "kind": "short",
+       "level": 2,
+       "marks": 3,
+       "q": "Explain calgon conditioning with the reaction.",
+       "model_answer_md": "Calgon, sodium hexametaphosphate $\\mathrm{Na_2[Na_4(PO_3)_6]}$, is added to boiler water. It reacts with $\\mathrm{Ca^{2+}}$ salts to give a **soluble complex**:\n$$\\mathrm{2CaSO_4 + Na_2[Na_4(PO_3)_6] \\rightarrow Na_2[Ca_2(PO_3)_6] + 2Na_2SO_4}$$\nBecause calcium remains in solution, $\\mathrm{CaSO_4}$ cannot deposit, so **neither scale nor sludge** forms.",
+       "points": [
+        "Calgon formula",
+        "Reaction",
+        "Soluble complex, no scale or sludge"
+       ]
+      },
+      {
+       "id": "it-p2",
+       "pyq": "f019aa753eadf08d",
+       "level": 2,
+       "points": [
+        "Phosphate gives insoluble Ca3(PO4)2 sludge: 3CaSO4 + 2Na3PO4 -> Ca3(PO4)2 + 3Na2SO4",
+        "Calgon gives soluble complex: no scale or sludge",
+        "Phosphate sludge needs frequent blow-down; phosphate must be chosen by alkalinity, calgon needs no pH matching",
+        "Calgon keeps surfaces clean in small doses"
+       ]
+      }
+     ]
+    },
+    {
+     "id": "internal-vs-external",
+     "title": "Internal versus external treatment",
+     "theory_md": "| | Internal treatment | External treatment |\n|---|---|---|\n| Where | Inside the boiler | Before feeding to the boiler |\n| What | Conditioning chemicals (phosphate, calgon, carbonate, colloidal) | Removes hardness salts: **lime-soda**, **zeolite**, **ion exchange** |\n| Aim | Convert scale-formers into sludge or soluble complex | Remove hardness ions beforehand |\n| Use | Supplement; low hardness | Main method for hard water |\n\nInternal treatment is usually applied after external softening to remove the small residual hardness.",
+     "basics_md": "External treatment cleans the water before the boiler. Internal treatment deals with whatever slips through.",
+     "key_points": [
+      "Internal: chemicals added inside the boiler",
+      "External: softening before feed (lime-soda, zeolite, ion exchange)",
+      "Internal is used as a supplement after external softening"
+     ],
+     "questions": [
+      {
+       "id": "ie-q1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "Which of these is an external treatment?",
+       "options": [
+        "Zeolite process",
+        "Calgon conditioning",
+        "Phosphate conditioning",
+        "Blow-down"
+       ],
+       "answer_index": 0,
+       "why": "Zeolite softens the water before it enters the boiler."
+      },
+      {
+       "id": "ie-q2",
+       "kind": "short",
+       "level": 2,
+       "marks": 2,
+       "q": "Distinguish internal and external treatment of boiler water.",
+       "model_answer_md": "**Internal treatment**: chemicals (phosphate, calgon, carbonate, colloidal agents) added inside the boiler to convert scale-forming salts into sludge or soluble complexes.\n\n**External treatment**: hardness salts removed before the water enters the boiler by lime-soda, zeolite or ion-exchange processes.",
+       "points": [
+        "Internal: inside the boiler, conditioning chemicals",
+        "External: before feeding, softening processes"
+       ]
+      },
+      {
+       "id": "ie-q3",
+       "kind": "short",
+       "level": 3,
+       "marks": 3,
+       "q": "Why is internal treatment normally combined with external treatment in a power plant?",
+       "model_answer_md": "External softening (lime-soda or zeolite) leaves a small **residual hardness** (about 10 to 30 ppm). Internal conditioning with phosphate or calgon deals with this residue so that no scale forms, and also protects against hardness entering through leaks. Ion-exchange water has almost no hardness and needs less conditioning.",
+       "points": [
+        "External leaves residual hardness",
+        "Internal treatment handles the residue",
+        "Together prevent scale"
+       ]
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "topic": "Lime-soda process (hot and cold)",
+   "subtopics": [
+    {
+     "id": "ls-reactions",
+     "title": "Principle and reactions of the lime-soda process",
+     "theory_md": "Lime $\\mathrm{Ca(OH)_2}$ and soda $\\mathrm{Na_2CO_3}$ convert soluble hardness into insoluble $\\mathrm{CaCO_3}$ and $\\mathrm{Mg(OH)_2}$, which settle and are filtered.\n\n**Lime** removes temporary hardness, all Mg hardness, $\\mathrm{CO_2}$, free acids, Fe and Al salts:\n- $\\mathrm{Ca(HCO_3)_2 + Ca(OH)_2 \\rightarrow 2CaCO_3\\downarrow + 2H_2O}$\n- $\\mathrm{Mg(HCO_3)_2 + 2Ca(OH)_2 \\rightarrow 2CaCO_3\\downarrow + Mg(OH)_2\\downarrow + 2H_2O}$\n- $\\mathrm{MgCl_2 + Ca(OH)_2 \\rightarrow Mg(OH)_2\\downarrow + CaCl_2}$\n- $\\mathrm{CO_2 + Ca(OH)_2 \\rightarrow CaCO_3\\downarrow + H_2O}$\n\n**Soda** removes Ca permanent hardness, original or made by lime:\n- $\\mathrm{CaCl_2 + Na_2CO_3 \\rightarrow CaCO_3\\downarrow + 2NaCl}$\n- $\\mathrm{CaSO_4 + Na_2CO_3 \\rightarrow CaCO_3\\downarrow + Na_2SO_4}$\n\n*Merits*: cheap, raises pH, removes Fe and Mn. *Demerits*: much sludge, residual hardness too high for high-pressure boilers.",
+     "basics_md": "Lime and soda are chemicals that grab the dissolved calcium and magnesium and turn them into solids that sink. Lime handles the bicarbonates and magnesium; soda handles whatever calcium is left.",
+     "key_points": [
+      "Lime removes temporary hardness, Mg salts, CO2, acids; soda removes Ca permanent hardness",
+      "Mg(HCO3)2 needs 2 lime; MgCl2 needs lime then soda",
+      "Products: insoluble CaCO3 and Mg(OH)2, settled and filtered",
+      "Merits: cheap, raises pH; demerits: large sludge, residual hardness"
+     ],
+     "questions": [
+      {
+       "id": "lsr-q1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "In the lime-soda process, calcium permanent hardness is removed by",
+       "options": [
+        "Na2CO3",
+        "Ca(OH)2",
+        "NaOH",
+        "alum"
+       ],
+       "answer_index": 0,
+       "why": "CaCl2 and CaSO4 react with soda to give CaCO3."
+      },
+      {
+       "id": "lsr-q2",
+       "kind": "mcq",
+       "level": 2,
+       "q": "How many moles of Ca(OH)2 are needed per mole of Mg(HCO3)2?",
+       "options": [
+        "2",
+        "1",
+        "3",
+        "0.5"
+       ],
+       "answer_index": 0,
+       "why": "One mole removes Mg as Mg(OH)2 and one removes the carbonate as CaCO3."
+      },
+      {
+       "id": "lsr-q3",
+       "kind": "short",
+       "level": 2,
+       "marks": 3,
+       "q": "Why do MgCl2 and MgSO4 need both lime and soda?",
+       "model_answer_md": "Lime precipitates the Mg: $\\mathrm{MgCl_2 + Ca(OH)_2 \\rightarrow Mg(OH)_2\\downarrow + CaCl_2}$. This exchanges Mg hardness for an equal amount of **Ca hardness** ($\\mathrm{CaCl_2}$), which lime cannot remove. Soda is then needed:\n$\\mathrm{CaCl_2 + Na_2CO_3 \\rightarrow CaCO_3\\downarrow + 2NaCl}$.\n\nSo permanent Mg hardness consumes one equivalent of lime and one of soda.",
+       "points": [
+        "Lime precipitates Mg(OH)2",
+        "CaCl2 formed is a new Ca permanent hardness",
+        "Soda removes it as CaCO3"
+       ]
+      },
+      {
+       "id": "lsr-p1",
+       "pyq": "a59d50c4fd249046",
+       "level": 2,
+       "points": [
+        "Principle: soluble Ca and Mg salts converted by lime and soda into insoluble CaCO3 and Mg(OH)2",
+        "Lime reactions: Ca(HCO3)2 + Ca(OH)2 -> 2CaCO3 + 2H2O; Mg(HCO3)2 + 2Ca(OH)2 -> 2CaCO3 + Mg(OH)2 + 2H2O; MgCl2, MgSO4, CO2, acids",
+        "Soda reactions: CaCl2 + Na2CO3 -> CaCO3 + 2NaCl; CaSO4 + Na2CO3 -> CaCO3 + Na2SO4",
+        "Cold (50-60 ppm residual) and hot (15-30 ppm) processes; merits and demerits"
+       ]
+      }
+     ]
+    },
+    {
+     "id": "cold-process",
+     "title": "Cold lime-soda process and its plant",
+     "theory_md": "Done at **room temperature**. Raw water, calculated lime and soda, and a **coagulant** (alum, $\\mathrm{FeSO_4}$ or sodium aluminate) enter the **inner vertical chamber** of a continuous plant, where a motor-driven **stirrer with paddles** mixes them.\n\nThe treated water moves to the **outer conical (settling) chamber**; the coagulant floc carries the very fine precipitate down. **Sludge** leaves at the bottom outlet. Softened water rises through a **wood-fibre filter** and leaves at the top.\n\nReaction is slow (hours). **Residual hardness 50 to 60 ppm.**",
+     "basics_md": "Cold is slow and the solids come out very fine, so a coagulant is added to glue them into lumps that settle.",
+     "key_points": [
+      "Room temperature, coagulant needed, slow",
+      "Plant: inner chamber with stirrer, outer settling chamber, wood-fibre filter, sludge outlet",
+      "Residual hardness 50-60 ppm"
+     ],
+     "questions": [
+      {
+       "id": "cp-q1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "Why is a coagulant added in the cold lime-soda process?",
+       "options": [
+        "precipitates are very fine and settle slowly",
+        "to raise temperature",
+        "to remove CO2",
+        "to neutralise acid"
+       ],
+       "answer_index": 0,
+       "why": "At room temperature the precipitate is fine; the floc makes it settle."
+      },
+      {
+       "id": "cp-q2",
+       "kind": "mcq",
+       "level": 1,
+       "q": "The residual hardness after cold lime-soda treatment is about",
+       "options": [
+        "50 to 60 ppm",
+        "0 to 2 ppm",
+        "15 to 30 ppm",
+        "200 ppm"
+       ],
+       "answer_index": 0,
+       "why": "Hot process gives 15-30 ppm; ion exchange gives 0-2 ppm."
+      },
+      {
+       "id": "cp-q3",
+       "kind": "short",
+       "level": 2,
+       "marks": 3,
+       "q": "Name the main parts of a cold lime-soda plant and the role of each.",
+       "model_answer_md": "1. **Inner vertical chamber with stirrer**: water, lime, soda and coagulant mix and react.\n2. **Outer conical chamber**: precipitate settles; **sludge outlet** at the bottom.\n3. **Wood-fibre filter** at the top: retains remaining particles.\n4. **Softened water outlet** at the top.",
+       "points": [
+        "Mixing chamber with stirrer",
+        "Settling chamber with sludge outlet",
+        "Wood-fibre filter"
+       ]
+      },
+      {
+       "id": "cp-p1",
+       "pyq": "d88c6cd5d54c37ff",
+       "level": 2,
+       "points": [
+        "Lime-soda process: lime and soda added in calculated amounts to precipitate hardness as CaCO3 and Mg(OH)2",
+        "Reactions e.g. Mg(HCO3)2 + 2Ca(OH)2 -> 2CaCO3 + Mg(OH)2 + 2H2O; CaSO4 + Na2CO3 -> CaCO3 + Na2SO4",
+        "Cold process diagram: inner chamber with stirrer, coagulant added, outer conical settling chamber, sludge outlet, wood-fibre filter, softened water outlet",
+        "Residual hardness 50-60 ppm"
+       ]
+      }
+     ]
+    },
+    {
+     "id": "hot-vs-cold",
+     "title": "Hot lime-soda process and comparison",
+     "theory_md": "**Hot process**: water heated to **80 to 150 $^\\circ$C** with exhaust steam in a reaction tank, then settled in a conical tank and filtered through a sand filter.\n\nAt high temperature: reaction is fast (about 15 min); precipitate is coarse and settles quickly, so **no coagulant**; low viscosity gives easy filtration; dissolved $\\mathrm{CO_2}$ and air are driven out; less lime and soda needed; capacity high; **residual hardness 15 to 30 ppm**.\n\nCold: slow, coagulant needed, wood-fibre filter, gases not removed, residual 50 to 60 ppm.\n\nHot process is preferred.",
+     "basics_md": "Heat speeds everything up: the reactions finish faster, the solids grow bigger and sink by themselves, and gases leave the water.",
+     "key_points": [
+      "Hot: 80-150 C, fast, no coagulant, residual 15-30 ppm",
+      "Cold: room temperature, slow, coagulant needed, residual 50-60 ppm",
+      "Hot process also removes dissolved gases and gives easy filtration",
+      "Hot process is preferred"
+     ],
+     "questions": [
+      {
+       "id": "hc2-q1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "Residual hardness of the hot lime-soda process is about",
+       "options": [
+        "15 to 30 ppm",
+        "50 to 60 ppm",
+        "0 ppm",
+        "100 to 150 ppm"
+       ],
+       "answer_index": 0,
+       "why": "Higher temperature gives more complete precipitation."
+      },
+      {
+       "id": "hc2-q2",
+       "kind": "mcq",
+       "level": 2,
+       "q": "Which is NOT an advantage of the hot lime-soda process?",
+       "options": [
+        "Needs a coagulant",
+        "Fast reaction",
+        "Dissolved gases removed",
+        "Easy filtration"
+       ],
+       "answer_index": 0,
+       "why": "No coagulant is needed in the hot process; it is needed in the cold process."
+      },
+      {
+       "id": "hc2-q3",
+       "kind": "short",
+       "level": 2,
+       "marks": 3,
+       "q": "Draw the layout of the hot lime-soda process in words and state its working temperature.",
+       "model_answer_md": "Raw water, lime-soda solution and **steam** enter a **reaction tank** at 80 to 150 $^\\circ$C. The mixture goes to a **conical sedimentation tank** with a **sludge outlet**, and the clear water passes through a **sand filter** (fine sand, coarse sand, gravel) to the softened water outlet.",
+       "points": [
+        "Steam heating to 80-150 C",
+        "Reaction tank, conical sedimentation tank, sludge outlet",
+        "Sand filter and outlet"
+       ]
+      },
+      {
+       "id": "hc2-p1",
+       "pyq": "bf240a7fd257a0e1",
+       "level": 2,
+       "points": [
+        "Reactions much faster at high temperature",
+        "Precipitate is coarse and settles fast; no coagulant; easy filtration due to low viscosity",
+        "Dissolved gases (CO2, air) expelled",
+        "Residual hardness 15-30 ppm against 50-60 ppm in cold process"
+       ]
+      },
+      {
+       "id": "hc2-p2",
+       "pyq": "4a8c843389d2097a",
+       "level": 2,
+       "points": [
+        "Hot lime-soda process is preferred",
+        "Fast reaction (about 15 min), no coagulant, coarse precipitate, gases removed, residual hardness 15-30 ppm",
+        "Diagram: reaction tank with steam, conical sedimentation tank, sand filter",
+        "Chemical equations with lime (Ca(HCO3)2, Mg(HCO3)2, MgCl2, MgSO4, CO2) and with soda (CaCl2, CaSO4)"
+       ]
+      },
+      {
+       "id": "hc2-p3",
+       "pyq": "2b05ab0d5a3c833e",
+       "level": 2,
+       "points": [
+        "Point-wise table: temperature 80-150 C vs room temperature",
+        "Rate fast vs slow; coagulant not needed vs needed",
+        "Precipitate coarse vs fine; filtration easy (sand filter) vs wood-fibre",
+        "Dissolved gases removed vs not removed; residual hardness 15-30 vs 50-60 ppm; chemicals less vs more"
+       ]
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "topic": "Zeolite process",
+   "subtopics": [
+    {
+     "id": "zeolite-reactions",
+     "title": "Zeolite and the exchange reactions",
+     "theory_md": "**Zeolites** are hydrated sodium aluminosilicates, $\\mathrm{Na_2O\\cdot Al_2O_3\\cdot xSiO_2\\cdot yH_2O}$ ($x$ = 2 to 10, $y$ = 2 to 6), written $\\mathrm{Na_2Ze}$. They exchange $\\mathrm{Na^+}$ for $\\mathrm{Ca^{2+}}$ and $\\mathrm{Mg^{2+}}$. *Natural*: natrolite (non-porous). *Synthetic* (**permutit**): porous, gel-like, higher capacity.\n\n**Softening**\n- $\\mathrm{Na_2Ze + Ca(HCO_3)_2 \\rightarrow CaZe + 2NaHCO_3}$\n- $\\mathrm{Na_2Ze + MgSO_4 \\rightarrow MgZe + Na_2SO_4}$\n- $\\mathrm{Na_2Ze + CaCl_2 \\rightarrow CaZe + 2NaCl}$\n\n**Regeneration** of exhausted bed with **10% NaCl** (brine):\n$\\mathrm{CaZe + 2NaCl \\rightarrow Na_2Ze + CaCl_2}$\n\nResidual hardness about 10 ppm.",
+     "basics_md": "A zeolite is a sponge-like mineral loaded with sodium. It swaps its sodium for the calcium and magnesium in the water. When it is full, you soak it in salt water to put the sodium back.",
+     "key_points": [
+      "Zeolite = hydrated sodium aluminosilicate, Na2Ze; natural (natrolite) and synthetic (permutit)",
+      "Cation exchange: Na+ of zeolite replaced by Ca2+ and Mg2+",
+      "Regenerated with 10% brine: CaZe + 2NaCl -> Na2Ze + CaCl2",
+      "Residual hardness about 10 ppm"
+     ],
+     "questions": [
+      {
+       "id": "zr-q1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "The exhausted zeolite bed is regenerated using",
+       "options": [
+        "10% NaCl solution",
+        "dil. HCl",
+        "NaOH",
+        "lime water"
+       ],
+       "answer_index": 0,
+       "why": "Brine restores Na+ on the bed and washes out CaCl2 and MgCl2."
+      },
+      {
+       "id": "zr-q2",
+       "kind": "mcq",
+       "level": 2,
+       "q": "Zeolite-softened water contains more",
+       "options": [
+        "sodium salts",
+        "calcium salts",
+        "magnesium salts",
+        "free acid"
+       ],
+       "answer_index": 0,
+       "why": "Ca and Mg are replaced by Na; anions stay, so e.g. NaHCO3 and Na2SO4 are present."
+      },
+      {
+       "id": "zr-q3",
+       "kind": "short",
+       "level": 2,
+       "marks": 3,
+       "q": "Write the equations for the removal of Ca(HCO3)2 and MgSO4 by zeolite and the regeneration of the bed.",
+       "model_answer_md": "$\\mathrm{Na_2Ze + Ca(HCO_3)_2 \\rightarrow CaZe + 2NaHCO_3}$\n\n$\\mathrm{Na_2Ze + MgSO_4 \\rightarrow MgZe + Na_2SO_4}$\n\nRegeneration with 10% NaCl: $\\mathrm{CaZe + 2NaCl \\rightarrow Na_2Ze + CaCl_2}$ and $\\mathrm{MgZe + 2NaCl \\rightarrow Na_2Ze + MgCl_2}$; the washings are drained.",
+       "points": [
+        "Two softening equations",
+        "Regeneration equation with brine",
+        "Washings drained"
+       ]
+      },
+      {
+       "id": "zr-p1",
+       "pyq": "afcd19462b0b7ea3",
+       "level": 2,
+       "points": [
+        "Zeolite (permutit) = hydrated sodium aluminosilicate Na2O.Al2O3.xSiO2.yH2O, Na2Ze; cation exchange",
+        "Na2Ze + Ca(HCO3)2 -> CaZe + 2NaHCO3",
+        "Regeneration with 10% brine: CaZe + 2NaCl -> Na2Ze + CaCl2",
+        "Residual hardness about 10 ppm"
+       ]
+      }
+     ]
+    },
+    {
+     "id": "zeolite-plant",
+     "title": "Zeolite softener: set-up and working",
+     "theory_md": "**Set-up** (described in words): a vertical steel cylinder (softener) holds a **bed of zeolite** resting on a layer of gravel and coarse sand.\n- Top: **hard water inlet** and a connection from the **brine tank**.\n- Bottom: **soft water outlet** and a drain for **washings** ($\\mathrm{CaCl_2}$, $\\mathrm{MgCl_2}$).\n\n**Working**: hard water percolates down at a fixed rate; Ca and Mg are held as $\\mathrm{CaZe}$/$\\mathrm{MgZe}$; softened water leaves at the bottom.\n\n**Regeneration**: when exhausted, stop the supply, pass 10% brine over the bed, wash with water, and reuse. NaCl needed: 117 parts per 100 parts of $\\mathrm{CaCO_3}$ equivalent hardness.",
+     "basics_md": "Water goes in the top, flows through a bed of zeolite, and comes out soft at the bottom. When the bed stops working you soak it in salt solution and start again.",
+     "key_points": [
+      "Vertical cylinder, zeolite bed over gravel",
+      "Inlet and brine tank at top; soft water outlet and washings drain at bottom",
+      "Regenerate with 10% NaCl, wash, reuse",
+      "117 g NaCl per 100 g CaCO3 equivalent"
+     ],
+     "questions": [
+      {
+       "id": "zp-q1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "In a zeolite softener the soft water leaves from the",
+       "options": [
+        "bottom",
+        "top",
+        "side only",
+        "brine tank"
+       ],
+       "answer_index": 0,
+       "why": "Hard water enters at the top, percolates down and soft water is collected at the bottom."
+      },
+      {
+       "id": "zp-q2",
+       "kind": "mcq",
+       "level": 2,
+       "q": "NaCl needed to regenerate zeolite per 100 g of CaCO3-equivalent hardness is",
+       "options": [
+        "117 g",
+        "58.5 g",
+        "100 g",
+        "234 g"
+       ],
+       "answer_index": 0,
+       "why": "CaZe + 2NaCl: 2 x 58.5 = 117 g per 100 g CaCO3."
+      },
+      {
+       "id": "zp-q3",
+       "kind": "numerical",
+       "level": 2,
+       "marks": 3,
+       "q": "A zeolite softener treats 10 000 L of water per day containing 300 ppm hardness as CaCO3. Calculate the NaCl needed per day to regenerate it.",
+       "model_answer_md": "Hardness removed $= 300\\ \\mathrm{mg/L} \\times 10\\,000\\ \\mathrm{L} = 3\\times10^{6}\\ \\mathrm{mg} = 3\\ \\mathrm{kg}\\ \\mathrm{CaCO_3}$ equivalent.\n\n$\\mathrm{CaZe + 2NaCl \\rightarrow Na_2Ze + CaCl_2}$: 100 g $\\mathrm{CaCO_3}$ equivalent needs $2\\times58.5 = 117$ g NaCl.\n\n$\\mathrm{NaCl} = 3 \\times \\dfrac{117}{100} = 3.51\\ \\mathrm{kg\\ per\\ day}$.",
+       "points": [
+        "Hardness removed = 3 kg CaCO3 equivalent",
+        "117 g NaCl per 100 g",
+        "NaCl = 3.51 kg"
+       ]
+      },
+      {
+       "id": "zp-p1",
+       "pyq": "927c749b349343c4",
+       "level": 2,
+       "points": [
+        "Zeolites: hydrated sodium aluminosilicates; natural (natrolite) and synthetic (permutit)",
+        "Na2Ze + Ca(HCO3)2 -> CaZe + 2NaHCO3; Na2Ze + MgSO4 -> MgZe + Na2SO4; regeneration CaZe + 2NaCl -> Na2Ze + CaCl2",
+        "Apparatus: vertical cylinder, zeolite bed over gravel, hard water inlet and brine tank at top, soft water outlet and washings drain at bottom",
+        "Residual hardness about 10 ppm"
+       ]
+      },
+      {
+       "id": "zp-p2",
+       "pyq": "6e2b05b41d0ebc78",
+       "level": 3,
+       "points": [
+        "Principle: cation exchange, Na+ of zeolite replaced by Ca2+ and Mg2+",
+        "Zeolite types; softening reactions and regeneration with 10% brine",
+        "Apparatus described with labelled parts and process",
+        "Advantages: residual hardness about 10 ppm, no sludge, compact",
+        "Limitations: turbidity clogs, acid destroys zeolite, Fe2+/Mn2+ not regenerated, only cations exchanged (more Na salts in water)"
+       ]
+      }
+     ]
+    },
+    {
+     "id": "zeolite-merits",
+     "title": "Advantages and limitations of the zeolite process",
+     "theory_md": "**Advantages**\n- Residual hardness only about **10 ppm**.\n- **No sludge**; no precipitation.\n- Compact, easy and automatic; handles varying hardness.\n- No equipment for chemical dosing.\n\n**Limitations**\n- Only **cations** are exchanged: Na salts ($\\mathrm{NaHCO_3}$) remain, which give NaOH and $\\mathrm{CO_2}$ in the boiler (caustic embrittlement).\n- **Turbid** water clogs the pores; **acidic** water destroys the zeolite.\n- $\\mathrm{Fe^{2+}}$, $\\mathrm{Mn^{2+}}$ make zeolites that cannot be regenerated.\n- Costly for very hard water (much NaCl).",
+     "basics_md": "Zeolite is neat and clean, but it only swaps ions. The water is soft yet still salty, and a dirty or acidic feed spoils the bed.",
+     "key_points": [
+      "Advantages: residual hardness about 10 ppm, no sludge, compact",
+      "Only cations are exchanged; water keeps Na salts",
+      "Turbidity and acid damage zeolite; Fe2+, Mn2+ poison it",
+      "NaHCO3 in softened water can cause embrittlement in boilers"
+     ],
+     "questions": [
+      {
+       "id": "zm-q1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "A limitation of the zeolite process is that",
+       "options": [
+        "turbid water clogs the bed",
+        "it forms sludge",
+        "it needs a coagulant",
+        "it works only at high temperature"
+       ],
+       "answer_index": 0,
+       "why": "Suspended matter blocks the pores of the zeolite bed."
+      },
+      {
+       "id": "zm-q2",
+       "kind": "mcq",
+       "level": 2,
+       "q": "Which is an advantage of zeolite over lime-soda?",
+       "options": [
+        "Lower residual hardness and no sludge",
+        "Removes all ions",
+        "Works with acidic water",
+        "Cheaper chemicals for every water"
+       ],
+       "answer_index": 0,
+       "why": "Zeolite leaves about 10 ppm against 15-60 ppm, and forms no sludge."
+      },
+      {
+       "id": "zm-q3",
+       "kind": "short",
+       "level": 2,
+       "marks": 3,
+       "q": "Compare the zeolite and lime-soda processes in four points.",
+       "model_answer_md": "| Point | Zeolite | Lime-soda |\n|---|---|---|\n| Residual hardness | about 10 ppm | 15 to 30 ppm (hot), 50 to 60 ppm (cold) |\n| Sludge | none | large sludge, disposal problem |\n| Operation | compact, easy, automatic | needs careful dosing and control |\n| Suitable water | clear, non-acidic | turbid or acidic water acceptable |\n| Effect on dissolved solids | replaces Ca/Mg by Na | reduces dissolved solids |",
+       "points": [
+        "Residual hardness",
+        "Sludge",
+        "Operation",
+        "Suitable water or dissolved solids"
+       ]
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "topic": "Ion-exchange process",
+   "subtopics": [
+    {
+     "id": "resins-reactions",
+     "title": "Ion-exchange resins and their reactions",
+     "theory_md": "**Resins** are long-chain, cross-linked, insoluble organic polymers (styrene-divinylbenzene copolymer) carrying exchangeable ions.\n\n- **Cation exchange resin** ($\\mathrm{RH_2}$, sulphonic acid group $\\mathrm{-SO_3H}$): exchanges all cations for $\\mathrm{H^+}$.\n$\\mathrm{2RH + Ca^{2+} \\rightarrow R_2Ca + 2H^+}$; $\\mathrm{2RH + Mg^{2+} \\rightarrow R_2Mg + 2H^+}$.\n- **Anion exchange resin** ($\\mathrm{R'(OH)_2}$, quaternary ammonium): exchanges all anions for $\\mathrm{OH^-}$.\n$\\mathrm{R'(OH)_2 + SO_4^{2-} \\rightarrow R'SO_4 + 2OH^-}$; also $\\mathrm{Cl^-}$, $\\mathrm{HCO_3^-}$.\n\n$\\mathrm{H^+ + OH^- \\rightarrow H_2O}$, so the water is **de-ionised**.\n\n**Regeneration**: cation resin with dil. HCl or $\\mathrm{H_2SO_4}$; anion resin with dil. NaOH.",
+     "basics_md": "One resin swaps every positive ion for hydrogen. A second resin swaps every negative ion for hydroxide. Hydrogen and hydroxide join to make plain water.",
+     "key_points": [
+      "Resins: cross-linked styrene-divinylbenzene polymers",
+      "Cation resin RH2 exchanges cations for H+; anion resin R'(OH)2 exchanges anions for OH-",
+      "H+ + OH- -> H2O gives de-ionised water",
+      "Regeneration: dil. HCl for cation resin, dil. NaOH for anion resin"
+     ],
+     "figures": [
+      {
+       "smiles": "C=Cc1ccccc1",
+       "caption": "Styrene, the main monomer of the resin"
+      },
+      {
+       "smiles": "C=Cc1ccc(C=C)cc1",
+       "caption": "Divinylbenzene, the cross-linker"
+      },
+      {
+       "smiles": "OS(=O)(=O)c1ccccc1",
+       "caption": "Benzenesulfonic acid group: the exchange site of the cation resin"
+      }
+     ],
+     "questions": [
+      {
+       "id": "rr-q1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "The cation exchange resin releases which ion into the water?",
+       "options": [
+        "H+",
+        "OH-",
+        "Na+",
+        "Cl-"
+       ],
+       "answer_index": 0,
+       "why": "RH resin exchanges Ca2+, Mg2+, Na+ for H+."
+      },
+      {
+       "id": "rr-q2",
+       "kind": "mcq",
+       "level": 2,
+       "q": "The anion exchange resin is regenerated with",
+       "options": [
+        "dil. NaOH",
+        "dil. HCl",
+        "10% NaCl",
+        "lime water"
+       ],
+       "answer_index": 0,
+       "why": "OH- is restored by NaOH; the cation resin uses dil. acid."
+      },
+      {
+       "id": "rr-q3",
+       "kind": "short",
+       "level": 2,
+       "marks": 3,
+       "q": "Write the equations for the removal of Ca2+ and SO4 2- and for the regeneration of both resins.",
+       "model_answer_md": "Cation exchange: $\\mathrm{2RH + Ca^{2+} \\rightarrow R_2Ca + 2H^+}$\n\nAnion exchange: $\\mathrm{R'(OH)_2 + SO_4^{2-} \\rightarrow R'SO_4 + 2OH^-}$\n\nCombination: $\\mathrm{H^+ + OH^- \\rightarrow H_2O}$.\n\nRegeneration: $\\mathrm{R_2Ca + 2HCl \\rightarrow 2RH + CaCl_2}$ (dil. HCl or $\\mathrm{H_2SO_4}$); $\\mathrm{R'SO_4 + 2NaOH \\rightarrow R'(OH)_2 + Na_2SO_4}$ (dil. NaOH).",
+       "points": [
+        "Cation exchange equation",
+        "Anion exchange equation",
+        "H+ + OH- -> H2O",
+        "Both regeneration equations"
+       ]
+      }
+     ]
+    },
+    {
+     "id": "deionisation-setup",
+     "title": "De-ionisation plant: set-up and working",
+     "theory_md": "**Set-up** (in order): hard water pump, then **cation exchanger** (resin $\\mathrm{RH}$ on gravel, acid regenerant tank), then **anion exchanger** (resin $\\mathrm{R'OH}$ on gravel, alkali regenerant tank), then a **degasser** that removes $\\mathrm{CO_2}$ (from bicarbonates), then demineralised water outlet. Each column has a washings drain.\n\n**Working**\n1. Cation column: all cations replaced by $\\mathrm{H^+}$; outgoing water is acidic.\n2. Anion column: all anions replaced by $\\mathrm{OH^-}$.\n3. $\\mathrm{H^+ + OH^- \\rightarrow H_2O}$: ion-free water; residual hardness 0 to 2 ppm.\n\n**Regeneration**: dil. HCl (cation bed) and dil. NaOH (anion bed), then wash.\n\nDisadvantages: costly resins and equipment; turbid water fouls the resin.",
+     "basics_md": "Two columns in a row: first strips all positive ions, second strips all negative ones. Then the water is almost as pure as distilled water.",
+     "key_points": [
+      "Order: cation exchanger, anion exchanger, degasser",
+      "Cation column gives acidic water; anion column removes anions",
+      "Regeneration with dil. HCl and dil. NaOH",
+      "Residual hardness 0-2 ppm; costly"
+     ],
+     "questions": [
+      {
+       "id": "ds2-q1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "In a de-ionisation plant the water first passes through the",
+       "options": [
+        "cation exchanger",
+        "anion exchanger",
+        "degasser",
+        "brine tank"
+       ],
+       "answer_index": 0,
+       "why": "Cations are exchanged first; the acidic water then goes to the anion column."
+      },
+      {
+       "id": "ds2-q2",
+       "kind": "mcq",
+       "level": 2,
+       "q": "The degasser in a de-ionisation plant removes",
+       "options": [
+        "CO2",
+        "Na+",
+        "Cl-",
+        "turbidity"
+       ],
+       "answer_index": 0,
+       "why": "Bicarbonate is converted to CO2 in the acidic water and removed."
+      },
+      {
+       "id": "ds2-q3",
+       "kind": "short",
+       "level": 2,
+       "marks": 3,
+       "q": "Describe the working of the de-ionisation process in numbered steps.",
+       "model_answer_md": "1. Hard water enters the **cation exchanger**: $\\mathrm{Ca^{2+}}$, $\\mathrm{Mg^{2+}}$, $\\mathrm{Na^+}$ replaced by $\\mathrm{H^+}$; water becomes acidic.\n2. It enters the **anion exchanger**: $\\mathrm{Cl^-}$, $\\mathrm{SO_4^{2-}}$, $\\mathrm{HCO_3^-}$ replaced by $\\mathrm{OH^-}$.\n3. $\\mathrm{H^+ + OH^- \\rightarrow H_2O}$; the **degasser** removes $\\mathrm{CO_2}$.\n4. Exhausted beds are regenerated with dil. HCl and dil. NaOH and washed.",
+       "points": [
+        "Cation column, acidic water",
+        "Anion column",
+        "H+ + OH- and degasser",
+        "Regeneration"
+       ]
+      },
+      {
+       "id": "ds2-p2",
+       "pyq": "6aa53a76da689437",
+       "level": 2,
+       "points": [
+        "Labelled diagram only: hard water inlet, cation exchange column (RH), anion exchange column (R'OH), degasser, demineralised water outlet",
+        "Acid and alkali regenerant tanks, washings drains, gravel support"
+       ]
+      },
+      {
+       "id": "ds2-p1",
+       "pyq": "a86f6aee207ab376",
+       "level": 3,
+       "points": [
+        "De-ionisation removes all cations and anions using cross-linked styrene-divinylbenzene resins",
+        "Diagram: cation exchanger, anion exchanger, degasser, regenerant tanks, drains",
+        "Cation reactions 2RH + Ca2+ -> R2Ca + 2H+; anion reactions R'OH + Cl- -> R'Cl + OH-",
+        "H+ + OH- -> H2O; regeneration with dil. HCl and dil. NaOH",
+        "Advantages residual 0-2 ppm; disadvantage costly, turbidity fouls resin"
+       ]
+      }
+     ]
+    },
+    {
+     "id": "which-process",
+     "title": "Choosing between zeolite, lime-soda and ion exchange",
+     "theory_md": "| | Lime-soda | Zeolite | Ion exchange |\n|---|---|---|---|\n| Residual hardness | 15 to 60 ppm | about 10 ppm | 0 to 2 ppm |\n| Removes | Ca, Mg hardness | Ca, Mg only (replaced by Na) | all cations and anions |\n| Sludge | large | none | none |\n| Acidic water | acceptable | destroys zeolite | acceptable |\n| Cost | cheap | moderate | costly |\n| Use | municipal, low-pressure | small plants, medium-pressure | **high-pressure boilers**, industry |\n\nZeolite water still has $\\mathrm{NaHCO_3}$, giving NaOH and $\\mathrm{CO_2}$ in boilers; de-ionised water does not.",
+     "basics_md": "The cleaner the water has to be, the more expensive the method. For a high-pressure boiler, only the ion-exchange method is clean enough.",
+     "key_points": [
+      "Ion exchange gives 0-2 ppm, zeolite about 10, lime-soda 15-60",
+      "Ion exchange removes all ions; zeolite only replaces Ca/Mg by Na",
+      "Ion exchange suits high-pressure boilers and works with acidic or alkaline water",
+      "Ion exchange is costly"
+     ],
+     "questions": [
+      {
+       "id": "wp-q1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "Water of lowest residual hardness is obtained by",
+       "options": [
+        "ion exchange",
+        "zeolite",
+        "cold lime-soda",
+        "hot lime-soda"
+       ],
+       "answer_index": 0,
+       "why": "Ion exchange gives 0-2 ppm."
+      },
+      {
+       "id": "wp-q2",
+       "kind": "mcq",
+       "level": 2,
+       "q": "For feed water of a high-pressure industrial boiler, the best process is",
+       "options": [
+        "de-ionisation (ion exchange)",
+        "cold lime-soda",
+        "zeolite",
+        "boiling"
+       ],
+       "answer_index": 0,
+       "why": "It removes all ions, avoiding Na salts and scale-forming hardness."
+      },
+      {
+       "id": "wp-q3",
+       "kind": "short",
+       "level": 2,
+       "marks": 3,
+       "q": "Why is ion exchange preferred over zeolite for treating water in large-scale industry?",
+       "model_answer_md": "1. It removes **all** cations and anions (residual hardness 0 to 2 ppm); zeolite leaves about 10 to 15 ppm and merely replaces Ca/Mg by Na.\n2. Zeolite water keeps $\\mathrm{NaHCO_3}$/$\\mathrm{Na_2CO_3}$, which give NaOH in the boiler, causing caustic embrittlement and priming.\n3. Ion-exchange resins work with acidic or alkaline water; zeolite is attacked by acid.",
+       "points": [
+        "Removes all ions, lower residual hardness",
+        "Zeolite leaves Na salts causing embrittlement",
+        "Works with acidic water"
+       ]
+      },
+      {
+       "id": "wp-p1",
+       "pyq": "c80d8149445591c8",
+       "level": 2,
+       "points": [
+        "Ion exchange is more suitable for large industrial setup",
+        "Removes all cations and anions, residual hardness 0-2 ppm; zeolite leaves 10-15 ppm and only replaces Ca/Mg by Na",
+        "Zeolite water has NaHCO3/Na2CO3 giving NaOH: caustic embrittlement and priming",
+        "Resins work with acidic or alkaline water; higher cost justified"
+       ]
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "topic": "Numericals on water purification",
+   "subtopics": [
+    {
+     "id": "ls-calc-method",
+     "title": "Lime and soda required: the standard method",
+     "theory_md": "1. Convert each Ca/Mg salt: ppm as $\\mathrm{CaCO_3}$ $= \\dfrac{\\text{mg/L} \\times 100}{M}$.\n2. Sort and count:\n\n| Impurity | Lime | Soda |\n|---|---|---|\n| $\\mathrm{Ca(HCO_3)_2}$ (temp Ca) | 1 | 0 |\n| $\\mathrm{Mg(HCO_3)_2}$ (temp Mg) | 2 | 0 |\n| $\\mathrm{MgCl_2}$, $\\mathrm{MgSO_4}$ (perm Mg) | 1 | 1 |\n| $\\mathrm{CaCl_2}$, $\\mathrm{CaSO_4}$ (perm Ca) | 0 | 1 |\n| NaCl, KCl, $\\mathrm{Na_2SO_4}$, $\\mathrm{SiO_2}$ | 0 | 0 |\n\n3. $\\text{Lime} = \\dfrac{74}{100}[\\text{TCa} + 2\\,\\text{TMg} + \\text{PMg}]$ mg/L; $\\text{Soda} = \\dfrac{106}{100}[\\text{PCa} + \\text{PMg}]$ mg/L.\n4. For $V$ litres: mass (kg) $= \\text{mg/L} \\times V/10^{6}$; divide by purity: $\\times 100/\\%$.",
+     "basics_md": "Each unit of hardness (in CaCO3 terms) needs a fixed amount of lime or soda. Count the units, multiply by 74/100 or 106/100, scale by the volume, and correct for impure chemicals.",
+     "key_points": [
+      "Convert every salt to CaCO3 equivalent: mg/L x 100 / M",
+      "Lime counts: temp Ca 1, temp Mg 2, perm Mg 1; soda counts: perm Ca 1, perm Mg 1",
+      "Lime = 74/100 [..], soda = 106/100 [..] mg/L; kg = mg/L x V / 10^6",
+      "Divide by purity (x 100/%); ignore Na, K salts and SiO2"
+     ],
+     "questions": [
+      {
+       "id": "lc-q1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "In the lime requirement formula, Mg(HCO3)2 is multiplied by",
+       "options": [
+        "2",
+        "1",
+        "0",
+        "3"
+       ],
+       "answer_index": 0,
+       "why": "Temporary Mg needs two equivalents of lime."
+      },
+      {
+       "id": "lc-q2",
+       "kind": "mcq",
+       "level": 2,
+       "q": "Which salt needs ONLY soda (no lime)?",
+       "options": [
+        "CaSO4",
+        "MgCl2",
+        "Mg(HCO3)2",
+        "Ca(HCO3)2"
+       ],
+       "answer_index": 0,
+       "why": "Permanent Ca hardness is removed by soda alone."
+      },
+      {
+       "id": "lc-q3",
+       "kind": "numerical",
+       "level": 2,
+       "marks": 4,
+       "q": "Calculate the lime and soda (both 100% pure) needed to soften 20 000 L of water containing Ca(HCO3)2 = 81 mg/L, Mg(HCO3)2 = 73 mg/L, CaSO4 = 68 mg/L and MgCl2 = 47.5 mg/L. (M: 162, 146, 136, 95)",
+       "model_answer_md": "| Salt | mg/L | ppm as $\\mathrm{CaCO_3}$ | Type |\n|---|---|---|---|\n| $\\mathrm{Ca(HCO_3)_2}$ | 81 | $81\\times100/162 = 50$ | temp Ca (L) |\n| $\\mathrm{Mg(HCO_3)_2}$ | 73 | $73\\times100/146 = 50$ | temp Mg (2L) |\n| $\\mathrm{CaSO_4}$ | 68 | $68\\times100/136 = 50$ | perm Ca (S) |\n| $\\mathrm{MgCl_2}$ | 47.5 | $47.5\\times100/95 = 50$ | perm Mg (L + S) |\n\nLime $= \\dfrac{74}{100}[50 + 2(50) + 50] = 0.74 \\times 200 = 148$ mg/L.\nSoda $= \\dfrac{106}{100}[50 + 50] = 1.06\\times100 = 106$ mg/L.\n\nFor $20\\,000$ L: lime $= 148 \\times 20\\,000 = 2.96\\times10^{6}$ mg $= 2.96$ kg; soda $= 106\\times20\\,000 = 2.12$ kg.",
+       "points": [
+        "Each salt converted to CaCO3",
+        "Lime formula with 2 x temp Mg",
+        "Soda formula",
+        "Lime 2.96 kg, soda 2.12 kg"
+       ]
+      },
+      {
+       "id": "lc-p1",
+       "pyq": "b845c09f4ca41b41",
+       "level": 2,
+       "points": [
+        "Convert to CaCO3: Ca(HCO3)2 16.2 = 10, Mg(HCO3)2 7.3 = 5, CaCl2 11.1 = 10, MgCl2 19 = 20 ppm",
+        "Lime = 74/100 [10 + 2x5 + 20] = 29.6 mg/L; soda = 106/100 [10 + 20] = 31.8 mg/L",
+        "For 10 000 L: lime 0.296 kg pure, 0.370 kg at 80%; soda 0.318 kg pure, 0.398 kg at 80%"
+       ]
+      },
+      {
+       "id": "lc-p2",
+       "pyq": "77732f2daf19f657",
+       "level": 2,
+       "points": [
+        "Convert to CaCO3: Ca(HCO3)2 5, Mg(HCO3)2 5, CaCl2 10, MgCl2 20 ppm",
+        "Lime = 74/100 [5 + 2x5 + 20] = 25.9 mg/L; soda = 106/100 [10 + 20] = 31.8 mg/L",
+        "For 10 000 L: lime 0.259 kg pure, 0.288 kg at 90%; soda 0.318 kg pure, 0.324 kg at 98%"
+       ]
+      },
+      {
+       "id": "lc-p3",
+       "pyq": "1672b3042f2089e5",
+       "level": 2,
+       "points": [
+        "Convert to CaCO3: Mg(HCO3)2 36.5 = 25, CaCl2 55.5 = 50, MgSO4 30 = 25, CaSO4 68 = 50 ppm",
+        "Lime = 74/100 [2x25 + 25] = 55.5 mg/L; soda = 106/100 [50 + 25 + 50] = 132.5 mg/L",
+        "For 10 000 L: lime 0.555 kg pure, 0.617 kg at 90%; soda 1.325 kg pure, 1.472 kg at 90%"
+       ]
+      },
+      {
+       "id": "lc-p4",
+       "pyq": "1309b687378007b4",
+       "level": 2,
+       "points": [
+        "Convert to CaCO3: Ca(HCO3)2 324 = 200, Mg(HCO3)2 146 = 100, CaSO4 68 = 50, MgCl2 47.5 = 50 ppm; NaCl ignored",
+        "Lime = 74/100 [200 + 2x100 + 50] = 333 mg/L; soda = 106/100 [50 + 50] = 106 mg/L",
+        "For 10 000 L: lime 3.33 kg pure, 3.70 kg at 90%; soda 1.06 kg at 100%"
+       ]
+      },
+      {
+       "id": "lc-q4",
+       "kind": "numerical",
+       "level": 3,
+       "marks": 4,
+       "q": "Find the lime (80% pure) and soda (90% pure) required for 10 000 L of water containing Ca(HCO3)2 = 40.5 mg/L, Mg(HCO3)2 = 36.5 mg/L, CaCl2 = 33.3 mg/L, MgSO4 = 30 mg/L and NaCl = 11.7 mg/L. (M: 162, 146, 111, 120, 58.5)",
+       "model_answer_md": "Ca(HCO3)2: $40.5\\times100/162 = 25$; Mg(HCO3)2: $36.5\\times100/146 = 25$; CaCl2: $33.3\\times100/111 = 30$; MgSO4: $30\\times100/120 = 25$ ppm. NaCl gives no hardness.\n\nLime $= \\dfrac{74}{100}[25 + 2(25) + 25] = 0.74\\times100 = 74$ mg/L, so $74\\times10^4$ mg $= 0.74$ kg pure; at 80%: $0.74\\times100/80 = 0.925$ kg.\n\nSoda $= \\dfrac{106}{100}[30 + 25] = 1.06\\times55 = 58.3$ mg/L, so $0.583$ kg pure; at 90%: $0.583\\times100/90 = 0.648$ kg.",
+       "points": [
+        "Conversions with NaCl ignored",
+        "Lime 0.74 kg pure, 0.925 kg at 80%",
+        "Soda 0.583 kg pure, 0.648 kg at 90%"
+       ]
+      }
+     ]
+    },
+    {
+     "id": "ls-calc-variants",
+     "title": "Variations: nitrates, equivalent weights, no purity",
+     "theory_md": "- **$\\mathrm{Ca(NO_3)_2}$** (M = 164) is permanent Ca (soda); **$\\mathrm{Mg(NO_3)_2}$** (M = 148) is permanent Mg (lime and soda).\n- **Equivalent weights given**: ppm as $\\mathrm{CaCO_3}$ $= \\text{mg/L}\\times 50/\\text{Eq. wt}$.\n- **Purity not stated**: take 100% pure.\n- **Volume**: 1 million litres $= 10^{6}$ L, so kg $=$ mg/L numerically. 1000 L: grams $=$ mg/L numerically.\n- Report quantities with units and say which is lime ($\\mathrm{Ca(OH)_2}$, 74) and which is soda ($\\mathrm{Na_2CO_3}$, 106).",
+     "basics_md": "The method is the same. Only the way the data is given changes: sometimes as equivalent weights, sometimes with nitrates, sometimes with no purity.",
+     "key_points": [
+      "Nitrates of Ca/Mg are permanent hardness",
+      "If equivalent weights are given: ppm as CaCO3 = mg/L x 50 / Eq wt",
+      "No purity stated means 100% pure",
+      "1 million L means kg numerically equals mg/L"
+     ],
+     "questions": [
+      {
+       "id": "lv-q1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "If no purity of lime and soda is mentioned in the question, we take them as",
+       "options": [
+        "100% pure",
+        "50% pure",
+        "90% pure",
+        "unknown, so the problem cannot be solved"
+       ],
+       "answer_index": 0,
+       "why": "Standard convention."
+      },
+      {
+       "id": "lv-q2",
+       "kind": "mcq",
+       "level": 2,
+       "q": "Ca(NO3)2 in a lime-soda problem needs",
+       "options": [
+        "soda only",
+        "lime only",
+        "lime and soda",
+        "neither"
+       ],
+       "answer_index": 0,
+       "why": "It is permanent Ca hardness."
+      },
+      {
+       "id": "lv-q3",
+       "kind": "numerical",
+       "level": 2,
+       "marks": 4,
+       "q": "Find the lime (90% pure) and soda (95% pure) for 25 000 L of water containing Ca(HCO3)2 = 8.1 mg/L, Mg(HCO3)2 = 14.6 mg/L, Ca(NO3)2 = 82 mg/L and MgCl2 = 19 mg/L. (M: 162, 146, 164, 95)",
+       "model_answer_md": "| Salt | mg/L | ppm as $\\mathrm{CaCO_3}$ | Type |\n|---|---|---|---|\n| $\\mathrm{Ca(HCO_3)_2}$ | 8.1 | 5 | temp Ca (L) |\n| $\\mathrm{Mg(HCO_3)_2}$ | 14.6 | 10 | temp Mg (2L) |\n| $\\mathrm{Ca(NO_3)_2}$ | 82 | 50 | perm Ca (S) |\n| $\\mathrm{MgCl_2}$ | 19 | 20 | perm Mg (L + S) |\n\nLime $= 0.74[5 + 2(10) + 20] = 0.74\\times45 = 33.3$ mg/L; for $25\\,000$ L $= 0.8325$ kg; at 90%: $0.925$ kg.\n\nSoda $= 1.06[50 + 20] = 74.2$ mg/L; for $25\\,000$ L $= 1.855$ kg; at 95%: $1.953$ kg.",
+       "points": [
+        "Conversions",
+        "Lime 0.8325 kg pure, 0.925 kg at 90%",
+        "Soda 1.855 kg pure, 1.953 kg at 95%"
+       ]
+      },
+      {
+       "id": "lv-p1",
+       "pyq": "d157cb232dd3c7d7",
+       "level": 2,
+       "points": [
+        "Purity not stated so taken 100%; NaCl ignored",
+        "Convert to CaCO3: Ca(HCO3)2 5.68, Mg(HCO3)2 5.41, CaSO4 11.25, MgSO4 12.5, MgCl2 3.16 ppm",
+        "Lime = 74/100 [5.68 + 2x5.41 + 12.5 + 3.16] = 23.8 mg/L; soda = 106/100 [11.25 + 12.5 + 3.16] = 28.52 mg/L",
+        "For 50 000 L: lime 1.19 kg, soda 1.43 kg"
+       ]
+      },
+      {
+       "id": "lv-p2",
+       "pyq": "0aca718ab5929268",
+       "level": 2,
+       "points": [
+        "Convert to CaCO3: Ca(HCO3)2 5, Mg(HCO3)2 5, CaCl2 10, MgCl2 20 ppm",
+        "Lime = 25.9 mg/L, soda = 31.8 mg/L",
+        "For 10^6 L: lime 25.9 kg pure, 28.78 kg at 90%; soda 31.8 kg pure, 32.45 kg at 98%"
+       ]
+      },
+      {
+       "id": "lv-p3",
+       "pyq": "29627d0edaa1e32b",
+       "level": 3,
+       "points": [
+        "Convert using equivalent weights: ppm as CaCO3 = mg/L x 50 / Eq wt: Ca(HCO3)2 5, Mg(HCO3)2 5, CaCl2 30, MgCl2 20 ppm",
+        "Lime = 74/100 [5 + 2x5 + 20] = 25.9 mg/L; soda = 106/100 [30 + 20] = 53 mg/L",
+        "For 1000 L: lime 25.9 g pure, 32.4 g at 80%; soda 53 g pure, 66.25 g at 80%"
+       ]
+      },
+      {
+       "id": "lv-p4",
+       "pyq": "7995892e8f8b9994",
+       "level": 3,
+       "points": [
+        "Convert to CaCO3: Mg(HCO3)2 73 = 50, CaCl2 222 = 200, MgSO4 120 = 100, Ca(NO3)2 164 = 100 ppm",
+        "Lime = 74/100 [2x50 + 100] = 148 mg/L; soda = 106/100 [200 + 100 + 100] = 424 mg/L",
+        "For 5000 L: lime 0.74 kg pure, 1.00 kg at 74%; soda 2.12 kg pure, 2.356 kg at 90%"
+       ]
+      },
+      {
+       "id": "lv-p5",
+       "pyq": "16209620188e75d1",
+       "level": 3,
+       "points": [
+        "Convert to CaCO3: Mg(HCO3)2 = 50, CaCl2 = 200, MgSO4 = 100, Ca(NO3)2 = 100 ppm",
+        "Lime = 148 mg/L; soda = 424 mg/L",
+        "For 5000 L: lime 1.00 kg at 74%; soda 2.356 kg at 90%"
+       ]
+      }
+     ]
+    },
+    {
+     "id": "acid-co2-cost",
+     "title": "Dissolved CO2, free acid, SiO2 and cost",
+     "theory_md": "- **Dissolved $\\mathrm{CO_2}$**: ppm as $\\mathrm{CaCO_3}$ $= \\text{mg/L}\\times100/44$; needs **lime only** ($\\mathrm{CO_2 + Ca(OH)_2 \\rightarrow CaCO_3 + H_2O}$).\n- **Free acid** $\\mathrm{H_2SO_4}$: $\\times100/98$; $\\mathrm{HCl}$: $\\times100/73$ (not 36.5). It needs **lime (1) and soda (1)**, since $\\mathrm{CaSO_4}$ or $\\mathrm{CaCl_2}$ is formed.\n- $\\mathrm{SiO_2}$, NaCl, KCl, $\\mathrm{Na_2SO_4}$: ignore.\n- **Cost** $=$ mass (kg) $\\times$ price per kg.\n\n$\\text{Lime} = 0.74[\\text{TCa} + 2\\text{TMg} + \\text{PMg} + \\mathrm{CO_2} + \\mathrm{H^+}]$; $\\text{Soda} = 1.06[\\text{PCa} + \\text{PMg} + \\mathrm{H^+}]$.",
+     "basics_md": "Acid and dissolved CO2 also eat lime, so they must be counted. Silica and sodium salts cost nothing to treat, so they are ignored.",
+     "key_points": [
+      "CO2 as CaCO3 = mg/L x 100/44, lime only",
+      "H2SO4 x 100/98, HCl x 100/73; acid takes lime and soda",
+      "SiO2, NaCl, KCl, Na2SO4 ignored",
+      "Cost = kg x rate per kg"
+     ],
+     "questions": [
+      {
+       "id": "ac-q1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "73 mg/L of HCl is equivalent to how many ppm as CaCO3?",
+       "options": [
+        "100",
+        "50",
+        "73",
+        "200"
+       ],
+       "answer_index": 0,
+       "why": "HCl equivalent weight is 36.5; 73 x 50/36.5 = 100 ppm."
+      },
+      {
+       "id": "ac-q2",
+       "kind": "mcq",
+       "level": 2,
+       "q": "Dissolved CO2 in raw water is removed in the lime-soda process by",
+       "options": [
+        "lime only",
+        "soda only",
+        "lime and soda",
+        "neither"
+       ],
+       "answer_index": 0,
+       "why": "CO2 + Ca(OH)2 -> CaCO3 + H2O."
+      },
+      {
+       "id": "ac-p2",
+       "pyq": "34a638475b984738",
+       "level": 2,
+       "points": [
+        "Convert to CaCO3: MgCl2 190 = 200, CaSO4 136 = 100, MgSO4 180 = 150, H2SO4 49 = 50 ppm; SiO2 ignored",
+        "Lime = 74/100 [200 + 150 + 50] = 296 mg/L; soda = 106/100 [200 + 100 + 150 + 50] = 530 mg/L",
+        "For 10^6 L: lime 296 kg pure, 328.9 kg at 90%; soda 530 kg pure, 552.1 kg at 96%"
+       ]
+      },
+      {
+       "id": "ac-q3",
+       "kind": "numerical",
+       "level": 3,
+       "marks": 5,
+       "q": "Water contains MgSO4 = 60 mg/L, dissolved CO2 = 22 mg/L and H2SO4 = 49 mg/L. Find the lime (85% pure) and soda (95% pure) for 50 000 L. (M: MgSO4 120, CO2 44, H2SO4 98)",
+       "model_answer_md": "| Constituent | mg/L | ppm as $\\mathrm{CaCO_3}$ | Needs |\n|---|---|---|---|\n| $\\mathrm{MgSO_4}$ | 60 | $60\\times100/120 = 50$ | L + S |\n| $\\mathrm{CO_2}$ | 22 | $22\\times100/44 = 50$ | L |\n| $\\mathrm{H_2SO_4}$ | 49 | $49\\times100/98 = 50$ | L + S |\n\nLime $= 0.74[50 + 50 + 50] = 111$ mg/L; for $50\\,000$ L $= 5.55$ kg; at 85%: $6.529$ kg.\nSoda $= 1.06[50 + 50] = 106$ mg/L; for $50\\,000$ L $= 5.30$ kg; at 95%: $5.579$ kg.",
+       "points": [
+        "Conversions",
+        "Lime 5.55 kg pure, 6.53 kg at 85%",
+        "Soda 5.30 kg pure, 5.58 kg at 95%"
+       ]
+      },
+      {
+       "id": "ac-p1",
+       "pyq": "349f1d8422eaa300",
+       "level": 3,
+       "points": [
+        "Convert to CaCO3: Mg(HCO3)2 144 = 98.63, CaSO4 68 = 50, CaCl2 111 = 100, MgCl2 9.5 = 10, CO2 44 = 100 ppm; Na2SO4 ignored",
+        "Lime = 74/100 [2x98.63 + 10 + 100] = 227.4 mg/L; soda = 106/100 [50 + 100 + 10] = 169.6 mg/L",
+        "For 10 000 L: lime 2.274 kg pure, 2.842 kg at 80%; soda 1.696 kg pure, 1.884 kg at 90%"
+       ]
+      },
+      {
+       "id": "ac-p3",
+       "pyq": "5bd736b059a3df19",
+       "level": 3,
+       "points": [
+        "Convert to CaCO3: MgCl2 95 = 100, CaSO4 272 = 200, MgSO4 120 = 100, H2SO4 49 = 50 ppm; SiO2 ignored",
+        "Lime = 74/100 [100 + 100 + 50] = 185 mg/L; soda = 106/100 [100 + 200 + 100 + 50] = 477 mg/L",
+        "For 10^6 L: lime 185 kg pure, 194.74 kg at 95%; soda 477 kg pure, 491.75 kg at 97%",
+        "Cost: lime 194.74 x 40/100 = Rs 77.9; soda 491.75 x 2000/100 = Rs 9835; total about Rs 9913"
+       ]
+      }
+     ]
+    },
+    {
+     "id": "carbonate-alkalinity",
+     "title": "Data in carbonate form, alkalinity data and validity",
+     "theory_md": "- **Carbonates given**: $\\mathrm{CaCO_3}$ is temporary Ca (lime 1); $\\mathrm{MgCO_3}$ (M = 84) is temporary Mg (lime 2). Salts like $\\mathrm{Mg(NO_3)_2}$ (148) are permanent Mg.\n- **Validity**: $\\mathrm{CaCO_3}$ and $\\mathrm{MgCO_3}$ are sparingly soluble, so such amounts cannot exist literally; in practice the hardness is present as bicarbonates and reported as carbonate, so the calculation is acceptable.\n- **Alkalinity given** (as $\\mathrm{CaCO_3}$): temporary Ca $= \\min(\\text{Ca hardness}, \\text{alkalinity})$; temporary Mg $=$ alkalinity $-$ temporary Ca; permanent Mg $=$ Mg hardness $-$ temporary Mg.\n- **Valid** if alkalinity $\\le$ total hardness; if alkalinity is larger, $\\mathrm{NaHCO_3}$ is also present.",
+     "basics_md": "Alkalinity measures the bicarbonate in the water. That bicarbonate pairs first with calcium, then with magnesium. What is left of each is permanent hardness.",
+     "key_points": [
+      "CaCO3 is temporary Ca (1 lime); MgCO3 is temporary Mg (2 lime)",
+      "Alkalinity gives the temporary hardness: assigned first to Ca, then Mg",
+      "Data valid if alkalinity is not more than total hardness",
+      "Carbonates are sparingly soluble; treat as bicarbonates"
+     ],
+     "questions": [
+      {
+       "id": "ca-q1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "In the lime-soda calculation, MgCO3 is treated as",
+       "options": [
+        "temporary Mg hardness (2 lime)",
+        "permanent Mg hardness",
+        "no hardness",
+        "temporary Ca hardness"
+       ],
+       "answer_index": 0,
+       "why": "It is carbonate (temporary) hardness of Mg, requiring 2 equivalents of lime."
+      },
+      {
+       "id": "ca-q2",
+       "kind": "mcq",
+       "level": 2,
+       "q": "If the alkalinity of a water sample is greater than its total hardness, the water contains",
+       "options": [
+        "NaHCO3 or Na2CO3 as well",
+        "only permanent hardness",
+        "free acid",
+        "no bicarbonate"
+       ],
+       "answer_index": 0,
+       "why": "Carbonate hardness cannot exceed total hardness; the excess alkalinity is due to sodium alkali."
+      },
+      {
+       "id": "ca-p2",
+       "pyq": "a8af4f0780196931",
+       "level": 2,
+       "points": [
+        "Convert to CaCO3: MgCO3 84 = 100 (temp Mg), CaCO3 40 = 40 (temp Ca), CaCl2 55.5 = 50 (perm Ca), Mg(NO3)2 37 = 25 (perm Mg, M 148); KCl ignored",
+        "Lime = 74/100 [2x100 + 40 + 25] = 196.1 mg/L; soda = 106/100 [50 + 25] = 79.5 mg/L",
+        "For 80 000 L: lime 15.69 kg pure, 18.24 kg at 86%; soda 6.36 kg pure, 7.66 kg at 83%"
+       ]
+      },
+      {
+       "id": "ca-q3",
+       "kind": "numerical",
+       "level": 3,
+       "marks": 4,
+       "q": "A water sample has total alkalinity 200 ppm, calcium hardness 150 ppm and magnesium hardness 100 ppm (all as CaCO3). Find the lime and soda (100% pure) for 10^6 L. Is the data valid?",
+       "model_answer_md": "Total hardness $= 150 + 100 = 250$ ppm. Alkalinity $200 \\le 250$: **data valid**.\n\nTemporary Ca $= 150$ ppm (since $150 < 200$). Temporary Mg $= 200 - 150 = 50$ ppm. Permanent Mg $= 100 - 50 = 50$ ppm. Permanent Ca $= 0$.\n\nLime $= 0.74[150 + 2(50) + 50] = 0.74\\times300 = 222$ mg/L $\\Rightarrow$ **222 kg** per $10^6$ L.\nSoda $= 1.06[0 + 50] = 53$ mg/L $\\Rightarrow$ **53 kg** per $10^6$ L.",
+       "points": [
+        "Validity: alkalinity less than total hardness",
+        "Split into temporary Ca 150, temporary Mg 50, permanent Mg 50",
+        "Lime 222 kg",
+        "Soda 53 kg"
+       ]
+      },
+      {
+       "id": "ca-q4",
+       "kind": "numerical",
+       "level": 3,
+       "marks": 4,
+       "q": "Water contains MgCO3 = 42 mg/L, CaCO3 = 25 mg/L, MgCl2 = 47.5 mg/L and KCl = 20 mg/L. Calculate the lime (90% pure) and soda (95% pure) for 100 000 L. (M: MgCO3 84, CaCO3 100, MgCl2 95)",
+       "model_answer_md": "MgCO3: $42\\times100/84 = 50$ (temp Mg); CaCO3: $25$ (temp Ca); MgCl2: $47.5\\times100/95 = 50$ (perm Mg); KCl: ignored.\n\nLime $= 0.74[25 + 2(50) + 50] = 0.74\\times175 = 129.5$ mg/L; for $10^5$ L $= 12.95$ kg; at 90%: $14.39$ kg.\nSoda $= 1.06[50] = 53$ mg/L; for $10^5$ L $= 5.30$ kg; at 95%: $5.58$ kg.",
+       "points": [
+        "Conversions with KCl ignored",
+        "Lime 12.95 kg pure, 14.39 kg at 90%",
+        "Soda 5.30 kg pure, 5.58 kg at 95%"
+       ]
+      },
+      {
+       "id": "ca-p1",
+       "pyq": "83b27185ce9d871c",
+       "level": 3,
+       "points": [
+        "Total hardness = 252 + 70 = 322 ppm; alkalinity 320 is less than 322, so data valid",
+        "Temporary Ca 252, temporary Mg 320 - 252 = 68, permanent Mg 2, permanent Ca 0",
+        "Lime = 74/100 [252 + 2x68 + 2] = 288.6 mg/L = 288.6 kg per 10^6 L (100% pure)",
+        "Soda = 106/100 [2] = 2.12 mg/L = 2.12 kg per 10^6 L",
+        "Nearly all hardness is temporary, so mostly lime"
+       ]
+      },
+      {
+       "id": "ca-p3",
+       "pyq": "eac048eb6c1bbbae",
+       "level": 3,
+       "points": [
+        "Convert to CaCO3: MgCO3 180 = 214.29 (temp Mg), CaCl2 55.5 = 50 (perm Ca), CaCO3 90 = 90 (temp Ca), Mg(NO3)2 74 = 50 (perm Mg); KCl ignored",
+        "Lime = 74/100 [2x214.29 + 90 + 50] = 420.7 mg/L; soda = 106/100 [50 + 50] = 106 mg/L",
+        "For 50 000 L: lime 21.04 kg pure, 28.05 kg at 75%; soda 5.30 kg pure, 6.46 kg at 82%",
+        "Practicality: CaCO3 and MgCO3 are sparingly soluble so literally not possible; treated as bicarbonate hardness reported as carbonate, so calculation is valid"
+       ]
+      },
+      {
+       "id": "ca-p4",
+       "pyq": "ebd3b062b55806c4",
+       "level": 3,
+       "points": [
+        "Convert to CaCO3: MgCO3 90 = 107.14 (temp Mg), CaCl2 55.5 = 50 (perm Ca), CaCO3 45 = 45 (temp Ca), Mg(NO3)2 37 = 25 (perm Mg); KCl ignored",
+        "Lime = 74/100 [2x107.14 + 45 + 25] = 210.4 mg/L; soda = 106/100 [50 + 25] = 79.5 mg/L",
+        "For 90 000 L: lime 18.93 kg pure, 21.52 kg at 88%; soda 7.16 kg pure, 7.78 kg at 92%",
+        "Logic of data: carbonates are sparingly soluble; practically treated as bicarbonate hardness, so data acceptable"
+       ]
+      }
+     ]
+    }
+   ]
+  }
+ ]
+}

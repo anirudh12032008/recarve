@@ -1,0 +1,1170 @@
+{
+ "code": "HS1106",
+ "unit": "Soft Skills",
+ "written": "2026-10-19",
+ "by": "claude-sonnet-5-5, in a Claude Code session",
+ "topics": [
+  {
+   "topic": "Emotional and social skills",
+   "subtopics": [
+    {
+     "id": "ei",
+     "title": "Emotional intelligence",
+     "theory_md": "**Emotional intelligence (EI)** is the ability to recognise, understand and manage your own emotions and to recognise and influence the emotions of others (Daniel Goleman).\n\nGoleman's **five components**:\n1. **Self-awareness**: knowing your emotions, strengths, weaknesses.\n2. **Self-regulation**: controlling impulses and moods.\n3. **Motivation**: inner drive towards goals.\n4. **Empathy**: understanding others' feelings.\n5. **Social skills**: managing relationships, communication, conflict.\n\nFirst three are personal competence; last two are social competence.",
+     "basics_md": "IQ is how well you solve problems; EI is how well you handle feelings, yours and other people's. A person who stays calm when angry and notices when a friend is upset has high EI.",
+     "key_points": [
+      "EI = recognise, understand, manage own and others' emotions",
+      "Goleman's five: self-awareness, self-regulation, motivation, empathy, social skills",
+      "Give one everyday example",
+      "Link to leadership or teamwork when asked"
+     ],
+     "questions": [
+      {
+       "id": "ei-q1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "Which is NOT one of Goleman's five components of EI?",
+       "options": [
+        "Self-regulation",
+        "Empathy",
+        "Intelligence quotient",
+        "Social skills"
+       ],
+       "answer_index": 2,
+       "why": "IQ is a measure of cognitive ability; it is not a component of EI."
+      },
+      {
+       "id": "ei-q2",
+       "kind": "mcq",
+       "level": 1,
+       "q": "Staying calm and not shouting when you are angry is",
+       "options": [
+        "Empathy",
+        "Self-regulation",
+        "Motivation",
+        "Social skills"
+       ],
+       "answer_index": 1,
+       "why": "Controlling impulses and moods is self-regulation."
+      },
+      {
+       "id": "ei-q3",
+       "kind": "short",
+       "level": 2,
+       "marks": 5,
+       "q": "Define emotional intelligence and list its five components with one line on each.",
+       "model_answer_md": "**Emotional intelligence** is the ability to recognise, understand and manage one's own emotions and to recognise and influence the emotions of others (Goleman).\n\n**Five components**\n1. **Self-awareness**: knowing one's own emotions, strengths and limits.\n2. **Self-regulation**: controlling impulses and moods, staying calm.\n3. **Motivation**: inner drive to achieve goals despite setbacks.\n4. **Empathy**: understanding how others feel.\n5. **Social skills**: building relationships, communicating, resolving conflict.\n\n**Example:** a student who stays calm after a poor test, studies harder and comforts a friend who failed shows all five.",
+       "points": [
+        "Definition covering own and others' emotions",
+        "All five components named",
+        "One line on each",
+        "Example"
+       ]
+      },
+      {
+       "id": "ei-p1",
+       "pyq": "13611871ec384097",
+       "level": 2,
+       "points": [
+        "Mentor's advice: leadership needs empathy and relationships, not only technical knowledge",
+        "Leader must understand members' concerns and aspirations and build trust",
+        "Amit applied it: one-on-one meetings, public recognition, collaboration",
+        "EI defined: recognise, understand and manage own and others' emotions",
+        "Goleman's five components listed"
+       ]
+      }
+     ]
+    },
+    {
+     "id": "interpersonal",
+     "title": "Interpersonal skills and relationships",
+     "theory_md": "**Interpersonal skills** are the skills used to communicate and interact effectively with other people: verbal and non-verbal communication, active listening, empathy, teamwork, conflict resolution, negotiation, positive attitude, respect and etiquette.\n\n**Key to good relationships:** honest two-way **communication** built on **trust, respect and empathy**.\n- Listen actively and give full attention.\n- Be honest, reliable, keep promises.\n- Respect differences, appreciate others.\n- Handle conflict calmly; apologise when wrong.\n\n**Social skills** (etiquette, courtesy, cooperation) are the same family seen from society's side.",
+     "basics_md": "These are the people skills: how you talk, listen and behave with others. Good relationships grow the way a bank balance does, by regular small deposits of trust.",
+     "key_points": [
+      "Interpersonal skills = skills to interact effectively with others",
+      "List: listening, empathy, teamwork, conflict resolution, communication",
+      "Key to relationships: communication with trust, respect, empathy",
+      "Example of a real situation"
+     ],
+     "questions": [
+      {
+       "id": "ip-q1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "Which is an interpersonal skill?",
+       "options": [
+        "Active listening",
+        "Memorising formulae",
+        "Typing speed",
+        "Drawing"
+       ],
+       "answer_index": 0,
+       "why": "Active listening is how we interact with people."
+      },
+      {
+       "id": "ip-q2",
+       "kind": "mcq",
+       "level": 1,
+       "q": "The key to building good relationships is",
+       "options": [
+        "Winning every argument",
+        "Trust, respect and honest communication",
+        "Avoiding all contact",
+        "Giving expensive gifts"
+       ],
+       "answer_index": 1,
+       "why": "Relationships rest on trust, respect and two-way communication."
+      },
+      {
+       "id": "ip-q3",
+       "kind": "short",
+       "level": 2,
+       "marks": 5,
+       "q": "What are interpersonal skills? How are good relationships built?",
+       "model_answer_md": "**Interpersonal skills** are the skills we use to communicate and work with other people: verbal and non-verbal communication, active listening, empathy, teamwork, conflict resolution and negotiation.\n\n**Building good relationships**\n1. Communicate honestly in both directions.\n2. Listen actively and give full attention.\n3. Show empathy: see the other person's view.\n4. Be reliable and keep promises (trust).\n5. Respect differences and give appreciation.\n6. Resolve conflict calmly and apologise when wrong.\n\n**Example:** a friend who listens without judging and helps in difficulty builds a lasting bond.",
+       "points": [
+        "Definition with examples of skills",
+        "Key = communication based on trust, respect, empathy",
+        "At least four building steps",
+        "Example"
+       ]
+      },
+      {
+       "id": "ip-p1",
+       "pyq": "83560cb6b85f53a3",
+       "level": 2,
+       "points": [
+        "Interpersonal skills: skills to interact and communicate effectively with others (listening, empathy, teamwork, conflict resolution)",
+        "Key to good relationships: honest two-way communication based on trust, respect and empathy",
+        "Active listening, honesty, respect, calm handling of conflict",
+        "Example given"
+       ]
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "topic": "Critical thinking and problem solving",
+   "subtopics": [
+    {
+     "id": "critical",
+     "title": "Critical thinking",
+     "theory_md": "**Critical thinking** is analysing information objectively, questioning assumptions and judging evidence before accepting a conclusion.\n\nSkills: **analysis, evaluation, inference, interpretation, explanation, self-regulation**.\n\nBarriers: bias, emotions, stereotypes, peer pressure, jumping to conclusions.\n\nHabits: ask *who, what, why, how, what is the evidence*; separate **fact from opinion**; consider other viewpoints; test the logic before deciding.",
+     "basics_md": "Do not swallow a claim whole. Ask what it rests on, who says it and what is missing, then decide.",
+     "key_points": [
+      "Critical thinking = objective analysis and evaluation of evidence",
+      "Skills: analysis, evaluation, inference, interpretation",
+      "Barriers: bias, emotion, stereotype",
+      "Distinguish fact from opinion"
+     ],
+     "questions": [
+      {
+       "id": "ct-q1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "Critical thinking mainly involves",
+       "options": [
+        "Accepting what authority says",
+        "Evaluating evidence before concluding",
+        "Speed of reply",
+        "Agreeing with the majority"
+       ],
+       "answer_index": 1,
+       "why": "It is judging evidence objectively."
+      },
+      {
+       "id": "ct-q2",
+       "kind": "mcq",
+       "level": 1,
+       "q": "'This phone is the best' (said by an advertiser) is",
+       "options": [
+        "A proven fact",
+        "An opinion needing evidence",
+        "A statistic",
+        "A definition"
+       ],
+       "answer_index": 1,
+       "why": "A claim of 'best' is an opinion until supported."
+      },
+      {
+       "id": "ct-q3",
+       "kind": "short",
+       "level": 2,
+       "marks": 4,
+       "q": "What is critical thinking? Mention its barriers and two ways to develop it.",
+       "model_answer_md": "**Critical thinking** is the disciplined analysis and evaluation of information, assumptions and evidence to reach a reasoned judgment.\n\n**Barriers:** personal bias, strong emotions, stereotypes, peer pressure, hasty conclusions.\n\n**Developing it**\n1. Question assumptions and ask for evidence.\n2. Separate fact from opinion and weigh other viewpoints before deciding.",
+       "points": [
+        "Definition",
+        "Two or more barriers",
+        "Two ways to develop it"
+       ]
+      }
+     ]
+    },
+    {
+     "id": "problem-solving",
+     "title": "Problem solving steps",
+     "theory_md": "**Problem solving** is a systematic way of reaching a solution to a difficulty.\n\nSteps:\n1. **Define** the problem clearly.\n2. **Analyse** causes and collect facts.\n3. **Generate** alternative solutions (brainstorming).\n4. **Evaluate** the options against criteria (cost, time, risk).\n5. **Select** and **implement** the best one.\n6. **Review** the result and learn.\n\nTools: brainstorming, cause-and-effect (fishbone) diagram, SWOT, pros and cons list.",
+     "basics_md": "Treat a problem like a bug in code: state what is wrong, find the cause, try fixes, keep the one that works and check it.",
+     "key_points": [
+      "Steps: define, analyse, generate options, evaluate, implement, review",
+      "Tools: brainstorming, fishbone diagram, pros-cons",
+      "Decision uses criteria, not guesswork",
+      "Apply to a student problem"
+     ],
+     "questions": [
+      {
+       "id": "ps-q1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "The first step of problem solving is",
+       "options": [
+        "Choosing a solution",
+        "Defining the problem",
+        "Implementing",
+        "Reviewing"
+       ],
+       "answer_index": 1,
+       "why": "Without a clear definition, effort goes in the wrong direction."
+      },
+      {
+       "id": "ps-q2",
+       "kind": "mcq",
+       "level": 1,
+       "q": "Brainstorming is used to",
+       "options": [
+        "Evaluate the final result",
+        "Generate many alternative solutions",
+        "Blame someone",
+        "Reduce the problem"
+       ],
+       "answer_index": 1,
+       "why": "Brainstorming produces ideas without judging them first."
+      },
+      {
+       "id": "ps-q3",
+       "kind": "short",
+       "level": 2,
+       "marks": 5,
+       "q": "Explain the steps of problem solving with an example from student life.",
+       "model_answer_md": "**Steps**\n1. **Define** the problem: I keep failing mathematics quizzes.\n2. **Analyse** causes: no daily practice, weak basics, late nights.\n3. **Generate** options: daily practice, group study, tuition, seek the teacher's help.\n4. **Evaluate** each by cost, time and effect.\n5. **Select and implement:** one hour of practice daily plus weekly doubt session.\n6. **Review** after the next quiz and adjust.",
+       "points": [
+        "Steps in order",
+        "Each step explained",
+        "Example linked to each step"
+       ]
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "topic": "Positive attitude",
+   "subtopics": [
+    {
+     "id": "attitude",
+     "title": "Attitude: meaning, ABC model, formation",
+     "theory_md": "**Attitude** is a relatively stable tendency to think, feel and behave in a particular way towards a person, object, idea or situation.\n\n**ABC model:** **A**ffective (feelings), **B**ehavioural (action tendency), **C**ognitive (beliefs).\n\n**Positive attitude:** optimistic outlook that looks for solutions and learns from failure.\n\n**Formed by:** family and upbringing, education and teachers, friends and peers, personal experiences, role models and media, culture and values, self-effort (positive self-talk, gratitude, solutions focus).\n\nAttitude can be changed: \"we can change our life by changing our attitude\" (William James).",
+     "basics_md": "Attitude is the lens through which you see events. The same exam can be a threat or a chance, depending on the lens.",
+     "key_points": [
+      "Attitude = stable tendency to think, feel, act towards something",
+      "ABC components: affective, behavioural, cognitive",
+      "Formed by family, teachers, peers, experience, role models, culture, self-effort",
+      "Always give a day-to-day example",
+      "Attitude can be changed; first step to success"
+     ],
+     "questions": [
+      {
+       "id": "at-q1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "In the ABC model of attitude, 'C' stands for",
+       "options": [
+        "Control",
+        "Cognitive",
+        "Culture",
+        "Communication"
+       ],
+       "answer_index": 1,
+       "why": "A = Affective, B = Behavioural, C = Cognitive."
+      },
+      {
+       "id": "at-q2",
+       "kind": "mcq",
+       "level": 1,
+       "q": "'I feel nervous about exams' is the ___ component",
+       "options": [
+        "Affective",
+        "Behavioural",
+        "Cognitive",
+        "Social"
+       ],
+       "answer_index": 0,
+       "why": "Feelings and emotions are the affective component."
+      },
+      {
+       "id": "at-q3",
+       "kind": "short",
+       "level": 2,
+       "marks": 5,
+       "q": "Define attitude and list five factors that shape it, with an example each.",
+       "model_answer_md": "**Attitude** is a relatively stable tendency to think, feel and behave favourably or unfavourably towards a person, object or situation.\n\n**Factors that shape it**\n1. **Family:** parents who handle failure calmly teach children to do the same.\n2. **Teachers and education:** a teacher who praises effort builds confidence.\n3. **Peers:** a motivated hostel study group makes one disciplined.\n4. **Experience:** failing a contest, then practising and succeeding, builds resilience.\n5. **Role models:** reading about A.P.J. Abdul Kalam shows humble beginnings are no barrier.",
+       "points": [
+        "Definition",
+        "Five factors",
+        "Example for each"
+       ]
+      },
+      {
+       "id": "at-p1",
+       "pyq": "55c6a496bc1e0880",
+       "level": 3,
+       "points": [
+        "Definition: relatively stable tendency to think, feel, behave towards something; ABC components with examples",
+        "Positive attitude defined",
+        "Formation: family, education and teachers, peers, personal experiences, role models and media, culture and values, self-effort",
+        "Day-to-day example for each factor",
+        "Benefits and conclusion (attitude can be developed)"
+       ]
+      },
+      {
+       "id": "at-p2",
+       "pyq": "11d64888f95ef525",
+       "level": 2,
+       "points": [
+        "Attitude is the way we think about circumstances; changing it changes behaviour and results (William James)",
+        "Self-fulfilling prophecy and growth mindset",
+        "Better relationships, health, seeing opportunity (two salesmen and shoes)",
+        "How to build: positive self-talk, gratitude, learning from mistakes",
+        "Limit: skill and effort still needed; conclusion"
+       ]
+      }
+     ]
+    },
+    {
+     "id": "attitude-comm",
+     "title": "Attitude in communication and teams",
+     "theory_md": "A **positive attitude** in communication builds rapport and trust, encourages collaboration, and makes us listen and empathise. A **negative attitude** causes misunderstanding, conflict and missed opportunities.\n\n**Positive team leader:** optimistic, solution-focused, supports members, so people share ideas and take initiative.\n\n**Negative communication** (harsh words, harsh criticism, hostile body language): members stop speaking up, collaboration and productivity drop, environment turns toxic.\n\nAttitude affects how others see you **and** how you see others. It helps resolve conflict and strengthens personal relationships.",
+     "basics_md": "If you walk into a conversation expecting to be attacked, you hear attacks. If you walk in open, you hear the person.",
+     "key_points": [
+      "Positive attitude: rapport, trust, collaboration, empathy",
+      "Negative attitude: misunderstanding, conflict, toxic team",
+      "Leader's attitude sets team motivation",
+      "Attitude is a choice needing awareness and effort",
+      "Support with a personal example"
+     ],
+     "questions": [
+      {
+       "id": "ac-q1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "A negative communication style in a team most likely leads to",
+       "options": [
+        "More ideas",
+        "Members staying silent",
+        "Faster work",
+        "Better trust"
+       ],
+       "answer_index": 1,
+       "why": "Fear of harsh judgment makes members stop speaking up."
+      },
+      {
+       "id": "ac-q2",
+       "kind": "mcq",
+       "level": 1,
+       "q": "A leader with a positive attitude will",
+       "options": [
+        "Ignore problems",
+        "Stress solutions and encourage the team",
+        "Blame members",
+        "Avoid meetings"
+       ],
+       "answer_index": 1,
+       "why": "Positive leaders focus on solutions and support."
+      },
+      {
+       "id": "ac-q3",
+       "kind": "short",
+       "level": 2,
+       "marks": 4,
+       "q": "How does attitude affect communication in a team? Give an example.",
+       "model_answer_md": "**Positive attitude** builds rapport, trust and collaboration; people listen attentively, empathise and resolve conflict easily.\n\n**Negative attitude** causes misunderstanding, conflict and a toxic environment; members stop sharing ideas, so productivity falls.\n\n**Example:** our project model failed before submission; the leader said, \"Let us see what we can fix by tomorrow\", divided work by strengths and appreciated progress, so we finished on time.",
+       "points": [
+        "Positive effects",
+        "Negative effects",
+        "Example"
+       ]
+      },
+      {
+       "id": "ac-p1",
+       "pyq": "1cf24d6a141fb2f4",
+       "level": 1,
+       "points": [
+        "Positive attitude builds rapport, trust, collaboration, attentive listening, empathy",
+        "Negative attitude leads to misunderstanding, conflict, missed opportunities",
+        "Affects how others see us and how we see them"
+       ]
+      },
+      {
+       "id": "ac-p2",
+       "pyq": "d2c303142d598391",
+       "level": 2,
+       "points": [
+        "Leader approaches problems with optimism, stresses solutions",
+        "Team feels supported and motivated, shares ideas, trust rises",
+        "Productivity and collaboration improve",
+        "A personal example given"
+       ]
+      },
+      {
+       "id": "ac-p3",
+       "pyq": "8079e936080efa4d",
+       "level": 2,
+       "points": [
+        "Harsh words, criticism and negative body language create a toxic environment",
+        "Members stop speaking up; initiative and ideas vanish",
+        "Collaboration and productivity drop",
+        "Example given"
+       ]
+      },
+      {
+       "id": "ac-p4",
+       "pyq": "fded742550bcd580",
+       "level": 2,
+       "points": [
+        "Positive attitude makes us listen attentively and empathise",
+        "Fosters mutual respect, so conflicts resolve easily",
+        "Focus on solutions, not blame"
+       ]
+      },
+      {
+       "id": "ac-p5",
+       "pyq": "121b5aa8ecbfdde3",
+       "level": 2,
+       "points": [
+        "Kindness, patience and understanding build lasting bonds",
+        "Listening without judgment and thoughtful response make others feel heard and respected",
+        "Builds trust and calm handling of disagreement"
+       ]
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "topic": "Time management",
+   "subtopics": [
+    {
+     "id": "importance-wasters",
+     "title": "Importance and time wasters",
+     "theory_md": "**Time management** is planning and controlling how time is spent on activities to work smarter. Time is fixed and non-renewable.\n\n**Importance:** less stress and last-minute rush, higher productivity, better quality, time for rest and hobbies, reliability.\n\n**External time wasters** (others, environment; largely outside control): interruptions and visitors, phone calls and notifications, unproductive meetings, unclear instructions, travel and waiting, noise.\n\n**Internal time wasters** (own habits; within control): procrastination, no planning or goals, poor priorities, inability to say no, perfectionism, disorganisation, indecision, fatigue.\n\nRemedy: control external ones; eliminate internal ones by self-discipline.",
+     "basics_md": "Time is like a bucket with a fixed size. Planning decides what goes in; wasters are holes in the bottom.",
+     "key_points": [
+      "Time management = planning and controlling time; time cannot be stored",
+      "Benefits: less stress, productivity, quality, balance",
+      "External wasters: others and environment; internal: own habits",
+      "Each waster paired with a remedy",
+      "Day-to-day example"
+     ],
+     "questions": [
+      {
+       "id": "iw-q1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "Procrastination is an example of an",
+       "options": [
+        "External time waster",
+        "Internal time waster",
+        "Time tool",
+        "Priority"
+       ],
+       "answer_index": 1,
+       "why": "It comes from one's own habit, so it is internal."
+      },
+      {
+       "id": "iw-q2",
+       "kind": "mcq",
+       "level": 1,
+       "q": "Unscheduled visitors are an ___ time waster",
+       "options": [
+        "Internal",
+        "External",
+        "Personal",
+        "Hidden"
+       ],
+       "answer_index": 1,
+       "why": "They come from others and the environment."
+      },
+      {
+       "id": "iw-q3",
+       "kind": "short",
+       "level": 2,
+       "marks": 5,
+       "q": "Why is time management important? Name three time wasters and how to manage each, with examples.",
+       "model_answer_md": "**Importance**\n- Reduces stress and last-minute rush (a student revising weekly does not cram before the exam).\n- Raises productivity and quality; leaves time for sleep, hobbies, family.\n- Time is non-renewable, so it must be planned.\n\n**Time wasters and remedies**\n| Waster | Example | Remedy |\n|---|---|---|\n| Procrastination | Postponing an assignment | Break into small tasks, set deadlines |\n| Social media | Scrolling during study | Mute notifications, fixed slots |\n| Saying yes to everything | Helping others at own cost | Learn to say no |",
+       "points": [
+        "Importance with example",
+        "Three wasters with examples",
+        "Remedy for each"
+       ]
+      },
+      {
+       "id": "iw-p1",
+       "pyq": "4c4b5d7923cf566f",
+       "level": 2,
+       "points": [
+        "Importance: less stress, productivity, quality, balance, reputation; time is non-renewable",
+        "Wasters: procrastination, social media, interruptions, poor planning, saying yes to everything, perfectionism",
+        "Remedy for each waster",
+        "Tools mentioned: to-do list, calendar, Eisenhower matrix, 80:20 rule",
+        "Day-to-day examples"
+       ]
+      },
+      {
+       "id": "iw-p2",
+       "pyq": "702abde4517b8890",
+       "level": 2,
+       "points": [
+        "External wasters: interruptions, calls, notifications, meetings, unclear instructions, travel; remedies",
+        "Internal wasters: procrastination, no planning, poor prioritising, cannot say no, perfectionism, disorganisation, fatigue; remedies",
+        "External are to be controlled; internal eliminated by self-discipline"
+       ]
+      },
+      {
+       "id": "iw-p3",
+       "pyq": "80146893d448c8b5",
+       "level": 2,
+       "points": [
+        "Pareto: 80% of results from 20% of efforts; 80% of wasted time from 20% of wasters",
+        "Own time and energy wasters listed (phone, procrastination, sleep, chatting, no plan)",
+        "Strategy for each (limits, Pomodoro, schedule, say no, to-do list)",
+        "Attack the top few wasters first"
+       ]
+      }
+     ]
+    },
+    {
+     "id": "tools",
+     "title": "Prioritising tools: Eisenhower matrix and 80/20 rule",
+     "theory_md": "**Eisenhower (urgent-important) matrix:** 2x2 grid.\n- **Q1 urgent + important:** do now (deadline tomorrow).\n- **Q2 important, not urgent:** plan and schedule (revision, exercise, skills). The zone of effectiveness; planning here cuts Q1 crises.\n- **Q3 urgent, not important:** delegate or minimise (calls, interruptions).\n- **Q4 neither:** eliminate (scrolling, gossip).\n\n**Pareto 80/20 rule:** about 80% of results come from 20% of efforts. Find the **vital few**, drop the **trivial many**.\n\nOther tools: to-do list (A, B, C priority), calendar or timetable, **Pomodoro** (25 min work, 5 min break), SMART goals, Gantt chart.",
+     "basics_md": "Ask two questions of every task: does it matter, and is it due soon? The answers decide whether to do it now, plan it, hand it off or drop it.",
+     "key_points": [
+      "Matrix quadrants and action for each",
+      "Q2 is the key quadrant",
+      "80/20: vital few give most results",
+      "Other tools: to-do, calendar, Pomodoro",
+      "Own examples for each quadrant"
+     ],
+     "questions": [
+      {
+       "id": "tl-q1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "An important task that is not urgent, like regular revision, goes in",
+       "options": [
+        "Q1: do now",
+        "Q2: plan or schedule",
+        "Q3: delegate",
+        "Q4: eliminate"
+       ],
+       "answer_index": 1,
+       "why": "Important but not urgent is scheduled."
+      },
+      {
+       "id": "tl-q2",
+       "kind": "mcq",
+       "level": 1,
+       "q": "According to the Pareto principle, 20% of efforts produce about",
+       "options": [
+        "20% of results",
+        "50% of results",
+        "80% of results",
+        "100% of results"
+       ],
+       "answer_index": 2,
+       "why": "80/20 rule."
+      },
+      {
+       "id": "tl-q3",
+       "kind": "short",
+       "level": 2,
+       "marks": 5,
+       "q": "Draw an urgent-important matrix with one example in each box and state its significance.",
+       "model_answer_md": "**Matrix**\n| | Urgent | Not urgent |\n|---|---|---|\n| **Important** | Q1 Do now: assignment due tomorrow | Q2 Plan: daily revision, exercise, learning coding |\n| **Not important** | Q3 Delegate or minimise: phone calls, unplanned visitors | Q4 Eliminate: endless scrolling, binge-watching |\n\n**Significance**\n- Prioritises by importance, not by loudness.\n- Q2 planning reduces Q1 crises.\n- Exposes Q3 and Q4 wasters.\n- Reduces stress and aligns work with long-term goals.",
+       "points": [
+        "2x2 matrix drawn",
+        "Example in each box",
+        "Significance points"
+       ]
+      },
+      {
+       "id": "tl-q4",
+       "kind": "short",
+       "level": 3,
+       "marks": 3,
+       "q": "How can the 80/20 rule improve efficiency? Give a student example.",
+       "model_answer_md": "The Pareto principle says roughly **80% of results come from 20% of efforts**.\n- Identify the **vital few** tasks that give most results and do them first.\n- Cut the **trivial many** that consume time with little return.\n- Use peak hours for the high-value work.\n\n**Example:** the 20% of topics that carry most exam marks get most of the revision time.",
+       "points": [
+        "Statement of the rule",
+        "Vital few versus trivial many",
+        "Student example"
+       ]
+      },
+      {
+       "id": "tl-p1",
+       "pyq": "2885fb6421a12dfa",
+       "level": 2,
+       "points": [
+        "Ten strategies: SMART goals, prioritise, plan in writing, break tasks, deadlines, avoid procrastination, remove wasters, say no and delegate, avoid multitasking, breaks and review",
+        "Three tools explained (to-do list, Eisenhower matrix, calendar; Pomodoro or Gantt chart also fine)"
+       ]
+      },
+      {
+       "id": "tl-p2",
+       "pyq": "935d769e2efdd074",
+       "level": 2,
+       "points": [
+        "Own matrix with an example in each of four quadrants",
+        "Significance: prioritise, Q2 reduces crises, exposes wasters, reduces stress",
+        "80/20: 80% of results from 20% of efforts; vital few, trivial many"
+       ]
+      }
+     ]
+    },
+    {
+     "id": "planner",
+     "title": "Making a planner for a clash of deadlines",
+     "theory_md": "Method for a scenario question (for example lab exam, assignment and presentation on consecutive days with seven days to prepare):\n1. **List** all tasks and their fixed dates.\n2. **Prioritise** (urgent-important) and break each into steps.\n3. **Work backward** from each deadline; start the task needing the longest preparation first.\n4. Build a **day-wise table**, using free slots around fixed class hours.\n5. Add a **buffer** hour daily, 25-minute focus blocks, no phone, 7 to 8 hours sleep.\n6. **Review** each evening and adjust.",
+     "basics_md": "A plan is a timetable drawn backward from the deadlines, with slack for surprises.",
+     "key_points": [
+      "List tasks and fixed dates",
+      "Prioritise and break into steps",
+      "Day-wise table working backward",
+      "Buffer, breaks, sleep, daily review"
+     ],
+     "questions": [
+      {
+       "id": "pl-q1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "When many deadlines are fixed, the best first step is to",
+       "options": [
+        "Start with the easiest",
+        "List tasks and work backward from each deadline",
+        "Ignore classes",
+        "Cram on the last day"
+       ],
+       "answer_index": 1,
+       "why": "Backward planning from fixed dates is the standard approach."
+      },
+      {
+       "id": "pl-q2",
+       "kind": "mcq",
+       "level": 1,
+       "q": "Why keep a daily buffer in a plan?",
+       "options": [
+        "To waste time",
+        "To absorb delays and surprises",
+        "To skip revision",
+        "To sleep less"
+       ],
+       "answer_index": 1,
+       "why": "Buffers protect the plan from overruns."
+      },
+      {
+       "id": "pl-q3",
+       "kind": "short",
+       "level": 3,
+       "marks": 5,
+       "q": "Your lab exam, assignment submission and presentation fall on three consecutive days and you have seven days. Outline your plan.",
+       "model_answer_md": "**Approach:** list the tasks, prioritise, break into steps, schedule backward from fixed dates.\n\n| Day | Plan |\n|---|---|\n| 1 | List tasks; collect lab manual, assignment questions, topic; start assignment |\n| 2 | Assignment research and draft; revise experiments |\n| 3 | Finish and proofread assignment; presentation outline |\n| 4 | Finish slides; rehearse aloud and time it |\n| 5 | Lab exam preparation: procedure, viva |\n| 6 | Lab exam; submit assignment |\n| 7 | Final rehearsal and presentation |\n\n**Techniques:** to-do list and calendar, 25-minute focus blocks, buffer hour, sleep 7 to 8 hours, daily review.",
+       "points": [
+        "Approach",
+        "Day-wise table covering all three tasks",
+        "Techniques"
+       ]
+      },
+      {
+       "id": "pl-p1",
+       "pyq": "df84bb29f230e6f8",
+       "level": 3,
+       "points": [
+        "Approach: list tasks, set priorities, break into steps, deadlines, avoid procrastination",
+        "Seven-day table covering assignment, lab exam, presentation around class hours",
+        "Techniques: to-do list, calendar, focus blocks, buffer, sleep, daily review"
+       ]
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "topic": "Leadership",
+   "subtopics": [
+    {
+     "id": "traits",
+     "title": "Leadership and traits of leaders",
+     "theory_md": "**Leadership** is the ability to influence, guide and inspire people towards a common goal. A leader is made by qualities, not by position.\n\n**Ten qualities:** vision; integrity and honesty; communication; decisiveness; confidence and courage; empathy; commitment and passion; accountability; creativity and adaptability; delegation and team building.\n\nExamples: **Gandhi** (vision, integrity), **A.P.J. Abdul Kalam** (inspiring, humble).\n\nA good answer: define, list ten with a half-line each, one example, one-line conclusion.",
+     "basics_md": "A manager organises work; a leader makes people want to do it. The difference is trust and direction.",
+     "key_points": [
+      "Leadership = influencing and inspiring people towards a goal",
+      "Vision, integrity, communication, decisiveness, empathy, accountability",
+      "Delegation and team building",
+      "Example of a real leader",
+      "Leadership is learnable"
+     ],
+     "questions": [
+      {
+       "id": "tr-q1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "Which is a core leadership trait?",
+       "options": [
+        "Integrity",
+        "Shyness",
+        "Avoiding decisions",
+        "Blaming others"
+       ],
+       "answer_index": 0,
+       "why": "Honesty and integrity earn trust."
+      },
+      {
+       "id": "tr-q2",
+       "kind": "mcq",
+       "level": 1,
+       "q": "A leader who owns the team's failure shows",
+       "options": [
+        "Accountability",
+        "Aggression",
+        "Weakness",
+        "Delegation"
+       ],
+       "answer_index": 0,
+       "why": "Taking responsibility is accountability."
+      },
+      {
+       "id": "tr-q3",
+       "kind": "short",
+       "level": 2,
+       "marks": 5,
+       "q": "Define leadership. List ten qualities of an effective leader.",
+       "model_answer_md": "**Leadership** is the ability to influence and guide people towards a shared goal.\n\n1. **Vision:** clear picture of the goal (Kalam, India 2020).\n2. **Integrity:** words match actions (Gandhi).\n3. **Communication:** explains and listens.\n4. **Decisiveness:** timely decisions.\n5. **Confidence and courage:** faces risk.\n6. **Empathy:** understands others.\n7. **Commitment:** leads by example.\n8. **Accountability:** owns failures.\n9. **Adaptability and creativity:** accepts change.\n10. **Delegation and team building:** trusts people with work.\n\nLeadership is a learnable set of qualities, not a position.",
+       "points": [
+        "Definition",
+        "Ten qualities with a phrase each",
+        "Example of a leader"
+       ]
+      },
+      {
+       "id": "tr-p1",
+       "pyq": "ef831ef15e865ddc",
+       "level": 2,
+       "points": [
+        "Definition of effective leader",
+        "Ten qualities: vision, integrity, communication, decisiveness, confidence, empathy, commitment, accountability, adaptability, delegation",
+        "Example of a leader or project team",
+        "Conclusion"
+       ]
+      },
+      {
+       "id": "tr-p2",
+       "pyq": "fa904d1aa5e14350",
+       "level": 2,
+       "points": [
+        "Common traits: vision, integrity, confidence, communication, decision-making, accountability, courage, empathy, motivation, adaptability",
+        "EI defined (Goleman's five components)",
+        "Role of EI in leadership: self-awareness, self-regulation, motivation, empathy, social skills",
+        "Example of a leader with high EI"
+       ]
+      }
+     ]
+    },
+    {
+     "id": "listening-case",
+     "title": "Listening, empathy and the case passage",
+     "theory_md": "**Listening** is a leadership skill: full attention, understanding the message and the feeling, thoughtful response.\n\nBernard Baruch: successful people \"do more listening than talking\".\n- **Builds trust:** people feel valued, share honest feedback.\n- **Empowers members:** voice in decisions, ownership, delegation by strengths.\n- **Drives innovation:** psychological safety, diverse ideas.\n\n**Case passage (Amit):** a technical expert whose team's morale fell because he focused only on tasks. He sought a mentor, held one-on-one meetings, gave public recognition and encouraged collaboration; the team became cohesive and the project succeeded.\n\n**Empathy and relationships** build trust, raise morale, improve communication, resolve conflicts and encourage creativity.",
+     "basics_md": "A leader who talks all day learns nothing new. A leader who listens learns what the team actually needs.",
+     "key_points": [
+      "Listening: trust, empowerment, innovation",
+      "Empathy and relationships: trust, morale, communication, conflict",
+      "Case: task-only approach lowers morale",
+      "Steps taken: mentor, one-on-ones, recognition, collaboration",
+      "Quote or example for each point"
+     ],
+     "questions": [
+      {
+       "id": "lc-q1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "Amit's team morale dipped mainly because he",
+       "options": [
+        "Was too friendly",
+        "Focused only on tasks and deadlines",
+        "Delegated too much",
+        "Hired new people"
+       ],
+       "answer_index": 1,
+       "why": "He ignored the people side."
+      },
+      {
+       "id": "lc-q2",
+       "kind": "mcq",
+       "level": 1,
+       "q": "Listening to a team member without interrupting mainly builds",
+       "options": [
+        "Distance",
+        "Trust",
+        "Fear",
+        "Competition"
+       ],
+       "answer_index": 1,
+       "why": "Feeling heard creates trust."
+      },
+      {
+       "id": "lc-q3",
+       "kind": "short",
+       "level": 3,
+       "marks": 5,
+       "q": "'Successful people do more listening than talking.' Evaluate the significance of listening for leaders.",
+       "model_answer_md": "**Meaning:** a leader's influence comes from understanding people, not just giving orders.\n\n**1. Builds trust:** people who are heard feel respected and share honest feedback. Example: regular one-on-one meetings.\n\n**2. Empowers members:** giving a voice in decisions creates ownership and confidence. Example: a junior presents her own solution.\n\n**3. Drives innovation:** psychological safety lets people propose new ideas; diverse views combine. Example: hackathons and open forums.\n\n**Conclusion:** listening turns a boss into a leader.",
+       "points": [
+        "Meaning of quote",
+        "Trust",
+        "Empowerment",
+        "Innovation",
+        "Examples and conclusion"
+       ]
+      },
+      {
+       "id": "lc-p1",
+       "pyq": "2b54df71a81085ef",
+       "level": 3,
+       "points": [
+        "Meaning: influence comes from understanding, active listening defined",
+        "Significance: better decisions, fewer misunderstandings, early warning",
+        "Builds trust (example)",
+        "Empowers members (example)",
+        "Drives innovation (example); conclusion"
+       ]
+      },
+      {
+       "id": "lc-p2",
+       "pyq": "b5b084b6af52861d",
+       "level": 1,
+       "points": [
+        "Leadership: ability to influence, guide and inspire a group towards a common goal",
+        "Morale dipped: Amit focused only on tasks and deadlines",
+        "He did not connect with members or recognise contributions; communication issues"
+       ]
+      },
+      {
+       "id": "lc-p3",
+       "pyq": "5b1b64ff73e537e5",
+       "level": 2,
+       "points": [
+        "Recognised the problem from falling morale",
+        "Sought a mentor's advice",
+        "One-on-one meetings with each member",
+        "Public recognition of contributions",
+        "Encouraged collaboration; result: cohesive team"
+       ]
+      },
+      {
+       "id": "lc-p4",
+       "pyq": "fb8e3d3d6076c7ff",
+       "level": 2,
+       "points": [
+        "Empathy and relationships build trust",
+        "Raise morale and motivation",
+        "Improve communication and resolve conflict",
+        "Encourage collaboration and creativity",
+        "Link to the Amit passage"
+       ]
+      },
+      {
+       "id": "lc-p5",
+       "pyq": "c004c870d8ed5695",
+       "level": 2,
+       "points": [
+        "Benefit to Amit: discovered leadership potential, confidence, successful project, reputation",
+        "Benefit to team: felt heard and valued, morale rose, communication and collaboration improved",
+        "Win-win outcome"
+       ]
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "topic": "SWOT analysis",
+   "subtopics": [
+    {
+     "id": "swot-meaning",
+     "title": "SWOT: meaning and significance",
+     "theory_md": "**SWOT analysis** is a planning tool that evaluates **S**trengths, **W**eaknesses, **O**pportunities and **T**hreats.\n- **Strengths** and **Weaknesses** are **internal** (inside you, within your control).\n- **Opportunities** and **Threats** are **external** (environment).\n\n**Significance in life:** self-awareness, realistic goals, building on strengths, correcting weaknesses, using opportunities, preparing for threats, career choice and better decisions.\n\nStrategy: use S to grasp O; fix W using O; use S to meet T; reduce W to avoid T.",
+     "basics_md": "Draw a 2x2 grid: inside against outside, helpful against harmful. Fill it honestly and a plan appears.",
+     "key_points": [
+      "SWOT = Strengths, Weaknesses, Opportunities, Threats",
+      "S and W internal; O and T external",
+      "Significance: self-awareness, goals, career decisions",
+      "Action plan linking quadrants",
+      "Example for each"
+     ],
+     "questions": [
+      {
+       "id": "sw-q1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "In SWOT, which are internal factors?",
+       "options": [
+        "Strengths and weaknesses",
+        "Opportunities and threats",
+        "Strengths and opportunities",
+        "Weaknesses and threats"
+       ],
+       "answer_index": 0,
+       "why": "S and W are within the person."
+      },
+      {
+       "id": "sw-q2",
+       "kind": "mcq",
+       "level": 1,
+       "q": "'Heavy competition for placements' is a",
+       "options": [
+        "Strength",
+        "Weakness",
+        "Opportunity",
+        "Threat"
+       ],
+       "answer_index": 3,
+       "why": "An external harmful factor is a threat."
+      },
+      {
+       "id": "sw-q3",
+       "kind": "short",
+       "level": 2,
+       "marks": 4,
+       "q": "What is SWOT analysis? Discuss its significance in life.",
+       "model_answer_md": "**SWOT analysis** assesses one's **S**trengths and **W**eaknesses (internal) and **O**pportunities and **T**hreats (external).\n\n**Significance**\n- Gives self-awareness.\n- Helps set realistic goals.\n- Builds on strengths and corrects weaknesses.\n- Uses opportunities and prepares for threats.\n- Aids career choice and decisions.\n\n**Example:** a student weak in speaking but strong in coding joins a debate club and enters coding contests.",
+       "points": [
+        "Four terms with internal/external",
+        "Significance points",
+        "Example"
+       ]
+      },
+      {
+       "id": "sw-p1",
+       "pyq": "7ee021e603a19cf5",
+       "level": 1,
+       "points": [
+        "SWOT: Strengths and Weaknesses (internal), Opportunities and Threats (external)",
+        "Significance: self-awareness, goals, using strengths, correcting weaknesses, career choice",
+        "Example"
+       ]
+      }
+     ]
+    },
+    {
+     "id": "personal-swot",
+     "title": "Personal SWOT with example",
+     "theory_md": "A **personal SWOT** is drawn as a table, then turned into an action plan.\n\n| | Helpful | Harmful |\n|---|---|---|\n| **Internal** | Strengths: maths and programming, hardworking, team player | Weaknesses: stage fear, poor time management, procrastination |\n| **External** | Opportunities: coding clubs, hackathons, internships, NPTEL, placements | Threats: strong competition, fast-changing technology, social-media distraction |\n\n**Action plan:** hackathons (S+O), presentations and GDs for stage fear (W+O), planner against procrastination, online courses and screen limits (T).\n\nWrite honestly about **yourself**, as a first-year B.Tech student.",
+     "basics_md": "First list what is true about you, then what is happening around you, then connect the two.",
+     "key_points": [
+      "Definition of SWOT first",
+      "2x2 table with 2-3 entries per quadrant, personal",
+      "Entries must be about you",
+      "Action plan joining quadrants"
+     ],
+     "questions": [
+      {
+       "id": "ps-q3a",
+       "kind": "mcq",
+       "level": 1,
+       "q": "Which is an internal weakness for a first-year student?",
+       "options": [
+        "Placement season",
+        "Procrastination",
+        "Online courses",
+        "Competition"
+       ],
+       "answer_index": 1,
+       "why": "A habit of one's own is internal."
+      },
+      {
+       "id": "ps-q3b",
+       "kind": "mcq",
+       "level": 1,
+       "q": "An action plan after SWOT should",
+       "options": [
+        "Ignore weaknesses",
+        "Link strengths to opportunities and fix weaknesses",
+        "Only list threats",
+        "Avoid goals"
+       ],
+       "answer_index": 1,
+       "why": "The plan turns the table into action."
+      },
+      {
+       "id": "ps-q3c",
+       "kind": "short",
+       "level": 2,
+       "marks": 5,
+       "q": "Prepare a personal SWOT analysis for yourself as a first-year B.Tech student, with an action plan.",
+       "model_answer_md": "**SWOT** assesses Strengths, Weaknesses (internal) and Opportunities, Threats (external).\n\n| | Helpful | Harmful |\n|---|---|---|\n| **Internal** | **S:** good at mathematics; hardworking; team player | **W:** hesitation in public speaking; procrastination |\n| **External** | **O:** coding clubs, hackathons, internships, online courses | **T:** strong competition; fast-changing technology; social-media distraction |\n\n**Action plan:** use strengths in hackathons; speak in presentations and GDs; use a planner against procrastination; take online courses and limit screen time.",
+       "points": [
+        "Meaning",
+        "Four quadrants with personal entries",
+        "Action plan"
+       ]
+      },
+      {
+       "id": "ps-p1",
+       "pyq": "a3361466c15543eb",
+       "level": 2,
+       "points": [
+        "SWOT defined: S, W internal; O, T external",
+        "Personal example with all four quadrants",
+        "Action plan linking S with O, W with O, guarding against T"
+       ]
+      },
+      {
+       "id": "ps-p2",
+       "pyq": "db7a1377c72e4bf2",
+       "level": 2,
+       "points": [
+        "SWOT defined, internal versus external",
+        "Personal table of a first-year student",
+        "Action plan"
+       ]
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "topic": "Stress management",
+   "subtopics": [
+    {
+     "id": "stress",
+     "title": "Stress: causes, effects and coping",
+     "theory_md": "**Stress** is the body's and mind's reaction to demands (stressors) that seem to exceed one's resources.\n- **Eustress:** positive, motivating (a competition).\n- **Distress:** negative, harmful (exam fear, overload).\n\n**Causes (students):** exams, workload, competition, homesickness, money, relationships, poor sleep.\n**Effects:** headache, fatigue, poor sleep (physical); anxiety, irritability (emotional); poor focus, withdrawal (behavioural).\n\n**Coping:** time management, exercise, 7 to 8 hours sleep, breathing and meditation, hobbies, talking to friends or counsellor, positive self-talk, avoiding caffeine and substance use.",
+     "basics_md": "Stress is the gap between what is asked of you and what you feel able to do. Shrink the demand, grow the resource, or change how you read the situation.",
+     "key_points": [
+      "Stress = reaction to demands; eustress versus distress",
+      "Causes: academics, social, personal",
+      "Effects: physical, emotional, behavioural",
+      "Management: planning, exercise, sleep, meditation, support"
+     ],
+     "questions": [
+      {
+       "id": "st-q1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "Positive, motivating stress is called",
+       "options": [
+        "Distress",
+        "Eustress",
+        "Burnout",
+        "Anxiety"
+       ],
+       "answer_index": 1,
+       "why": "Eustress is helpful stress."
+      },
+      {
+       "id": "st-q2",
+       "kind": "mcq",
+       "level": 1,
+       "q": "Which is a healthy way to cope with stress?",
+       "options": [
+        "Skipping sleep",
+        "Regular exercise and sleep",
+        "Isolation",
+        "Caffeine overload"
+       ],
+       "answer_index": 1,
+       "why": "Exercise and rest reduce stress."
+      },
+      {
+       "id": "st-q3",
+       "kind": "short",
+       "level": 2,
+       "marks": 5,
+       "q": "What is stress? Suggest five ways to manage it.",
+       "model_answer_md": "**Stress** is the reaction to demands that seem to exceed one's ability to cope; it can be positive (eustress) or harmful (distress).\n\n**Management**\n1. Plan time and priorities to avoid last-minute pressure.\n2. Exercise daily.\n3. Sleep 7 to 8 hours and eat well.\n4. Practise deep breathing or meditation.\n5. Talk to friends, mentors or a counsellor; use positive self-talk.",
+       "points": [
+        "Definition with types",
+        "Five coping methods"
+       ]
+      }
+     ]
+    },
+    {
+     "id": "mental-hygiene",
+     "title": "Mental hygiene and distorted thoughts",
+     "theory_md": "**Mental hygiene** is the set of practices that maintain and promote mental health and prevent mental disorders, as physical hygiene keeps the body healthy.\n\n**Distorted thoughts** (cognitive distortions) are irrational exaggerated thoughts: *all-or-nothing* (\"if I fail, I am a failure\"), *catastrophising*, *overgeneralising*, *mind reading*.\n\n**Challenging them:**\n1. Identify the thought.\n2. Examine evidence for and against.\n3. Look for alternative explanations.\n4. Avoid always/never labels.\n5. Decatastrophise: worst case, can I cope?\n6. Reframe with positive self-talk.\n7. Talk it out with a friend, mentor or counsellor.",
+     "basics_md": "Your mind tells you stories. Mental hygiene is checking whether the story matches the facts.",
+     "key_points": [
+      "Mental hygiene = maintaining and promoting mental health",
+      "Distortions: all-or-nothing, catastrophising, overgeneralising",
+      "Challenge: identify, evidence, alternatives, reframe",
+      "Support: exercise, sleep, meditation, talking"
+     ],
+     "questions": [
+      {
+       "id": "mh-q1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "'If I fail this test I am a total failure' is",
+       "options": [
+        "Balanced thinking",
+        "All-or-nothing thinking",
+        "Mind reading",
+        "Gratitude"
+       ],
+       "answer_index": 1,
+       "why": "It sees only two extremes."
+      },
+      {
+       "id": "mh-q2",
+       "kind": "mcq",
+       "level": 1,
+       "q": "The first step in challenging a distorted thought is to",
+       "options": [
+        "Suppress it",
+        "Identify it",
+        "Share it online",
+        "Ignore sleep"
+       ],
+       "answer_index": 1,
+       "why": "Notice and write the thought first."
+      },
+      {
+       "id": "mh-q3",
+       "kind": "short",
+       "level": 3,
+       "marks": 5,
+       "q": "What is mental hygiene? Suggest ways to challenge distorted thoughts. (150 words)",
+       "model_answer_md": "**Mental hygiene** means practices that maintain and promote mental health and prevent mental disorders, like physical hygiene for the body.\n\n**Distorted thoughts** are irrational, exaggerated thoughts: all-or-nothing, catastrophising, overgeneralising, mind reading.\n\n**Ways to challenge them**\n1. Identify the thought when you feel upset.\n2. Examine the evidence for and against.\n3. Look for alternative explanations.\n4. Replace 'always' and 'never' with balanced words.\n5. Decatastrophise: ask what is the worst that can realistically happen.\n6. Reframe with positive self-talk.\n7. Talk to a trusted friend, mentor or counsellor.\n\nExercise, sleep, meditation and a gratitude journal support this.",
+       "points": [
+        "Mental hygiene defined",
+        "Distorted thoughts with examples",
+        "At least five challenging methods"
+       ]
+      },
+      {
+       "id": "mh-p1",
+       "pyq": "1fc834b303e1bd99",
+       "level": 2,
+       "points": [
+        "Mental hygiene: practices that maintain and promote mental health",
+        "Distorted thoughts: all-or-nothing, catastrophising, overgeneralising, mind reading",
+        "Ways to challenge: identify, evidence, alternatives, avoid labels, decatastrophise, reframe, talk it out"
+       ]
+      }
+     ]
+    }
+   ]
+  }
+ ]
+}

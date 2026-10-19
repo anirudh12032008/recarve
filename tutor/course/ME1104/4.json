@@ -1,0 +1,831 @@
+{
+ "code": "ME1104",
+ "unit": "Section of Solids",
+ "written": "2026-10-19",
+ "by": "claude-sonnet-5-5, in a Claude Code session",
+ "topics": [
+  {
+   "topic": "Cutting planes",
+   "subtopics": [
+    {
+     "id": "section-basics",
+     "title": "Section planes and what is drawn",
+     "theory_md": "A **section plane** (cutting plane) cuts the solid and the part between it and the observer is removed; the cut face is **hatched**: thin lines at $45^\\circ$, 2 to 3 mm apart.\n\nFour useful positions:\n- **Perpendicular to VP, inclined to HP** (an AIP-type plane): a line in the FV (its VT); the TV section is foreshortened.\n- **Perpendicular to HP, inclined to VP** (AVP): a line in the TV (its HT).\n- **Parallel to HP**: section is its true shape in the TV. **Parallel to VP**: true shape in the FV.\n\nA plane inclined to the view appears as a line only in the view it is perpendicular to. Its **true shape** needs an auxiliary view with $x_1y_1$ parallel to that line.",
+     "basics_md": "Slice a loaf of bread. The cut face is the section. If you look straight at the cut face you see its real size; if you look from the side it looks squashed. That squashed picture is the apparent section; the straight-on picture is the true shape.",
+     "key_points": [
+      "Section plane cuts the solid; the part towards the observer is removed",
+      "Cut face hatched with thin lines at 45 degrees",
+      "Plane perpendicular to VP: line in FV (VT); perpendicular to HP: line in TV (HT)",
+      "Plane parallel to HP/VP gives the true shape directly in TV/FV",
+      "Otherwise the true shape is found by an auxiliary view with x1y1 parallel to the section line"
+     ],
+     "questions": [
+      {
+       "id": "sb-q1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "The section of a solid by a plane parallel to the HP is seen in its true shape in the",
+       "options": [
+        "front view",
+        "top view",
+        "side view only",
+        "neither view"
+       ],
+       "answer_index": 1,
+       "why": "A face parallel to the HP projects to its true size on the HP, that is the top view."
+      },
+      {
+       "id": "sb-q2",
+       "kind": "mcq",
+       "level": 1,
+       "q": "The cut face in a sectional view is hatched with thin lines inclined at",
+       "options": [
+        "$30^\\circ$",
+        "$45^\\circ$",
+        "$60^\\circ$",
+        "$90^\\circ$"
+       ],
+       "answer_index": 1,
+       "why": "Standard section lining is $45^\\circ$, evenly spaced."
+      },
+      {
+       "id": "sb-q3",
+       "kind": "mcq",
+       "level": 2,
+       "q": "A section plane is perpendicular to the VP and inclined at $40^\\circ$ to the HP. In the FV it appears as",
+       "options": [
+        "a line inclined at $40^\\circ$ to XY",
+        "a line inclined at $50^\\circ$ to XY",
+        "a true-shape polygon",
+        "a point"
+       ],
+       "answer_index": 0,
+       "why": "A plane perpendicular to the VP is edge-on in the FV and shows its inclination to the HP in true size."
+      },
+      {
+       "id": "sb-q4",
+       "kind": "short",
+       "level": 2,
+       "marks": 3,
+       "q": "State the four common positions of a section plane and say in which view each appears as a line.",
+       "model_answer_md": "1. **Perpendicular to VP, inclined to HP:** a line in the FV (VT); TV section is apparent, true shape needs an auxiliary view.\n2. **Perpendicular to HP, inclined to VP:** a line in the TV (HT).\n3. **Parallel to HP:** a line in the FV; true shape in the TV.\n4. **Parallel to VP:** a line in the TV; true shape in the FV.",
+       "points": [
+        "Perpendicular to VP, inclined to HP: line in FV (VT)",
+        "Perpendicular to HP, inclined to VP: line in TV (HT)",
+        "Parallel to HP: line in FV, true shape in TV",
+        "Parallel to VP: line in TV, true shape in FV"
+       ]
+      }
+     ]
+    },
+    {
+     "id": "perp-vp-pyramid",
+     "title": "Pyramid cut by a plane perpendicular to VP and inclined to HP",
+     "theory_md": "Standard job: pyramid on its base on the HP, section plane perpendicular to the VP at $\\theta$ to the HP, through a stated point of the axis.\n\n1. Draw TV and FV of the pyramid.\n2. Draw the **section line** in the FV through the point at $\\theta$ to XY; mark $1',2',3'\\dots$ where it crosses the slant edges.\n3. Project each point **down onto the same edge** in the TV; join in order: the **sectional TV**, hatched.\n4. **True shape:** $x_1y_1$ parallel to the section line, projectors perpendicular to it, distances taken from XY in the TV; join.\n\nThe cut part (above the line) is removed in the FV. If the line leaves through the base, the base edge is cut too.",
+     "basics_md": "Think of a tent cut by a knife. In the front view the knife is a straight line. Where it crosses each rope-edge of the tent gives one corner of the cut face. Drop those corners straight down to the plan, onto the same ropes.",
+     "key_points": [
+      "Section line in FV through the given axis point at the given angle to XY",
+      "Cut points on slant edges projected to the same edges in TV",
+      "Sectional TV joined in order and hatched at 45 degrees",
+      "True shape on x1y1 parallel to section line, distances from XY of the TV",
+      "Cut part removed in FV; final answer shows FV, sectional TV and true shape"
+     ],
+     "questions": [
+      {
+       "id": "pv-q1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "The true shape of a section by a plane perpendicular to the VP and inclined to the HP is obtained by taking $x_1y_1$",
+       "options": [
+        "perpendicular to XY",
+        "parallel to the section line in the FV",
+        "parallel to XY",
+        "parallel to the axis in the TV"
+       ],
+       "answer_index": 1,
+       "why": "Viewing perpendicular to the cutting plane needs the new reference line parallel to its edge-on view."
+      },
+      {
+       "id": "pv-q2",
+       "kind": "mcq",
+       "level": 2,
+       "q": "In the sectional TV, a cut point found on the FV edge $o'a'$ is projected down onto",
+       "options": [
+        "the edge $oa$ of the TV",
+        "the centre $o$ only",
+        "the nearest base edge",
+        "any edge, it does not matter"
+       ],
+       "answer_index": 0,
+       "why": "Each section point lies on one particular edge, so it must be projected onto the same edge in the TV."
+      },
+      {
+       "id": "pv-q3",
+       "kind": "mcq",
+       "level": 2,
+       "q": "A square pyramid is cut by a plane which meets every slant edge. The true shape of the section is a",
+       "options": [
+        "triangle",
+        "quadrilateral",
+        "pentagon",
+        "ellipse"
+       ],
+       "answer_index": 1,
+       "why": "Four slant edges are cut, so four corners."
+      },
+      {
+       "id": "pv-q4",
+       "kind": "numerical",
+       "level": 2,
+       "marks": 4,
+       "q": "A square pyramid, base 30 mm, axis 60 mm, stands on its base on the HP with all base edges equally inclined to the VP. A plane perpendicular to the VP and inclined at $40^\\circ$ to the HP bisects the axis. Find where the plane cuts the two edges that appear as the extreme slant lines in the FV, and the true length of the section along the cut line.",
+       "model_answer_md": "**Setup.** Half-diagonal of base $=30/\\sqrt2=21.21$ mm. The extreme edges in the FV run from the apex (60 mm) to the corners at $\\pm21.21$ mm. Plane through the axis midpoint (30 mm height), slope $\\tan40^\\circ$.\n\n**Right edge:** $z=60(1-x/21.21)$ and $z=30-x\\tan40^\\circ$ gives $x=15.08$ mm, $z=17.35$ mm.\n**Left edge:** $z=60(1-x/21.21)$ and $z=30+x\\tan40^\\circ$ gives $x=8.18$ mm (left), $z=36.86$ mm.\n\n**Length along the cut line** $=\\sqrt{(15.08+8.18)^2+(36.86-17.35)^2}=30.36$ mm.\n\nThe other two edges are cut at 30 mm height on the axis line, 10.61 mm to either side of the FV axis in the TV, so the true shape is a four-sided figure with diagonals 30.36 mm and 21.21 mm.",
+       "points": [
+        "Half-diagonal 21.21 mm",
+        "Right cut at 15.08 mm from axis, 17.35 mm high",
+        "Left cut at 8.18 mm from axis, 36.86 mm high",
+        "Length along cut line 30.36 mm",
+        "Other two edges cut at 30 mm height, 10.61 mm either side of axis in the TV"
+       ]
+      },
+      {
+       "id": "pv-p1",
+       "pyq": "24029a7e3b81fa00",
+       "level": 2,
+       "points": [
+        "Draw the TV and FV of the solid in the given position, base on HP, with the stated orientation of the base edge",
+        "Pentagon with one base edge perpendicular to the VP, apex at its centre; FV triangle, apex 60 mm",
+        "Draw the section line (VT) in the FV through the given point of the axis, at the given angle to XY; it is a line because the plane is perpendicular to the VP",
+        "Mark 1', 2', 3'... where the line cuts the edges; project them down onto the same edges in the TV and join in order",
+        "Sectional TV: hatch the section with thin lines at 45 degrees; FV shows the cut line, the part above is removed",
+        "True shape: x1y1 parallel to the section line, projectors perpendicular to it, distance of each point from x1y1 equals its distance from XY in the TV; join and hatch"
+       ]
+      },
+      {
+       "id": "pv-p2",
+       "pyq": "308b1662e9414d9e",
+       "level": 2,
+       "points": [
+        "TV: square 30 mm with sides at 45 degrees to XY, apex at centre; FV triangle of height 60 mm",
+        "Draw the section line (VT) in the FV through the given point of the axis, at the given angle to XY; it is a line because the plane is perpendicular to the VP",
+        "Mark 1', 2', 3'... where the line cuts the edges; project them down onto the same edges in the TV and join in order",
+        "Sectional TV: hatch the section with thin lines at 45 degrees; FV shows the cut line, the part above is removed",
+        "True shape: x1y1 parallel to the section line, projectors perpendicular to it, distance of each point from x1y1 equals its distance from XY in the TV; join and hatch"
+       ]
+      },
+      {
+       "id": "pv-p3",
+       "pyq": "54d1829aee99a0af",
+       "level": 2,
+       "points": [
+        "TV: square 40 mm, sides at 45 degrees to XY (diagonal perpendicular to XY); FV base 56.57 mm, height 60 mm",
+        "Section line through 30 mm on the axis at 45 degrees to XY, cutting the edges at a', b', c', d'",
+        "Project to the TV on the same edges; join; hatch (sectional TV)",
+        "Right extreme edge is cut at 26.75 mm from the axis, 3.25 mm above the base; left at 9.61 mm, 39.61 mm high",
+        "True shape on x1y1 parallel to the cut line: quadrilateral about 51.4 mm long and 28.3 mm wide"
+       ]
+      },
+      {
+       "id": "pv-p4",
+       "pyq": "35d437eab8655d28",
+       "level": 2,
+       "points": [
+        "TV: rectangle 50 x 30 with longer side parallel to XY, diagonals meeting at o; FV triangle of base 50 mm and an assumed axis height, stated",
+        "Point on the axis 20 mm below the apex; section line through it at 30 degrees to XY, cutting the edges",
+        "Project to the TV on the same edges; join and hatch (sectional TV)",
+        "True shape on x1y1 parallel to the section line; hatch"
+       ]
+      },
+      {
+       "id": "pv-p5",
+       "pyq": "17f9354acd172057",
+       "level": 2,
+       "points": [
+        "Rectangular pyramid 30 x 50 with the 50 mm side parallel to VP; state the assumed axis height",
+        "Section line 20 mm below the apex on the axis at 30 degrees to XY",
+        "Cut points projected to the TV; sectional TV hatched",
+        "True shape on x1y1 parallel to the section line"
+       ]
+      },
+      {
+       "id": "pv-p6",
+       "pyq": "33347dcbe2dc9190",
+       "level": 3,
+       "points": [
+        "Hexagon side 30 mm with two sides parallel to XY; FV apex 65 mm; point on the axis 25 mm above the base",
+        "Section line at 45 degrees to XY through that point; on the right it misses the extreme slant edge and leaves through the base (cuts the base at 25 mm from the axis)",
+        "Other cut points: slant edges at 12.0 mm from axis, 13.0 mm high (right pair) and 7.5 mm, 32.5 mm (left pair) and 12.63 mm, 37.63 mm (left extreme edge)",
+        "Project to the TV on the same edges, plus the two base-edge points; join all seven points; hatch",
+        "True shape on x1y1 parallel to the section line: a seven-sided figure"
+       ]
+      }
+     ]
+    },
+    {
+     "id": "perp-hp-parallel",
+     "title": "Plane perpendicular to HP, or parallel to a reference plane",
+     "theory_md": "**Plane perpendicular to HP, inclined to VP (AVP):** the section line is drawn in the **TV** through the stated point at $\\phi$ to XY (its HT). Cut points are projected **up** to the same edges in the FV to give the **sectional FV**. True shape: $x_1y_1$ parallel to the TV section line, projectors perpendicular to it, and distance of each point from $x_1y_1$ equals its **height above XY** in the FV.\n\n**Plane parallel to VP** (a distance from the axis): the TV shows a line parallel to XY; the section is its **true shape in the FV**, so no auxiliary view is needed. Remove the part nearer the observer.",
+     "basics_md": "Same method as before, with the views swapped. The plane is edge-on in the plan this time, so you mark cuts in the plan and lift them to the elevation. Heights come from the elevation.",
+     "key_points": [
+      "AVP section line is drawn in the TV at the given angle to XY",
+      "Cut points projected up to the same edges in the FV give the sectional FV",
+      "True shape on x1y1 parallel to the TV line; distances are heights from the FV",
+      "Plane parallel to VP: section is true shape in the FV; no auxiliary view",
+      "Part nearer the observer is removed; hatch at 45 degrees"
+     ],
+     "questions": [
+      {
+       "id": "ph-q1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "A section plane perpendicular to the HP and inclined to the VP appears as a line in the",
+       "options": [
+        "front view",
+        "top view",
+        "both views",
+        "neither view"
+       ],
+       "answer_index": 1,
+       "why": "Edge-on in the view it is perpendicular to, the TV."
+      },
+      {
+       "id": "ph-q2",
+       "kind": "mcq",
+       "level": 2,
+       "q": "For an AVP section, the distance of a point from $x_1y_1$ in the true-shape view equals its",
+       "options": [
+        "distance from XY in the TV",
+        "height above XY in the FV",
+        "distance from the axis in the FV",
+        "slant length in the FV"
+       ],
+       "answer_index": 1,
+       "why": "The new view looks along the TV line, so the new distance is the height seen in the FV."
+      },
+      {
+       "id": "ph-q3",
+       "kind": "mcq",
+       "level": 2,
+       "q": "A plane parallel to the VP cuts a pyramid. The section is seen in true shape in the",
+       "options": [
+        "top view",
+        "front view",
+        "neither, an auxiliary view is needed",
+        "both views"
+       ],
+       "answer_index": 1,
+       "why": "A plane parallel to the VP projects to true shape on the VP."
+      },
+      {
+       "id": "ph-q4",
+       "kind": "numerical",
+       "level": 2,
+       "marks": 4,
+       "q": "A triangular pyramid of base edge 40 mm and axis 50 mm rests on its base on the HP with one base edge parallel to and nearest the VP. A plane parallel to the VP cuts it 10 mm in front of the axis (towards the observer). Find the corner points of the section in the FV and describe its shape.",
+       "model_answer_md": "**Setup.** Circumradius $=40/\\sqrt3=23.09$ mm, inradius $=11.55$ mm. The front base edge lies 11.55 mm in front of the axis. The plane is 10 mm in front.\n\n**Slant edges to the front corners** are cut at fraction $10/11.55=0.866$ of their plan length: $x=\\pm17.32$ mm from axis, height $50(1-0.866)=6.7$ mm.\n**Base edges at the sides** are cut at $x=\\pm19.11$ mm, height 0.\n\nThe plane does not reach the front base edge (11.55 mm away) and the back edges are behind it.\n\n**Section (true shape in the FV):** a **trapezium**, base 38.22 mm, top 34.64 mm, height 6.7 mm. Hatch at $45^\\circ$ and remove the part in front of the plane.",
+       "points": [
+        "Circumradius 23.09 mm, inradius 11.55 mm",
+        "Slant edges cut at 17.32 mm either side, 6.7 mm high",
+        "Base edges cut at 19.11 mm either side, at the base level",
+        "Section is a trapezium, 38.22 mm base and 34.64 mm top, true shape in the FV",
+        "Part nearer the observer removed, hatch at 45 degrees"
+       ]
+      },
+      {
+       "id": "ph-p1",
+       "pyq": "07193cbe24e310d0",
+       "level": 2,
+       "points": [
+        "TV: pentagon side 30 mm with one edge parallel to XY, apex at centre; FV triangle, apex 60 mm",
+        "Plane perpendicular to HP at 60 degrees to VP through the midpoint of the axis: section line in the TV through the centre o at 60 degrees to XY",
+        "Mark the cut points on the base edges and slant edges in the TV; project up to the same edges in the FV; join (sectional FV, front view with cut)",
+        "Sectional TV: the part on the observer's side removed, hatch at 45 degrees",
+        "True shape on x1y1 parallel to the TV line; distances are heights from the FV"
+       ]
+      },
+      {
+       "id": "ph-p2",
+       "pyq": "8060f08240d35b31",
+       "level": 2,
+       "points": [
+        "TV: equilateral triangle side 40 mm, edge ab parallel to XY and nearest it; FV triangle, apex 50 mm",
+        "Section line in the TV parallel to XY, 10 mm in front of the axis (towards the observer)",
+        "Mark 1, 2, 3, 4 where it cuts the edges; project up to the FV",
+        "Sectional FV is the true shape: a trapezium; hatch at 45 degrees, part in front removed",
+        "The TV shows the cutting line and the remaining outline"
+       ]
+      },
+      {
+       "id": "ph-p3",
+       "pyq": "cb5a663126c3047e",
+       "level": 2,
+       "points": [
+        "Stage I: axis perpendicular to VP, resting on a rectangular face: FV hexagon (side 30 mm) with a side on XY; TV rectangle 60 mm wide",
+        "Stage II: rotate the TV so the axis is parallel to XY (70 mm long); project the FV (rectangle 70 x 51.96 mm)",
+        "AVP at 45 degrees to the VP: section line in the TV through the point 25 mm from one end of the axis, at 45 degrees to XY",
+        "Cut points on the TV edges projected up to the FV: sectional FV (hatched)",
+        "True shape on x1y1 parallel to the TV line, distances equal heights in the FV; join, hatch"
+       ]
+      }
+     ]
+    },
+    {
+     "id": "cone-conics",
+     "title": "Cone cut by a plane perpendicular to VP: ellipse, parabola, hyperbola",
+     "theory_md": "For a cone cut by a plane perpendicular to the VP, compare the plane's angle $\\theta$ to the base with the generator angle $\\alpha=\\tan^{-1}(h/r)$:\n- through the apex: **triangle**\n- parallel to the base: **circle**\n- $\\theta<\\alpha$ (cuts all generators): **ellipse**\n- $\\theta=\\alpha$ (parallel to one generator): **parabola**\n- $\\theta>\\alpha$, or parallel to the axis: **hyperbola**\n\nFor the curve: divide the base circle into 12 generators, mark where the section line cuts each in the FV, project to the TV on the same generators, join with a smooth curve. For the ellipse, the **major axis** is the cut line in the FV; the minor axis is the chord at the midpoint of the major axis, not at the axis point.",
+     "basics_md": "A cone cut like a carrot: cut straight across gives a circle; slanted but all the way through gives an oval; cut parallel to the side gives a one-ended parabola; cut steep gives a hyperbola.",
+     "key_points": [
+      "Conic types decided by comparing the plane angle with the generator angle alpha",
+      "Ellipse when the plane angle is less than alpha; parabola when equal; hyperbola when greater",
+      "Generators drawn in FV and TV, cut points projected to the same generators",
+      "Major axis is the cut line in the FV",
+      "Smooth curve through the points; hatch the section"
+     ],
+     "questions": [
+      {
+       "id": "cc-q1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "A cone is cut by a plane parallel to one of its generators. The section is a",
+       "options": [
+        "circle",
+        "ellipse",
+        "parabola",
+        "hyperbola"
+       ],
+       "answer_index": 2,
+       "why": "Parallel to a generator gives the parabola."
+      },
+      {
+       "id": "cc-q2",
+       "kind": "mcq",
+       "level": 2,
+       "q": "A cone of base diameter 50 mm and axis 60 mm is cut by a plane perpendicular to the VP at $45^\\circ$ to the HP. The generator angle is $67.4^\\circ$. The section is a",
+       "options": [
+        "circle",
+        "parabola",
+        "hyperbola",
+        "ellipse"
+       ],
+       "answer_index": 3,
+       "why": "$\\theta=45^\\circ<67.4^\\circ$, so the plane cuts every generator: ellipse."
+      },
+      {
+       "id": "cc-q3",
+       "kind": "mcq",
+       "level": 2,
+       "q": "A plane parallel to the axis of a cone, 10 mm from it, gives a",
+       "options": [
+        "triangle",
+        "ellipse",
+        "hyperbola",
+        "parabola"
+       ],
+       "answer_index": 2,
+       "why": "A plane parallel to the axis (angle $90^\\circ>\\alpha$) not through the apex gives the hyperbola."
+      },
+      {
+       "id": "cc-q4",
+       "kind": "numerical",
+       "level": 2,
+       "marks": 4,
+       "q": "A cone of base diameter 50 mm and axis 60 mm stands on its base on the HP. A plane perpendicular to the VP and inclined at $45^\\circ$ to the HP passes through the midpoint of the axis. Find the major and minor axes of the section.",
+       "model_answer_md": "**Generator angle:** $\\tan^{-1}(60/25)=67.4^\\circ>45^\\circ$, so the section is an **ellipse**.\n\n**Cut points in the FV** (plane $z=30-x\\tan45^\\circ$, generators $z=60(1-|x|/25)$):\n- right generator: $x=21.43$ mm, $z=8.57$ mm\n- left generator: $x=8.82$ mm (left), $z=38.82$ mm\n\n**Major axis** $=\\sqrt{(21.43+8.82)^2+(38.82-8.57)^2}=42.78$ mm (the cut line in the FV).\n\n**Minor axis:** midpoint of the major axis at $x=6.30$ mm, $z=23.70$ mm; cone radius there $=25(1-23.70/60)=15.13$ mm; minor axis $=2\\sqrt{15.13^2-6.30^2}=27.5$ mm.",
+       "points": [
+        "Generator angle 67.4 degrees greater than 45 degrees, so ellipse",
+        "Generator cut points: (21.43, 8.57) and (8.82 left, 38.82)",
+        "Major axis 42.78 mm",
+        "Minor axis 27.5 mm, at the midpoint of the major axis",
+        "Units in mm"
+       ]
+      },
+      {
+       "id": "cc-q5",
+       "kind": "numerical",
+       "level": 3,
+       "marks": 3,
+       "q": "A cone of base diameter 50 mm and axis 60 mm is cut by a plane perpendicular to the VP and parallel to a generator, through the point on the axis 30 mm above the base. Name the curve and find its vertex and the axis length of the curve.",
+       "model_answer_md": "Generator angle $67.4^\\circ$, so the plane is at $67.4^\\circ$ to the HP: a **parabola**.\n\nPlane: $z=30+x_l\\tan67.4^\\circ$ on the left, generator $z=60-2.4x_l$. So $4.8x_l=30$, $x_l=6.25$ mm, vertex $z=45$ mm.\n\nOn the right the plane meets the base at $x=12.5$ mm. Length of the curve's axis (vertex to base) $=\\sqrt{(6.25+12.5)^2+45^2}=48.75$ mm.",
+       "points": [
+        "Plane parallel to generator: parabola",
+        "Vertex 6.25 mm left of axis, 45 mm high",
+        "Plane meets the base 12.5 mm to the right",
+        "Axis of the curve 48.75 mm"
+       ]
+      },
+      {
+       "id": "cc-p1",
+       "pyq": "0d0b515ecff90771",
+       "level": 2,
+       "points": [
+        "Generator angle tan^-1(60/25) = 67.4 degrees; plane at 45 degrees is smaller, so the section is an ellipse",
+        "FV triangle base 50 mm, height 60 mm; TV circle of 50 mm with 12 generators",
+        "Section line in the FV through the midpoint of the axis (30 mm) at 45 degrees; mark where it cuts the generators",
+        "Project down to the same generators in the TV: sectional TV (ellipse), hatched",
+        "True shape on x1y1 parallel to the section line; major axis is the cut line in the FV (42.78 mm); minor axis (27.5 mm) is the chord at the midpoint of the major axis"
+       ]
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "topic": "Auxiliary planes",
+   "subtopics": [
+    {
+     "id": "aip",
+     "title": "Auxiliary inclined plane (AIP) as the cutting plane",
+     "theory_md": "An **AIP** is a plane perpendicular to the VP and inclined to the HP. In the FV it is a line; the TV of the section is foreshortened. An **AVP** (auxiliary vertical plane) is perpendicular to the HP and inclined to the VP; it is a line in the TV.\n\nSteps for a pyramid in simple position: FV/TV; section line in the FV through the stated point (e.g. midpoint of axis) at $\\theta$ to XY; cut points on the slant edges; project to the TV on the same edges; **sectional TV**; the FV of the remaining solid is the **sectional FV** (cut line as the top edge). For a hexagonal pyramid, a plane at $30^\\circ$ through the midpoint of a 70 mm axis cuts all six slant edges.",
+     "basics_md": "The AIP is the 'knife seen edge-on in the elevation'. You draw it as a straight inclined line in the front view, and everything else follows from where that line crosses the edges.",
+     "key_points": [
+      "AIP: perpendicular to VP, inclined to HP; a line in the FV",
+      "AVP: perpendicular to HP, inclined to VP; a line in the TV",
+      "Section line through the stated axis point at the stated angle to XY",
+      "Cut points projected to the same edges in the other view",
+      "Sectional TV hatched; remaining solid shown in FV with the cut line"
+     ],
+     "questions": [
+      {
+       "id": "ai-q1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "An AIP is a plane which is",
+       "options": [
+        "perpendicular to the HP, inclined to the VP",
+        "perpendicular to the VP, inclined to the HP",
+        "parallel to the VP",
+        "inclined to both HP and VP"
+       ],
+       "answer_index": 1,
+       "why": "Auxiliary inclined plane: perpendicular to VP, inclined to HP."
+      },
+      {
+       "id": "ai-q2",
+       "kind": "mcq",
+       "level": 2,
+       "q": "A hexagonal pyramid (base side 20 mm, axis 70 mm, edge parallel to VP) is cut by an AIP at $30^\\circ$ through the axis midpoint. The number of slant edges cut is",
+       "options": [
+        "3",
+        "4",
+        "6",
+        "none, it cuts only the base"
+       ],
+       "answer_index": 2,
+       "why": "The plane is shallow ($30^\\circ$) compared with the edge angle, so it crosses all six edges."
+      },
+      {
+       "id": "ai-q3",
+       "kind": "numerical",
+       "level": 2,
+       "marks": 4,
+       "q": "Hexagonal pyramid, base side 20 mm, axis 70 mm, base on the HP with an edge parallel to the VP. An AIP at $30^\\circ$ to the HP bisects the axis. Find where the plane cuts the two extreme slant edges in the FV, and state the shape of the sectional TV.",
+       "model_answer_md": "**Setup.** Corner radius $=20$ mm (side of a regular hexagon). Extreme edges in the FV run from the apex (70 mm) to corners at $\\pm20$ mm. Plane through (axis, 35 mm), slope $\\tan30^\\circ$.\n\n**Right edge:** $x=11.98$ mm from axis, $z=28.09$ mm.\n**Left edge:** $x=8.58$ mm (left), $z=39.96$ mm.\n\nThe four remaining edges are cut at: $x=\\pm5.45$ mm right pair $z=31.85$ mm, and $x=4.62$ mm left pair $z=37.67$ mm.\n\nThe sectional TV is a **six-sided figure** (one point on each slant edge), hatched at $45^\\circ$.",
+       "points": [
+        "Corner radius 20 mm",
+        "Right extreme edge cut at 11.98 mm, 28.09 mm high",
+        "Left extreme edge cut at 8.58 mm, 39.96 mm high",
+        "Other four edges cut at 31.85 mm and 37.67 mm height",
+        "Six-sided sectional TV, hatched"
+       ]
+      },
+      {
+       "id": "ai-p1",
+       "pyq": "ebd32b21b186d528",
+       "level": 2,
+       "points": [
+        "TV: hexagon side 20 mm, edge parallel to XY, apex at centre; FV triangle height 70 mm",
+        "Section line (AIP) at 30 degrees to XY through the midpoint of the axis (35 mm); cuts all six slant edges at 1', 2', 3'...",
+        "Project down to the same edges: sectional TV, hatched at 45 degrees",
+        "Remove the part above the plane; FV of the remainder is the sectional FV",
+        "True shape on x1y1 parallel to the cut line, distances from XY of the TV; join and hatch"
+       ]
+      }
+     ]
+    },
+    {
+     "id": "true-shape",
+     "title": "True shape of the section: the auxiliary view",
+     "theory_md": "The section is at its **true shape** when viewed perpendicular to the cutting plane. So:\n1. Draw $x_1y_1$ **parallel** to the section line, a convenient distance away.\n2. Draw projectors from each cut point **perpendicular** to the section line.\n3. On each projector measure from $x_1y_1$ the distance the point has from **XY in the other view** (TV for an AIP, FV heights for an AVP).\n4. Join in the same order; hatch at $45^\\circ$.\n\nTrue length of the section along the cut line is the length of the line itself, since it is parallel to $x_1y_1$. Every point keeps its order, so a quadrilateral section gives a quadrilateral.",
+     "basics_md": "To see the real shape of the cut face you walk round until you look at it face-on. Drawing-wise that means drawing a new ground line parallel to the edge-on line, and putting each point at its old distance from the old ground line.",
+     "key_points": [
+      "x1y1 parallel to the section line",
+      "Projectors perpendicular to the section line",
+      "Distance from x1y1 equals distance from XY in the other view",
+      "Join in order and hatch at 45 degrees",
+      "Length along the cut line in the true shape equals the cut line length"
+     ],
+     "questions": [
+      {
+       "id": "ts-q1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "In the auxiliary view for the true shape, projectors are drawn",
+       "options": [
+        "parallel to XY",
+        "perpendicular to $x_1y_1$",
+        "parallel to $x_1y_1$",
+        "at $45^\\circ$ to $x_1y_1$"
+       ],
+       "answer_index": 1,
+       "why": "Projectors are always perpendicular to the reference line."
+      },
+      {
+       "id": "ts-q2",
+       "kind": "mcq",
+       "level": 2,
+       "q": "A student draws $x_1y_1$ perpendicular to the section line instead of parallel. The result is",
+       "options": [
+        "still the true shape",
+        "a foreshortened view, not the true shape",
+        "a rotated true shape",
+        "the sectional TV"
+       ],
+       "answer_index": 1,
+       "why": "Only a view perpendicular to the cutting plane gives the true shape; $x_1y_1$ must be parallel to its edge-on line."
+      },
+      {
+       "id": "ts-q3",
+       "kind": "numerical",
+       "level": 2,
+       "marks": 4,
+       "q": "A square pyramid (base 40 mm, axis 60 mm, sides equally inclined to the VP) is cut by a plane perpendicular to the VP, at $45^\\circ$ to the HP, bisecting the axis. Give the dimensions of the true shape.",
+       "model_answer_md": "Section points (x from axis, y from axis in the TV, z height): $(26.75, 0, 3.25)$, $(0, 14.14, 30)$, $(-9.61, 0, 39.61)$, $(0, -14.14, 30)$ mm.\n\nOn $x_1y_1$ parallel to the cut line, the distances along the line are $16.62$, $-21.21$, $-34.81$, $-21.21$ mm and widths $0, \\pm14.14, 0$ mm.\n\nSo the true shape is a **kite**, length $16.62+34.81=51.43$ mm along the cut line and width $2\\times14.14=28.28$ mm at 21.21 mm from the lower end.",
+       "points": [
+        "Section points (26.75, 0), (0, 14.14), (-9.61, 0), (0, -14.14) in plan",
+        "Heights 3.25, 30, 39.61, 30 mm",
+        "True shape is a kite",
+        "Length 51.43 mm along the cut line",
+        "Width 28.28 mm"
+       ]
+      }
+     ]
+    },
+    {
+     "id": "tilted-solid",
+     "title": "Solid in a tilted position, then cut",
+     "theory_md": "For a solid resting on a face or edge, or with its axis inclined, draw it **in two stages**: first with the base on the HP (simple position), then tilt the FV by the required angle about the corner or edge in contact and project the TV (keeping the axis parallel to the VP if so stated). Then add the cutting plane in the view where it appears as a line: an AVP in the TV (HT at the given angle to XY), and find the sectional FV from it.\n\nPentagonal pyramid (side 30, axis 60) on a triangular face: apothem of base $=15/\\tan36^\\circ=20.65$ mm, face makes $\\tan^{-1}(60/20.65)=71.0^\\circ$ with the base, so the axis is inclined $19.0^\\circ$ to the HP.",
+     "basics_md": "First stand the solid up normally. Then tip it until it rests on the face you want. Only after that do you draw the knife. The cuts are always found in the tipped drawing.",
+     "key_points": [
+      "Draw the solid in simple position first, then tilt for the final position",
+      "Pentagonal pyramid on a triangular face: base at 71.0 degrees, axis at 19.0 degrees to HP",
+      "Cutting plane (AVP) is a line in the TV at the given angle",
+      "Cut points projected up to the FV give the sectional FV",
+      "True shape on x1y1 parallel to the TV line, heights from the FV"
+     ],
+     "questions": [
+      {
+       "id": "ts2-q1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "A pentagonal pyramid (base 30 mm, axis 60 mm) rests on a triangular face on the HP. The axis is inclined to the HP at about",
+       "options": [
+        "$71^\\circ$",
+        "$19^\\circ$",
+        "$36^\\circ$",
+        "$60^\\circ$"
+       ],
+       "answer_index": 1,
+       "why": "The base is at $71^\\circ$ to the HP (the face angle), so the axis is at $90^\\circ-71^\\circ=19^\\circ$."
+      },
+      {
+       "id": "ts2-q2",
+       "kind": "mcq",
+       "level": 2,
+       "q": "In the second stage the solid is tilted. A common error is to",
+       "options": [
+        "tilt the TV instead of the FV",
+        "tilt the FV about the corner and project the TV",
+        "keep the axis length unchanged",
+        "redraw the cutting plane after tilting"
+       ],
+       "answer_index": 0,
+       "why": "Tilting is done in the view where the angle to the HP is true, the FV; the TV is then projected."
+      },
+      {
+       "id": "ts2-q3",
+       "kind": "short",
+       "level": 2,
+       "marks": 3,
+       "q": "A hexagonal prism of base side 30 mm and axis 70 mm rests with a rectangular face on the HP and its axis parallel to the VP. Give the dimensions of its FV and TV.",
+       "model_answer_md": "Across flats $=30\\sqrt3=51.96$ mm, across corners $=60$ mm.\n\nWith a rectangular face on the HP the flats are down, the corners are at the sides.\n**FV:** rectangle 70 mm long and 51.96 mm high.\n**TV:** rectangle 70 mm long and 60 mm wide, with edge lines at $\\pm15$ mm and $\\pm30$ mm from the axis.\n\nThe hexagon itself shows in the end view (Stage I FV with the axis perpendicular to the VP).",
+       "points": [
+        "Across flats 51.96 mm",
+        "Across corners 60 mm",
+        "FV rectangle 70 x 51.96 mm",
+        "TV rectangle 70 x 60 mm"
+       ]
+      },
+      {
+       "id": "ts2-p1",
+       "pyq": "09664df18aea0dec",
+       "level": 2,
+       "points": [
+        "Stage I: pentagon (one base edge perpendicular to XY) and FV triangle of height 60 mm",
+        "Stage II: tilt FV so the triangular face lies on XY (base at 71 degrees, axis at 19 degrees to HP); project the TV with the axis parallel to VP",
+        "AIP at 60 degrees to HP through the highest point of the base: cut the edges in the FV and project to the TV (sectional TV, hatched)",
+        "True shape on x1y1 parallel to the cut line, distances from XY of the TV; join and hatch"
+       ]
+      },
+      {
+       "id": "ts2-p2",
+       "pyq": "414e38cb87e3975b",
+       "level": 2,
+       "points": [
+        "Hexagonal prism: axis 70 mm inclined at 45 degrees to HP, parallel to VP, an edge of the base on the HP; draw in two stages",
+        "AVP at 45 degrees to the VP through a point 15 mm from the top end: section line in the TV at 45 degrees to XY",
+        "Cut points on the TV edges projected up to the same edges in the FV: sectional FV, hatched",
+        "True shape on x1y1 parallel to the TV line, distances equal heights in the FV; join"
+       ]
+      },
+      {
+       "id": "ts2-p3",
+       "pyq": "5b38e9beb5822cf1",
+       "level": 2,
+       "points": [
+        "Pentagonal pyramid (side 30, axis 60) on a triangular face on the HP, axis parallel to the VP: two stages (base at 71 degrees, axis at 19 degrees)",
+        "Plane is an AVP: HT at 30 degrees to XY through the midpoint of the axis, apex removed",
+        "Cut points on the TV edges projected up to the FV: sectional FV (hatched)",
+        "True shape on x1y1 parallel to the TV line; distances are heights from the FV; join"
+       ]
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "topic": "Frustum and truncated solids",
+   "subtopics": [
+    {
+     "id": "frustum-def",
+     "title": "Frustum and truncated solid",
+     "theory_md": "A **frustum** is what remains of a cone or pyramid when the top is cut off by a plane **parallel to the base**; its FV is a trapezium and its TV is two concentric figures. A **truncated solid** is cut by a plane **inclined** to the base and the part above is removed; it has no top face of the same shape.\n\nThe frustum's full cone/pyramid is found by similar triangles: apex height $H=h\\,r_1/(r_1-r_2)$, where $h$ is the frustum height, $r_1$ the base and $r_2$ the top radius. For a base of 50 mm diameter, top 25 mm and height 50 mm: $H=50\\times25/12.5=100$ mm. A section parallel to the base at $z$ above it has radius $r_1(1-z/H)$.",
+     "basics_md": "Cut the top off an ice-cream cone with a straight horizontal cut: the bit left is a frustum. Cut slantwise: it is a truncated cone.",
+     "key_points": [
+      "Frustum: cone or pyramid with the top cut by a plane parallel to the base",
+      "Truncated solid: cut by an inclined plane, upper part removed",
+      "Apex height of the full solid H = h r1/(r1 - r2) by similar triangles",
+      "Parallel section is a similar figure; radius r1(1 - z/H)"
+     ],
+     "questions": [
+      {
+       "id": "fd-q1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "A frustum of a cone is formed by cutting the cone with a plane",
+       "options": [
+        "through the apex",
+        "parallel to the base",
+        "parallel to a generator",
+        "parallel to the axis"
+       ],
+       "answer_index": 1,
+       "why": "Parallel to the base."
+      },
+      {
+       "id": "fd-q2",
+       "kind": "mcq",
+       "level": 2,
+       "q": "A cone frustum has base diameter 50 mm, top diameter 25 mm and height 50 mm. The full cone height is",
+       "options": [
+        "75 mm",
+        "100 mm",
+        "125 mm",
+        "150 mm"
+       ],
+       "answer_index": 1,
+       "why": "$H=50\\times25/(25-12.5)=100$ mm."
+      },
+      {
+       "id": "fd-q3",
+       "kind": "numerical",
+       "level": 2,
+       "marks": 3,
+       "q": "A cone frustum has base diameter 50 mm, top diameter 25 mm and height 50 mm. Find the diameter of the section by a plane parallel to the base at 20 mm above the base.",
+       "model_answer_md": "Full cone height $H=h\\,r_1/(r_1-r_2)=50\\times25/12.5=100$ mm.\n\nRadius at $z=20$ mm: $25(1-20/100)=20$ mm.\n\n**Diameter $=40$ mm** (a circle, true shape in the TV).",
+       "points": [
+        "Apex height 100 mm by similar triangles",
+        "Radius 20 mm at z = 20 mm",
+        "Diameter 40 mm; circle"
+       ]
+      }
+     ]
+    },
+    {
+     "id": "frustum-section",
+     "title": "Section of a frustum by an inclined plane",
+     "theory_md": "For a **cone frustum** cut by a plane perpendicular to the VP at $\\theta$ to the HP, extend the generators to the full cone, find the cut with the generators, and check each point lies between the base and the top face. If the line meets the **top face**, the curve stops there and a straight (chord) edge closes the section; if it meets the base, the cut leaves through the base circle.\n\nThe method: 12 generators, section line in the FV, project each cut point to the TV on its generator, join with a smooth curve, then the true shape on $x_1y_1$ parallel to the cut line.\n\nFor base $\\varnothing50$, top $\\varnothing25$, height 50, a plane at $45^\\circ$ through the 30 mm level meets the generators at 6.67 mm and 44 mm height, both inside the frustum.",
+     "basics_md": "Imagine the frustum is still part of a bigger cone. Cut it the same way as the cone, but throw away the points that would be outside the real solid.",
+     "key_points": [
+      "Extend the frustum to the full cone for the generators",
+      "Section line in the FV at the given angle through the given point",
+      "Cut points must lie between base and top; otherwise the section is cut by the top face or base",
+      "Project to the TV on the same generators; smooth curve",
+      "True shape on x1y1 parallel to the cut line; ellipse axes from the cut line"
+     ],
+     "questions": [
+      {
+       "id": "fs-q1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "A frustum of a cone is cut by an inclined plane which stays within the slant surface. The section is part of an",
+       "options": [
+        "ellipse",
+        "circle",
+        "parabola",
+        "straight line"
+       ],
+       "answer_index": 0,
+       "why": "A plane at less than the generator angle gives an ellipse."
+      },
+      {
+       "id": "fs-q2",
+       "kind": "mcq",
+       "level": 2,
+       "q": "If the section line in the FV leaves the frustum through the top face, the section",
+       "options": [
+        "is a full ellipse",
+        "is an elliptical arc closed by a straight edge",
+        "is a circle",
+        "does not exist"
+       ],
+       "answer_index": 1,
+       "why": "The top face is a plane; its cut with the section plane is a straight chord closing the curve."
+      },
+      {
+       "id": "fs-q3",
+       "kind": "numerical",
+       "level": 2,
+       "marks": 4,
+       "q": "A frustum has base $\\varnothing50$ mm, top $\\varnothing25$ mm and height 50 mm. A plane perpendicular to the VP and inclined at $45^\\circ$ to the HP passes through the point 30 mm up the axis. Find the major and minor axes of the section.",
+       "model_answer_md": "Full cone: $H=100$ mm, base radius 25 mm.\n\n**Cut points:** right generator $x=23.33$ mm, $z=6.67$ mm; left generator $x=14.00$ mm (left), $z=44.00$ mm. Both are between 0 and 50 mm so the whole ellipse lies on the slant surface.\n\n**Major axis** $=\\sqrt{(23.33+14.00)^2+(44.00-6.67)^2}=52.80$ mm.\n\n**Minor axis** at the midpoint: $x=4.67$ mm, $z=25.33$ mm; radius there $=25(1-25.33/100)=18.67$ mm; minor $=2\\sqrt{18.67^2-4.67^2}=36.15$ mm.",
+       "points": [
+        "Full cone 100 mm high, radius 25 mm",
+        "Cut points (23.33, 6.67) and (14.00 left, 44.00)",
+        "Both within the frustum, so complete ellipse",
+        "Major axis 52.80 mm",
+        "Minor axis 36.15 mm"
+       ]
+      }
+     ]
+    },
+    {
+     "id": "truncated-views",
+     "title": "Views of the remaining (truncated) solid",
+     "theory_md": "After the section, **draw the remaining solid** in both views.\n- Sectional view of the cut: hatched at $45^\\circ$ (the cut face).\n- The view in which the plane is a line (FV for a plane perpendicular to the VP) shows the remaining outline with the **cut line as the top edge**; no hatching.\n- In the other view, the outline of the solid is unchanged where it is below the cut; the cut part's edges are not drawn.\n- Edges between the cut points and the retained corners are shown as **thick** lines, the removed edges are erased (or thin).\n\nLabel the cut points $1,2,3\\dots$; state the shape of the section and its true shape.",
+     "basics_md": "After you cut, tidy the drawing: show only what is left, with the cut face shaded. Everything above the knife disappears.",
+     "key_points": [
+      "Show only the retained solid; remove the cut part",
+      "Cut line is the top edge of the FV (plane perpendicular to VP)",
+      "Hatch the cut face in the sectional view at 45 degrees",
+      "Retained corners and cut points joined by thick lines",
+      "Label the cut points and give the true shape"
+     ],
+     "questions": [
+      {
+       "id": "tv-q1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "In a sectional view, the part of the solid between the cutting plane and the observer is",
+       "options": [
+        "kept and hatched",
+        "removed",
+        "drawn with dotted lines",
+        "drawn thin"
+       ],
+       "answer_index": 1,
+       "why": "It is imagined removed."
+      },
+      {
+       "id": "tv-q2",
+       "kind": "mcq",
+       "level": 2,
+       "q": "A pyramid is cut by an AIP and the top removed. In the FV the cut face appears as",
+       "options": [
+        "a hatched polygon",
+        "a single inclined line",
+        "an ellipse",
+        "a point"
+       ],
+       "answer_index": 1,
+       "why": "The AIP is edge-on in the FV."
+      },
+      {
+       "id": "tv-q3",
+       "kind": "short",
+       "level": 2,
+       "marks": 3,
+       "q": "State, with reasons, what is shown in the FV and TV after a pyramid is cut by a plane perpendicular to the VP.",
+       "model_answer_md": "**FV:** the retained part is the pyramid below the section line; the cut face is edge-on, so a straight line with **no hatching**.\n\n**TV:** the retained edges up to the cut points, and the closed section figure **hatched at $45^\\circ$** (the apparent section).\n\n**Auxiliary view:** the true shape, drawn on $x_1y_1$ parallel to the section line, also hatched.\n\nBase outline remains in both views.",
+       "points": [
+        "FV shows the cut face as a line, no hatching",
+        "TV shows the apparent section hatched at 45 degrees",
+        "True shape in an auxiliary view",
+        "Removed part is not drawn"
+       ]
+      }
+     ]
+    }
+   ]
+  }
+ ]
+}

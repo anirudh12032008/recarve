@@ -1,0 +1,3322 @@
+{
+ "code": "CY1107",
+ "unit": "Materials",
+ "written": "2026-10-19",
+ "by": "claude-sonnet-5-5, in a Claude Code session",
+ "topics": [
+  {
+   "topic": "Types of polymerization",
+   "subtopics": [
+    {
+     "id": "functionality",
+     "title": "Polymers, monomers and functionality",
+     "theory_md": "A **polymer** is a macromolecule (molar mass about $10^4$ to $10^6$ g/mol) made by joining many small **monomers** with **covalent bonds**; the chains are held to each other by weaker van der Waals and hydrogen bonds. The repeat unit is the basic unit; the **degree of polymerisation** is $DP = M_{polymer}/M_{repeat\\ unit}$.\n\n**Functionality** is the number of bonding sites a monomer offers. A C=C counts as 2 (ethylene); each -OH, -COOH, -NH$_2$ counts as 1.\n- Functionality 2 (ethylene, diol + diacid): **linear** polymer.\n- Functionality 3 or more (glycerol, phenol towards HCHO): **branched or cross-linked** network.\n- Functionality 1 (ethanol, acetic acid) or 0 (methane): no polymer; ethanol + acetic acid stop at ethyl acetate.\n\nNatural polymers: cellulose, starch, proteins, natural rubber.",
+     "basics_md": "Think of a chain of paper clips. Each clip needs two free ends to join its neighbours. A monomer with only one free end can attach once and stop; one with three ends makes a net.",
+     "key_points": [
+      "Polymer = macromolecule of repeat units joined by covalent bonds; monomer = small molecule that forms it",
+      "Functionality = number of bonding sites; a monomer needs at least 2",
+      "Functionality 2 gives linear chains, 3 or more gives cross-linked network",
+      "Macromolecule (large), not micro-molecule"
+     ],
+     "figures": [
+      {
+       "smiles": "C=C",
+       "caption": "Ethylene: C=C counts as functionality 2"
+      },
+      {
+       "smiles": "C=CCl",
+       "caption": "Vinyl chloride, a bifunctional monomer"
+      }
+     ],
+     "questions": [
+      {
+       "id": "f-q1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "The functionality of ethylene $\\mathrm{CH_2{=}CH_2}$ as a monomer is",
+       "options": [
+        "1",
+        "2",
+        "3",
+        "4"
+       ],
+       "answer_index": 1,
+       "why": "The double bond opens to give two bonding sites."
+      },
+      {
+       "id": "f-q2",
+       "kind": "mcq",
+       "level": 1,
+       "q": "A monomer of functionality 3, such as phenol towards formaldehyde, gives a",
+       "options": [
+        "linear polymer",
+        "cross-linked network polymer",
+        "cyclic dimer only",
+        "no polymer"
+       ],
+       "answer_index": 1,
+       "why": "Three bonding sites per monomer let chains branch and join into a 3-D network."
+      },
+      {
+       "id": "f-q3",
+       "kind": "short",
+       "level": 2,
+       "marks": 2,
+       "q": "Define functionality. Why can ethanol not form a polymer by itself or with acetic acid?",
+       "model_answer_md": "**Functionality** is the number of bonding sites (reactive groups or opening multiple bonds) in a monomer.\n\nEthanol and acetic acid each have functionality 1. They react once to give ethyl acetate, $\\mathrm{CH_3COOH + C_2H_5OH \\rightarrow CH_3COOC_2H_5 + H_2O}$, which has no reactive group left, so the chain stops. A polymer needs functionality of at least 2.",
+       "points": [
+        "Functionality = number of bonding sites in a monomer",
+        "Ethanol and acetic acid are monofunctional",
+        "Product ethyl acetate has no reactive group, chain stops",
+        "Polymer needs functionality at least 2"
+       ]
+      },
+      {
+       "id": "f-q4",
+       "kind": "numerical",
+       "level": 2,
+       "marks": 2,
+       "q": "PVC has repeat unit $\\mathrm{-CH_2-CHCl-}$ (62.5 g/mol). Find the degree of polymerisation of a sample of molar mass 62 500 g/mol.",
+       "model_answer_md": "$DP = \\dfrac{M_{polymer}}{M_{repeat\\ unit}} = \\dfrac{62500}{62.5} = 1000$",
+       "points": [
+        "Formula DP = M of polymer / M of repeat unit",
+        "DP = 1000"
+       ]
+      },
+      {
+       "id": "f-p1",
+       "pyq": "6ec59b2f4aa919f6",
+       "level": 2,
+       "points": [
+        "True: not every simple organic molecule can form a polymer",
+        "Monomer needs functionality of at least 2 (C=C or two reactive groups)",
+        "Methane, ethane (0) and ethanol, acetic acid (1) cannot polymerise; ethylene, glycol + terephthalic acid can",
+        "Also thermodynamics must favour it ($\\Delta G_p<0$) and steric hindrance must not block it"
+       ]
+      },
+      {
+       "id": "f-p2",
+       "pyq": "8bcbf2eb49395107",
+       "level": 2,
+       "points": [
+        "Functionality: number of bonding sites; 2 gives linear, 3 or more gives cross-linked polymer",
+        "Tacticity: arrangement of side groups along the chain (isotactic, syndiotactic, atactic)",
+        "Tacticity decides crystallinity and strength"
+       ]
+      },
+      {
+       "id": "f-p3",
+       "pyq": "2151b907ac75c6bf",
+       "level": 1,
+       "points": [
+        "A) Monomer: the repeating basic unit of a polymer"
+       ]
+      },
+      {
+       "id": "f-p4",
+       "pyq": "0671e9a4c64110f3",
+       "level": 1,
+       "points": [
+        "B) Polymerization: joining monomers into a high polymer"
+       ]
+      },
+      {
+       "id": "f-p5",
+       "pyq": "f6695eba3f335a04",
+       "level": 2,
+       "points": [
+        "Statement is incorrect",
+        "Polymers are macromolecules of mass about $10^4$ to $10^6$ g/mol, formed from hundreds to thousands of monomers",
+        "Called macromolecules because of large size; the small molecules are the monomers"
+       ]
+      },
+      {
+       "id": "f-p6",
+       "pyq": "9f10e836aa37848f",
+       "level": 1,
+       "points": [
+        "B) Covalent bonds join monomers within a chain"
+       ]
+      },
+      {
+       "id": "f-p7",
+       "pyq": "6884caac3d562f69",
+       "level": 1,
+       "points": [
+        "C) Cellulose is the natural polymer; nylon, polypropylene and Teflon are synthetic"
+       ]
+      },
+      {
+       "id": "f-p8",
+       "pyq": "f44542860311eaf0",
+       "level": 1,
+       "points": [
+        "B) Covalent bonds within chains and weaker intermolecular forces between chains"
+       ]
+      }
+     ]
+    },
+    {
+     "id": "addition-condensation",
+     "title": "Addition, condensation and copolymers",
+     "theory_md": "**Addition (chain-growth)**: unsaturated monomers (C=C) add with **no by-product**; polymer has the same empirical formula as the monomer, $M = n M_0$. Needs an initiator, fast. Examples: polyethylene, PVC, polystyrene, Teflon.\n\n**Condensation (step-growth)**: monomers with two different functional groups react with **loss of a small molecule** ($\\mathrm{H_2O}$, HCl). Slow, stepwise; repeat unit differs from monomers. Examples: nylon 6,6 (hexamethylenediamine + adipic acid, $-\\mathrm{H_2O}$), terylene (glycol + terephthalic acid), bakelite.\n\n**Copolymerisation**: two or more different monomers in one chain (Buna-S: butadiene + styrene); random, alternating, block or graft.\n\nCellulose nitrate is made by nitrating cellulose, not by addition polymerisation.",
+     "basics_md": "Addition: pearls added to a string, nothing falls off. Condensation: each link drops a small piece (water) when it joins.",
+     "key_points": [
+      "Addition: unsaturated monomer, no by-product, same empirical formula, needs initiator",
+      "Condensation: bifunctional monomers, small molecule (H2O, HCl) eliminated, stepwise",
+      "Two examples of each, with equation for the chosen ones",
+      "Copolymer: two or more different monomers in the same chain, e.g. Buna-S"
+     ],
+     "figures": [
+      {
+       "smiles": "C=C",
+       "caption": "Ethylene (addition)"
+      },
+      {
+       "smiles": "C=CCl",
+       "caption": "Vinyl chloride (addition)"
+      },
+      {
+       "smiles": "NCCCCCCN",
+       "caption": "Hexamethylenediamine (condensation)"
+      },
+      {
+       "smiles": "OC(=O)CCCCC(=O)O",
+       "caption": "Adipic acid (condensation)"
+      }
+     ],
+     "questions": [
+      {
+       "id": "ac-q1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "Which polymer is formed with elimination of a small molecule?",
+       "options": [
+        "Polyethylene",
+        "PVC",
+        "Nylon 6,6",
+        "Teflon"
+       ],
+       "answer_index": 2,
+       "why": "Nylon 6,6 is a condensation polymer; water is lost at every amide link."
+      },
+      {
+       "id": "ac-q2",
+       "kind": "mcq",
+       "level": 1,
+       "q": "Buna-S is a",
+       "options": [
+        "homopolymer of butadiene",
+        "copolymer of butadiene and styrene",
+        "condensation polymer",
+        "thermoset only"
+       ],
+       "answer_index": 1,
+       "why": "Buna-S joins butadiene and styrene in one chain."
+      },
+      {
+       "id": "ac-q3",
+       "kind": "short",
+       "level": 2,
+       "marks": 3,
+       "q": "Distinguish addition from condensation polymerisation (three points) with one example each.",
+       "model_answer_md": "| Addition | Condensation |\n|---|---|\n| Unsaturated monomers (C=C) | Bifunctional monomers with two reactive groups |\n| No by-product; same empirical formula as monomer | Small molecule ($\\mathrm{H_2O}$, HCl) eliminated |\n| Chain reaction, needs initiator, fast | Step reaction, slow |\n\nExample: ethylene $\\rightarrow$ polyethylene (addition); hexamethylenediamine + adipic acid $\\rightarrow$ nylon 6,6 + $\\mathrm{H_2O}$ (condensation).",
+       "points": [
+        "Monomer type: C=C versus two functional groups",
+        "By-product: none versus small molecule",
+        "Mechanism: chain versus step; speed",
+        "One correct example of each"
+       ]
+      },
+      {
+       "id": "ac-q4",
+       "kind": "short",
+       "level": 3,
+       "marks": 4,
+       "q": "Define copolymerisation. Name the types of copolymer and give two examples.",
+       "model_answer_md": "**Copolymerisation** is the polymerisation of two or more different monomers to give a chain containing all of them.\n\n**Types:** random, alternating, block ($\\mathrm{AAAA\\!-\\!BBBB}$) and graft (branches of B on a chain of A).\n\n**Examples:**\n1. Buna-S: butadiene + styrene.\n2. Buna-N: butadiene + acrylonitrile.\n\nCopolymers combine the properties of both monomers.",
+       "points": [
+        "Definition: two or more different monomers in one chain",
+        "Types: random, alternating, block, graft",
+        "Two examples: Buna-S, Buna-N"
+       ]
+      },
+      {
+       "id": "ac-p1",
+       "pyq": "e6f199be654c6a9e",
+       "level": 2,
+       "points": [
+        "Addition: unsaturated monomers, no by-product (polyethylene from ethylene, PVC); properties and uses given",
+        "Condensation: elimination of H2O or HCl (nylon 6,6, bakelite); properties and uses given",
+        "Two examples of each with equation"
+       ]
+      },
+      {
+       "id": "ac-p2",
+       "pyq": "a85a42043ebe66a9",
+       "level": 3,
+       "points": [
+        "Addition polymerisation: definition, two examples (polyethylene, PVC)",
+        "Condensation polymerisation: definition, two examples (nylon 6,6, terylene)",
+        "Copolymerisation: definition, two examples (Buna-S, Buna-N)",
+        "Mechanism of free radical addition: initiation, propagation, termination with equations"
+       ]
+      },
+      {
+       "id": "ac-p3",
+       "pyq": "2b8b3159cc04ffba",
+       "level": 3,
+       "points": [
+        "Addition polymerisation: definition and two examples",
+        "Condensation polymerisation: definition and two examples",
+        "Detailed mechanism of addition polymerisation: initiation, propagation, termination with equations"
+       ]
+      },
+      {
+       "id": "ac-p4",
+       "pyq": "0b21e169aecd1e92",
+       "level": 2,
+       "points": [
+        "False",
+        "Polyethene is made by addition polymerisation of ethylene (C=C opens, no by-product)",
+        "Condensation needs two reactive groups and loses a small molecule"
+       ]
+      },
+      {
+       "id": "ac-p5",
+       "pyq": "4825d5fa8fe751c8",
+       "level": 2,
+       "points": [
+        "No",
+        "Addition polymerisation needs an unsaturated monomer adding without by-product",
+        "Cellulose nitrate is prepared by nitrating natural cellulose with conc. HNO3 + H2SO4 (esterification, water formed)",
+        "Not made from a monomer by addition"
+       ]
+      },
+      {
+       "id": "ac-p6",
+       "pyq": "5bc920c0da27b096",
+       "level": 1,
+       "points": [
+        "A) Condensation polymerization forms nylon (amide link, water eliminated)"
+       ]
+      }
+     ]
+    },
+    {
+     "id": "thermodynamics",
+     "title": "Thermodynamic feasibility and ceiling temperature",
+     "theory_md": "Polymerisation is feasible only if $\\Delta G_p = \\Delta H_p - T\\Delta S_p < 0$.\n\n- $\\Delta S_p$ is **negative**: free monomers become one chain, so freedom is lost.\n- $\\Delta H_p$ is **negative** (exothermic): one $\\pi$ bond becomes a stronger $\\sigma$ bond, releasing about 35 to 100 kJ/mol.\n- So polymerisation is favoured at **low temperature**. Above the **ceiling temperature** $T_c = \\Delta H_p/\\Delta S_p$, $\\Delta G_p>0$ and the polymer depolymerises.\n\nEthylene: $\\Delta H_p=-93$ kJ/mol, $\\Delta S_p=-155$ J/(mol K). At 298 K, $\\Delta G_p = -93000 + 298\\times155 = -46\\,810$ J/mol, so it polymerises; $T_c = 93000/155 = 600$ K.",
+     "basics_md": "A reaction goes ahead if it lowers free energy. Joining molecules into a chain cuts disorder (bad) but forms stronger bonds (good); the bond gain must win.",
+     "key_points": [
+      "Condition: $\\Delta G_p = \\Delta H_p - T\\Delta S_p < 0$",
+      "$\\Delta S_p$ negative (loss of freedom), $\\Delta H_p$ negative and large enough",
+      "Favoured at low temperature; ceiling temperature $T_c=\\Delta H_p/\\Delta S_p$",
+      "Above $T_c$ the polymer depolymerises"
+     ],
+     "figures": [
+      {
+       "smiles": "C=C",
+       "caption": "Ethylene: $\\pi$ bond converted to a $\\sigma$ bond on polymerisation"
+      }
+     ],
+     "questions": [
+      {
+       "id": "th-q1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "For addition polymerisation the entropy change $\\Delta S_p$ is",
+       "options": [
+        "positive",
+        "negative",
+        "zero",
+        "equal to $\\Delta H_p$"
+       ],
+       "answer_index": 1,
+       "why": "Many free monomers become one chain, so disorder falls."
+      },
+      {
+       "id": "th-q2",
+       "kind": "mcq",
+       "level": 2,
+       "q": "Raising the temperature of a polymerising system, the polymerisation becomes",
+       "options": [
+        "more favourable always",
+        "less favourable, and impossible above $T_c$",
+        "unaffected",
+        "endothermic"
+       ],
+       "answer_index": 1,
+       "why": "$-T\\Delta S_p$ is positive and grows with T, eventually exceeding $|\\Delta H_p|$."
+      },
+      {
+       "id": "th-q3",
+       "kind": "short",
+       "level": 2,
+       "marks": 2,
+       "q": "Why is addition polymerisation exothermic although entropy decreases? State the condition for feasibility.",
+       "model_answer_md": "A $\\pi$ bond is replaced by a stronger $\\sigma$ bond, so $\\Delta H_p$ is negative (about -35 to -100 kJ/mol).\n\nEntropy falls ($\\Delta S_p<0$) because free monomers become one chain.\n\nFeasible only when $\\Delta G_p=\\Delta H_p-T\\Delta S_p<0$, i.e. below the ceiling temperature.",
+       "points": [
+        "$\\pi$ to $\\sigma$ bond gives negative $\\Delta H_p$",
+        "Entropy falls as monomers join",
+        "Condition $\\Delta G_p<0$"
+       ]
+      },
+      {
+       "id": "th-q4",
+       "kind": "numerical",
+       "level": 3,
+       "marks": 3,
+       "q": "For $\\alpha$-methylstyrene $\\Delta H_p=-35$ kJ/mol and $\\Delta S_p=-104$ J/(mol K). Find the ceiling temperature and comment.",
+       "model_answer_md": "$T_c=\\dfrac{\\Delta H_p}{\\Delta S_p}=\\dfrac{-35000}{-104}\\approx 337$ K (about 63 $^\\circ$C).\n\nAbove 337 K, $\\Delta G_p>0$ and the polymer reverts to monomer, so it can be made only at low temperature. Steric strain makes $|\\Delta H_p|$ small, hence the low $T_c$.",
+       "points": [
+        "$T_c=\\Delta H_p/\\Delta S_p$",
+        "$T_c$ about 337 K (63 $^\\circ$C)",
+        "Polymerises only below $T_c$; steric strain lowers $|\\Delta H_p|$"
+       ]
+      },
+      {
+       "id": "th-p1",
+       "pyq": "9a6e2283f9f31b4d",
+       "level": 2,
+       "points": [
+        "$\\Delta G_p=\\Delta H_p-T\\Delta S_p<0$ needed",
+        "$\\Delta S_p$ negative, $\\Delta H_p$ negative (pi to sigma bond)",
+        "Favoured at low temperature; ceiling temperature $T_c=\\Delta H_p/\\Delta S_p$",
+        "Example ethylene: $\\Delta G_p\\approx-46.8$ kJ/mol at 298 K"
+       ]
+      },
+      {
+       "id": "th-p2",
+       "pyq": "b71ff6b476efe098",
+       "level": 2,
+       "points": [
+        "$\\Delta G_p<0$ (free energy of polymerisation negative)",
+        "Exothermic, $\\Delta H_p$ must outweigh $T\\Delta S_p$",
+        "Entropy decreases; feasible below ceiling temperature"
+       ]
+      }
+     ]
+    },
+    {
+     "id": "tacticity",
+     "title": "Tacticity: isotactic, syndiotactic, atactic",
+     "theory_md": "**Tacticity** is the spatial arrangement of the side groups R along a chain $\\mathrm{-[CH_2-CHR]_n-}$. It exists because each CHR carbon is **asymmetric (chiral)**. It is a **configuration** (set when the polymer forms, changed only by breaking bonds), unlike linear, branched or cross-linked, which describe chain architecture.\n\n| Type | Side groups | Result |\n|---|---|---|\n| Isotactic | all on the same side | crystalline, strong, high m.p. |\n| Syndiotactic | alternate regularly | crystalline |\n| Atactic | random | amorphous, soft, tacky |\n\nIsotactic PP (m.p. about 165 $^\\circ$C) is made with Ziegler-Natta catalyst; atactic PP is a weak, sticky material.",
+     "basics_md": "Imagine each carbon holds a flag. All flags on one side: isotactic. Alternating sides: syndiotactic. Random: atactic. Regular chains pack neatly and become strong.",
+     "key_points": [
+      "Tacticity = arrangement of side groups at asymmetric carbons",
+      "Isotactic same side, syndiotactic alternate, atactic random",
+      "Regular (iso, syndio) means crystalline, strong, higher m.p.; atactic amorphous and weak",
+      "Cross-linking is not a configuration"
+     ],
+     "figures": [
+      {
+       "smiles": "C=CC",
+       "caption": "Propylene: polymerises to isotactic, syndiotactic or atactic PP"
+      }
+     ],
+     "questions": [
+      {
+       "id": "ta-q1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "In isotactic polypropylene the methyl groups are",
+       "options": [
+        "randomly placed",
+        "alternately on opposite sides",
+        "all on the same side",
+        "absent"
+       ],
+       "answer_index": 2,
+       "why": "Isotactic means all side groups on one side of the chain."
+      },
+      {
+       "id": "ta-q2",
+       "kind": "mcq",
+       "level": 2,
+       "q": "Which polymer is the most crystalline and strongest?",
+       "options": [
+        "Atactic PP",
+        "Isotactic PP",
+        "Branched LDPE",
+        "Cross-linked rubber"
+       ],
+       "answer_index": 1,
+       "why": "Regular chains pack closely."
+      },
+      {
+       "id": "ta-q3",
+       "kind": "short",
+       "level": 2,
+       "marks": 3,
+       "q": "Classify polymers by tacticity and state how it affects their properties.",
+       "model_answer_md": "**Tacticity** is the orientation of side groups R on asymmetric carbons of $\\mathrm{-[CH_2-CHR]_n-}$.\n\n1. **Isotactic:** all R on the same side.\n2. **Syndiotactic:** R alternate regularly.\n3. **Atactic:** R random.\n\nIso and syndiotactic chains pack closely: crystalline, high density, strength and melting point. Atactic polymers are amorphous, soft and tacky.",
+       "points": [
+        "Defines tacticity",
+        "Three classes with arrangement",
+        "Regular means crystalline, strong, high m.p.",
+        "Atactic amorphous, soft"
+       ]
+      },
+      {
+       "id": "ta-p1",
+       "pyq": "2bde92352db83c54",
+       "level": 1,
+       "points": [
+        "Asymmetric (chiral) carbon atoms in the chain",
+        "Side group arrangement on them gives isotactic, syndiotactic or atactic"
+       ]
+      },
+      {
+       "id": "ta-p2",
+       "pyq": "d01b87547e39e2e7",
+       "level": 1,
+       "points": [
+        "Asymmetric (chiral) carbon atoms bearing side groups"
+       ]
+      },
+      {
+       "id": "ta-p3",
+       "pyq": "d88a83ba603d8ad3",
+       "level": 2,
+       "points": [
+        "Answer: (c) Cross-linked",
+        "Isotactic, syndiotactic, atactic describe arrangement of side groups (configuration)",
+        "Cross-linked describes chain architecture, not side-group arrangement"
+       ]
+      },
+      {
+       "id": "ta-p4",
+       "pyq": "f841fb184eecc83a",
+       "level": 2,
+       "points": [
+        "Isotactic: all side groups on same side",
+        "Syndiotactic: alternate sides",
+        "Atactic: random",
+        "Iso/syndio crystalline, strong, higher m.p.; atactic amorphous, soft, tacky"
+       ]
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "topic": "Addition and coordination polymerization mechanisms",
+   "subtopics": [
+    {
+     "id": "free-radical",
+     "title": "Free radical addition polymerisation",
+     "theory_md": "A chain reaction in three steps. **Initiators**: benzoyl peroxide, AIBN, $\\mathrm{H_2O_2}$, persulphate (heat or light makes radicals $\\mathrm{R^\\bullet}$).\n\n1. **Initiation**: $\\mathrm{(C_6H_5COO)_2 \\xrightarrow{\\Delta} 2C_6H_5COO^\\bullet \\rightarrow 2C_6H_5^\\bullet + 2CO_2}$, then $\\mathrm{R^\\bullet + CH_2{=}CH_2 \\rightarrow R{-}CH_2{-}CH_2^\\bullet}$.\n2. **Propagation**: the radical adds monomer after monomer, $\\mathrm{R{-}CH_2CH_2^\\bullet + n\\,CH_2{=}CH_2 \\rightarrow R{-}(CH_2CH_2)_n{-}CH_2CH_2^\\bullet}$.\n3. **Termination**: two radicals meet, by **coupling** (join) or **disproportionation** (H transfer, one chain gets a C=C and one is saturated).\n\nGives LDPE, PVC, polystyrene, PMMA. High molar mass forms from the start; monomer is used up slowly.",
+     "basics_md": "A radical is an atom with an unpaired electron that wants a partner. It grabs the C=C electrons of a monomer, which leaves a new radical at the end of the chain, and so on.",
+     "key_points": [
+      "Initiators: benzoyl peroxide, AIBN; heat or light makes radicals",
+      "Initiation: radical adds to monomer",
+      "Propagation: repeated addition, radical stays at the chain end",
+      "Termination: coupling or disproportionation",
+      "Example ethylene to polyethylene with equations"
+     ],
+     "figures": [
+      {
+       "smiles": "O=C(OOC(=O)c1ccccc1)c1ccccc1",
+       "caption": "Benzoyl peroxide, the radical initiator"
+      },
+      {
+       "smiles": "C=C",
+       "caption": "Ethylene"
+      }
+     ],
+     "questions": [
+      {
+       "id": "fr-q1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "Which compound is a free radical initiator?",
+       "options": [
+        "Benzoyl peroxide",
+        "$\\mathrm{BF_3}$",
+        "n-Butyllithium",
+        "$\\mathrm{TiCl_4}$"
+       ],
+       "answer_index": 0,
+       "why": "The weak O-O bond splits into radicals on heating."
+      },
+      {
+       "id": "fr-q2",
+       "kind": "mcq",
+       "level": 1,
+       "q": "In the termination of free radical polymerisation, two chains can",
+       "options": [
+        "only add monomer",
+        "couple or disproportionate",
+        "form carbanions",
+        "insert into Ti-C"
+       ],
+       "answer_index": 1,
+       "why": "Coupling joins two radicals; disproportionation transfers H."
+      },
+      {
+       "id": "fr-q3",
+       "kind": "short",
+       "level": 2,
+       "marks": 3,
+       "q": "Write the three steps of free radical polymerisation of ethylene using benzoyl peroxide.",
+       "model_answer_md": "**1. Initiation:** $\\mathrm{(C_6H_5COO)_2 \\xrightarrow{\\Delta} 2C_6H_5COO^\\bullet \\rightarrow 2C_6H_5^\\bullet + 2CO_2}$; $\\mathrm{R^\\bullet + CH_2{=}CH_2 \\rightarrow R{-}CH_2{-}CH_2^\\bullet}$\n\n**2. Propagation:** $\\mathrm{R{-}CH_2CH_2^\\bullet + CH_2{=}CH_2 \\rightarrow R{-}CH_2CH_2CH_2CH_2^\\bullet}$, repeated $n$ times.\n\n**3. Termination:** by coupling, $\\mathrm{{\\sim}CH_2CH_2^\\bullet + {}^\\bullet CH_2CH_2{\\sim} \\rightarrow {\\sim}CH_2CH_2CH_2CH_2{\\sim}}$; or by disproportionation.",
+       "points": [
+        "Initiation: peroxide splits to radicals, which add to monomer",
+        "Propagation equation",
+        "Termination by coupling and disproportionation"
+       ]
+      },
+      {
+       "id": "fr-q4",
+       "kind": "short",
+       "level": 3,
+       "marks": 3,
+       "q": "Why is a high molar mass polymer formed at the very start of a chain-growth reaction, while monomer is still present?",
+       "model_answer_md": "In chain growth, once a radical forms it adds monomer very fast (each addition takes about a millisecond) until termination, so one chain reaches full length quickly.\n\nTherefore the mixture holds a few giant chains and a lot of unreacted monomer; monomer falls steadily, not suddenly. In step growth, in contrast, all species react slowly and high mass appears only near full conversion.",
+       "points": [
+        "Chain grows very fast once started",
+        "Mixture of full chains and monomer",
+        "Contrast with step growth"
+       ]
+      },
+      {
+       "id": "fr-p1",
+       "pyq": "89205fa53d9796dc",
+       "level": 2,
+       "points": [
+        "Benzoyl peroxide is a free radical initiator, so free radical addition polymerisation",
+        "Initiation: peroxide splits to radicals on heating; radical adds to ethylene",
+        "Propagation: radical adds monomer repeatedly",
+        "Termination: coupling or disproportionation"
+       ]
+      },
+      {
+       "id": "fr-p2",
+       "pyq": "542f9c03237730f8",
+       "level": 2,
+       "points": [
+        "Chain growth: unsaturated monomers add to an active centre (radical, ion or metal)",
+        "Three steps: initiation, propagation, termination",
+        "No by-product; high mass forms rapidly; needs initiator"
+       ]
+      },
+      {
+       "id": "fr-p3",
+       "pyq": "04b5f9c5b62036cb",
+       "level": 1,
+       "points": [
+        "C) Joining monomers without by-products"
+       ]
+      }
+     ]
+    },
+    {
+     "id": "ionic",
+     "title": "Cationic and anionic polymerisation",
+     "theory_md": "Both need **dry, oxygen-free** conditions and low temperature.\n\n**Cationic**: initiator a Lewis acid + co-catalyst ($\\mathrm{BF_3 + H_2O}$, $\\mathrm{AlCl_3}$); monomers with **electron-donating** groups (isobutylene, vinyl ethers); the growing end is a carbocation; ends by loss of $\\mathrm{H^+}$.\n\n**Anionic**: initiator a strong base/nucleophile (n-BuLi, $\\mathrm{NaNH_2}$, sodium naphthalene); monomers with **electron-withdrawing** groups (styrene, acrylonitrile, MMA); the growing end is a carbanion, solvent THF.\n\nSteps: initiation, propagation, termination. **No termination in anionic** (carbanions repel) gives **living polymers**: growth continues on adding monomer and is stopped by water or alcohol.\n\nAnionic, DP 2: $\\mathrm{Bu^-} + \\mathrm{CH_2{=}CHPh} \\rightarrow \\mathrm{Bu{-}CH_2CH(Ph)^-}$; one more styrene gives $\\mathrm{Bu(CH_2CHPh)_2^-}$; $\\mathrm{H_2O}$ gives the dimer.",
+     "basics_md": "Cationic: a positive charge leads the chain, so the monomer must push electrons toward it. Anionic: a negative charge leads, so the monomer must pull electrons away.",
+     "key_points": [
+      "Cationic: Lewis acid ($\\mathrm{BF_3}$ + $\\mathrm{H_2O}$), electron-donating monomers (isobutylene), carbocation end",
+      "Anionic: n-BuLi or NaNH2, electron-withdrawing monomers (styrene), carbanion end",
+      "Conditions: dry, inert atmosphere, low temperature, suitable solvent",
+      "Anionic has no termination, so living polymers"
+     ],
+     "figures": [
+      {
+       "smiles": "C=C(C)C",
+       "caption": "Isobutylene (cationic)"
+      },
+      {
+       "smiles": "C=Cc1ccccc1",
+       "caption": "Styrene (anionic)"
+      }
+     ],
+     "questions": [
+      {
+       "id": "io-q1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "Which monomer polymerises readily by the anionic route?",
+       "options": [
+        "Isobutylene",
+        "Styrene",
+        "Vinyl ethyl ether",
+        "Propylene with BF3"
+       ],
+       "answer_index": 1,
+       "why": "The phenyl group stabilises the carbanion."
+      },
+      {
+       "id": "io-q2",
+       "kind": "mcq",
+       "level": 1,
+       "q": "$\\mathrm{BF_3}$ with a trace of water is an initiator for",
+       "options": [
+        "free radical",
+        "anionic",
+        "cationic",
+        "coordination"
+       ],
+       "answer_index": 2,
+       "why": "BF3 is a Lewis acid; with water it gives $\\mathrm{H^+}$."
+      },
+      {
+       "id": "io-q3",
+       "kind": "short",
+       "level": 2,
+       "marks": 3,
+       "q": "Compare cationic and anionic addition polymerisation (three points).",
+       "model_answer_md": "| Cationic | Anionic |\n|---|---|\n| Lewis acid initiator ($\\mathrm{BF_3/H_2O}$) | Strong base (n-BuLi, NaNH$_2$) |\n| Electron-donating monomers (isobutylene) | Electron-withdrawing monomers (styrene, acrylonitrile) |\n| Carbocation chain end | Carbanion chain end |\n| Terminates by $\\mathrm{H^+}$ loss | Living, no termination |",
+       "points": [
+        "Initiator type",
+        "Monomer type",
+        "Chain end",
+        "Termination"
+       ]
+      },
+      {
+       "id": "io-q4",
+       "kind": "short",
+       "level": 3,
+       "marks": 4,
+       "q": "Write the mechanism of anionic polymerisation of styrene with n-BuLi giving a dimer (DP = 2).",
+       "model_answer_md": "**Initiation:** $\\mathrm{Bu^-Li^+ + CH_2{=}CHPh \\rightarrow Bu{-}CH_2{-}CH(Ph)^-Li^+}$\n\n**Propagation (one step, DP 2):** $\\mathrm{Bu{-}CH_2CH(Ph)^- + CH_2{=}CHPh \\rightarrow Bu{-}CH_2CH(Ph){-}CH_2CH(Ph)^-}$\n\n**Termination (deliberate):** $\\mathrm{{\\sim}CH(Ph)^- + H_2O \\rightarrow {\\sim}CH_2Ph + OH^-}$\n\nThe product is the styrene dimer with a butyl end group.",
+       "points": [
+        "Initiation: carbanion adds to styrene",
+        "Propagation: second styrene added",
+        "Termination by water or alcohol",
+        "Conditions: dry, THF"
+       ]
+      },
+      {
+       "id": "io-p1",
+       "pyq": "b21e7bdeef762469",
+       "level": 2,
+       "points": [
+        "Conditions: dry, inert, low temperature, polar solvent; strong base initiator for anionic",
+        "Anionic: initiation by carbanion (n-BuLi) adding to monomer",
+        "Propagation by carbanion end",
+        "Termination by proton source (water or alcohol)"
+       ]
+      },
+      {
+       "id": "io-p2",
+       "pyq": "a9b6600d7f6b7c10",
+       "level": 3,
+       "points": [
+        "Choose a monomer with electron-withdrawing group (styrene)",
+        "Initiation: n-BuLi adds, carbanion",
+        "Propagation once to give DP 2",
+        "Termination with water/proton source gives dimer"
+       ]
+      },
+      {
+       "id": "io-p3",
+       "pyq": "ea1e345ba1a8fa6c",
+       "level": 2,
+       "points": [
+        "Yes: anionic polymers are living polymers",
+        "No termination: carbanions do not combine; no proton source in dry system",
+        "Chain stays active; more monomer restarts growth; narrow mass distribution; block copolymers"
+       ]
+      },
+      {
+       "id": "io-p4",
+       "pyq": "d958c16d2ffa168d",
+       "level": 3,
+       "points": [
+        "Free radical: initiator (benzoyl peroxide), initiation, propagation, termination",
+        "Cationic: Lewis acid ($\\mathrm{BF_3/H_2O}$), carbocation, electron-donating monomer, terminates by loss of $\\mathrm{H^+}$",
+        "Coordination: Ziegler-Natta, coordination then insertion, isotactic"
+       ]
+      },
+      {
+       "id": "io-p5",
+       "pyq": "aecd16ab9b20cc46",
+       "level": 3,
+       "points": [
+        "Free radical: initiation (peroxide gives R., adds to monomer), propagation, termination (coupling or disproportionation)",
+        "Anionic: initiation (n-BuLi, NaNH2) gives carbanion",
+        "Propagation by carbanion; termination absent or by water"
+       ]
+      }
+     ]
+    },
+    {
+     "id": "coordination",
+     "title": "Ziegler-Natta coordination polymerisation",
+     "theory_md": "**Catalyst**: $\\mathrm{TiCl_4 + Al(C_2H_5)_3}$ (Ziegler-Natta), used for ethylene and propylene at low pressure.\n\n1. **Active site**: $\\mathrm{TiCl_4 + Al(C_2H_5)_3 \\rightarrow Cl_3Ti{-}C_2H_5 + Al(C_2H_5)_2Cl}$ (alkyl moves to Ti, leaving a vacant site).\n2. **Coordination**: monomer binds to the vacant site.\n3. **Insertion**: monomer inserts into the Ti-alkyl bond, so the alkyl group becomes the chain end: $\\mathrm{[Ti]{-}R + CH_2{=}CHCH_3 \\rightarrow [Ti]{-}CH_2CH(CH_3){-}R}$.\n4. Repeated; stops with $\\mathrm{H_2}$.\n\nHence also called **insertion polymerisation**. The surface fixes monomer orientation: linear, **isotactic** product (HDPE, isotactic PP), more crystalline and stronger but less transparent. Unlike ionic, there are no free ions and it controls stereochemistry.",
+     "basics_md": "The monomer docks at a metal atom, which holds it in one orientation, and then slides into the metal-carbon bond. Every unit enters the same way, so the chain is regular.",
+     "key_points": [
+      "Catalyst $\\mathrm{TiCl_4 + Al(C_2H_5)_3}$",
+      "Coordination of monomer to Ti, then insertion into Ti-C bond (insertion polymerisation)",
+      "Alkyl group is directly incorporated into the chain end",
+      "Gives linear, isotactic, crystalline polymer: stronger, higher m.p., less transparent",
+      "Differs from ionic: no free ions, stereocontrol, works for non-polar alkenes"
+     ],
+     "figures": [
+      {
+       "smiles": "C=CC",
+       "caption": "Propylene, polymerised to isotactic PP"
+      },
+      {
+       "smiles": "C=C",
+       "caption": "Ethylene, polymerised to HDPE"
+      }
+     ],
+     "questions": [
+      {
+       "id": "co-q1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "The Ziegler-Natta catalyst is",
+       "options": [
+        "$\\mathrm{BF_3 + H_2O}$",
+        "n-BuLi",
+        "$\\mathrm{TiCl_4 + Al(C_2H_5)_3}$",
+        "benzoyl peroxide"
+       ],
+       "answer_index": 2,
+       "why": "A transition metal halide with an alkylaluminium co-catalyst."
+      },
+      {
+       "id": "co-q2",
+       "kind": "mcq",
+       "level": 2,
+       "q": "Compared with atactic PP, isotactic PP from a Ziegler-Natta catalyst is",
+       "options": [
+        "softer and clearer",
+        "stronger and more crystalline",
+        "soluble and tacky",
+        "cross-linked"
+       ],
+       "answer_index": 1,
+       "why": "Regular chains pack and crystallise."
+      },
+      {
+       "id": "co-q3",
+       "kind": "short",
+       "level": 2,
+       "marks": 3,
+       "q": "Outline the mechanism of coordination polymerisation of propylene.",
+       "model_answer_md": "**Catalyst:** $\\mathrm{TiCl_4 + Al(C_2H_5)_3}$.\n\n1. **Active site:** $\\mathrm{TiCl_4 + AlEt_3 \\rightarrow Cl_3Ti{-}Et + AlEt_2Cl}$ (vacant site on Ti).\n2. **Coordination:** propylene binds to the vacant site by its C=C.\n3. **Insertion:** $\\mathrm{[Ti]{-}Et + CH_2{=}CHCH_3 \\rightarrow [Ti]{-}CH_2CH(CH_3){-}Et}$.\n4. **Repeat** to grow the chain; **termination** by $\\mathrm{H_2}$.\n\nProduct: isotactic polypropylene.",
+       "points": [
+        "Catalyst named",
+        "Active site with vacant position",
+        "Coordination then insertion into Ti-C",
+        "Chain growth and termination by H2"
+       ]
+      },
+      {
+       "id": "co-q4",
+       "kind": "short",
+       "level": 3,
+       "marks": 3,
+       "q": "Why is coordination polymerisation different from ionic polymerisation?",
+       "model_answer_md": "1. The chain end is a metal-carbon bond (Ti-C), not a free ion pair.\n2. The monomer first coordinates to the metal and then inserts, so its orientation is controlled: **stereoregular (isotactic)** polymer. Ionic polymerisation gives little stereocontrol.\n3. It polymerises non-polar alkenes (ethylene, propylene) at low pressure and temperature, which ionic initiators cannot.",
+       "points": [
+        "Metal-carbon bond, no free ions",
+        "Stereocontrol, isotactic product",
+        "Works for non-polar alkenes"
+       ]
+      },
+      {
+       "id": "co-p1",
+       "pyq": "ff8eb6b913870a52",
+       "level": 3,
+       "points": [
+        "Catalyst $\\mathrm{TiCl_4 + Al(C_2H_5)_3}$; vacant site",
+        "Coordination of monomer then insertion into Ti-C bond; repeat",
+        "Different from ionic: no free ions, monomer coordinated and oriented, stereoregular",
+        "Non-polar monomers; low pressure"
+       ]
+      },
+      {
+       "id": "co-p2",
+       "pyq": "f777dc01bf76355f",
+       "level": 1,
+       "points": [
+        "Yes: the monomer inserts into the metal-alkyl bond at each step"
+       ]
+      },
+      {
+       "id": "co-p3",
+       "pyq": "e706f1527f463226",
+       "level": 1,
+       "points": [
+        "Yes: the monomer is inserted between the metal and the growing chain"
+       ]
+      },
+      {
+       "id": "co-p4",
+       "pyq": "ebb1121326f5312e",
+       "level": 1,
+       "points": [
+        "Yes: each monomer is inserted into the transition metal-carbon bond"
+       ]
+      },
+      {
+       "id": "co-p5",
+       "pyq": "bd0f49eaa39c11ce",
+       "level": 2,
+       "points": [
+        "Ziegler-Natta catalyst $\\mathrm{TiCl_4 + Al(C_2H_5)_3}$",
+        "Coordination of monomer at Ti then insertion into Ti-alkyl bond",
+        "Catalyst fixes orientation: isotactic, linear, high density polymer"
+       ]
+      },
+      {
+       "id": "co-p6",
+       "pyq": "2dd56e977574c0b5",
+       "level": 2,
+       "points": [
+        "Name: coordination (Ziegler-Natta, insertion) polymerisation",
+        "Alkyl group of AlEt3 moves to Ti and ends up at the chain end; coordination then insertion",
+        "Importance: stereoregular isotactic PP, HDPE at low pressure and temperature, strong crystalline polymers"
+       ]
+      },
+      {
+       "id": "co-p7",
+       "pyq": "49133c3682b55f79",
+       "level": 3,
+       "points": [
+        "Catalyst gives stereoregular (isotactic) linear chains",
+        "Higher crystallinity: more strength, stiffness, m.p.",
+        "Crystalline regions scatter light: less transparent",
+        "Example: isotactic PP or HDPE versus atactic PP or LDPE"
+       ]
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "topic": "Molecular weight of polymers",
+   "subtopics": [
+    {
+     "id": "mn-mw",
+     "title": "Number average and weight average molar mass",
+     "theory_md": "A polymer sample has chains of many lengths (**polydisperse**), so molar mass is an average. For $N_i$ molecules of molar mass $M_i$:\n\n$$\\overline{M}_n=\\frac{\\sum N_iM_i}{\\sum N_i}\\qquad \\overline{M}_w=\\frac{\\sum N_iM_i^2}{\\sum N_iM_i}=\\sum w_iM_i$$\n\n$w_i$ is the weight fraction of species $i$. $\\overline{M}_n$ counts every molecule equally (found by osmometry or end-group analysis); $\\overline{M}_w$ gives heavy chains more weight (light scattering). Units g/mol.\n\nExample: 100 molecules of 10 000 and 100 of 30 000 g/mol: $\\overline{M}_n=20\\,000$, $\\overline{M}_w=25\\,000$ g/mol.",
+     "basics_md": "Mn is the plain average: total mass divided by number of chains. Mw is a mass-weighted average, so a few very big chains lift it.",
+     "key_points": [
+      "$\\overline{M}_n = \\sum N_iM_i/\\sum N_i$, $\\overline{M}_w = \\sum N_iM_i^2/\\sum N_iM_i$",
+      "Mn by osmometry or end-group analysis; Mw by light scattering",
+      "Mn sensitive to small molecules, Mw to large ones",
+      "Units g/mol; show the sums for a discrete distribution"
+     ],
+     "questions": [
+      {
+       "id": "mn-q1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "$\\overline{M}_n$ is obtained by",
+       "options": [
+        "light scattering",
+        "osmometry",
+        "ultracentrifuge only",
+        "viscosity only"
+       ],
+       "answer_index": 1,
+       "why": "Osmometry counts molecules; light scattering gives $\\overline{M}_w$."
+      },
+      {
+       "id": "mn-q2",
+       "kind": "mcq",
+       "level": 1,
+       "q": "Which average is more affected by a few very heavy chains?",
+       "options": [
+        "$\\overline{M}_n$",
+        "$\\overline{M}_w$",
+        "both equally",
+        "neither"
+       ],
+       "answer_index": 1,
+       "why": "Weighting by mass favours heavy chains."
+      },
+      {
+       "id": "mn-q3",
+       "kind": "numerical",
+       "level": 2,
+       "marks": 3,
+       "q": "A sample has 2 mol of mass 10 000, 3 mol of 20 000 and 5 mol of 40 000 g/mol. Find $\\overline{M}_n$ and $\\overline{M}_w$.",
+       "model_answer_md": "$\\sum N_i=10$; $\\sum N_iM_i=2(10^4)+3(2\\times10^4)+5(4\\times10^4)=2.8\\times10^5$\n\n$\\overline{M}_n=2.8\\times10^5/10=\\mathbf{28\\,000}$ g/mol\n\n$\\sum N_iM_i^2=2(10^8)+3(4\\times10^8)+5(16\\times10^8)=9.4\\times10^9$\n\n$\\overline{M}_w=9.4\\times10^9/2.8\\times10^5=\\mathbf{33\\,571}$ g/mol",
+       "points": [
+        "$\\overline{M}_n$ formula and value 28 000 g/mol",
+        "$\\overline{M}_w$ formula and value 33 571 g/mol"
+       ]
+      },
+      {
+       "id": "mn-p1",
+       "pyq": "d779068f4cfeb095",
+       "level": 2,
+       "points": [
+        "$\\overline{M}_n=\\sum N_iM_i/\\sum N_i$",
+        "$\\overline{M}_w=\\sum N_iM_i^2/\\sum N_iM_i=\\sum w_iM_i$",
+        "Symbols defined; units g/mol"
+       ]
+      },
+      {
+       "id": "mn-p2",
+       "pyq": "927b2b38b779e82f",
+       "level": 2,
+       "points": [
+        "$\\overline{M}_w=\\sum W_iM_i/\\sum W_i=\\sum N_iM_i^2/\\sum N_iM_i$",
+        "$W_i=N_iM_i$ for each fraction",
+        "Example with sums giving the value (e.g. 28 667 g/mol)"
+       ]
+      }
+     ]
+    },
+    {
+     "id": "pdi-dp",
+     "title": "Polydispersity index and degree of polymerisation",
+     "theory_md": "**Polydispersity index** $PDI=\\overline{M}_w/\\overline{M}_n\\ge 1$. Because\n$$\\overline{M}_w-\\overline{M}_n=\\frac{\\sigma^2}{\\overline{M}_n}\\ge 0,$$\nwhere $\\sigma^2$ is the variance of the distribution, $\\overline{M}_w\\ge\\overline{M}_n$; equality ($PDI=1$) holds only for a **monodisperse** sample (all chains equal, as in proteins). Living anionic polymers give $PDI$ near 1; free radical and condensation polymers about 2.\n\nA larger PDI means a broader distribution. Higher molar mass gives more strength, toughness and melt viscosity; low-mass chains act like plasticiser and lower strength.\n\n$DP=\\overline{M}_n/M_0$ ($M_0$ = repeat-unit mass).",
+     "basics_md": "PDI says how uneven the chain lengths are. All chains equal gives exactly 1. The more varied the lengths, the larger the number.",
+     "key_points": [
+      "$PDI=\\overline{M}_w/\\overline{M}_n\\ge 1$; 1 for monodisperse",
+      "$\\overline{M}_w-\\overline{M}_n=\\sigma^2/\\overline{M}_n\\ge0$ (variance is not negative)",
+      "Heavy chains pull $\\overline{M}_w$ above $\\overline{M}_n$",
+      "Higher mass gives higher strength and melt viscosity; $DP=\\overline{M}_n/M_0$"
+     ],
+     "questions": [
+      {
+       "id": "pd-q1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "The PDI of a monodisperse polymer is",
+       "options": [
+        "0",
+        "1",
+        "2",
+        "less than 1"
+       ],
+       "answer_index": 1,
+       "why": "All chains have the same mass, so $\\overline{M}_w=\\overline{M}_n$."
+      },
+      {
+       "id": "pd-q2",
+       "kind": "mcq",
+       "level": 2,
+       "q": "A polymer has $\\overline{M}_n=20\\,000$ and $\\overline{M}_w=25\\,000$. Its PDI is",
+       "options": [
+        "0.8",
+        "1.25",
+        "5000",
+        "45 000"
+       ],
+       "answer_index": 1,
+       "why": "$25000/20000=1.25$."
+      },
+      {
+       "id": "pd-q3",
+       "kind": "numerical",
+       "level": 2,
+       "marks": 2,
+       "q": "Polystyrene (repeat unit 104.15 g/mol) has $\\overline{M}_n=104\\,150$ g/mol. Find the degree of polymerisation.",
+       "model_answer_md": "$DP=\\overline{M}_n/M_0=104150/104.15=\\mathbf{1000}$",
+       "points": [
+        "DP = Mn / M0",
+        "DP = 1000"
+       ]
+      },
+      {
+       "id": "pd-q4",
+       "kind": "short",
+       "level": 3,
+       "marks": 3,
+       "q": "What does PDI signify about polymer properties?",
+       "model_answer_md": "$PDI=\\overline{M}_w/\\overline{M}_n$ measures the breadth of the chain-length distribution.\n\n- PDI = 1: all chains equal, sharp melting and uniform behaviour.\n- Larger PDI: broad distribution; low-mass chains lower strength and melting point, high-mass chains raise melt viscosity and toughness, so processing and mechanical properties both depend on it.",
+       "points": [
+        "PDI = Mw/Mn, breadth of distribution",
+        "PDI = 1 is uniform",
+        "Effect on strength, melt viscosity"
+       ]
+      },
+      {
+       "id": "pd-p1",
+       "pyq": "0fa9f0ad54131628",
+       "level": 3,
+       "points": [
+        "Define $\\overline{M}_n$ and $\\overline{M}_w$ with formulas (osmometry; light scattering)",
+        "$\\overline{M}_w-\\overline{M}_n=\\sigma^2/\\overline{M}_n\\ge0$, so $\\overline{M}_w\\ge\\overline{M}_n$",
+        "Heavy chains weighted more in $\\overline{M}_w$; equal only if monodisperse",
+        "Significance: PDI measures breadth, affects strength and viscosity"
+       ]
+      },
+      {
+       "id": "pd-p2",
+       "pyq": "3f2941ab375399a6",
+       "level": 2,
+       "points": [
+        "Mn: number fraction, sensitive to small molecules, osmometry; Mw: weight fraction, sensitive to large molecules, light scattering",
+        "Formulas for both",
+        "Correlated by PDI $=\\overline{M}_w/\\overline{M}_n\\ge1$"
+       ]
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "topic": "Thermosetting vs thermoplastic polymers",
+   "subtopics": [
+    {
+     "id": "difference",
+     "title": "Thermoplastic versus thermosetting",
+     "theory_md": "**Thermoplastics** (PE, PVC, polystyrene, nylon): linear or branched chains held by weak van der Waals or H-bond forces. They soften on heating, harden on cooling, **reversibly**, so can be remoulded and recycled; soluble in solvents; softer, tougher.\n\n**Thermosets** (bakelite, urea-formaldehyde, epoxy): on first heating (curing) chains join by **covalent cross-links** into a 3-D network. They do not soften again, char on strong heating, are insoluble, hard, rigid and brittle.\n\n**Cross-linking** = covalent bonds between chains. PVC with plasticizer is soft; bakelite is hard and brittle because chains cannot slide.",
+     "basics_md": "Thermoplastic is like candle wax: melt and reshape again. Thermoset is like a baked cake: once set, heat only burns it.",
+     "key_points": [
+      "Thermoplastic: linear, weak forces, softens reversibly, recyclable",
+      "Thermoset: 3-D covalent network, permanent set, insoluble, hard and brittle",
+      "Cross-linking is covalent bonding between chains",
+      "Examples: PE, PVC versus bakelite, UF"
+     ],
+     "figures": [
+      {
+       "smiles": "Oc1ccccc1",
+       "caption": "Phenol, trifunctional towards formaldehyde"
+      },
+      {
+       "smiles": "C=O",
+       "caption": "Formaldehyde"
+      }
+     ],
+     "questions": [
+      {
+       "id": "d-q1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "Which can be softened and remoulded repeatedly?",
+       "options": [
+        "Bakelite",
+        "Polyethylene",
+        "Vulcanised ebonite",
+        "Epoxy resin"
+       ],
+       "answer_index": 1,
+       "why": "Polyethylene is a thermoplastic."
+      },
+      {
+       "id": "d-q2",
+       "kind": "mcq",
+       "level": 1,
+       "q": "Cross-links in a thermoset are",
+       "options": [
+        "van der Waals forces",
+        "covalent bonds",
+        "hydrogen bonds",
+        "ionic bonds"
+       ],
+       "answer_index": 1,
+       "why": "They are covalent bridges between chains."
+      },
+      {
+       "id": "d-q3",
+       "kind": "short",
+       "level": 2,
+       "marks": 4,
+       "q": "Differentiate thermoplastic and thermosetting resins (four points) with examples.",
+       "model_answer_md": "| Thermoplastic | Thermosetting |\n|---|---|\n| Soften on heating, reversible | Set permanently on heating |\n| Linear chains, weak forces | 3-D covalent network |\n| Remoulded, recycled; soluble | Cannot be remoulded; insoluble |\n| Soft, less brittle | Hard, rigid, brittle |\n| Mostly addition; injection moulding | Mostly condensation; compression moulding |\n| PE, PVC, nylon | Bakelite, UF, epoxy |",
+       "points": [
+        "Behaviour on heating",
+        "Structure and forces",
+        "Remoulding and solubility",
+        "Hardness",
+        "Examples"
+       ]
+      },
+      {
+       "id": "d-p1",
+       "pyq": "7290267d0fbf907d",
+       "level": 2,
+       "points": [
+        "Thermoplastic: soften reversibly, linear chains, weak forces, recyclable, soluble, injection moulding; PE, PVC",
+        "Thermoset: permanent set, 3-D cross-linked, covalent, insoluble, hard and brittle, compression moulding; bakelite, UF"
+       ]
+      },
+      {
+       "id": "d-p2",
+       "pyq": "9041ff1bf4029518",
+       "level": 1,
+       "points": [
+        "A) Melted and reshaped multiple times"
+       ]
+      },
+      {
+       "id": "d-p3",
+       "pyq": "fa6d169c3bf9e81e",
+       "level": 1,
+       "points": [
+        "B) Formation of covalent bonds between chains"
+       ]
+      },
+      {
+       "id": "d-p4",
+       "pyq": "e26d8ee4f99b91f2",
+       "level": 2,
+       "points": [
+        "Polythene, PVC, polystyrene are linear thermoplastics held by weak forces; chains slide",
+        "Bakelite: phenol trifunctional, CH2 bridges give 3-D network of strong covalent bonds",
+        "Chains cannot slide, hence stronger, harder, heat resistant"
+       ]
+      },
+      {
+       "id": "d-p5",
+       "pyq": "4363c13b27b237c1",
+       "level": 2,
+       "points": [
+        "PVC is a linear thermoplastic with weak forces; plasticizer lowers Tg, so soft and flexible",
+        "Bakelite is a 3-D cross-linked thermoset: hard",
+        "Chains cannot move, so it breaks instead of bending: brittle"
+       ]
+      }
+     ]
+    },
+    {
+     "id": "crystallinity-tg",
+     "title": "Crystallinity, glass transition and fibre formation",
+     "theory_md": "**Crystalline regions** form where chains are regular and pack closely (linear chains, isotactic, H-bonding as in nylon); they raise strength, density and melting point (Tm). Branching and bulky or random groups give **amorphous** polymers.\n\n**Glass transition temperature $T_g$**: the temperature at which an amorphous polymer changes from hard, glassy to soft, rubbery (segments begin to move). It is not melting; Tm belongs to crystalline regions. Plasticizers lower $T_g$.\n\nA strong **fibre** needs linear, highly crystalline, oriented chains with strong intermolecular forces (nylon, polyester, Kevlar).",
+     "basics_md": "Neat, straight chains line up like logs in a stack and are strong; tangled chains are like spaghetti and are soft.",
+     "key_points": [
+      "Crystallinity needs regular, linear chains and strong forces",
+      "Tg: glassy to rubbery in amorphous regions, not melting",
+      "Plasticiser lowers Tg",
+      "Fibres: highly crystalline, linear, oriented"
+     ],
+     "questions": [
+      {
+       "id": "c-q1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "Glass transition temperature is where an amorphous polymer",
+       "options": [
+        "melts",
+        "becomes soft and rubbery",
+        "decomposes",
+        "boils"
+       ],
+       "answer_index": 1,
+       "why": "Segmental motion begins."
+      },
+      {
+       "id": "c-q2",
+       "kind": "mcq",
+       "level": 1,
+       "q": "Which factor reduces crystallinity?",
+       "options": [
+        "Linear chains",
+        "Random bulky side groups",
+        "H-bonding",
+        "Isotactic structure"
+       ],
+       "answer_index": 1,
+       "why": "Irregular chains cannot pack."
+      },
+      {
+       "id": "c-q3",
+       "kind": "short",
+       "level": 2,
+       "marks": 2,
+       "q": "Why does a strong fibre need high crystallinity? Give two fibre-forming polymers.",
+       "model_answer_md": "Linear chains packed in line give a high density of strong intermolecular forces (H-bonds) along the fibre axis, hence high tensile strength.\n\nExamples: nylon 6,6, terylene (PET), Kevlar.",
+       "points": [
+        "Linear, regular packing",
+        "Strong intermolecular forces",
+        "Two examples"
+       ]
+      },
+      {
+       "id": "c-p1",
+       "pyq": "bcdc433b0cc9b6dd",
+       "level": 1,
+       "points": [
+        "C) Temperature at which it becomes soft and rubbery"
+       ]
+      },
+      {
+       "id": "c-p2",
+       "pyq": "5ec9074380dff5ec",
+       "level": 2,
+       "points": [
+        "(iii) Highly crystalline",
+        "Linear chains pack and align with strong forces; amorphous or branched polymers are weak"
+       ]
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "topic": "Moulding of plastics",
+   "subtopics": [
+    {
+     "id": "compounding",
+     "title": "Compounding and plasticizers",
+     "theory_md": "A plastic is made by **compounding** the resin with additives: **plasticizer**, filler, pigment, stabiliser, lubricant and (for thermosets) hardener/catalyst.\n\n- **Plasticizer** (dioctyl phthalate, tricresyl phosphate): high-boiling liquid that gets between chains, weakens intermolecular forces, lowers $T_g$: more flexible, softer, easier to flow and mould (rigid PVC to flexible PVC).\n- **Filler** (wood flour, mica, asbestos): bulk, hardness, lower cost.\n- **Pigment**: colour. **Stabiliser**: resists heat and light. **Lubricant**: easy release from mould.",
+     "basics_md": "Additives tune the resin: plasticizer makes it soft, filler makes it cheap and hard, pigment colours it.",
+     "key_points": [
+      "Compounding = resin + plasticizer + filler + pigment + stabiliser + lubricant",
+      "Plasticizer weakens inter-chain forces, lowers Tg, adds flexibility and flow",
+      "Filler adds strength or bulk; plasticizer adds flexibility"
+     ],
+     "questions": [
+      {
+       "id": "cp-q1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "A plasticizer is added to",
+       "options": [
+        "raise m.p.",
+        "improve flexibility and flow",
+        "make plastic brittle",
+        "colour it"
+       ],
+       "answer_index": 1,
+       "why": "It lowers Tg."
+      },
+      {
+       "id": "cp-q2",
+       "kind": "mcq",
+       "level": 1,
+       "q": "Which is a plasticizer?",
+       "options": [
+        "Tricresyl phosphate",
+        "Wood flour",
+        "Carbon black",
+        "$\\mathrm{TiO_2}$"
+       ],
+       "answer_index": 0,
+       "why": "Wood flour is a filler, the others are pigments."
+      },
+      {
+       "id": "cp-q3",
+       "kind": "short",
+       "level": 2,
+       "marks": 2,
+       "q": "Name four ingredients added to a resin to make a plastic and state the function of each.",
+       "model_answer_md": "1. Plasticizer: flexibility, lower $T_g$.\n2. Filler: strength, bulk, cheapness.\n3. Pigment: colour.\n4. Stabiliser: resists heat/light.\n(Lubricant: easy mould release.)",
+       "points": [
+        "Four correct ingredients",
+        "Function of each"
+       ]
+      },
+      {
+       "id": "cp-p1",
+       "pyq": "d75b6aebb2343f93",
+       "level": 2,
+       "points": [
+        "Plasticizer molecules enter between chains and weaken intermolecular forces",
+        "Lowers Tg: soft, flexible, easy to mould",
+        "Example rigid PVC to flexible PVC"
+       ]
+      },
+      {
+       "id": "cp-p2",
+       "pyq": "67d2b0359fc69d5d",
+       "level": 1,
+       "points": [
+        "C) Improve flow and flexibility"
+       ]
+      }
+     ]
+    },
+    {
+     "id": "compression-transfer",
+     "title": "Compression moulding and fabrication",
+     "theory_md": "**Fabrication** (moulding) converts compounded resin into a finished article by heat and pressure in a mould.\n\n**Compression moulding** (thermosets, e.g. bakelite): a weighed charge goes into the heated lower (female) die; the upper (male) die closes under pressure (about 100 to 500 kg/cm$^2$) at about 120 to 180 $^\\circ$C; the resin melts, fills the cavity and cures; the mould opens and the article is ejected. Used for switches and handles.\n\n**Transfer moulding**: charge softened in a separate chamber and forced by a plunger into a closed mould (for intricate parts and inserts).",
+     "basics_md": "Place powder in a hot mould, squeeze, wait while it sets, take out.",
+     "key_points": [
+      "Fabrication = shaping compounded resin by heat and pressure in a mould",
+      "Compression: charge in hot female die, male die closes, cures, ejected; for thermosets",
+      "Conditions: 120 to 180 $^\\circ$C, 100 to 500 kg/cm$^2$"
+     ],
+     "questions": [
+      {
+       "id": "ct-q1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "Compression moulding is mainly used for",
+       "options": [
+        "thermosets",
+        "fibres",
+        "films",
+        "rubber latex only"
+       ],
+       "answer_index": 0,
+       "why": "The resin cures in the hot mould."
+      },
+      {
+       "id": "ct-q2",
+       "kind": "short",
+       "level": 2,
+       "marks": 3,
+       "q": "Describe compression moulding with a labelled sketch in words.",
+       "model_answer_md": "**Diagram:** an upper plunger (male die) over a lower heated die (female) containing the powder charge; heater/steam channels around the dies; ejector pin below.\n\n1. A weighed charge is put in the heated female die.\n2. The male die closes; pressure (100 to 500 kg/cm$^2$) and heat (120 to 180 $^\\circ$C) are applied.\n3. The resin melts, fills the cavity and cures.\n4. The mould is opened and the article ejected.\n\nUses: bakelite switches, plugs.",
+       "points": [
+        "Labelled diagram",
+        "Charge, heat and pressure steps",
+        "Curing and ejection",
+        "Example article"
+       ]
+      },
+      {
+       "id": "ct-q3",
+       "kind": "mcq",
+       "level": 2,
+       "q": "Which is NOT a stage in compression moulding?",
+       "options": [
+        "Heating the die",
+        "Closing the male die under pressure",
+        "Forcing melt through a nozzle into a cold mould",
+        "Curing of resin"
+       ],
+       "answer_index": 2,
+       "why": "That describes injection moulding."
+      },
+      {
+       "id": "ct-p1",
+       "pyq": "f441ea50872e34a6",
+       "level": 2,
+       "points": [
+        "Fabrication = shaping compounded plastic by heat and pressure in a mould",
+        "Compression moulding: steps, conditions, thermosets",
+        "Injection moulding: hopper, heated cylinder, ram, nozzle, cold mould, thermoplastics"
+       ]
+      }
+     ]
+    },
+    {
+     "id": "injection-extrusion",
+     "title": "Injection moulding and other methods",
+     "theory_md": "**Injection moulding** (thermoplastics, e.g. polystyrene, PE): granules fall from the **hopper** into a **heated cylinder** (90 to 260 $^\\circ$C), soften, and a **ram/plunger** forces the melt through a **nozzle** into a **cold, closed split mould**. The plastic cools and sets, the mould opens and the article is ejected. Fast, mass production (buckets, toys, bottle caps).\n\n**Extrusion**: melt pushed by a screw through a die for pipes, wires, films. **Blow moulding**: air inflates a hot tube in a mould for bottles.",
+     "basics_md": "Melt it, squirt it into a cold mould, let it freeze, open.",
+     "key_points": [
+      "Injection: hopper, heated cylinder, ram, nozzle, cold split mould",
+      "For thermoplastics; fast, mass production",
+      "Extrusion for pipes and films; blow moulding for bottles"
+     ],
+     "questions": [
+      {
+       "id": "ie-q1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "In injection moulding the mould is",
+       "options": [
+        "heated and cured",
+        "cold",
+        "absent",
+        "filled with water"
+       ],
+       "answer_index": 1,
+       "why": "The melt must solidify in the cold mould."
+      },
+      {
+       "id": "ie-q2",
+       "kind": "short",
+       "level": 2,
+       "marks": 3,
+       "q": "Explain injection moulding with a labelled diagram.",
+       "model_answer_md": "**Diagram:** hopper on top of a heated cylinder (with heaters), a ram/plunger at one end, and a nozzle at the other end feeding a two-part (split) cold mould.\n\n1. Granules fall from the hopper into the cylinder.\n2. They soften at 90 to 260 $^\\circ$C.\n3. The ram forces the melt through the nozzle into the cold mould.\n4. It cools and sets; mould opens; article ejected.\n\nUsed for thermoplastics: buckets, toys.",
+       "points": [
+        "Diagram labels: hopper, cylinder, ram, nozzle, mould",
+        "Steps in order",
+        "Thermoplastics and use"
+       ]
+      },
+      {
+       "id": "ie-q3",
+       "kind": "mcq",
+       "level": 2,
+       "q": "A plastic pipe is best shaped by",
+       "options": [
+        "compression moulding",
+        "extrusion",
+        "injection moulding of thermosets",
+        "casting"
+       ],
+       "answer_index": 1,
+       "why": "A screw pushes the melt through a die."
+      },
+      {
+       "id": "ie-p1",
+       "pyq": "0dc6ad12e0d442ee",
+       "level": 2,
+       "points": [
+        "Hopper, heated cylinder, ram, nozzle, cold split mould in labelled diagram",
+        "Steps: soften, inject, cool, eject; thermoplastics"
+       ]
+      },
+      {
+       "id": "ie-p2",
+       "pyq": "f5985ae61312c69c",
+       "level": 3,
+       "points": [
+        "Diagram only, correctly labelled: hopper, heating cylinder with heaters, plunger/ram, torpedo or nozzle, split mould (cavity), ejector",
+        "Flow direction shown"
+       ]
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "topic": "Thermoplastic and thermosetting resins",
+   "subtopics": [
+    {
+     "id": "vinyl-thermoplastics",
+     "title": "Common thermoplastics: PE, PVC, PTFE, PET",
+     "theory_md": "- **Polyethylene** (ethylene; free radical gives LDPE, Ziegler-Natta gives HDPE): flexible, moisture proof; packaging film, bags.\n- **PVC** (vinyl chloride): tough, flame resistant; plasticized for cable insulation, pipes.\n- **Polystyrene**: rigid, transparent; packaging, toys.\n- **PTFE (Teflon)**, $\\mathrm{-[CF_2-CF_2]_n-}$: very strong C-F bonds and a fluorine sheath make it chemically inert and non-stick; gaskets, coatings.\n- **PET** (glycol + terephthalic acid): clear, tough, gas barrier; bottles and fibre.\n- **PMMA**: transparent; lenses, sheets.",
+     "basics_md": "Match each plastic with its monomer and its best-known use.",
+     "key_points": [
+      "Polyethylene: film; PVC: cables and pipes; PET: bottles",
+      "Teflon inert because C-F bond is very strong and F shields the chain",
+      "Name monomer, type of polymerisation and use for each"
+     ],
+     "figures": [
+      {
+       "smiles": "C=CCl",
+       "caption": "Vinyl chloride (PVC)"
+      },
+      {
+       "smiles": "FC(F)=C(F)F",
+       "caption": "Tetrafluoroethylene (Teflon)"
+      },
+      {
+       "smiles": "C=C(C)C(=O)OC",
+       "caption": "Methyl methacrylate (PMMA)"
+      }
+     ],
+     "questions": [
+      {
+       "id": "v-q1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "PVC is widely used for",
+       "options": [
+        "bottle caps only",
+        "electrical cable insulation",
+        "bulletproof vests",
+        "non-stick pans"
+       ],
+       "answer_index": 1,
+       "why": "Plasticized PVC is a good insulator."
+      },
+      {
+       "id": "v-q2",
+       "kind": "mcq",
+       "level": 1,
+       "q": "Teflon is made from",
+       "options": [
+        "$\\mathrm{CH_2{=}CHCl}$",
+        "$\\mathrm{CF_2{=}CF_2}$",
+        "$\\mathrm{CH_2{=}CHPh}$",
+        "$\\mathrm{CH_2{=}CH_2}$"
+       ],
+       "answer_index": 1,
+       "why": "Tetrafluoroethylene."
+      },
+      {
+       "id": "v-q3",
+       "kind": "short",
+       "level": 2,
+       "marks": 3,
+       "q": "Give the monomer, one property and one use of each: polyethylene, PVC, Teflon.",
+       "model_answer_md": "- Polyethylene: ethylene; flexible, moisture proof; packaging film.\n- PVC: vinyl chloride; tough, flame resistant; cable insulation, pipes.\n- Teflon: tetrafluoroethylene; chemically inert, non-stick; gaskets, coating.",
+       "points": [
+        "Three correct monomers",
+        "Property each",
+        "Use each"
+       ]
+      },
+      {
+       "id": "v-p1",
+       "pyq": "1b0403c8dc33101b",
+       "level": 2,
+       "points": [
+        "Teflon $\\mathrm{-[CF_2-CF_2]_n-}$: very strong C-F bonds, saturated chain",
+        "F atoms form a tight sheath protecting carbon chain; no C-H",
+        "Linear, crystalline: reagents cannot penetrate"
+       ]
+      },
+      {
+       "id": "v-p2",
+       "pyq": "764e485f82d91bb3",
+       "level": 1,
+       "points": [
+        "B) PET: clear, tough, gas barrier"
+       ]
+      },
+      {
+       "id": "v-p3",
+       "pyq": "21887d4db4931f85",
+       "level": 1,
+       "points": [
+        "A) PVC: good insulator, flame resistant"
+       ]
+      },
+      {
+       "id": "v-p4",
+       "pyq": "5461314e0ee4448c",
+       "level": 1,
+       "points": [
+        "B) Polyethylene: flexible, moisture proof, easily made into film"
+       ]
+      }
+     ]
+    },
+    {
+     "id": "thermosets",
+     "title": "Bakelite and other thermosetting resins",
+     "theory_md": "**Bakelite** (phenol-formaldehyde). Phenol (functionality 3) + HCHO give methylol phenols, which condense (loss of $\\mathrm{H_2O}$):\n- **Novolac** (acid catalyst, excess phenol): linear; cured with hexamethylenetetramine to a network.\n- **Resole** (alkaline catalyst, excess HCHO): cross-links on heating.\n\nFinal product: hard 3-D network joined by $\\mathrm{-CH_2-}$ bridges. Properties: hard, rigid, heat resistant, excellent insulator, cannot be remelted. Uses: switches, plugs, handles, telephone parts.\n\n**Urea-formaldehyde**: colourless; buttons and laminates.",
+     "basics_md": "Phenol has three reactive spots; formaldehyde bridges them into a net.",
+     "key_points": [
+      "Phenol + HCHO, condensation, loss of $\\mathrm{H_2O}$",
+      "Novolac (acid, excess phenol) then hexamine cure; resole (base, excess HCHO)",
+      "Hard, rigid, insulating, infusible; used for switches, handles"
+     ],
+     "figures": [
+      {
+       "smiles": "Oc1ccccc1",
+       "caption": "Phenol"
+      },
+      {
+       "smiles": "C=O",
+       "caption": "Formaldehyde"
+      }
+     ],
+     "questions": [
+      {
+       "id": "t-q1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "Bakelite is made from",
+       "options": [
+        "phenol and formaldehyde",
+        "ethylene and benzene",
+        "urea and ethylene",
+        "glycol and phthalic acid"
+       ],
+       "answer_index": 0,
+       "why": "A phenol-formaldehyde resin."
+      },
+      {
+       "id": "t-q2",
+       "kind": "short",
+       "level": 2,
+       "marks": 3,
+       "q": "Write short notes on bakelite: preparation, properties, uses.",
+       "model_answer_md": "**Preparation:** phenol + HCHO condense with loss of water; the methylol phenols form novolac (acid, excess phenol) or resole (alkali, excess HCHO), which cure to a 3-D network with $\\mathrm{-CH_2-}$ links.\n\n**Properties:** hard, rigid, heat resistant, good electrical insulator, infusible, insoluble.\n\n**Uses:** switches, plugs, handles, telephone parts.",
+       "points": [
+        "Phenol + HCHO, condensation",
+        "Novolac/resole, cross-linking",
+        "Properties",
+        "Uses"
+       ]
+      },
+      {
+       "id": "t-q3",
+       "kind": "mcq",
+       "level": 2,
+       "q": "Hexamethylenetetramine is used with novolac to",
+       "options": [
+        "act as plasticizer",
+        "cure it by cross-linking",
+        "make it linear",
+        "colour it"
+       ],
+       "answer_index": 1,
+       "why": "It supplies the extra methylene bridges."
+      },
+      {
+       "id": "t-p1",
+       "pyq": "d044ee5daa7d5e69",
+       "level": 2,
+       "points": [
+        "Phenol-formaldehyde resin; condensation, novolac then curing with hexamine",
+        "Hard, rigid, heat resistant, insulator, infusible",
+        "Switches, plugs, handles"
+       ]
+      },
+      {
+       "id": "t-p2",
+       "pyq": "2e4eb9e566a11837",
+       "level": 2,
+       "points": [
+        "Nylon-66: hexamethylenediamine + adipic acid, loss of $\\mathrm{H_2O}$; strong, tough; fibres, ropes, gears",
+        "Bakelite: phenol + HCHO, cross-linked; hard, insulator; switches, handles"
+       ]
+      }
+     ]
+    },
+    {
+     "id": "nylon-kevlar-silicone",
+     "title": "Nylon 6,6, Kevlar and silicone resins",
+     "theory_md": "**Nylon 6,6**: hexamethylenediamine + adipic acid, condensation with loss of $\\mathrm{H_2O}$; amide link; strong, tough, abrasion resistant, m.p. about 265 $^\\circ$C (H-bonds); fibres, ropes, gears.\n\n**Kevlar** (aramid): p-phenylenediamine + terephthaloyl chloride, $-$HCl; rigid rod chains, strong H-bonded sheets, highly crystalline; tensile strength about 5 times steel by weight, flame resistant; bulletproof vests, tyre cords, ropes.\n\n**Silicones**: $\\mathrm{-[R_2Si-O]_n-}$ from $\\mathrm{R_2SiCl_2}$ hydrolysed and condensed; $\\mathrm{RSiCl_3}$ gives cross-links (resin). Stable from about -90 to 250 $^\\circ$C, water repellent, insulating; paints, insulation, sealants.",
+     "basics_md": "These three are condensation polymers: amide links in nylon and Kevlar, siloxane links in silicones.",
+     "key_points": [
+      "Nylon 6,6: diamine + diacid, $-\\mathrm{H_2O}$, H-bonded, fibres",
+      "Kevlar: aromatic polyamide, p-phenylenediamine + terephthaloyl chloride, very high strength, bulletproof vests",
+      "Silicones: Si-O-Si backbone, heat stable, water repellent; resins use $\\mathrm{RSiCl_3}$"
+     ],
+     "figures": [
+      {
+       "smiles": "Nc1ccc(N)cc1",
+       "caption": "p-Phenylenediamine (Kevlar)"
+      },
+      {
+       "smiles": "ClC(=O)c1ccc(cc1)C(Cl)=O",
+       "caption": "Terephthaloyl chloride (Kevlar)"
+      },
+      {
+       "smiles": "C[Si](C)(Cl)Cl",
+       "caption": "Dimethyldichlorosilane (silicone)"
+      }
+     ],
+     "questions": [
+      {
+       "id": "nk-q1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "Kevlar is a",
+       "options": [
+        "polyester",
+        "aromatic polyamide (aramid)",
+        "polyolefin",
+        "polyether"
+       ],
+       "answer_index": 1,
+       "why": "Amide links between benzene rings."
+      },
+      {
+       "id": "nk-q2",
+       "kind": "mcq",
+       "level": 1,
+       "q": "Cross-links in a silicone resin come from",
+       "options": [
+        "$\\mathrm{R_3SiCl}$",
+        "$\\mathrm{R_2SiCl_2}$",
+        "$\\mathrm{RSiCl_3}$",
+        "$\\mathrm{SiO_2}$"
+       ],
+       "answer_index": 2,
+       "why": "Trifunctional units branch the chain."
+      },
+      {
+       "id": "nk-q3",
+       "kind": "short",
+       "level": 2,
+       "marks": 3,
+       "q": "Write a short note on Kevlar: preparation, properties, uses.",
+       "model_answer_md": "**Preparation:** p-phenylenediamine + terephthaloyl chloride, condensation, HCl eliminated: $\\mathrm{n\\,H_2N{-}C_6H_4{-}NH_2 + n\\,ClOC{-}C_6H_4{-}COCl \\rightarrow -[NH{-}C_6H_4{-}NH{-}CO{-}C_6H_4{-}CO]_n- + 2n\\,HCl}$\n\n**Properties:** rigid rod chains, H-bonded sheets, highly crystalline; very strong and light; flame and heat resistant.\n\n**Uses:** bulletproof vests, tyre cords, ropes, composites.",
+       "points": [
+        "Monomers and equation",
+        "Structure, H-bonds",
+        "Properties",
+        "Uses"
+       ]
+      },
+      {
+       "id": "nk-p1",
+       "pyq": "4db7e7db7eddbb3f",
+       "level": 2,
+       "points": [
+        "Kevlar: aramid from p-phenylenediamine + terephthaloyl chloride; strong, flame resistant; vests",
+        "Silicone resin: $\\mathrm{R_2SiCl_2 + RSiCl_3}$ hydrolysed and condensed, Si-O-Si; heat stable, water repellent; paints, insulation"
+       ]
+      },
+      {
+       "id": "nk-p2",
+       "pyq": "442afe5549fd4581",
+       "level": 2,
+       "points": [
+        "Si-O-Si backbone $\\mathrm{-[R_2Si-O]_n-}$",
+        "Preparation: hydrolysis of chlorosilanes then condensation; RSiCl3 cross-links",
+        "Properties: stable -90 to 250 degrees C, water repellent, insulating",
+        "Uses: paints, insulation, water-proofing"
+       ]
+      },
+      {
+       "id": "nk-p3",
+       "pyq": "0b86d72b612ba3c4",
+       "level": 2,
+       "points": [
+        "Kevlar is an aromatic polyamide from p-phenylenediamine and terephthaloyl chloride (HCl lost)",
+        "Rigid, H-bonded, crystalline; strength about 5 times steel; heat resistant",
+        "Uses: vests, tyre cords, composites"
+       ]
+      },
+      {
+       "id": "nk-p4",
+       "pyq": "0f28956410cf4a0e",
+       "level": 1,
+       "points": [
+        "B) Kevlar"
+       ]
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "topic": "Synthetic rubbers and vulcanization",
+   "subtopics": [
+    {
+     "id": "natural-rubber",
+     "title": "Natural rubber",
+     "theory_md": "**Natural rubber** is cis-1,4-polyisoprene, $\\mathrm{-[CH_2-C(CH_3)=CH-CH_2]_n-}$, from the latex of Hevea. Raw rubber is soft and sticky when hot, brittle when cold, shows permanent set, swells in solvents and oxidises easily because chains slip past each other (weak forces) and C=C remain.\n\n**Complete hydrogenation** ($\\mathrm{H_2}$/Ni): all C=C are saturated, giving $\\mathrm{-[CH_2-CH(CH_3)-CH_2-CH_2]_n-}$ (like an ethylene-propylene copolymer). The product loses elasticity and vulcanisability but resists oxidation and ozone.",
+     "basics_md": "Rubber is a coiled, springy chain of isoprene units with a double bond in every unit.",
+     "key_points": [
+      "Natural rubber = cis-1,4-polyisoprene",
+      "Raw rubber: sticky when hot, brittle when cold, low strength, permanent set",
+      "Hydrogenation removes C=C: saturated, non-elastic, oxidation resistant"
+     ],
+     "figures": [
+      {
+       "smiles": "C=C(C)C=C",
+       "caption": "Isoprene, the monomer of natural rubber"
+      }
+     ],
+     "questions": [
+      {
+       "id": "nr-q1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "Natural rubber is a polymer of",
+       "options": [
+        "butadiene",
+        "isoprene",
+        "chloroprene",
+        "styrene"
+       ],
+       "answer_index": 1,
+       "why": "cis-1,4-polyisoprene."
+      },
+      {
+       "id": "nr-q2",
+       "kind": "short",
+       "level": 2,
+       "marks": 2,
+       "q": "State two defects of raw rubber and what happens on its complete hydrogenation.",
+       "model_answer_md": "**Defects:** soft and sticky when hot, brittle when cold; low strength with permanent set; attacked by oxygen and solvents.\n\n**Hydrogenation:** all C=C add $\\mathrm{H_2}$ to give a saturated polymer, $\\mathrm{-[CH_2-CH(CH_3)-CH_2-CH_2]_n-}$, which is not elastic and cannot be vulcanised, but is more resistant to oxidation.",
+       "points": [
+        "Two defects",
+        "All C=C saturated",
+        "Properties of product"
+       ]
+      },
+      {
+       "id": "nr-q3",
+       "kind": "mcq",
+       "level": 2,
+       "q": "After complete hydrogenation natural rubber",
+       "options": [
+        "can still be vulcanised with sulphur",
+        "becomes a saturated hydrocarbon polymer",
+        "becomes more sticky",
+        "is converted into isoprene"
+       ],
+       "answer_index": 1,
+       "why": "No double bonds remain for S to attack."
+      },
+      {
+       "id": "nr-p1",
+       "pyq": "1c04e73cb16f459b",
+       "level": 2,
+       "points": [
+        "Natural rubber is cis-1,4-polyisoprene",
+        "Complete hydrogenation saturates every C=C: $\\mathrm{-[CH_2-CH(CH_3)-CH_2-CH_2]_n-}$",
+        "Loses elasticity and vulcanisability; more oxidation resistant"
+       ]
+      }
+     ]
+    },
+    {
+     "id": "vulcanization",
+     "title": "Vulcanization and its calculation",
+     "theory_md": "**Vulcanization** (Goodyear): heating raw rubber with **3 to 5% sulphur** at **100 to 140 $^\\circ$C**, with accelerator (mercaptobenzothiazole) and ZnO activator. Sulphur forms **-S-S- cross-links** at the C=C/allylic positions between chains.\n\nEffect: higher tensile strength and elasticity, no permanent set, not sticky, wide working range, less swelling, better oxidation and abrasion resistance. Uses: tyres, belts, hoses.\n\n**Few cross-links** (soft rubber, flexible coiled segments between them) versus the dense network of bakelite (rigid). With about 32% S all C=C are used and hard **ebonite** results.\n\n**Max S**: repeat unit $\\mathrm{C_5H_8}$ (68.12) + one S (32.06): $32.06/100.18=32\\%$.\n\nVulcanised rubber cannot be melted; burning gives $\\mathrm{SO_2}$, CO, soot: not advisable.",
+     "basics_md": "Sulphur bridges tie the rubber chains together, like staples between pieces of string, so they spring back instead of slipping.",
+     "key_points": [
+      "Rubber + 3 to 5% S, 100 to 140 degrees C, accelerator and ZnO; -S-S- cross-links",
+      "Improves strength, elasticity, no stickiness, solvent and wear resistance",
+      "Soft rubber: few cross-links; thermoset: dense cross-links",
+      "Maximum S about 32% (ebonite); calculation shown",
+      "Burning gives SO2 and toxic smoke, and it cannot be remelted"
+     ],
+     "figures": [
+      {
+       "smiles": "C=C(C)C=C",
+       "caption": "Isoprene unit: one C=C per repeat unit takes part in S cross-linking"
+      }
+     ],
+     "questions": [
+      {
+       "id": "vu-q1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "Vulcanisation of rubber uses",
+       "options": [
+        "chlorine",
+        "sulphur",
+        "hydrogen",
+        "benzoyl peroxide only"
+       ],
+       "answer_index": 1,
+       "why": "S forms -S-S- bridges."
+      },
+      {
+       "id": "vu-q2",
+       "kind": "mcq",
+       "level": 1,
+       "q": "A usual sulphur content of tyre rubber is",
+       "options": [
+        "0.1%",
+        "3 to 5%",
+        "32%",
+        "60%"
+       ],
+       "answer_index": 1,
+       "why": "About 32% gives ebonite."
+      },
+      {
+       "id": "vu-q3",
+       "kind": "short",
+       "level": 2,
+       "marks": 3,
+       "q": "What is vulcanisation? How does it change the properties of rubber? Give uses.",
+       "model_answer_md": "**Vulcanisation:** heating rubber with 3 to 5% sulphur at 100 to 140 $^\\circ$C (accelerator, ZnO); $\\mathrm{-S-S-}$ cross-links join chains at the C=C.\n\n**Changes:** higher tensile strength and elasticity; no permanent set; not sticky; usable from about -40 to 100 $^\\circ$C; less swelling and water absorption; better oxidation and abrasion resistance.\n\n**Uses:** tyres, tubes, belts, shoe soles, hoses.",
+       "points": [
+        "Definition with conditions",
+        "Cross-links",
+        "Property changes",
+        "Uses"
+       ]
+      },
+      {
+       "id": "vu-q4",
+       "kind": "numerical",
+       "level": 3,
+       "marks": 2,
+       "q": "Calculate the maximum percentage of sulphur that can combine with natural rubber.",
+       "model_answer_md": "Repeat unit $\\mathrm{C_5H_8}$: $5(12.011)+8(1.008)=68.12$ g/mol, one C=C per unit.\n\nMaximum when each unit takes one S (32.06 g/mol).\n\n$\\%\\,S=\\dfrac{32.06}{68.12+32.06}\\times100=\\mathbf{32.0\\%}$ (ebonite).",
+       "points": [
+        "Repeat unit mass 68.12 g/mol",
+        "One S per C=C",
+        "32%"
+       ]
+      },
+      {
+       "id": "vu-p1",
+       "pyq": "0795b572bc7dffd8",
+       "level": 2,
+       "points": [
+        "Definition: heating with sulphur, -S-S- cross-links",
+        "Property changes: strength, elasticity, non-sticky, solvent and wear resistance",
+        "Applications: tyres, belts, hoses"
+       ]
+      },
+      {
+       "id": "vu-p2",
+       "pyq": "4fd41fccfba89910",
+       "level": 2,
+       "points": [
+        "Definition with conditions (3-5% S, 100-140 degrees C, accelerator)",
+        "Cross-linking at C=C",
+        "Improved properties"
+       ]
+      },
+      {
+       "id": "vu-p3",
+       "pyq": "ce7d1d7190e7aed3",
+       "level": 2,
+       "points": [
+        "Need: raw rubber sticky, weak, perishable, large permanent set",
+        "Structure: chains linked by -S-S- bridges at C=C",
+        "Result: strong, elastic, durable"
+       ]
+      },
+      {
+       "id": "vu-p4",
+       "pyq": "732a186224a684ed",
+       "level": 3,
+       "points": [
+        "Vulcanisation: S cross-links, conditions",
+        "Not advisable to burn: cross-linked, cannot be melted",
+        "Burning gives SO2 (acid rain), CO, soot, toxic fumes"
+       ]
+      },
+      {
+       "id": "vu-p5",
+       "pyq": "5352cc9a18f9ff53",
+       "level": 2,
+       "points": [
+        "Reaction: polyisoprene + S, heat 100-140 degrees C, accelerator",
+        "Chains joined by -S-S- cross-links at C=C/allylic",
+        "Structure of the cross-link drawn"
+       ]
+      },
+      {
+       "id": "vu-p6",
+       "pyq": "50939717c0080f67",
+       "level": 3,
+       "points": [
+        "Max S about 32%",
+        "Repeat unit $\\mathrm{C_5H_8}$ = 68.12, S = 32.06",
+        "$32.06/(68.12+32.06)\\times100=32\\%$ (ebonite)"
+       ]
+      },
+      {
+       "id": "vu-p7",
+       "pyq": "f5da671f77c9f87b",
+       "level": 3,
+       "points": [
+        "Rubber: few cross-links, long flexible coiled segments, Tg below room temperature; stretches and recovers",
+        "Thermoset: dense network, no free segments, rigid, brittle",
+        "Illustration of both structures"
+       ]
+      }
+     ]
+    },
+    {
+     "id": "synthetic-rubbers",
+     "title": "Synthetic rubbers",
+     "theory_md": "- **Buna-S (SBR)**: butadiene + styrene (about 3:1), free radical emulsion; tyres, belts.\n- **Buna-N (nitrile)**: butadiene + acrylonitrile; oil and solvent resistant; fuel hoses, gaskets.\n- **Neoprene**: chloroprene; oil, flame and weather resistant; conveyor belts, cable cover.\n- **Butyl rubber**: isobutylene + about 2% isoprene; low gas permeability; tubes.\n- **Silicone rubber**: polydimethylsiloxane $\\mathrm{-[Si(CH_3)_2-O]_n-}$, from $\\mathrm{(CH_3)_2SiCl_2}$ hydrolysed and condensed, cured with peroxide; elastic from about -90 to 250 $^\\circ$C, water repellent, non-toxic; seals, medical tubing.",
+     "basics_md": "Synthetic rubbers copy the elasticity of natural rubber and add resistance to oil, heat or gas.",
+     "key_points": [
+      "Buna-S: butadiene + styrene; Buna-N: butadiene + acrylonitrile",
+      "Neoprene: chloroprene, oil resistant; butyl: gas tight",
+      "Silicone rubber: polydimethylsiloxane, -90 to 250 degrees C, from dimethyldichlorosilane"
+     ],
+     "figures": [
+      {
+       "smiles": "C=CC=C",
+       "caption": "1,3-Butadiene (Buna-S, Buna-N)"
+      },
+      {
+       "smiles": "C=CC#N",
+       "caption": "Acrylonitrile (Buna-N)"
+      },
+      {
+       "smiles": "C=C(Cl)C=C",
+       "caption": "Chloroprene (neoprene)"
+      },
+      {
+       "smiles": "C[Si](C)(Cl)Cl",
+       "caption": "Dimethyldichlorosilane (silicone rubber)"
+      }
+     ],
+     "questions": [
+      {
+       "id": "sr-q1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "Buna-N is made from butadiene and",
+       "options": [
+        "styrene",
+        "acrylonitrile",
+        "isobutylene",
+        "chloroprene"
+       ],
+       "answer_index": 1,
+       "why": "It is oil resistant."
+      },
+      {
+       "id": "sr-q2",
+       "kind": "mcq",
+       "level": 2,
+       "q": "Which rubber retains elasticity at -90 degrees C and 250 degrees C?",
+       "options": [
+        "Natural rubber",
+        "Buna-S",
+        "Silicone rubber",
+        "Butyl rubber"
+       ],
+       "answer_index": 2,
+       "why": "The Si-O-Si backbone is flexible and strong."
+      },
+      {
+       "id": "sr-q3",
+       "kind": "short",
+       "level": 2,
+       "marks": 3,
+       "q": "Write a short note on silicone rubber.",
+       "model_answer_md": "Linear polydimethylsiloxane $\\mathrm{-[Si(CH_3)_2-O]_n-}$.\n\n**Preparation:** $\\mathrm{(CH_3)_2SiCl_2 + 2H_2O \\rightarrow (CH_3)_2Si(OH)_2 + 2HCl}$, then condensation to the chain with loss of $\\mathrm{H_2O}$; cured with peroxide and silica filler.\n\n**Properties:** elastic -90 to 250 $^\\circ$C, water repellent, insulating, non-toxic.\n\n**Uses:** gaskets, seals, medical tubing.",
+       "points": [
+        "Structure",
+        "Preparation",
+        "Properties",
+        "Uses"
+       ]
+      },
+      {
+       "id": "sr-p1",
+       "pyq": "e6024b0ec039450c",
+       "level": 2,
+       "points": [
+        "Polydimethylsiloxane $\\mathrm{-[Si(CH_3)_2-O]_n-}$",
+        "Prepared by hydrolysis of dimethyldichlorosilane and condensation; peroxide cure",
+        "Elastic -90 to 250 degrees C, water repellent, non-toxic",
+        "Uses: seals, tubing, insulation"
+       ]
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "topic": "Polymer composites and biomedical polymers",
+   "subtopics": [
+    {
+     "id": "composites",
+     "title": "Polymer composites",
+     "theory_md": "A **composite** combines two phases: a continuous **matrix** (polymer such as epoxy, polyester or nylon) that holds shape and transfers load, and a **reinforcement** (glass, carbon or Kevlar fibre, or particles) that carries the load. The result is stronger, stiffer and lighter than either alone.\n\nTypes: **fibre-reinforced** (glass fibre-epoxy for boats; carbon fibre for aircraft; Kevlar for armour), **particulate** (filler in polymer) and **laminar** (plywood).\n\nProperties: high strength-to-weight, corrosion resistance, tailored direction of strength (anisotropy).",
+     "basics_md": "A composite is like reinforced concrete: soft matrix plus strong fibre working together.",
+     "key_points": [
+      "Composite = matrix + reinforcement",
+      "Matrix binds and transfers load; fibre carries load",
+      "Types: fibre-reinforced, particulate, laminar; examples glass-epoxy, carbon fibre",
+      "High strength-to-weight, corrosion resistant"
+     ],
+     "questions": [
+      {
+       "id": "pc-q1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "In a fibre-reinforced composite the fibre",
+       "options": [
+        "carries most of the load",
+        "is the binder",
+        "is the plasticiser",
+        "evaporates on curing"
+       ],
+       "answer_index": 0,
+       "why": "The matrix transfers load to it."
+      },
+      {
+       "id": "pc-q2",
+       "kind": "mcq",
+       "level": 1,
+       "q": "A glass fibre-epoxy composite is used for",
+       "options": [
+        "boat hulls",
+        "non-stick pans",
+        "baby nipples",
+        "water bottles"
+       ],
+       "answer_index": 0,
+       "why": "Strong, light and corrosion resistant."
+      },
+      {
+       "id": "pc-q3",
+       "kind": "short",
+       "level": 2,
+       "marks": 3,
+       "q": "What is a polymer composite? Name its two components with functions and give two examples.",
+       "model_answer_md": "A **composite** is a material of two or more distinct phases whose combined properties are better than either alone.\n\n- **Matrix** (epoxy, polyester): binds fibres, shapes the part, transfers load.\n- **Reinforcement** (glass, carbon, Kevlar fibre): carries load, gives strength and stiffness.\n\nExamples: glass fibre-epoxy (boat hulls), carbon fibre-epoxy (aircraft parts).",
+       "points": [
+        "Definition",
+        "Matrix function",
+        "Reinforcement function",
+        "Two examples"
+       ]
+      }
+     ]
+    },
+    {
+     "id": "biomedical",
+     "title": "Biomedical polymers",
+     "theory_md": "Biomedical polymers must be **biocompatible** (non-toxic, no immune reaction), sterilisable and, for temporary uses, **biodegradable**.\n\n- **PLA** (poly lactic acid, from lactic acid): biodegradable polyester; hydrolyses to lactic acid; sutures, drug-delivery capsules.\n- **Polyglycolic acid**: absorbable sutures.\n- **PMMA**: bone cement, dental, eye lenses.\n- **Silicone**: implants, catheters.\n- **UHMWPE**: hip and knee joints.\n- **Dacron (PET)**: blood vessel grafts.",
+     "basics_md": "A body-friendly plastic must not poison tissue, and a temporary one must dissolve harmlessly.",
+     "key_points": [
+      "Biocompatible, non-toxic, sterilisable",
+      "PLA and polyglycolic acid are biodegradable: sutures, drug delivery",
+      "PMMA bone cement; silicone implants; UHMWPE joints"
+     ],
+     "figures": [
+      {
+       "smiles": "CC(O)C(=O)O",
+       "caption": "Lactic acid, the monomer of PLA"
+      }
+     ],
+     "questions": [
+      {
+       "id": "bm-q1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "Which polymer is biodegradable?",
+       "options": [
+        "Polyethylene",
+        "PVC",
+        "PLA",
+        "Teflon"
+       ],
+       "answer_index": 2,
+       "why": "PLA hydrolyses to lactic acid."
+      },
+      {
+       "id": "bm-q2",
+       "kind": "mcq",
+       "level": 1,
+       "q": "Absorbable surgical sutures are made of",
+       "options": [
+        "polyglycolic acid",
+        "PVC",
+        "bakelite",
+        "polystyrene"
+       ],
+       "answer_index": 0,
+       "why": "It hydrolyses in the body."
+      },
+      {
+       "id": "bm-q3",
+       "kind": "short",
+       "level": 2,
+       "marks": 3,
+       "q": "List the requirements of a biomedical polymer and give three examples with uses.",
+       "model_answer_md": "**Requirements:** biocompatible and non-toxic; chemically stable (or biodegradable if temporary); sterilisable; adequate mechanical strength.\n\n**Examples:** PLA (sutures, drug delivery); PMMA (bone cement, lenses); silicone (implants, catheters).",
+       "points": [
+        "Requirements",
+        "Three examples",
+        "Uses"
+       ]
+      },
+      {
+       "id": "bm-p1",
+       "pyq": "486395bc289d5cc7",
+       "level": 1,
+       "points": [
+        "C) Polylactic acid (PLA)",
+        "Polyester that hydrolyses to lactic acid"
+       ]
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "topic": "Manufacture of Portland cement (wet and dry)",
+   "subtopics": [
+    {
+     "id": "wet-process",
+     "title": "Raw materials and the wet process",
+     "theory_md": "**Raw materials**: calcareous (limestone, chalk: CaO) and argillaceous (clay, shale: $\\mathrm{SiO_2, Al_2O_3, Fe_2O_3}$) in about **3:1**; fuel (powdered coal, oil or gas); **gypsum** 2 to 3% added at the end.\n\n**Wet process** (soft materials): limestone is crushed; clay is washed in a wash mill; both are ground with water to a **slurry (35 to 40% water)**, corrected for composition in correcting basins, stored with agitation, and fed to the **upper end of the rotary kiln**. The kiln is inclined (about 150 m long, 2 to 3 rpm); fuel is fired from the lower end. The clinker is cooled, mixed with gypsum and ground.",
+     "basics_md": "Mix lime-rich and clay-rich rocks, burn to partial melting, grind with a little gypsum: that is Portland cement.",
+     "key_points": [
+      "Limestone : clay about 3:1; gypsum 2 to 3%",
+      "Wet: washed and ground with water to slurry (35 to 40% water)",
+      "Slurry corrected, stored, fed to upper end of the rotary kiln",
+      "Clinker cooled, ground with gypsum"
+     ],
+     "questions": [
+      {
+       "id": "w-q1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "In the wet process the slurry contains water of about",
+       "options": [
+        "5%",
+        "15%",
+        "35 to 40%",
+        "70%"
+       ],
+       "answer_index": 2,
+       "why": "Water is added to grind and mix intimately."
+      },
+      {
+       "id": "w-q2",
+       "kind": "mcq",
+       "level": 1,
+       "q": "Gypsum is added to cement clinker",
+       "options": [
+        "before burning",
+        "after burning, during grinding",
+        "in the correcting basin",
+        "to the slurry tank"
+       ],
+       "answer_index": 1,
+       "why": "It must not decompose in the kiln."
+      },
+      {
+       "id": "w-q3",
+       "kind": "short",
+       "level": 2,
+       "marks": 3,
+       "q": "Name the raw materials of Portland cement and the oxide each supplies.",
+       "model_answer_md": "- Limestone or chalk (calcareous): $\\mathrm{CaO}$.\n- Clay or shale (argillaceous): $\\mathrm{SiO_2, Al_2O_3, Fe_2O_3}$.\n- Gypsum (2 to 3%): retarder, added to the clinker.\n- Powdered coal/oil/gas: fuel.\nProportion limestone : clay about 3 : 1.",
+       "points": [
+        "Limestone gives CaO",
+        "Clay gives silica, alumina, iron oxide",
+        "Gypsum and fuel",
+        "Ratio 3:1"
+       ]
+      },
+      {
+       "id": "w-p1",
+       "pyq": "0ff6d7c0325d24f9",
+       "level": 2,
+       "points": [
+        "Raw materials: calcareous (limestone, supplies CaO) and argillaceous (clay, supplies silica, alumina, iron oxide), about 3:1; fuel; 2 to 3% gypsum added at the end",
+        "Wet process: crush limestone, wash clay in wash mill, grind with water to slurry (35 to 40% water), correct composition, store, feed to upper end of rotary kiln",
+        "Kiln zones: drying (about 400 degrees C), calcination ($\\mathrm{CaCO_3 \\rightarrow CaO + CO_2}$, 700 to 1000 degrees C), clinkering (1400 to 1500 degrees C) forming C2S, C3S, C3A, C4AF with equations",
+        "Clinker cooled and ground with 2 to 3% gypsum",
+        "Labelled diagram of the inclined rotary kiln: slurry/raw feed at top, flame at lower end, clinker out, hot gases rising"
+       ]
+      },
+      {
+       "id": "w-p2",
+       "pyq": "edb614cdb4e10435",
+       "level": 3,
+       "points": [
+        "Raw materials: calcareous (limestone, supplies CaO) and argillaceous (clay, supplies silica, alumina, iron oxide), about 3:1; fuel; 2 to 3% gypsum added at the end",
+        "Wet process: crush limestone, wash clay in wash mill, grind with water to slurry (35 to 40% water), correct composition, store, feed to upper end of rotary kiln",
+        "Kiln zones: drying (about 400 degrees C), calcination ($\\mathrm{CaCO_3 \\rightarrow CaO + CO_2}$, 700 to 1000 degrees C), clinkering (1400 to 1500 degrees C) forming C2S, C3S, C3A, C4AF with equations",
+        "Clinker cooled and ground with 2 to 3% gypsum",
+        "Labelled diagram of the inclined rotary kiln: slurry/raw feed at top, flame at lower end, clinker out, hot gases rising"
+       ]
+      }
+     ]
+    },
+    {
+     "id": "kiln-zones",
+     "title": "Rotary kiln zones and clinker reactions",
+     "theory_md": "The kiln is inclined; charge moves down, flame at the lower end. Zones:\n\n1. **Drying** (upper, about 400 $^\\circ$C): water evaporates; clay loses combined water, $\\mathrm{Al_2O_3\\cdot2SiO_2\\cdot2H_2O \\rightarrow Al_2O_3+2SiO_2+2H_2O}$.\n2. **Calcination** (middle, 700 to 1000 $^\\circ$C): $\\mathrm{CaCO_3 \\rightarrow CaO + CO_2}$.\n3. **Clinkering** (lower, 1400 to 1500 $^\\circ$C): partial fusion to clinker balls (3 to 20 mm):\n$\\mathrm{2CaO+SiO_2\\rightarrow C_2S}$; $\\mathrm{3CaO+SiO_2\\rightarrow C_3S}$; $\\mathrm{3CaO+Al_2O_3\\rightarrow C_3A}$; $\\mathrm{4CaO+Al_2O_3+Fe_2O_3\\rightarrow C_4AF}$.\n\nClinker is cooled, then ground with gypsum.",
+     "basics_md": "Going down the kiln it gets hotter: dry, then decompose limestone, then fuse into clinker.",
+     "key_points": [
+      "Drying about 400 degrees C; calcination 700 to 1000; clinkering 1400 to 1500",
+      "CaCO3 gives CaO + CO2 in calcination",
+      "Clinkering forms C2S, C3S, C3A, C4AF with equations",
+      "Diagram: inclined rotating kiln, feed at top, flame and clinker exit at bottom"
+     ],
+     "questions": [
+      {
+       "id": "kz-q1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "Limestone decomposes in the",
+       "options": [
+        "drying zone",
+        "calcination zone",
+        "clinkering zone only",
+        "cooling zone only"
+       ],
+       "answer_index": 1,
+       "why": "At 700 to 1000 degrees C."
+      },
+      {
+       "id": "kz-q2",
+       "kind": "mcq",
+       "level": 2,
+       "q": "Clinker is formed at about",
+       "options": [
+        "400 degrees C",
+        "900 degrees C",
+        "1400 to 1500 degrees C",
+        "2500 degrees C"
+       ],
+       "answer_index": 2,
+       "why": "Partial fusion in the burning zone."
+      },
+      {
+       "id": "kz-q3",
+       "kind": "short",
+       "level": 2,
+       "marks": 4,
+       "q": "Write the reactions in the three zones of the rotary kiln with temperatures.",
+       "model_answer_md": "1. **Drying (about 400 $^\\circ$C):** water removed; $\\mathrm{Al_2O_3\\cdot2SiO_2\\cdot2H_2O \\rightarrow Al_2O_3+2SiO_2+2H_2O}$.\n2. **Calcination (700 to 1000 $^\\circ$C):** $\\mathrm{CaCO_3 \\rightarrow CaO + CO_2}$.\n3. **Clinkering (1400 to 1500 $^\\circ$C):** $\\mathrm{2CaO+SiO_2\\rightarrow 2CaO\\cdot SiO_2}$; $\\mathrm{3CaO+SiO_2\\rightarrow 3CaO\\cdot SiO_2}$; $\\mathrm{3CaO+Al_2O_3\\rightarrow 3CaO\\cdot Al_2O_3}$; $\\mathrm{4CaO+Al_2O_3+Fe_2O_3\\rightarrow 4CaO\\cdot Al_2O_3\\cdot Fe_2O_3}$.",
+       "points": [
+        "Drying zone reaction",
+        "Calcination reaction",
+        "Four clinker reactions",
+        "Temperatures"
+       ]
+      },
+      {
+       "id": "kz-p1",
+       "pyq": "deb01492fe19f8d6",
+       "level": 2,
+       "points": [
+        "Raw materials: calcareous (limestone, supplies CaO) and argillaceous (clay, supplies silica, alumina, iron oxide), about 3:1; fuel; 2 to 3% gypsum added at the end",
+        "Wet process: crush limestone, wash clay in wash mill, grind with water to slurry (35 to 40% water), correct composition, store, feed to upper end of rotary kiln",
+        "Kiln zones: drying (about 400 degrees C), calcination ($\\mathrm{CaCO_3 \\rightarrow CaO + CO_2}$, 700 to 1000 degrees C), clinkering (1400 to 1500 degrees C) forming C2S, C3S, C3A, C4AF with equations",
+        "Clinker cooled and ground with 2 to 3% gypsum",
+        "Labelled diagram of the inclined rotary kiln: slurry/raw feed at top, flame at lower end, clinker out, hot gases rising"
+       ]
+      },
+      {
+       "id": "kz-p2",
+       "pyq": "96978d5e3b213a46",
+       "level": 3,
+       "points": [
+        "Raw materials: calcareous (limestone, supplies CaO) and argillaceous (clay, supplies silica, alumina, iron oxide), about 3:1; fuel; 2 to 3% gypsum added at the end",
+        "Wet process: crush limestone, wash clay in wash mill, grind with water to slurry (35 to 40% water), correct composition, store, feed to upper end of rotary kiln",
+        "Kiln zones: drying (about 400 degrees C), calcination ($\\mathrm{CaCO_3 \\rightarrow CaO + CO_2}$, 700 to 1000 degrees C), clinkering (1400 to 1500 degrees C) forming C2S, C3S, C3A, C4AF with equations",
+        "Clinker cooled and ground with 2 to 3% gypsum",
+        "Labelled diagram of the inclined rotary kiln: slurry/raw feed at top, flame at lower end, clinker out, hot gases rising"
+       ]
+      }
+     ]
+    },
+    {
+     "id": "dry-process",
+     "title": "Dry process",
+     "theory_md": "Used for **hard** raw materials. Limestone and clay are dried, crushed and ground **separately** to a fine powder, mixed in the correct ratio (about 3:1) as dry **raw meal**, homogenised with compressed air in blending silos, and fed (often pelletised with about 12% water or via a suspension preheater) into a **shorter rotary kiln** (about 45 to 90 m). The same three zones, reactions and clinker follow; clinker is ground with 2 to 3% gypsum.\n\nThere is no slurry water to evaporate, so fuel use is low (about 100 kg coal/tonne against 350 kg for wet).",
+     "basics_md": "Same cement, but ground dry: less fuel needed.",
+     "key_points": [
+      "Dry ground raw meal mixed in 3:1 ratio and blended with air",
+      "Fed to a shorter rotary kiln",
+      "Same zone reactions as wet process",
+      "Lower fuel as no water to evaporate"
+     ],
+     "questions": [
+      {
+       "id": "dp-q1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "The dry process is suited to",
+       "options": [
+        "soft raw materials like chalk",
+        "hard raw materials",
+        "only gypsum",
+        "clinker grinding"
+       ],
+       "answer_index": 1,
+       "why": "Hard materials are ground dry."
+      },
+      {
+       "id": "dp-q2",
+       "kind": "short",
+       "level": 2,
+       "marks": 3,
+       "q": "Explain the dry process of manufacture of cement.",
+       "model_answer_md": "1. Limestone and clay are dried, crushed and finely ground separately.\n2. Mixed in about 3:1 as a dry raw meal and homogenised by compressed air in silos.\n3. Fed (as pellets or via a preheater) to a shorter rotary kiln.\n4. Drying (400 $^\\circ$C), calcination ($\\mathrm{CaCO_3\\rightarrow CaO+CO_2}$) and clinkering (1400 to 1500 $^\\circ$C) give C2S, C3S, C3A, C4AF.\n5. Clinker cooled and ground with 2 to 3% gypsum.",
+       "points": [
+        "Dry grinding and mixing",
+        "Kiln feed",
+        "Zone reactions",
+        "Gypsum grinding"
+       ]
+      },
+      {
+       "id": "dp-q3",
+       "kind": "mcq",
+       "level": 2,
+       "q": "The dry kiln is shorter because",
+       "options": [
+        "no slurry water must be evaporated",
+        "gypsum is added early",
+        "clay is not used",
+        "it runs cooler"
+       ],
+       "answer_index": 0,
+       "why": "Drying takes much less length."
+      },
+      {
+       "id": "dp-p1",
+       "pyq": "bfb57cc4a498232b",
+       "level": 2,
+       "points": [
+        "Raw materials as before",
+        "Dry grinding, mixing 3:1, blending",
+        "Kiln reactions by zones",
+        "Clinker ground with gypsum"
+       ]
+      }
+     ]
+    },
+    {
+     "id": "wet-vs-dry",
+     "title": "Wet versus dry process",
+     "theory_md": "| Basis | Dry | Wet |\n|---|---|---|\n| Raw mix | dry powder | slurry, 35 to 40% water |\n| Raw materials | hard | soft |\n| Mixing / control | less uniform | uniform, easy to correct |\n| Fuel | low (about 100 kg coal/t) | high (about 350 kg/t) |\n| Kiln | short, 45 to 90 m | long, about 150 m |\n| Speed, cost | faster, cheaper | slower, costlier |\n| Quality | slightly inferior | superior |\n| Dust | more | little |",
+     "basics_md": "Wet gives better mixing but burns more fuel to boil off the water.",
+     "key_points": [
+      "Form of raw mix and type of raw material",
+      "Fuel and kiln length",
+      "Quality, cost and speed"
+     ],
+     "questions": [
+      {
+       "id": "wd-q1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "The kiln is longer in the",
+       "options": [
+        "dry process",
+        "wet process",
+        "both equal",
+        "neither"
+       ],
+       "answer_index": 1,
+       "why": "Water has to be evaporated."
+      },
+      {
+       "id": "wd-q2",
+       "kind": "short",
+       "level": 2,
+       "marks": 3,
+       "q": "Distinguish dry and wet processes of cement manufacture (point-wise).",
+       "model_answer_md": "| Dry | Wet |\n|---|---|\n| Dry raw meal | Slurry (35 to 40% water) |\n| Hard materials | Soft materials |\n| Low fuel | High fuel |\n| Short kiln | Long kiln |\n| Faster, cheaper | Slower, costlier |\n| Slightly inferior quality | Superior, uniform quality |",
+       "points": [
+        "Form of mix",
+        "Raw materials",
+        "Fuel",
+        "Kiln length",
+        "Cost and quality"
+       ]
+      },
+      {
+       "id": "wd-q3",
+       "kind": "mcq",
+       "level": 2,
+       "q": "Which is a point in favour of the wet process?",
+       "options": [
+        "Lower fuel use",
+        "Better composition control",
+        "Shorter kiln",
+        "Fewer kiln chambers"
+       ],
+       "answer_index": 1,
+       "why": "Slurry mixes intimately."
+      },
+      {
+       "id": "wd-p1",
+       "pyq": "aca4d824307fd9c4",
+       "level": 2,
+       "points": [
+        "Form of raw mix; raw materials; mixing",
+        "Fuel; kiln length; speed; cost",
+        "Quality; dust"
+       ]
+      },
+      {
+       "id": "wd-p2",
+       "pyq": "5f48bbbe846e3147",
+       "level": 2,
+       "points": [
+        "Dry: raw meal powder; wet: slurry 35 to 40% water",
+        "Dry less fuel, shorter kiln, faster; wet more fuel, longer kiln",
+        "Wet suits soft materials, better mixing"
+       ]
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "topic": "Composition, setting and hardening of cement",
+   "subtopics": [
+    {
+     "id": "composition",
+     "title": "Composition of Portland cement",
+     "theory_md": "Typical oxides (mass %): $\\mathrm{CaO}$ 60 to 67, $\\mathrm{SiO_2}$ 17 to 25, $\\mathrm{Al_2O_3}$ 3 to 8, $\\mathrm{Fe_2O_3}$ 0.5 to 6, MgO 0.1 to 4, $\\mathrm{SO_3}$ 1 to 3.\n\nCompounds (Bogue):\n- **C$_3$S** (tricalcium silicate, alite): early strength (1 to 7 days), high heat.\n- **C$_2$S** (dicalcium silicate, belite): slow, later strength, low heat.\n- **C$_3$A** (tricalcium aluminate): flash set, much heat, weak to sulphates.\n- **C$_4$AF**: gives colour; little strength.\n\nC = CaO, S = $\\mathrm{SiO_2}$, A = $\\mathrm{Al_2O_3}$, F = $\\mathrm{Fe_2O_3}$.",
+     "basics_md": "Cement is mainly four calcium compounds. The silicates give strength; the aluminate sets quickly and gives heat.",
+     "key_points": [
+      "Oxides: CaO largest, then SiO2, Al2O3, Fe2O3",
+      "C3S early strength; C2S later strength",
+      "C3A flash set, heat; C4AF colour"
+     ],
+     "questions": [
+      {
+       "id": "cm-q1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "Which compound gives early strength?",
+       "options": [
+        "$\\mathrm{C_2S}$",
+        "$\\mathrm{C_3S}$",
+        "$\\mathrm{C_4AF}$",
+        "gypsum"
+       ],
+       "answer_index": 1,
+       "why": "Alite hydrates fast."
+      },
+      {
+       "id": "cm-q2",
+       "kind": "mcq",
+       "level": 1,
+       "q": "The main oxide in Portland cement is",
+       "options": [
+        "$\\mathrm{SiO_2}$",
+        "$\\mathrm{Al_2O_3}$",
+        "CaO",
+        "MgO"
+       ],
+       "answer_index": 2,
+       "why": "60 to 67%."
+      },
+      {
+       "id": "cm-q3",
+       "kind": "short",
+       "level": 2,
+       "marks": 3,
+       "q": "Name the four Bogue compounds and one role of each.",
+       "model_answer_md": "- $\\mathrm{3CaO\\cdot SiO_2}$ (C3S): early strength, high heat.\n- $\\mathrm{2CaO\\cdot SiO_2}$ (C2S): later strength, low heat.\n- $\\mathrm{3CaO\\cdot Al_2O_3}$ (C3A): flash set, high heat.\n- $\\mathrm{4CaO\\cdot Al_2O_3\\cdot Fe_2O_3}$ (C4AF): colour, little strength.",
+       "points": [
+        "Four names/formulae",
+        "Role each"
+       ]
+      }
+     ]
+    },
+    {
+     "id": "setting-hardening",
+     "title": "Setting and hardening with reactions",
+     "theory_md": "**Setting**: loss of plasticity of the paste within hours. **Hardening**: later strength gain over days. Both are exothermic hydration (with a gel then crystals).\n\n**Setting** (C$_3$A, C$_4$AF):\n$\\mathrm{3CaO\\cdot Al_2O_3 + 6H_2O \\rightarrow 3CaO\\cdot Al_2O_3\\cdot 6H_2O}$ (880 kJ/kg)\n$\\mathrm{4CaO\\cdot Al_2O_3\\cdot Fe_2O_3 + 7H_2O \\rightarrow 3CaO\\cdot Al_2O_3\\cdot 6H_2O + CaO\\cdot Fe_2O_3\\cdot H_2O}$ (420)\n\n**Hardening** (C$_3$S, C$_2$S) gives tobermorite gel + $\\mathrm{Ca(OH)_2}$:\n$\\mathrm{2(3CaO\\cdot SiO_2)+6H_2O \\rightarrow 3CaO\\cdot2SiO_2\\cdot3H_2O+3Ca(OH)_2}$ (500)\n$\\mathrm{2(2CaO\\cdot SiO_2)+4H_2O \\rightarrow 3CaO\\cdot2SiO_2\\cdot3H_2O+Ca(OH)_2}$ (250)\n\nInitial set at least 30 min, final at most 10 h. Curing keeps it wet.",
+     "basics_md": "Aluminates hydrate first and stiffen the paste; silicates hydrate slower and build strength.",
+     "key_points": [
+      "Setting by C3A, C4AF hydration; hardening by C3S, C2S",
+      "Four balanced hydration equations",
+      "Products: tobermorite gel and $\\mathrm{Ca(OH)_2}$",
+      "Initial set at least 30 min; final at most 10 h; curing"
+     ],
+     "questions": [
+      {
+       "id": "sh-q1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "Hardening of cement mainly results from hydration of",
+       "options": [
+        "C3A",
+        "C3S and C2S",
+        "gypsum",
+        "free lime only"
+       ],
+       "answer_index": 1,
+       "why": "They form tobermorite gel."
+      },
+      {
+       "id": "sh-q2",
+       "kind": "mcq",
+       "level": 2,
+       "q": "Which is a product of the hydration of C3S?",
+       "options": [
+        "$\\mathrm{Ca(OH)_2}$",
+        "$\\mathrm{CaCO_3}$",
+        "$\\mathrm{CaSO_4}$",
+        "$\\mathrm{SiO_2}$"
+       ],
+       "answer_index": 0,
+       "why": "Along with tobermorite gel."
+      },
+      {
+       "id": "sh-q3",
+       "kind": "short",
+       "level": 2,
+       "marks": 4,
+       "q": "Describe setting and hardening of cement with the chemical reactions.",
+       "model_answer_md": "**Setting** is the stiffening of the paste (hours); **hardening** is the strength gain that follows (days).\n\n1. $\\mathrm{3CaO\\cdot Al_2O_3 + 6H_2O \\rightarrow 3CaO\\cdot Al_2O_3\\cdot 6H_2O}$\n2. $\\mathrm{4CaO\\cdot Al_2O_3\\cdot Fe_2O_3 + 7H_2O \\rightarrow 3CaO\\cdot Al_2O_3\\cdot 6H_2O + CaO\\cdot Fe_2O_3\\cdot H_2O}$\n3. $\\mathrm{2(3CaO\\cdot SiO_2)+6H_2O \\rightarrow 3CaO\\cdot2SiO_2\\cdot3H_2O+3Ca(OH)_2}$\n4. $\\mathrm{2(2CaO\\cdot SiO_2)+4H_2O \\rightarrow 3CaO\\cdot2SiO_2\\cdot3H_2O+Ca(OH)_2}$\n\nC3S gives early strength, C2S later. Initial set at least 30 min.",
+       "points": [
+        "Definitions",
+        "Four equations",
+        "C3S/C2S roles",
+        "Setting times"
+       ]
+      },
+      {
+       "id": "sh-p1",
+       "pyq": "bf70b8cb74cecb06",
+       "level": 2,
+       "points": [
+        "Setting: stiffening of the paste (hours); hardening: strength gain over days and weeks; both from exothermic hydration",
+        "Setting: $\\mathrm{3CaO\\cdot Al_2O_3 + 6H_2O \\rightarrow 3CaO\\cdot Al_2O_3\\cdot 6H_2O}$ and C4AF hydration; gypsum retards C3A",
+        "Hardening: $\\mathrm{2(3CaO\\cdot SiO_2)+6H_2O\\rightarrow 3CaO\\cdot2SiO_2\\cdot3H_2O+3Ca(OH)_2}$ and C2S reaction giving tobermorite gel",
+        "C3S early strength, C2S later; initial set not less than 30 min, final not more than 10 h; curing"
+       ]
+      },
+      {
+       "id": "sh-p2",
+       "pyq": "ecffddd3c8804a27",
+       "level": 2,
+       "points": [
+        "Setting: stiffening of the paste (hours); hardening: strength gain over days and weeks; both from exothermic hydration",
+        "Setting: $\\mathrm{3CaO\\cdot Al_2O_3 + 6H_2O \\rightarrow 3CaO\\cdot Al_2O_3\\cdot 6H_2O}$ and C4AF hydration; gypsum retards C3A",
+        "Hardening: $\\mathrm{2(3CaO\\cdot SiO_2)+6H_2O\\rightarrow 3CaO\\cdot2SiO_2\\cdot3H_2O+3Ca(OH)_2}$ and C2S reaction giving tobermorite gel",
+        "C3S early strength, C2S later; initial set not less than 30 min, final not more than 10 h; curing"
+       ]
+      },
+      {
+       "id": "sh-p3",
+       "pyq": "6c643d5423eec484",
+       "level": 2,
+       "points": [
+        "Setting: stiffening of the paste (hours); hardening: strength gain over days and weeks; both from exothermic hydration",
+        "Setting: $\\mathrm{3CaO\\cdot Al_2O_3 + 6H_2O \\rightarrow 3CaO\\cdot Al_2O_3\\cdot 6H_2O}$ and C4AF hydration; gypsum retards C3A",
+        "Hardening: $\\mathrm{2(3CaO\\cdot SiO_2)+6H_2O\\rightarrow 3CaO\\cdot2SiO_2\\cdot3H_2O+3Ca(OH)_2}$ and C2S reaction giving tobermorite gel",
+        "C3S early strength, C2S later; initial set not less than 30 min, final not more than 10 h; curing"
+       ]
+      },
+      {
+       "id": "sh-p4",
+       "pyq": "e6c11950f14b273c",
+       "level": 3,
+       "points": [
+        "Setting: stiffening of the paste (hours); hardening: strength gain over days and weeks; both from exothermic hydration",
+        "Setting: $\\mathrm{3CaO\\cdot Al_2O_3 + 6H_2O \\rightarrow 3CaO\\cdot Al_2O_3\\cdot 6H_2O}$ and C4AF hydration; gypsum retards C3A",
+        "Hardening: $\\mathrm{2(3CaO\\cdot SiO_2)+6H_2O\\rightarrow 3CaO\\cdot2SiO_2\\cdot3H_2O+3Ca(OH)_2}$ and C2S reaction giving tobermorite gel",
+        "C3S early strength, C2S later; initial set not less than 30 min, final not more than 10 h; curing"
+       ]
+      },
+      {
+       "id": "sh-p5",
+       "pyq": "cf2999287046d22c",
+       "level": 3,
+       "points": [
+        "Setting: stiffening of the paste (hours); hardening: strength gain over days and weeks; both from exothermic hydration",
+        "Setting: $\\mathrm{3CaO\\cdot Al_2O_3 + 6H_2O \\rightarrow 3CaO\\cdot Al_2O_3\\cdot 6H_2O}$ and C4AF hydration; gypsum retards C3A",
+        "Hardening: $\\mathrm{2(3CaO\\cdot SiO_2)+6H_2O\\rightarrow 3CaO\\cdot2SiO_2\\cdot3H_2O+3Ca(OH)_2}$ and C2S reaction giving tobermorite gel",
+        "C3S early strength, C2S later; initial set not less than 30 min, final not more than 10 h; curing"
+       ]
+      },
+      {
+       "id": "sh-p6",
+       "pyq": "bd0f8928815b3de0",
+       "level": 3,
+       "points": [
+        "Setting: stiffening of the paste (hours); hardening: strength gain over days and weeks; both from exothermic hydration",
+        "Setting: $\\mathrm{3CaO\\cdot Al_2O_3 + 6H_2O \\rightarrow 3CaO\\cdot Al_2O_3\\cdot 6H_2O}$ and C4AF hydration; gypsum retards C3A",
+        "Hardening: $\\mathrm{2(3CaO\\cdot SiO_2)+6H_2O\\rightarrow 3CaO\\cdot2SiO_2\\cdot3H_2O+3Ca(OH)_2}$ and C2S reaction giving tobermorite gel",
+        "C3S early strength, C2S later; initial set not less than 30 min, final not more than 10 h; curing"
+       ]
+      },
+      {
+       "id": "sh-p7",
+       "pyq": "6b2fbc4cb359a526",
+       "level": 3,
+       "points": [
+        "Setting: stiffening of the paste (hours); hardening: strength gain over days and weeks; both from exothermic hydration",
+        "Setting: $\\mathrm{3CaO\\cdot Al_2O_3 + 6H_2O \\rightarrow 3CaO\\cdot Al_2O_3\\cdot 6H_2O}$ and C4AF hydration; gypsum retards C3A",
+        "Hardening: $\\mathrm{2(3CaO\\cdot SiO_2)+6H_2O\\rightarrow 3CaO\\cdot2SiO_2\\cdot3H_2O+3Ca(OH)_2}$ and C2S reaction giving tobermorite gel",
+        "C3S early strength, C2S later; initial set not less than 30 min, final not more than 10 h; curing"
+       ]
+      },
+      {
+       "id": "sh-p8",
+       "pyq": "b7a5d01425a60dfc",
+       "level": 2,
+       "points": [
+        "Four balanced hydration equations: C3A, C4AF, C3S, C2S with correct products",
+        "Tobermorite gel $\\mathrm{3CaO\\cdot2SiO_2\\cdot3H_2O}$ and $\\mathrm{Ca(OH)_2}$"
+       ]
+      }
+     ]
+    },
+    {
+     "id": "gypsum",
+     "title": "Role of gypsum",
+     "theory_md": "$\\mathrm{C_3A}$ reacts with water at once and releases a lot of heat, so cement would **flash set** and could not be placed. **Gypsum** ($\\mathrm{CaSO_4\\cdot2H_2O}$, 2 to 3%, added during grinding of clinker) reacts with C$_3$A to form insoluble **ettringite** (calcium sulphoaluminate) which coats the C$_3$A grains and **retards** hydration:\n\n$\\mathrm{3CaO\\cdot Al_2O_3 + 3(CaSO_4\\cdot2H_2O)+26H_2O \\rightarrow 3CaO\\cdot Al_2O_3\\cdot3CaSO_4\\cdot32H_2O}$\n\nThis gives an initial setting time of at least 30 min. Excess gypsum causes expansion and unsoundness.",
+     "basics_md": "Gypsum is the brake that slows down the fast-reacting aluminate so you have time to work.",
+     "key_points": [
+      "Without gypsum C3A causes flash set",
+      "Gypsum forms insoluble ettringite coating on C3A: retarder",
+      "2 to 3%; excess gives expansion/unsoundness"
+     ],
+     "questions": [
+      {
+       "id": "gy-q1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "Gypsum in cement acts as a",
+       "options": [
+        "accelerator",
+        "retarder",
+        "filler",
+        "pigment"
+       ],
+       "answer_index": 1,
+       "why": "It delays C3A hydration."
+      },
+      {
+       "id": "gy-q2",
+       "kind": "short",
+       "level": 2,
+       "marks": 2,
+       "q": "Why is a small amount of gypsum an absolute necessity in cement?",
+       "model_answer_md": "$\\mathrm{C_3A}$ hydrates instantly and exothermically, so cement would set at once (flash set). Gypsum (2 to 3%) forms an insoluble ettringite layer on C$_3$A, retarding it and giving a setting time of at least 30 min:\n$\\mathrm{C_3A + 3CaSO_4\\cdot2H_2O + 26H_2O \\rightarrow 3CaO\\cdot Al_2O_3\\cdot3CaSO_4\\cdot32H_2O}$",
+       "points": [
+        "C3A causes flash set",
+        "Gypsum forms ettringite, retards",
+        "Amount and equation"
+       ]
+      },
+      {
+       "id": "gy-q3",
+       "kind": "mcq",
+       "level": 2,
+       "q": "Too much gypsum causes",
+       "options": [
+        "flash set",
+        "expansion and unsoundness",
+        "faster hardening",
+        "colour change"
+       ],
+       "answer_index": 1,
+       "why": "Ettringite forms after setting and expands."
+      },
+      {
+       "id": "gy-p1",
+       "pyq": "5a0be9b7f5e8cc7c",
+       "level": 2,
+       "points": [
+        "C3A flash set without gypsum",
+        "Gypsum + C3A gives ettringite (equation); retards",
+        "2 to 3%; excess gives unsoundness"
+       ]
+      },
+      {
+       "id": "gy-p2",
+       "pyq": "94d984c3451d348f",
+       "level": 2,
+       "points": [
+        "Gypsum retards setting of C3A",
+        "Ettringite coating; setting at least 30 min",
+        "Small amount only"
+       ]
+      }
+     ]
+    },
+    {
+     "id": "heat-of-hydration",
+     "title": "Heat of hydration",
+     "theory_md": "Hydration of cement compounds is **exothermic**; the heat released is the **heat of hydration**. Approximate values: $\\mathrm{C_3A}$ 880, $\\mathrm{C_3S}$ 500, $\\mathrm{C_4AF}$ 420, $\\mathrm{C_2S}$ 250 kJ/kg. Most heat comes in the first days from C$_3$A and C$_3$S. In massive structures (dams) it causes thermal cracks, so **low-heat cement** (less C$_3$A and C$_3$S, more C$_2$S) is used.",
+     "basics_md": "Cement and water warm up as they react; in thick concrete the heat is trapped.",
+     "key_points": [
+      "Hydration is exothermic: heat of hydration",
+      "C3A 880 > C3S 500 > C4AF 420 > C2S 250 kJ/kg",
+      "Dams need low heat cement"
+     ],
+     "questions": [
+      {
+       "id": "hh-q1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "Which compound gives the most heat of hydration?",
+       "options": [
+        "C3A",
+        "C2S",
+        "C4AF",
+        "C3S"
+       ],
+       "answer_index": 0,
+       "why": "About 880 kJ/kg."
+      },
+      {
+       "id": "hh-q2",
+       "kind": "short",
+       "level": 2,
+       "marks": 2,
+       "q": "What happens in energy terms when cement is mixed with water? Name the phenomenon.",
+       "model_answer_md": "Hydration is exothermic, so heat is released: the **heat of hydration**. C3A gives about 880 kJ/kg, C3S 500, C4AF 420, C2S 250. In massive concrete it can crack, so low-heat cement is used.",
+       "points": [
+        "Heat is released",
+        "Name: heat of hydration",
+        "Values or consequence"
+       ]
+      },
+      {
+       "id": "hh-p1",
+       "pyq": "29ee3c87efc2d76e",
+       "level": 2,
+       "points": [
+        "Exothermic: energy released as heat",
+        "Phenomenon: heat of hydration",
+        "Values per compound; low heat cement for dams"
+       ]
+      },
+      {
+       "id": "hh-q3",
+       "kind": "mcq",
+       "level": 2,
+       "q": "Low heat cement contains",
+       "options": [
+        "more C3A and C3S",
+        "less C3A and C3S, more C2S",
+        "more gypsum",
+        "no silicates"
+       ],
+       "answer_index": 1,
+       "why": "Less fast-reacting compound."
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "topic": "Lime saturation factor and silica modulus",
+   "subtopics": [
+    {
+     "id": "lsf",
+     "title": "Lime saturation factor",
+     "theory_md": "$$\\mathrm{LSF}=\\frac{\\mathrm{CaO}-0.7\\,\\mathrm{SO_3}}{2.8\\,\\mathrm{SiO_2}+1.2\\,\\mathrm{Al_2O_3}+0.65\\,\\mathrm{Fe_2O_3}}$$\n(oxide mass %). It is the ratio of lime present to the maximum that can combine with the acidic oxides. IS limit **0.66 to 1.02**. Too high: free lime, unsound cement; too low: little C$_3$S and poor early strength.\n\nExample: CaO 64, SiO$_2$ 21, Al$_2$O$_3$ 5.5, Fe$_2$O$_3$ 3.5, SO$_3$ 1.5 (%): numerator $64-1.05=62.95$; denominator $58.8+6.6+2.275=67.675$; LSF $=0.93$.",
+     "basics_md": "LSF checks that the right amount of lime is in the raw mix: not too little, not too much.",
+     "key_points": [
+      "LSF formula with 0.7 SO3 correction",
+      "IS limit 0.66 to 1.02",
+      "High LSF: free lime, unsound; low: weak early strength"
+     ],
+     "questions": [
+      {
+       "id": "ls-q1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "Excess lime (very high LSF) causes",
+       "options": [
+        "quick drying",
+        "free lime and unsoundness",
+        "white colour",
+        "low heat"
+       ],
+       "answer_index": 1,
+       "why": "Free CaO expands slowly."
+      },
+      {
+       "id": "ls-q2",
+       "kind": "numerical",
+       "level": 2,
+       "marks": 3,
+       "q": "Calculate the LSF for CaO 64%, SiO$_2$ 21%, Al$_2$O$_3$ 5.5%, Fe$_2$O$_3$ 3.5%, SO$_3$ 1.5%.",
+       "model_answer_md": "$\\mathrm{LSF}=\\dfrac{64-0.7(1.5)}{2.8(21)+1.2(5.5)+0.65(3.5)}=\\dfrac{62.95}{58.8+6.6+2.275}=\\dfrac{62.95}{67.675}=\\mathbf{0.93}$, within 0.66 to 1.02.",
+       "points": [
+        "Formula",
+        "Numerator 62.95 and denominator 67.675",
+        "LSF 0.93, within limit"
+       ]
+      },
+      {
+       "id": "ls-q3",
+       "kind": "mcq",
+       "level": 2,
+       "q": "The IS limits of LSF are",
+       "options": [
+        "0.2 to 0.4",
+        "0.66 to 1.02",
+        "1.5 to 2.5",
+        "2 to 3"
+       ],
+       "answer_index": 1,
+       "why": "Above 1.02 free lime is likely."
+      },
+      {
+       "id": "ls-p1",
+       "pyq": "db71a754b7ecd32b",
+       "level": 2,
+       "points": [
+        "LSF formula and IS limit; too high gives free lime, too low weak early strength",
+        "SM = $\\mathrm{SiO_2}/(\\mathrm{Al_2O_3}+\\mathrm{Fe_2O_3})$, about 2 to 3",
+        "Together control raw mix proportion, burnability, clinker quality"
+       ]
+      }
+     ]
+    },
+    {
+     "id": "moduli",
+     "title": "Silica and alumina modulus",
+     "theory_md": "**Silica modulus (SM)** $=\\dfrac{\\mathrm{SiO_2}}{\\mathrm{Al_2O_3}+\\mathrm{Fe_2O_3}}$, usually about **2 to 3**. High SM: hard to burn, slow setting; low SM: too much liquid phase, kiln ring formation, lower strength.\n\n**Alumina modulus (AM)** $=\\dfrac{\\mathrm{Al_2O_3}}{\\mathrm{Fe_2O_3}}$ (about 1.5 to 2.5) controls the fluxing liquid: high AM gives more C$_3$A, quick setting.\n\nExample (same oxides as before): SM $=21/(5.5+3.5)=2.33$; AM $=5.5/3.5=1.57$.",
+     "basics_md": "The moduli are ratios that tell how the oxides balance, so the kiln burns the mix properly.",
+     "key_points": [
+      "SM = SiO2 / (Al2O3 + Fe2O3), about 2 to 3",
+      "AM = Al2O3 / Fe2O3",
+      "SM affects burnability and setting; AM affects liquid phase and C3A"
+     ],
+     "questions": [
+      {
+       "id": "mo-q1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "Silica modulus is",
+       "options": [
+        "$\\mathrm{SiO_2}/(\\mathrm{Al_2O_3}+\\mathrm{Fe_2O_3})$",
+        "$\\mathrm{CaO}/\\mathrm{SiO_2}$",
+        "$\\mathrm{Al_2O_3}/\\mathrm{SiO_2}$",
+        "$\\mathrm{Fe_2O_3}/\\mathrm{CaO}$"
+       ],
+       "answer_index": 0,
+       "why": "Silica to the fluxes."
+      },
+      {
+       "id": "mo-q2",
+       "kind": "numerical",
+       "level": 2,
+       "marks": 3,
+       "q": "Find SM and AM for SiO$_2$ 21%, Al$_2$O$_3$ 5.5%, Fe$_2$O$_3$ 3.5%.",
+       "model_answer_md": "$\\mathrm{SM}=21/(5.5+3.5)=21/9=\\mathbf{2.33}$\n$\\mathrm{AM}=5.5/3.5=\\mathbf{1.57}$",
+       "points": [
+        "SM formula and value 2.33",
+        "AM formula and value 1.57"
+       ]
+      },
+      {
+       "id": "mo-q3",
+       "kind": "mcq",
+       "level": 2,
+       "q": "A very high silica modulus makes the raw mix",
+       "options": [
+        "easy to burn",
+        "difficult to burn",
+        "melt at low temperature",
+        "white"
+       ],
+       "answer_index": 1,
+       "why": "Less liquid phase forms."
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "topic": "Special cements",
+   "subtopics": [
+    {
+     "id": "blended",
+     "title": "Portland pozzolana and slag cements",
+     "theory_md": "- **Portland Pozzolana Cement (PPC)**: OPC clinker ground with 15 to 35% pozzolana (fly ash). The pozzolana reacts with free $\\mathrm{Ca(OH)_2}$: $\\mathrm{Ca(OH)_2+SiO_2+H_2O\\rightarrow C\\text{-}S\\text{-}H}$. Gives low heat of hydration, denser, less permeable concrete, good sulphate and chloride resistance, lower cost; slower early strength. Used in dams, marine and mass concrete.\n- **Portland Slag Cement (PSC)**: OPC with granulated blast-furnace slag (25 to 70%); similar benefits.",
+     "basics_md": "Industrial wastes (fly ash, slag) replace part of the clinker and improve durability.",
+     "key_points": [
+      "PPC = OPC + fly ash (pozzolana)",
+      "Pozzolana consumes Ca(OH)2 to give more C-S-H",
+      "Low heat, impermeable, sulphate resistant; slower early strength"
+     ],
+     "questions": [
+      {
+       "id": "bl-q1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "PPC contains",
+       "options": [
+        "fly ash",
+        "bauxite",
+        "white clay only",
+        "extra gypsum"
+       ],
+       "answer_index": 0,
+       "why": "A pozzolanic material."
+      },
+      {
+       "id": "bl-q2",
+       "kind": "short",
+       "level": 2,
+       "marks": 3,
+       "q": "Write a note on Portland pozzolana cement.",
+       "model_answer_md": "PPC is OPC clinker ground with 15 to 35% pozzolana (fly ash). Pozzolana combines with $\\mathrm{Ca(OH)_2}$ released in hydration to give extra C-S-H gel: $\\mathrm{Ca(OH)_2+SiO_2+H_2O\\rightarrow C\\text{-}S\\text{-}H}$.\n\nProperties: low heat, dense and impermeable, resists sulphates and chlorides, slower early strength. Uses: dams, marine and mass concrete.",
+       "points": [
+        "Composition",
+        "Reaction",
+        "Properties",
+        "Uses"
+       ]
+      },
+      {
+       "id": "bl-q3",
+       "kind": "mcq",
+       "level": 2,
+       "q": "Why does PPC give a more durable concrete than OPC?",
+       "options": [
+        "It has more free lime",
+        "Pozzolana uses up $\\mathrm{Ca(OH)_2}$ to form extra C-S-H, giving denser concrete",
+        "It contains more C3A",
+        "It sets faster"
+       ],
+       "answer_index": 1,
+       "why": "Less free lime and lower permeability."
+      }
+     ]
+    },
+    {
+     "id": "white-coloured",
+     "title": "White and coloured cement",
+     "theory_md": "**White cement**: Portland cement with very low iron oxide ($\\mathrm{Fe_2O_3}$ below about 1%) and manganese. Made from pure chalk/limestone and china clay (kaolin), burnt with oil or gas (no coal ash) and ground in iron-free mills. Used for decorative work, tiles, terrazzo, wall putty.\n\n**Coloured cement**: white cement ground with pigments (Cr$_2$O$_3$ green, iron oxide red/brown, cobalt blue) in 5 to 10%.",
+     "basics_md": "No iron means no grey colour; add pigment for any other colour.",
+     "key_points": [
+      "White cement: Fe2O3 below 1%, pure chalk and china clay, oil/gas fuel",
+      "Used for decoration, flooring, tiles",
+      "Coloured cement: white cement + pigment"
+     ],
+     "questions": [
+      {
+       "id": "wc-q1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "White cement is white because it has very little",
+       "options": [
+        "lime",
+        "iron oxide",
+        "silica",
+        "gypsum"
+       ],
+       "answer_index": 1,
+       "why": "Iron oxide gives grey colour."
+      },
+      {
+       "id": "wc-q2",
+       "kind": "short",
+       "level": 2,
+       "marks": 2,
+       "q": "Write a short note on white cement.",
+       "model_answer_md": "White cement is Portland cement with very low $\\mathrm{Fe_2O_3}$ (below about 1%) and manganese. It is made from pure chalk and china clay, fired with oil or gas, and ground in iron-free mills. Uses: decorative work, tiles, terrazzo, wall putty, fixing marble.",
+       "points": [
+        "Low iron oxide",
+        "Raw materials and fuel",
+        "Uses"
+       ]
+      },
+      {
+       "id": "wc-q3",
+       "kind": "mcq",
+       "level": 2,
+       "q": "Coloured cement is made by",
+       "options": [
+        "adding pigments to white cement",
+        "adding extra iron oxide to OPC",
+        "burning with coal",
+        "adding extra gypsum"
+       ],
+       "answer_index": 0,
+       "why": "Pigment such as Cr2O3 gives green."
+      }
+     ]
+    },
+    {
+     "id": "functional",
+     "title": "Rapid hardening, low heat, sulphate resisting and high alumina",
+     "theory_md": "- **Rapid hardening**: more C$_3$S, finer grinding; strength in 3 days equals OPC at 7 days; for repairs.\n- **Low heat**: less C$_3$A and C$_3$S, more C$_2$S; for dams.\n- **Sulphate resisting**: C$_3$A below about 5%; for sewers, marine work.\n- **High alumina cement**: limestone + bauxite fused at 1500 to 1600 $^\\circ$C; mainly $\\mathrm{CaO\\cdot Al_2O_3}$; very quick strength gain, refractory, resists acids.",
+     "basics_md": "Change the compound balance and you change the cement's behaviour.",
+     "key_points": [
+      "Rapid hardening: more C3S, fine",
+      "Low heat: less C3A and C3S",
+      "Sulphate resisting: C3A below 5%",
+      "High alumina: limestone + bauxite, fused"
+     ],
+     "questions": [
+      {
+       "id": "fn-q1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "Sulphate resisting cement has low",
+       "options": [
+        "C2S",
+        "C3A",
+        "gypsum",
+        "silica"
+       ],
+       "answer_index": 1,
+       "why": "C3A reacts with sulphates."
+      },
+      {
+       "id": "fn-q2",
+       "kind": "short",
+       "level": 2,
+       "marks": 3,
+       "q": "Match: rapid hardening, low heat and high alumina cement with their key composition feature and use.",
+       "model_answer_md": "- Rapid hardening: more C$_3$S, finer; quick repairs.\n- Low heat: less C$_3$A and C$_3$S, more C$_2$S; dams.\n- High alumina: bauxite + limestone fused, mainly $\\mathrm{CaO\\cdot Al_2O_3}$; refractory, quick strength.",
+       "points": [
+        "Rapid hardening composition and use",
+        "Low heat composition and use",
+        "High alumina composition and use"
+       ]
+      },
+      {
+       "id": "fn-q3",
+       "kind": "mcq",
+       "level": 2,
+       "q": "High alumina cement is made by fusing limestone with",
+       "options": [
+        "gypsum",
+        "bauxite",
+        "fly ash",
+        "clay"
+       ],
+       "answer_index": 1,
+       "why": "The product is mainly CaO.Al2O3."
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "topic": "Concrete and RCC",
+   "subtopics": [
+    {
+     "id": "concrete",
+     "title": "Concrete",
+     "theory_md": "**Concrete** = cement + fine aggregate (sand) + coarse aggregate + water; a nominal mix M20 is 1 : 1.5 : 3. Strength grade M20 = characteristic compressive strength 20 MPa at 28 days. Strength falls as the **water-cement ratio** rises; **curing** (keeping wet, at least 7 days) is essential. It is strong in compression, weak in tension (about one tenth).",
+     "basics_md": "Cement paste glues sand and stones into artificial rock.",
+     "key_points": [
+      "Cement + sand + aggregate + water",
+      "Grade M20 = 20 MPa at 28 days; mix 1:1.5:3",
+      "Low w/c ratio and curing raise strength",
+      "Strong in compression, weak in tension"
+     ],
+     "questions": [
+      {
+       "id": "cn-q1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "Concrete is weak in",
+       "options": [
+        "compression",
+        "tension",
+        "both equal",
+        "hardness"
+       ],
+       "answer_index": 1,
+       "why": "Hence steel is added."
+      },
+      {
+       "id": "cn-q2",
+       "kind": "short",
+       "level": 2,
+       "marks": 2,
+       "q": "State four factors that determine the strength of concrete.",
+       "model_answer_md": "1. Water-cement ratio (lower gives stronger).\n2. Cement grade and content.\n3. Quality and grading of aggregates.\n4. Compaction and curing (at least 7 days).",
+       "points": [
+        "Four correct factors"
+       ]
+      },
+      {
+       "id": "cn-q3",
+       "kind": "mcq",
+       "level": 1,
+       "q": "A concrete of grade M20 has a characteristic compressive strength after 28 days of",
+       "options": [
+        "2 MPa",
+        "20 MPa",
+        "200 MPa",
+        "0.2 MPa"
+       ],
+       "answer_index": 1,
+       "why": "The number after M is the strength in MPa."
+      }
+     ]
+    },
+    {
+     "id": "rcc",
+     "title": "RCC and its working",
+     "theory_md": "**RCC (reinforced cement concrete)** is concrete with steel bars or mesh embedded in the tension zone. Concrete takes compression, steel takes tension. It works because steel and concrete have nearly the same coefficient of thermal expansion (about $1.2\\times10^{-5}$ per $^\\circ$C), bond well, and the alkaline concrete (pH about 12.5) keeps steel **passive** against rust. Used in beams, slabs, columns, bridges and dams.",
+     "basics_md": "Concrete is like a stone and steel like a rope: together they resist both squeezing and pulling.",
+     "key_points": [
+      "Concrete + embedded steel",
+      "Steel takes tension, concrete compression",
+      "Same thermal expansion, good bond, alkaline protection",
+      "Uses: beams, slabs, bridges"
+     ],
+     "questions": [
+      {
+       "id": "rc-q1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "In RCC the steel mainly resists",
+       "options": [
+        "compression",
+        "tension",
+        "heat",
+        "sulphates"
+       ],
+       "answer_index": 1,
+       "why": "Concrete is weak in tension."
+      },
+      {
+       "id": "rc-q2",
+       "kind": "short",
+       "level": 2,
+       "marks": 3,
+       "q": "Why do steel and concrete work together in RCC?",
+       "model_answer_md": "1. Nearly equal coefficients of thermal expansion, so no internal stress on heating.\n2. Good bond between steel and concrete.\n3. Alkaline concrete (pH about 12.5) passivates steel against rusting.\n4. Steel supplies the tensile strength concrete lacks.",
+       "points": [
+        "Equal expansion",
+        "Bond",
+        "Alkaline protection",
+        "Tension carried by steel"
+       ]
+      },
+      {
+       "id": "rc-q3",
+       "kind": "mcq",
+       "level": 2,
+       "q": "Steel is suitable for reinforcing concrete because it",
+       "options": [
+        "has the same thermal expansion as concrete",
+        "expands twice as much",
+        "is acidic",
+        "is brittle"
+       ],
+       "answer_index": 0,
+       "why": "No internal stress arises on heating."
+      },
+      {
+       "id": "rc-p1",
+       "pyq": "70a2ac0d28c30a01",
+       "level": 2,
+       "points": [
+        "RCC: concrete with steel bars; steel takes tension, concrete compression; same thermal expansion, protection from rust; used in beams, slabs, bridges",
+        "White cement: very low Fe2O3 (below 1%), pure chalk and china clay, oil fuel; decorative work, tiles"
+       ]
+      }
+     ]
+    },
+    {
+     "id": "durability",
+     "title": "Durable RCC for harsh conditions",
+     "theory_md": "For wet, loaded structures (a bridge): use **PPC or slag cement** (or sulphate-resisting OPC, $\\mathrm{C_3A}<5\\%$), high grade (M30 to M40), **low w/c about 0.40 to 0.45**, plasticiser, adequate cover (45 to 50 mm), epoxy-coated or galvanised bars, and thorough curing.\n\nThey work because dense, impermeable concrete keeps out water, chlorides and $\\mathrm{CO_2}$. **Carbonation** ($\\mathrm{Ca(OH)_2+CO_2\\rightarrow CaCO_3+H_2O}$) lowers pH and depassivates steel; rust expands and spalls concrete. Pozzolana forms extra C-S-H and reduces free lime.",
+     "basics_md": "Keep water and CO2 away from the steel and it will not rust.",
+     "key_points": [
+      "PPC or slag cement; low w/c, high grade, curing",
+      "Cover, coated bars, plasticiser",
+      "Low permeability keeps steel passive; stops carbonation and chlorides",
+      "Pozzolana: extra C-S-H, less free lime"
+     ],
+     "questions": [
+      {
+       "id": "du-q1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "Carbonation of concrete",
+       "options": [
+        "raises pH",
+        "lowers pH and endangers steel",
+        "makes steel passive",
+        "increases strength of steel"
+       ],
+       "answer_index": 1,
+       "why": "CO2 neutralises $\\mathrm{Ca(OH)_2}$."
+      },
+      {
+       "id": "du-q2",
+       "kind": "short",
+       "level": 2,
+       "marks": 3,
+       "q": "Why does low water-cement ratio improve durability of RCC?",
+       "model_answer_md": "Less water leaves fewer pores, so concrete is dense and impermeable. Water, chlorides and $\\mathrm{CO_2}$ cannot reach the steel, carbonation is slow, the steel stays passive and does not rust and crack the cover.",
+       "points": [
+        "Fewer pores, impermeable",
+        "Keeps out water, chlorides, CO2",
+        "Steel stays passive, no cracking"
+       ]
+      },
+      {
+       "id": "du-q3",
+       "kind": "mcq",
+       "level": 1,
+       "q": "Which cement is recommended for a bridge in constant moisture?",
+       "options": [
+        "White cement",
+        "Portland pozzolana cement",
+        "Rapid hardening cement only",
+        "High alumina cement"
+       ],
+       "answer_index": 1,
+       "why": "PPC gives dense, low-permeability concrete."
+      },
+      {
+       "id": "du-p1",
+       "pyq": "1b74cfa6be8a10c0",
+       "level": 3,
+       "points": [
+        "Cement: PPC/slag or sulphate resisting; pozzolana gives extra C-S-H",
+        "Concrete: M30-M40, low w/c about 0.4, curing; cover 45-50 mm, coated bars",
+        "Mechanism: low permeability, steel stays passive, slows carbonation and chloride attack, avoids rust expansion cracking"
+       ]
+      }
+     ]
+    }
+   ]
+  }
+ ]
+}

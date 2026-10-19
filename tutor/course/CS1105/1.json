@@ -1,0 +1,845 @@
+{
+ "code": "CS1105",
+ "unit": "Computers and Problem Solving",
+ "written": "2026-10-19",
+ "by": "claude-sonnet-5-5, in a Claude Code session",
+ "topics": [
+  {
+   "topic": "Introduction to computers and their organization",
+   "subtopics": [
+    {
+     "id": "organization",
+     "title": "Block diagram of a computer",
+     "theory_md": "A computer takes **input**, **processes** it under a stored **program**, keeps results in **memory** and gives **output** (von Neumann stored-program model).\n\n- **Input unit**: keyboard, mouse, scanner.\n- **Output unit**: monitor, printer.\n- **CPU** = **ALU** (arithmetic and logic operations) + **CU** (control unit: fetches, decodes, directs) + **registers** (fastest small storage, e.g. PC, IR, accumulator).\n- **Memory**: primary (RAM, ROM) and secondary (hard disk, SSD).\n\nData and instructions both sit in memory; the CPU repeats **fetch, decode, execute**.",
+     "basics_md": "A computer works like a cook. Ingredients come in (input), the cook follows a recipe held in his head (program in memory), works at the counter (ALU) while a manager gives orders (CU), and the dish goes out (output).",
+     "key_points": [
+      "Five units: input, output, memory, ALU, control unit (CPU = ALU + CU + registers)",
+      "CU fetches, decodes and controls; ALU does arithmetic and logic",
+      "Program and data are stored in memory (stored-program concept)",
+      "Cycle is fetch, decode, execute"
+     ],
+     "figures": [],
+     "questions": [
+      {
+       "id": "o-q1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "Which part of the CPU performs arithmetic and logical operations?",
+       "options": [
+        "Control unit",
+        "ALU",
+        "Register",
+        "Cache"
+       ],
+       "answer_index": 1,
+       "why": "The ALU does arithmetic and logic; the CU only directs the other units."
+      },
+      {
+       "id": "o-q2",
+       "kind": "mcq",
+       "level": 1,
+       "q": "Which of these is NOT part of the CPU?",
+       "options": [
+        "ALU",
+        "Control unit",
+        "Registers",
+        "Hard disk"
+       ],
+       "answer_index": 3,
+       "why": "The hard disk is secondary storage outside the CPU."
+      },
+      {
+       "id": "o-q3",
+       "kind": "short",
+       "level": 2,
+       "marks": 3,
+       "q": "Draw the block diagram of a computer in words and state the function of each block.",
+       "model_answer_md": "**Block diagram:** Input unit -> [ CPU: ALU + Control unit + Registers ] <-> Memory unit -> Output unit.\n\n1. **Input unit**: takes data and instructions from the user (keyboard, mouse) and converts them to binary.\n2. **Memory unit**: stores the program, data and results (primary RAM/ROM, secondary disk).\n3. **ALU**: arithmetic (+, -, *, /) and logical (AND, OR, comparison) operations.\n4. **Control unit**: fetches each instruction, decodes it and sends control signals to all units.\n5. **Output unit**: shows results (monitor, printer).",
+       "points": [
+        "Input unit takes data and instructions",
+        "Memory stores program, data, results",
+        "ALU does arithmetic and logic",
+        "CU fetches, decodes and controls",
+        "Output unit gives results"
+       ]
+      },
+      {
+       "id": "o-q4",
+       "kind": "short",
+       "level": 2,
+       "marks": 2,
+       "q": "Differentiate between ALU and control unit.",
+       "model_answer_md": "| ALU | Control unit |\n|---|---|\n| Performs arithmetic and logical operations | Fetches and decodes instructions and controls the sequence |\n| Works on data given to it | Does not process data; sends control signals to ALU, memory, I/O |\n| Result goes to a register or memory | Directs where the result goes |",
+       "points": [
+        "ALU: arithmetic and logic operations",
+        "CU: fetch, decode, control signals",
+        "CU does not process data"
+       ]
+      }
+     ]
+    },
+    {
+     "id": "memory-software",
+     "title": "Memory, hardware and software",
+     "theory_md": "**Memory hierarchy** (fast and small to slow and large): registers, cache, **RAM** (primary, volatile, read/write), **ROM** (non-volatile, holds boot program), secondary storage (HDD, SSD; non-volatile).\n\nUnits: 1 byte = 8 bits; 1 KB = $2^{10}$ bytes = 1024 B; 1 MB = $2^{20}$ B; 1 GB = $2^{30}$ B.\n\n**Hardware** = physical parts. **Software** = programs: **system software** (operating system, compiler, assembler, interpreter) and **application software** (word processor, browser).\n\n**Compiler** translates the whole program at once; **interpreter** line by line; **assembler** converts assembly to machine code.",
+     "basics_md": "Your desk is RAM: small and quick, cleared when you leave. The cupboard is the hard disk: big and slow, but things stay. Hardware is what you can kick; software is what you cannot.",
+     "key_points": [
+      "RAM is volatile primary memory; ROM and disk are non-volatile",
+      "Hierarchy: register, cache, RAM, secondary (speed falls, size rises)",
+      "Hardware = physical; software = system and application",
+      "Compiler: whole program; interpreter: line by line; assembler: assembly to machine code"
+     ],
+     "figures": [],
+     "questions": [
+      {
+       "id": "m-q1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "Which memory loses its contents when power is switched off?",
+       "options": [
+        "ROM",
+        "RAM",
+        "Hard disk",
+        "SSD"
+       ],
+       "answer_index": 1,
+       "why": "RAM is volatile; the others are non-volatile."
+      },
+      {
+       "id": "m-q2",
+       "kind": "mcq",
+       "level": 2,
+       "q": "A program is translated and executed one statement at a time by a",
+       "options": [
+        "compiler",
+        "assembler",
+        "interpreter",
+        "linker"
+       ],
+       "answer_index": 2,
+       "why": "An interpreter translates and runs line by line; a compiler translates the whole program first."
+      },
+      {
+       "id": "m-q3",
+       "kind": "numerical",
+       "level": 2,
+       "marks": 2,
+       "q": "How many bytes are there in 2 MB? Give the answer in bytes and in bits.",
+       "model_answer_md": "$1\\ \\mathrm{MB} = 2^{20} = 1\\,048\\,576$ bytes.\n\n$2\\ \\mathrm{MB} = 2 \\times 1\\,048\\,576 = 2\\,097\\,152$ bytes.\n\nBits $= 2\\,097\\,152 \\times 8 = 16\\,777\\,216$ bits.",
+       "points": [
+        "1 MB = $2^{20}$ bytes",
+        "2 MB = 2 097 152 bytes",
+        "1 byte = 8 bits, so 16 777 216 bits"
+       ]
+      },
+      {
+       "id": "m-q4",
+       "kind": "short",
+       "level": 2,
+       "marks": 3,
+       "q": "Differentiate between RAM and ROM, and between system software and application software (one example each).",
+       "model_answer_md": "| RAM | ROM |\n|---|---|\n| Read and write | Normally read only |\n| Volatile | Non-volatile |\n| Holds running programs and data | Holds boot (start-up) program |\n\n| System software | Application software |\n|---|---|\n| Runs and manages the hardware, e.g. operating system | Does a user task, e.g. word processor |",
+       "points": [
+        "RAM volatile read/write, ROM non-volatile read only",
+        "RAM holds running programs, ROM holds boot program",
+        "System software manages hardware, e.g. OS",
+        "Application software does user task, e.g. word processor"
+       ]
+      }
+     ]
+    },
+    {
+     "id": "to-decimal",
+     "title": "Number systems to decimal",
+     "theory_md": "Positional systems: **binary** base 2 (0,1), **octal** base 8 (0-7), **decimal** base 10, **hexadecimal** base 16 (0-9, A=10, B=11, C=12, D=13, E=14, F=15).\n\nTo get decimal, multiply each digit by $\\text{base}^{\\text{position}}$ (positions $0,1,2,\\dots$ to the left of the point, $-1,-2,\\dots$ to the right) and add.\n\nExample: $(1101.101)_2 = 1\\cdot2^3+1\\cdot2^2+0\\cdot2^1+1\\cdot2^0+1\\cdot2^{-1}+0\\cdot2^{-2}+1\\cdot2^{-3}=13.625$.\n\nPowers of 2 to remember: 1, 2, 4, 8, 16, 32, 64, 128, 256; powers of 16: 1, 16, 256, 4096.",
+     "basics_md": "In 425 the digit 4 means four hundreds, because it sits two places from the right: $4\\times10^2$. Other bases do the same with their own base.",
+     "key_points": [
+      "Write each digit times base^position, then add",
+      "Hex letters: A=10, B=11, C=12, D=13, E=14, F=15",
+      "Fraction digits use negative powers",
+      "Show the expansion line and the final answer with the base subscript"
+     ],
+     "figures": [],
+     "questions": [
+      {
+       "id": "d-q1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "The decimal value of hexadecimal digit D is",
+       "options": [
+        "12",
+        "13",
+        "14",
+        "15"
+       ],
+       "answer_index": 1,
+       "why": "A=10, B=11, C=12, D=13. Students slip by one."
+      },
+      {
+       "id": "d-q2",
+       "kind": "mcq",
+       "level": 1,
+       "q": "The decimal value of $(1011)_2$ is",
+       "options": [
+        "9",
+        "11",
+        "13",
+        "15"
+       ],
+       "answer_index": 1,
+       "why": "8+0+2+1 = 11."
+      },
+      {
+       "id": "d-q3",
+       "kind": "numerical",
+       "level": 2,
+       "marks": 3,
+       "q": "Convert $(2F)_{16}$ and $(745)_8$ to decimal.",
+       "model_answer_md": "$(2F)_{16} = 2\\times16^1 + 15\\times16^0 = 32+15 = (47)_{10}$\n\n$(745)_8 = 7\\times8^2 + 4\\times8^1 + 5\\times8^0 = 448+32+5 = (485)_{10}$",
+       "points": [
+        "Expansion with place values for hex",
+        "(2F)16 = 47",
+        "Expansion with place values for octal",
+        "(745)8 = 485"
+       ]
+      },
+      {
+       "id": "d-q4",
+       "kind": "numerical",
+       "level": 3,
+       "marks": 3,
+       "q": "Convert $(1101.101)_2$ to decimal.",
+       "model_answer_md": "Integer part: $1\\cdot2^3+1\\cdot2^2+0\\cdot2^1+1\\cdot2^0 = 8+4+0+1 = 13$\n\nFraction: $1\\cdot2^{-1}+0\\cdot2^{-2}+1\\cdot2^{-3} = 0.5+0+0.125 = 0.625$\n\n$(1101.101)_2 = (13.625)_{10}$",
+       "points": [
+        "Integer part expanded: 13",
+        "Fraction uses negative powers: 0.625",
+        "Answer 13.625"
+       ]
+      },
+      {
+       "id": "d-p1",
+       "pyq": "3037a564ceda2a67",
+       "level": 2,
+       "points": [
+        "Expansion $8\\cdot16^3+13\\cdot16^2+5\\cdot16+14$ with D=13, E=14",
+        "$32768+3328+80+14$",
+        "$(8D5E)_{16}=(36190)_{10}$"
+       ]
+      },
+      {
+       "id": "d-p2",
+       "pyq": "bfcba7aa707921e5",
+       "level": 2,
+       "points": [
+        "Expansion with powers $2^7$ down to $2^0$",
+        "$128+32+16+8+4+2+1$",
+        "$(10111111)_2=(191)_{10}$"
+       ]
+      }
+     ]
+    },
+    {
+     "id": "from-decimal",
+     "title": "Decimal to binary, octal, hex and between bases",
+     "theory_md": "**Integer part**: divide repeatedly by the base, write the remainders, read them **bottom to top**.\n**Fraction part**: multiply repeatedly by the base, write the integer parts, read **top to bottom**; stop when the fraction is 0 (or at the asked number of places).\n\n**Shortcuts**: binary to octal groups of **3 bits** from the point; binary to hex groups of **4 bits**; pad with zeros at the ends (left of the integer, right of the fraction).\n\n$(101101110)_2 = (101\\ 101\\ 110)_2 = (556)_8$ and $(0001\\ 0110\\ 1110)_2=(16E)_{16}$.",
+     "basics_md": "Dividing by 2 asks 'is the number odd?' and keeps the answer as the last bit; halving again finds the next bit. That is why the first remainder is the last (lowest) bit and you read upwards.",
+     "key_points": [
+      "Integer: repeated division, remainders read bottom to top",
+      "Fraction: repeated multiplication, integer parts read top to bottom",
+      "Binary to octal: groups of 3; to hex: groups of 4",
+      "Show the division/multiplication table and a check"
+     ],
+     "figures": [],
+     "questions": [
+      {
+       "id": "f-q1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "While converting 13 to binary by repeated division, the binary number is read",
+       "options": [
+        "top to bottom of the remainders",
+        "bottom to top of the remainders",
+        "from the quotients",
+        "from the last quotient only"
+       ],
+       "answer_index": 1,
+       "why": "The first remainder is the least significant bit, so read upwards."
+      },
+      {
+       "id": "f-q2",
+       "kind": "mcq",
+       "level": 2,
+       "q": "$(10011100)_2$ in hexadecimal is",
+       "options": [
+        "9C",
+        "93",
+        "C9",
+        "1C9"
+       ],
+       "answer_index": 0,
+       "why": "Groups of four: 1001 = 9 and 1100 = C."
+      },
+      {
+       "id": "f-q3",
+       "kind": "numerical",
+       "level": 2,
+       "marks": 3,
+       "q": "Convert $(45)_{10}$ to binary and $(25.75)_{10}$ to binary.",
+       "model_answer_md": "**45:** 45/2 = 22 r1; 22/2 = 11 r0; 11/2 = 5 r1; 5/2 = 2 r1; 2/2 = 1 r0; 1/2 = 0 r1. Bottom to top: $(101101)_2$.\n\n**25.75:** integer 25: 25/2 = 12 r1; 12/2 = 6 r0; 6/2 = 3 r0; 3/2 = 1 r1; 1/2 = 0 r1, giving $11001$. Fraction 0.75: 0.75x2 = 1.5 (1); 0.5x2 = 1.0 (1), giving $.11$.\n\n$(25.75)_{10} = (11001.11)_2$. Check: $16+8+1+0.5+0.25 = 25.75$.",
+       "points": [
+        "Repeated division by 2 with remainders",
+        "45 = 101101",
+        "Fraction by repeated multiplication",
+        "25.75 = 11001.11"
+       ]
+      },
+      {
+       "id": "f-q4",
+       "kind": "numerical",
+       "level": 3,
+       "marks": 3,
+       "q": "Convert $(156)_{10}$ to octal and to hexadecimal, and check by converting $(10011100)_2$ to octal.",
+       "model_answer_md": "**Octal:** 156/8 = 19 r4; 19/8 = 2 r3; 2/8 = 0 r2, so $(234)_8$.\n\n**Hex:** 156/16 = 9 r12; 9/16 = 0 r9, so $(9C)_{16}$.\n\n**Check:** $156=(10011100)_2$; groups of three from the right: 010 011 100 = 2 3 4, so $(234)_8$. Both agree.",
+       "points": [
+        "Octal 234 by division by 8",
+        "Hex 9C by division by 16 (12 = C)",
+        "Binary 10011100 regrouped in 3 bits gives 234"
+       ]
+      },
+      {
+       "id": "f-p1",
+       "pyq": "e390b8e3e2d312c0",
+       "level": 2,
+       "points": [
+        "Integer 72 by repeated division by 2 gives 1001000",
+        "Fraction 0.125 by repeated multiplication gives .001",
+        "$(72.125)_{10}=(1001000.001)_2$"
+       ]
+      },
+      {
+       "id": "f-p2",
+       "pyq": "549dfddec4297340",
+       "level": 2,
+       "points": [
+        "Integer 67 by division by 8 gives 103",
+        "Fraction 0.625 x 8 = 5.0 gives .5",
+        "$(67.625)_{10}=(103.5)_8$"
+       ]
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "topic": "Flowcharts",
+   "subtopics": [
+    {
+     "id": "symbols",
+     "title": "Flowchart symbols and rules",
+     "theory_md": "A **flowchart** is a diagram of the steps of a solution using standard symbols joined by arrows.\n\n- **Oval (terminator)**: Start / Stop.\n- **Parallelogram**: Input / Output.\n- **Rectangle**: process (calculation, assignment).\n- **Diamond**: decision, one entry, two exits (Yes/No or True/False).\n- **Arrows**: flow direction. **Circle**: connector.\n\nRules: one Start, at least one Stop; flow top to bottom, left to right; every decision branch must rejoin or end; no crossing lines.\n\nThree structures: **sequence**, **selection** (diamond), **loop** (arrow back to a diamond).",
+     "basics_md": "A flowchart is a road map. Boxes are places, arrows are roads, and a diamond is a fork where you must choose a road.",
+     "key_points": [
+      "Oval Start/Stop, parallelogram I/O, rectangle process, diamond decision",
+      "Arrows show the flow; connector joins distant parts",
+      "Decision has two exits labelled Yes/No",
+      "Three structures: sequence, selection, loop"
+     ],
+     "figures": [],
+     "questions": [
+      {
+       "id": "s-q1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "The symbol used for a decision in a flowchart is a",
+       "options": [
+        "rectangle",
+        "parallelogram",
+        "diamond",
+        "oval"
+       ],
+       "answer_index": 2,
+       "why": "The diamond has one entry and two exits. Students confuse it with the rectangle."
+      },
+      {
+       "id": "s-q2",
+       "kind": "mcq",
+       "level": 1,
+       "q": "Reading a value from the keyboard is drawn in a",
+       "options": [
+        "rectangle",
+        "parallelogram",
+        "oval",
+        "diamond"
+       ],
+       "answer_index": 1,
+       "why": "Input and output use the parallelogram; the rectangle is for calculations."
+      },
+      {
+       "id": "s-q3",
+       "kind": "short",
+       "level": 2,
+       "marks": 3,
+       "q": "Name the flowchart symbols with the use of each, and list two advantages of a flowchart.",
+       "model_answer_md": "1. **Oval**: Start / Stop.\n2. **Parallelogram**: Input / Output.\n3. **Rectangle**: process / calculation.\n4. **Diamond**: decision (Yes/No).\n5. **Arrow**: direction of flow.\n6. **Circle**: connector.\n\n**Advantages:** easy to understand and communicate the logic; helps find errors before coding and works as documentation.",
+       "points": [
+        "Oval, parallelogram, rectangle, diamond each with its use",
+        "Arrow and connector",
+        "Two advantages"
+       ]
+      },
+      {
+       "id": "s-p1",
+       "pyq": "898d7fd2e0537644",
+       "level": 2,
+       "points": [
+        "Oval Start and Exit; rectangle for R0 and Steps 2 to 6 calculations",
+        "Parallelogram for analogRead input and for LED and buzzer output",
+        "Diamond for ppm > 2000 with Yes branch (LED, buzzer HIGH) and No branch (LOW)",
+        "Both branches join before Exit"
+       ]
+      }
+     ]
+    },
+    {
+     "id": "decision-flow",
+     "title": "Flowcharts with decisions",
+     "theory_md": "Turn each rule of the problem into a diamond. For **nested** conditions, test the largest-first or smallest-first ranges in order (`budget <= 100000`, then `<= 200000`, else the rest) so each range is checked once.\n\nFor a **percentage** rule, compute `spent = percent/100 * budget` in a rectangle after the decision. For an \"extra weight\" rule, find the excess first, then `amount = extra * rate`, and GST as `amount * 0.18`.\n\nEvery branch ends at one common Output, then Stop. Always write the **pseudocode** when the paper asks for it: IF / ELSE IF / ELSE / END IF.",
+     "basics_md": "Ask one yes/no question at a time. Each answer sends you down one road; the roads meet again at the printing step.",
+     "key_points": [
+      "Each rule becomes a diamond with Yes and No exits",
+      "Order the range tests so ranges do not overlap",
+      "Calculations in rectangles, results in a parallelogram",
+      "Branches rejoin before the final Output and Stop"
+     ],
+     "figures": [],
+     "questions": [
+      {
+       "id": "c-q1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "A decision symbol has",
+       "options": [
+        "one entry and one exit",
+        "one entry and two exits",
+        "two entries and one exit",
+        "no entry"
+       ],
+       "answer_index": 1,
+       "why": "Yes and No exits."
+      },
+      {
+       "id": "c-q2",
+       "kind": "mcq",
+       "level": 2,
+       "q": "For budget slabs up to 1,00,000, up to 2,00,000 and above, the correct order of tests is",
+       "options": [
+        "budget <= 200000 first, then budget <= 100000",
+        "budget <= 100000 first, then budget <= 200000",
+        "budget > 200000 first, then budget <= 200000",
+        "order does not matter"
+       ],
+       "answer_index": 1,
+       "why": "Testing the smaller slab first means the second test only sees budgets above 1,00,000. Testing 200000 first would send 50,000 to the UK."
+      },
+      {
+       "id": "c-q3",
+       "kind": "numerical",
+       "level": 2,
+       "marks": 3,
+       "q": "Rs. 150 per kg is charged on excess luggage. If the excess is 4 kg and the passenger wears 1 jacket of 1 kg, find the amount payable, and draw the flowchart in words.",
+       "model_answer_md": "Excess after wearing 1 jacket $= 4-1 = 3$ kg.\n\nAmount $= 3\\times150 = $ Rs. 450.\n\n**Flowchart:** (Start) -> /Input k jackets worn/ -> [extra = 2 - k] -> <blanket worn over jackets?> Yes: no change; No: [extra = extra + 2] -> [amount = extra x 150] -> /Output amount/ -> (Stop).",
+       "points": [
+        "Excess reduced by the weight worn: 3 kg",
+        "Amount = 3 x 150 = Rs. 450",
+        "Flowchart with input, calculation, decision, output"
+       ]
+      },
+      {
+       "id": "c-p1",
+       "pyq": "92ff0d2a77edf8fe",
+       "level": 3,
+       "points": [
+        "Input budget and season; nested decisions: budget <= 100000 Dubai, <= 200000 UK, else New Zealand",
+        "Season decides hotel/camping and 40%/60% (Dubai), 50%/70% (UK); New Zealand always camping 95%",
+        "Print Visit destination, then type - money spent; pseudocode with IF/ELSE IF/ELSE",
+        "Example: 1,50,000 winter gives UK, Hotel - 105000"
+       ]
+      },
+      {
+       "id": "c-p2",
+       "pyq": "265f5f5d4b148265",
+       "level": 3,
+       "points": [
+        "Transport share by group size: 1-4 is 75%, 5-9 is 60%, 10 or more 50%",
+        "rest = budget - transport; price 10000 (VIP) or 5000 (Normal); cost = n x price",
+        "Compare rest >= cost and print enough money or shortfall; flowchart and pseudocode",
+        "Example: 1,00,000, n=5, Normal gives rest 40,000, cost 25,000, 15,000 left"
+       ]
+      },
+      {
+       "id": "c-p3",
+       "pyq": "80daba74c8e88f1a",
+       "level": 2,
+       "points": [
+        "Input number of jackets worn k; extra = (2 - k) x 1",
+        "Blanket (2 kg) added to extra unless worn over the jackets",
+        "amount = extra x 150; output amount; Start and Stop ovals",
+        "k = 0 gives Rs. 600; k = 2 with blanket worn gives Rs. 0"
+       ]
+      },
+      {
+       "id": "c-p4",
+       "pyq": "db492cfcbac2c65f",
+       "level": 3,
+       "points": [
+        "extra = 5 kg initially (3 jackets + 2 kg blanket); wear one jacket at a time reduces extra by 1",
+        "Blanket worn only after all 3 jackets, reduces extra by 2",
+        "cost = extra x 500; GST = 0.18 x cost; total = cost + GST (Rs. 590 per kg)",
+        "Outputs: 2950, 2360, 1770, 1180, 0 for 0 to 3 jackets and the blanket"
+       ]
+      }
+     ]
+    },
+    {
+     "id": "loop-flow",
+     "title": "Flowcharts with loops and counters",
+     "theory_md": "A **loop** is a decision whose No-exit goes on and Yes-exit loops back through an update box. Four parts: **initialise**, **test**, **body**, **update**.\n\n- Counter: `count = count + 1` for each event.\n- Fixed repeat (100 students): `i = 1`, test `i <= 100`, `i = i + 1`.\n- Series: keep the previous two terms, `c = 2*b + a`, then `a = b`, `b = c`.\n\nIn a repeat-until-no loop (more complaints? y/n) the test comes at the end. Initialise counters **before** the loop, display totals **after** it (or inside, if asked after every entry).",
+     "basics_md": "A loop is a lap counter on a racetrack: start at zero, check if the laps are finished, run one more lap, add one, check again.",
+     "key_points": [
+      "Initialise counters before the loop",
+      "Test, body, update; arrow back to the test",
+      "Fixed repeat uses i = 1, i <= n, i = i + 1",
+      "Totals displayed after the loop unless asked each time"
+     ],
+     "figures": [],
+     "questions": [
+      {
+       "id": "l-q1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "A loop in a flowchart is drawn by",
+       "options": [
+        "a second Start symbol",
+        "an arrow going back to an earlier point",
+        "two Stop symbols",
+        "a connector only"
+       ],
+       "answer_index": 1,
+       "why": "The arrow returns to the decision, so the body repeats."
+      },
+      {
+       "id": "l-q2",
+       "kind": "mcq",
+       "level": 2,
+       "q": "For 100 voters, counters m1 and m2 must be set to zero",
+       "options": [
+        "inside the loop each time",
+        "before the loop",
+        "after the loop",
+        "never"
+       ],
+       "answer_index": 1,
+       "why": "Resetting inside the loop would erase the count each pass."
+      },
+      {
+       "id": "l-q3",
+       "kind": "numerical",
+       "level": 2,
+       "marks": 3,
+       "q": "The series 1, 4, 7, 10, ... has first term 1 and a common difference 3. Write the algorithm to print n terms and find the 8th term.",
+       "model_answer_md": "**Algorithm:** 1. Start 2. Input n 3. term = 1, i = 1 4. While i <= n: print term; term = term + 3; i = i + 1 5. Stop.\n\n8th term $= 1 + (8-1)\\times3 = 22$. The series is 1, 4, 7, 10, 13, 16, 19, 22.",
+       "points": [
+        "Initialise term and i",
+        "Loop with i <= n, print, update term and i",
+        "8th term = 22"
+       ]
+      },
+      {
+       "id": "l-p1",
+       "pyq": "2c72c1389658e128",
+       "level": 3,
+       "points": [
+        "Initialise E_count, I_count, O_count to 0; input Name, Room_No, Type",
+        "Decisions on Type increment the matching count; else invalid type, re-enter",
+        "After every complaint display the three totals",
+        "Loop back while more complaints; algorithm and flowchart both"
+       ]
+      },
+      {
+       "id": "l-p2",
+       "pyq": "51e7e71bdf65f856",
+       "level": 3,
+       "points": [
+        "Pattern t(n) = 2 t(n-1) + t(n-2) with 0 and 1 as first terms",
+        "Initialise a = 0, b = 1, print both, i = 3",
+        "Loop while i <= n: c = 2b + a, print c, a = b, b = c, i = i + 1",
+        "Terms 0, 1, 2, 5, 12, 29, 70, 169"
+       ]
+      },
+      {
+       "id": "l-p3",
+       "pyq": "b913d42a94d4952f",
+       "level": 3,
+       "points": [
+        "Initialise m1, m2, f1, f2 to 0 and input JEE marks",
+        "Loop i = 1 to 100 reading Blue and Pink slips and incrementing counts",
+        "Male CR: higher votes, tie goes to higher JEE marks (j1 vs j2); female similarly (j3 vs j4)",
+        "Print both representatives, then Stop"
+       ]
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "topic": "Algorithms",
+   "subtopics": [
+    {
+     "id": "basics",
+     "title": "What an algorithm is and how to write one",
+     "theory_md": "An **algorithm** is a finite, step-by-step procedure to solve a problem.\n\n**Properties**: finite, definite (each step clear), input (zero or more), output (one or more), effective (each step doable).\n\nWrite it as: **Start**, declare/**Input**, numbered steps with `If ... then ... else`, **Output**, **Stop**. **Pseudocode** is the same in code-like English. Use `mod` for remainder: `n mod 2 = 0` means even.\n\nAlgorithm = steps in words; flowchart = steps as a diagram; program = steps in a language.",
+     "basics_md": "An algorithm is a recipe: precise steps, in order, that end with the dish ready.",
+     "key_points": [
+      "Finite, definite, input, output, effective",
+      "Start, input, steps, output, Stop",
+      "Even test: n mod 2 = 0",
+      "Algorithm in words, flowchart as diagram, program in code"
+     ],
+     "figures": [],
+     "questions": [
+      {
+       "id": "b-q1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "Which is NOT a property of an algorithm?",
+       "options": [
+        "Finiteness",
+        "Definiteness",
+        "Infinite loop",
+        "Output"
+       ],
+       "answer_index": 2,
+       "why": "An algorithm must end after a finite number of steps."
+      },
+      {
+       "id": "b-q2",
+       "kind": "mcq",
+       "level": 1,
+       "q": "A number n is odd if",
+       "options": [
+        "n mod 2 = 0",
+        "n mod 2 = 1",
+        "n / 2 = 1",
+        "n mod 10 = 1"
+       ],
+       "answer_index": 1,
+       "why": "The remainder after dividing by 2 is 1. Students pick n mod 10."
+      },
+      {
+       "id": "b-q3",
+       "kind": "short",
+       "level": 2,
+       "marks": 3,
+       "q": "Define an algorithm and write any four properties. Differentiate an algorithm from a flowchart.",
+       "model_answer_md": "An **algorithm** is a finite, ordered set of well-defined steps that solves a problem.\n\n**Properties:** 1. Finiteness (ends in finite steps). 2. Definiteness (each step unambiguous). 3. Input (zero or more). 4. Output (at least one). 5. Effectiveness.\n\n**Difference:** an algorithm is written in words as numbered steps; a flowchart is the graphical form using symbols and arrows.",
+       "points": [
+        "Definition",
+        "Four properties",
+        "Algorithm in words vs flowchart graphical"
+       ]
+      },
+      {
+       "id": "b-p1",
+       "pyq": "a033cbb43bad15fb",
+       "level": 1,
+       "points": [
+        "Start, Input integer n",
+        "If n mod 2 = 0 display Even else Odd",
+        "Stop"
+       ]
+      }
+     ]
+    },
+    {
+     "id": "selection-algo",
+     "title": "Algorithms with conditions",
+     "theory_md": "Convert each sentence of the problem into an **If**. Use **AND** when all factors must hold, **OR** when any one suffices, and **nested If** or **Else If** when only one outcome is allowed.\n\n- Independent messages (placement, society) are **separate If** blocks, so more than one can print.\n- Mutually exclusive choices (aeroplane or train) use If/Else.\n- A repeated check (wrong password) uses a **While** loop until correct.\n\nName the variables and their type first, then list steps. End with an example input and output.",
+     "basics_md": "Read the paper like a rulebook: each sentence is an if-then. Say which rules can fire together and which exclude each other.",
+     "key_points": [
+      "Declare variables with type",
+      "AND for all-must-hold, OR for any-one, Else-If for exclusive cases",
+      "Independent checks as separate If blocks",
+      "Wrong-input retry uses While"
+     ],
+     "figures": [],
+     "questions": [
+      {
+       "id": "a-q1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "To print a message only when CGPA >= 6 and health is good, the condition uses",
+       "options": [
+        "OR",
+        "AND",
+        "NOT only",
+        "XOR"
+       ],
+       "answer_index": 1,
+       "why": "Both must be true."
+      },
+      {
+       "id": "a-q2",
+       "kind": "mcq",
+       "level": 2,
+       "q": "Two independent messages (good placement, improved skills) should be coded as",
+       "options": [
+        "one If / Else If chain",
+        "separate If blocks",
+        "one nested If",
+        "a loop"
+       ],
+       "answer_index": 1,
+       "why": "An Else If chain would stop after the first true message."
+      },
+      {
+       "id": "a-q3",
+       "kind": "short",
+       "level": 2,
+       "marks": 3,
+       "q": "Write an algorithm: a student is declared Pass if marks >= 40 and attendance >= 75, Detained if attendance < 75, otherwise Fail.",
+       "model_answer_md": "1. Start\n2. Input `marks`, `attendance`\n3. If `attendance < 75` then display \"Detained\"\n4. Else if `marks >= 40` then display \"Pass\"\n5. Else display \"Fail\"\n6. Stop\n\nExample: marks 35, attendance 80 gives Fail.",
+       "points": [
+        "Inputs",
+        "Detained tested first on attendance",
+        "Pass needs marks >= 40 with attendance >= 75",
+        "Else Fail"
+       ]
+      },
+      {
+       "id": "a-p1",
+       "pyq": "96ebeb04d2c80758",
+       "level": 3,
+       "points": [
+        "Three groups of conditions: Army (CGPA >= 6 AND join_Army AND both health good) with else Sorry message",
+        "Placement: CGPA >= 7.5 AND program_skill_good AND project_done",
+        "Society: member_of_society = y; steps 6 and 8 independent so several messages can show",
+        "Inputs, Start, Stop and example"
+       ]
+      },
+      {
+       "id": "a-p2",
+       "pyq": "2a7fceffb343262b",
+       "level": 2,
+       "points": [
+        "Input mode: aeroplane gives airport and pre-paid taxi, train gives station and bus",
+        "At MANIT square check admission letter",
+        "If shown: check and allow entry; else visitor notebook entry then allow entry",
+        "Both branches join and end inside campus"
+       ]
+      },
+      {
+       "id": "a-p3",
+       "pyq": "24d6d53ece4810ea",
+       "level": 3,
+       "points": [
+        "Registration by gender gives hostel and default password (h10_manit / h7_manit); admin stores MAC",
+        "Laptop login uses a While loop: Wrong user-id/password entered until correct, then Welcome to MANIT",
+        "WiFi credentials check: Wrong WiFi user-id/password entered",
+        "MAC check: unauthorized message if another hostel's WiFi; else Welcome to the World of Internet"
+       ]
+      }
+     ]
+    },
+    {
+     "id": "loop-algo",
+     "title": "Algorithms with loops and counters",
+     "theory_md": "For \"100 students\" use **For i = 1 to 100**. Set the counters (`male_count = 0`) **before** the loop, update inside, display after.\n\nSteps: **initialise, loop, input per item, test, count**.\n\n- Range test: `age >= 18 AND age <= 25` (both inclusive).\n- Not eligible if any one criterion fails: `weight < 45 OR age < 18 OR ...`; start with `eligible = TRUE` and set FALSE.\n- Gender-based limits: male 90 days, female 120 days.\n- Tie break: higher votes win; if equal, compare JEE marks.\n\nCheck: `male + female + not_eligible = 100`.",
+     "basics_md": "Keep a tally sheet. Before you start, all tallies are zero; for each person, decide which tally to mark; at the end, read the tallies.",
+     "key_points": [
+      "Initialise counters before the loop",
+      "For i = 1 to N with one set of inputs per pass",
+      "Flag eligible = TRUE then set FALSE on any failed criterion",
+      "Display totals after the loop"
+     ],
+     "figures": [],
+     "questions": [
+      {
+       "id": "p-q1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "Counters used for totals should be initialised",
+       "options": [
+        "inside the loop",
+        "before the loop",
+        "after the loop",
+        "at Stop"
+       ],
+       "answer_index": 1,
+       "why": "Otherwise they reset each pass."
+      },
+      {
+       "id": "p-q2",
+       "kind": "mcq",
+       "level": 2,
+       "q": "The condition for age between 18 and 25 inclusive is",
+       "options": [
+        "age > 18 AND age < 25",
+        "age >= 18 AND age <= 25",
+        "age >= 18 OR age <= 25",
+        "age = 18 OR age = 25"
+       ],
+       "answer_index": 1,
+       "why": "Inclusive needs >= and <=; OR is always true."
+      },
+      {
+       "id": "p-q3",
+       "kind": "short",
+       "level": 2,
+       "marks": 4,
+       "q": "Write an algorithm to read marks of 50 students and count how many passed (marks >= 40) and how many failed.",
+       "model_answer_md": "1. Start\n2. `pass = 0`, `fail = 0`\n3. For `i = 1` to `50`:\n   - Input `marks`\n   - If `marks >= 40` then `pass = pass + 1` else `fail = fail + 1`\n4. Display `pass`, `fail`\n5. Stop\n\nCheck: `pass + fail = 50`.",
+       "points": [
+        "Counters initialised to 0",
+        "For loop 1 to 50 with input",
+        "Condition marks >= 40 and counter update",
+        "Display counts after the loop"
+       ]
+      },
+      {
+       "id": "p-p1",
+       "pyq": "d9e680533712f150",
+       "level": 3,
+       "points": [
+        "Initialise male_count, female_count, not_eligible to 0; loop 100 students",
+        "Common criteria: weight >= 45, age 18 to 25, Hb >= 12.5, pulse 50 to 100, temp < 37.5",
+        "Previous donation: male days > 90, female days > 120",
+        "Eligible: increment gender count; else not_eligible; display three totals after the loop"
+       ]
+      },
+      {
+       "id": "p-p2",
+       "pyq": "5e7effa150c53652",
+       "level": 3,
+       "points": [
+        "Initialise m1, m2, f1, f2 to 0 and input JEE marks",
+        "Loop 100: Blue slip counts M1/M2, Pink slip counts F1/F2",
+        "Compare votes; tie goes to higher JEE marks",
+        "Display male and female representatives; Stop"
+       ]
+      },
+      {
+       "id": "p-p3",
+       "pyq": "c0c3c5cb29555334",
+       "level": 2,
+       "points": [
+        "Excess is 4 kg: jackets 1 kg each and blanket 2 kg",
+        "Input jackets worn k and blanket worn; extra = (2-k) plus 2 if blanket not worn",
+        "amount = extra x 150; display; results 600, 300, 0"
+       ]
+      }
+     ]
+    }
+   ]
+  }
+ ]
+}

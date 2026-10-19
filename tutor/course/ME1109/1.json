@@ -1,0 +1,2148 @@
+{
+ "code": "ME1109",
+ "unit": "Fitting Shop",
+ "written": "2026-10-19",
+ "by": "claude-sonnet-5-5, in a Claude Code session",
+ "topics": [
+  {
+   "topic": "Classification of metals",
+   "subtopics": [
+    {
+     "id": "ferrous",
+     "title": "Ferrous metals and carbon content",
+     "theory_md": "Engineering metals are **ferrous** (iron is the main constituent) or **non-ferrous**. Ferrous metals are graded by carbon:\n- **Wrought iron**: below 0.1% C, soft, ductile, forgeable.\n- **Mild (low carbon) steel**: 0.05 to 0.3% C; workshop jobs, bolts, structural sections.\n- **Medium carbon steel**: 0.3 to 0.6% C; shafts, axles, rails.\n- **High carbon steel**: 0.6 to 1.5% C; files, chisels, punches, hacksaw blades, springs.\n- **Cast iron**: 2 to 4.5% C; brittle, strong in compression, damps vibration; machine beds, surface plates, vice bodies.\n- **Alloy steels**: stainless steel (about 10.5% Cr or more); HSS (18% W, 4% Cr, 1% V) for drills and taps.",
+     "basics_md": "Pure iron is soft. Adding carbon makes it harder but more brittle, so the more carbon, the harder the tool and the harder it is to bend.",
+     "key_points": [
+      "Ferrous = iron-based; carbon decides the grade",
+      "Mild steel 0.05-0.3% C is the fitting-shop job material",
+      "High carbon steel 0.6-1.5% C makes the cutting tools",
+      "Cast iron 2-4.5% C: brittle, good in compression, damps vibration",
+      "HSS (18-4-1 W-Cr-V) for drills and taps"
+     ],
+     "figures": [],
+     "questions": [
+      {
+       "id": "fe-q1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "The carbon content of mild steel is about",
+       "options": [
+        "0.05 to 0.3%",
+        "0.6 to 1.5%",
+        "2 to 4.5%",
+        "above 6.67%"
+       ],
+       "answer_index": 0,
+       "why": "Mild steel is low carbon, 0.05 to 0.3% C. 0.6 to 1.5% is high carbon steel and 2 to 4.5% is cast iron."
+      },
+      {
+       "id": "fe-q2",
+       "kind": "mcq",
+       "level": 2,
+       "q": "Files, chisels and hacksaw blades are made of",
+       "options": [
+        "mild steel",
+        "grey cast iron",
+        "hardened high carbon steel",
+        "wrought iron"
+       ],
+       "answer_index": 2,
+       "why": "A cutting tool must be harder than the mild steel job, so it is high carbon steel (0.6 to 1.5% C), hardened and tempered."
+      },
+      {
+       "id": "fe-q3",
+       "kind": "short",
+       "level": 2,
+       "marks": 3,
+       "q": "Why is cast iron used for machine beds and surface plates although it is brittle?",
+       "model_answer_md": "Cast iron casts easily into complex shapes and is cheap. It has high compressive strength and its graphite flakes damp vibration. It is stable and easily scraped flat. Beds and plates take static, compressive loads, not impact, so brittleness does not matter.",
+       "points": [
+        "Castability and low cost",
+        "High compressive strength",
+        "Vibration damping by graphite flakes",
+        "Loads are static, so brittleness is acceptable"
+       ]
+      },
+      {
+       "id": "fe-q4",
+       "kind": "long",
+       "level": 3,
+       "marks": 5,
+       "q": "Classify ferrous metals by carbon content with one use of each.",
+       "model_answer_md": "**Ferrous metals**\n1. Wrought iron (below 0.1% C): chains, hooks.\n2. Mild steel (0.05 to 0.3% C): nuts, bolts, structural sections, fitting-shop jobs.\n3. Medium carbon steel (0.3 to 0.6% C): shafts, axles, rails.\n4. High carbon steel (0.6 to 1.5% C): files, chisels, springs.\n5. Cast iron (2 to 4.5% C): machine beds, surface plates, pipes.\n6. Alloy steels: stainless steel (cutlery), HSS (drills and taps).",
+       "points": [
+        "Wrought iron below 0.1% C",
+        "Mild 0.05-0.3%, medium 0.3-0.6%, high 0.6-1.5% C",
+        "Cast iron 2-4.5% C",
+        "Alloy steels: stainless, HSS",
+        "One use for each"
+       ]
+      }
+     ]
+    },
+    {
+     "id": "non-ferrous",
+     "title": "Non-ferrous metals and alloys",
+     "theory_md": "**Non-ferrous** metals have no iron or only a little: aluminium (light, 2.7 g/cc), copper (wires), zinc (galvanising), lead, tin, nickel. They generally do not rust, are non-magnetic, good conductors and costlier than steel.\n\nCommon alloys:\n- **Brass**: copper + zinc.\n- **Bronze**: copper + tin.\n- **Gunmetal**: copper + tin + zinc.\n- **Solder**: tin + lead.\n- **Duralumin**: aluminium + copper + magnesium + manganese.\n\n| Ferrous | Non-ferrous |\n|---|---|\n| Iron main constituent | Iron absent or minor |\n| Mostly magnetic, rust | Non-magnetic, corrosion resistant |\n| Cheaper, stronger | Costlier, lighter, better conductors |",
+     "basics_md": "Remember brass = copper + zinc, bronze = copper + tin. Bearings and bells are bronze.",
+     "key_points": [
+      "Non-ferrous: no iron, non-magnetic, corrosion resistant, costlier",
+      "Brass = Cu + Zn; bronze = Cu + Sn; gunmetal = Cu + Sn + Zn",
+      "Solder = Sn + Pb",
+      "Duralumin = Al + Cu + Mg + Mn"
+     ],
+     "figures": [],
+     "questions": [
+      {
+       "id": "nf-q1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "Brass is an alloy of",
+       "options": [
+        "copper and tin",
+        "copper and zinc",
+        "copper and aluminium",
+        "iron and nickel"
+       ],
+       "answer_index": 1,
+       "why": "Brass is copper + zinc. Copper + tin is bronze, the commonly swapped pair."
+      },
+      {
+       "id": "nf-q2",
+       "kind": "mcq",
+       "level": 2,
+       "q": "Which is a ferrous metal?",
+       "options": [
+        "Brass",
+        "Aluminium",
+        "Cast iron",
+        "Gunmetal"
+       ],
+       "answer_index": 2,
+       "why": "Cast iron is iron with 2 to 4.5% C. The others contain no (or negligible) iron."
+      },
+      {
+       "id": "nf-q3",
+       "kind": "short",
+       "level": 2,
+       "marks": 3,
+       "q": "Differentiate between ferrous and non-ferrous metals.",
+       "model_answer_md": "| Ferrous | Non-ferrous |\n|---|---|\n| Iron is the main constituent | Iron absent or minor |\n| Mostly magnetic | Non-magnetic |\n| Rust easily | Corrosion resistant |\n| Cheaper, heavier, stronger | Costlier, lighter, better conductors |\n| e.g. cast iron, steels | e.g. Al, Cu, Zn, brass, bronze |",
+       "points": [
+        "Iron main constituent versus absent",
+        "Magnetic versus non-magnetic",
+        "Rusting versus corrosion resistant",
+        "Cost and examples"
+       ]
+      }
+     ]
+    },
+    {
+     "id": "properties",
+     "title": "Mechanical property words",
+     "theory_md": "Property words examiners ask in one or two marks:\n- **Ductility**: drawn into wire under tension (copper, mild steel).\n- **Malleability**: hammered or rolled into sheet under compression (gold, aluminium, lead).\n- **Hardness**: resistance to scratching or indentation.\n- **Toughness**: absorbs energy and deforms before fracture, resists impact (mild steel).\n- **Brittleness**: breaks with little plastic deformation (cast iron, glass).\n- **Elasticity**: returns to shape when the load is removed. **Plasticity**: keeps the new shape.",
+     "basics_md": "Think of copper wire (pulled, ductile) and aluminium foil (flattened, malleable).",
+     "key_points": [
+      "Ductility is under tension (wire); malleability under compression (sheet)",
+      "Toughness = energy absorbed before fracture; cast iron is hard but not tough",
+      "Brittleness is the opposite of ductility",
+      "Hardness = resistance to indentation or scratching"
+     ],
+     "figures": [],
+     "questions": [
+      {
+       "id": "pr-q1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "The ability of a metal to be drawn into a wire is called",
+       "options": [
+        "malleability",
+        "ductility",
+        "toughness",
+        "hardness"
+       ],
+       "answer_index": 1,
+       "why": "Wire drawing is a tension process: ductility. Malleability is for sheets."
+      },
+      {
+       "id": "pr-q2",
+       "kind": "mcq",
+       "level": 2,
+       "q": "Cast iron is",
+       "options": [
+        "hard and tough",
+        "hard and brittle",
+        "soft and ductile",
+        "soft and tough"
+       ],
+       "answer_index": 1,
+       "why": "Cast iron is hard and brittle, so it cracks under impact; toughness belongs to mild steel."
+      },
+      {
+       "id": "pr-q3",
+       "kind": "short",
+       "level": 2,
+       "marks": 4,
+       "q": "Define ductility, malleability, toughness and brittleness with one example each.",
+       "model_answer_md": "- **Ductility**: ability to be drawn into wire under tension, e.g. copper.\n- **Malleability**: ability to be hammered or rolled into sheet, e.g. aluminium.\n- **Toughness**: ability to absorb energy and deform plastically before fracture, e.g. mild steel.\n- **Brittleness**: fracture with almost no plastic deformation, e.g. cast iron.",
+       "points": [
+        "Ductility: wire, tension",
+        "Malleability: sheet, compression",
+        "Toughness: energy absorbed before fracture",
+        "Brittleness: little deformation before fracture",
+        "One example each"
+       ]
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "topic": "Clamping tools, vices and V-blocks",
+   "subtopics": [
+    {
+     "id": "bench-vice",
+     "title": "Bench vice",
+     "theory_md": "The **bench vice** (parallel-jaw vice) holds the job for filing, sawing, chipping and tapping.\n\n**Parts**: cast iron **body** bolted to the bench; **fixed jaw**; **movable jaw** sliding in a guide; **square-threaded screw** with **nut**, turned by a **handle**; hardened, serrated **jaw plates**.\n\n**Size** is the **width of the jaws** (75 to 150 mm). Fix the vice so the jaw top is at elbow height. Hold the job low, near the jaws, to stop chatter. Put **soft jaws** (aluminium, copper, lead caps) over the plates to protect a finished surface. The square thread gives high axial force for little friction and wear.",
+     "basics_md": "A vice is a very strong screw clamp. Turning the handle drives the screw, which pushes the movable jaw against the fixed one with the job between.",
+     "key_points": [
+      "Parts: body, fixed jaw, movable jaw, jaw plates, square-threaded screw, nut, handle",
+      "Size = width of jaws, e.g. 100 mm",
+      "Soft jaws (Al, Cu, Pb) protect finished surfaces",
+      "Job held low and close to the jaws; vice at elbow height"
+     ],
+     "figures": [],
+     "questions": [
+      {
+       "id": "bv-q1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "The size of a bench vice is given by",
+       "options": [
+        "length of the screw",
+        "width of the jaws",
+        "maximum opening",
+        "weight"
+       ],
+       "answer_index": 1,
+       "why": "A bench vice is specified by jaw width, e.g. a 100 mm vice."
+      },
+      {
+       "id": "bv-q2",
+       "kind": "mcq",
+       "level": 2,
+       "q": "Soft jaws are fitted over the vice plates to",
+       "options": [
+        "increase grip",
+        "avoid marking a finished job",
+        "reduce vibration only",
+        "increase the opening"
+       ],
+       "answer_index": 1,
+       "why": "The hardened serrated plates would dent a finished or soft job; soft caps prevent it."
+      },
+      {
+       "id": "bv-q3",
+       "kind": "long",
+       "level": 2,
+       "marks": 5,
+       "q": "Draw a neat sketch of a bench vice and name its parts. State how it is specified.",
+       "model_answer_md": "**Sketch (described)**: a cast iron body bolted to the bench. On the left the fixed jaw is cast with the body. The movable jaw slides in a rectangular guide in the body. A square-threaded screw passes through the movable jaw into a nut fixed in the body and is turned by a handle (tommy bar) at the front. Hardened serrated steel jaw plates are screwed on both jaw faces.\n\n**Parts**: body, fixed jaw, movable jaw, jaw plates, square-threaded screw, nut, handle, guide.\n\n**Specification**: width of jaws, e.g. 100 mm.\n\n**Use**: holds work for filing, sawing, chipping, tapping.",
+       "points": [
+        "Neat labelled sketch",
+        "Fixed and movable jaw, screw, nut, handle",
+        "Serrated hardened jaw plates",
+        "Specified by jaw width",
+        "Use: holding work"
+       ]
+      },
+      {
+       "id": "bv-q4",
+       "kind": "short",
+       "level": 2,
+       "marks": 2,
+       "q": "Why is the screw of a bench vice square-threaded?",
+       "model_answer_md": "A square thread has no thread angle, so nearly all the torque becomes axial clamping force with little friction and no bursting force on the nut. It is also strong and wears slowly under repeated clamping.",
+       "points": [
+        "Square thread, zero thread angle",
+        "High axial force, low friction",
+        "Strong and wears slowly"
+       ]
+      }
+     ]
+    },
+    {
+     "id": "other-vices",
+     "title": "Other vices and clamps",
+     "theory_md": "- **Hand vice**: small work held in the hand, thin sheet being drilled.\n- **Pin vice**: very small diameters, wire and pins.\n- **Pipe vice**: pipes; serrated V jaws (a hinged chain or upper jaw) grip the pipe at four points so it does not slip or crush.\n- **Leg vice**: heavy hammering, smithy work; the leg takes the blow to the floor.\n- **Machine vice**: bolted on the drilling machine table.\n- **C-clamp (G-clamp)** and **toolmaker's clamp**: hold a job to an angle plate, or two parts together.",
+     "basics_md": "Each vice is named for the job it holds: a pipe vice holds pipe, a hand vice sits in your hand, a leg vice stands on a leg.",
+     "key_points": [
+      "Hand vice: small work; pin vice: wire and pins",
+      "Pipe vice: V-toothed jaws or chain, round pipe at four points",
+      "Leg vice: heavy hammering; leg carries the blow",
+      "Machine vice: on the drilling table; C-clamp: holds work to angle plate"
+     ],
+     "figures": [],
+     "questions": [
+      {
+       "id": "ov-q1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "Which vice suits holding a pipe for cutting and threading?",
+       "options": [
+        "leg vice",
+        "pin vice",
+        "pipe vice",
+        "hand vice"
+       ],
+       "answer_index": 2,
+       "why": "The pipe vice grips round pipe at four points without slipping or crushing."
+      },
+      {
+       "id": "ov-q2",
+       "kind": "mcq",
+       "level": 2,
+       "q": "A leg vice is chosen for",
+       "options": [
+        "fine filing of small parts",
+        "heavy hammering and forging",
+        "holding wire",
+        "drilling machine work"
+       ],
+       "answer_index": 1,
+       "why": "Its leg transfers hammer blows to the floor, so it is for heavy smithy work."
+      },
+      {
+       "id": "ov-p1",
+       "pyq": "3c0f6e6b22eedcde",
+       "level": 2,
+       "points": [
+        "Neat diagram of pipe vice",
+        "Labels: base or bench mount, fixed lower jaw (bow-shaped frame), hinged upper chain or jaw with serrated teeth",
+        "Labels: threaded screw, handle (tommy bar), pipe held between the jaws",
+        "Gripping at several points holds round work without slipping"
+       ]
+      },
+      {
+       "id": "ov-q3",
+       "kind": "short",
+       "level": 2,
+       "marks": 3,
+       "q": "Name any four holding devices used in the fitting shop and state one use each.",
+       "model_answer_md": "1. **Bench vice**: holds work for filing and sawing.\n2. **Hand vice**: holds small work and thin sheet for drilling.\n3. **V-block**: holds round bars for marking and drilling.\n4. **C-clamp**: clamps work to an angle plate or table.",
+       "points": [
+        "Four correct devices",
+        "A correct use for each"
+       ]
+      }
+     ]
+    },
+    {
+     "id": "v-block",
+     "title": "V-block",
+     "theory_md": "A **V-block** is a hardened steel or cast iron block with an accurately machined **90 degree V-groove**, usually on top and bottom, with side grooves and a slot for a U-clamp.\n\n**Use**: a round bar lying in the V has its axis parallel to the base. It holds cylindrical work on the surface plate for **marking centre lines** and centres with a surface gauge or height gauge, and under the drill for **drilling across a shaft**. V-blocks are made as **matched pairs** so a long shaft lies parallel to the plate.",
+     "basics_md": "The V acts like a cradle: two sloping faces centre a round bar automatically, whatever its diameter.",
+     "key_points": [
+      "Block with 90 degree V-groove, hardened and ground",
+      "Holds round work for marking and drilling",
+      "Used in matched pairs with a U-clamp",
+      "Round bar axis parallel to the base"
+     ],
+     "figures": [],
+     "questions": [
+      {
+       "id": "vb-q1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "The included angle of a standard V-block groove is",
+       "options": [
+        "45 degrees",
+        "60 degrees",
+        "90 degrees",
+        "120 degrees"
+       ],
+       "answer_index": 2,
+       "why": "The standard groove is 90 degrees; 60 degrees is a common wrong answer."
+      },
+      {
+       "id": "vb-q2",
+       "kind": "mcq",
+       "level": 2,
+       "q": "V-blocks are used in pairs mainly to",
+       "options": [
+        "double the clamping force",
+        "support a long shaft parallel to the surface plate",
+        "make the job heavier",
+        "mark flat surfaces"
+       ],
+       "answer_index": 1,
+       "why": "A matched pair supports both ends at equal height, so the axis stays parallel to the plate."
+      },
+      {
+       "id": "vb-q3",
+       "kind": "short",
+       "level": 2,
+       "marks": 3,
+       "q": "What is a V-block? State its uses.",
+       "model_answer_md": "A V-block is a block of hardened steel or cast iron with a precisely machined 90 degree V-groove (top and bottom, side grooves) and a slot for a U-clamp.\n\n**Uses**\n1. Holding round work on the surface plate for marking centre lines and centres.\n2. Holding a round bar under the drill to drill across it.\n3. Used in matched pairs for long shafts.",
+       "points": [
+        "Hardened block with 90 degree V-groove",
+        "Marking centre lines on round work",
+        "Holding for drilling",
+        "Matched pairs, U-clamp"
+       ]
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "topic": "Marking and measuring tools",
+   "subtopics": [
+    {
+     "id": "marking-tools",
+     "title": "Marking out and marking tools",
+     "theory_md": "**Marking (marking out)** is drawing the layout of the job, lines, centres and curves, on the metal to show where metal is to be removed.\n\n**Tools**: **scriber** (hardened steel, point about 15 degrees) for fine lines; **divider** and **trammel** for circles, arcs and stepping off; **centre punch** (90 degrees) and **prick punch** (30 degrees) for dots; **surface gauge** (base, pillar, scriber) for lines parallel to the plate; **odd-leg caliper**; **try square**; steel rule.\n\n**Reference**: **surface plate** (cast iron or granite, flat top) is the datum; **V-block** and **angle plate** hold the job. **Marking media**: chalk (rough), marking blue (finished), copper sulphate (bright steel).",
+     "basics_md": "Marking is like tracing the drawing onto the metal so the file knows where to stop.",
+     "key_points": [
+      "Marking = transferring the drawing to the job as lines and dots",
+      "Scriber, divider, odd-leg caliper, punches, surface gauge, try square",
+      "Surface plate is the flat datum; V-block and angle plate hold the job",
+      "Marking blue or chalk makes scribed lines visible"
+     ],
+     "figures": [],
+     "questions": [
+      {
+       "id": "mt-q1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "Which tool draws lines parallel to the surface plate at a set height?",
+       "options": [
+        "divider",
+        "surface gauge",
+        "try square",
+        "centre punch"
+       ],
+       "answer_index": 1,
+       "why": "The surface gauge carries a scriber on a pillar and scribes at a set height from the plate."
+      },
+      {
+       "id": "mt-q2",
+       "kind": "mcq",
+       "level": 2,
+       "q": "The usual point angle of a prick punch and a centre punch is respectively",
+       "options": [
+        "90 and 30 degrees",
+        "30 and 90 degrees",
+        "60 and 60 degrees",
+        "118 and 60 degrees"
+       ],
+       "answer_index": 1,
+       "why": "Prick punch 30 degrees (light layout dots); centre punch 90 degrees (drill start). They are commonly swapped."
+      },
+      {
+       "id": "mt-p1",
+       "pyq": "ace600b16e9f0fdd",
+       "level": 2,
+       "points": [
+        "Marking = drawing layout lines, centres and curves on the job",
+        "Scriber (fine lines), divider and trammel (circles, arcs)",
+        "Centre and prick punch (dots), surface gauge (parallel lines at a height)",
+        "Surface plate as datum, V-block and angle plate holding, marking blue as medium"
+       ]
+      },
+      {
+       "id": "mt-q3",
+       "kind": "short",
+       "level": 2,
+       "marks": 3,
+       "q": "State the purpose of a surface plate and a scriber in marking.",
+       "model_answer_md": "**Surface plate**: a heavy, ground and scraped cast iron or granite plate with a very flat top. It is the reference plane; the job, surface gauge, V-block and angle plate stand on it so all heights are measured from one true plane.\n\n**Scriber**: a hardened steel pencil with a sharp point, ground to about 15 degrees, which scratches fine permanent lines on the metal, usually over marking blue.",
+       "points": [
+        "Surface plate is the flat reference plane",
+        "Surface gauge, V-block set on it",
+        "Scriber scratches fine lines",
+        "Point about 15 degrees, used over marking blue"
+       ]
+      }
+     ]
+    },
+    {
+     "id": "measuring-tools",
+     "title": "Measuring tools and checking tools",
+     "theory_md": "Measuring tools give a size to a stated accuracy:\n- **Steel rule**: least count 0.5 mm (or 1 mm).\n- **Calipers** (inside, outside): transfer sizes; read on a rule.\n- **Vernier caliper**: 0.02 mm. **Micrometer**: 0.01 mm.\n- **Vernier height and depth gauge**, **dial gauge**, **feeler gauge** (gaps), **radius gauge**, **screw pitch gauge**, **bevel protractor**.\n- **Try square**: checks 90 degrees (stock and blade). **Straight edge**: long, flat bar to check flatness or straightness by light gaps, or to guide a scriber.\n\n| Marking tools | Measuring tools |\n|---|---|\n| Transfer dimensions to the job | Find the size of a feature |\n| Accuracy about 0.25 mm | Accuracy 0.02 or 0.01 mm |\n| Scriber, divider, punches | Rule, vernier, micrometer |\n| Leave a mark on the job | Leave no mark |",
+     "basics_md": "Marking says where to cut; measuring says whether you cut it right.",
+     "key_points": [
+      "Steel rule 0.5 mm, vernier caliper 0.02 mm, micrometer 0.01 mm",
+      "Try square checks 90 degrees; straight edge checks flatness or straightness",
+      "Feeler gauge measures small gaps",
+      "Marking tools transfer a size; measuring tools find a size"
+     ],
+     "figures": [],
+     "questions": [
+      {
+       "id": "me-q1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "The least count of a standard micrometer is",
+       "options": [
+        "0.1 mm",
+        "0.02 mm",
+        "0.01 mm",
+        "1 mm"
+       ],
+       "answer_index": 2,
+       "why": "Pitch 0.5 mm over 50 thimble divisions gives 0.01 mm."
+      },
+      {
+       "id": "me-q2",
+       "kind": "mcq",
+       "level": 2,
+       "q": "A try square is used to",
+       "options": [
+        "measure length to 0.02 mm",
+        "check squareness (90 degrees)",
+        "measure bore diameter",
+        "mark circles"
+       ],
+       "answer_index": 1,
+       "why": "It checks and marks right angles; it does not measure length."
+      },
+      {
+       "id": "me-p1",
+       "pyq": "a06059fcf8ec7c25",
+       "level": 2,
+       "points": [
+        "Steel rule: 0.5 to 1 mm, general lengths",
+        "Calipers transfer size and are read on a rule",
+        "Vernier caliper 0.02 mm (outside, inside, depth); micrometer 0.01 mm",
+        "Height and depth gauge, feeler, radius, screw pitch gauge, bevel protractor; try square and straight edge for squareness and flatness"
+       ]
+      },
+      {
+       "id": "me-p2",
+       "pyq": "704acdef47329192",
+       "level": 2,
+       "points": [
+        "Any five tools with use: steel rule (length, 0.5 mm), vernier caliper (0.02 mm), micrometer (0.01 mm)",
+        "Try square checks squareness",
+        "Vernier height gauge, feeler gauge or thread gauge with correct use"
+       ]
+      },
+      {
+       "id": "me-p3",
+       "pyq": "e7388d98a0a82981",
+       "level": 2,
+       "points": [
+        "Marking tools transfer dimensions onto the job; measuring tools find the size",
+        "Marking is before cutting and less accurate (about 0.25 mm); measuring is during or after and more accurate (0.02 or 0.01 mm)",
+        "Examples of each",
+        "Marking leaves a permanent mark; measuring does not"
+       ]
+      },
+      {
+       "id": "me-p4",
+       "pyq": "d6614a52fc1edb0f",
+       "level": 1,
+       "points": [
+        "Long, flat, accurately machined steel bar with a true straight edge",
+        "Checks flatness and straightness (light gaps or feeler gauge)",
+        "Guides the scriber for straight lines on large surfaces"
+       ]
+      },
+      {
+       "id": "me-q3",
+       "kind": "short",
+       "level": 2,
+       "marks": 3,
+       "q": "Write three measuring tools with their least count and use.",
+       "model_answer_md": "1. **Steel rule**: least count 0.5 mm; direct length.\n2. **Vernier caliper**: 0.02 mm; outside, inside and depth.\n3. **Micrometer**: 0.01 mm; small diameters and thicknesses.",
+       "points": [
+        "Steel rule 0.5 mm",
+        "Vernier caliper 0.02 mm with uses",
+        "Micrometer 0.01 mm with use"
+       ]
+      }
+     ]
+    },
+    {
+     "id": "tool-families",
+     "title": "Classification and families of fitting tools",
+     "theory_md": "Fitting tools are classified by function:\n1. **Holding**: bench vice, hand vice, pipe vice, V-block, clamps, angle plate.\n2. **Marking and measuring**: scriber, divider, odd-leg caliper, punches, surface plate, surface gauge, try square, steel rule, vernier caliper, micrometer.\n3. **Cutting**: files, chisels, hacksaw, drills, taps, dies, reamers, scrapers.\n4. **Striking**: ball peen, cross peen, straight peen hammers, mallet.\n5. **Miscellaneous**: spanners, screwdrivers, pliers, file card, oil can.\n\n**Carpentry**: marking and measuring (rule, try square, marking and mortise gauge, bevel); cutting (rip saw, cross-cut saw, tenon saw, chisels, planes); boring (brace and bit, gimlet); striking (mallet, claw hammer); holding (carpenter's vice, bench hook, sash clamp).\n\n**Templates and jigs**: a **template** is a profile gauge the job is checked against; a **jig** holds the work and guides the tool. They give repeatability and interchangeability.",
+     "basics_md": "Sort the tool box by what each tool does: hold, mark, measure, cut, strike.",
+     "key_points": [
+      "Five families: holding, marking and measuring, cutting, striking, miscellaneous",
+      "Know two to three tools per family",
+      "Carpentry has its own saws, planes, gauges and mallet",
+      "Template = profile gauge; jig = holds work and guides the tool"
+     ],
+     "figures": [],
+     "questions": [
+      {
+       "id": "tf-q1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "A hacksaw belongs to which family of fitting tools?",
+       "options": [
+        "holding",
+        "marking",
+        "cutting",
+        "striking"
+       ],
+       "answer_index": 2,
+       "why": "A hacksaw cuts metal, so it is a cutting tool."
+      },
+      {
+       "id": "tf-q2",
+       "kind": "mcq",
+       "level": 2,
+       "q": "A jig is used to",
+       "options": [
+        "measure to 0.01 mm",
+        "hold the work and guide the tool",
+        "mark circles",
+        "check flatness"
+       ],
+       "answer_index": 1,
+       "why": "A jig positions the work and guides the tool, e.g. a drill jig bush, so every piece is identical."
+      },
+      {
+       "id": "tf-p1",
+       "pyq": "98755018507a7cab",
+       "level": 1,
+       "points": [
+        "Holding: bench vice, hand vice, V-block, clamps",
+        "Marking and measuring: scriber, divider, punch, surface plate, rule, vernier, micrometer",
+        "Cutting: files, chisels, hacksaw, drills, taps, dies, reamers",
+        "Striking: ball peen, cross peen, straight peen hammer; auxiliary tools"
+       ]
+      },
+      {
+       "id": "tf-p2",
+       "pyq": "874a3e41a89d0837",
+       "level": 2,
+       "points": [
+        "Names tools by group: holding, marking, measuring, cutting, striking",
+        "Any four explained, each with a use",
+        "Neat labelled figure for each (bench vice, hacksaw, file, scriber)"
+       ]
+      },
+      {
+       "id": "tf-p3",
+       "pyq": "4ef42e8fb59c7f6c",
+       "level": 2,
+       "points": [
+        "Fitting: marking (scriber, divider, punch, surface gauge), measuring (rule, try square, vernier, micrometer, feeler), working (files, hacksaw, chisels, hammers, vice)",
+        "Carpentry: rule, try square, marking gauge, saws, planes, chisels, mallet, brace and bit",
+        "Two labelled sketches (vernier caliper: fixed and sliding jaw, main and vernier scale, locking screw, depth rod; least count 0.02 mm. Try square: stock and blade at 90 degrees)"
+       ]
+      },
+      {
+       "id": "tf-p4",
+       "pyq": "2440a0f9167885af",
+       "level": 2,
+       "points": [
+        "Fitting tools in groups: holding, marking, cutting, measuring",
+        "Carpentry tools in groups: marking and measuring, holding, cutting, boring, striking",
+        "Two neat labelled sketches with use (try square, vernier caliper)"
+       ]
+      },
+      {
+       "id": "tf-p5",
+       "pyq": "19c2c2517dd8a1ab",
+       "level": 2,
+       "points": [
+        "Fitting tools: files, hacksaw, chisels, hammers, punches, drills and taps, vices, scribers",
+        "Carpentry tools: saws, planes, chisels, mallet, claw hammer, brace and bit",
+        "Three labelled sketches: flat file (tang, heel, edge, face, point), hacksaw (frame, handle, wing nut, blade, pins), flat chisel (head, body, cutting edge about 60 degrees)"
+       ]
+      },
+      {
+       "id": "tf-q3",
+       "kind": "short",
+       "level": 2,
+       "marks": 3,
+       "q": "Classify the tools of the fitting shop into groups with two examples each.",
+       "model_answer_md": "1. **Holding**: bench vice, V-block.\n2. **Marking and measuring**: scriber, vernier caliper.\n3. **Cutting**: file, hacksaw.\n4. **Striking**: ball peen hammer, mallet.\n5. **Miscellaneous**: spanner, file card.",
+       "points": [
+        "Holding group",
+        "Marking and measuring group",
+        "Cutting group",
+        "Striking group",
+        "Two examples each"
+       ]
+      }
+     ]
+    },
+    {
+     "id": "significance-safety",
+     "title": "Why marking and measuring matter; shop safety",
+     "theory_md": "**Significance**: marking tools transfer the drawing to the job as visible lines and dots; measuring tools check the size is reached. They give the **datum**, let the job be checked at each stage, reduce rework and scrap, and ensure **interchangeability**. **Precision** is repeatability; **accuracy** is closeness to the true size.\n\n**Safety in the fitting shop**: wear safety shoes and goggles, no loose clothing; clamp the job firmly; never use a file without a handle (the tang can pierce the palm); do not use chisels or punches with mushroomed heads; do not blow filings with the mouth, use a brush; keep the floor clean; know the fire and first-aid points.",
+     "basics_md": "A cut can be corrected only if you know how far off you are, which is why you measure often.",
+     "key_points": [
+      "Marking and measuring give the datum, stage checks, less scrap and interchangeability",
+      "Precision = repeatability; accuracy = closeness to true size",
+      "Handle on every file; goggles; mushroomed heads dressed",
+      "Brush, not mouth or hand, to clear filings"
+     ],
+     "figures": [],
+     "questions": [
+      {
+       "id": "ss-q1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "Why must a file always have a handle?",
+       "options": [
+        "for better grip only",
+        "the sharp tang can pierce the palm",
+        "to make it heavier",
+        "to cool the file"
+       ],
+       "answer_index": 1,
+       "why": "The tang is a sharp spike; a handle protects the hand."
+      },
+      {
+       "id": "ss-q2",
+       "kind": "mcq",
+       "level": 2,
+       "q": "Precision means",
+       "options": [
+        "closeness to the true value",
+        "repeatability of readings",
+        "a large least count",
+        "zero error"
+       ],
+       "answer_index": 1,
+       "why": "Precision is repeatability; accuracy is closeness to the true value."
+      },
+      {
+       "id": "ss-p1",
+       "pyq": "cbd00f433aef197a",
+       "level": 3,
+       "points": [
+        "Significance: transfer the drawing, give datum, check at each stage, reduce rework and scrap, give precision and accuracy",
+        "Three tools with use: scriber, vernier caliper (0.02 mm), try square or surface gauge",
+        "At least five safety measures with reason: goggles and shoes, firm clamping, file handle, no mushroomed chisels, brush for filings, clean floor"
+       ]
+      },
+      {
+       "id": "ss-q3",
+       "kind": "short",
+       "level": 2,
+       "marks": 4,
+       "q": "State four safety precautions in the fitting shop with the reason for each.",
+       "model_answer_md": "1. Wear goggles and safety shoes: chips and sparks.\n2. Clamp the job firmly: prevents slipping and cuts.\n3. Fit a handle on every file: the tang can pierce the palm.\n4. Use a brush, not the mouth, to clear filings: avoids eye injury.",
+       "points": [
+        "Four precautions",
+        "A reason for each"
+       ]
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "topic": "Files, chisels, hacksaw, punches and hammers",
+   "subtopics": [
+    {
+     "id": "files",
+     "title": "Files",
+     "theory_md": "A **file** is a hardened high carbon steel bar with rows of cutting teeth. **Parts**: tang, heel, face, edge, point; **length is measured from heel to point, without the tang**.\n\n**By cut**: single-cut (soft metals, finish), double-cut (fast removal on steel), rasp-cut (wood, leather), curved-cut (soft metals).\n**By grade** (coarse to fine): rough, bastard, second cut, smooth, dead smooth.\n**By shape**: **flat** (general flat surfaces), **hand** (one safe edge), **square** (square holes, slots), **round** (rat tail; enlarging round holes), **half-round** (curves and flats), **triangular** (corners over 60 degrees, saw sharpening), **knife-edge** (narrow grooves, acute angles), needle files.\n\n**Pinning** is clogging of teeth by metal; clear it with a file card.",
+     "basics_md": "Every tooth is a tiny chisel. Many teeth in a row remove metal in thin shavings, so a file can finish a surface smoothly.",
+     "key_points": [
+      "Parts: tang, heel, face, edge, point; length without tang",
+      "Cut: single, double, rasp, curved; grade: rough, bastard, second cut, smooth, dead smooth",
+      "Shapes: flat, hand, square, round, half-round, triangular, knife-edge",
+      "Hand file has one safe edge; triangular file for corners over 60 degrees",
+      "Pinning cleared with a file card"
+     ],
+     "figures": [],
+     "questions": [
+      {
+       "id": "fi-q1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "The length of a file is measured",
+       "options": [
+        "including the tang",
+        "from heel to point, excluding the tang",
+        "along the edge only",
+        "from handle to tang"
+       ],
+       "answer_index": 1,
+       "why": "File length excludes the tang."
+      },
+      {
+       "id": "fi-q2",
+       "kind": "mcq",
+       "level": 2,
+       "q": "A file with one edge left smooth (safe edge) is the",
+       "options": [
+        "flat file",
+        "hand file",
+        "square file",
+        "knife-edge file"
+       ],
+       "answer_index": 1,
+       "why": "The hand file has one safe edge so it can file into a corner without cutting the adjacent face."
+      },
+      {
+       "id": "fi-p1",
+       "pyq": "c564c0e9f2bec456",
+       "level": 2,
+       "points": [
+        "Tools of fitting shop listed by group: holding, marking, cutting, striking, measuring",
+        "Files: hardened high carbon steel, single or double cut, grades rough to dead smooth",
+        "Flat, hand, square, round, half-round, triangular, knife-edge with a use for each"
+       ]
+      },
+      {
+       "id": "fi-q3",
+       "kind": "short",
+       "level": 2,
+       "marks": 4,
+       "q": "Classify files by cut and by grade. Why is a double-cut file used on steel?",
+       "model_answer_md": "**By cut**: single-cut, double-cut, rasp-cut, curved-cut.\n**By grade (coarse to fine)**: rough, bastard, second cut, smooth, dead smooth.\n\nA double-cut file has a second set of teeth crossing the first, giving many small cutting points; it removes metal faster on steel, while a single-cut file leaves a smoother finish on soft metal.",
+       "points": [
+        "Four cuts",
+        "Five grades in order",
+        "Double cut = crossing teeth",
+        "Faster removal on steel"
+       ]
+      }
+     ]
+    },
+    {
+     "id": "hacksaw",
+     "title": "Hacksaw: blades and cutting process",
+     "theory_md": "**Saws in the fitting shop**: hand hacksaw (fixed or adjustable frame), junior hacksaw, power hacksaw, band saw, circular saw, coping saw.\n\n**Blade**: HSS or high carbon steel, 250 or 300 mm. **All-hard** (brittle, straight cuts); **flexible** (only the teeth hardened). **Pitch** (teeth per 25 mm): 14 coarse (soft metals, thick sections), 18 to 24 (mild steel, tubes), 32 (thin sheet, hard steel). Keep at least 2 to 3 teeth in contact. **Set** (raker or wavy) makes the kerf wider than the blade.\n\n**Process**: teeth point **forward**, blade taut; job low and near the vice jaws; start with a nick; cut on the **forward stroke** only, 40 to 60 strokes per minute, full blade length; saw in the waste, about 1 mm from the line; ease off at the end.\n\n**Pitch** $p = 25.4/n$ mm.",
+     "basics_md": "The saw cuts like a file does: pushing forward bites, pulling back must glide, so the teeth face away from you.",
+     "key_points": [
+      "Teeth point forward; cuts on the forward stroke; 40-60 strokes per minute",
+      "Pitch: 14 tpi soft/thick, 18-24 mild steel, 32 thin sheet/tubes",
+      "At least 2-3 teeth in contact with the section",
+      "Set gives kerf clearance so the blade does not bind",
+      "All-hard blade is brittle; flexible blade has hardened teeth only"
+     ],
+     "figures": [],
+     "questions": [
+      {
+       "id": "hs-q1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "A hacksaw blade is fitted with its teeth pointing",
+       "options": [
+        "towards the handle",
+        "away from the handle",
+        "downward only",
+        "either way"
+       ],
+       "answer_index": 1,
+       "why": "It cuts on the forward stroke, so the teeth point away from the handle."
+      },
+      {
+       "id": "hs-q2",
+       "kind": "mcq",
+       "level": 2,
+       "q": "Which blade pitch is best for thin sheet and tubes?",
+       "options": [
+        "14 teeth per 25 mm",
+        "18 teeth per 25 mm",
+        "32 teeth per 25 mm",
+        "8 teeth per 25 mm"
+       ],
+       "answer_index": 2,
+       "why": "Fine pitch (32 tpi) keeps at least 2-3 teeth on a thin section; coarse teeth would straddle and snap."
+      },
+      {
+       "id": "hs-q3",
+       "kind": "numerical",
+       "level": 2,
+       "marks": 3,
+       "q": "A hacksaw blade has 18 teeth per 25.4 mm. Find its pitch and say whether it suits a 1.5 mm thick sheet.",
+       "model_answer_md": "$p = \\dfrac{25.4}{18} = 1.41$ mm.\n\nTeeth in contact $= t/p = 1.5/1.41 \\approx 1.06$, only about one tooth. At least 2 to 3 teeth are needed, so the blade is **not suitable**. Use 32 teeth per 25.4 mm: $p = 25.4/32 = 0.79$ mm, giving about 1.9 teeth on 1.5 mm (about 2).",
+       "points": [
+        "Pitch = 25.4/18 = 1.41 mm",
+        "Teeth in contact = t/p = 1.06",
+        "Rule: need 2-3 teeth, so unsuitable",
+        "Use 32 tpi blade (0.79 mm pitch)"
+       ]
+      },
+      {
+       "id": "hs-p1",
+       "pyq": "c5b44a2c662e600b",
+       "level": 2,
+       "points": [
+        "Saws: hand hacksaw, junior hacksaw, power hacksaw, band saw, circular saw, coping saw",
+        "Process: mark and clamp, teeth forward and taut, start with a nick, cut on the forward stroke, 40-60 strokes per minute, full blade length",
+        "Blade pitch choice (14, 18-24, 32 tpi) with at least 3 teeth in contact; set of teeth",
+        "Applications: cutting bars, rods, pipes, sheets, slots, removing rivet heads"
+       ]
+      },
+      {
+       "id": "hs-p2",
+       "pyq": "b97dd3829dc233b8",
+       "level": 2,
+       "points": [
+        "Types: hand, junior, power hacksaw, band saw, circular saw, coping saw",
+        "Fit blade teeth forward and tighten; select pitch (coarse 14, medium 18-24, fine 32 tpi)",
+        "Clamp near jaws, nick the line, light start, 40-60 strokes per minute, pressure on forward stroke only, ease off at end",
+        "Applications: bars, rods, angles, pipes, sheets, slots, rivet heads"
+       ]
+      },
+      {
+       "id": "hs-p3",
+       "pyq": "e98630e5c9961913",
+       "level": 2,
+       "points": [
+        "Blade 250-300 mm, HSS or high carbon steel",
+        "All-hard blade: brittle, straight cuts; flexible blade: hardened teeth, soft back",
+        "Pitch: coarse 14, medium 18-24, fine 32 tpi with application",
+        "Tooth set: raker or wavy"
+       ]
+      }
+     ]
+    },
+    {
+     "id": "chisels-punches",
+     "title": "Chisels and punches",
+     "theory_md": "A **chisel** is a hardened and tempered steel tool struck with a hammer to **chip** metal, cut rivet heads, bolts and sheet, and cut grooves.\n\n**Types**:\n- **Flat (cold) chisel**: flat surfaces, sheet, rivet heads.\n- **Cross-cut (cape) chisel**: narrow edge; keyways and narrow grooves.\n- **Half-round (round nose) chisel**: oil grooves, curved grooves.\n- **Diamond-point chisel**: V-grooves, corners.\n- **Side chisel**: slots at the side.\n\nCutting angle about **60 degrees** for mild steel (larger for harder metal). Hold at 35 to 40 degrees to the surface; watch the cutting edge; wear goggles.\n\n**Punches**: **prick punch** 30 degrees (light layout dots); **centre punch** 90 degrees (centre mark to start a drill).",
+     "basics_md": "A chisel is a wedge: the hammer drives it and the wedge shears off a chip.",
+     "key_points": [
+      "Flat chisel for flats and sheet; cross-cut for keyways; half-round for oil grooves; diamond-point for V-grooves",
+      "Cutting angle about 60 degrees for mild steel; larger for harder metal",
+      "Hardened and tempered; head mushroomed after use must be dressed",
+      "Prick punch 30 degrees, centre punch 90 degrees"
+     ],
+     "figures": [],
+     "questions": [
+      {
+       "id": "cp-q1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "A cross-cut (cape) chisel is used to cut",
+       "options": [
+        "flat surfaces",
+        "keyways and narrow grooves",
+        "oil grooves",
+        "V-grooves"
+       ],
+       "answer_index": 1,
+       "why": "Its narrow edge cuts keyways and narrow grooves. Half-round is for oil grooves."
+      },
+      {
+       "id": "cp-q2",
+       "kind": "mcq",
+       "level": 2,
+       "q": "The point angle of a centre punch is",
+       "options": [
+        "30 degrees",
+        "60 degrees",
+        "90 degrees",
+        "118 degrees"
+       ],
+       "answer_index": 2,
+       "why": "Centre punch 90 degrees; prick punch 30 degrees. 118 degrees is a drill point angle."
+      },
+      {
+       "id": "cp-p1",
+       "pyq": "75f78865e07f27e1",
+       "level": 2,
+       "points": [
+        "Chisel: hardened and tempered steel tool struck with a hammer to chip metal",
+        "Flat, cross-cut, half-round, diamond-point and side chisels with the use of each",
+        "Cutting angle about 60 degrees for mild steel"
+       ]
+      },
+      {
+       "id": "cp-p2",
+       "pyq": "a1c17cd71473c446",
+       "level": 1,
+       "points": [
+        "Use: chip metal, cut off rivet heads, bolts and sheet, cut grooves and keyways",
+        "Types: flat, cross-cut, half-round, diamond-point, side chisel with the use of each"
+       ]
+      },
+      {
+       "id": "cp-q3",
+       "kind": "short",
+       "level": 2,
+       "marks": 2,
+       "q": "State the difference between a prick punch and a centre punch.",
+       "model_answer_md": "A **prick punch** has a 30 degree point and makes light dots to mark the layout lines (witness marks). A **centre punch** has a 90 degree point and makes a deeper dent to locate a hole centre and start the drill.",
+       "points": [
+        "Prick punch 30 degrees, layout dots",
+        "Centre punch 90 degrees, drill start"
+       ]
+      }
+     ]
+    },
+    {
+     "id": "hammers",
+     "title": "Hand hammers",
+     "theory_md": "A hammer has a forged steel **head** (face, peen, cheek, eye) on a hickory shaft (handle). It is **specified by the weight of the head** (0.45 kg common).\n- **Ball peen**: round ball one end, flat face the other; general fitting, riveting, chipping.\n- **Cross peen**: wedge across the shaft; spreading metal in narrow places.\n- **Straight peen**: wedge parallel to the shaft; drawing out metal.\n- **Soft-faced** (copper, lead, rubber, plastic) hammers and mallets for finished surfaces.\n- **Claw hammer** (carpentry); **sledge hammer** (heavy work).",
+     "basics_md": "The peen is the working shape at the back of the head; the face does the hitting.",
+     "key_points": [
+      "Ball peen, cross peen, straight peen: name the peen shape and use",
+      "Specified by head weight, not handle length",
+      "Soft-faced hammers do not mark finished surfaces",
+      "Claw hammer is carpentry; sledge for heavy work"
+     ],
+     "figures": [],
+     "questions": [
+      {
+       "id": "ha-q1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "The usual fitter's hammer is the",
+       "options": [
+        "claw hammer",
+        "ball peen hammer",
+        "sledge hammer",
+        "mallet"
+       ],
+       "answer_index": 1,
+       "why": "The ball peen hammer is used for chipping and riveting in fitting."
+      },
+      {
+       "id": "ha-q2",
+       "kind": "mcq",
+       "level": 2,
+       "q": "A hammer is specified by",
+       "options": [
+        "handle length",
+        "weight of the head",
+        "material of the handle",
+        "length of the peen"
+       ],
+       "answer_index": 1,
+       "why": "Hammers are specified by the weight of the head, e.g. 0.45 kg."
+      },
+      {
+       "id": "ha-p1",
+       "pyq": "4fd8d734c9f98ef9",
+       "level": 2,
+       "points": [
+        "Ball peen: round ball and flat face, general fitting, riveting",
+        "Cross peen: wedge across the shaft, spreading metal in narrow places",
+        "Straight peen: wedge parallel to the shaft, drawing out metal",
+        "Soft-faced hammers/mallets for finished surfaces; claw and sledge hammers"
+       ]
+      },
+      {
+       "id": "ha-q3",
+       "kind": "short",
+       "level": 2,
+       "marks": 3,
+       "q": "Name the parts of a hammer and state how it is specified.",
+       "model_answer_md": "**Parts**: head (face, peen, cheek, eye) and handle (hickory shaft). **Specified** by the weight of the head, e.g. 0.45 kg.",
+       "points": [
+        "Face, peen, cheek, eye, handle",
+        "Specified by head weight"
+       ]
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "topic": "Calipers and dividers",
+   "subtopics": [
+    {
+     "id": "calipers",
+     "title": "Outside, inside and odd-leg calipers",
+     "theory_md": "Calipers have **no scale**: they are set to the work and then read against a steel rule (or set from the rule and offered to the job). They are **transfer (indirect) measuring** instruments, accurate to about 0.25 mm and dependent on the user's 'feel'.\n- **Outside caliper**: legs bowed inwards; outside diameters and thickness.\n- **Inside caliper**: legs straight, tips turned outwards; bores and slot widths.\n- **Odd-leg (hermaphrodite, jenny) caliper**: one bent leg and one pointed leg; scribes a line parallel to a finished edge and finds the centre of a round bar.\n\nSize = length from the pivot to the tip. The legs should just touch and slide over the work under their own weight; forcing them gives a wrong reading.",
+     "basics_md": "A caliper only remembers a gap. You copy the gap from the job onto a rule to read it.",
+     "key_points": [
+      "Calipers are indirect: set to the job, read on a steel rule",
+      "Outside caliper: legs curve inwards; inside caliper: tips turn outwards",
+      "Odd-leg caliper: lines parallel to an edge, centre of a round bar",
+      "Accuracy about 0.25 mm; correct feel, never force"
+     ],
+     "figures": [],
+     "questions": [
+      {
+       "id": "ca-q1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "Which caliper measures the diameter of a bore?",
+       "options": [
+        "outside caliper",
+        "inside caliper",
+        "odd-leg caliper",
+        "divider"
+       ],
+       "answer_index": 1,
+       "why": "The inside caliper has tips turned outward to fit inside a bore."
+      },
+      {
+       "id": "ca-q2",
+       "kind": "mcq",
+       "level": 2,
+       "q": "Calipers are called transfer instruments because",
+       "options": [
+        "they have a vernier scale",
+        "they carry the size to a rule for reading",
+        "they transfer heat",
+        "they are made in pairs"
+       ],
+       "answer_index": 1,
+       "why": "They have no scale; the size is carried to a steel rule."
+      },
+      {
+       "id": "ca-q3",
+       "kind": "short",
+       "level": 3,
+       "marks": 3,
+       "q": "Name three types of calipers, with the sketch feature and use of each.",
+       "model_answer_md": "1. **Outside caliper**: legs bowed inward; measures outside diameter or thickness.\n2. **Inside caliper**: legs straight with tips turned outward; measures bore diameter or slot width.\n3. **Odd-leg caliper**: one bent leg and one straight scriber leg; scribes lines parallel to an edge and finds the centre of a round bar.\n\nAll are set to the work and read on a steel rule.",
+       "points": [
+        "Outside: legs bowed in, external size",
+        "Inside: tips outward, bore",
+        "Odd-leg: parallel lines and centre finding",
+        "Read on a rule"
+       ]
+      }
+     ]
+    },
+    {
+     "id": "dividers",
+     "title": "Dividers and joint construction",
+     "theory_md": "**Dividers** have two straight legs with hardened, sharp points. Uses: **scribing circles and arcs**, **stepping off equal distances**, transferring lengths from a steel rule.\n\n**Construction**:\n- **Firm-joint**: legs held by friction at a riveted joint; set by tapping on the bench.\n- **Spring-joint**: bow spring with screw and nut; finer setting and holds it.\n\n**Size** = length from the joint to the tip, e.g. 150 mm. Do not use a divider to measure a diameter (that is the caliper's job) and do not use an odd-leg caliper for a bore.",
+     "basics_md": "A divider is a compass for metal: one point fixed, one point scribing.",
+     "key_points": [
+      "Dividers: circles, arcs, stepping off distances",
+      "Firm-joint (friction) versus spring-joint (screw and nut)",
+      "Size = pivot to tip length",
+      "Divider scribes and transfers; caliper measures by contact"
+     ],
+     "figures": [],
+     "questions": [
+      {
+       "id": "di-q1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "Dividers are used to",
+       "options": [
+        "measure bores",
+        "scribe circles and arcs and step off distances",
+        "test squareness",
+        "measure thread pitch"
+       ],
+       "answer_index": 1,
+       "why": "They scribe circles and arcs and step off equal distances."
+      },
+      {
+       "id": "di-q2",
+       "kind": "mcq",
+       "level": 2,
+       "q": "A spring-joint caliper differs from a firm-joint caliper in that it",
+       "options": [
+        "has a screw and nut for fine setting",
+        "has no legs",
+        "has a vernier scale",
+        "is used only for bores"
+       ],
+       "answer_index": 0,
+       "why": "The spring joint has a bow spring with an adjusting screw and nut, so the setting is fine and held."
+      },
+      {
+       "id": "di-q3",
+       "kind": "short",
+       "level": 2,
+       "marks": 2,
+       "q": "Distinguish between a divider and an odd-leg caliper.",
+       "model_answer_md": "A **divider** has two straight pointed legs and scribes circles, arcs and steps off distances. An **odd-leg caliper** has one bent leg and one straight pointed leg; it scribes lines parallel to an edge and finds the centre of a round bar.",
+       "points": [
+        "Divider: two straight points, circles and arcs",
+        "Odd-leg: one bent leg, parallel lines and centres"
+       ]
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "topic": "Drills and taps",
+   "subtopics": [
+    {
+     "id": "twist-drill",
+     "title": "Drilling, boring and the twist drill",
+     "theory_md": "**Drilling** makes a round hole in solid metal with a rotating **twist drill** fed along its axis. **Boring** enlarges and finishes an existing hole to a precise size, straightness and finish with a single-point tool.\n\n**Classification of drills**: by shape (twist, flat or spade, straight-fluted, centre, core, step); by shank (straight, **Morse taper** with tang); by material (HSS, carbon steel, carbide-tipped).\n\n**Twist drill parts**: shank, tang, neck, body with two helical **flutes** (carry chips and coolant), **lands** (margin: guides and sizes the hole), **web**, **chisel edge** (dead centre), two **lips**. **Point angle 118 degrees**, **helix angle** about 30 degrees, **lip clearance** 8 to 12 degrees.\n\nSpindle speed: $N = \\dfrac{1000\\,V}{\\pi D}$ rpm, $D$ in mm, $V$ in m/min.",
+     "basics_md": "A drill is a rotating wedge pair: the two lips cut, the flutes carry the chips up and out.",
+     "key_points": [
+      "Drilling = round hole in solid; boring = enlarging and finishing an existing hole",
+      "Parts: shank, neck, body, flutes, lands, web, chisel edge, two lips",
+      "Point angle 118 degrees, helix about 30 degrees, lip clearance 8-12 degrees",
+      "Taper shank (Morse) has a tang; straight shank is held in a chuck",
+      "N = 1000 V / (pi D)"
+     ],
+     "figures": [],
+     "questions": [
+      {
+       "id": "td-q1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "The standard point angle of a twist drill for mild steel is",
+       "options": [
+        "60 degrees",
+        "90 degrees",
+        "118 degrees",
+        "140 degrees"
+       ],
+       "answer_index": 2,
+       "why": "118 degrees; a frequent slip is to call it the helix angle (about 30 degrees)."
+      },
+      {
+       "id": "td-q2",
+       "kind": "mcq",
+       "level": 2,
+       "q": "Boring differs from drilling in that boring",
+       "options": [
+        "makes a hole in solid metal",
+        "enlarges and finishes an existing hole",
+        "cuts external threads",
+        "uses a tap"
+       ],
+       "answer_index": 1,
+       "why": "Drilling makes a hole in solid; boring finishes an existing hole to size."
+      },
+      {
+       "id": "td-q3",
+       "kind": "numerical",
+       "level": 2,
+       "marks": 3,
+       "q": "Find the spindle speed for a 12 mm HSS drill if the cutting speed for mild steel is 25 m/min.",
+       "model_answer_md": "$N = \\dfrac{1000\\,V}{\\pi D} = \\dfrac{1000 \\times 25}{\\pi \\times 12} = \\dfrac{25000}{37.70} = 663$ rpm.\n\nChoose the nearest lower speed the machine offers (e.g. 600 rpm).",
+       "points": [
+        "Formula N = 1000 V / (pi D)",
+        "Substitution with units (mm, m/min)",
+        "N = 663 rpm",
+        "Select nearest available lower speed"
+       ]
+      },
+      {
+       "id": "td-q4",
+       "kind": "numerical",
+       "level": 3,
+       "marks": 3,
+       "q": "A 16 mm drill runs at 500 rpm. Find the cutting speed.",
+       "model_answer_md": "$V = \\dfrac{\\pi D N}{1000} = \\dfrac{\\pi \\times 16 \\times 500}{1000} = 25.1$ m/min.",
+       "points": [
+        "Formula V = pi D N / 1000",
+        "Correct substitution",
+        "V = 25.1 m/min"
+       ]
+      },
+      {
+       "id": "td-p1",
+       "pyq": "c76c49f6eb19a930",
+       "level": 2,
+       "points": [
+        "Classification by shape (twist, flat, straight-fluted, centre, core), shank (straight, taper), material (HSS, carbon steel, carbide-tipped)",
+        "Sketch of twist drill with shank, neck, body, flutes, lands, web, chisel edge, lips",
+        "Point angle 118 degrees, helix about 30 degrees, lip clearance 8-12 degrees",
+        "Description: lips cut, flutes carry chips and coolant, lands guide the drill"
+       ]
+      },
+      {
+       "id": "td-p2",
+       "pyq": "df78f94b53cd8872",
+       "level": 1,
+       "points": [
+        "Neat diagram of twist drill",
+        "Labels: shank (straight or taper with tang), neck, body, two helical flutes, lands, web, chisel edge, lips",
+        "Point angle 118 degrees marked, lip clearance and helix angle"
+       ]
+      },
+      {
+       "id": "td-p3",
+       "pyq": "f1ce5838aaaf5971",
+       "level": 1,
+       "points": [
+        "Drilling: making a round hole in solid metal with a rotating twist drill fed along its axis",
+        "Boring: enlarging and finishing an existing hole to precise size, straightness and finish with a single-point boring tool"
+       ]
+      }
+     ]
+    },
+    {
+     "id": "taps-tapping",
+     "title": "Taps, tapping and tap drill size",
+     "theory_md": "**Tapping** cuts an **internal thread** in a drilled hole using a **tap** held in a **tap wrench**. A set has three taps of one size: **taper (first)** with a long lead to start the thread, **second (intermediate)**, and **plug (bottoming)** that cuts full threads to the bottom of a blind hole.\n\nThe hole is first drilled to the **tap drill size**:\n$d = D - p$ (metric thread, major diameter $D$, pitch $p$), e.g. M10 x 1.5: $10 - 1.5 = 8.5$ mm.\n\n**Method**: centre punch, drill, chamfer the mouth, start the tap square, **half turn forward, quarter turn back** to break the chip, cutting oil, then second and plug taps. Check with a bolt.",
+     "basics_md": "The tap drill leaves a hole slightly smaller than the bolt, so the tap has thread depth to cut.",
+     "key_points": [
+      "Tap set: taper (first), second (intermediate), plug (bottoming)",
+      "Tap drill size d = D - p (M10 x 1.5 gives 8.5 mm)",
+      "Half turn forward, quarter turn back, cutting oil, keep tap square",
+      "Tap wrench holds the tap; die and die stock cut external threads"
+     ],
+     "figures": [],
+     "questions": [
+      {
+       "id": "tt-q1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "The tap that cuts full thread to the bottom of a blind hole is the",
+       "options": [
+        "taper tap",
+        "second tap",
+        "plug (bottoming) tap",
+        "die"
+       ],
+       "answer_index": 2,
+       "why": "The plug (bottoming) tap has almost no taper and finishes the thread at the bottom."
+      },
+      {
+       "id": "tt-q2",
+       "kind": "mcq",
+       "level": 2,
+       "q": "The tap drill size for an M12 x 1.75 thread is",
+       "options": [
+        "12.0 mm",
+        "10.25 mm",
+        "8.5 mm",
+        "13.75 mm"
+       ],
+       "answer_index": 1,
+       "why": "$d = D - p = 12 - 1.75 = 10.25$ mm."
+      },
+      {
+       "id": "tt-q3",
+       "kind": "numerical",
+       "level": 2,
+       "marks": 2,
+       "q": "Find the tap drill size for M8 x 1.25 and for M16 x 2.",
+       "model_answer_md": "$d = D - p$\n- M8 x 1.25: $8 - 1.25 = 6.75$ mm.\n- M16 x 2: $16 - 2 = 14$ mm.",
+       "points": [
+        "Formula d = D - p",
+        "6.75 mm",
+        "14 mm"
+       ]
+      },
+      {
+       "id": "tt-p1",
+       "pyq": "e81c12fa51cc73d6",
+       "level": 1,
+       "points": [
+        "Tapping: cutting an internal thread in a drilled hole with a tap (taper, second, plug) in a tap wrench; hole drilled to tap drill size (major diameter minus pitch)",
+        "Dieing: cutting an external thread on a rod with a die in a die stock; chamfer the rod end first"
+       ]
+      },
+      {
+       "id": "tt-p2",
+       "pyq": "8d9447ee12a72dd3",
+       "level": 3,
+       "points": [
+        "Job: mild steel square, e.g. 50 x 50 x 10 mm, M10 thread at the centre",
+        "Tools: rule, vernier caliper, try square, scriber, centre punch, hammer, vice, hacksaw, files, drilling machine and drill, tap set and wrench, cutting oil",
+        "Sequence: saw, file to size and square, mark diagonals for the centre, centre punch, drill tap drill size (10 - 1.5 = 8.5 mm), chamfer, tap (taper, second, plug) with half turn forward and quarter back, deburr, check"
+       ]
+      }
+     ]
+    },
+    {
+     "id": "dies-reamers",
+     "title": "Dies and reamers",
+     "theory_md": "A **die** cuts **external threads** on a rod or bolt (the tap is for internal threads), held in a **die stock**. Chamfer the rod end first. **Types**: solid (button) die; **adjustable (split) die** with an adjusting screw to vary the size; two-piece die plate; self-opening die head (for machines); pipe thread dies.\n\nA **reamer** is a multi-toothed tool that enlarges a drilled hole by 0.1 to 0.5 mm and gives an **accurate size, smooth finish, round and straight hole**. **Types**: hand reamer (straight or spiral flutes, square end for a tap wrench), machine (chucking) reamer, taper reamer (for taper pins), adjustable reamer, expanding reamer, shell reamer.",
+     "basics_md": "A drill makes the hole, a reamer finishes it, a tap threads it from inside and a die threads from outside.",
+     "key_points": [
+      "Die cuts external threads; held in a die stock",
+      "Die types: solid, adjustable (split), die plate, self-opening head",
+      "Reamer finishes a drilled hole to size, round, straight and smooth",
+      "Reamer types: hand, machine, taper, adjustable, expanding, shell"
+     ],
+     "figures": [],
+     "questions": [
+      {
+       "id": "dr-q1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "External threads on a rod are cut with a",
+       "options": [
+        "tap",
+        "die",
+        "reamer",
+        "twist drill"
+       ],
+       "answer_index": 1,
+       "why": "A die cuts external threads; a tap cuts internal ones."
+      },
+      {
+       "id": "dr-q2",
+       "kind": "mcq",
+       "level": 2,
+       "q": "A reamer removes about",
+       "options": [
+        "0.1 to 0.5 mm from a drilled hole",
+        "5 mm from a hole",
+        "a thread",
+        "nothing"
+       ],
+       "answer_index": 0,
+       "why": "It takes a very light cut to size and finish a drilled hole."
+      },
+      {
+       "id": "dr-p1",
+       "pyq": "9e31394381d98cfd",
+       "level": 1,
+       "points": [
+        "Die: hardened steel tool cutting external threads on rods and bolts, held in a die stock",
+        "Types: solid (button), adjustable (split), two-piece die plate, self-opening die head, pipe thread dies"
+       ]
+      },
+      {
+       "id": "dr-p2",
+       "pyq": "ab6fb148a15c78d7",
+       "level": 1,
+       "points": [
+        "Use: enlarge a drilled hole slightly (0.1-0.5 mm) to accurate size, smooth finish, round and straight hole",
+        "Types: hand reamer, machine reamer, taper reamer, adjustable reamer, expanding reamer, shell reamer"
+       ]
+      },
+      {
+       "id": "dr-q3",
+       "kind": "short",
+       "level": 2,
+       "marks": 2,
+       "q": "Distinguish between a tap and a die.",
+       "model_answer_md": "A **tap** cuts an **internal** thread in a drilled hole and is turned with a tap wrench; the hole must be of tap drill size. A **die** cuts an **external** thread on a rod and is held in a die stock; the rod end is chamfered first.",
+       "points": [
+        "Tap: internal, tap wrench, tap drill hole",
+        "Die: external, die stock, chamfered rod"
+       ]
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "topic": "Vernier caliper: principle, least count, reading",
+   "subtopics": [
+    {
+     "id": "vernier-principle",
+     "title": "Principle and least count",
+     "theory_md": "A vernier caliper reads to 0.02 mm (or 0.05, 0.1 mm), far better than a rule's 0.5 mm.\n\n**Principle**: two scales with slightly different divisions. $n$ vernier divisions (VSD) equal $(n-1)$ main scale divisions (MSD), so one VSD is shorter than one MSD.\n\n$LC = 1\\ \\mathrm{MSD} - 1\\ \\mathrm{VSD} = \\dfrac{s}{n}$ ($s$ = value of one MSD).\n- 10 VSD = 9 mm: $LC = 1/10 = 0.1$ mm.\n- 20 VSD = 19 mm: $LC = 1/20 = 0.05$ mm.\n- 50 VSD = 49 mm: $LC = 1/50 = 0.02$ mm.\n\n**Parts**: beam with main scale, fixed jaw, sliding jaw with vernier, upper (inside) jaws, lower (outside) jaws, depth rod, locking and fine-adjustment screws. Measures outside, inside and depth.",
+     "basics_md": "The vernier lets you read between two lines of the main scale by seeing which vernier line lines up with a main line.",
+     "key_points": [
+      "n VSD = (n - 1) MSD",
+      "LC = 1 MSD - 1 VSD = s / n",
+      "50 divisions on 49 mm gives 0.02 mm; 20 on 19 gives 0.05; 10 on 9 gives 0.1",
+      "Parts: main scale, vernier, fixed and sliding jaws, upper jaws, depth rod, lock screw",
+      "Measures outside, inside and depth"
+     ],
+     "figures": [],
+     "questions": [
+      {
+       "id": "vp-q1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "The least count of a vernier caliper whose 50 divisions equal 49 mm is",
+       "options": [
+        "0.1 mm",
+        "0.05 mm",
+        "0.02 mm",
+        "0.01 mm"
+       ],
+       "answer_index": 2,
+       "why": "$LC = 1 - 49/50 = 0.02$ mm."
+      },
+      {
+       "id": "vp-q2",
+       "kind": "mcq",
+       "level": 2,
+       "q": "The least count of a vernier whose 20 divisions coincide with 19 mm is",
+       "options": [
+        "0.05 mm",
+        "0.02 mm",
+        "0.1 mm",
+        "0.5 mm"
+       ],
+       "answer_index": 0,
+       "why": "$LC = 1/20 = 0.05$ mm. A common slip is $s/(n-1)$."
+      },
+      {
+       "id": "vp-q3",
+       "kind": "numerical",
+       "level": 2,
+       "marks": 3,
+       "q": "The main scale of a vernier caliper is divided in 0.5 mm and 25 vernier divisions coincide with 24 main scale divisions. Find the least count.",
+       "model_answer_md": "$1\\ \\mathrm{MSD} = 0.5$ mm. $1\\ \\mathrm{VSD} = \\dfrac{24 \\times 0.5}{25} = 0.48$ mm.\n\n$LC = 0.5 - 0.48 = 0.02$ mm.\n(Equivalent: $LC = s/n = 0.5/25 = 0.02$ mm.)",
+       "points": [
+        "1 VSD = 0.48 mm",
+        "LC = 1 MSD - 1 VSD",
+        "LC = 0.02 mm with unit"
+       ]
+      }
+     ]
+    },
+    {
+     "id": "vernier-reading",
+     "title": "Taking a reading and zero error",
+     "theory_md": "**Reading**: close the jaws and note the zero error; place the job; read the **main scale reading (MSR)** just before the vernier zero; find the vernier division that coincides with a main scale line (**VSC**).\n\n$\\text{Reading} = \\mathrm{MSR} + \\mathrm{VSC} \\times LC \\pm \\text{zero error}$\n\n**Zero error** (jaws closed): vernier zero to the **right** of main zero is **positive**, error $= +\\mathrm{VSC}\\times LC$, subtracted. Vernier zero to the **left** is **negative**, error $= -(n - \\mathrm{VSC})\\times LC$, added.\n\nCorrected reading = observed reading - zero error (with sign).\n\n**Micrometer** (one-line recall): reading = sleeve + thimble x 0.01 mm; LC $= 0.5/50 = 0.01$ mm.",
+     "basics_md": "The scale line just left of the vernier zero gives whole millimetres; the matching vernier line gives the leftover fraction.",
+     "key_points": [
+      "Reading = MSR + VSC x LC",
+      "Positive zero error (vernier zero right of main zero): subtract",
+      "Negative zero error: -(n - VSC) x LC; add",
+      "Avoid parallax and over-tightening the jaws"
+     ],
+     "figures": [],
+     "questions": [
+      {
+       "id": "vr-q1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "Vernier caliper LC 0.02 mm, MSR 42 mm, 23rd division coincides. The reading is",
+       "options": [
+        "42.23 mm",
+        "42.46 mm",
+        "44.3 mm",
+        "42.04 mm"
+       ],
+       "answer_index": 1,
+       "why": "$42 + 23 \\times 0.02 = 42.46$ mm."
+      },
+      {
+       "id": "vr-q2",
+       "kind": "mcq",
+       "level": 2,
+       "q": "With jaws closed the vernier zero lies to the right of the main zero. The zero error is",
+       "options": [
+        "negative, add it",
+        "positive, subtract it",
+        "zero",
+        "positive, add it"
+       ],
+       "answer_index": 1,
+       "why": "Right of zero is positive; the corrected reading is observed minus the error."
+      },
+      {
+       "id": "vr-q3",
+       "kind": "numerical",
+       "level": 2,
+       "marks": 4,
+       "q": "A caliper of LC 0.02 mm (50 divisions) with jaws closed shows the vernier zero to the right of main zero with the 3rd division coinciding. A rod reads MSR 30 mm with the 14th division coinciding. Find the true diameter.",
+       "model_answer_md": "Zero error $= +3 \\times 0.02 = +0.06$ mm (positive, zero to the right).\n\nObserved $= 30 + 14 \\times 0.02 = 30.28$ mm.\n\nTrue diameter $= 30.28 - 0.06 = 30.22$ mm.",
+       "points": [
+        "Zero error = +0.06 mm",
+        "Observed = 30.28 mm",
+        "Corrected = observed - error = 30.22 mm",
+        "Units on every number"
+       ]
+      },
+      {
+       "id": "vr-q4",
+       "kind": "numerical",
+       "level": 3,
+       "marks": 3,
+       "q": "With jaws closed the vernier zero of a 0.02 mm caliper (50 divisions) is to the left of the main zero and the 46th division coincides. A job reads MSR 18 mm, VSC 12. Find the corrected reading.",
+       "model_answer_md": "Zero error $= -(50 - 46) \\times 0.02 = -0.08$ mm.\n\nObserved $= 18 + 12 \\times 0.02 = 18.24$ mm.\n\nCorrected $= 18.24 - (-0.08) = 18.32$ mm.",
+       "points": [
+        "Negative zero error -0.08 mm",
+        "Observed 18.24 mm",
+        "Corrected 18.32 mm"
+       ]
+      },
+      {
+       "id": "vr-p1",
+       "pyq": "019fbd1a306b4b01",
+       "level": 2,
+       "points": [
+        "Vernier: principle n VSD = (n - 1) MSD; LC = 1 MSD - 1 VSD = 1/50 = 0.02 mm",
+        "Vernier reading: note zero error, MSR before the vernier zero, coinciding VSC; reading = MSR + VSC x LC +/- zero error",
+        "Micrometer: principle screw and nut; LC = 0.5/50 = 0.01 mm",
+        "Micrometer reading: sleeve reading + thimble division x 0.01 mm +/- zero error, tightened with the ratchet"
+       ]
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "topic": "Micrometer principle",
+   "subtopics": [
+    {
+     "id": "micrometer-principle",
+     "title": "Screw principle, parts and least count",
+     "theory_md": "The **outside micrometer (screw gauge)** reads to **0.01 mm**.\n\n**Principle**: screw and nut. One full turn of the thimble moves the spindle by one **pitch**. If the thimble has $n$ divisions, one division moves the spindle by pitch/$n$:\n$LC = \\dfrac{\\text{pitch}}{n} = \\dfrac{0.5}{50} = 0.01$ mm.\n\n**Parts**: U-shaped **frame**; **anvil** (fixed); **spindle** (moving); **sleeve (barrel)** with the datum line and main scale; **thimble** with the circular scale; **ratchet stop** (constant measuring pressure); **lock nut**. Range is 25 mm per micrometer (0-25, 25-50 and so on). Always close with the ratchet.",
+     "basics_md": "Turning a screw one full turn moves it forward by its pitch. A big circular scale on the thimble lets you read tiny fractions of one turn.",
+     "key_points": [
+      "Principle: screw and nut; one turn = one pitch",
+      "LC = pitch / thimble divisions = 0.5/50 = 0.01 mm",
+      "Parts: frame, anvil, spindle, sleeve, thimble, ratchet, lock nut",
+      "Ratchet gives constant pressure; range 25 mm each"
+     ],
+     "figures": [],
+     "questions": [
+      {
+       "id": "mp-q1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "The ratchet stop of a micrometer is used to",
+       "options": [
+        "lock the spindle",
+        "apply a constant measuring pressure",
+        "adjust zero",
+        "increase the range"
+       ],
+       "answer_index": 1,
+       "why": "It slips at a fixed torque so every reading uses the same pressure."
+      },
+      {
+       "id": "mp-q2",
+       "kind": "mcq",
+       "level": 2,
+       "q": "A micrometer has pitch 0.5 mm and 100 thimble divisions. Its least count is",
+       "options": [
+        "0.01 mm",
+        "0.005 mm",
+        "0.05 mm",
+        "0.002 mm"
+       ],
+       "answer_index": 1,
+       "why": "$0.5/100 = 0.005$ mm. Do not assume 50 divisions."
+      },
+      {
+       "id": "mp-q3",
+       "kind": "short",
+       "level": 3,
+       "marks": 4,
+       "q": "Explain the principle of a micrometer and derive its least count. Name its parts.",
+       "model_answer_md": "**Principle**: a screw turning in a fixed nut advances by its pitch for each revolution. The thimble, fixed to the screw, carries a circular scale of $n$ divisions, so one division moves the spindle by pitch$/n$.\n\n$LC = 0.5/50 = 0.01$ mm.\n\n**Parts**: frame, anvil, spindle, sleeve with datum line, thimble, ratchet stop, lock nut.",
+       "points": [
+        "Screw and nut principle",
+        "One turn = pitch; one division = pitch/n",
+        "LC = 0.01 mm",
+        "Parts named"
+       ]
+      }
+     ]
+    },
+    {
+     "id": "micrometer-reading",
+     "title": "Taking a reading and zero error",
+     "theory_md": "**Reading** $=$ sleeve reading (whole mm, plus 0.5 mm if the half-mm line is visible) $+$ thimble division on the datum line $\\times 0.01$ mm.\n\n**Zero error** (faces closed): thimble zero **below** the datum line, division $x$ on the line: error $= +x \\times LC$, **subtract**. Thimble zero **not reached**, division $x$ on the line: error $= -(n - x)\\times LC$, **add**.\n\nMissing the half-mm line is the commonest slip: 7.5 + 0.28 = 7.78, not 7.28.",
+     "basics_md": "First read the sleeve like a ruler, then the thimble like a dial, and add them.",
+     "key_points": [
+      "Reading = sleeve (with 0.5 mm line) + thimble x 0.01",
+      "Positive zero error: subtract; negative: add",
+      "Negative error = -(n - x) x LC",
+      "Do not miss the half-millimetre line"
+     ],
+     "figures": [],
+     "questions": [
+      {
+       "id": "mr-q1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "Sleeve shows 7 mm with the half-mm line visible; thimble division 28 on the datum. The reading is",
+       "options": [
+        "7.28 mm",
+        "7.78 mm",
+        "7.50 mm",
+        "8.28 mm"
+       ],
+       "answer_index": 1,
+       "why": "$7 + 0.5 + 28\\times0.01 = 7.78$ mm."
+      },
+      {
+       "id": "mr-q2",
+       "kind": "mcq",
+       "level": 2,
+       "q": "When the thimble zero has not reached the datum line at closing (division 47 on the line, 50 divisions) the zero error is",
+       "options": [
+        "+0.47 mm",
+        "-0.03 mm",
+        "+0.03 mm",
+        "-0.47 mm"
+       ],
+       "answer_index": 1,
+       "why": "$-(50-47)\\times0.01 = -0.03$ mm; add it to readings."
+      },
+      {
+       "id": "mr-q3",
+       "kind": "numerical",
+       "level": 2,
+       "marks": 3,
+       "q": "A micrometer (pitch 0.5 mm, 50 divisions) shows 18 mm on the sleeve with the half-mm line visible and 34 on the thimble. There is no zero error. Find the reading.",
+       "model_answer_md": "$LC = 0.5/50 = 0.01$ mm.\n\nSleeve $= 18 + 0.5 = 18.5$ mm. Thimble $= 34 \\times 0.01 = 0.34$ mm.\n\nReading $= 18.5 + 0.34 = 18.84$ mm.",
+       "points": [
+        "LC = 0.01 mm",
+        "Sleeve reading 18.5 mm",
+        "Thimble reading 0.34 mm",
+        "Reading 18.84 mm"
+       ]
+      },
+      {
+       "id": "mr-q4",
+       "kind": "numerical",
+       "level": 3,
+       "marks": 4,
+       "q": "With the faces closed, the 47th thimble division is on the datum line, the thimble zero not having reached it (LC 0.01 mm, 50 divisions). A wire reads 3.5 mm on the sleeve and 12 on the thimble. Find the true diameter.",
+       "model_answer_md": "Zero error $= -(50-47)\\times0.01 = -0.03$ mm.\n\nObserved $= 3.5 + 12 \\times 0.01 = 3.62$ mm.\n\nTrue $= 3.62 - (-0.03) = 3.65$ mm.",
+       "points": [
+        "Zero error -0.03 mm",
+        "Observed 3.62 mm",
+        "Corrected 3.65 mm"
+       ]
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "topic": "Vernier depth and height gauges",
+   "subtopics": [
+    {
+     "id": "height-gauge",
+     "title": "Vernier height gauge",
+     "theory_md": "Same vernier principle as the caliper, usually **LC 0.02 mm**; Reading = MSR + VSC x LC, corrected for zero error.\n\n**Parts**: heavy ground **base**, vertical **beam** with main scale, **slider** with vernier and fine adjustment, **measuring jaw** carrying a **scriber**.\n\n**Uses**: measure the height of a face or step above the **surface plate**, and **precision marking**: set the scriber at the required height and slide the gauge so it scribes a line parallel to the plate. Check zero by lowering the jaw on the plate. It is the precise (scaled) version of the surface gauge.",
+     "basics_md": "Think of a caliper standing upright on a flat plate, with a scriber at the top jaw.",
+     "key_points": [
+      "Parts: base, beam, slider with vernier, jaw with scriber",
+      "Used on a surface plate; datum is the plate",
+      "Measures heights and does precision marking",
+      "Reading = MSR + VSC x LC minus zero error",
+      "Surface gauge has no scale; height gauge has a vernier"
+     ],
+     "figures": [],
+     "questions": [
+      {
+       "id": "hg-q1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "A vernier height gauge is used on a",
+       "options": [
+        "bench top",
+        "surface plate",
+        "vice jaw",
+        "drill table"
+       ],
+       "answer_index": 1,
+       "why": "The plate is the flat datum."
+      },
+      {
+       "id": "hg-q2",
+       "kind": "mcq",
+       "level": 2,
+       "q": "The difference between a surface gauge and a vernier height gauge is that the latter",
+       "options": [
+        "has no scriber",
+        "carries a main scale and vernier to read the height",
+        "is used on wood only",
+        "has a dial only"
+       ],
+       "answer_index": 1,
+       "why": "The height gauge reads the set height to 0.02 mm; the surface gauge only holds a scriber."
+      },
+      {
+       "id": "hg-q3",
+       "kind": "numerical",
+       "level": 2,
+       "marks": 3,
+       "q": "A height gauge (50 vernier divisions = 49 mm) reads MSR 150 mm, VSC 9 on a step. On the plate the zero error was +0.04 mm. Find the true height.",
+       "model_answer_md": "$LC = 1/50 = 0.02$ mm.\n\nObserved $= 150 + 9 \\times 0.02 = 150.18$ mm.\n\nTrue height $= 150.18 - 0.04 = 150.14$ mm.",
+       "points": [
+        "LC = 0.02 mm",
+        "Observed 150.18 mm",
+        "Subtract positive zero error",
+        "True height 150.14 mm"
+       ]
+      }
+     ]
+    },
+    {
+     "id": "depth-gauge",
+     "title": "Vernier depth gauge",
+     "theory_md": "Same vernier principle and **LC 0.02 mm**.\n\n**Parts**: a **base (stock)** with a wide flat reference face that bridges the hole or slot, a narrow graduated **beam (rod)** sliding through it, the **vernier** on the base, and a clamp screw.\n\n**Use**: depths of blind holes, slots, recesses and steps. Hold the base flat across the mouth, push the beam lightly until it touches the bottom, lock, and read. Zero is checked with base and beam end on the surface plate. Do not rock the base or push it up off the surface.\n\nReading = MSR + VSC x LC, minus zero error.",
+     "basics_md": "A vernier caliper's depth rod, made into a stand-alone tool with a wide foot.",
+     "key_points": [
+      "Parts: base bridging the hole, sliding beam, vernier, clamp screw",
+      "Measures depth of blind holes, slots, steps",
+      "Base held flat on the surface, beam touches bottom lightly",
+      "Reading = MSR + VSC x LC minus zero error"
+     ],
+     "figures": [],
+     "questions": [
+      {
+       "id": "dg-q1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "A vernier depth gauge is used to measure",
+       "options": [
+        "outside diameter",
+        "depth of a slot or blind hole",
+        "thread pitch",
+        "angles"
+       ],
+       "answer_index": 1,
+       "why": "That is its job."
+      },
+      {
+       "id": "dg-q2",
+       "kind": "mcq",
+       "level": 2,
+       "q": "A frequent source of error in using a depth gauge is",
+       "options": [
+        "using it on a surface plate",
+        "rocking the base or lifting it off the reference face",
+        "locking the beam",
+        "reading the vernier"
+       ],
+       "answer_index": 1,
+       "why": "The base must sit flat on the surface across the mouth."
+      },
+      {
+       "id": "dg-q3",
+       "kind": "numerical",
+       "level": 2,
+       "marks": 2,
+       "q": "A vernier depth gauge (LC 0.02 mm) shows MSR 18 mm and the 31st vernier division coinciding. There is no zero error. Find the depth.",
+       "model_answer_md": "Depth $= 18 + 31 \\times 0.02 = 18 + 0.62 = 18.62$ mm.",
+       "points": [
+        "Formula MSR + VSC x LC",
+        "0.62 mm from vernier",
+        "Depth 18.62 mm"
+       ]
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "topic": "Fitting processes: marking, chipping, sawing, filing",
+   "subtopics": [
+    {
+     "id": "fitting-intro",
+     "title": "What fitting is, and its operations",
+     "theory_md": "**Fitting** is the assembling of parts, making them fit together with the required clearance or interference, by removing small amounts of metal with **hand tools**, without machine tools.\n\n**Operations**: marking and measuring, holding in a vice, **chipping**, **sawing**, **filing**, scraping, **drilling**, reaming, **tapping**, **threading with a die**, bending, riveting, grinding, assembling and checking the fit.\n\nSheet-metal operations in a press: **punching** cuts a hole in sheet with a punch and die; the removed slug is waste. **Blanking** cuts the required piece out of the sheet; the piece is the product and the rest is scrap.",
+     "basics_md": "The fitter does by hand, with file and saw, what a machine does by power. It is used where one or two parts must fit exactly.",
+     "key_points": [
+      "Fitting = assembling parts by hand-tool metal removal to the required fit",
+      "Operations: marking, chipping, sawing, filing, scraping, drilling, reaming, tapping, dieing",
+      "Punching: hole is the product; blanking: the cut piece is the product",
+      "No machine tools in fitting"
+     ],
+     "figures": [],
+     "questions": [
+      {
+       "id": "fn-q1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "In blanking, the piece cut out of the sheet is",
+       "options": [
+        "scrap",
+        "the product",
+        "always a hole",
+        "a chip"
+       ],
+       "answer_index": 1,
+       "why": "In blanking the cut piece is the product; in punching the slug is waste."
+      },
+      {
+       "id": "fn-q2",
+       "kind": "mcq",
+       "level": 2,
+       "q": "Fitting is mainly done using",
+       "options": [
+        "CNC machines",
+        "hand tools",
+        "lathes",
+        "EDM"
+       ],
+       "answer_index": 1,
+       "why": "Fitting is by hand tools: file, saw, chisel, drill, tap."
+      },
+      {
+       "id": "fn-p1",
+       "pyq": "18245764d5a7bdf9",
+       "level": 1,
+       "points": [
+        "Fitting: assembling parts to the required clearance or interference by removing metal with hand tools, without machine tools",
+        "Processes listed: marking, chipping, sawing, filing, scraping, drilling, tapping"
+       ]
+      },
+      {
+       "id": "fn-p2",
+       "pyq": "98a1e8abef044034",
+       "level": 1,
+       "points": [
+        "Fitting defined: assembling by removing small amounts of metal with hand tools",
+        "Tasks: marking and measuring, holding, chipping, sawing, filing, scraping, drilling, reaming, tapping, dieing, final fit check"
+       ]
+      },
+      {
+       "id": "fn-p3",
+       "pyq": "5f0ea1df882cbf1a",
+       "level": 1,
+       "points": [
+        "Marking and measuring, chipping, sawing, filing, scraping",
+        "Drilling, reaming, tapping, threading with a die",
+        "Bending, riveting, grinding, assembling and checking with gauges"
+       ]
+      },
+      {
+       "id": "fn-p4",
+       "pyq": "b2a042968fc6fc38",
+       "level": 1,
+       "points": [
+        "Punching: shearing in which a punch cuts a hole in sheet; the slug is waste, the sheet with the hole is the product",
+        "Blanking: the piece cut out is the product, the remaining sheet is scrap",
+        "Both done on a press with a punch and die; clearance on the die in blanking and on the punch in punching"
+       ]
+      },
+      {
+       "id": "fn-q3",
+       "kind": "short",
+       "level": 2,
+       "marks": 2,
+       "q": "Differentiate punching and blanking.",
+       "model_answer_md": "In **punching** a punch cuts a hole in sheet; the slug is waste and the sheet with the hole is the product. In **blanking** the cut-out piece is the product and the sheet is scrap. Clearance is put on the punch in punching and on the die in blanking.",
+       "points": [
+        "Punching: hole is the product, slug waste",
+        "Blanking: piece is the product",
+        "Clearance on punch versus die"
+       ]
+      }
+     ]
+    },
+    {
+     "id": "marking-sawing-chipping",
+     "title": "Marking out, chipping and sawing in a job",
+     "theory_md": "**Marking**: check stock; file two adjacent edges flat and square as **datum edges**; coat with marking blue; mark all lines from the datum with scriber, rule, try square or height gauge; put **witness marks** with a prick punch along the lines (half the dot should remain after filing); centre-punch hole centres.\n\n**Chipping**: remove metal with a cold chisel and ball peen hammer; chisel at 35 to 40 degrees; watch the cutting edge, wear goggles, use a chipping screen.\n\n**Sawing**: job low in the vice, line near the jaws; start with a nick; forward stroke cuts, 40 to 50 strokes per minute; **saw in the waste**, about 1 mm from the line, then file to the line.",
+     "basics_md": "You always leave a little extra metal at each stage and remove it in the next, finer stage.",
+     "key_points": [
+      "Datum edges first, then marking from them",
+      "Witness marks from a prick punch show you filed to the line",
+      "Chisel at 35-40 degrees, eyes on the cutting edge, goggles",
+      "Saw about 1 mm outside the line; file to the line"
+     ],
+     "figures": [],
+     "questions": [
+      {
+       "id": "ms-q1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "Witness marks are made with a",
+       "options": [
+        "centre punch only",
+        "prick punch",
+        "scriber",
+        "chisel"
+       ],
+       "answer_index": 1,
+       "why": "A prick punch puts light dots along the layout line; half the dot should remain after filing."
+      },
+      {
+       "id": "ms-q2",
+       "kind": "mcq",
+       "level": 2,
+       "q": "A fitter should saw",
+       "options": [
+        "exactly on the line",
+        "about 1 mm outside the line, in the waste",
+        "inside the line",
+        "without marking"
+       ],
+       "answer_index": 1,
+       "why": "Saw in the waste and file to the line."
+      },
+      {
+       "id": "ms-q3",
+       "kind": "short",
+       "level": 2,
+       "marks": 4,
+       "q": "Write the steps of marking out a fitting job.",
+       "model_answer_md": "1. Check the stock and file two adjacent edges flat and square as datum edges.\n2. Clean and apply marking blue.\n3. Mark lines from the datum with scriber, steel rule, try square, surface gauge or height gauge.\n4. Put witness marks along the lines with a prick punch.\n5. Centre-punch the hole centres.\n6. Check the marked dimensions.",
+       "points": [
+        "Datum edges",
+        "Marking medium",
+        "Lines from the datum with the right tools",
+        "Witness marks and centre punching"
+       ]
+      }
+     ]
+    },
+    {
+     "id": "filing",
+     "title": "Filing operations, files, templates and jigs",
+     "theory_md": "**Filing** removes a small amount of metal with a file. The job is held in the vice at elbow level; the file is held with both hands and pushed forward with light downward pressure on the **cutting stroke**, lifted on the return (40 to 50 strokes per minute). Keep the file level; rocking makes the surface convex. Check with the try square against light; clean the file with a file card.\n\n**Operations**: **cross (straight) filing** for rough removal and flattening; **draw filing** (file held at right angles to the job and moved sideways along it) for a fine finish; **lathe filing** on a rotating job; also level, square, flat and curved filing.\n\n**Template**: profile gauge to check shape. **Jig**: holds the work and guides the tool. They ensure **consistency** (repeatability, interchangeability, speed).",
+     "basics_md": "Cross filing takes the metal off; draw filing polishes what is left.",
+     "key_points": [
+      "Pressure on the forward stroke only; lift on the return",
+      "Cross filing for removal; draw filing for finish",
+      "Keep the file level; rocking gives a convex surface",
+      "Check with try square, straight edge, marking blue",
+      "Template checks the shape; jig holds the work and guides the tool"
+     ],
+     "figures": [],
+     "questions": [
+      {
+       "id": "fl-q1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "Draw filing is used to",
+       "options": [
+        "remove metal quickly",
+        "give a fine finish and remove file marks",
+        "cut threads",
+        "make holes"
+       ],
+       "answer_index": 1,
+       "why": "The file is held at both ends and moved sideways along the work for a fine finish."
+      },
+      {
+       "id": "fl-q2",
+       "kind": "mcq",
+       "level": 2,
+       "q": "File pressure is applied on",
+       "options": [
+        "the forward stroke only",
+        "the return stroke only",
+        "both strokes equally",
+        "neither"
+       ],
+       "answer_index": 0,
+       "why": "Teeth cut on the forward stroke; pressure on the return blunts them."
+      },
+      {
+       "id": "fl-p1",
+       "pyq": "68ac8c0fe71ccda1",
+       "level": 2,
+       "points": [
+        "Filing: removing a small amount of metal with a hardened high carbon steel file, job held in a bench vice, forward cutting stroke, return without pressure",
+        "Cross filing (rough, flatten), draw filing (fine finish), lathe filing, finishing with emery",
+        "Surface plate: ground cast iron or granite flat reference plane for marking and checking",
+        "Scriber: hardened steel pencil with sharp point (15-20 degrees) making fine lines for cutting and filing"
+       ]
+      },
+      {
+       "id": "fl-p2",
+       "pyq": "e7806cf0866445cd",
+       "level": 3,
+       "points": [
+        "Procedure: check drawing, hold in vice at elbow level with soft jaws, choose file by shape and cut, push forward with pressure, cross-file then draw-file, check with try square and marking blue, clean with a file card, deburr",
+        "File types by shape (flat, hand, square, round, half-round, triangular, knife-edge), cut (single, double, rasp, curved) and grade (rough to dead smooth)",
+        "Template: profile gauge to check shape; jig: holds work and guides the tool; both give repeatability, interchangeability, accuracy, speed",
+        "Tools with functions: vice (hold), V-block, surface plate, scriber, punch, rule, vernier, micrometer, try square, files, chisels, hacksaw, hammers, drills, taps and dies"
+       ]
+      },
+      {
+       "id": "fl-q3",
+       "kind": "short",
+       "level": 2,
+       "marks": 3,
+       "q": "Distinguish cross filing and draw filing.",
+       "model_answer_md": "**Cross filing**: the file moves across the job at right angles to its length; rough removal and flattening. **Draw filing**: the file is held at right angles to the job and moved sideways along it; fine finish and removes file marks.",
+       "points": [
+        "Cross filing for removal",
+        "Draw filing for finish",
+        "Direction of file movement"
+       ]
+      }
+     ]
+    },
+    {
+     "id": "job-sequence",
+     "title": "Sequence of a complete fitting job",
+     "theory_md": "**Typical sequence** (MS flat, L-shape or square fit):\n1. Study the drawing; select and inspect the stock.\n2. File one face and edge flat and square (datum).\n3. Apply marking blue; mark lines with scriber, rule, try square, surface gauge; punch.\n4. Hold in vice; **saw** about 1 mm outside the line.\n5. **Chip** if needed with chisel and hammer.\n6. **File** rough then smooth to the lines; check size with vernier or micrometer and flatness with the try square.\n7. **Drill, tap or ream** where required.\n8. **Trial fit** with the mating piece, trim using marking blue and light.\n9. Deburr, finish, clean, oil.\n\nFor an **L-shape sheet** joint: cut the sheet to size with shears or hacksaw, file edges, mark the bend line and holes, **bend to 90 degrees in a vice** with a mallet, drill and rivet or bolt.",
+     "basics_md": "Plan the job as a flow chart: each box is one operation whose output feeds the next.",
+     "key_points": [
+      "Study drawing, prepare datum, mark, saw, chip, file, drill/tap, trial fit, finish",
+      "Check size with vernier/micrometer and squareness with try square at each stage",
+      "L-shape sheet: shear/saw, file, mark bend, bend in vice, drill, rivet",
+      "Flow chart: boxes in order joined by arrows"
+     ],
+     "figures": [],
+     "questions": [
+      {
+       "id": "js-q1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "In a fitting job the first operation after studying the drawing is",
+       "options": [
+        "tapping",
+        "preparing and checking the stock, filing a datum",
+        "final fitting",
+        "polishing"
+       ],
+       "answer_index": 1,
+       "why": "The stock is checked and a datum face and edge filed square before marking."
+      },
+      {
+       "id": "js-q2",
+       "kind": "mcq",
+       "level": 2,
+       "q": "A job is trial fitted with its mating piece and trimmed using",
+       "options": [
+        "marking blue and light gaps",
+        "a micrometer only",
+        "a hammer only",
+        "a lathe"
+       ],
+       "answer_index": 0,
+       "why": "Blue transfer and light gaps show high spots to file."
+      },
+      {
+       "id": "js-p1",
+       "pyq": "351b31e36da4a855",
+       "level": 2,
+       "points": [
+        "Study drawing and select stock; prepare datum face and edge",
+        "Mark out with scriber, rule, try square, surface gauge; centre punch",
+        "Saw about 1 mm outside; chip if needed; file to lines",
+        "Drill, tap or ream; trial fit; deburr, finish, oil"
+       ]
+      },
+      {
+       "id": "js-p2",
+       "pyq": "2b3a0b5c14b45808",
+       "level": 1,
+       "points": [
+        "Study drawing and check stock; clean and apply marking blue",
+        "Mark with scriber, rule, try square, surface gauge; punch; fix in vice",
+        "Saw leaving 1 mm; file rough then smooth to the lines",
+        "Drill/tap if needed; deburr, check dimensions with vernier"
+       ]
+      },
+      {
+       "id": "js-p3",
+       "pyq": "646f8141e5179784",
+       "level": 3,
+       "points": [
+        "Flow chart: study drawing, select MS stock, true edges, marking blue, mark with scriber/rule/try square, punch, saw to rough size, file to size, cut half/L-shape by sawing and chiselling, file L-shape and fit face, deburr, trial fit and trim, final check",
+        "Measuring tools: steel rule, try square (90 degrees), vernier caliper (0.02 mm), micrometer (0.01 mm), height and depth gauge, feeler gauge",
+        "Neat sketches of the measuring tools"
+       ]
+      },
+      {
+       "id": "js-p4",
+       "pyq": "7b9c103bb72442f0",
+       "level": 3,
+       "points": [
+        "Flow chart for L-shape sheet: study drawing and select sheet, clean and apply blue, mark outline, cut with hand shears or hacksaw, file edges and deburr, check size and squareness, mark bend line and holes, bend to 90 degrees in a vice with a mallet, drill and rivet/bolt/solder, final inspection",
+        "Neat sketches of measuring tools: steel rule, try square, vernier caliper, micrometer with labels"
+       ]
+      },
+      {
+       "id": "js-q3",
+       "kind": "long",
+       "level": 2,
+       "marks": 5,
+       "q": "List the operations to make a square fit job from a mild steel flat.",
+       "model_answer_md": "1. Study drawing, check stock.\n2. File datum face and edge square.\n3. Mark out with scriber, rule, try square; punch.\n4. Saw 1 mm outside the line.\n5. File to the lines; check with try square and vernier.\n6. Chip or drill if needed.\n7. Trial fit, trim.\n8. Deburr, finish.",
+       "points": [
+        "Study drawing and datum",
+        "Marking and punching",
+        "Sawing and filing",
+        "Checking with instruments",
+        "Trial fit and finish"
+       ]
+      }
+     ]
+    }
+   ]
+  }
+ ]
+}

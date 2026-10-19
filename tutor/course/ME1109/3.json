@@ -1,0 +1,1276 @@
+{
+ "code": "ME1109",
+ "unit": "Carpentry Shop",
+ "written": "2026-10-19",
+ "by": "claude-sonnet-5-5, in a Claude Code session",
+ "topics": [
+  {
+   "topic": "Carpentry tools and their use",
+   "subtopics": [
+    {
+     "id": "classification",
+     "title": "Carpentry, joinery and the classes of tools",
+     "theory_md": "**Carpentry** is cutting, shaping and joining timber for rough structural work (frames, roofs, doors). **Joinery** is the finer work of making joints for furniture, shutters and panelling.\n\nTools are classified by job:\n- **Marking and measuring**: steel rule, tape, try square, marking gauge, mortise gauge, sliding bevel, scriber.\n- **Holding**: carpenter's vice, bench hook, G-clamp, sash clamp.\n- **Cutting**: saws, chisels.\n- **Planing**: jack, smoothing, trying, rebate, plough plane.\n- **Boring**: brace and bit, auger, gimlet, bradawl.\n- **Striking**: claw hammer, mallet.\n- **Miscellaneous**: rasp, file, screwdriver, pincers, oilstone.",
+     "basics_md": "Every job in wood needs the same few things: mark where to cut, hold the wood still, cut it, smooth it, drill it, hit things, and finish it. The tool groups follow those jobs.",
+     "key_points": [
+      "Carpentry = rough structural wooden work; joinery = fine jointed work",
+      "Seven classes: marking and measuring, holding, cutting, planing, boring, striking, miscellaneous",
+      "Give two named examples per class",
+      "Try square checks right angles; bevel sets any angle"
+     ],
+     "questions": [
+      {
+       "id": "c-q1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "Which tool is used to check that a planed edge is square to the face?",
+       "options": [
+        "Marking gauge",
+        "Try square",
+        "Sliding bevel",
+        "Mortise gauge"
+       ],
+       "answer_index": 1,
+       "why": "The try square has a blade at 90 degrees to its stock; the bevel is adjustable for other angles."
+      },
+      {
+       "id": "c-q2",
+       "kind": "mcq",
+       "level": 1,
+       "q": "A brace and bit belongs to which class of carpentry tools?",
+       "options": [
+        "Cutting",
+        "Holding",
+        "Boring",
+        "Striking"
+       ],
+       "answer_index": 2,
+       "why": "It bores holes."
+      },
+      {
+       "id": "c-q3",
+       "kind": "short",
+       "level": 2,
+       "marks": 3,
+       "q": "Name the carpentry tool used for each job: (a) drawing a line parallel to an edge, (b) holding a job on the bench, (c) striking a chisel, (d) making a small starter hole.",
+       "model_answer_md": "(a) **Marking gauge** (one pin, scribes along the grain).\n(b) **Carpenter's vice** (or bench hook / clamp).\n(c) **Mallet** (wooden, does not split the handle).\n(d) **Bradawl** or **gimlet**.",
+       "points": [
+        "Marking gauge",
+        "Carpenter's vice, bench hook or clamp",
+        "Wooden mallet",
+        "Bradawl or gimlet"
+       ]
+      },
+      {
+       "id": "c-p1",
+       "pyq": "82fe908427b2ae33",
+       "level": 1,
+       "points": [
+        "Carpentry: craft of cutting, shaping and joining wood into furniture, doors, windows, frames",
+        "Any five tools with use, e.g. hand saw (cutting), jack plane (smoothing), chisel (joints, grooves), try square (marking, squareness), mallet (striking chisel)"
+       ]
+      },
+      {
+       "id": "c-p2",
+       "pyq": "957c7374c07fef77",
+       "level": 3,
+       "points": [
+        "Classes: marking and measuring, holding, cutting, planing, boring, striking, miscellaneous, with examples",
+        "Study table tools: rule, try square, marking gauge, rip and tenon saw, jack and smoothing plane, chisels, mallet, brace and bit, clamps, sand paper",
+        "Joint: mortise and tenon for leg to rail (dovetail for a drawer)",
+        "Why: shoulders resist twisting, glue and pin make it strong against load and racking; a butt joint relies only on nails or screws and is weak",
+        "Rough diagram of leg with mortise and rail with tenon, with assumed dimensions"
+       ]
+      },
+      {
+       "id": "c-p3",
+       "pyq": "2a83307eb28da445",
+       "level": 3,
+       "points": [
+        "Tools by class with function: measuring and marking, cutting (rip, cross-cut, tenon, coping), planing (jack, smoothing, trying, rebate), chiselling (firmer, bevel-edge, mortise), boring, striking, holding and finishing",
+        "Defects: knots, shakes, checks and splits, warping, wane, rot, insect holes, cross and spiral grain",
+        "Effect: lower strength and durability, poor finish, weak joints, wastage, shorter life",
+        "Choose seasoned defect-free timber and cut away defective parts"
+       ]
+      }
+     ]
+    },
+    {
+     "id": "marking-holding",
+     "title": "Marking, measuring and holding tools",
+     "theory_md": "**Marking gauge**: stock sliding on a stem with **one pin**; scribes a line parallel to an edge, along the grain.\n**Mortise gauge**: **two pins**, one adjustable; marks both sides of a mortise or tenon in one stroke.\n**Try square**: stock and blade at 90 degrees; checks squareness and marks lines across the grain.\n**Sliding bevel**: adjustable blade; sets and transfers any angle, e.g. 45 degrees for a mitre.\n**Steel rule, tape**: lengths. **Scriber or pencil** for lines.\n\n**Holding**: carpenter's vice (on the bench), bench hook (stops the job when sawing), G-clamp, sash (bar) clamp for gluing frames, hand vice.",
+     "basics_md": "To cut accurately you first draw a line you trust and then stop the wood from moving. Marking tools draw the line; holding tools stop the movement.",
+     "key_points": [
+      "Marking gauge: one pin; mortise gauge: two pins",
+      "Try square: right angles; sliding bevel: any angle",
+      "Measuring: steel rule, tape, folding rule",
+      "Holding: vice, bench hook, G-clamp, sash clamp, hand vice"
+     ],
+     "questions": [
+      {
+       "id": "m-q1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "A mortise gauge differs from a marking gauge in having",
+       "options": [
+        "A steel stem",
+        "Two marking pins",
+        "A scale",
+        "No stock"
+       ],
+       "answer_index": 1,
+       "why": "Two pins mark both lines of a mortise or tenon at once."
+      },
+      {
+       "id": "m-q2",
+       "kind": "mcq",
+       "level": 1,
+       "q": "A sash clamp is mainly used to",
+       "options": [
+        "Strike a chisel",
+        "Mark angles",
+        "Hold glued frames together",
+        "Bore holes"
+       ],
+       "answer_index": 2,
+       "why": "Bar clamps pull long frames tight while the glue sets."
+      },
+      {
+       "id": "m-q3",
+       "kind": "short",
+       "level": 2,
+       "marks": 3,
+       "q": "Differentiate between a marking gauge and a mortise gauge.",
+       "model_answer_md": "| Marking gauge | Mortise gauge |\n|---|---|\n| One pin | Two pins, one adjustable |\n| Draws one line parallel to the edge | Draws two parallel lines in one stroke |\n| Marks width, thickness, shoulder lines | Marks mortise and tenon width |",
+       "points": [
+        "One pin versus two pins",
+        "One line versus two parallel lines",
+        "Mortise gauge used for mortise and tenon"
+       ]
+      },
+      {
+       "id": "m-p1",
+       "pyq": "78adcd95f9e975a0",
+       "level": 2,
+       "points": [
+        "Marking tools mark lines: marking gauge, mortise gauge, scriber, pencil, try square, bevel",
+        "Measuring tools give sizes: steel rule, folding rule, tape, calipers",
+        "Holding tools hold the work firmly: bench vice, hold-fast, G-clamp, sash clamp, hand vice"
+       ]
+      }
+     ]
+    },
+    {
+     "id": "saws",
+     "title": "Saws",
+     "theory_md": "**Rip saw**: cuts **along the grain**; coarse, about 4 to 6 teeth per 25 mm; teeth filed square (chisel-edged) and chop out the fibres.\n**Cross-cut saw**: cuts **across the grain**; finer, about 7 to 10 teeth per 25 mm; teeth filed with a bevel (knife-edged) that sever the fibres on both sides of the kerf.\n**Tenon (back) saw**: stiff back, fine teeth; accurate cuts in joints.\n**Dovetail saw**: finer tenon saw. **Coping saw**: thin blade in a U-frame, curves in thin wood. **Keyhole or compass saw**: narrow tapered blade, internal and curved cuts. **Bow saw**, and power **circular** and **band saw**.\n\nSaw on the waste side of the line.",
+     "basics_md": "Along the grain you are splitting fibres apart, so you want chisels. Across the grain you must cut fibres through, so you want knives.",
+     "key_points": [
+      "Rip saw: along the grain, coarse, chisel teeth",
+      "Cross-cut saw: across the grain, finer, knife-edged teeth",
+      "Tenon saw for joints (stiff back); coping and keyhole saws for curves and holes",
+      "Hacksaw, circular and band saw also named"
+     ],
+     "questions": [
+      {
+       "id": "s-q1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "A rip saw is used to cut",
+       "options": [
+        "Across the grain",
+        "Along the grain",
+        "Curves in thin plywood",
+        "Metal"
+       ],
+       "answer_index": 1,
+       "why": "Rip: along the grain. Cross-cut: across."
+      },
+      {
+       "id": "s-q2",
+       "kind": "mcq",
+       "level": 1,
+       "q": "Which saw cuts a curve in thin wood?",
+       "options": [
+        "Tenon saw",
+        "Rip saw",
+        "Coping saw",
+        "Cross-cut saw"
+       ],
+       "answer_index": 2,
+       "why": "Thin blade in a U-frame turns easily."
+      },
+      {
+       "id": "s-q3",
+       "kind": "short",
+       "level": 2,
+       "marks": 2,
+       "q": "Name the saw best suited to each: (a) cutting a long plank along its length, (b) cutting a tenon shoulder, (c) cutting a curve, (d) cutting a hole from inside a panel.",
+       "model_answer_md": "(a) **Rip saw**\n(b) **Tenon (back) saw**\n(c) **Coping saw** (or bow saw)\n(d) **Keyhole or compass saw**",
+       "points": [
+        "Rip saw",
+        "Tenon saw",
+        "Coping saw",
+        "Keyhole or compass saw"
+       ]
+      },
+      {
+       "id": "s-q4",
+       "kind": "short",
+       "level": 3,
+       "marks": 2,
+       "q": "Why must a cross-cut saw have knife-edged teeth, while a rip saw has chisel-edged teeth?",
+       "model_answer_md": "Across the grain the fibres must be **severed** on both sides of the cut, which knife-edged (bevel-filed) teeth do cleanly. Along the grain the fibres only have to be **chiselled out** in a line, which square-filed teeth do fast, so a rip saw cuts quickly but roughly.",
+       "points": [
+        "Cross-cut: knife teeth sever fibres across the grain",
+        "Rip: chisel teeth remove fibres along the grain"
+       ]
+      },
+      {
+       "id": "s-p1",
+       "pyq": "8769766180d59237",
+       "level": 1,
+       "points": [
+        "Rip saw (along grain), cross-cut saw (across grain), tenon or back saw (fine joints)",
+        "Dovetail, coping (curves), keyhole or compass (internal and curved cuts), bow, panel saw",
+        "Hacksaw; power circular and band saw"
+       ]
+      },
+      {
+       "id": "s-p2",
+       "pyq": "dfe5aaa03f397e28",
+       "level": 2,
+       "points": [
+        "Rip saw cuts along the grain; cross-cut saw across the grain",
+        "Rip: coarse, about 4 to 6 teeth per 25 mm, chisel-edged teeth; cross-cut: finer, about 7 to 10 teeth per 25 mm, knife-edged teeth",
+        "Rip is faster and rougher; cross-cut slower and smooth",
+        "Rip saw is longer, about 650 to 700 mm, than cross-cut, about 500 to 600 mm"
+       ]
+      }
+     ]
+    },
+    {
+     "id": "planes-chisels",
+     "title": "Planes, chisels, boring and striking tools",
+     "theory_md": "**Jack plane** (350 to 400 mm, general planing). Parts: **body with flat sole**, **mouth**, **cutting iron** (blade, bedded at about 45 degrees), **cap iron** (back iron: stiffens the blade and breaks the shaving so the grain does not tear), **lever cap**, adjusting nut and lateral lever, handle, knob.\n**Smoothing plane**: short, final finish. **Trying (jointer) plane**: long, true long edges. **Rebate plane**: steps. **Plough plane**: grooves.\n**Chisels**: firmer (general), bevel-edge (fine, dovetails), mortise (thick, chopping), struck with a **wooden mallet**.\n**Boring**: bradawl, gimlet, brace and bit, auger. **Claw hammer** drives and pulls nails.",
+     "basics_md": "A plane is a chisel held in a block so it takes the same thin shaving every pass. A longer block (trying plane) rides over hollows and makes a straighter edge.",
+     "key_points": [
+      "Jack plane parts: sole, mouth, cutting iron at 45 degrees, cap iron, lever cap, adjusting nut, handle, knob",
+      "Cap iron stiffens the blade and breaks the shaving to prevent tearing",
+      "Trying plane for long edges, smoothing plane for finish, rebate and plough for steps and grooves",
+      "Chisels: firmer, bevel-edge, mortise; hit with a mallet, not a steel hammer"
+     ],
+     "questions": [
+      {
+       "id": "p-q1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "A chisel with a wooden handle should be struck with a",
+       "options": [
+        "Ball peen hammer",
+        "Claw hammer",
+        "Wooden mallet",
+        "Sledge hammer"
+       ],
+       "answer_index": 2,
+       "why": "The mallet face does not split the handle."
+      },
+      {
+       "id": "p-q2",
+       "kind": "mcq",
+       "level": 1,
+       "q": "The plane used to make a long edge straight is the",
+       "options": [
+        "Smoothing plane",
+        "Trying plane",
+        "Rebate plane",
+        "Plough plane"
+       ],
+       "answer_index": 1,
+       "why": "Its long sole bridges low spots."
+      },
+      {
+       "id": "p-q3",
+       "kind": "short",
+       "level": 2,
+       "marks": 5,
+       "q": "Describe a jack plane with a labelled sketch in words and state the function of the cap iron.",
+       "model_answer_md": "**Sketch (side view):** long body with a flat **sole**; **mouth** (slot) in the sole; **cutting iron** resting on the frog at about 45 degrees with its edge just through the mouth; **cap iron** screwed on top of the cutting iron, 1 to 2 mm behind the edge; **lever cap** clamping both; **adjusting nut** and **lateral adjusting lever**; **handle** at the back, **knob** at the front.\n\n**Function of the cap iron:** it stiffens the blade against chatter and curls and breaks the shaving as it rises, so the wood does not split ahead of the edge.",
+       "points": [
+        "Labelled parts: sole, mouth, cutting iron at 45 degrees, cap iron, lever cap, adjusting nut, handle, knob",
+        "Cap iron stiffens the blade",
+        "Cap iron breaks the shaving and prevents tearing of the grain"
+       ]
+      },
+      {
+       "id": "p-p1",
+       "pyq": "5d6d2fe5aa158b6c",
+       "level": 3,
+       "points": [
+        "Marking and measuring: steel and shrink (pattern maker's) rule, try square, gauges, bevel, dividers: exact size with shrinkage allowed",
+        "Cutting: rip, cross-cut, tenon and band saw: straight cuts to the line",
+        "Shaping: jack and smoothing plane, firmer chisel and gouge, spokeshave, rasp, sand paper: accurate surfaces, curves, fillets, clean draw",
+        "Holding: vice, clamps, bench hook; boring and joining: brace and bit, dowels; lathe for round patterns",
+        "Contribution: accurate, quick, less rework and wastage, so correct castings"
+       ]
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "topic": "Types of wood and applications",
+   "subtopics": [
+    {
+     "id": "tree-structure",
+     "title": "Structure of a timber tree",
+     "theory_md": "Timber comes from **exogenous** trees, which grow outward by adding a ring each year. Cross-section from the centre outward:\n1. **Pith**: soft central core.\n2. **Heartwood**: dark, dense, dead inner rings; strong and durable; the timber.\n3. **Sapwood**: light outer rings carrying sap; weaker, decays easily.\n4. **Cambium**: thin layer that makes new wood and bark.\n5. **Inner bark (bast)**: carries food down.\n6. **Outer bark**: protects.\n\n**Annual rings**: one per year, count gives age. **Medullary rays**: radial lines from pith to bark; store and carry food sideways.",
+     "basics_md": "A tree grows a new skin of wood under the bark every year, like layers of an onion. Old inner layers stop carrying sap and become hard heartwood.",
+     "key_points": [
+      "Sketch circle: pith, heartwood, sapwood, cambium, inner bark, outer bark",
+      "Annual rings give the age; medullary rays are radial",
+      "Heartwood strong and durable; sapwood weaker",
+      "Cambium produces new wood and bark"
+     ],
+     "questions": [
+      {
+       "id": "t-q1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "The layer that produces new wood and bark each year is the",
+       "options": [
+        "Pith",
+        "Cambium",
+        "Heartwood",
+        "Medullary ray"
+       ],
+       "answer_index": 1,
+       "why": "Cambium lies between sapwood and bark."
+      },
+      {
+       "id": "t-q2",
+       "kind": "mcq",
+       "level": 1,
+       "q": "The age of a felled tree is found by counting its",
+       "options": [
+        "Medullary rays",
+        "Annual rings",
+        "Knots",
+        "Shakes"
+       ],
+       "answer_index": 1,
+       "why": "One ring is added each year."
+      },
+      {
+       "id": "t-q3",
+       "kind": "short",
+       "level": 2,
+       "marks": 4,
+       "q": "Draw (describe) the cross-section of an exogenous tree and give the function of any four parts.",
+       "model_answer_md": "**Sketch:** concentric circles; pith at the centre, then heartwood, sapwood, cambium, inner bark, outer bark; thin radial lines are medullary rays; the circles are annual rings.\n1. **Pith**: soft core, first growth.\n2. **Heartwood**: dead, dense, gives strength.\n3. **Sapwood**: carries sap.\n4. **Cambium**: makes new wood and bark.\n5. **Outer bark**: protects the tree.",
+       "points": [
+        "Labelled sketch with the concentric layers",
+        "Pith, heartwood, sapwood, cambium, bark with functions",
+        "Annual rings and medullary rays shown"
+       ]
+      },
+      {
+       "id": "t-p1",
+       "pyq": "d7f9a741a8fd0925",
+       "level": 2,
+       "points": [
+        "Sketch: pith, heartwood, sapwood, cambium, inner bark, outer bark, annual rings, medullary rays",
+        "Pith: soft central core; heartwood: dark dense dead wood, strong; sapwood: light, carries sap",
+        "Cambium makes new wood and bark; inner bark carries food; outer bark protects",
+        "Annual rings show age; medullary rays are radial and carry sap sideways"
+       ]
+      }
+     ]
+    },
+    {
+     "id": "hard-soft-boards",
+     "title": "Hardwood, softwood, grain and plywood",
+     "theory_md": "| | Hardwood | Softwood |\n|---|---|---|\n| Tree | Broad-leaved, deciduous | Conifer, needle leaves |\n| Growth | Slow, dense | Fast, light |\n| Grain | Close | Open, resinous |\n| Use | Furniture, doors, beams | Packing cases, light frames, patterns |\n| Examples | Teak, sal, sheesham, oak | Deodar, pine, fir |\n\nThe classification is botanical, not by hardness (balsa is a hardwood).\n\n**Grain**: direction of the fibres: straight, cross, spiral, wavy, interlocked; fine (small pores) or coarse. **Plywood**: thin veneers glued with grain at right angles, odd number of layers; equal strength both ways, stable, large sheets. Others: block board, particle board, hardboard.",
+     "basics_md": "Hardwood and softwood are tree families, like cats and dogs. Hardwood trees lose their leaves and grow slowly, which packs the wood tight. Conifers grow fast and make lighter wood.",
+     "key_points": [
+      "Hardwood: broad-leaved, slow, dense, costly (teak, sal, sheesham, oak)",
+      "Softwood: conifer, fast, light, cheap (deodar, pine, fir)",
+      "Grain: straight, cross, spiral, wavy, interlocked; affects strength and finish",
+      "Plywood: veneers glued with grain crossed, stable and equal strength both ways"
+     ],
+     "questions": [
+      {
+       "id": "h-q1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "Which of these is a softwood?",
+       "options": [
+        "Teak",
+        "Sal",
+        "Deodar",
+        "Sheesham"
+       ],
+       "answer_index": 2,
+       "why": "Deodar is a conifer."
+      },
+      {
+       "id": "h-q2",
+       "kind": "mcq",
+       "level": 2,
+       "q": "The classification of wood as hardwood or softwood depends on",
+       "options": [
+        "Actual hardness of the timber",
+        "Type of tree: broad-leaved or conifer",
+        "Colour of the timber",
+        "Moisture content"
+       ],
+       "answer_index": 1,
+       "why": "It is botanical: balsa is a hardwood although it is very soft."
+      },
+      {
+       "id": "h-q3",
+       "kind": "short",
+       "level": 2,
+       "marks": 3,
+       "q": "State one use each of teak, sal, deodar and sheesham.",
+       "model_answer_md": "- **Teak**: furniture, doors, windows, ship building.\n- **Sal**: beams, railway sleepers, heavy construction.\n- **Deodar**: doors, light furniture, packing cases.\n- **Sheesham**: good furniture, cabinets, carving.",
+       "points": [
+        "Teak: furniture, doors, ships",
+        "Sal: beams, sleepers",
+        "Deodar: light furniture, doors, packing",
+        "Sheesham: furniture, carving"
+       ]
+      },
+      {
+       "id": "h-q4",
+       "kind": "short",
+       "level": 3,
+       "marks": 2,
+       "q": "Why is plywood more stable than solid wood?",
+       "model_answer_md": "Veneers are glued with the grain of adjacent layers at **right angles**, so shrinkage along one layer is restrained by the next. This gives nearly equal strength in both directions and prevents warping and splitting.",
+       "points": [
+        "Grain of adjacent layers crossed at 90 degrees",
+        "Equal strength, little warping or splitting"
+       ]
+      },
+      {
+       "id": "h-p1",
+       "pyq": "564506c9debe41bb",
+       "level": 2,
+       "points": [
+        "Hardwood from broad-leaved deciduous trees; softwood from conifers",
+        "Hardwood slow growing, dense, costly; softwood quick growing, light, cheap",
+        "Examples: teak, sal, oak, sheesham against pine, deodar, fir"
+       ]
+      },
+      {
+       "id": "h-p2",
+       "pyq": "d8cc979b95d814cc",
+       "level": 2,
+       "points": [
+        "Softwood (pine, deodar, fir): light, easy to work; doors, window frames, packing cases",
+        "Hardwood (teak, sal, sheesham, oak): dense, strong, durable; furniture, beams, flooring",
+        "Processed wood: plywood, block board, particle board, hardboard"
+       ]
+      },
+      {
+       "id": "h-p3",
+       "pyq": "0ffaea435e84b1b7",
+       "level": 2,
+       "points": [
+        "Difference table: source, growth, density, grain, resin, durability and cost, examples, uses",
+        "Grain: direction and arrangement of fibres",
+        "Types: straight, cross, spiral, wavy, interlocked; close or coarse",
+        "Affects strength, appearance and workability"
+       ]
+      },
+      {
+       "id": "h-p4",
+       "pyq": "8bcf23f43e7c65b5",
+       "level": 2,
+       "points": [
+        "Carpentry: cutting, shaping, fitting timber for rough structural work; joinery: fine work of joints for furniture, doors, panelling",
+        "Wood is natural, plywood is glued veneers with grains at right angles",
+        "Wood is weaker across the grain, warps; plywood equal strength, stable, large sheets"
+       ]
+      }
+     ]
+    },
+    {
+     "id": "seasoning",
+     "title": "Seasoning of timber",
+     "theory_md": "**Seasoning** removes moisture from green timber (40 to 60 per cent water) down to **10 to 15 per cent** (8 to 12 for furniture).\n\n**Why**: stops later shrinkage, warping and cracking; raises strength and durability; lighter; resists fungi and insects; easier to work, glue and polish.\n\n**Natural (air)**: planks stacked on raised bearers with spacers in a shaded, ventilated shed; cheap, slow (months to years).\n**Artificial**: **kiln** (hot humid air, about 35 to 40 degrees C rising to 60 to 80, days), water, boiling or steaming, chemical (urea, salt), electrical (high frequency).\n\nMoisture content $MC=\\dfrac{W_{wet}-W_{dry}}{W_{dry}}\\times100$ (oven-dry basis).",
+     "basics_md": "Fresh wood is full of water. It shrinks as it dries, and if it dries after being made into a door, the door cracks. So we dry it first, slowly and evenly.",
+     "key_points": [
+      "Seasoning = controlled removal of moisture to 10 to 15 per cent",
+      "Purpose: no warping or cracking, more strength and durability, resists fungi and insects",
+      "Natural: stacked in shade, slow, cheap; artificial: kiln, water, boiling, chemical, electrical",
+      "Kiln: fast, controlled; start humid, raise temperature, then condition",
+      "MC on the oven-dry weight"
+     ],
+     "questions": [
+      {
+       "id": "e-q1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "Timber for furniture should be seasoned to a moisture content of about",
+       "options": [
+        "50 to 60 per cent",
+        "30 to 40 per cent",
+        "20 to 25 per cent",
+        "8 to 15 per cent"
+       ],
+       "answer_index": 3,
+       "why": "Green timber holds 40 to 60 per cent; seasoned timber 10 to 15 per cent or less."
+      },
+      {
+       "id": "e-q2",
+       "kind": "mcq",
+       "level": 2,
+       "q": "Moisture content of timber is calculated as the water weight divided by the",
+       "options": [
+        "Wet weight",
+        "Oven-dry weight",
+        "Green volume",
+        "Final weight after painting"
+       ],
+       "answer_index": 1,
+       "why": "MC is on the oven-dry basis."
+      },
+      {
+       "id": "e-q3",
+       "kind": "numerical",
+       "level": 2,
+       "marks": 3,
+       "q": "A timber sample weighs 5.0 kg when cut and 4.2 kg after oven drying. Find its moisture content and say whether it is fit for furniture.",
+       "model_answer_md": "$MC=\\dfrac{5.0-4.2}{4.2}\\times100=\\dfrac{0.8}{4.2}\\times100=19.05\\ \\%$\n\nFurniture timber should be about 8 to 15 per cent, so this is **not adequately seasoned**; it would shrink and warp.",
+       "points": [
+        "Formula MC = (W wet - W dry)/W dry x 100",
+        "MC = 19.05 per cent",
+        "Higher than 8 to 15 per cent, so unfit"
+       ]
+      },
+      {
+       "id": "e-q4",
+       "kind": "numerical",
+       "level": 3,
+       "marks": 3,
+       "q": "A green log weighs 100 kg at 50 per cent moisture content (oven-dry basis). How much water must be removed to season it to 12 per cent?",
+       "model_answer_md": "Dry weight: $W_{dry}=\\dfrac{100}{1+0.50}=66.67\\ \\mathrm{kg}$.\nFinal weight at 12 per cent: $66.67\\times1.12=74.67\\ \\mathrm{kg}$.\nWater to remove $=100-74.67=25.33\\ \\mathrm{kg}$.",
+       "points": [
+        "Dry weight 66.67 kg",
+        "Final weight 74.67 kg at 12 per cent",
+        "Water removed 25.33 kg"
+       ]
+      },
+      {
+       "id": "e-p1",
+       "pyq": "e447849d1a75b681",
+       "level": 1,
+       "points": [
+        "Seasoning: removing moisture from fresh timber to about 10 to 15 per cent for durability and stability",
+        "Natural (air) seasoning",
+        "Artificial: kiln, water, boiling or steaming, chemical, electrical"
+       ]
+      },
+      {
+       "id": "e-p2",
+       "pyq": "df2483958a38e5fe",
+       "level": 2,
+       "points": [
+        "Seasoning removes sap from 40 to 60 per cent water to about 10 to 15",
+        "Application: furniture factory kiln-seasons teak or sal planks stacked with spacers, humidity lowered stepwise over days, before doors and cots",
+        "Reasons: no shrinkage, warping, cracking; more strength and durability; lighter and easier to work; resists fungi and insects; takes paint, polish, glue"
+       ]
+      },
+      {
+       "id": "e-p3",
+       "pyq": "431ac5dafc3aeee5",
+       "level": 3,
+       "points": [
+        "Seasoning: controlled removal of moisture to 10 to 15 per cent",
+        "Methods: natural (air), kiln, water, chemical, electrical",
+        "Importance: dimensional stability (no shrinkage, warping, splitting) and durability (resists fungi, insects), better strength and working",
+        "Hardwood against softwood table: source, growth, grain, working, cost, use, examples"
+       ]
+      },
+      {
+       "id": "e-p4",
+       "pyq": "d8bd3f13185f9d06",
+       "level": 3,
+       "points": [
+        "Significance: no shrinkage, warping, cracking; more strength and durability; lighter; resists fungi and insects; easier to work and polish",
+        "Methods: natural (air); artificial: kiln, water, chemical, electrical, steam or boiling",
+        "Large quantity of softwood: kiln seasoning, fast, controlled, kills insects and fungi, softwood dries easily",
+        "Procedure: stack with spacers, warm humid air first (35 to 40 degrees C), raise to 60 to 80 and lower humidity, circulate with fans, condition and cool, test moisture"
+       ]
+      }
+     ]
+    },
+    {
+     "id": "defects-selection",
+     "title": "Defects in timber and choosing good timber",
+     "theory_md": "**Natural defects**: **knots** (branch bases, weaken and break the grain), **shakes** (cracks along the grain: heart, star, cup, ring, radial), cross or spiral grain, rind galls, upsets, burls.\n**Seasoning defects**: **warping** (bow, cup, twist), **checks and splits**, honeycombing, case hardening; also **wane** (bark or rounded edge).\n**Decay**: dry rot, wet rot, fungal stain; **insects**: borers, termites.\n\nEffect: lower strength, poor finish, weak joints, wastage, short life.\n\n**Good timber**: straight uniform close grain; hard, strong, heavy; durable; well seasoned; free from defects; easy to work, takes polish; dark uniform colour; clear ring when struck. Selection also depends on use, cost and availability.",
+     "basics_md": "Wood is a natural material, so it has flaws: places where a branch grew, cracks from drying, and rot. A good carpenter learns to spot them before cutting.",
+     "key_points": [
+      "Knots, shakes, cross grain, rind galls are natural defects",
+      "Warping, checks, splits come from uneven drying",
+      "Wane, rot and insect attack",
+      "Defects reduce strength, finish and life",
+      "Good timber: seasoned, straight close grain, durable, free of defects"
+     ],
+     "questions": [
+      {
+       "id": "d-q1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "A shake in timber is",
+       "options": [
+        "A dark spot where a branch grew",
+        "A crack separating fibres along the grain",
+        "Bending of the plank along its length",
+        "Fungal decay"
+       ],
+       "answer_index": 1,
+       "why": "A branch base is a knot; bending is a bow; fungus causes rot."
+      },
+      {
+       "id": "d-q2",
+       "kind": "mcq",
+       "level": 2,
+       "q": "Warping, twisting and cupping of planks are mainly caused by",
+       "options": [
+        "Termite attack",
+        "Uneven drying or shrinkage",
+        "Wrong felling",
+        "Knots"
+       ],
+       "answer_index": 1,
+       "why": "They are seasoning defects from unequal shrinkage."
+      },
+      {
+       "id": "d-q3",
+       "kind": "short",
+       "level": 2,
+       "marks": 4,
+       "q": "Explain any four defects of timber with their effect.",
+       "model_answer_md": "1. **Knot**: base of a branch; breaks the fibres, weakens the plank, hard to work.\n2. **Shake**: crack along the grain (heart, star, cup, ring); reduces strength.\n3. **Warping** (bow, cup, twist): uneven drying; distorts joints and surfaces.\n4. **Wane**: bark or missing edge on a plank; wastage and poor appearance.\n5. **Rot and borer holes**: decay and insect attack; destroy strength.",
+       "points": [
+        "Knot with effect",
+        "Shake with types",
+        "Warping with cause",
+        "Wane or rot or insect attack",
+        "Effect on quality for each"
+       ]
+      },
+      {
+       "id": "d-p1",
+       "pyq": "270efc8cb9d8d8aa",
+       "level": 1,
+       "points": [
+        "Straight, close and uniform grain; hard, strong, tough, heavy",
+        "Durable, seasoned, free from defects",
+        "Easy to work, good polish; dark uniform colour, sweet smell; clear ringing sound when struck",
+        "Fire resistant, little shrinkage"
+       ]
+      },
+      {
+       "id": "d-p2",
+       "pyq": "26964fbf476890f6",
+       "level": 2,
+       "points": [
+        "Strength for the load, durability, seasoning",
+        "Workability, appearance (colour, grain, polish)",
+        "Cost and availability; weight, shrinkage, fire resistance",
+        "Intended use: furniture, structural, indoor or outdoor"
+       ]
+      },
+      {
+       "id": "d-p3",
+       "pyq": "8a4bc1260f1b5cb6",
+       "level": 2,
+       "points": [
+        "Defects: knots, shakes (heart, star, cup, ring, radial), checks and splits, warping, wane, rind galls, burls, cross grain, decay, insects",
+        "Seasoning methods: natural (air), water, kiln, chemical, electrical, boiling or steam",
+        "Each method with one line: stacked in shade, soaked 2 to 4 weeks, hot humid chamber, salt or urea, high frequency current",
+        "Moisture reduced to about 10 to 15 per cent"
+       ]
+      },
+      {
+       "id": "d-p4",
+       "pyq": "5e827db3da530692",
+       "level": 3,
+       "points": [
+        "Structure: pith, heartwood, sapwood, cambium, inner bark, outer bark, medullary rays, annual rings, each with function",
+        "Selection parameters: straight long trunk with few knots, mature age, large heartwood proportion",
+        "Strength, hardness, durability, fine grain, colour",
+        "Seasoning behaviour, resistance to decay and termites, ease of working, availability and cost"
+       ]
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "topic": "Carpentry hardware",
+   "subtopics": [
+    {
+     "id": "nails-screws",
+     "title": "Nails, screws and bolts",
+     "theory_md": "**Nails** (mild steel wire): wire nail (round head), oval (less splitting), cut nail, clout (flat head, roofing felt), panel pin or lost-head (head punched below the surface), brad. Specified by **length and gauge**. Drive slightly inclined for grip; keep off the ends to avoid splitting.\n\n**Wood screws**: countersunk (flush), round head, raised head; slotted or Phillips. Specified by **length and gauge number**. Drill a **pilot hole** (smaller than the root diameter) and a clearance hole in the top piece. Screws hold better than nails and can be removed.\n\n**Carriage bolt** (round head, square neck) and **coach screw** (square head, spanner) for heavy work. **Corrugated fasteners** for butt and mitre joints.",
+     "basics_md": "A nail grips by friction; a screw has a thread that bites, so it holds more and can be unwound. The pilot hole makes room so the wood does not split.",
+     "key_points": [
+      "Nails: wire, oval, cut, clout, panel pin, brad; length and gauge",
+      "Screws: countersunk, round, raised head; length and gauge number; pilot hole",
+      "Screws hold better and are removable",
+      "Carriage bolt (square neck), coach screw (square head)"
+     ],
+     "questions": [
+      {
+       "id": "n-q1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "A wood screw is specified by",
+       "options": [
+        "Head diameter only",
+        "Length and gauge number",
+        "Weight",
+        "Thread pitch only"
+       ],
+       "answer_index": 1,
+       "why": "Length and gauge (shank diameter number)."
+      },
+      {
+       "id": "n-q2",
+       "kind": "mcq",
+       "level": 2,
+       "q": "The main reason for drilling a pilot hole before a screw is to",
+       "options": [
+        "Increase the head size",
+        "Prevent splitting and guide the screw",
+        "Make the screw loose",
+        "Reduce the screw length"
+       ],
+       "answer_index": 1,
+       "why": "It guides the screw and stops splitting."
+      },
+      {
+       "id": "n-q3",
+       "kind": "short",
+       "level": 2,
+       "marks": 3,
+       "q": "Compare nails and screws as wood fasteners.",
+       "model_answer_md": "| Nails | Screws |\n|---|---|\n| Driven with a hammer | Driven with a screwdriver into a pilot hole |\n| Hold by friction | Hold by threads |\n| Lower holding power | Higher holding power |\n| Hard to remove without damage | Removable and reusable |\n| Cheap and quick | Costlier, slower |",
+       "points": [
+        "Hammer versus screwdriver",
+        "Friction versus thread grip",
+        "Holding power higher in screws",
+        "Removable screws; nails cheap and quick"
+       ]
+      },
+      {
+       "id": "n-q4",
+       "kind": "short",
+       "level": 3,
+       "marks": 2,
+       "q": "Why is a pilot hole drilled before driving a wood screw, and why is a nail not driven near the end of a board?",
+       "model_answer_md": "The **pilot hole** (smaller than the screw root) guides the screw straight, prevents splitting, lowers driving torque and leaves wood for the thread to grip. A nail near the end of a board wedges the fibres apart and **splits** the wood.",
+       "points": [
+        "Pilot hole guides and prevents splitting",
+        "Wood left for thread to grip",
+        "Nail near end splits the fibres"
+       ]
+      }
+     ]
+    },
+    {
+     "id": "hinges-fittings",
+     "title": "Hinges, fittings and adhesives",
+     "theory_md": "**Hinges**: **butt hinge** (doors and windows; leaves let into frame and door), **T-hinge** and **strap hinge** (gates, heavy doors), **piano (continuous) hinge** (box lids, long light lids), **parliament hinge** (door swings clear of the wall), spring hinge.\n**Other fittings**: **tower bolt** (bolts door closed), latch, **hasp and staple** (with padlock), lock, handles, brackets, angle plates.\n**Adhesives**: animal (hide) glue, casein, PVA, urea-formaldehyde, epoxy. **Dowels**: wooden pins that align and join.",
+     "basics_md": "Hinges let a door swing, bolts and locks keep it shut, brackets hold shelves, and glue joins the wood itself.",
+     "key_points": [
+      "Hinges: butt (doors), T and strap (gates), piano (lids), parliament, spring",
+      "Tower bolt, latch, hasp and staple, lock, handle, bracket",
+      "Adhesives: hide glue, casein, PVA, urea-formaldehyde, epoxy",
+      "Dowels align joints"
+     ],
+     "questions": [
+      {
+       "id": "g-q1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "The hinge commonly used on ordinary doors and windows is the",
+       "options": [
+        "Piano hinge",
+        "Butt hinge",
+        "Strap hinge",
+        "Parliament hinge"
+       ],
+       "answer_index": 1,
+       "why": "Butt hinges with two leaves let into the door and frame are standard."
+      },
+      {
+       "id": "g-q2",
+       "kind": "mcq",
+       "level": 1,
+       "q": "A continuous (piano) hinge is mainly used on",
+       "options": [
+        "Heavy gates",
+        "Box lids and long light covers",
+        "Main doors only",
+        "Window grills"
+       ],
+       "answer_index": 1,
+       "why": "It runs the full length and supports a long light lid evenly."
+      },
+      {
+       "id": "g-q3",
+       "kind": "short",
+       "level": 2,
+       "marks": 3,
+       "q": "Name any six items of carpentry hardware and state the use of each.",
+       "model_answer_md": "1. **Wire nail**: general fastening.\n2. **Wood screw**: strong removable fastening.\n3. **Butt hinge**: hangs doors and windows.\n4. **Tower bolt**: bolts a door closed.\n5. **Hasp and staple**: holds a padlock on a box or door.\n6. **Corrugated fastener**: holds butt and mitre joints.\n(Any six.)",
+       "points": [
+        "Six distinct items named",
+        "Correct use for each",
+        "Hinge, bolt and lock items among them"
+       ]
+      },
+      {
+       "id": "g-q4",
+       "kind": "short",
+       "level": 3,
+       "marks": 2,
+       "q": "Name four wood adhesives and one use of dowels.",
+       "model_answer_md": "Adhesives: **animal (hide) glue, casein, PVA, urea-formaldehyde** (or epoxy). **Dowels** are round wooden pins fitted into matching holes in two pieces to align and join them (panels, table tops).",
+       "points": [
+        "Four adhesives named",
+        "Dowels align and join pieces in matching holes"
+       ]
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "topic": "Carpentry operations",
+   "subtopics": [
+    {
+     "id": "basic-operations",
+     "title": "Basic operations and the order of work",
+     "theory_md": "**Order of work**: select seasoned timber, **mark**, **saw**, **plane**, **chisel**, **bore**, **assemble**, **finish**.\n\n- **Face side and face edge** are planed first, flat and square to each other, and marked with face marks; all other marking is done from them.\n- **Marking**: gauge and try square from the face side and edge.\n- **Sawing**: ripping along the grain, cross-cutting across; saw in the waste side of the line.\n- **Planing**: with the grain, to width and thickness.\n- **Chiselling**: **paring** (thin slices by hand pressure) and **chopping** (mallet, mortises).\n- Also boring, grooving, rebating, chamfering, sanding.",
+     "basics_md": "A cut is only as accurate as the line it follows, and the line is only accurate if it was measured from a true flat surface. That surface is the face side.",
+     "key_points": [
+      "Order: mark, saw, plane, chisel, bore, assemble, finish",
+      "Face side and face edge first; mark all dimensions from them",
+      "Saw on the waste side; plane with the grain",
+      "Paring by hand pressure; chopping with a mallet"
+     ],
+     "questions": [
+      {
+       "id": "o-q1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "In carpentry marking is always done from the",
+       "options": [
+        "Rough end",
+        "Face side and face edge",
+        "Back of the board",
+        "Any convenient side"
+       ],
+       "answer_index": 1,
+       "why": "They are the true datum surfaces."
+      },
+      {
+       "id": "o-q2",
+       "kind": "mcq",
+       "level": 2,
+       "q": "While sawing to a marked line the saw cut should be made",
+       "options": [
+        "On the line, centred",
+        "On the waste side of the line",
+        "On the finished side of the line",
+        "Anywhere near the line"
+       ],
+       "answer_index": 1,
+       "why": "The cut removes a kerf; keeping it in the waste leaves the part full size."
+      },
+      {
+       "id": "o-q3",
+       "kind": "short",
+       "level": 2,
+       "marks": 3,
+       "q": "Why are a face side and a face edge prepared first? Differentiate paring and chopping.",
+       "model_answer_md": "**Face side and edge** are planed flat and square to each other. They are the datum, so width, thickness, shoulders and mortises are gauged from them and every piece comes out consistent and square. Face marks stop them being confused.\n\n**Paring**: removing thin shavings with the chisel pushed by hand pressure. **Chopping**: striking the chisel with a mallet to cut deeper, as in a mortise.",
+       "points": [
+        "Face side and edge are the datum for marking",
+        "Flat and square to each other, face marks",
+        "Paring: thin slices by hand pressure",
+        "Chopping: mallet blows, deep cuts"
+       ]
+      }
+     ]
+    },
+    {
+     "id": "joints",
+     "title": "Wood joints: construction, use, advantages",
+     "theory_md": "| Joint | Construction | Use | Advantage |\n|---|---|---|---|\n| **Lap (halving)**: cross, T, corner | Half thickness removed from each piece, faces flush | Frames, stretchers | Simple, flat, good glue area |\n| **Mortise and tenon** | Tenon (about one-third of the thickness) fits a mortise; pinned or wedged | Doors, windows, table legs | Strongest frame joint, resists racking |\n| **Bridle** | Open slot receives a tongue | Frames, legs | Strong, easy |\n| **Dovetail** | Tails interlock with pins, slope 1:6 soft, 1:8 hard | Drawers, boxes | Locks, resists pull |\n| **Mitre** | Both ends at 45 degrees | Picture frames | Hidden end grain |\n| **Dowel** | Round pins in matching holes | Panels, table tops | Hidden, aligned |\n| **Butt** | End to face, nailed or glued | Boxes | Cheapest |\n| **Tongue and groove** | Tongue in groove | Flooring, panelling | Tight, flat |",
+     "basics_md": "Every joint trades effort for strength. A butt joint is the easiest and weakest; mortise and tenon and dovetail take work but lock the pieces mechanically.",
+     "key_points": [
+      "Lap joint: half the thickness from each piece, flush faces",
+      "Mortise and tenon: tenon about one-third of the stock thickness; strongest frame joint",
+      "Dovetail: interlocking tails and pins, for drawers; resists pulling apart",
+      "Mitre at 45 degrees, dowel, butt, tongue and groove with a use each"
+     ],
+     "questions": [
+      {
+       "id": "j-q1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "In a lap (halving) joint the material removed from each piece is",
+       "options": [
+        "Full thickness of one piece",
+        "Half the thickness of each piece",
+        "One-third of each",
+        "None"
+       ],
+       "answer_index": 1,
+       "why": "Half from each makes the faces flush."
+      },
+      {
+       "id": "j-q2",
+       "kind": "mcq",
+       "level": 1,
+       "q": "Drawers are best joined at the corners by a",
+       "options": [
+        "Butt joint",
+        "Dovetail joint",
+        "Mitre joint",
+        "Cross-lap joint"
+       ],
+       "answer_index": 1,
+       "why": "The interlocking tails and pins resist the pull on the drawer front."
+      },
+      {
+       "id": "j-q3",
+       "kind": "numerical",
+       "level": 2,
+       "marks": 2,
+       "q": "A rail is 45 mm thick. What tenon thickness would you cut, and what is the dovetail angle for a slope of 1:6 in softwood?",
+       "model_answer_md": "Tenon thickness $\\approx T/3=45/3=15\\ \\mathrm{mm}$.\nDovetail angle $=\\tan^{-1}(1/6)=9.46^\\circ$ (about $9.5^\\circ$ from the vertical edge).",
+       "points": [
+        "Tenon about one-third of the thickness",
+        "15 mm",
+        "Angle = arctan(1/6) = 9.46 degrees"
+       ]
+      },
+      {
+       "id": "j-q4",
+       "kind": "short",
+       "level": 2,
+       "marks": 4,
+       "q": "Name four carpentry joints and state a use and an advantage of each.",
+       "model_answer_md": "1. **Cross-lap**: frames; flush surface.\n2. **Mortise and tenon**: doors and table legs; strongest frame joint.\n3. **Dovetail**: drawers; interlock resists pull.\n4. **Mitre**: picture frames; end grain hidden.",
+       "points": [
+        "Four joints named",
+        "Use for each",
+        "Advantage for each"
+       ]
+      },
+      {
+       "id": "j-p1",
+       "pyq": "954132729641f3ee",
+       "level": 3,
+       "points": [
+        "Table: lap, mortise and tenon, dovetail, mitre, dowel, butt, tongue and groove",
+        "Construction of each in a line with a sketch of members separated and assembled",
+        "Applications and advantages of each",
+        "Tools and role: gauge and square (mark), tenon saw (cheeks and shoulders), chisel and mallet (mortise), dovetail saw, mitre box, brace and bit, plough plane"
+       ]
+      }
+     ]
+    },
+    {
+     "id": "making-joints",
+     "title": "Steps to make a joint",
+     "theory_md": "**Mortise and tenon**:\n1. Select seasoned timber; plane to size and square.\n2. **Mark** with the mortise gauge from the face side; shoulder lines with try square and knife.\n3. **Cut the tenon**: clamp in the vice, saw the cheeks along the grain, then the shoulders across the grain.\n4. **Cut the mortise**: bore a row of holes inside the lines, or chop with mortise chisel and mallet; pare the walls.\n5. **Fit** and trim, check square.\n6. **Assemble**: glue, push home, peg or wedge, clamp, clean, plane and sand.\n\n**Cross or L halving**: mark width and half depth on both pieces, saw shoulders and cheeks to the depth line (in the waste), chisel out the waste, test fit.",
+     "basics_md": "Making a joint is marking exactly, sawing short of the line, then paring to fit. Test fit before gluing.",
+     "key_points": [
+      "Mark from face side with gauge and try square",
+      "Tenon cheeks along the grain, shoulders across, with tenon saw",
+      "Mortise by boring a row of holes or chopping, then paring",
+      "Test fit, glue, peg or wedge, clamp, finish",
+      "Halving: saw to half depth, chisel out waste"
+     ],
+     "questions": [
+      {
+       "id": "k-q1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "The cheeks of a tenon are cut with a",
+       "options": [
+        "Tenon saw along the grain",
+        "Rip saw across the grain",
+        "Coping saw",
+        "Mallet"
+       ],
+       "answer_index": 0,
+       "why": "The tenon (back) saw gives fine accurate cuts."
+      },
+      {
+       "id": "k-q2",
+       "kind": "mcq",
+       "level": 2,
+       "q": "A mortise is usually made by",
+       "options": [
+        "Planing",
+        "Boring holes inside the lines and chiselling out",
+        "Sawing both sides only",
+        "Filing"
+       ],
+       "answer_index": 1,
+       "why": "A brace and bit removes most waste; the mortise chisel and mallet finish it."
+      },
+      {
+       "id": "k-q3",
+       "kind": "short",
+       "level": 2,
+       "marks": 5,
+       "q": "State the steps to make a mortise and tenon joint, and sketch (describe) the finished joint.",
+       "model_answer_md": "**Steps**\n1. Select seasoned timber, plane to size, square.\n2. Mark mortise and tenon with the mortise gauge from the face side; shoulders with try square.\n3. Saw tenon cheeks (along the grain) and shoulders (across) with the tenon saw.\n4. Cut the mortise: bore holes with brace and bit, chop with mortise chisel and mallet, pare walls.\n5. Test fit and trim.\n6. Glue, assemble, drive a peg or wedge, clamp, clean and finish.\n\n**Sketch:** exploded and assembled view; rail with tongue (tenon) and shoulders, leg with rectangular slot (mortise).",
+       "points": [
+        "Select, plane, square and mark with gauge and try square",
+        "Saw tenon cheeks and shoulders",
+        "Cut and pare the mortise with brace, chisel, mallet",
+        "Fit, glue, peg or wedge, clamp, finish",
+        "Sketch of exploded and assembled joint"
+       ]
+      },
+      {
+       "id": "k-p1",
+       "pyq": "ddef2547a119334f",
+       "level": 2,
+       "points": [
+        "Mortise and tenon steps: season and plane, mark with mortise gauge, saw tenon cheeks and shoulders, bore and chisel mortise, fit, glue, wedge, clamp, finish",
+        "Cross halving: mark width and half depth on both, saw, chisel out waste, notches interlock flush",
+        "L (corner halving): same, notch at the end of each member",
+        "Sketches of mortise and tenon, cross halving and L-joint"
+       ]
+      }
+     ]
+    },
+    {
+     "id": "whole-jobs",
+     "title": "Planning a whole job: door, cot, table",
+     "theory_md": "A job question has four parts: **figure**, **joints**, **tools**, **operations**.\n\n**Panelled door**: vertical stiles; top, middle (lock) and bottom rails; panels in grooves. Joints: **mortise and tenon** (haunched at the top rail) for stile to rail, **tongue and groove** or rebate for the panel, **butt** for hinge leaves, **mitre** for mouldings.\n**Cot**: four legs, two long side rails, two short rails; **mortise and tenon** at each leg, dowel or bridle alternatives, halving for cross-bracing.\n**Study table**: legs and aprons by mortise and tenon, top fixed by buttons or screws, **dovetail** for the drawer.\n\nOperations: season, mark, saw, plane, chisel, dry fit, glue and clamp, finish.",
+     "basics_md": "Break any job into its frame, panels and fasteners. Frames use mortise and tenon, panels use a groove, drawers use dovetails.",
+     "key_points": [
+      "Draw a clear labelled figure",
+      "Mortise and tenon is the main joint of frames, doors, cots, tables",
+      "Tongue and groove or rebate for panels; dovetail for drawers; butt for hinges",
+      "List tools by class, then operations in order"
+     ],
+     "questions": [
+      {
+       "id": "w-q1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "The main joint between a door stile and a rail is the",
+       "options": [
+        "Mortise and tenon",
+        "Mitre",
+        "Butt",
+        "Cross-lap"
+       ],
+       "answer_index": 0,
+       "why": "It is the strongest frame joint and resists racking."
+      },
+      {
+       "id": "w-q2",
+       "kind": "mcq",
+       "level": 2,
+       "q": "A panel in a panelled door is fixed to the frame by",
+       "options": [
+        "Dovetail",
+        "Groove (tongue and groove or rebate)",
+        "Nails driven through the face",
+        "Mitre"
+       ],
+       "answer_index": 1,
+       "why": "The panel floats in a groove so it can expand without splitting."
+      },
+      {
+       "id": "w-q3",
+       "kind": "long",
+       "level": 2,
+       "marks": 5,
+       "q": "A wooden stool with four legs and a seat is to be made. Name the joints, the tools and the operations.",
+       "model_answer_md": "**Figure:** four legs, four rails below the seat, a square seat on top.\n\n**Joints:** mortise and tenon, leg to rail; dowel or screws to fix the seat; butt for any bracing.\n\n**Tools:** steel rule, try square, marking and mortise gauge; rip and tenon saw; jack and smoothing plane; mortise and firmer chisels, mallet; brace and bit; clamps and vice; sand paper.\n\n**Operations:**\n1. Season and rough cut the timber.\n2. Plane to size, square.\n3. Mark the joints.\n4. Saw tenons, cut mortises.\n5. Dry fit.\n6. Glue and clamp, fix the seat.\n7. Sand and polish.",
+       "points": [
+        "Labelled figure",
+        "Mortise and tenon, leg to rail, plus a seat fixing",
+        "Tools listed by class",
+        "Operations in correct order: season, plane, mark, saw, chisel, dry fit, glue, finish"
+       ]
+      },
+      {
+       "id": "w-p1",
+       "pyq": "85228b2d85836e3a",
+       "level": 2,
+       "points": [
+        "Diagram: stiles, top, middle and bottom rails, panels in grooves",
+        "Joints: mortise and tenon (haunched at top), tongue and groove or rebate for panel, dowel, butt for hinges, mitre for moulding",
+        "Tools: rule, try square, gauges, rip, cross-cut, tenon saws, jack, smoothing, plough planes, chisels, mallet, brace and bit, clamps, sand paper",
+        "Operations: season, plane, mark, saw tenons, chisel mortises, groove and fit panels, dry fit, glue and clamp, finish and fit hinges and lock"
+       ]
+      },
+      {
+       "id": "w-p2",
+       "pyq": "c679ff92a39eb0dd",
+       "level": 2,
+       "points": [
+        "Figure: rectangular frame of two long and two short rails, four legs, woven web",
+        "Joints: mortise and tenon (main), dowel or bridle, halving for bracing, butt with nails or screws",
+        "Tools: marking and measuring, holding (vice, clamps), cutting (saws), shaping (planes, chisels), boring (brace and bit, gimlet), striking and finishing",
+        "Sequence: seasoned timber, mark, saw, plane, cut joints, assemble with adhesive and pins, finish"
+       ]
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "topic": "Safety in the carpentry shop",
+   "subtopics": [
+    {
+     "id": "personal-shop",
+     "title": "Personal protection and shop housekeeping",
+     "theory_md": "**Personal**: apron and close-fitting clothes; no loose sleeves, ties or jewellery; tie long hair; safety shoes; **goggles** for chiselling, sanding and machine work; dust mask when sanding.\n**Shop**: floor free of shavings (slips and fire); no smoking or flames near wood dust and finishes; fire extinguisher and first-aid box within reach; report every injury; no horseplay.",
+     "basics_md": "Most shop accidents come from loose clothing, flying chips, slippery floors and fire. The rules just remove those causes.",
+     "key_points": [
+      "Apron, tight clothes, hair tied, no jewellery, safety shoes",
+      "Goggles for chiselling and machines; dust mask for sanding",
+      "Clean floor, no smoking near shavings, extinguisher and first aid ready",
+      "Report injuries; no horseplay"
+     ],
+     "questions": [
+      {
+       "id": "a-q1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "Goggles are most needed while",
+       "options": [
+        "Measuring",
+        "Chiselling, sanding and machine work",
+        "Reading the drawing",
+        "Cleaning the vice"
+       ],
+       "answer_index": 1,
+       "why": "Chips and dust fly into the eyes."
+      },
+      {
+       "id": "a-q2",
+       "kind": "mcq",
+       "level": 1,
+       "q": "Which of the following should NOT be worn in the shop?",
+       "options": [
+        "Close-fitting apron",
+        "Safety shoes",
+        "Loose sleeves and a tie",
+        "Goggles"
+       ],
+       "answer_index": 2,
+       "why": "They can catch in machines."
+      },
+      {
+       "id": "a-q3",
+       "kind": "short",
+       "level": 2,
+       "marks": 3,
+       "q": "State any five safety precautions to be observed in the carpentry shop.",
+       "model_answer_md": "1. Wear an apron and tight clothes; no loose sleeves or jewellery; tie long hair.\n2. Wear safety shoes and goggles for chiselling or machines.\n3. Keep the floor clear of shavings.\n4. No smoking or flame near wood dust.\n5. Keep a fire extinguisher and first-aid box ready.\n6. Report every injury.",
+       "points": [
+        "Close clothing and hair tied",
+        "Goggles and shoes",
+        "Clean floor",
+        "No fire hazards",
+        "First aid and reporting"
+       ]
+      }
+     ]
+    },
+    {
+     "id": "tools-machines",
+     "title": "Safe use of hand tools and machines",
+     "theory_md": "- Keep tools **sharp**: a blunt tool needs force and slips.\n- Never use a chisel or file without a **handle**; strike chisels with a **mallet**.\n- Cut **away from the body**, both hands **behind the cutting edge**.\n- Hold the work in a vice, bench hook or clamp.\n- Lay planes **on the side** (or retract the blade); carry sharp tools pointing down; never in pockets.\n- Check timber for **nails** before sawing or planing.\n- **Machines**: use guards, push sticks for short pieces, never adjust while running, switch off and wait until the cutter stops, one operator, know the emergency stop.",
+     "basics_md": "A slipping tool follows the push of your hand. Make sure the path it would take is empty: hands behind the edge, work clamped, edge away from the body.",
+     "key_points": [
+      "Sharp tools safer than blunt ones",
+      "Hands behind the edge, cut away from the body",
+      "Plane on its side, tools carried pointing down",
+      "Check for nails; clamp the work",
+      "Machines: guards, push stick, switch off before adjusting"
+     ],
+     "questions": [
+      {
+       "id": "b-q1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "A plane not in use should be kept",
+       "options": [
+        "On its sole with the blade out",
+        "On its side or with the blade retracted",
+        "In the apron pocket",
+        "Upside down on the floor"
+       ],
+       "answer_index": 1,
+       "why": "It protects the edge and the fingers."
+      },
+      {
+       "id": "b-q2",
+       "kind": "mcq",
+       "level": 2,
+       "q": "For feeding a short piece into a circular saw, the operator should use a",
+       "options": [
+        "Bare hand close to the blade",
+        "Push stick",
+        "Hammer",
+        "Glove"
+       ],
+       "answer_index": 1,
+       "why": "It keeps the fingers clear."
+      },
+      {
+       "id": "b-q3",
+       "kind": "short",
+       "level": 2,
+       "marks": 3,
+       "q": "Why is a sharp tool safer than a blunt one, and why must timber be checked for nails before planing or sawing?",
+       "model_answer_md": "A **sharp tool** cuts with little force and stays under control; a blunt one needs extra force, skids and can slip into the hand.\n\n A hidden **nail** chips or breaks the plane iron or saw teeth and can make the tool jerk or throw fragments, injuring the worker.",
+       "points": [
+        "Sharp tool needs less force, stays in control",
+        "Blunt tool slips",
+        "Nails damage the tool and cause jerks and flying fragments"
+       ]
+      },
+      {
+       "id": "b-q4",
+       "kind": "long",
+       "level": 3,
+       "marks": 5,
+       "q": "State any eight safety precautions in the carpentry shop.",
+       "model_answer_md": "1. Apron and tight clothing; no loose sleeves or jewellery; hair tied.\n2. Safety shoes; goggles for chiselling, sanding, machine work.\n3. Keep tools sharp and in good condition.\n4. Never use a chisel or file without a handle.\n5. Cut away from the body, hands behind the edge.\n6. Hold work in a vice, bench hook or clamp.\n7. Strike chisels only with a mallet.\n8. Lay planes on their side; carry sharp tools pointing down.\n9. Check timber for nails.\n10. Machines: guards and push sticks; never adjust while running.",
+       "points": [
+        "Personal protection (clothes, goggles, shoes)",
+        "Sharp tools with handles",
+        "Hands behind the edge, work clamped",
+        "Mallet for chisels, plane on its side",
+        "Nails checked; machine guards, push stick"
+       ]
+      }
+     ]
+    }
+   ]
+  }
+ ]
+}

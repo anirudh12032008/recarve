@@ -1,0 +1,905 @@
+{
+ "code": "EE1108",
+ "unit": "Bipolar Junction Transistor",
+ "written": "2026-10-19",
+ "by": "claude-sonnet-5-5, in a Claude Code session",
+ "topics": [
+  {
+   "topic": "Principle of operation of a BJT",
+   "subtopics": [
+    {
+     "id": "structure",
+     "title": "Structure, NPN and PNP",
+     "theory_md": "A **BJT** is a three-layer, two-junction device: **emitter** (heavily doped, injects carriers), **base** (very thin, lightly doped), **collector** (largest area, moderately doped, collects carriers). Two types: **NPN** (p base between n regions, electrons main carriers) and **PNP** (n base between p regions, holes main carriers). In the symbol the arrow is on the emitter and shows conventional current direction: out for NPN, in for PNP (\"Not Pointing iN\" for NPN). Both are **bipolar** because electrons and holes both take part. NPN is faster because electron mobility is higher.",
+     "basics_md": "Think of a sandwich where the middle slice is very thin. The two outer slices are of one semiconductor type and the thin middle is the opposite type. Which type is outside gives the name.",
+     "key_points": [
+      "Three regions: emitter (heavy), base (thin, light), collector (large area)",
+      "Two p-n junctions: emitter-base and collector-base",
+      "NPN: electrons main carriers; PNP: holes main carriers",
+      "Arrow on emitter: out for NPN, in for PNP"
+     ],
+     "questions": [
+      {
+       "id": "s-q1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "In a BJT the region that is thinnest and lightly doped is the",
+       "options": [
+        "emitter",
+        "base",
+        "collector",
+        "substrate"
+       ],
+       "answer_index": 1,
+       "why": "The thin, light base lets most carriers cross to the collector."
+      },
+      {
+       "id": "s-q2",
+       "kind": "mcq",
+       "level": 1,
+       "q": "The emitter arrow of a PNP transistor symbol points",
+       "options": [
+        "outward",
+        "inward, towards the base",
+        "along the collector",
+        "there is no arrow"
+       ],
+       "answer_index": 1,
+       "why": "Arrow shows conventional current: into the base from the p emitter."
+      },
+      {
+       "id": "s-q3",
+       "kind": "short",
+       "level": 2,
+       "marks": 3,
+       "q": "Differentiate between NPN and PNP transistors.",
+       "model_answer_md": "| Point | NPN | PNP |\n|---|---|---|\n| Structure | thin p base between n emitter and n collector | thin n base between p emitter and p collector |\n| Main carriers | electrons | holes |\n| Active biasing | $V_{BE}>0$, collector positive of base | $V_{EB}>0$, collector negative of base |\n| Conventional current | enters collector and base, leaves emitter | enters emitter, leaves base and collector |\n| Symbol arrow | emitter, pointing out | emitter, pointing in |\n| Speed | faster (electron mobility higher) | slower |",
+       "points": [
+        "Structure: p base between n regions (NPN), n base between p regions (PNP)",
+        "Main carriers: electrons (NPN), holes (PNP)",
+        "Biasing polarities reversed",
+        "Emitter arrow out (NPN), in (PNP)",
+        "NPN is faster"
+       ]
+      },
+      {
+       "id": "s-q4",
+       "kind": "mcq",
+       "level": 2,
+       "q": "Which statement about the three regions of a BJT is correct?",
+       "options": [
+        "Emitter is lightly doped, base is heavily doped",
+        "Collector has the smallest area",
+        "Emitter is heavily doped, base is thin and lightly doped",
+        "All three are equally doped"
+       ],
+       "answer_index": 2,
+       "why": "A wrong answer here is the mix-up of emitter and base doping; the emitter must inject many carriers, the base must pass them."
+      },
+      {
+       "id": "s-q5",
+       "kind": "short",
+       "level": 1,
+       "marks": 2,
+       "q": "Why is the base made thin and lightly doped, and the emitter heavily doped?",
+       "model_answer_md": "- Emitter heavily doped: injects a large number of majority carriers into the base.\n- Base thin and lightly doped: few recombinations, so most carriers reach the collector and $I_B$ is small.\n- Collector large: collects carriers and dissipates the heat.",
+       "points": [
+        "Emitter heavy doping gives many carriers",
+        "Thin light base means little recombination",
+        "Most carriers reach the collector",
+        "Collector large to dissipate heat"
+       ]
+      }
+     ]
+    },
+    {
+     "id": "working",
+     "title": "Working of an NPN transistor",
+     "theory_md": "Normal (active) bias: **emitter-base forward biased**, **collector-base reverse biased** ($V_{BE}\\approx0.7$ V for Si, $V_{CC}$ across the collector junction). The n emitter injects a large flow of electrons into the base. The base is thin and lightly doped, so only about 2 to 5% recombine with holes (this is the small $I_B$). The remaining 95 to 98% diffuse across and are swept into the collector by the strong reverse-bias field (this is $I_C$). So $I_E=I_B+I_C$, and a small $I_B$ controls a large $I_C$: this is **amplification**. For PNP the same holds with holes and reversed polarities.",
+     "basics_md": "A tap and a pipe: a small turn of the tap (base current) controls a large water flow (collector current). Forward bias opens the gate; the reverse-biased junction pulls everything through.",
+     "key_points": [
+      "Emitter-base forward biased, collector-base reverse biased",
+      "Emitter injects electrons; thin base so few recombine (2 to 5%)",
+      "Most electrons swept into collector: $I_C$",
+      "$I_E=I_B+I_C$; small $I_B$ controls large $I_C$"
+     ],
+     "questions": [
+      {
+       "id": "w-q1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "For a transistor to work as an amplifier, its junctions are biased",
+       "options": [
+        "both forward",
+        "both reverse",
+        "emitter-base forward, collector-base reverse",
+        "emitter-base reverse, collector-base forward"
+       ],
+       "answer_index": 2,
+       "why": "Active region: BE forward, CB reverse."
+      },
+      {
+       "id": "w-q2",
+       "kind": "mcq",
+       "level": 2,
+       "q": "In an NPN transistor most of the emitter current reaches the collector because",
+       "options": [
+        "the base is thick",
+        "the base is thin and lightly doped, so few electrons recombine",
+        "the collector is forward biased",
+        "holes carry the current"
+       ],
+       "answer_index": 1,
+       "why": "Thin light base means low recombination."
+      },
+      {
+       "id": "w-q3",
+       "kind": "short",
+       "level": 2,
+       "marks": 4,
+       "q": "Explain the working of an n-p-n transistor.",
+       "model_answer_md": "### Working of an n-p-n transistor\n- Emitter-base junction **forward biased** ($V_{BE}\\approx0.7$ V), collector-base junction **reverse biased** ($V_{CC}$).\n- The heavily doped emitter injects many electrons into the base: emitter current $I_E$.\n- The base is thin and lightly doped: about 2 to 5% of the electrons recombine with holes, forming the small base current $I_B$.\n- The other 95 to 98% are swept into the collector by the reverse-bias field: collector current $I_C$.\n- $I_E=I_B+I_C$; a small change in $I_B$ gives a large change in $I_C$ ($I_C=\\beta I_B$): amplification.\n- Diagram: n-p-n block with $V_{EB}$ forward and $V_{CB}$ reverse, arrows for $I_E$, $I_B$, $I_C$.",
+       "points": [
+        "Junction biasing: EB forward, CB reverse",
+        "Emitter injects electrons",
+        "Few recombine in thin base: $I_B$",
+        "Rest swept to collector: $I_C$",
+        "$I_E=I_B+I_C$ and amplification idea",
+        "Labelled diagram"
+       ]
+      },
+      {
+       "id": "w-p1",
+       "pyq": "e5217f781fdad593",
+       "level": 3,
+       "points": [
+        "Differentiate p-n-p and n-p-n: structure, carriers, polarity, arrow, speed",
+        "Working of n-p-n: EB forward, CB reverse; emitter injects electrons, 2 to 5% recombine in base ($I_B$), rest swept to collector ($I_C$); $I_E=I_B+I_C$",
+        "CE input characteristics: $I_B$ vs $V_{BE}$ at constant $V_{CE}$, diode-like, cut-in about 0.7 V, shifts right with $V_{CE}$",
+        "CE output characteristics: $I_C$ vs $V_{CE}$ at constant $I_B$; steep rise then flat; Early effect",
+        "Active, saturation and cut-off regions marked on the output curves"
+       ]
+      }
+     ]
+    },
+    {
+     "id": "currents",
+     "title": "Current relations: alpha, beta, gamma",
+     "theory_md": "$I_E=I_B+I_C$. **Common-base gain** $\\alpha=I_C/I_E$ (0.95 to 0.995, always less than 1). **Common-emitter gain** $\\beta=I_C/I_B$ (50 to 300). **Common-collector gain** $\\gamma=I_E/I_B=1+\\beta$. Relations: $\\beta=\\dfrac{\\alpha}{1-\\alpha}$, $\\alpha=\\dfrac{\\beta}{1+\\beta}$. With leakage: $I_C=\\alpha I_E+I_{CBO}$ and $I_C=\\beta I_B+(1+\\beta)I_{CBO}$, where $I_{CEO}=(1+\\beta)I_{CBO}$ is the collector current with base open.",
+     "basics_md": "Out of every 100 electrons leaving the emitter, say 98 reach the collector: alpha = 0.98. The 2 lost are the base current. Beta just compares the 98 with the 2: 49.",
+     "key_points": [
+      "$I_E=I_B+I_C$",
+      "$\\alpha=I_C/I_E<1$; $\\beta=I_C/I_B$",
+      "$\\beta=\\alpha/(1-\\alpha)$ and $\\alpha=\\beta/(1+\\beta)$",
+      "$I_{CEO}=(1+\\beta)I_{CBO}$"
+     ],
+     "questions": [
+      {
+       "id": "c-q1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "The relation between $\\alpha$ and $\\beta$ is",
+       "options": [
+        "$\\beta=\\alpha/(1+\\alpha)$",
+        "$\\beta=\\alpha/(1-\\alpha)$",
+        "$\\beta=1/(1-\\alpha)$",
+        "$\\beta=(1-\\alpha)/\\alpha$"
+       ],
+       "answer_index": 1,
+       "why": "Divide $\\alpha=I_C/I_E$ by $1-\\alpha=I_B/I_E$. Option C is $\\gamma=1+\\beta$, a different gain."
+      },
+      {
+       "id": "c-q2",
+       "kind": "mcq",
+       "level": 2,
+       "q": "A transistor has $\\beta=100$. Its $\\alpha$ is about",
+       "options": [
+        "0.99",
+        "0.90",
+        "1.01",
+        "0.50"
+       ],
+       "answer_index": 0,
+       "why": "$\\alpha=100/101=0.9901$. Alpha can never exceed 1."
+      },
+      {
+       "id": "c-q3",
+       "kind": "numerical",
+       "level": 2,
+       "marks": 3,
+       "q": "A transistor has $\\alpha=0.98$ and emitter current $2$ mA. Find $\\beta$, $I_C$ and $I_B$.",
+       "model_answer_md": "$\\beta=\\dfrac{\\alpha}{1-\\alpha}=\\dfrac{0.98}{0.02}=49$\n\n$I_C=\\alpha I_E=0.98\\times2=1.96$ mA\n\n$I_B=I_E-I_C=2-1.96=0.04$ mA $=40\\ \\mu$A\n\nCheck: $I_C/\\beta=1.96/49=0.04$ mA.",
+       "points": [
+        "$\\beta=\\alpha/(1-\\alpha)=49$",
+        "$I_C=\\alpha I_E=1.96$ mA",
+        "$I_B=I_E-I_C=40\\ \\mu$A with units"
+       ]
+      },
+      {
+       "id": "c-q4",
+       "kind": "numerical",
+       "level": 3,
+       "marks": 3,
+       "q": "A transistor has $\\beta=100$ and $I_B=40\\ \\mu$A. Find $I_C$, $I_E$ and $\\alpha$.",
+       "model_answer_md": "$I_C=\\beta I_B=100\\times40\\ \\mu A=4$ mA\n\n$I_E=I_B+I_C=0.04+4=4.04$ mA\n\n$\\alpha=\\dfrac{\\beta}{1+\\beta}=\\dfrac{100}{101}=0.990$",
+       "points": [
+        "$I_C=\\beta I_B=4$ mA",
+        "$I_E=I_B+I_C=4.04$ mA",
+        "$\\alpha=\\beta/(1+\\beta)=0.990$"
+       ]
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "topic": "CB configuration characteristics",
+   "subtopics": [
+    {
+     "id": "cb-input",
+     "title": "CB circuit and input characteristics",
+     "theory_md": "In **common base** the base is common: input between emitter and base ($V_{EB}$, $I_E$), output between collector and base ($V_{CB}$, $I_C$). $V_{EE}$ forward biases the emitter junction; $V_{CC}$ reverse biases the collector junction. **Input characteristics**: $I_E$ vs $V_{EB}$ at constant $V_{CB}$. The curve is a forward diode: negligible below cut-in (about 0.5 to 0.7 V Si), then rising fast. Higher $V_{CB}$ shifts the curve **left** (Early effect). Input resistance $r_i=\\Delta V_{EB}/\\Delta I_E$ is very low (tens of ohms).",
+     "basics_md": "A diode curve: no current until about 0.7 V, then a sudden rise. In CB the input is just the emitter-base diode, so it looks like a diode.",
+     "key_points": [
+      "Input: $I_E$ vs $V_{EB}$ at constant $V_{CB}$",
+      "Diode-like, cut-in about 0.7 V (Si)",
+      "Larger $V_{CB}$ shifts curve left (base-width modulation)",
+      "Input resistance very low (tens of ohms)"
+     ],
+     "questions": [
+      {
+       "id": "i-q1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "In the CB input characteristics the quantity kept constant is",
+       "options": [
+        "$V_{EB}$",
+        "$V_{CB}$",
+        "$I_C$",
+        "$I_B$"
+       ],
+       "answer_index": 1,
+       "why": "Plotted $I_E$ against $V_{EB}$ at constant $V_{CB}$."
+      },
+      {
+       "id": "i-q2",
+       "kind": "mcq",
+       "level": 2,
+       "q": "The input resistance of a CB amplifier is",
+       "options": [
+        "very high (MΩ)",
+        "very low (tens of ohms)",
+        "about 1 kΩ always",
+        "infinite"
+       ],
+       "answer_index": 1,
+       "why": "It is a forward-biased diode. High input resistance belongs to CC; MΩ output resistance belongs to CB."
+      },
+      {
+       "id": "i-q3",
+       "kind": "short",
+       "level": 2,
+       "marks": 5,
+       "q": "Draw the circuit and explain the input characteristics of an NPN transistor in CB configuration.",
+       "model_answer_md": "### Circuit\nNPN with base common. $V_{EE}$ and a rheostat forward bias the emitter-base junction; $V_{CC}$ reverse biases the collector-base junction. Milliammeter in the emitter lead ($I_E$), milliammeter in the collector lead ($I_C$), voltmeters across EB ($V_{EB}$) and CB ($V_{CB}$).\n\n### Input characteristics ($I_E$ vs $V_{EB}$ at constant $V_{CB}$)\n- Like a forward-biased diode: $I_E$ is negligible until $V_{EB}$ reaches the cut-in voltage (about 0.7 V Si), then rises rapidly.\n- Increasing $V_{CB}$ shifts the curve to the **left** (more $I_E$ for the same $V_{EB}$): the base narrows (Early effect).\n- $r_i=\\dfrac{\\Delta V_{EB}}{\\Delta I_E}\\Big|_{V_{CB}}$ is very low (tens of ohms).",
+       "points": [
+        "Circuit with base common, EB forward, CB reverse",
+        "$I_E$ vs $V_{EB}$ at constant $V_{CB}$",
+        "Diode-like with cut-in voltage",
+        "Curve shifts left with $V_{CB}$",
+        "$r_i$ low"
+       ]
+      }
+     ]
+    },
+    {
+     "id": "cb-output",
+     "title": "CB output characteristics and regions",
+     "theory_md": "**Output characteristics**: $I_C$ vs $V_{CB}$ at constant $I_E$ (curves for $I_E=0,1,2,3$ mA...).\n- **Active** ($V_{CB}>0$): curves nearly horizontal, $I_C\\approx\\alpha I_E$; output resistance very high (MΩ).\n- **Saturation** (small negative $V_{CB}$): collector junction becomes forward biased, $I_C$ falls sharply to zero.\n- **Cut-off** ($I_E=0$ curve): only reverse leakage $I_{CBO}$.\nCurrent gain $\\alpha=\\Delta I_C/\\Delta I_E$ is **slightly less than 1** (0.95 to 0.995), so CB gives no current gain, only voltage gain.",
+     "basics_md": "Whatever you push in at the emitter comes out at the collector, nearly unchanged, whatever voltage you put on the collector. That is why the curves are flat.",
+     "key_points": [
+      "Output: $I_C$ vs $V_{CB}$ at constant $I_E$",
+      "Active: flat, $I_C\\approx\\alpha I_E$, $r_o$ very high",
+      "Saturation: $V_{CB}<0$, both junctions forward",
+      "Cut-off: $I_E=0$, $I_C=I_{CBO}$",
+      "$\\alpha$ slightly less than 1"
+     ],
+     "questions": [
+      {
+       "id": "o-q1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "In a CB configuration the current gain $\\alpha$ is",
+       "options": [
+        "greater than 1",
+        "slightly less than 1",
+        "exactly 1",
+        "about 100"
+       ],
+       "answer_index": 1,
+       "why": "Collector gets slightly less than the emitter current. Large gain is a CE feature."
+      },
+      {
+       "id": "o-q2",
+       "kind": "mcq",
+       "level": 2,
+       "q": "In CB output characteristics the saturation region lies",
+       "options": [
+        "at large positive $V_{CB}$",
+        "at small negative $V_{CB}$, where the collector junction turns forward",
+        "along the $I_E=0$ curve",
+        "where $I_C$ is largest"
+       ],
+       "answer_index": 1,
+       "why": "The common mistake is placing saturation on the $I_E=0$ curve, which is cut-off."
+      },
+      {
+       "id": "o-q3",
+       "kind": "short",
+       "level": 2,
+       "marks": 5,
+       "q": "Explain the output characteristics of a CB transistor and label active, saturation and cut-off regions.",
+       "model_answer_md": "### Output characteristics ($I_C$ vs $V_{CB}$ at constant $I_E$)\nFamily of curves for $I_E=0,1,2,3$ mA.\n- **Active region** (right of the vertical axis, $V_{CB}>0$): $I_C\\approx\\alpha I_E$, almost independent of $V_{CB}$; curves nearly horizontal. $r_o=\\Delta V_{CB}/\\Delta I_C$ very high (MΩ).\n- **Saturation region** (left of the axis, small negative $V_{CB}$): CB junction forward biased, $I_C$ falls rapidly to zero.\n- **Cut-off region** (below the $I_E=0$ curve): only leakage $I_{CBO}$.\n- Current gain $\\alpha=\\Delta I_C/\\Delta I_E$, slightly below 1 (0.95 to 0.995).",
+       "points": [
+        "Axes and constant $I_E$ stated",
+        "Active region: flat, $I_C\\approx\\alpha I_E$",
+        "Saturation at negative $V_{CB}$",
+        "Cut-off along $I_E=0$ with $I_{CBO}$",
+        "$\\alpha<1$, high $r_o$"
+       ]
+      },
+      {
+       "id": "o-p1",
+       "pyq": "75f26c212e60399a",
+       "level": 3,
+       "points": [
+        "Applications: amplifier, electronic switch, oscillator, regulator, logic gates, buffer",
+        "CB circuit: base common, $V_{EE}$ forward on EB, $V_{CC}$ reverse on CB, meters for $I_E$, $I_C$, $V_{EB}$, $V_{CB}$",
+        "Input: $I_E$ vs $V_{EB}$ at constant $V_{CB}$, diode-like, shifts left with $V_{CB}$, $r_i$ low",
+        "Output: $I_C$ vs $V_{CB}$ at constant $I_E$; active (flat), saturation ($V_{CB}<0$), cut-off ($I_E=0$)",
+        "$\\alpha=\\Delta I_C/\\Delta I_E$ slightly less than 1"
+       ]
+      }
+     ]
+    },
+    {
+     "id": "applications",
+     "title": "Applications of a BJT",
+     "theory_md": "A BJT is used as: an **amplifier** (audio, RF, small-signal voltage and power amplifiers) in the active region; an **electronic switch** (OFF in cut-off, ON in saturation), the basis of digital logic gates and relay drivers; **oscillators**; **voltage regulators** (series pass element); **current sources**; and **buffers** for impedance matching (CC). Each configuration has its job: CB for high-frequency and low-input-impedance uses, CE for general amplification, CC as a buffer.",
+     "basics_md": "Anything that needs a small signal to control a bigger one, or a fast electronic on/off, can use a transistor.",
+     "key_points": [
+      "Amplifier (active region)",
+      "Switch (cut-off and saturation), logic gates",
+      "Oscillator, regulator, current source",
+      "Buffer or impedance matching (CC)"
+     ],
+     "questions": [
+      {
+       "id": "a-q1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "A BJT used as an electronic switch operates between",
+       "options": [
+        "active and saturation",
+        "cut-off and saturation",
+        "active and cut-off",
+        "breakdown and saturation"
+       ],
+       "answer_index": 1,
+       "why": "OFF in cut-off, ON in saturation. Active is for amplifiers."
+      },
+      {
+       "id": "a-q2",
+       "kind": "short",
+       "level": 2,
+       "marks": 3,
+       "q": "List four applications of a BJT and name the region used for each.",
+       "model_answer_md": "- Amplifier (audio, RF): active region.\n- Electronic switch (relay driver, logic gate): cut-off for OFF, saturation for ON.\n- Oscillator: active region with feedback.\n- Voltage regulator (series pass element) and current source: active region.\n- Buffer for impedance matching: CC configuration.",
+       "points": [
+        "At least four applications named",
+        "Amplifier uses active region",
+        "Switch uses cut-off and saturation"
+       ]
+      },
+      {
+       "id": "a-q3",
+       "kind": "mcq",
+       "level": 2,
+       "q": "Which use of a BJT needs the transistor in the active region?",
+       "options": [
+        "relay driver",
+        "logic gate",
+        "small-signal amplifier",
+        "push-button switch"
+       ],
+       "answer_index": 2,
+       "why": "Switches and logic gates swing between cut-off and saturation; linear amplification needs the active region."
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "topic": "CE configuration characteristics",
+   "subtopics": [
+    {
+     "id": "ce-input",
+     "title": "CE circuit and input characteristics",
+     "theory_md": "In **common emitter** the emitter is common: input between base and emitter ($V_{BE}$, $I_B$), output between collector and emitter ($V_{CE}$, $I_C$). Circuit: $V_{BB}$ with a rheostat, microammeter for $I_B$, voltmeter for $V_{BE}$; $V_{CC}$ with a rheostat, milliammeter for $I_C$, voltmeter for $V_{CE}$. **Input characteristics**: $I_B$ vs $V_{BE}$ at constant $V_{CE}$. Diode-like: $I_B\\approx0$ below cut-in (0.5 to 0.7 V Si), then steep. Increasing $V_{CE}$ shifts the curve slightly **right** (Early effect, less recombination). $r_i=\\Delta V_{BE}/\\Delta I_B\\approx1$ k$\\Omega$.",
+     "basics_md": "In CE the input is again the base-emitter diode, but now we measure the small base current, so the curve is in microamps and the resistance is about 1 kΩ.",
+     "key_points": [
+      "Input: $I_B$ vs $V_{BE}$ at constant $V_{CE}$",
+      "Diode-like, cut-in about 0.7 V (Si)",
+      "Higher $V_{CE}$ shifts curve right (Early effect)",
+      "$r_i$ about 1 kΩ (moderate)"
+     ],
+     "questions": [
+      {
+       "id": "ci-q1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "The CE input characteristic is a plot of",
+       "options": [
+        "$I_C$ vs $V_{CE}$",
+        "$I_B$ vs $V_{BE}$ at constant $V_{CE}$",
+        "$I_E$ vs $V_{EB}$ at constant $V_{CB}$",
+        "$I_C$ vs $I_B$"
+       ],
+       "answer_index": 1,
+       "why": "Option C is the CB input; D is the transfer characteristic."
+      },
+      {
+       "id": "ci-q2",
+       "kind": "mcq",
+       "level": 2,
+       "q": "As $V_{CE}$ is increased the CE input curve",
+       "options": [
+        "shifts slightly right",
+        "shifts left",
+        "does not change at all",
+        "becomes a straight line"
+       ],
+       "answer_index": 0,
+       "why": "Wider collector depletion layer narrows the base, less recombination, less $I_B$ at the same $V_{BE}$. Left shift is the CB behaviour."
+      },
+      {
+       "id": "ci-q3",
+       "kind": "short",
+       "level": 2,
+       "marks": 3,
+       "q": "Draw and explain the input characteristics of a CE transistor.",
+       "model_answer_md": "### Circuit\nNPN, emitter common. $V_{BB}$ + rheostat, microammeter in base ($I_B$), voltmeter across BE ($V_{BE}$); $V_{CC}$ in the collector circuit, voltmeter across CE ($V_{CE}$).\n\n### Curve ($I_B$ vs $V_{BE}$ at constant $V_{CE}$)\n- Like a forward diode: $I_B\\approx0$ until the cut-in voltage (about 0.7 V Si), then rises steeply.\n- Larger $V_{CE}$ shifts the curve slightly to the right (Early effect).\n- $r_i=\\dfrac{\\Delta V_{BE}}{\\Delta I_B}\\Big|_{V_{CE}}\\approx1$ k$\\Omega$.",
+       "points": [
+        "Circuit with meters",
+        "Diode-like curve with cut-in",
+        "Right shift with $V_{CE}$ and reason",
+        "$r_i$ definition and value"
+       ]
+      }
+     ]
+    },
+    {
+     "id": "ce-output",
+     "title": "CE output characteristics and regions",
+     "theory_md": "**Output characteristics**: $I_C$ vs $V_{CE}$ at constant $I_B$ (family for $I_B=0,20,40,60\\ \\mu$A...). $I_C$ rises steeply for $V_{CE}$ up to about 0.2 V, then is almost flat, with a slight rise (Early effect: wider collector depletion, thinner base, higher $\\beta$). Flat part: $I_C\\approx\\beta I_B$. $r_o=\\Delta V_{CE}/\\Delta I_C$ is high (tens of kΩ).\n\n| Region | Position | Junctions | Use |\n|---|---|---|---|\n| Active | flat part | BE fwd, CB rev | amplifier |\n| Saturation | steep part, $V_{CE}\\le0.2$ V | both fwd | switch ON |\n| Cut-off | below $I_B=0$, $I_C=I_{CEO}$ | both rev | switch OFF |",
+     "basics_md": "Each curve is one fixed base current. Raise the collector voltage and the current climbs quickly, then levels off because the collector has already collected nearly everything the base lets through.",
+     "key_points": [
+      "Output: $I_C$ vs $V_{CE}$ at constant $I_B$",
+      "Steep rise, then flat; slight slope is Early effect",
+      "Active: BE forward, CB reverse",
+      "Saturation: both forward, $V_{CE(sat)}\\approx0.2$ V",
+      "Cut-off: $I_B=0$, $I_C=I_{CEO}$, both reverse"
+     ],
+     "questions": [
+      {
+       "id": "co-q1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "The active region of a CE transistor is the region where",
+       "options": [
+        "both junctions are forward biased",
+        "both junctions are reverse biased",
+        "BE is forward and CB is reverse biased",
+        "BE is reverse and CB is forward biased"
+       ],
+       "answer_index": 2,
+       "why": "A and B are saturation and cut-off."
+      },
+      {
+       "id": "co-q2",
+       "kind": "mcq",
+       "level": 2,
+       "q": "At cut-off in CE the collector current is",
+       "options": [
+        "exactly zero",
+        "$I_{CEO}$, a small leakage",
+        "$\\beta I_B$",
+        "$V_{CC}/R_C$"
+       ],
+       "answer_index": 1,
+       "why": "With $I_B=0$ a small $I_{CEO}=(1+\\beta)I_{CBO}$ still flows; $V_{CC}/R_C$ is the saturation current."
+      },
+      {
+       "id": "co-q3",
+       "kind": "short",
+       "level": 2,
+       "marks": 5,
+       "q": "Explain the CE output characteristics. Mark the active, saturation and cut-off regions.",
+       "model_answer_md": "### Output characteristics ($I_C$ vs $V_{CE}$ at constant $I_B$)\nFamily of curves for $I_B=0,20,40,60\\ \\mu$A.\n- $I_C$ rises steeply for $V_{CE}$ from 0 to about 0.2 V, then is almost flat, rising slightly (Early effect).\n- In the flat part $I_C\\approx\\beta I_B$; larger $I_B$ gives a higher curve.\n- $r_o=\\dfrac{\\Delta V_{CE}}{\\Delta I_C}\\Big|_{I_B}$ high; $\\beta=\\dfrac{\\Delta I_C}{\\Delta I_B}\\Big|_{V_{CE}}$.\n\n| Region | Where | Junctions | Use |\n|---|---|---|---|\n| Active | flat part | BE fwd, CB rev | amplifier |\n| Saturation | steep part, $V_{CE}\\le0.2$ V | both fwd | switch ON |\n| Cut-off | below $I_B=0$ | both rev | switch OFF |",
+       "points": [
+        "Axes and constant $I_B$ stated",
+        "Steep rise then flat, Early effect",
+        "Active region, $I_C\\approx\\beta I_B$",
+        "Saturation, $V_{CE(sat)}\\approx0.2$ V",
+        "Cut-off, $I_{CEO}$",
+        "Labelled graph"
+       ]
+      },
+      {
+       "id": "co-p1",
+       "pyq": "f22c6b619688d9c0",
+       "level": 2,
+       "points": [
+        "Circuit: NPN with emitter common, meters for $I_B$, $I_C$, $V_{BE}$, $V_{CE}$",
+        "Input: $I_B$ vs $V_{BE}$, diode-like, shifts right with $V_{CE}$, $r_i$ about 1 kΩ",
+        "Output: $I_C$ vs $V_{CE}$ for several $I_B$, steep then flat",
+        "Regions marked: active, saturation, cut-off with bias conditions",
+        "Early effect gives the slight rise in the active region"
+       ]
+      },
+      {
+       "id": "co-p2",
+       "pyq": "58af5099a1466d70",
+       "level": 2,
+       "points": [
+        "Circuit and meters stated",
+        "Input characteristic and its features",
+        "Output characteristic family with $I_C\\approx\\beta I_B$",
+        "Three regions labelled on the diagram",
+        "Load line $V_{CE}=V_{CC}-I_CR_C$ and Q-point in the active region (extra credit)"
+       ]
+      },
+      {
+       "id": "co-p3",
+       "pyq": "bccd36ff481ab79a",
+       "level": 2,
+       "points": [
+        "NPN vs PNP: structure, carriers, polarity, arrow, speed",
+        "CE input characteristics with circuit",
+        "CE output characteristics, $\\beta$, $r_o$",
+        "Active, saturation, cut-off regions on the graph"
+       ]
+      },
+      {
+       "id": "co-p4",
+       "pyq": "98517e2dfd5ee6a4",
+       "level": 3,
+       "points": [
+        "NPN and PNP explained: structure, carriers, polarity, arrow",
+        "CE: input, output and transfer (slope $\\beta$, intercept $I_{CEO}$)",
+        "CC: input ($I_B$ vs $V_{CB}$), output ($I_E$ vs $V_{CE}$), transfer ($I_E$ vs $I_B$, slope $1+\\beta$)",
+        "CC has voltage gain about 1, no phase reversal, buffer"
+       ]
+      }
+     ]
+    },
+    {
+     "id": "ce-transfer",
+     "title": "Transfer characteristic and beta",
+     "theory_md": "**Transfer characteristic** (CE): $I_C$ vs $I_B$ at constant $V_{CE}$. It is nearly a straight line, slope $\\beta=\\Delta I_C/\\Delta I_B$ (DC: $\\beta_{dc}=I_C/I_B$), with a small intercept $I_{CEO}$ on the $I_C$ axis. Leakage form: $I_C=\\beta I_B+I_{CEO}$, $I_{CEO}=(1+\\beta)I_{CBO}$. CE has high current gain and high voltage gain, **phase reversal of 180 degrees**, and medium input and output resistance, so it is the usual amplifier.",
+     "basics_md": "If every microamp of base current gives about a hundred times as much collector current, plotting one against the other gives a straight line with slope 100.",
+     "key_points": [
+      "Transfer: $I_C$ vs $I_B$ at constant $V_{CE}$",
+      "Straight line, slope $\\beta$",
+      "Intercept $I_{CEO}$",
+      "CE: high gain, 180 degree phase shift"
+     ],
+     "questions": [
+      {
+       "id": "ct-q1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "The slope of the CE transfer characteristic is",
+       "options": [
+        "$\\alpha$",
+        "$\\beta$",
+        "$1+\\beta$",
+        "$r_i$"
+       ],
+       "answer_index": 1,
+       "why": "Slope of $I_C$ vs $I_B$ is $\\beta$. Slope $1+\\beta$ belongs to the CC transfer ($I_E$ vs $I_B$)."
+      },
+      {
+       "id": "ct-q2",
+       "kind": "mcq",
+       "level": 2,
+       "q": "A CE amplifier output is out of phase with its input by",
+       "options": [
+        "0 degrees",
+        "90 degrees",
+        "180 degrees",
+        "360 degrees"
+       ],
+       "answer_index": 2,
+       "why": "An increase in $I_B$ raises $I_C$, which lowers $V_{CE}$. CC has no phase reversal."
+      },
+      {
+       "id": "ct-q3",
+       "kind": "numerical",
+       "level": 2,
+       "marks": 2,
+       "q": "A transistor has $\\beta=100$, $I_{CBO}=2\\ \\mu$A and $I_B=40\\ \\mu$A. Find $I_C$ in CE.",
+       "model_answer_md": "$I_{CEO}=(1+\\beta)I_{CBO}=101\\times2\\ \\mu A=202\\ \\mu A$\n\n$I_C=\\beta I_B+I_{CEO}=100\\times40+202=4202\\ \\mu A\\approx4.2$ mA",
+       "points": [
+        "$I_{CEO}=(1+\\beta)I_{CBO}=202\\ \\mu$A",
+        "$I_C=\\beta I_B+I_{CEO}=4.2$ mA"
+       ]
+      }
+     ]
+    },
+    {
+     "id": "ce-numerical",
+     "title": "CE numericals: KVL, load line, base current",
+     "theory_md": "Collector loop (KVL): $V_{CE}=V_{CC}-I_CR_C$. Base current: $I_B=I_C/\\beta$ with $\\beta=\\alpha/(1-\\alpha)$. **DC load line** joins $(V_{CE}=V_{CC},\\,I_C=0)$ (cut-off) to $(V_{CE}=0,\\,I_C=V_{CC}/R_C)$ (saturation). The Q-point is where the line meets the chosen $I_B$ curve. Base resistor: $R_B=(V_{CC}-V_{BE})/I_B$ with $V_{BE}=0.7$ V. Steps: find $I_C$, then $V_{CE}$, then $I_B$.",
+     "basics_md": "Treat the collector circuit like a simple series loop: supply, resistor, transistor. Voltage left over after the resistor is what the transistor gets.",
+     "key_points": [
+      "$V_{CE}=V_{CC}-I_CR_C$",
+      "$\\beta=\\alpha/(1-\\alpha)$, $I_B=I_C/\\beta$",
+      "Load line ends: $V_{CC}$ and $V_{CC}/R_C$",
+      "Always give units"
+     ],
+     "questions": [
+      {
+       "id": "cn-q1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "The saturation end of the DC load line is at",
+       "options": [
+        "$I_C=0,\\ V_{CE}=V_{CC}$",
+        "$I_C=V_{CC}/R_C,\\ V_{CE}=0$",
+        "$I_C=V_{CC},\\ V_{CE}=R_C$",
+        "$I_C=\\beta I_B,\\ V_{CE}=V_{CC}$"
+       ],
+       "answer_index": 1,
+       "why": "Option A is the cut-off end."
+      },
+      {
+       "id": "cn-p1",
+       "pyq": "fad2a399d48fae00",
+       "level": 2,
+       "points": [
+        "$V_{CE}=V_{CC}-I_CR_C$",
+        "$V_{CE}=10-0.6=9.4$ V",
+        "Units stated"
+       ]
+      },
+      {
+       "id": "cn-p2",
+       "pyq": "b810e771ca346c5e",
+       "level": 2,
+       "points": [
+        "$I_C=0.6/600=1$ mA",
+        "$\\beta=\\alpha/(1-\\alpha)=0.95/0.05=19$",
+        "$I_B=I_C/\\beta=52.6\\ \\mu$A",
+        "Check with $I_E=I_C/\\alpha$ optional"
+       ]
+      },
+      {
+       "id": "cn-q3",
+       "kind": "numerical",
+       "level": 2,
+       "marks": 4,
+       "q": "In a CE circuit $V_{CC}=12$ V, $R_C=2$ k$\\Omega$, $\\beta=100$ and $I_B=40\\ \\mu$A. Find $I_C$, $V_{CE}$ and the two ends of the DC load line.",
+       "model_answer_md": "$I_C=\\beta I_B=100\\times40\\ \\mu A=4$ mA\n\n$V_{CE}=V_{CC}-I_CR_C=12-4\\times2=4$ V\n\nLoad line: cut-off point $(V_{CE},I_C)=(12\\text{ V},0)$; saturation point $(0,\\,12/2\\text{ k}\\Omega)=(0,\\,6\\text{ mA})$. Q-point $(4\\text{ V},4\\text{ mA})$ lies on it, inside the active region.",
+       "points": [
+        "$I_C=\\beta I_B=4$ mA",
+        "$V_{CE}=4$ V",
+        "Load line ends 12 V and 6 mA",
+        "Q-point in active region"
+       ]
+      },
+      {
+       "id": "cn-q4",
+       "kind": "mcq",
+       "level": 2,
+       "q": "For $V_{CC}=10$ V and $R_C=600\\ \\Omega$ a student finds $V_{CE}=V_{CC}+I_CR_C$. The error is",
+       "options": [
+        "none, it is correct",
+        "the drop across $R_C$ must be subtracted from $V_{CC}$",
+        "$R_C$ should be in kΩ",
+        "$V_{CE}$ should equal $V_{CC}$"
+       ],
+       "answer_index": 1,
+       "why": "KVL: $V_{CC}=I_CR_C+V_{CE}$, so $V_{CE}=V_{CC}-I_CR_C$."
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "topic": "CC configuration characteristics",
+   "subtopics": [
+    {
+     "id": "cc-input",
+     "title": "CC circuit and input characteristics",
+     "theory_md": "In **common collector** (emitter follower) the collector is common: input between base and collector ($V_{CB}$, $I_B$), output between emitter and collector ($V_{CE}$, $I_E$). Circuit: $V_{BB}$ + rheostat drives the base, $V_{EE}$ supplies the emitter-collector loop; meters for $I_B$, $I_E$, $V_{CB}$, $V_{CE}$. **Input characteristics**: $I_B$ vs $V_{CB}$ at constant $V_{CE}$. Since $V_{BE}=V_{CE}-V_{CB}$, as $V_{CB}$ rises the BE forward bias falls and $I_B$ **decreases**, reaching zero near $V_{CB}=V_{CE}-V_{BE(cut\\text{-}in)}$. A higher $V_{CE}$ shifts the curve right. Unlike CE and CB, this is not a diode curve.",
+     "basics_md": "The input voltage is measured from base to collector, but the junction that matters is base to emitter. Raising $V_{CB}$ eats into the voltage across the emitter junction, so the base current falls.",
+     "key_points": [
+      "Input: $I_B$ vs $V_{CB}$ at constant $V_{CE}$",
+      "$V_{BE}=V_{CE}-V_{CB}$",
+      "$I_B$ falls as $V_{CB}$ rises",
+      "Higher $V_{CE}$ shifts curve right"
+     ],
+     "questions": [
+      {
+       "id": "cci-q1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "In CC configuration the common terminal is the",
+       "options": [
+        "emitter",
+        "base",
+        "collector",
+        "none"
+       ],
+       "answer_index": 2,
+       "why": "Input between base and collector, output between emitter and collector."
+      },
+      {
+       "id": "cci-q2",
+       "kind": "mcq",
+       "level": 2,
+       "q": "In the CC input characteristic, $I_B$ decreases when $V_{CB}$ increases because",
+       "options": [
+        "the collector current rises",
+        "$V_{BE}=V_{CE}-V_{CB}$ falls",
+        "$\\beta$ falls",
+        "the base widens"
+       ],
+       "answer_index": 1,
+       "why": "Fixed $V_{CE}$: any rise in $V_{CB}$ lowers the forward bias on the BE junction. Option A is a plausible but wrong guess."
+      },
+      {
+       "id": "cci-q3",
+       "kind": "short",
+       "level": 2,
+       "marks": 3,
+       "q": "Draw the circuit and explain the CC input characteristics.",
+       "model_answer_md": "### Circuit\nCollector common. $V_{BB}$ with rheostat to the base, $V_{EE}$ in the emitter-collector loop. Meters: $I_B$ (μA), $I_E$ (mA), $V_{CB}$, $V_{CE}$.\n\n### Input characteristics ($I_B$ vs $V_{CB}$ at constant $V_{CE}$)\n- $V_{BE}=V_{CE}-V_{CB}$: as $V_{CB}$ rises the BE forward bias falls, so $I_B$ falls.\n- $I_B$ reaches zero when $V_{CB}\\approx V_{CE}-V_{BE(cut\\text{-}in)}$.\n- Higher $V_{CE}$ moves the curve to the right.",
+       "points": [
+        "Collector common circuit with meters",
+        "$I_B$ vs $V_{CB}$ at constant $V_{CE}$",
+        "$V_{BE}=V_{CE}-V_{CB}$ reasoning",
+        "Curve falls to zero; shifts right with $V_{CE}$"
+       ]
+      }
+     ]
+    },
+    {
+     "id": "cc-output-transfer",
+     "title": "CC output and transfer characteristics",
+     "theory_md": "**Output**: $I_E$ vs $V_{CE}$ at constant $I_B$. Almost the same as CE output curves because $I_E=I_C+I_B\\approx I_C$: steep rise (saturation), then flat (active), $I_E=(1+\\beta)I_B$; the $I_B=0$ curve is cut-off. **Transfer**: $I_E$ vs $I_B$ at constant $V_{CE}$: almost a straight line through the origin, slope $\\gamma=\\Delta I_E/\\Delta I_B=1+\\beta=\\dfrac{1}{1-\\alpha}$, the CC current gain.",
+     "basics_md": "The emitter current is the collector current plus a tiny bit of base current, so the picture hardly changes from CE. Only the label on the vertical axis does.",
+     "key_points": [
+      "Output: $I_E$ vs $V_{CE}$ at constant $I_B$, like CE",
+      "Transfer: $I_E$ vs $I_B$, straight line",
+      "Slope $\\gamma=1+\\beta=1/(1-\\alpha)$",
+      "$I_E=(1+\\beta)I_B$"
+     ],
+     "questions": [
+      {
+       "id": "cco-q1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "The CC current gain $\\gamma=I_E/I_B$ equals",
+       "options": [
+        "$\\beta$",
+        "$1+\\beta$",
+        "$\\alpha$",
+        "$1-\\alpha$"
+       ],
+       "answer_index": 1,
+       "why": "$I_E=I_B+I_C=(1+\\beta)I_B$."
+      },
+      {
+       "id": "cco-q2",
+       "kind": "numerical",
+       "level": 2,
+       "marks": 2,
+       "q": "A CC transistor has $\\beta=99$ and $I_B=20\\ \\mu$A. Find $I_E$.",
+       "model_answer_md": "$\\gamma=1+\\beta=100$\n\n$I_E=\\gamma I_B=100\\times20\\ \\mu A=2000\\ \\mu A=2$ mA",
+       "points": [
+        "$\\gamma=1+\\beta=100$",
+        "$I_E=2$ mA with units"
+       ]
+      },
+      {
+       "id": "cco-q3",
+       "kind": "mcq",
+       "level": 2,
+       "q": "The CC output characteristic ($I_E$ vs $V_{CE}$) closely resembles the CE output characteristic because",
+       "options": [
+        "$I_E\\approx I_C$",
+        "$V_{CE}=0$",
+        "$\\beta=1$",
+        "the base is common"
+       ],
+       "answer_index": 0,
+       "why": "$I_E=I_C+I_B$ and $I_B$ is tiny."
+      },
+      {
+       "id": "cco-p1",
+       "pyq": "7820156aa3eda8b9",
+       "level": 3,
+       "points": [
+        "NPN vs PNP: structure, carriers, polarity, arrow, speed",
+        "CC circuit: collector common, input base-collector, output emitter-collector",
+        "Input: $I_B$ vs $V_{CB}$ at constant $V_{CE}$; falls as $V_{CB}$ rises",
+        "Output: $I_E$ vs $V_{CE}$ at constant $I_B$, like CE",
+        "Transfer: $I_E$ vs $I_B$, slope $1+\\beta$",
+        "Features: gain about 1, no phase reversal, high $r_i$, low $r_o$, buffer"
+       ]
+      }
+     ]
+    },
+    {
+     "id": "cc-features",
+     "title": "CC features and comparison of configurations",
+     "theory_md": "CC (emitter follower): voltage gain slightly **less than 1**, no phase reversal, current gain $1+\\beta$, **highest input resistance and lowest output resistance**; used as a **buffer** for impedance matching.\n\n| | CB | CE | CC |\n|---|---|---|---|\n| Current gain | $\\alpha<1$ | $\\beta$ high | $1+\\beta$ high |\n| Voltage gain | high | high | $\\approx1$ |\n| Input resistance | lowest | medium | highest |\n| Output resistance | highest | medium | lowest |\n| Phase shift | 0 | 180 | 0 |",
+     "basics_md": "The emitter simply follows the base voltage about 0.7 V lower, so the output copies the input but can drive a heavy load.",
+     "key_points": [
+      "CC voltage gain slightly less than 1, no phase reversal",
+      "Highest $r_i$, lowest $r_o$",
+      "Used as buffer or for impedance matching",
+      "CE gives both current and voltage gain with 180 degree shift"
+     ],
+     "questions": [
+      {
+       "id": "ccf-q1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "Which configuration has the highest input resistance and lowest output resistance?",
+       "options": [
+        "CB",
+        "CE",
+        "CC",
+        "all equal"
+       ],
+       "answer_index": 2,
+       "why": "Emitter follower, used as a buffer. CB is the opposite (lowest $r_i$, highest $r_o$)."
+      },
+      {
+       "id": "ccf-q2",
+       "kind": "mcq",
+       "level": 2,
+       "q": "The voltage gain of a CC amplifier is",
+       "options": [
+        "much greater than 1",
+        "slightly less than 1",
+        "exactly 180 degrees out of phase",
+        "zero"
+       ],
+       "answer_index": 1,
+       "why": "Output follows input minus $V_{BE}$. High voltage gain is CE and CB."
+      },
+      {
+       "id": "ccf-q3",
+       "kind": "short",
+       "level": 2,
+       "marks": 4,
+       "q": "Compare CB, CE and CC configurations on current gain, voltage gain, input and output resistance, and phase.",
+       "model_answer_md": "| Point | CB | CE | CC |\n|---|---|---|---|\n| Current gain | $\\alpha<1$ | $\\beta$ (50 to 300) | $1+\\beta$ |\n| Voltage gain | high | high | $\\approx1$ |\n| Input resistance | very low (tens of Ω) | about 1 kΩ | highest (hundreds of kΩ) |\n| Output resistance | very high (MΩ) | tens of kΩ | lowest |\n| Phase shift | 0 | 180 degrees | 0 |\n| Use | high-frequency, low-input | general amplifier | buffer |",
+       "points": [
+        "Current gain of each",
+        "Voltage gain of each",
+        "Input and output resistance ordering",
+        "Phase shift: only CE inverts",
+        "Typical use"
+       ]
+      }
+     ]
+    }
+   ]
+  }
+ ]
+}

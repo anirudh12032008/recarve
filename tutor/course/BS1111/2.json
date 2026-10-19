@@ -1,0 +1,1585 @@
+{
+ "code": "BS1111",
+ "unit": "Human Physiology",
+ "written": "2026-10-19",
+ "by": "claude-sonnet-5-5, in a Claude Code session",
+ "topics": [
+  {
+   "topic": "Digestive system",
+   "subtopics": [
+    {
+     "id": "tract-glands",
+     "title": "Alimentary canal and associated glands",
+     "theory_md": "**Canal:** mouth -> pharynx -> oesophagus -> stomach (cardiac, fundus, body, pyloric) -> small intestine (duodenum, jejunum, ileum) -> large intestine (caecum with appendix, colon, rectum) -> anus. Food moves by **peristalsis**.\n\n**Glands:** salivary (parotid, submandibular, sublingual); gastric glands; **liver** (largest gland, makes bile, stored in gall bladder); **pancreas** (exocrine juice plus insulin and glucagon); intestinal glands. Bile and pancreatic juice enter the duodenum through the common bile duct (sphincter of Oddi).\n\nWall layers, outside in: serosa, muscularis, submucosa, mucosa.",
+     "basics_md": "Digestion is a one-way tube. Glands pour juices into it at fixed points, like feeder pipes joining a main line.",
+     "key_points": [
+      "Order of the canal from mouth to anus",
+      "Three pairs of salivary glands; liver, gall bladder and pancreas open into the duodenum",
+      "Liver is the largest gland; bile is stored in the gall bladder",
+      "Stomach parts: cardiac, fundus, body, pyloric",
+      "Wall layers: serosa, muscularis, submucosa, mucosa"
+     ],
+     "figures": [],
+     "questions": [
+      {
+       "id": "t-q1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "Which is the largest gland in the human body?",
+       "options": [
+        "Pancreas",
+        "Liver",
+        "Parotid gland",
+        "Thyroid"
+       ],
+       "answer_index": 1,
+       "why": "The liver is the largest gland; it secretes bile."
+      },
+      {
+       "id": "t-q2",
+       "kind": "mcq",
+       "level": 1,
+       "q": "Bile and pancreatic juice enter the alimentary canal at the",
+       "options": [
+        "Stomach",
+        "Jejunum",
+        "Duodenum",
+        "Ileum"
+       ],
+       "answer_index": 2,
+       "why": "Both open into the duodenum through the hepatopancreatic ampulla."
+      },
+      {
+       "id": "t-q3",
+       "kind": "short",
+       "level": 2,
+       "marks": 4,
+       "q": "Draw a labelled diagram of the human digestive system. (Describe it in words.)",
+       "model_answer_md": "**Diagram (draw as described):** a long tube with glands attached.\n1. **Mouth** with teeth, tongue and three pairs of **salivary glands** (parotid, submandibular, sublingual)\n2. **Pharynx** -> **oesophagus**\n3. **Stomach** (cardiac, fundus, body, pylorus with pyloric sphincter)\n4. **Liver** and **gall bladder**, **pancreas**, joining the **duodenum**\n5. **Small intestine** (duodenum, jejunum, ileum)\n6. **Large intestine** (caecum, appendix, ascending, transverse, descending colon), **rectum**, **anus**",
+       "points": [
+        "Tube drawn in correct order mouth to anus",
+        "Salivary glands (three pairs) labelled",
+        "Stomach with pylorus labelled",
+        "Liver, gall bladder, pancreas joined to duodenum",
+        "Small and large intestine parts labelled"
+       ]
+      },
+      {
+       "id": "t-p1",
+       "pyq": "d533f26b7231ae3e",
+       "level": 2,
+       "points": [
+        "Chosen system drawn as a tube: mouth, pharynx, oesophagus, stomach, small intestine, large intestine, rectum, anus",
+        "Salivary glands labelled (parotid, submandibular, sublingual)",
+        "Liver, gall bladder, pancreas shown opening into the duodenum",
+        "Stomach parts and intestine parts labelled"
+       ]
+      },
+      {
+       "id": "t-p2",
+       "pyq": "836c815ab70b31a7",
+       "level": 3,
+       "points": [
+        "Labelled diagram of the alimentary canal and glands",
+        "Mouth: salivary amylase starts starch to maltose; teeth and tongue make bolus",
+        "Stomach: HCl (pH about 1.8) activates pepsinogen to pepsin, proteins to peptones; mucus protects",
+        "Liver: bile emulsifies fats, no enzymes; pancreas: trypsin, amylase, lipase",
+        "Small intestine: final digestion by succus entericus; absorption by villi; large intestine absorbs water and forms faeces"
+       ]
+      }
+     ]
+    },
+    {
+     "id": "enzymes",
+     "title": "Digestion by region: enzymes and absorption",
+     "theory_md": "| Site | Secretion | Action |\n|---|---|---|\n| Mouth | salivary amylase (ptyalin) | starch -> maltose |\n| Stomach | HCl, **pepsin**, rennin (infants), mucus, intrinsic factor | proteins -> peptones; milk curdled |\n| Duodenum | bile (liver) | emulsifies fats, no enzyme |\n| | pancreatic amylase, **trypsin**, chymotrypsin, lipase | starch, proteins, fats |\n| Small intestine | maltase, sucrase, lactase, dipeptidases | to glucose, fructose, galactose, amino acids |\n\n**Absorption** is in the small intestine: **villi and microvilli** give a huge area. Sugars and amino acids go to blood capillaries; fats go as chylomicrons into **lacteals**. Large intestine absorbs water and salts.",
+     "basics_md": "Each region adds one tool. The mouth cuts starch, the stomach cuts protein, the duodenum cuts fat, and the last part of the small intestine finishes everything small enough to absorb.",
+     "key_points": [
+      "Salivary amylase: starch to maltose in mouth",
+      "HCl converts pepsinogen to pepsin; protein digestion starts in stomach",
+      "Bile emulsifies fat but has no enzyme; pancreatic lipase digests fat",
+      "Intestinal enzymes finish digestion to glucose, amino acids, fatty acids",
+      "Absorption in small intestine through villi; fats via lacteals"
+     ],
+     "figures": [],
+     "questions": [
+      {
+       "id": "e-q1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "The enzyme that starts digestion of starch in the mouth is",
+       "options": [
+        "Pepsin",
+        "Salivary amylase",
+        "Lipase",
+        "Trypsin"
+       ],
+       "answer_index": 1,
+       "why": "Ptyalin (salivary amylase) converts starch to maltose."
+      },
+      {
+       "id": "e-q2",
+       "kind": "mcq",
+       "level": 2,
+       "q": "Which statement about bile is correct?",
+       "options": [
+        "It contains lipase and digests fat",
+        "It emulsifies fat but has no enzyme",
+        "It is made in the gall bladder",
+        "It is acidic and activates pepsin"
+       ],
+       "answer_index": 1,
+       "why": "Bile is made in the liver, stored in the gall bladder, alkaline, and only emulsifies."
+      },
+      {
+       "id": "e-p1",
+       "pyq": "63ae51b6b29035ff",
+       "level": 2,
+       "points": [
+        "Table with organ, diagram, structure, function, biochemical reaction for each organ",
+        "Mouth: teeth/tongue, salivary amylase: starch -> maltose",
+        "Stomach: HCl and pepsin: proteins -> peptones",
+        "Liver/pancreas: bile emulsifies fat; trypsin, amylase, lipase act in duodenum",
+        "Small intestine: villi absorb; enzymes finish to glucose, amino acids, fatty acids",
+        "Large intestine: water absorption, faeces formation"
+       ]
+      },
+      {
+       "id": "e-q3",
+       "kind": "short",
+       "level": 2,
+       "marks": 3,
+       "q": "Name the enzymes of pancreatic juice and the substrate each acts on.",
+       "model_answer_md": "**Pancreatic juice** (alkaline, enters duodenum):\n1. **Pancreatic amylase**: starch -> maltose\n2. **Trypsin** (from trypsinogen, activated by enterokinase) and **chymotrypsin**: proteins -> peptides\n3. **Lipase**: fats -> fatty acids + glycerol\n4. **Nucleases**: nucleic acids -> nucleotides",
+       "points": [
+        "Amylase on starch",
+        "Trypsin and chymotrypsin on protein",
+        "Lipase on fat",
+        "Trypsinogen activated by enterokinase"
+       ]
+      }
+     ]
+    },
+    {
+     "id": "disorders",
+     "title": "Disorders of the digestive and respiratory systems",
+     "theory_md": "**Digestive:** **jaundice** (bilirubin builds up, yellow skin and eyes; liver or bile duct); **peptic ulcer** (*H. pylori*, excess acid); **diarrhoea** (frequent watery stools); **constipation**; **indigestion**; **gallstones**; **hepatitis**.\n\n**Respiratory:** **asthma** (allergic narrowing of bronchioles, wheezing); **bronchitis** (inflamed bronchi, cough); **emphysema** (alveolar walls damaged, smoking, less surface area); **pneumonia** (alveoli fill with fluid, bacteria *Streptococcus pneumoniae*); **tuberculosis** (*Mycobacterium tuberculosis*); **occupational** (silicosis, asbestosis).",
+     "basics_md": "Each disease is just something going wrong in one organ: a blocked pipe, an infected lining, or a damaged exchange surface.",
+     "key_points": [
+      "Four digestive diseases with cause and feature (jaundice, peptic ulcer, diarrhoea, gallstones/hepatitis)",
+      "Four respiratory diseases with cause and feature (asthma, bronchitis, emphysema, pneumonia/TB)",
+      "Cause and symptom stated for each, not just the name"
+     ],
+     "figures": [],
+     "questions": [
+      {
+       "id": "d-q1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "Yellow skin and eyes in jaundice are due to excess",
+       "options": [
+        "Bile salts in stomach",
+        "Bilirubin in blood",
+        "Urea in blood",
+        "Cholesterol"
+       ],
+       "answer_index": 1,
+       "why": "Bilirubin accumulates when the liver or bile duct fails."
+      },
+      {
+       "id": "d-q2",
+       "kind": "mcq",
+       "level": 2,
+       "q": "Damage to alveolar walls with reduced surface area, commonly from smoking, is",
+       "options": [
+        "Asthma",
+        "Pneumonia",
+        "Emphysema",
+        "Tuberculosis"
+       ],
+       "answer_index": 2,
+       "why": "Emphysema destroys alveolar walls; asthma narrows bronchioles."
+      },
+      {
+       "id": "d-p1",
+       "pyq": "ba915aaee265458a",
+       "level": 2,
+       "points": [
+        "Four digestive diseases with cause: jaundice (bilirubin, liver/bile duct), peptic ulcer (H. pylori, acid), diarrhoea, constipation/gallstones/hepatitis",
+        "Four respiratory diseases with cause: asthma (allergic bronchial narrowing), bronchitis, emphysema (alveolar damage, smoking), pneumonia/TB",
+        "Main feature of each given"
+       ]
+      },
+      {
+       "id": "d-q3",
+       "kind": "short",
+       "level": 2,
+       "marks": 3,
+       "q": "Name two diseases of the respiratory system with cause and symptom.",
+       "model_answer_md": "1. **Asthma:** allergic narrowing and inflammation of bronchioles; wheezing and breathlessness.\n2. **Emphysema:** alveolar walls damaged, usually by smoking; reduced surface area, breathlessness.",
+       "points": [
+        "Asthma with cause",
+        "Emphysema with cause",
+        "Symptom of each"
+       ]
+      }
+     ]
+    },
+    {
+     "id": "dig-engineering",
+     "title": "Digestive system as a process plant",
+     "theory_md": "Engineering reading of the canal (the answer for both mid 2025 questions):\n- **Mouth:** teeth = crusher (size reduction, more surface area); saliva = first catalytic reactor.\n- **Oesophagus:** peristalsis = conveyor/peristaltic pump.\n- **Stomach:** stirred acid batch reactor; HCl pH 1.5-2 with pepsin; mucus lining = corrosion protection; pyloric sphincter = valve.\n- **Small intestine:** bicarbonate neutralisation, enzymes, then **villi** = large-area mass-transfer unit.\n- **Large intestine:** dewatering, by-product recovery (water, vitamin K).\n- **Anus:** waste discharge valve (sphincters).",
+     "basics_md": "A food factory: crush, mix with acid, neutralise, extract the useful stuff, dry the waste, discharge.",
+     "key_points": [
+      "Teeth = size reduction; stomach = acidic stirred reactor",
+      "Peristalsis = peristaltic pump/conveyor; sphincters = valves",
+      "Villi give large surface area for mass transfer",
+      "Enzymes = catalysts, bile = emulsifier",
+      "Large intestine = water recovery; anus = waste discharge"
+     ],
+     "figures": [],
+     "questions": [
+      {
+       "id": "g-q1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "In a process-engineering analogy, villi of the small intestine correspond to",
+       "options": [
+        "A crusher",
+        "A large-area mass-transfer surface",
+        "A storage tank",
+        "A pressure valve"
+       ],
+       "answer_index": 1,
+       "why": "Villi and microvilli increase absorptive area."
+      },
+      {
+       "id": "g-q2",
+       "kind": "short",
+       "level": 2,
+       "marks": 3,
+       "q": "Which part of the digestive system acts as a peristaltic pump and which as a reactor? Justify.",
+       "model_answer_md": "1. **Oesophagus (and intestine) = peristaltic pump:** waves of muscle contraction push the bolus forward, even against gravity, without moving parts touching the food.\n2. **Stomach = stirred acid batch reactor:** churning mixes food with HCl (pH 1.5-2) and pepsin; the mucus lining protects the wall, like a corrosion-resistant lining.",
+       "points": [
+        "Oesophagus/intestine peristalsis = pump",
+        "Stomach churning = stirred reactor with acid and enzyme",
+        "Mucus = protective lining"
+       ]
+      },
+      {
+       "id": "g-p1",
+       "pyq": "3b2eb92ee3b09e5d",
+       "level": 3,
+       "points": [
+        "Labelled diagram of digestive system (or skeleton) drawn",
+        "Mouth: crusher and first reactor (amylase)",
+        "Oesophagus: conveyor with peristalsis",
+        "Stomach: acid batch reactor, mucus as corrosion protection",
+        "Small intestine: neutralisation and villi for mass transfer",
+        "Large intestine: dewatering and by-product recovery; anus as discharge valve"
+       ]
+      },
+      {
+       "id": "g-q3",
+       "kind": "short",
+       "level": 3,
+       "marks": 4,
+       "q": "Map the digestive system to a process plant in a table.",
+       "model_answer_md": "| Organ | Plant unit |\n|---|---|\n| Mouth | crusher plus first reactor |\n| Oesophagus | conveyor/pump |\n| Stomach | stirred acid reactor |\n| Small intestine | neutraliser, enzyme reactor, mass-transfer unit |\n| Large intestine | dewatering unit |\n| Anus | discharge valve |",
+       "points": [
+        "Mouth as crusher",
+        "Stomach as reactor",
+        "Small intestine as mass-transfer unit",
+        "Large intestine as dewatering"
+       ]
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "topic": "Respiratory system",
+   "subtopics": [
+    {
+     "id": "mechanism",
+     "title": "Respiratory tract and mechanism of breathing",
+     "theory_md": "**Pathway:** nostrils -> nasal chamber -> pharynx -> larynx -> **trachea** (C-shaped cartilage rings) -> bronchi -> bronchioles -> **alveoli** (exchange surface). Lungs lie in a double-layered **pleural** sac.\n\n**Inspiration (active):** diaphragm contracts and flattens, external intercostals lift ribs and sternum -> thoracic volume rises -> intrapulmonary pressure falls below atmospheric (Boyle's law, $P\\propto 1/V$) -> air flows in.\n**Expiration (resting, passive):** muscles relax, volume falls, pressure rises above atmospheric, air flows out. Forced expiration uses internal intercostals and abdominal muscles.",
+     "basics_md": "Air goes wherever pressure is lower. Making the chest bigger lowers the pressure inside, so air rushes in.",
+     "key_points": [
+      "Pathway nostril to alveoli with trachea rings and pleura",
+      "Inspiration: diaphragm contracts, ribs lift, volume rises, pressure falls",
+      "Air flows from high to low pressure (Boyle's law)",
+      "Resting expiration is passive"
+     ],
+     "figures": [],
+     "questions": [
+      {
+       "id": "m-q1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "During inspiration the diaphragm",
+       "options": [
+        "Relaxes and domes upward",
+        "Contracts and flattens",
+        "Contracts and domes upward",
+        "Stays still"
+       ],
+       "answer_index": 1,
+       "why": "Flattening increases thoracic volume."
+      },
+      {
+       "id": "m-q2",
+       "kind": "mcq",
+       "level": 2,
+       "q": "At the start of inspiration the intrapulmonary pressure is",
+       "options": [
+        "Equal to atmospheric",
+        "Below atmospheric",
+        "Above atmospheric",
+        "Zero absolute"
+       ],
+       "answer_index": 1,
+       "why": "Volume rise lowers the pressure, so air flows in."
+      },
+      {
+       "id": "m-q3",
+       "kind": "short",
+       "level": 2,
+       "marks": 4,
+       "q": "Explain how air flows into the lungs during inhalation using pressure gradients.",
+       "model_answer_md": "1. Air moves from **higher to lower pressure**.\n2. **Diaphragm contracts and flattens**; **external intercostals contract** and lift ribs and sternum.\n3. Thoracic and lung **volume increases**.\n4. By Boyle's law ($P\\propto 1/V$) **intrapulmonary pressure falls below atmospheric**.\n5. Air flows in down this gradient until pressures equalise.",
+       "points": [
+        "Flow from high to low pressure",
+        "Diaphragm and external intercostals contract",
+        "Thoracic volume rises",
+        "Boyle's law: pressure falls below atmospheric",
+        "Air flows in until equalised"
+       ]
+      }
+     ]
+    },
+    {
+     "id": "volumes",
+     "title": "Lung volumes and capacities (numericals)",
+     "theory_md": "| Term | Typical value |\n|---|---|\n| Tidal volume TV | 500 mL |\n| Inspiratory reserve IRV | 2500-3000 mL |\n| Expiratory reserve ERV | 1000-1100 mL |\n| Residual volume RV | 1100-1200 mL |\n\n$VC = TV + IRV + ERV$, $\\ TLC = VC + RV$, minute ventilation $=TV\\times f$.\nAlveolar ventilation $=(TV - V_D)\\times f$, dead space $V_D\\approx150$ mL. Residual volume cannot be expelled, so it is **not** part of VC.",
+     "basics_md": "Count how much air you move in one calm breath, then add what you can still breathe in or out on top of that.",
+     "key_points": [
+      "VC = TV + IRV + ERV (no residual volume)",
+      "TLC = VC + RV",
+      "Minute ventilation = TV x breathing rate, in mL/min or L/min",
+      "Alveolar ventilation subtracts dead space (150 mL)",
+      "Always write units"
+     ],
+     "figures": [],
+     "questions": [
+      {
+       "id": "v-q1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "Vital capacity equals",
+       "options": [
+        "TV + RV",
+        "TV + IRV + ERV",
+        "IRV + ERV + RV",
+        "TLC + RV"
+       ],
+       "answer_index": 1,
+       "why": "Vital capacity excludes residual volume."
+      },
+      {
+       "id": "v-q2",
+       "kind": "numerical",
+       "level": 2,
+       "marks": 3,
+       "q": "A person has TV = 500 mL, IRV = 3000 mL, ERV = 1100 mL, RV = 1200 mL. Find VC and TLC.",
+       "model_answer_md": "$VC = TV+IRV+ERV = 500+3000+1100 = 4600\\ \\text{mL}$\n$TLC = VC + RV = 4600+1200 = 5800\\ \\text{mL}$",
+       "points": [
+        "VC formula",
+        "VC = 4600 mL",
+        "TLC = VC + RV = 5800 mL"
+       ]
+      },
+      {
+       "id": "v-q3",
+       "kind": "numerical",
+       "level": 3,
+       "marks": 4,
+       "q": "At rest a person breathes 12 times per minute with TV 500 mL and dead space 150 mL. Find the minute ventilation and the alveolar ventilation.",
+       "model_answer_md": "Minute ventilation $=TV\\times f = 500\\times12 = 6000\\ \\text{mL/min} = 6\\ \\text{L/min}$.\nAlveolar ventilation $=(TV-V_D)\\times f=(500-150)\\times12 = 4200\\ \\text{mL/min}$.",
+       "points": [
+        "Minute ventilation = 6000 mL/min",
+        "Dead space subtracted for alveolar ventilation",
+        "Alveolar ventilation = 4200 mL/min"
+       ]
+      }
+     ]
+    },
+    {
+     "id": "exchange",
+     "title": "Gas exchange, transport and control",
+     "theory_md": "**Exchange** is by diffusion down partial-pressure gradients across the thin alveolar-capillary membrane: alveolar $pO_2\\approx104$ mmHg vs 40 in venous blood; $pCO_2$ 40 vs 45. $CO_2$ is far more soluble, so a smaller gradient suffices.\n\n**Transport:** $O_2$ about 97% as **oxyhaemoglobin**; $CO_2$ about 70% as **bicarbonate** (carbonic anhydrase in RBC), 20-25% carbamino-Hb. **Bohr effect:** higher $pCO_2$, $H^+$ or temperature shifts the dissociation curve **right**, so Hb releases more $O_2$ to tissues.\n\n**Control:** respiratory rhythm centre in the **medulla** (with pneumotaxic centre in pons); chemosensitive area responds to $CO_2$ and $H^+$.",
+     "basics_md": "Gases move from where there is more of them to where there is less. Active tissues have more CO2 and acid, so haemoglobin lets go of oxygen there.",
+     "key_points": [
+      "Diffusion along partial pressure gradient across alveolar membrane",
+      "O2 mainly as oxyhaemoglobin; CO2 mainly as bicarbonate",
+      "Bohr effect: more pCO2 shifts curve right, more O2 released",
+      "Rate of breathing controlled by medulla; pons only moderates"
+     ],
+     "figures": [],
+     "questions": [
+      {
+       "id": "x-q1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "Most carbon dioxide is carried in blood as",
+       "options": [
+        "Dissolved gas",
+        "Carbaminohaemoglobin",
+        "Bicarbonate",
+        "Carbon monoxide"
+       ],
+       "answer_index": 2,
+       "why": "About 70% as bicarbonate via carbonic anhydrase."
+      },
+      {
+       "id": "x-q2",
+       "kind": "mcq",
+       "level": 2,
+       "q": "Increase in blood $pCO_2$ shifts the oxygen dissociation curve",
+       "options": [
+        "Left, raising affinity",
+        "Right, lowering affinity",
+        "Up",
+        "Does not shift it"
+       ],
+       "answer_index": 1,
+       "why": "Bohr effect: right shift, O2 released more easily."
+      },
+      {
+       "id": "x-p1",
+       "pyq": "233212a07e0ad518",
+       "level": 1,
+       "points": [
+        "B) Medulla oblongata",
+        "Respiratory rhythm centre sets the rate; pons only moderates it"
+       ]
+      },
+      {
+       "id": "x-p2",
+       "pyq": "528ae2b1e19d2fff",
+       "level": 3,
+       "points": [
+        "Inhalation: diaphragm and external intercostals contract, volume rises, intrapulmonary pressure falls below atmospheric (Boyle's law), air flows in",
+        "Gas exchange by diffusion from higher to lower partial pressure (alveolar pO2 104 vs 40 mmHg; pCO2 40 vs 45)",
+        "Bohr effect: increased pCO2 and H+ shift the O2 dissociation curve right",
+        "Hb releases more O2 to active tissues"
+       ]
+      },
+      {
+       "id": "x-q3",
+       "kind": "short",
+       "level": 2,
+       "marks": 3,
+       "q": "State two ways CO2 is carried in blood and the Bohr effect.",
+       "model_answer_md": "CO2 is carried about **70% as bicarbonate** (carbonic anhydrase in RBC) and 20-25% as **carbaminohaemoglobin**. **Bohr effect:** raised pCO2 or H+ shifts the oxygen dissociation curve to the right, so Hb releases more O2 in tissues.",
+       "points": [
+        "Bicarbonate 70%",
+        "Carbaminohaemoglobin",
+        "Bohr effect: right shift, more O2 released"
+       ]
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "topic": "Excretory system",
+   "subtopics": [
+    {
+     "id": "nephron",
+     "title": "Kidney and nephron structure",
+     "theory_md": "Humans are **ureotelic**: urea is made in the liver and excreted by the kidneys. Path: kidney -> ureter -> urinary bladder -> urethra. Kidney has outer **cortex** and inner **medulla**; each has about **one million nephrons**, the **functional unit**.\n\n**Nephron:** glomerulus (capillary tuft; wide **afferent**, narrow **efferent** arteriole) inside **Bowman's capsule** (together the renal corpuscle) -> **PCT** -> **loop of Henle** (descending, ascending) -> **DCT** -> **collecting duct**. Peritubular capillaries and **vasa recta** surround the tubule.",
+     "basics_md": "A nephron is a tiny filter attached to a long tube. Blood is squeezed through the filter, then the tube takes back what the body still needs.",
+     "key_points": [
+      "Nephron is the structural and functional unit",
+      "Renal corpuscle = glomerulus + Bowman's capsule",
+      "Order: PCT, loop of Henle, DCT, collecting duct",
+      "Afferent arteriole wider than efferent",
+      "Humans are ureotelic"
+     ],
+     "figures": [],
+     "questions": [
+      {
+       "id": "n-p1",
+       "pyq": "7ac81c90d3089f68",
+       "level": 1,
+       "points": [
+        "A) Nephron: functional unit of kidney",
+        "Glomerulus and Bowman's capsule are only parts of it (renal corpuscle)"
+       ]
+      },
+      {
+       "id": "n-q1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "Which arteriole is narrower?",
+       "options": [
+        "Afferent",
+        "Efferent",
+        "Both equal",
+        "Neither exists"
+       ],
+       "answer_index": 1,
+       "why": "A narrower efferent arteriole keeps glomerular pressure high."
+      },
+      {
+       "id": "n-q2",
+       "kind": "short",
+       "level": 2,
+       "marks": 4,
+       "q": "Draw and describe the structure of a nephron.",
+       "model_answer_md": "**Nephron (draw as described):**\n1. **Renal corpuscle:** glomerulus (afferent in, efferent out) enclosed by Bowman's capsule\n2. **PCT** (brush border)\n3. **Loop of Henle:** descending and ascending limbs dipping into medulla\n4. **DCT**\n5. **Collecting duct** into renal pelvis\n6. Surrounding **peritubular capillaries** and **vasa recta**",
+       "points": [
+        "Glomerulus with afferent and efferent arterioles",
+        "Bowman's capsule",
+        "PCT, loop of Henle, DCT, collecting duct in order",
+        "Peritubular capillaries/vasa recta shown"
+       ]
+      },
+      {
+       "id": "n-q3",
+       "kind": "mcq",
+       "level": 2,
+       "q": "The Malpighian body is made of",
+       "options": [
+        "PCT and loop of Henle",
+        "Glomerulus and Bowman's capsule",
+        "DCT and collecting duct",
+        "Vasa recta only"
+       ],
+       "answer_index": 1,
+       "why": "Renal corpuscle = glomerulus plus Bowman's capsule."
+      }
+     ]
+    },
+    {
+     "id": "urine",
+     "title": "Urine formation and numericals",
+     "theory_md": "1. **Ultrafiltration** in the glomerulus: blood pressure forces plasma minus proteins into Bowman's capsule. **GFR = 125 mL/min = 180 L/day**.\n2. **Selective reabsorption:** about 99% of filtrate returns to blood; PCT takes glucose, amino acids, $Na^+$ and most water. Descending limb permeable to **water**, ascending limb to **salts**.\n3. **Tubular secretion:** $H^+$, $K^+$, ammonia added to filtrate.\n\nNet filtration pressure $=P_{GC}-(P_{BC}+\\pi_{GC}) = 55-(15+30)=10$ mmHg. Urine about 1.5 L/day.",
+     "basics_md": "Filter everything small, take back what is useful, add a bit more waste to the tube, and what is left is urine.",
+     "key_points": [
+      "Three steps: filtration, reabsorption, secretion",
+      "GFR 125 mL/min, 180 L/day",
+      "Proteins are not filtered",
+      "NFP = glomerular pressure - (capsular pressure + oncotic pressure)",
+      "About 99% reabsorbed"
+     ],
+     "figures": [],
+     "questions": [
+      {
+       "id": "u-q1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "Normal GFR is about",
+       "options": [
+        "12.5 mL/min",
+        "125 mL/min",
+        "1250 mL/min",
+        "180 mL/min"
+       ],
+       "answer_index": 1,
+       "why": "125 mL/min = 180 L/day."
+      },
+      {
+       "id": "u-q2",
+       "kind": "mcq",
+       "level": 2,
+       "q": "The descending limb of the loop of Henle is permeable to",
+       "options": [
+        "Water only",
+        "Salts only",
+        "Both equally",
+        "Neither"
+       ],
+       "answer_index": 0,
+       "why": "Reverse for the ascending limb: salts, impermeable to water."
+      },
+      {
+       "id": "u-q3",
+       "kind": "numerical",
+       "level": 2,
+       "marks": 3,
+       "q": "If GFR is 125 mL/min and 1.5 L of urine is passed per day, find the daily filtrate and the percentage reabsorbed.",
+       "model_answer_md": "Filtrate $=125\\times1440 = 180000\\ \\text{mL} = 180\\ \\text{L/day}$.\nReabsorbed $=180-1.5 = 178.5\\ \\text{L}$.\n$\\%\\ \\text{reabsorbed} = 178.5/180\\times100 \\approx 99.2\\%$.",
+       "points": [
+        "Daily filtrate = 180 L",
+        "Reabsorbed = 178.5 L",
+        "About 99.2% reabsorbed"
+       ]
+      },
+      {
+       "id": "u-q4",
+       "kind": "numerical",
+       "level": 3,
+       "marks": 3,
+       "q": "Glomerular capillary pressure is 55 mmHg, capsular pressure 15 mmHg, plasma oncotic pressure 30 mmHg. Find the net filtration pressure.",
+       "model_answer_md": "$NFP = P_{GC} - (P_{BC} + \\pi_{GC}) = 55 - (15+30) = 10\\ \\text{mmHg}$ (positive, so filtration occurs).",
+       "points": [
+        "Formula",
+        "NFP = 10 mmHg"
+       ]
+      }
+     ]
+    },
+    {
+     "id": "kidney-filter",
+     "title": "Kidney as a filter and homeostasis",
+     "theory_md": "| Water treatment plant | Kidney |\n|---|---|\n| Intake of raw water | renal artery -> afferent arteriole |\n| Screening/filter bed | glomerulus (blocks cells, proteins) |\n| Recovery of useful water | PCT, loop of Henle reabsorption |\n| Chemical dosing/adjustment | tubular secretion of $H^+$, $K^+$ |\n| Concentration control | counter-current system (300 to 1200 mOsm/L) |\n| Waste discharge | ureter, bladder |\n\n**Balance:** **ADH** (posterior pituitary) raises water reabsorption; **aldosterone** (adrenal cortex) raises $Na^+$ reabsorption; renin-angiotensin system corrects low GFR; secretion of $H^+$ keeps pH. About 180 L filtered, 1.5 L excreted.",
+     "basics_md": "The kidney is a self-adjusting filter plant: it cleans a large volume, returns almost all of it, and tunes what stays.",
+     "key_points": [
+      "Glomerulus = filter; tubule = recovery and adjustment",
+      "Reabsorption of about 99% of filtrate",
+      "Controls water (ADH), Na+ (aldosterone), pH (H+ secretion)",
+      "Counter-current mechanism concentrates urine"
+     ],
+     "figures": [],
+     "questions": [
+      {
+       "id": "k-q1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "Which hormone increases water reabsorption in the kidney?",
+       "options": [
+        "Aldosterone",
+        "Insulin",
+        "ADH",
+        "Glucagon"
+       ],
+       "answer_index": 2,
+       "why": "ADH acts on the DCT and collecting duct; aldosterone acts on Na+."
+      },
+      {
+       "id": "k-p1",
+       "pyq": "9c7d53b3d3bab3e4",
+       "level": 2,
+       "points": [
+        "Table: intake = renal artery/afferent arteriole; filter = glomerulus; recovery = tubular reabsorption; adjustment = secretion; concentration = counter-current; discharge = ureter/bladder",
+        "About 180 L filtered per day, 99% returned, about 1.5 L urine",
+        "Balance: water by ADH, Na+ by aldosterone, pH by H+ secretion, osmolarity by counter-current"
+       ]
+      },
+      {
+       "id": "k-q2",
+       "kind": "short",
+       "level": 3,
+       "marks": 3,
+       "q": "Why does a dialysis machine resemble the nephron?",
+       "model_answer_md": "Dialyser is a **membrane mass exchanger**: blood flows on one side of a semipermeable membrane, dialysate flows **counter-current** on the other, so urea and excess salts diffuse out while cells and proteins stay. It copies the glomerular filtration and counter-current exchange of the nephron.",
+       "points": [
+        "Semipermeable membrane like glomerulus",
+        "Counter-current flow",
+        "Urea removed, cells and proteins retained"
+       ]
+      },
+      {
+       "id": "k-q3",
+       "kind": "short",
+       "level": 2,
+       "marks": 3,
+       "q": "Name the hormones controlling water and sodium balance in the kidney.",
+       "model_answer_md": "**ADH** from the posterior pituitary raises water reabsorption in DCT and collecting duct. **Aldosterone** from the adrenal cortex raises Na+ reabsorption. **Renin-angiotensin** acts when GFR falls.",
+       "points": [
+        "ADH for water",
+        "Aldosterone for Na+",
+        "Renin-angiotensin"
+       ]
+      },
+      {
+       "id": "k-q4",
+       "kind": "mcq",
+       "level": 2,
+       "q": "Counter-current mechanism builds a medullary gradient up to about",
+       "options": [
+        "300 mOsm/L",
+        "1200 mOsm/L",
+        "12 mOsm/L",
+        "5000 mOsm/L"
+       ],
+       "answer_index": 1,
+       "why": "From 300 in the cortex to 1200 mOsm/L in the inner medulla."
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "topic": "Skeletal system",
+   "subtopics": [
+    {
+     "id": "bones",
+     "title": "Bones of the skeleton",
+     "theory_md": "Adult skeleton: **206 bones** = **axial 80** (skull 29, vertebral column 26, sternum 1, ribs 24) + **appendicular 126** (pectoral girdle 4, pelvic girdle 2, limbs 60 each pair).\n\nVertebrae: 7 cervical, 12 thoracic, 5 lumbar, 1 sacrum, 1 coccyx. Each limb: 30 bones (arm: humerus, radius, ulna, 8 carpals, 5 metacarpals, 14 phalanges).\n\n**Bone material:** about two-thirds mineral (**calcium phosphate / hydroxyapatite**, stores about 99% of body calcium) and one-third **collagen**. **Osteoblasts** build, **osteoclasts** resorb. Functions: support, protection, movement, red marrow makes blood cells, mineral store.",
+     "basics_md": "Bones are a living scaffold, hard because of calcium minerals and tough because of collagen fibres.",
+     "key_points": [
+      "206 bones: axial 80, appendicular 126",
+      "Main mineral in bone is calcium (as calcium phosphate/hydroxyapatite)",
+      "Vertebrae 7-12-5-1-1",
+      "Osteoblasts form bone, osteoclasts resorb",
+      "Bone is a mineral plus collagen composite"
+     ],
+     "figures": [],
+     "questions": [
+      {
+       "id": "b-p1",
+       "pyq": "5f3a760e37844ed8",
+       "level": 1,
+       "points": [
+        "B) Calcium",
+        "Stored as calcium phosphate (hydroxyapatite), about 99% of body calcium"
+       ]
+      },
+      {
+       "id": "b-q1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "The appendicular skeleton has how many bones?",
+       "options": [
+        "80",
+        "126",
+        "206",
+        "29"
+       ],
+       "answer_index": 1,
+       "why": "206 - 80 = 126."
+      },
+      {
+       "id": "b-q2",
+       "kind": "mcq",
+       "level": 2,
+       "q": "Bone-resorbing cells are",
+       "options": [
+        "Osteoblasts",
+        "Osteoclasts",
+        "Chondrocytes",
+        "Fibroblasts"
+       ],
+       "answer_index": 1,
+       "why": "Osteoblasts build; osteoclasts break down."
+      },
+      {
+       "id": "b-q3",
+       "kind": "short",
+       "level": 2,
+       "marks": 3,
+       "q": "Give the composition of the human skeleton by region.",
+       "model_answer_md": "**Axial (80):** skull 29 (cranium 8, face 14, hyoid 1, ear ossicles 6), vertebral column 26, sternum 1, ribs 24.\n**Appendicular (126):** pectoral girdle 4, pelvic girdle 2, upper limbs 60, lower limbs 60.\nTotal 206.",
+       "points": [
+        "Axial 80 with parts",
+        "Appendicular 126 with parts",
+        "Total 206"
+       ]
+      }
+     ]
+    },
+    {
+     "id": "joints",
+     "title": "Appendicular skeleton and joints",
+     "theory_md": "**Appendicular skeleton (126):** pectoral girdle (clavicle, scapula) + forelimbs; pelvic girdle (coxal bone: ilium, ischium, pubis) + hindlimbs (femur, tibia, fibula, patella, tarsals, metatarsals, phalanges).\n\n**Joints:** **fibrous** (immovable: skull sutures); **cartilaginous** (slightly movable: between vertebrae); **synovial** (freely movable, with synovial fluid, cartilage, ligaments):\n- **Ball and socket**: shoulder, hip (all directions)\n- **Hinge**: knee, elbow (one plane)\n- **Pivot**: atlas-axis (rotation)\n- **Gliding**: carpals\n- **Saddle**: thumb\nMuscles pull on bones as **levers**; joint = fulcrum.",
+     "basics_md": "A joint is a hinge or swivel built from bone ends covered by slippery cartilage, held by ligaments and lubricated by fluid.",
+     "key_points": [
+      "Appendicular skeleton = girdles + limbs (126 bones)",
+      "Three types: fibrous, cartilaginous, synovial",
+      "Synovial types with examples: ball-and-socket, hinge, pivot, gliding, saddle",
+      "Synovial fluid and cartilage reduce friction; ligaments hold bones",
+      "Muscle-bone-joint as lever"
+     ],
+     "figures": [],
+     "questions": [
+      {
+       "id": "j-q1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "The knee is a",
+       "options": [
+        "Ball and socket joint",
+        "Hinge joint",
+        "Pivot joint",
+        "Fibrous joint"
+       ],
+       "answer_index": 1,
+       "why": "Knee and elbow are hinge joints."
+      },
+      {
+       "id": "j-q2",
+       "kind": "mcq",
+       "level": 2,
+       "q": "Joints between skull bones are",
+       "options": [
+        "Synovial",
+        "Cartilaginous",
+        "Fibrous (immovable)",
+        "Pivot"
+       ],
+       "answer_index": 2,
+       "why": "Sutures are fibrous and immovable."
+      },
+      {
+       "id": "j-p1",
+       "pyq": "4029d7f2fb410d42",
+       "level": 3,
+       "points": [
+        "Appendicular skeleton: pectoral and pelvic girdles plus limb bones (126 bones)",
+        "Joint types: fibrous, cartilaginous, synovial",
+        "Synovial types with examples: ball and socket (shoulder, hip), hinge (knee, elbow), pivot, gliding, saddle",
+        "Components: articular cartilage, synovial membrane and fluid, capsule, ligaments",
+        "Mechanism: muscles pull on bones as levers, joint as fulcrum",
+        "Labelled diagram of a synovial joint"
+       ]
+      },
+      {
+       "id": "j-q3",
+       "kind": "short",
+       "level": 2,
+       "marks": 3,
+       "q": "Name three synovial joint types with one example each.",
+       "model_answer_md": "**Ball and socket:** shoulder/hip. **Hinge:** knee/elbow. **Pivot:** atlas-axis. (Also gliding: carpals; saddle: thumb.)",
+       "points": [
+        "Three types",
+        "One example each"
+       ]
+      }
+     ]
+    },
+    {
+     "id": "sk-engineering",
+     "title": "Skeleton as an engineered structure",
+     "theory_md": "**Support:** vertebral column = central column; leg bones = pillars carrying body weight. Bone is a **composite**: collagen resists tension, hydroxyapatite resists compression, like reinforced concrete.\n**Protection:** skull = helmet, rib cage = protective cage, vertebrae = conduit for spinal cord.\n**Movement:** joints = hinges/pivots, bones = levers. **Wolff's law:** bone remodels to the load it carries.\n\nStress $\\sigma=F/A$; strain $\\varepsilon=\\Delta L/L$; $E=\\sigma/\\varepsilon$ (cortical bone about 17 GPa).",
+     "basics_md": "Treat bone like a beam: it carries load, resists bending and adapts when loads change.",
+     "key_points": [
+      "Skeleton is the load-bearing frame, like a steel/RCC frame",
+      "Bone is a composite: collagen (tension) plus hydroxyapatite (compression)",
+      "Skull and rib cage protect like a helmet and cage",
+      "Joints and levers give motion",
+      "Wolff's law: bone adapts to load"
+     ],
+     "figures": [],
+     "questions": [
+      {
+       "id": "s-q1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "Bone remodelling in response to mechanical load is described by",
+       "options": [
+        "Boyle's law",
+        "Wolff's law",
+        "Laplace's law",
+        "Fick's law"
+       ],
+       "answer_index": 1,
+       "why": "Wolff's law."
+      },
+      {
+       "id": "s-p1",
+       "pyq": "abbb95753eed6943",
+       "level": 2,
+       "points": [
+        "Support: vertebral column as column, leg bones as pillars carrying load; bone as composite (collagen + hydroxyapatite) like reinforced concrete",
+        "Protection: skull as helmet, rib cage as protective cage for heart and lungs, vertebral canal for spinal cord"
+       ]
+      },
+      {
+       "id": "s-q2",
+       "kind": "numerical",
+       "level": 3,
+       "marks": 3,
+       "q": "A femur carries 700 N with a cross-section of 3.5 cm$^2$. Find the stress, and the strain if $E=17$ GPa.",
+       "model_answer_md": "$A = 3.5\\ \\text{cm}^2 = 3.5\\times10^{-4}\\ \\text{m}^2$\n$\\sigma = F/A = 700/(3.5\\times10^{-4}) = 2.0\\times10^{6}\\ \\text{Pa} = 2.0\\ \\text{MPa}$\n$\\varepsilon = \\sigma/E = 2.0\\times10^{6}/(17\\times10^{9}) \\approx 1.2\\times10^{-4}$ (dimensionless)",
+       "points": [
+        "Convert area to m^2",
+        "Stress = 2.0 MPa",
+        "Strain about 1.2e-4"
+       ]
+      },
+      {
+       "id": "s-q3",
+       "kind": "mcq",
+       "level": 2,
+       "q": "In bone, which component resists compression best?",
+       "options": [
+        "Collagen",
+        "Hydroxyapatite",
+        "Water",
+        "Marrow"
+       ],
+       "answer_index": 1,
+       "why": "Mineral resists compression; collagen resists tension."
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "topic": "Cardiovascular system",
+   "subtopics": [
+    {
+     "id": "heart",
+     "title": "Heart: structure and conduction",
+     "theory_md": "Four chambers: two thin **atria**, two thick **ventricles** (left wall thickest). Valves: **tricuspid** (right AV), **bicuspid/mitral** (left AV), **semilunar** valves (pulmonary artery, aorta); one-way flow. Heart is **myogenic**.\n\n**Conduction:** **SA node** (pacemaker, right atrium, about 70-75/min) -> atria contract -> **AV node** (delay) -> **bundle of His** -> **Purkinje fibres** -> ventricles contract.\n\n**Double circulation:** pulmonary (right ventricle -> lungs -> left atrium); systemic (left ventricle -> body -> right atrium). Pulmonary artery carries deoxygenated blood.",
+     "basics_md": "A double pump: the right side sends blood to the lungs, the left side to the whole body.",
+     "key_points": [
+      "Four chambers and valves with positions",
+      "SA node is the pacemaker; AV node delays",
+      "Path: SA node, AV node, bundle of His, Purkinje fibres",
+      "Pulmonary artery deoxygenated, pulmonary vein oxygenated",
+      "Left ventricle wall thickest"
+     ],
+     "figures": [],
+     "questions": [
+      {
+       "id": "h-q1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "The pacemaker of the heart is the",
+       "options": [
+        "AV node",
+        "SA node",
+        "Purkinje fibre",
+        "Bundle of His"
+       ],
+       "answer_index": 1,
+       "why": "SA node initiates the impulse."
+      },
+      {
+       "id": "h-q2",
+       "kind": "mcq",
+       "level": 2,
+       "q": "Which vessel carries oxygenated blood?",
+       "options": [
+        "Pulmonary artery",
+        "Pulmonary vein",
+        "Vena cava",
+        "Right coronary vein"
+       ],
+       "answer_index": 1,
+       "why": "Pulmonary veins return oxygenated blood to the left atrium."
+      },
+      {
+       "id": "h-q3",
+       "kind": "short",
+       "level": 2,
+       "marks": 4,
+       "q": "Describe the conducting system of the heart.",
+       "model_answer_md": "1. **SA node** in right atrial wall generates the impulse (pacemaker)\n2. Both atria contract\n3. **AV node** delays impulse so ventricles fill\n4. **Bundle of His** and branches carry it down the septum\n5. **Purkinje fibres** spread it; ventricles contract from the apex",
+       "points": [
+        "SA node pacemaker",
+        "AV node delay",
+        "Bundle of His",
+        "Purkinje fibres, ventricular contraction"
+       ]
+      }
+     ]
+    },
+    {
+     "id": "cycle",
+     "title": "Cardiac cycle and cardiac output",
+     "theory_md": "Cardiac cycle (72 beats/min) lasts **0.8 s**: atrial systole 0.1 s, ventricular systole 0.3 s, joint diastole 0.4 s.\n**'Lub'** = AV valves close (start of ventricular systole). **'Dub'** = semilunar valves close (end).\n\n$SV = EDV-ESV$, $\\ CO = HR\\times SV$, $\\ EF = SV/EDV$, $\\ T = 60/HR$.\nAt rest $SV\\approx70$ mL, $CO\\approx5$ L/min. Normal BP 120/80 mmHg; $MAP\\approx DBP+\\tfrac13(SBP-DBP)$.",
+     "basics_md": "Each beat ejects a small volume; multiply by beats per minute for flow per minute.",
+     "key_points": [
+      "Cycle 0.8 s at 72/min",
+      "Lub = AV closure, dub = semilunar closure",
+      "CO = HR x SV",
+      "SV = EDV - ESV",
+      "BP 120/80 mmHg"
+     ],
+     "figures": [],
+     "questions": [
+      {
+       "id": "c-q1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "The first heart sound 'lub' is due to closure of",
+       "options": [
+        "Semilunar valves",
+        "AV valves",
+        "Aortic valve only",
+        "Venous valves"
+       ],
+       "answer_index": 1,
+       "why": "AV valves close as ventricles contract."
+      },
+      {
+       "id": "c-q2",
+       "kind": "numerical",
+       "level": 2,
+       "marks": 3,
+       "q": "Heart rate 72 beats/min, stroke volume 70 mL. Find the cardiac output and the duration of one cycle.",
+       "model_answer_md": "$CO=HR\\times SV=72\\times70=5040\\ \\text{mL/min}\\approx5.0\\ \\text{L/min}$\n$T=60/72\\approx0.83\\ \\text{s}$ (about 0.8 s)",
+       "points": [
+        "CO = HR x SV",
+        "CO about 5.04 L/min",
+        "Cycle about 0.83 s"
+       ]
+      },
+      {
+       "id": "c-q3",
+       "kind": "numerical",
+       "level": 3,
+       "marks": 4,
+       "q": "EDV = 120 mL, ESV = 50 mL, HR = 75/min, SBP 120 and DBP 80 mmHg. Find SV, EF, CO and MAP.",
+       "model_answer_md": "$SV=120-50=70\\ \\text{mL}$\n$EF=70/120=58\\%$\n$CO=75\\times70=5250\\ \\text{mL/min}=5.25\\ \\text{L/min}$\n$MAP=80+\\tfrac13(120-80)\\approx93\\ \\text{mmHg}$",
+       "points": [
+        "SV = 70 mL",
+        "EF about 58%",
+        "CO = 5.25 L/min",
+        "MAP about 93 mmHg"
+       ]
+      }
+     ]
+    },
+    {
+     "id": "ecg-blood",
+     "title": "ECG, blood and vessels",
+     "theory_md": "**Blood:** plasma (55%) + RBC, WBC, platelets. **ECG:** **P** = atrial depolarisation; **QRS** = ventricular depolarisation (start of systole); **T** = ventricular repolarisation.\n\n**Vessels:** arteries (thick elastic wall, high pressure, away from heart), veins (thin wall, **valves**, towards heart), capillaries (one cell thick, exchange). Disorders: hypertension, atherosclerosis, angina, heart failure.",
+     "basics_md": "The ECG is the heart's electrical signature, one wave for each event.",
+     "key_points": [
+      "P wave atrial depolarisation, QRS ventricular depolarisation, T ventricular repolarisation",
+      "Arteries thick-walled without valves; veins have valves",
+      "Capillaries are the exchange site",
+      "Hypertension and atherosclerosis"
+     ],
+     "figures": [],
+     "questions": [
+      {
+       "id": "b2-q1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "The QRS complex represents",
+       "options": [
+        "Atrial depolarisation",
+        "Ventricular depolarisation",
+        "Ventricular repolarisation",
+        "SA node firing"
+       ],
+       "answer_index": 1,
+       "why": "QRS is ventricular depolarisation, start of ventricular systole."
+      },
+      {
+       "id": "b2-q2",
+       "kind": "short",
+       "level": 2,
+       "marks": 3,
+       "q": "Differentiate between artery and vein.",
+       "model_answer_md": "| Artery | Vein |\n|---|---|\n| Carries blood away from heart | towards heart |\n| Thick, elastic wall | thin wall |\n| No valves | valves present |\n| High pressure, narrow lumen | low pressure, wide lumen |\n| Usually oxygenated (not pulmonary) | usually deoxygenated (not pulmonary) |",
+       "points": [
+        "Direction of flow",
+        "Wall thickness",
+        "Valves",
+        "Pressure/lumen"
+       ]
+      },
+      {
+       "id": "b2-q3",
+       "kind": "mcq",
+       "level": 2,
+       "q": "Valves are present in",
+       "options": [
+        "Arteries",
+        "Veins",
+        "Capillaries",
+        "Aorta only"
+       ],
+       "answer_index": 1,
+       "why": "Veins have valves for one-way flow at low pressure."
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "topic": "Nervous system",
+   "subtopics": [
+    {
+     "id": "neuron",
+     "title": "Neuron structure",
+     "theory_md": "**Neuron:** **cell body (soma/cyton)** with nucleus and Nissl's granules; branched **dendrites** receive signals and conduct them **towards** the soma; one long **axon** carries impulses **away**, ending in synaptic knobs. **Myelin sheath** (Schwann cells) insulates the axon, with gaps called **nodes of Ranvier**.\n\nTypes: multipolar, bipolar, unipolar. Classification of nerves: **afferent** (sensory) and **efferent** (motor); PNS has somatic and autonomic (sympathetic, parasympathetic) parts.",
+     "basics_md": "A neuron is a wire with branches on the input end and a long insulated cable on the output end.",
+     "key_points": [
+      "Dendrites receive, axon transmits away",
+      "Soma contains nucleus and Nissl's granules",
+      "Myelin sheath insulates; nodes of Ranvier are gaps",
+      "Afferent = sensory, efferent = motor"
+     ],
+     "figures": [],
+     "questions": [
+      {
+       "id": "e2-p1",
+       "pyq": "320ea80a2fcf765b",
+       "level": 1,
+       "points": [
+        "C) Dendrite",
+        "Dendrites receive signals and conduct towards soma; axon carries impulses away"
+       ]
+      },
+      {
+       "id": "n2-q1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "Gaps in the myelin sheath are called",
+       "options": [
+        "Synapses",
+        "Nodes of Ranvier",
+        "Dendrites",
+        "Nissl bodies"
+       ],
+       "answer_index": 1,
+       "why": "Nodes of Ranvier allow saltatory conduction."
+      },
+      {
+       "id": "n2-q2",
+       "kind": "short",
+       "level": 2,
+       "marks": 3,
+       "q": "Draw and label a neuron.",
+       "model_answer_md": "**Neuron (draw as described):** cell body with nucleus and Nissl's granules; several branched **dendrites** from the cell body; one **axon** with **myelin sheath**, **nodes of Ranvier** and **Schwann cells**; **axon terminals** (synaptic knobs) at the end.",
+       "points": [
+        "Cell body with nucleus",
+        "Dendrites",
+        "Axon with myelin and nodes of Ranvier",
+        "Axon terminals"
+       ]
+      },
+      {
+       "id": "n2-q3",
+       "kind": "mcq",
+       "level": 2,
+       "q": "Impulses are carried away from the cell body by the",
+       "options": [
+        "Dendrite",
+        "Axon",
+        "Nissl granule",
+        "Cytoplasm only"
+       ],
+       "answer_index": 1,
+       "why": "Axon."
+      }
+     ]
+    },
+    {
+     "id": "impulse",
+     "title": "Nerve impulse and synapse",
+     "theory_md": "**Resting potential:** about **-70 mV** inside, kept by the **Na$^+$/K$^+$ pump** (3 Na out, 2 K in). **Stimulus:** Na channels open, Na enters (**depolarisation**, about +30 mV = action potential). Then K channels open, K leaves (**repolarisation**). In myelinated fibres the impulse jumps node to node (**saltatory conduction**, faster).\n\n**Chemical synapse:** impulse at the terminal releases a neurotransmitter (e.g. **acetylcholine**) into the cleft; it binds receptors on the post-synaptic membrane. Nernst: $E=\\dfrac{RT}{zF}\\ln\\dfrac{[\\text{out}]}{[\\text{in}]}$; $E_K\\approx-89$ mV at 37 C.",
+     "basics_md": "A neuron is like a charged battery. The signal is a wave of sodium rushing in and potassium leaving, passed along the membrane.",
+     "key_points": [
+      "Resting potential about -70 mV, maintained by Na/K pump",
+      "Depolarisation: Na+ in; repolarisation: K+ out",
+      "Saltatory conduction in myelinated fibres",
+      "Synapse: neurotransmitter crosses the cleft"
+     ],
+     "figures": [],
+     "questions": [
+      {
+       "id": "i-q1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "During depolarisation of a neuron, the ion that enters is",
+       "options": [
+        "K+",
+        "Na+",
+        "Cl-",
+        "Ca2+ only"
+       ],
+       "answer_index": 1,
+       "why": "Na+ rushes in; K+ leaves during repolarisation."
+      },
+      {
+       "id": "i-q2",
+       "kind": "mcq",
+       "level": 2,
+       "q": "The resting membrane potential is about",
+       "options": [
+        "+70 mV",
+        "-70 mV",
+        "0 mV",
+        "+30 mV"
+       ],
+       "answer_index": 1,
+       "why": "Inside is negative."
+      },
+      {
+       "id": "i-q3",
+       "kind": "short",
+       "level": 2,
+       "marks": 4,
+       "q": "Explain how a nerve impulse is generated and conducted.",
+       "model_answer_md": "1. Resting potential **-70 mV** (Na/K pump)\n2. Stimulus opens Na channels; Na enters: **depolarisation** to +30 mV (action potential)\n3. K channels open; K leaves: **repolarisation**\n4. Wave spreads along axon; in myelinated fibre it jumps between nodes (saltatory conduction)\n5. At the synapse, **acetylcholine** crosses the cleft and excites the next neuron",
+       "points": [
+        "Resting potential -70 mV",
+        "Na entry depolarisation",
+        "K exit repolarisation",
+        "Saltatory conduction",
+        "Neurotransmitter at synapse"
+       ]
+      },
+      {
+       "id": "i-q4",
+       "kind": "numerical",
+       "level": 3,
+       "marks": 3,
+       "q": "Using $E=\\frac{RT}{F}\\ln\\frac{[K]_{out}}{[K]_{in}}$ at 37 C with $[K]_{out}=5$ mM and $[K]_{in}=140$ mM, find $E_K$.",
+       "model_answer_md": "$RT/F=8.314\\times310.15/96485 = 26.7\\ \\text{mV}$\n$E_K=26.7\\times\\ln(5/140)=26.7\\times(-3.33)\\approx-89\\ \\text{mV}$",
+       "points": [
+        "RT/F = 26.7 mV",
+        "ln(5/140) = -3.33",
+        "E_K about -89 mV"
+       ]
+      }
+     ]
+    },
+    {
+     "id": "cns",
+     "title": "Central nervous system and reflex",
+     "theory_md": "**CNS = brain + spinal cord**, protected by skull, vertebral column, **meninges** (dura, arachnoid, pia) and **cerebrospinal fluid**.\n\n| Part | Function |\n|---|---|\n| Cerebrum | thinking, memory, voluntary action, sensation |\n| Thalamus | relay of sensory signals |\n| Hypothalamus | temperature, hunger, hormones |\n| Cerebellum | balance and coordination |\n| Pons | links parts, moderates breathing |\n| Medulla | breathing, heart rate, BP |\n| Spinal cord | conduction and reflexes |\n\n**Reflex arc:** receptor -> sensory neuron (dorsal root) -> spinal cord -> motor neuron (ventral root) -> effector.",
+     "basics_md": "The CNS is the control room: sensory data comes in, decisions are made in the brain or cord, commands go out.",
+     "key_points": [
+      "CNS = brain and spinal cord with three meninges and CSF",
+      "Cerebrum, cerebellum, medulla roles",
+      "Hypothalamus controls temperature and hormones",
+      "Reflex arc via spinal cord (dorsal sensory, ventral motor)"
+     ],
+     "figures": [],
+     "questions": [
+      {
+       "id": "s2-q1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "Balance and coordination are controlled by the",
+       "options": [
+        "Cerebrum",
+        "Cerebellum",
+        "Medulla",
+        "Thalamus"
+       ],
+       "answer_index": 1,
+       "why": "Cerebellum."
+      },
+      {
+       "id": "s2-q2",
+       "kind": "mcq",
+       "level": 2,
+       "q": "In the spinal cord, the motor neuron leaves through the",
+       "options": [
+        "Dorsal root",
+        "Ventral root",
+        "Both roots",
+        "Meninges"
+       ],
+       "answer_index": 1,
+       "why": "Sensory dorsal, motor ventral."
+      },
+      {
+       "id": "s2-p1",
+       "pyq": "11368d5a7674f89f",
+       "level": 2,
+       "points": [
+        "CNS defined as brain and spinal cord (protected by skull, vertebrae, meninges, CSF)",
+        "Components: cerebrum, thalamus, hypothalamus, cerebellum, pons, medulla, spinal cord with function of each",
+        "Integration: sensory input processed in brain/cord, motor output via efferent neurons; reflexes via spinal cord"
+       ]
+      },
+      {
+       "id": "s2-q3",
+       "kind": "short",
+       "level": 2,
+       "marks": 3,
+       "q": "Name the three meninges and the role of CSF.",
+       "model_answer_md": "**Dura mater** (outer), **arachnoid** (middle), **pia mater** (inner). CSF cushions the brain and cord and carries nutrients and wastes.",
+       "points": [
+        "Three meninges",
+        "CSF cushions"
+       ]
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "topic": "Engineering aspects of physiology",
+   "subtopics": [
+    {
+     "id": "overview",
+     "title": "Organ systems and the engineering they inspired",
+     "theory_md": "| System | Function | Engineering inspiration |\n|---|---|---|\n| Digestive | digest, absorb | bioreactors, peristaltic pumps, heat/mass exchangers |\n| Respiratory | gas exchange | ventilators, oxygenators, membranes |\n| Circulatory | blood transport | pumps, pacemakers, artificial valves, stents |\n| Excretory | filtration, balance | dialysis, membrane filters |\n| Skeletal/muscular | support, motion | trusses, prosthetics, exoskeletons |\n| Nervous | sensing, signalling | sensors, feedback control, neural networks |\n| Endocrine/immune | chemical control, defence | chemical control, biosensors, anomaly detection |\n\nOrder: cells -> tissues -> organs -> organ systems. **Homeostasis** = negative feedback control.",
+     "basics_md": "The body has systems with jobs. Engineers copy the job, for example the heart gives pumps and kidneys give filters.",
+     "key_points": [
+      "Cells to tissues to organs to organ systems",
+      "Function of each major system",
+      "One engineering innovation per system",
+      "Homeostasis as feedback control"
+     ],
+     "figures": [],
+     "questions": [
+      {
+       "id": "o-q1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "The dialysis machine is an engineering copy of the",
+       "options": [
+        "Heart",
+        "Lung",
+        "Kidney",
+        "Liver"
+       ],
+       "answer_index": 2,
+       "why": "Dialysers imitate nephron filtration."
+      },
+      {
+       "id": "o-p1",
+       "pyq": "03f180bdd98e36ca",
+       "level": 1,
+       "points": [
+        "Hierarchy: cells, tissues, organs, organ systems",
+        "Main systems (digestive, respiratory, circulatory, excretory, skeletal, muscular, nervous, endocrine) with organs and function"
+       ]
+      },
+      {
+       "id": "o-p2",
+       "pyq": "66144aa6ab9b8350",
+       "level": 2,
+       "points": [
+        "Table of major systems with function and engineering innovation",
+        "Digestive: bioreactors/peristaltic pumps; respiratory: ventilators and oxygenators; circulatory: pumps and valves; excretory: dialysis; skeletal: trusses and prostheses; nervous: sensors and control systems",
+        "Theme: biomimetics, homeostasis as feedback control"
+       ]
+      },
+      {
+       "id": "o-q2",
+       "kind": "short",
+       "level": 2,
+       "marks": 3,
+       "q": "Give the engineering analogue of the heart, kidney and lungs.",
+       "model_answer_md": "Heart = pump with check valves (artificial heart, pacemaker). Kidney = membrane filter (dialysis machine). Lungs = gas exchanger (ventilator, oxygenator).",
+       "points": [
+        "Heart pump",
+        "Kidney filter/dialysis",
+        "Lungs ventilator/oxygenator"
+       ]
+      },
+      {
+       "id": "o-q3",
+       "kind": "mcq",
+       "level": 2,
+       "q": "Homeostasis is best described as",
+       "options": [
+        "Positive feedback",
+        "Negative feedback regulation",
+        "Open-loop control",
+        "Random variation"
+       ],
+       "answer_index": 1,
+       "why": "Negative feedback restores the set point."
+      }
+     ]
+    },
+    {
+     "id": "principles",
+     "title": "Physiology as engineering: pump, pipe, exchanger",
+     "theory_md": "- **Heart = pump:** $CO=HR\\times SV\\approx5$ L/min; valves = check valves.\n- **Vessels = pipes:** $\\Delta P=QR$ with Poiseuille $R=\\dfrac{8\\eta L}{\\pi r^4}$. Halving the radius raises resistance $2^4=16$ times.\n- **Alveolus:** Laplace $P=2\\gamma/r$; surfactant lowers $\\gamma$ so small alveoli do not collapse. Fick: diffusion $\\propto A\\,\\Delta p/T$ (large area, thin barrier).\n- **Bone = beam/column:** $\\sigma=F/A$, $E=\\sigma/\\varepsilon$.\n- **Nerve = signalling cable:** myelin raises speed up to about 100 m/s.",
+     "basics_md": "Treat each organ as a device with inputs, outputs and limits, then ordinary mechanics and fluid laws apply.",
+     "key_points": [
+      "Heart as positive-displacement pump with check valves",
+      "Resistance goes as 1/r^4 (Poiseuille)",
+      "Surfactant reduces surface tension (Laplace)",
+      "Lungs maximise area and minimise thickness (Fick)",
+      "Bone as a composite load-bearing structure"
+     ],
+     "figures": [],
+     "questions": [
+      {
+       "id": "p-q1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "If a blood vessel radius is halved, resistance to flow becomes",
+       "options": [
+        "2 times",
+        "4 times",
+        "8 times",
+        "16 times"
+       ],
+       "answer_index": 3,
+       "why": "R is proportional to 1/r^4."
+      },
+      {
+       "id": "p-q2",
+       "kind": "numerical",
+       "level": 2,
+       "marks": 3,
+       "q": "A vessel narrows by plaque so that its radius falls by 20%. By what factor does resistance rise at constant length and viscosity?",
+       "model_answer_md": "$R\\propto 1/r^4$. New radius $=0.8r$.\n$R_2/R_1=(1/0.8)^4 = 2.44$.\nResistance rises about **2.4 times**.",
+       "points": [
+        "R proportional to 1/r^4",
+        "Radius factor 0.8",
+        "Factor about 2.44"
+       ]
+      },
+      {
+       "id": "p-p1",
+       "pyq": "2c5c1bd50977ad11",
+       "level": 3,
+       "points": [
+        "Labelled diagram of digestive system (or skeleton) drawn",
+        "Digestive: teeth as crusher, stomach as stirred acid reactor with mucus protection, peristalsis as pump, villi as mass-transfer surface, large intestine for dewatering and by-product recovery",
+        "Skeletal alternative: bones as columns and levers, composite material, joints as hinges",
+        "Principle stated: process engineering or structural/mechanical engineering"
+       ]
+      },
+      {
+       "id": "p-q3",
+       "kind": "short",
+       "level": 2,
+       "marks": 3,
+       "q": "Why do small alveoli not collapse? (Laplace)",
+       "model_answer_md": "$P=2\\gamma/r$: smaller radius needs higher pressure to stay open. **Surfactant** lowers surface tension $\\gamma$, so small alveoli stay open.",
+       "points": [
+        "Laplace relation",
+        "Surfactant lowers surface tension"
+       ]
+      }
+     ]
+    },
+    {
+     "id": "biosensor",
+     "title": "Biosensors, electronic tongue and nose",
+     "theory_md": "**Biosensor:** analytical device with a **biological recognition element** and a **transducer** giving a signal proportional to analyte concentration (e.g. glucometer).\n**Components:** bioreceptor (enzyme, antibody, DNA, cell); transducer (electrochemical, optical, thermal, piezoelectric); electronics (amplifier, processor); display.\n\n**Electronic tongue:** array of non-specific chemical sensors for dissolved tastants + pattern recognition (like taste buds + brain). **Electronic nose:** array of gas sensors (metal-oxide, conducting polymer) for volatiles + pattern recognition (like olfactory receptors + brain).",
+     "basics_md": "A biosensor is a detector that pairs something that recognises a chemical with something that turns that recognition into a number.",
+     "key_points": [
+      "Biosensor = bioreceptor + transducer + signal processor",
+      "Examples: glucose biosensor",
+      "E-tongue: sensor array for liquids; E-nose: sensor array for gases",
+      "Both use pattern recognition like the brain"
+     ],
+     "figures": [],
+     "questions": [
+      {
+       "id": "bs-q1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "In a biosensor the transducer",
+       "options": [
+        "Recognises the analyte",
+        "Converts the biological response to a measurable signal",
+        "Stores the sample",
+        "Cools the sensor"
+       ],
+       "answer_index": 1,
+       "why": "The bioreceptor recognises; the transducer converts."
+      },
+      {
+       "id": "bs-p1",
+       "pyq": "bded44c71ff13837",
+       "level": 2,
+       "points": [
+        "Definition: biological recognition element plus transducer giving signal proportional to analyte",
+        "Components: bioreceptor, transducer, signal processor/display",
+        "E-tongue: array of sensors for dissolved tastants with pattern recognition, mimics taste buds",
+        "E-nose: array of gas sensors with pattern recognition, mimics olfactory receptors"
+       ]
+      },
+      {
+       "id": "bs-q2",
+       "kind": "short",
+       "level": 2,
+       "marks": 3,
+       "q": "Name the components of a biosensor.",
+       "model_answer_md": "1. **Bioreceptor** (enzyme, antibody, DNA, cell)\n2. **Transducer** (electrochemical, optical, thermal)\n3. **Signal processor/amplifier**\n4. **Display**",
+       "points": [
+        "Bioreceptor",
+        "Transducer",
+        "Processor and display"
+       ]
+      },
+      {
+       "id": "bs-q3",
+       "kind": "mcq",
+       "level": 2,
+       "q": "An electronic nose uses",
+       "options": [
+        "A single specific sensor",
+        "An array of gas sensors with pattern recognition",
+        "A camera",
+        "A thermometer"
+       ],
+       "answer_index": 1,
+       "why": "Array plus pattern recognition mimics olfaction."
+      }
+     ]
+    },
+    {
+     "id": "eye",
+     "title": "Human eye and camera",
+     "theory_md": "**Eye parts:** sclera, **cornea**, choroid, **iris** with **pupil**, **lens**, **ciliary muscles**, **retina** (rods for dim light, cones for colour), **fovea**, **optic nerve**, aqueous and vitreous humour.\n\n| Eye | Camera |\n|---|---|\n| Cornea + lens | Lens |\n| Iris/pupil | Aperture/diaphragm |\n| Retina | Film/image sensor |\n| Ciliary muscles change lens curvature | Focus by moving lens |\n| Choroid (dark) | Black inner wall |\n| Eyelid | Lens cap/shutter |\n\nDifference: eye lens is flexible (accommodation); camera focuses by moving the lens.",
+     "basics_md": "The eye is a natural camera: lens focuses light on a sensor (the retina), the iris controls how much light gets in.",
+     "key_points": [
+      "Labelled eye: cornea, iris, pupil, lens, retina, optic nerve",
+      "Retina = image sensor, iris = aperture",
+      "Eye focuses by changing lens shape, camera by moving lens",
+      "Image on retina is inverted; brain corrects"
+     ],
+     "figures": [],
+     "questions": [
+      {
+       "id": "y-q1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "The part of the eye that corresponds to a camera's aperture is the",
+       "options": [
+        "Cornea",
+        "Iris with pupil",
+        "Retina",
+        "Lens"
+       ],
+       "answer_index": 1,
+       "why": "The iris controls pupil diameter."
+      },
+      {
+       "id": "y-p1",
+       "pyq": "876f76dfcf6bbc43",
+       "level": 3,
+       "points": [
+        "Labelled diagram: sclera, cornea, choroid, iris, pupil, lens, ciliary body, retina, fovea, optic nerve",
+        "Comparison table: cornea+lens = lens, iris = diaphragm, retina = film/sensor, choroid = dark inner wall, eyelid = cap",
+        "Differences: eye lens changes curvature (accommodation), camera moves lens; retina inverted image corrected by the brain"
+       ]
+      },
+      {
+       "id": "y-q2",
+       "kind": "short",
+       "level": 2,
+       "marks": 3,
+       "q": "Name the camera counterpart of cornea, iris, retina.",
+       "model_answer_md": "Cornea and lens = camera lens. Iris/pupil = aperture. Retina = film/image sensor.",
+       "points": [
+        "Lens",
+        "Aperture",
+        "Sensor"
+       ]
+      },
+      {
+       "id": "y-q3",
+       "kind": "mcq",
+       "level": 2,
+       "q": "Eye focuses on near objects by",
+       "options": [
+        "Moving the lens",
+        "Increasing lens curvature",
+        "Dilating the pupil",
+        "Moving the retina"
+       ],
+       "answer_index": 1,
+       "why": "Ciliary muscles increase curvature (accommodation)."
+      }
+     ]
+    }
+   ]
+  }
+ ]
+}

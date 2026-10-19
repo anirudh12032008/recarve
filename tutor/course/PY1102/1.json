@@ -1,0 +1,2019 @@
+{
+ "code": "PY1102",
+ "unit": "Wave Optics",
+ "written": "2026-10-19",
+ "by": "claude-sonnet-5-5, in a Claude Code session",
+ "topics": [
+  {
+   "topic": "Interference",
+   "subtopics": [
+    {
+     "id": "coherence",
+     "title": "Coherent sources and coherence length",
+     "theory_md": "Sustained fringes need **coherent** sources: same frequency and a constant phase difference. Independent sources (two candles, two bulbs) emit random wave trains of about $10^{-8}$ s, so the phase difference changes at random and only $I_1+I_2$ is seen. Get coherence by **dividing one source**: wavefront division (Young) or amplitude division (thin film, Michelson).\n\nConditions: coherent monochromatic source, nearly equal amplitudes, narrow sources close together, path difference within the coherence length.\n\n**Temporal** coherence is along the beam: $\\tau_c=1/\\Delta\\nu$, $L_c=c\\tau_c=\\lambda^2/\\Delta\\lambda$. **Spatial** coherence is across the wavefront and depends on source size.\n\n$I_{max}/I_{min}=\\left(\\dfrac{a_1+a_2}{a_1-a_2}\\right)^2$, with amplitude $a\\propto\\sqrt I$.",
+     "basics_md": "A single lamp is like a crowd talking: everyone changes what they say every instant. Two lamps are two crowds, so they never stay in step. Split one lamp's light in two and both halves say the same thing at the same time.",
+     "key_points": [
+      "Coherent: same frequency, constant phase difference, obtained by dividing one source",
+      "Two independent sources have randomly changing phase (wave trains about $10^{-8}$ s), so no steady fringes",
+      "Four conditions: coherent, monochromatic, nearly equal amplitudes, narrow close sources",
+      "$\\tau_c=1/\\Delta\\nu$ and $L_c=c\\tau_c$; temporal is along the beam, spatial is across the wavefront",
+      "$I_{max}/I_{min}=\\left(\\frac{a_1+a_2}{a_1-a_2}\\right)^2$"
+     ],
+     "questions": [
+      {
+       "id": "c-q1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "Sustained interference fringes can be obtained from",
+       "options": [
+        "two candles side by side",
+        "two identical bulbs on the same circuit",
+        "two beams obtained by splitting light from one source",
+        "two sodium lamps held close together"
+       ],
+       "answer_index": 2,
+       "why": "Only beams divided from the same source keep a constant phase difference."
+      },
+      {
+       "id": "c-q2",
+       "kind": "short",
+       "level": 2,
+       "marks": 3,
+       "q": "State four conditions for sustained interference. Why can two sodium lamps not show fringes on a screen?",
+       "model_answer_md": "**Conditions**\n1. The sources must be coherent (constant phase difference).\n2. The light must be monochromatic.\n3. The two amplitudes should be equal or nearly equal, for good contrast.\n4. The sources must be narrow and close, with path difference within the coherence length.\n\n**Two lamps.** Each atom radiates independently in wave trains of about $10^{-8}$ s with random phase. The phase difference between the lamps therefore changes randomly and rapidly, the fringes shift faster than the eye can follow, and the screen shows uniform intensity $I_1+I_2$.",
+       "points": [
+        "Coherent sources",
+        "Monochromatic",
+        "Nearly equal amplitudes",
+        "Narrow sources, path difference within coherence length",
+        "Independent atoms give random phase, so average intensity is I1+I2 and no fringes"
+       ]
+      },
+      {
+       "id": "c-q3",
+       "kind": "numerical",
+       "level": 2,
+       "marks": 3,
+       "q": "A lamp line has bandwidth $\\Delta\\nu=5.0\\times10^{9}$ Hz at $\\lambda=589$ nm. Find the coherence time, the coherence length and the number of waves in it.",
+       "model_answer_md": "$\\tau_c=\\dfrac1{\\Delta\\nu}=\\dfrac1{5.0\\times10^{9}}=2.0\\times10^{-10}$ s\n\n$L_c=c\\tau_c=3\\times10^{8}\\times2.0\\times10^{-10}=0.060$ m\n\n$N=\\dfrac{L_c}{\\lambda}=\\dfrac{0.060}{589\\times10^{-9}}\\approx1.0\\times10^{5}$ waves",
+       "points": [
+        "Coherence time = 1/bandwidth = 2.0e-10 s",
+        "Coherence length = c x time = 0.060 m",
+        "Number of waves = L/lambda, about 1.0e5"
+       ]
+      },
+      {
+       "id": "c-q4",
+       "kind": "mcq",
+       "level": 2,
+       "q": "Two waves of intensity ratio 4:1 interfere. The ratio $I_{max}:I_{min}$ is",
+       "options": [
+        "5:3",
+        "9:1",
+        "4:1",
+        "3:1"
+       ],
+       "answer_index": 1,
+       "why": "Amplitudes are in ratio 2:1, so $I_{max}/I_{min}=(2+1)^2/(2-1)^2=9$."
+      },
+      {
+       "id": "c-p1",
+       "pyq": "38e7b2957ebd8361",
+       "level": 1,
+       "points": [
+        "No: two independent sources are not coherent",
+        "Phase of each source changes randomly in about $10^{-8}$ s, so the fringes keep shifting and only uniform intensity is seen",
+        "Coherent beams come from one source by wavefront or amplitude division"
+       ]
+      },
+      {
+       "id": "c-p2",
+       "pyq": "e7ab3dee9a158c13",
+       "level": 1,
+       "points": [
+        "Candles are independent, incoherent sources",
+        "Atoms radiate in short wave trains of random phase, so the phase difference changes rapidly",
+        "Time-averaged intensity is $I_1+I_2$, no steady fringes"
+       ]
+      },
+      {
+       "id": "c-p3",
+       "pyq": "9faa6c017a68d123",
+       "level": 2,
+       "points": [
+        "Temporal: phase correlation along the direction of propagation, measured by $\\tau_c$ and $L_c=c\\tau_c$, set by monochromaticity",
+        "Spatial: phase correlation across the wavefront, set by source size",
+        "Wave diagram: a finite wave train of length $L_c$; points A and B on one wavefront in step",
+        "$\\Delta\\nu=0.3\\times10^{15}$ Hz, $\\tau_c=3.33\\times10^{-15}$ s, $L_c=1\\ \\mu$m"
+       ]
+      },
+      {
+       "id": "c-p4",
+       "pyq": "c3d678b38c678e65",
+       "level": 2,
+       "points": [
+        "Coherence time $=L_c/c=9.82\\times10^{-11}$ s",
+        "Number of oscillations $=L_c/\\lambda=4.99\\times10^{4}$"
+       ]
+      },
+      {
+       "id": "c-p5",
+       "pyq": "41ba0e32e1400720",
+       "level": 2,
+       "points": [
+        "$\\tau_c=1/\\Delta\\nu=1/3000$ s",
+        "$L_c=c\\tau_c=1\\times10^{5}$ m"
+       ]
+      },
+      {
+       "id": "c-p6",
+       "pyq": "559a63f34eca2bce",
+       "level": 1,
+       "points": [
+        "Intensity ratio 9:1 gives amplitude ratio 3:1",
+        "$I_{max}/I_{min}=(3+1)^2/(3-1)^2=4:1$, option (b)"
+       ]
+      }
+     ]
+    },
+    {
+     "id": "film-conditions",
+     "title": "Thin film: path difference and conditions",
+     "theory_md": "Light reflected from the top and bottom of a film (thickness $t$, index $\\mu$, refraction angle $r$) interferes. The path difference is $2\\mu t\\cos r$, plus **$\\lambda/2$** for the $\\pi$ phase change on reflection at the air-to-film surface (rare to dense). Refraction never changes phase.\n\nReflected light, $\\Delta=2\\mu t\\cos r+\\lambda/2$:\n- **Bright:** $2\\mu t\\cos r=(2n-1)\\lambda/2$, $n=1,2,\\dots$\n- **Dark:** $2\\mu t\\cos r=n\\lambda$, $n=0,1,\\dots$\n\nAt $t=0$ the film is dark. Transmitted light is complementary. The film must be **thin**, of order $\\lambda$, so that $2\\mu t\\cos r$ stays within the coherence length. White light gives coloured fringes.",
+     "basics_md": "Two reflections off a soap film: the top one flips like a wave bouncing off a fixed end of a rope, the bottom one does not. That flip is the extra half wavelength.",
+     "key_points": [
+      "Path difference $2\\mu t\\cos r$, extra $\\lambda/2$ from reflection at the denser medium (top surface)",
+      "Reflected: bright $2\\mu t\\cos r=(2n-1)\\lambda/2$; dark $2\\mu t\\cos r=n\\lambda$",
+      "At $t=0$ the film is dark in reflected light; transmitted pattern is complementary",
+      "Film must be thin (of order $\\lambda$) or the path exceeds the coherence length; $t_{max}=\\lambda^2/(2\\mu\\,\\delta\\lambda\\cos r)$",
+      "White light gives coloured fringes (soap bubble, oil film)"
+     ],
+     "questions": [
+      {
+       "id": "f-q1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "A light wave reflected at the air-glass interface suffers a path change of",
+       "options": [
+        "$\\lambda/4$",
+        "$\\lambda/2$",
+        "$\\lambda$",
+        "none"
+       ],
+       "answer_index": 1,
+       "why": "Reflection from a denser medium gives a $\\pi$ phase change, equal to a path change of $\\lambda/2$."
+      },
+      {
+       "id": "f-q2",
+       "kind": "long",
+       "level": 2,
+       "marks": 3,
+       "q": "Prove that the path difference between the rays reflected from a film of uniform thickness is $2\\mu t\\cos r+\\lambda/2$.",
+       "model_answer_md": "**Diagram.** Ray $SA$ meets the top surface at $A$ with angle of incidence $i$. One part is reflected along $AR_1$. The other is refracted at angle $r$, reflected at the bottom at $B$ and leaves at $C$ along $CR_2\\parallel AR_1$. Draw $CN\\perp AR_1$.\n\n**Path difference (optical).**\n$\\Delta=\\mu(AB+BC)-AN$\n\n$AB=BC=\\dfrac t{\\cos r}$, $AC=2t\\tan r$, $AN=AC\\sin i=2t\\tan r\\,\\mu\\sin r$\n\n$\\Delta=\\dfrac{2\\mu t}{\\cos r}-\\dfrac{2\\mu t\\sin^2r}{\\cos r}=2\\mu t\\cos r$\n\n**Phase change.** Reflection at $A$ (air to film, rare to dense) adds $\\pi$, i.e. $\\lambda/2$. Reflection at $B$ (film to air) adds none.\n\n$$\\Delta=2\\mu t\\cos r+\\frac\\lambda2$$",
+       "points": [
+        "Labelled diagram with $A,B,C,N$ and angles $i,r$",
+        "$\\Delta=\\mu(AB+BC)-AN$",
+        "$AB=BC=t/\\cos r$ and $AN=2\\mu t\\sin^2 r/\\cos r$",
+        "Result $2\\mu t\\cos r$",
+        "$\\lambda/2$ added for reflection at the denser surface"
+       ]
+      },
+      {
+       "id": "f-q3",
+       "kind": "short",
+       "level": 2,
+       "marks": 3,
+       "q": "Give the conditions for maxima and minima in reflected light from a thin film. Why does a film much thinner than $\\lambda$ look dark?",
+       "model_answer_md": "For $\\Delta=2\\mu t\\cos r+\\lambda/2$:\n- **Maxima:** $2\\mu t\\cos r=(2n-1)\\lambda/2$, $n=1,2,3,\\dots$\n- **Minima:** $2\\mu t\\cos r=n\\lambda$, $n=0,1,2,\\dots$\n\nIf $t\\ll\\lambda$, $2\\mu t\\cos r\\approx0$, so $\\Delta\\approx\\lambda/2$. The two reflected rays are in opposite phase and cancel: the film looks dark.",
+       "points": [
+        "Maxima $2\\mu t\\cos r=(2n-1)\\lambda/2$",
+        "Minima $2\\mu t\\cos r=n\\lambda$",
+        "For $t\\ll\\lambda$, $\\Delta=\\lambda/2$, destructive, dark"
+       ]
+      },
+      {
+       "id": "f-q4",
+       "kind": "mcq",
+       "level": 2,
+       "q": "For a film in air, the condition for a bright fringe in transmitted light is",
+       "options": [
+        "$2\\mu t\\cos r=n\\lambda$",
+        "$2\\mu t\\cos r=(2n-1)\\lambda/2$",
+        "$2\\mu t\\cos r=(2n+1)\\lambda$",
+        "$2\\mu t=\\lambda/2$"
+       ],
+       "answer_index": 0,
+       "why": "No phase change in transmission, so the transmitted pattern is complementary to the reflected one."
+      },
+      {
+       "id": "f-q5",
+       "kind": "numerical",
+       "level": 3,
+       "marks": 3,
+       "q": "Sodium light has two lines, $\\lambda=5893$ Å and $\\delta\\lambda=6$ Å apart. Find the largest film thickness (normal incidence, $\\mu=1$) for which fringes stay visible.",
+       "model_answer_md": "Fringes vanish when the maximum of one line falls on the minimum of the other: $2t=m\\lambda=(m+1)(\\lambda-\\delta\\lambda)$, so $m\\approx\\lambda/\\delta\\lambda$.\n\n$$t_{max}=\\frac{\\lambda^2}{2\\mu\\,\\delta\\lambda}=\\frac{(5.893\\times10^{-7})^2}{2\\times1\\times6\\times10^{-10}}=2.9\\times10^{-4}\\ \\text{m}\\approx0.29\\ \\text{mm}$$",
+       "points": [
+        "Fringes lost when $m\\lambda=(m+1)\\lambda'$",
+        "$t_{max}=\\lambda^2/(2\\mu\\,\\delta\\lambda\\cos r)$",
+        "Answer $2.9\\times10^{-4}$ m"
+       ]
+      },
+      {
+       "id": "f-p1",
+       "pyq": "df316131ee0e6f49",
+       "level": 2,
+       "points": [
+        "Diagram: incident ray at A, refracted at B, emerges at C, normal CN to the reflected ray",
+        "$\\Delta=\\mu(AB+BC)-AN=2\\mu t\\cos r$",
+        "Add $\\lambda/2$ for reflection at the denser surface: $2\\mu t\\cos r+\\lambda/2$"
+       ]
+      },
+      {
+       "id": "f-p2",
+       "pyq": "897f52daafe0d6b3",
+       "level": 2,
+       "points": [
+        "$\\Delta=2\\mu t\\cos r+\\lambda/2$ with a short derivation",
+        "Maxima $2\\mu t\\cos r=(2n-1)\\lambda/2$",
+        "Minima $2\\mu t\\cos r=n\\lambda$"
+       ]
+      },
+      {
+       "id": "f-p3",
+       "pyq": "a02578a40f775a4c",
+       "level": 2,
+       "points": [
+        "Both reflected beams come from one incident beam, so they are coherent and overlap to give fringes",
+        "$\\Delta=2\\mu t\\cos r+\\lambda/2$ at refraction angle $r$",
+        "Bright: $2\\mu t\\cos r=(2m-1)\\lambda/2$, $m=1,2,\\dots$",
+        "Dark: $2\\mu t\\cos r=m\\lambda$, $m=0,1,\\dots$"
+       ]
+      },
+      {
+       "id": "f-p4",
+       "pyq": "e4108c1dfd41c281",
+       "level": 2,
+       "points": [
+        "Optical path difference $2\\mu t\\cos r$ plus $\\lambda/2$, with the geometry",
+        "Maxima $2\\mu t\\cos r=(2n-1)\\lambda/2$",
+        "Minima $2\\mu t\\cos r=n\\lambda$"
+       ]
+      },
+      {
+       "id": "f-p5",
+       "pyq": "87e448550aa1fa90",
+       "level": 2,
+       "points": [
+        "Interference by division of amplitude in a parallel film, diagram",
+        "$\\Delta=2\\mu t\\cos r+\\lambda/2$",
+        "Maxima and minima conditions in reflected light"
+       ]
+      },
+      {
+       "id": "f-p6",
+       "pyq": "43ae9fd72399ebad",
+       "level": 3,
+       "points": [
+        "Explain the phenomenon: reflected rays from top and bottom are coherent, diagram",
+        "Path difference $2\\mu t\\cos r+\\lambda/2$ derived",
+        "Maxima $(2n-1)\\lambda/2$, minima $n\\lambda$ (6 marks: derivation and both conditions)"
+       ]
+      },
+      {
+       "id": "f-p7",
+       "pyq": "f5c53879e392c94b",
+       "level": 1,
+       "points": [
+        "Answer (d) $\\lambda/2$: reflection from a denser medium gives a $\\pi$ change, equal to $\\lambda/2$"
+       ]
+      },
+      {
+       "id": "f-p8",
+       "pyq": "afda7eb701ffb698",
+       "level": 1,
+       "points": [
+        "Answer (d): the refracted ray suffers no phase change; only the reflected ray at a rare-to-dense boundary changes phase by $\\pi$"
+       ]
+      },
+      {
+       "id": "f-p9",
+       "pyq": "4bbca78f96ac3bfa",
+       "level": 1,
+       "points": [
+        "Answer (a) interference: waves reflected from the top and bottom surfaces superpose and different wavelengths are reinforced at different thicknesses"
+       ]
+      },
+      {
+       "id": "f-p10",
+       "pyq": "e77fed8708758744",
+       "level": 2,
+       "points": [
+        "Each wavelength has its own bright and dark condition, so some colours are reinforced and others cancelled",
+        "Coloured fringes are seen (soap bubble, oil film)",
+        "For a wedge only a few coloured fringes show and then fade to white",
+        "A film with $t\\ll\\lambda$ appears dark"
+       ]
+      },
+      {
+       "id": "f-p11",
+       "pyq": "23d6d18c198bdfab",
+       "level": 2,
+       "points": [
+        "Film must be very thin, thickness of the order of $\\lambda$",
+        "For a thick film $2\\mu t\\cos r$ exceeds the coherence length, rays are no longer coherent, no fringes",
+        "Also fringes of different wavelengths overlap and wash out"
+       ]
+      },
+      {
+       "id": "f-p12",
+       "pyq": "7edff146c57b0ac0",
+       "level": 3,
+       "points": [
+        "Source has two close wavelengths $\\lambda_1,\\lambda_2$ with $\\lambda_1-\\lambda_2=d\\lambda$",
+        "Fringes lost when $2\\mu t\\cos r=m\\lambda_1=(m+1)\\lambda_2$",
+        "So $m=\\lambda/d\\lambda$",
+        "$t_{max}=\\lambda^2/(2\\mu\\,d\\lambda\\cos r)$"
+       ]
+      },
+      {
+       "id": "f-p13",
+       "pyq": "6af703abac0eb7d5",
+       "level": 1,
+       "points": [
+        "Answer (c): the reflected light alternates between bright and dark as the path difference passes through whole and half wavelength multiples"
+       ]
+      }
+     ]
+    },
+    {
+     "id": "film-numericals",
+     "title": "Thin film numericals",
+     "theory_md": "Recipe for any film numerical:\n1. Find $r$ from $\\sin i=\\mu\\sin r$ (normal incidence: $\\cos r=1$).\n2. Count the $\\pi$ changes. **One** (air-film-rarer medium, the usual case): dark $2\\mu t\\cos r=n\\lambda$, bright $2\\mu t\\cos r=(2n-1)\\lambda/2$. **Zero or two** (film between two denser media, or a coating on glass): reversed, bright $2\\mu t\\cos r=n\\lambda$, dark $2\\mu t\\cos r=(2n-1)\\lambda/2$.\n3. Take the $m$th dark band as order $m$, as the papers do.\n4. Two consecutive bright bands $\\lambda_1>\\lambda_2$: $n=\\lambda_2/(\\lambda_1-\\lambda_2)$.\n\nA transparent sheet in a beam adds optical path $(\\mu-1)t$.",
+     "basics_md": "Optical path is how far light would travel in vacuum in the same time: in a medium of index $\\mu$ a thickness $t$ counts as $\\mu t$. A sheet replaces a thickness $t$ of air, so the extra path is $\\mu t-t$.",
+     "key_points": [
+      "Find $r$ first: $\\sin i=\\mu\\sin r$; check units (Å, nm, cm)",
+      "One $\\pi$ change: dark $2\\mu t\\cos r=n\\lambda$, bright $(2n-1)\\lambda/2$",
+      "Two $\\pi$ changes (both dense) or none: conditions swap",
+      "Consecutive bright bands: $n=\\lambda_2/(\\lambda_1-\\lambda_2)$",
+      "Sheet in a beam adds $(\\mu-1)t$"
+     ],
+     "questions": [
+      {
+       "id": "n-q1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "Least thickness of a film ($\\mu=1.5$) in air that looks dark in reflected light at normal incidence for $\\lambda=600$ nm is",
+       "options": [
+        "100 nm",
+        "200 nm",
+        "400 nm",
+        "150 nm"
+       ],
+       "answer_index": 1,
+       "why": "Dark: $2\\mu t=\\lambda$ (n=1), $t=600/3=200$ nm."
+      },
+      {
+       "id": "n-q2",
+       "kind": "numerical",
+       "level": 2,
+       "marks": 3,
+       "q": "An oil film ($\\mu=1.5$) on water is viewed at $45^\\circ$ to the normal and shows the 5th dark band for $\\lambda=600$ nm. Find its thickness.",
+       "model_answer_md": "$\\sin r=\\dfrac{\\sin45^\\circ}{1.5}=0.4714$, $\\cos r=0.8819$\n\nDark: $2\\mu t\\cos r=n\\lambda$\n\n$$t=\\frac{5\\times600\\times10^{-9}}{2\\times1.5\\times0.8819}=1.13\\times10^{-6}\\ \\text{m}=1.13\\ \\mu\\text{m}$$",
+       "points": [
+        "$\\sin r=0.4714$, $\\cos r=0.8819$",
+        "Dark condition $2\\mu t\\cos r=n\\lambda$ with n=5",
+        "$t=1.13\\ \\mu$m"
+       ]
+      },
+      {
+       "id": "n-q3",
+       "kind": "numerical",
+       "level": 3,
+       "marks": 3,
+       "q": "A glass lens is coated with $\\mathrm{MgF_2}$ ($\\mu=1.38$, glass $\\mu=1.5$) to suppress reflection of $\\lambda=550$ nm at normal incidence. Find the least thickness.",
+       "model_answer_md": "Reflection at air to $\\mathrm{MgF_2}$ and at $\\mathrm{MgF_2}$ to glass are both rare to dense: both change phase by $\\pi$, so there is no relative phase change.\n\nDark (no reflection): $2\\mu t=\\dfrac\\lambda2$\n\n$$t=\\frac\\lambda{4\\mu}=\\frac{550}{4\\times1.38}=99.6\\ \\text{nm}\\approx100\\ \\text{nm}$$",
+       "points": [
+        "Both reflections change phase by $\\pi$, so no net change",
+        "Dark condition $2\\mu t=\\lambda/2$ (n=0 order)",
+        "$t=\\lambda/4\\mu=99.6$ nm"
+       ]
+      },
+      {
+       "id": "n-q4",
+       "kind": "numerical",
+       "level": 2,
+       "marks": 2,
+       "q": "In Young's double slit experiment a mica sheet ($\\mu=1.58$) over one slit shifts the central fringe by 7 fringes. $\\lambda=5500$ Å. Find the thickness.",
+       "model_answer_md": "Extra optical path $(\\mu-1)t=n\\lambda$\n\n$$t=\\frac{7\\times5.5\\times10^{-7}}{0.58}=6.64\\times10^{-6}\\ \\text{m}=6.64\\ \\mu\\text{m}$$",
+       "points": [
+        "$(\\mu-1)t=n\\lambda$",
+        "$t=6.64\\ \\mu$m"
+       ]
+      },
+      {
+       "id": "n-p1",
+       "pyq": "aa15c2a546ed428f",
+       "level": 2,
+       "points": [
+        "Air to oil gives $\\pi$ change; oil to water (rarer) none, so dark: $2\\mu t\\cos r=n\\lambda$",
+        "$\\sin r=\\sin30^\\circ/1.4=0.3571$, $\\cos r=0.9341$",
+        "$t=6\\times589\\ \\text{nm}/(2\\times1.4\\times0.9341)=1.35\\ \\mu$m"
+       ]
+      },
+      {
+       "id": "n-p2",
+       "pyq": "e317e14903021bd2",
+       "level": 2,
+       "points": [
+        "Dark band: $2\\mu t\\cos r=n\\lambda$ with n=8",
+        "$\\sin r=0.3425$, $\\cos r=0.9395$",
+        "$t=1.72\\times10^{-6}$ m"
+       ]
+      },
+      {
+       "id": "n-p3",
+       "pyq": "a48434b57b8630fa",
+       "level": 2,
+       "points": [
+        "Dark band: $2\\mu t\\cos r=n\\lambda$, n=8, $\\mu=1.46$",
+        "$\\cos r=0.9395$",
+        "$t=1.72\\times10^{-6}$ m"
+       ]
+      },
+      {
+       "id": "n-p4",
+       "pyq": "61dcef4e9b79abeb",
+       "level": 2,
+       "points": [
+        "Dark: $2\\mu t\\cos r=m\\lambda$, m=8, $\\mu=1.44$",
+        "$\\sin r=0.3472$, $\\cos r=0.9378$",
+        "$t=1.75\\times10^{-6}$ m"
+       ]
+      },
+      {
+       "id": "n-p5",
+       "pyq": "db132f7b17375665",
+       "level": 2,
+       "points": [
+        "Dark: $2\\mu t\\cos r=8\\lambda$, $\\mu=1.44$",
+        "$\\cos r=0.9378$",
+        "$t=1.75\\times10^{-6}$ m"
+       ]
+      },
+      {
+       "id": "n-p6",
+       "pyq": "c43cfaf034541cdc",
+       "level": 2,
+       "points": [
+        "Bright with one $\\pi$ change: $2\\mu t\\cos r=(2m-1)\\lambda/2$, m=2 gives $3\\lambda/2$",
+        "$\\cos r=0.9266$",
+        "$t=3\\lambda/(4\\mu\\cos r)=426$ nm"
+       ]
+      },
+      {
+       "id": "n-p7",
+       "pyq": "6c704ae218cbebcf",
+       "level": 2,
+       "points": [
+        "Dark: $2\\mu t\\cos r=n\\lambda$, least non-zero thickness n=1",
+        "$t=\\lambda/(2\\mu\\cos60^\\circ)=5890\\ \\text{Å}/1.5$",
+        "$t=3.93\\times10^{-7}$ m (3927 Å)"
+       ]
+      },
+      {
+       "id": "n-p8",
+       "pyq": "289c4fb072f5f43f",
+       "level": 2,
+       "points": [
+        "Four conditions: coherent, monochromatic, nearly equal amplitudes, narrow close sources",
+        "Maxima $2\\mu t\\cos r=(2n-1)\\lambda/2$, minima $n\\lambda$",
+        "$t=0$: $\\Delta=\\lambda/2$, dark",
+        "Bright, n=1: $t=\\lambda/4\\mu=1.04\\times10^{-7}$ m (1037.5 Å)"
+       ]
+      },
+      {
+       "id": "n-p9",
+       "pyq": "6f2e9d19e4d742ce",
+       "level": 2,
+       "points": [
+        "Four conditions for sustained interference",
+        "Maxima and minima conditions; $t=0$ gives a dark film",
+        "Dark, n=1: $t=\\lambda/2\\mu=2.08\\times10^{-7}$ m (2075 Å)"
+       ]
+      },
+      {
+       "id": "n-p10",
+       "pyq": "c8e4cce130560cdb",
+       "level": 2,
+       "points": [
+        "Air-glass and glass-medium (2.00) are both rare to dense: both $\\pi$, no net change",
+        "Constructive: $2\\mu t=m\\lambda$, least m=1",
+        "$t=450/(2\\times1.5)=150$ nm, option (b)"
+       ]
+      },
+      {
+       "id": "n-p11",
+       "pyq": "08e4c73ac03786a5",
+       "level": 2,
+       "points": [
+        "Both reflections are rare to dense: no relative phase change",
+        "Constructive: $2\\mu t=m\\lambda$, m=1",
+        "$t=600/(2\\times1.5)=200$ nm"
+       ]
+      },
+      {
+       "id": "n-p12",
+       "pyq": "2b91844343c5a812",
+       "level": 3,
+       "points": [
+        "Consecutive bright bands: $2\\mu t\\cos r=n\\lambda_1=(n+1)\\lambda_2$, so $n=\\lambda_2/(\\lambda_1-\\lambda_2)=60$",
+        "$\\sin r=0.5305$, $\\cos r=0.848$",
+        "$t=n\\lambda_1/(2\\mu\\cos r)=1.62\\times10^{-3}$ cm $\\approx16.2\\ \\mu$m"
+       ]
+      },
+      {
+       "id": "n-p13",
+       "pyq": "e21d73af2fc56036",
+       "level": 2,
+       "points": [
+        "Sheet adds optical path $(\\mu-1)t$ which shifts the central fringe by $n$ fringes: $(\\mu-1)t=n\\lambda$",
+        "$\\mu=1+n\\lambda/t=1+6\\times5.46\\times10^{-7}/6.3\\times10^{-6}$",
+        "$\\mu=1.52$"
+       ]
+      }
+     ]
+    },
+    {
+     "id": "wedge",
+     "title": "Wedge-shaped film",
+     "theory_md": "Two flat plates touching at an edge with a small angle $\\theta$, lit at normal incidence. At distance $x$ from the edge $t=x\\theta$, and in reflected light $\\Delta=2\\mu t+\\lambda/2$.\n\n- **Dark:** $2\\mu t=n\\lambda$, $n=0,1,2,\\dots$. At the **apex** $t=0$, $\\Delta=\\lambda/2$: the edge is dark.\n- **Bright:** $2\\mu t=(2n-1)\\lambda/2$.\n\nFringes are straight, parallel to the edge, equally spaced (fringes of equal thickness). Fringe width\n$$\\beta=\\frac{\\lambda}{2\\mu\\theta}$$\nIt shrinks as $\\theta$ grows. A wire at the far end of a wedge of length $L$ (air) has diameter $t=L\\theta=L\\lambda/2\\beta$.",
+     "basics_md": "Think of a ramp: each time the gap grows by half a wavelength the light flips from dark to bright to dark again. The steeper the ramp, the quicker that happens, so the stripes crowd together.",
+     "key_points": [
+      "Path difference $2\\mu t+\\lambda/2$ with $t=x\\theta$",
+      "Apex is dark ($t=0$, $\\Delta=\\lambda/2$)",
+      "Dark $2\\mu t=n\\lambda$, bright $2\\mu t=(2n-1)\\lambda/2$",
+      "Fringes straight, parallel to edge, equally spaced; width $\\beta=\\lambda/2\\mu\\theta$",
+      "Thickness change between neighbouring fringes is $\\lambda/2\\mu$"
+     ],
+     "questions": [
+      {
+       "id": "w-q1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "In reflected light the fringe at the edge of an air wedge is",
+       "options": [
+        "bright, path difference $\\lambda$",
+        "bright, path difference $\\lambda/2$",
+        "dark, path difference $\\lambda/2$",
+        "dark, path difference $\\lambda$"
+       ],
+       "answer_index": 2,
+       "why": "At the apex $t=0$, so $\\Delta=\\lambda/2$ from the $\\pi$ change: destructive."
+      },
+      {
+       "id": "w-q2",
+       "kind": "short",
+       "level": 2,
+       "marks": 3,
+       "q": "Obtain the expression for the fringe width in a wedge-shaped film of angle $\\theta$.",
+       "model_answer_md": "Normal incidence, film index $\\mu$. At thickness $t$ the path difference is $2\\mu t+\\lambda/2$.\n\nDark fringe: $2\\mu t_n=n\\lambda$. At distance $x_n$ from the edge $t_n=x_n\\theta$ (small angle), so $x_n=\\dfrac{n\\lambda}{2\\mu\\theta}$ and $x_{n+1}=\\dfrac{(n+1)\\lambda}{2\\mu\\theta}$.\n\n$$\\beta=x_{n+1}-x_n=\\frac{\\lambda}{2\\mu\\theta}$$\n\nThe same holds for bright fringes. Fringes are equally spaced.",
+       "points": [
+        "Condition $2\\mu t_n=n\\lambda$ with $t=x\\theta$",
+        "$x_n=n\\lambda/2\\mu\\theta$",
+        "$\\beta=x_{n+1}-x_n=\\lambda/2\\mu\\theta$"
+       ]
+      },
+      {
+       "id": "w-q3",
+       "kind": "mcq",
+       "level": 2,
+       "q": "If the wedge angle is increased, the fringes",
+       "options": [
+        "move apart",
+        "come closer together",
+        "change from straight to circular",
+        "disappear only at the apex"
+       ],
+       "answer_index": 1,
+       "why": "$\\beta=\\lambda/(2\\mu\\theta)$ decreases as $\\theta$ increases."
+      },
+      {
+       "id": "w-q4",
+       "kind": "numerical",
+       "level": 3,
+       "marks": 3,
+       "q": "Two glass plates in contact at one end are separated by a thin wire at the other end, 10.0 cm away. With $\\lambda=589$ nm the dark fringes are 0.50 mm apart. Find the wedge angle and the diameter of the wire.",
+       "model_answer_md": "Air wedge, $\\mu=1$: $\\beta=\\dfrac\\lambda{2\\theta}$\n\n$\\theta=\\dfrac{589\\times10^{-9}}{2\\times0.50\\times10^{-3}}=5.89\\times10^{-4}$ rad\n\nWire diameter $=L\\theta=0.100\\times5.89\\times10^{-4}=5.89\\times10^{-5}$ m $\\approx59\\ \\mu$m",
+       "points": [
+        "$\\beta=\\lambda/2\\theta$ for air",
+        "$\\theta=5.89\\times10^{-4}$ rad",
+        "$t=L\\theta=5.89\\times10^{-5}$ m"
+       ]
+      },
+      {
+       "id": "w-p1",
+       "pyq": "50ea9299146a4cdd",
+       "level": 1,
+       "points": [
+        "Reflected path difference $2\\mu t\\cos r+\\lambda/2$, extra $\\lambda/2$ from reflection at the air-film surface only",
+        "At the apex $t=0$, so $\\Delta=\\lambda/2$, opposite phase, destructive: dark"
+       ]
+      },
+      {
+       "id": "w-p2",
+       "pyq": "7837308634e2989c",
+       "level": 2,
+       "points": [
+        "$\\pi$ phase change at one reflection (air to film), none at the other",
+        "At the apex $t=0$, $\\Delta=\\lambda/2$",
+        "Rays cancel, so the apex fringe is dark"
+       ]
+      },
+      {
+       "id": "w-p3",
+       "pyq": "3e6ac3db0e31d807",
+       "level": 1,
+       "points": [
+        "Answer (c): dark, path difference $\\lambda/2$ (from the $\\pi$ change)"
+       ]
+      },
+      {
+       "id": "w-p4",
+       "pyq": "659b36fd879065c3",
+       "level": 1,
+       "points": [
+        "True: lines of equal thickness in a wedge are straight, parallel to the edge"
+       ]
+      },
+      {
+       "id": "w-p5",
+       "pyq": "1f60d22574bd5e96",
+       "level": 2,
+       "points": [
+        "Dark $2\\mu t_n=n\\lambda$, $t=x\\theta$",
+        "$\\beta=x_{n+1}-x_n=\\lambda/(2\\mu\\theta)$",
+        "Angular separation $=\\beta/D=\\lambda/(2\\mu\\theta D)$ seen from distance $D$"
+       ]
+      },
+      {
+       "id": "w-p6",
+       "pyq": "165b881c42ab6363",
+       "level": 2,
+       "points": [
+        "Path difference $2\\mu t+\\lambda/2$; dark $2\\mu t=n\\lambda$; $t=x\\theta$",
+        "$\\beta=\\lambda/(2\\mu\\theta)$",
+        "Fringes straight, parallel, equally spaced"
+       ]
+      },
+      {
+       "id": "w-p7",
+       "pyq": "39e56fb38c75f34a",
+       "level": 3,
+       "points": [
+        "Diagram of wedge; ray reflected at top and bottom at thickness $t$",
+        "$\\Delta=2\\mu t\\cos(r+\\theta)+\\lambda/2\\approx2\\mu t\\cos r+\\lambda/2$",
+        "Bright $2\\mu t\\cos r=(2n-1)\\lambda/2$; dark $2\\mu t\\cos r=n\\lambda$"
+       ]
+      },
+      {
+       "id": "w-p8",
+       "pyq": "f569bbf050f4561c",
+       "level": 2,
+       "points": [
+        "Fringe is the locus of constant thickness $t$ at fixed inclination",
+        "Wedge: straight equally spaced fringes, $\\beta=\\lambda/2\\mu\\theta$; Newton's rings: circles",
+        "Bright $2\\mu t\\cos r=(2n-1)\\lambda/2$, dark $n\\lambda$"
+       ]
+      }
+     ]
+    },
+    {
+     "id": "newton",
+     "title": "Newton's rings",
+     "theory_md": "A plano-convex lens (radius $R$) rests on a flat glass plate. The air film has $t=r^2/2R$ and, in reflected light, $\\Delta=2t+\\lambda/2$. Fringes are concentric rings.\n\n- **Dark:** $2t=n\\lambda$, so $D_n^2=4n\\lambda R$, $D_n\\propto\\sqrt n$. Centre ($t=0$) is dark; transmitted light gives a bright centre.\n- **Bright:** $2t=(2n-1)\\lambda/2$, so $D_n^2=2(2n-1)\\lambda R$, $D_n\\propto\\sqrt{\\text{odd}}$.\n\nA liquid $\\mu$ in the film: $D_n^2=4n\\lambda R/\\mu$, so $\\mu=D_{air}^2/D_{liq}^2$. Without finding the centre: $\\lambda=\\dfrac{D_{n+p}^2-D_n^2}{4pR}$. Uses: $\\lambda$, $\\mu$ of a liquid, testing flatness.",
+     "basics_md": "Where the air gap is the same the interference is the same. The gap is equal on circles around the touching point, so the fringes are circles. The gap grows as $r^2$, so the rings crowd together outward.",
+     "key_points": [
+      "Air film $t=r^2/2R$; reflected $\\Delta=2t+\\lambda/2$",
+      "Dark rings $D_n^2=4n\\lambda R$; bright $D_n^2=2(2n-1)\\lambda R$",
+      "$D_n\\propto\\sqrt n$ (dark), $\\propto\\sqrt{\\text{odd}}$ (bright); centre dark in reflected light",
+      "With a liquid: $D_n^2=4n\\lambda R/\\mu$, $\\mu=D_{air}^2/D_{liq}^2$",
+      "$\\lambda=(D_{n+p}^2-D_n^2)/4pR$"
+     ],
+     "questions": [
+      {
+       "id": "r-q1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "In Newton's rings by reflected light the diameter of the $n$th dark ring is proportional to",
+       "options": [
+        "$n$",
+        "$\\sqrt n$",
+        "$\\sqrt{2n-1}$",
+        "$n^2$"
+       ],
+       "answer_index": 1,
+       "why": "$D_n^2=4n\\lambda R$."
+      },
+      {
+       "id": "r-q2",
+       "kind": "short",
+       "level": 2,
+       "marks": 3,
+       "q": "Why does the centre of Newton's rings look dark in reflected light? What is seen in transmitted light, and what happens to the ring diameters when a liquid is introduced?",
+       "model_answer_md": "At the centre $t=0$. The ray reflected from the lens-air surface has no phase change; the ray reflected from air to glass plate gains $\\pi$ ($\\lambda/2$). So $\\Delta=\\lambda/2$: destructive, dark centre.\n\nIn transmitted light the pattern is complementary: the centre is bright.\n\nWith a liquid of index $\\mu$: $D_n'^2=4n\\lambda R/\\mu$, so the rings shrink and crowd closer by $1/\\sqrt\\mu$.",
+       "points": [
+        "$t=0$ and $\\pi$ change at one surface gives $\\Delta=\\lambda/2$, dark",
+        "Transmitted pattern complementary, bright centre",
+        "Rings shrink: $D'=D/\\sqrt\\mu$"
+       ]
+      },
+      {
+       "id": "r-q3",
+       "kind": "numerical",
+       "level": 2,
+       "marks": 3,
+       "q": "The 5th and 15th dark rings have diameters 0.28 cm and 0.58 cm; $R=100$ cm. Find $\\lambda$.",
+       "model_answer_md": "$$\\lambda=\\frac{D_{15}^2-D_5^2}{4pR}=\\frac{0.58^2-0.28^2}{4\\times10\\times100}\\ \\text{cm}=\\frac{0.2580}{4000}=6.45\\times10^{-5}\\ \\text{cm}=645\\ \\text{nm}$$",
+       "points": [
+        "$D_{n+p}^2-D_n^2=4p\\lambda R$ with p=10",
+        "Substitute in cm",
+        "$\\lambda=645$ nm"
+       ]
+      },
+      {
+       "id": "r-q4",
+       "kind": "numerical",
+       "level": 3,
+       "marks": 3,
+       "q": "For $\\lambda=589$ nm and $R=1.0$ m, find the diameter of the 5th bright ring in air and when $\\mu=1.33$ liquid fills the film.",
+       "model_answer_md": "Bright: $D_n^2=2(2n-1)\\lambda R$\n\n$D_5^2=2\\times9\\times589\\times10^{-9}\\times1.0=1.060\\times10^{-5}\\ \\text{m}^2$, $D_5=3.26\\ \\text{mm}$\n\nLiquid: $D_5'=D_5/\\sqrt{1.33}=2.82\\ \\text{mm}$",
+       "points": [
+        "Bright ring formula $D_n^2=2(2n-1)\\lambda R$",
+        "$D_5=3.26$ mm",
+        "With liquid divide by $\\sqrt\\mu$: 2.82 mm"
+       ]
+      },
+      {
+       "id": "r-p1",
+       "pyq": "d1ef5a8f1e3f83c4",
+       "level": 1,
+       "points": [
+        "Reflection at the lens-air surface: no phase change; at air-glass plate: change of $\\pi$ ($\\lambda/2$)",
+        "At the centre $t=0$, $\\Delta=\\lambda/2$, destructive: dark centre"
+       ]
+      },
+      {
+       "id": "r-p2",
+       "pyq": "11677ead20155016",
+       "level": 2,
+       "points": [
+        "Air film has $t=0$ at the contact point",
+        "Path difference $2\\mu t+\\lambda/2=\\lambda/2$: dark central ring",
+        "Transmitted light: complementary, bright centre; shows the $\\pi$ change on reflection from denser medium"
+       ]
+      },
+      {
+       "id": "r-p3",
+       "pyq": "5fa9556ca67007ea",
+       "level": 3,
+       "points": [
+        "Formation: air film between lens and plate, rays reflected from top and bottom surfaces interfere, circular rings of equal thickness",
+        "$\\Delta=2t+\\lambda/2$; bright $2t=(2n-1)\\lambda/2$",
+        "Geometry $r^2=2Rt$",
+        "$D_n^2=2(2n-1)\\lambda R$, so $D_n\\propto\\sqrt{\\text{odd natural numbers}}$"
+       ]
+      },
+      {
+       "id": "r-p4",
+       "pyq": "98cf7969896d3bf3",
+       "level": 3,
+       "points": [
+        "Formation of rings in reflected light with a labelled diagram",
+        "$t=r^2/2R$ and bright condition $2t=(2n-1)\\lambda/2$",
+        "$D_n=\\sqrt{2\\lambda R}\\sqrt{2n-1}$, proportional to the square roots of odd numbers"
+       ]
+      },
+      {
+       "id": "r-p5",
+       "pyq": "47c073f57a6ccdef",
+       "level": 1,
+       "points": [
+        "Answer (c): $D_n\\propto\\sqrt n$, since $D_n^2=4n\\lambda R$"
+       ]
+      },
+      {
+       "id": "r-p6",
+       "pyq": "4ad200778dba6597",
+       "level": 1,
+       "points": [
+        "False: bright ring $r_n=\\sqrt{(2n-1)R\\lambda/2}$, so $r_4=\\sqrt{7R\\lambda/2}$"
+       ]
+      },
+      {
+       "id": "r-p7",
+       "pyq": "506db668d2668b32",
+       "level": 1,
+       "points": [
+        "False: $r_4^2=7R\\lambda/2$ for the 4th bright ring",
+        "$\\sqrt{4R\\lambda}$ is the radius of the 4th dark ring"
+       ]
+      },
+      {
+       "id": "r-p8",
+       "pyq": "4d69572fac29f957",
+       "level": 2,
+       "points": [
+        "$D_n^2=4n\\lambda R$, so $D_n\\propto\\sqrt n$",
+        "$D_x=2D_4$ gives $x/4=4$",
+        "Order 16"
+       ]
+      },
+      {
+       "id": "r-p9",
+       "pyq": "761a664c16a0365c",
+       "level": 2,
+       "points": [
+        "Dark ring $D_n\\propto\\sqrt n$",
+        "$D_m/D_4=\\sqrt{m/4}=2$",
+        "16th dark ring, independent of $\\lambda$"
+       ]
+      },
+      {
+       "id": "r-p10",
+       "pyq": "2dcd8260b07f1287",
+       "level": 2,
+       "points": [
+        "$\\lambda=(r_{20}^2-r_{10}^2)/(10R)$",
+        "Radius of curvature taken as $R=f=90$ cm",
+        "$\\lambda=0.05/900$ cm $=5.56\\times10^{-5}$ cm $\\approx556$ nm"
+       ]
+      },
+      {
+       "id": "r-p11",
+       "pyq": "d424c110f75e92ac",
+       "level": 2,
+       "points": [
+        "Air $D^2=4nR\\lambda$; liquid $D'^2=4nR\\lambda/\\mu$",
+        "$\\mu=(1.40/1.27)^2$",
+        "$\\mu=1.215$"
+       ]
+      },
+      {
+       "id": "r-p12",
+       "pyq": "9e1097a8476d61a2",
+       "level": 3,
+       "points": [
+        "Neat diagram: lens on plate, normal incidence, reflected rays",
+        "Bright $2t=(2n-1)\\lambda/2$, dark $2t=n\\lambda$",
+        "$D'^2=D^2/\\mu$ and $D_5'=D_5/2$",
+        "$\\mu=4$"
+       ]
+      },
+      {
+       "id": "r-p13",
+       "pyq": "ff7d8255873b609e",
+       "level": 3,
+       "points": [
+        "Conditions of maxima and minima",
+        "Two applications: wavelength of light, refractive index of a liquid (or test of flatness)",
+        "$\\lambda=D^2/4nR=0.48^2/(4\\times10\\times90)\\ \\text{cm}=6.4\\times10^{-5}$ cm $=6400$ Å"
+       ]
+      },
+      {
+       "id": "r-p14",
+       "pyq": "2415317b7874fd49",
+       "level": 3,
+       "points": [
+        "Coincidence $n\\lambda_1=(n+1)\\lambda_2$, so $n=\\lambda_2/(\\lambda_1-\\lambda_2)=59$",
+        "$D_n^2=4nR\\lambda_1$",
+        "$D\\approx1.13\\times10^{-2}$ m $=1.13$ cm"
+       ]
+      },
+      {
+       "id": "r-p15",
+       "pyq": "684cd48bb8a3d047",
+       "level": 1,
+       "points": [
+        "$\\lambda=r_8^2/(8R)=(3.6\\times10^{-3})^2/(8\\times3)=5.4\\times10^{-7}$ m",
+        "Answer (c) 540 nm"
+       ]
+      },
+      {
+       "id": "r-p16",
+       "pyq": "e663414b9d4a97a7",
+       "level": 2,
+       "points": [
+        "$\\lambda=(D_{20}^2-D_{10}^2)/(4\\times10\\times R)$ with $R=1$ m",
+        "Direct arithmetic gives about 564.6 nm",
+        "Nearest option (d) 563.6 nm"
+       ]
+      },
+      {
+       "id": "r-p17",
+       "pyq": "f0ebba2cfb719544",
+       "level": 1,
+       "points": [
+        "A true: a convex surface always converges, $1/f=(\\mu-1)/R$ is positive",
+        "B false: a plate has $R_1=R_2=\\infty$, so $1/f=0$ and $f=\\infty$",
+        "Answer (a)"
+       ]
+      },
+      {
+       "id": "r-p18",
+       "pyq": "4d78cda2d0530cd5",
+       "level": 2,
+       "points": [
+        "Centre air gap $t$: $\\Delta=2t+\\lambda/2$",
+        "$t=\\lambda$: $\\Delta=5\\lambda/2$, dark",
+        "$t=\\lambda/4$: $\\Delta=\\lambda$, bright",
+        "Answer (a)"
+       ]
+      },
+      {
+       "id": "r-p19",
+       "pyq": "de6a39bdae5cab0c",
+       "level": 3,
+       "points": [
+        "$D_{20}^2-D_{12}^2=D_{12}^2-D_4^2$ (equal $p=8$)",
+        "$D_{20}^2=2(0.7)^2-0.4^2=0.82$, $D_{20}=0.9055$ cm",
+        "Liquid: $D_n^2\\propto1/\\mu$, $\\mu=1/0.75^2=1.78$"
+       ]
+      },
+      {
+       "id": "r-p20",
+       "pyq": "f5d638c3a62669ae",
+       "level": 2,
+       "points": [
+        "Liquid film: $D_n^2=4n\\lambda R/\\mu$, so $\\mu=4n\\lambda R/D_n^2$",
+        "$\\mu=4\\times16\\times5.896\\times10^{-7}\\times1.0/(5.1\\times10^{-3})^2$",
+        "$\\mu\\approx1.45$"
+       ]
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "topic": "Diffraction",
+   "subtopics": [
+    {
+     "id": "fresnel-fraunhofer",
+     "title": "Diffraction types and the difference from interference",
+     "theory_md": "**Diffraction** is the bending of light round an obstacle or aperture whose size is comparable to $\\lambda$.\n\n- **Fresnel:** source or screen (or both) at a finite distance, no lens, spherical or cylindrical wavefronts.\n- **Fraunhofer:** source and screen effectively at infinity (lenses used), plane wavefronts.\n\n| Interference | Diffraction |\n|---|---|\n| Superposition of waves from two coherent sources | Superposition of secondary wavelets from different parts of one wavefront |\n| Fringes usually of equal width and nearly equal intensity | Fringes of unequal width, intensity falls rapidly with order |\n| All maxima almost equally bright | Central maximum much brighter |",
+     "basics_md": "Waves spread out when they squeeze through a gap about as wide as the wavelength, like sound coming round a door.",
+     "key_points": [
+      "Diffraction: bending round obstacle or aperture of size comparable to $\\lambda$",
+      "Fresnel: finite distances, spherical wavefronts; Fraunhofer: infinity, plane wavefronts, lenses",
+      "Interference: two coherent sources; diffraction: wavelets from one wavefront",
+      "Interference fringes equally bright and spaced; diffraction fringes unequal, intensity falls off"
+     ],
+     "questions": [
+      {
+       "id": "d-q1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "In Fraunhofer diffraction the incident wavefront is",
+       "options": [
+        "spherical",
+        "cylindrical",
+        "plane",
+        "random"
+       ],
+       "answer_index": 2,
+       "why": "Source and screen are at infinity (lenses), so the wavefront is plane."
+      },
+      {
+       "id": "d-q2",
+       "kind": "mcq",
+       "level": 1,
+       "q": "Fresnel diffraction differs from Fraunhofer in that",
+       "options": [
+        "a lens is essential",
+        "the source and screen are at finite distance",
+        "the wavefront is always plane",
+        "no obstacle is used"
+       ],
+       "answer_index": 1,
+       "why": "Fresnel needs no lens; distances are finite."
+      },
+      {
+       "id": "d-q3",
+       "kind": "short",
+       "level": 2,
+       "marks": 2,
+       "q": "Write two differences between interference and diffraction.",
+       "model_answer_md": "1. Interference is the superposition of waves from two coherent sources; diffraction is the superposition of secondary wavelets from different parts of the same wavefront.\n2. Interference fringes are usually of equal width and nearly equal intensity; diffraction fringes have unequal width and the intensity falls rapidly away from the central maximum.",
+       "points": [
+        "Two coherent sources vs one wavefront",
+        "Equal width and intensity vs unequal width, falling intensity"
+       ]
+      },
+      {
+       "id": "d-q4",
+       "kind": "short",
+       "level": 2,
+       "marks": 2,
+       "q": "Distinguish Fresnel diffraction from Fraunhofer diffraction.",
+       "model_answer_md": "**Fresnel:** source and screen at finite distance from the aperture, no lenses, spherical or cylindrical wavefronts.\n\n**Fraunhofer:** source and screen at infinity (obtained with two lenses), plane wavefronts. Mathematically simpler.",
+       "points": [
+        "Fresnel: finite distance, no lens, spherical wavefront",
+        "Fraunhofer: infinite distance, lenses, plane wavefront"
+       ]
+      },
+      {
+       "id": "d-p1",
+       "pyq": "de3c090edfefe3f8",
+       "level": 1,
+       "points": [
+        "True: in Fresnel diffraction the source and screen are at finite distance from the slit (spherical or cylindrical wavefronts)"
+       ]
+      },
+      {
+       "id": "d-p2",
+       "pyq": "447eec2b6f8b1d7e",
+       "level": 2,
+       "points": [
+        "Two differences, e.g. two coherent sources vs one wavefront; equal width and intensity vs unequal, falling intensity",
+        "Plot of $I/I_0$ against $\\alpha$: central maximum $I_0$ at $\\alpha=0$, zeros at $\\alpha=\\pm\\pi,\\pm2\\pi,\\dots$, weak secondary maxima (0.045, 0.016, ...) between, symmetric"
+       ]
+      },
+      {
+       "id": "d-p3",
+       "pyq": "f36dbc76cc47267f",
+       "level": 1,
+       "points": [
+        "Interference: two coherent sources, fringes equally bright and spaced",
+        "Diffraction: wavelets from one wavefront, intensity falls rapidly with order"
+       ]
+      }
+     ]
+    },
+    {
+     "id": "single-slit",
+     "title": "Single slit (Fraunhofer)",
+     "theory_md": "Plane wave of wavelength $\\lambda$ on a slit of width $a$. Divide the slit into strips; the strip at $x$ has phase $\\frac{2\\pi}{\\lambda}x\\sin\\theta$. Adding them gives amplitude $A_0\\sin\\alpha/\\alpha$ and\n$$I=I_0\\left(\\frac{\\sin\\alpha}{\\alpha}\\right)^2,\\quad \\alpha=\\frac{\\pi a\\sin\\theta}{\\lambda}$$\n- Central maximum at $\\theta=0$ ($I_0$).\n- **Minima:** $a\\sin\\theta=m\\lambda$, $m=\\pm1,\\pm2,\\dots$\n- **Secondary maxima:** $\\tan\\alpha=\\alpha$, near $a\\sin\\theta\\approx(2m+1)\\lambda/2$, with $I\\approx\\frac{4}{(2m+1)^2\\pi^2}I_0$: $1:0.045:0.016:0.008$.\n\nOn a screen at distance $f$: $y_m=m\\lambda f/a$, central width $2\\lambda f/a\\propto1/a$.",
+     "basics_md": "A single slit is many tiny sources side by side. At the centre they all agree. Off to the side, the strips at the top and bottom start to cancel in pairs, and at the first minimum the slit's two halves cancel completely.",
+     "key_points": [
+      "$I=I_0(\\sin\\alpha/\\alpha)^2$ with $\\alpha=\\pi a\\sin\\theta/\\lambda$",
+      "Minima $a\\sin\\theta=m\\lambda$; central maximum at $\\theta=0$",
+      "Secondary maxima from $\\tan\\alpha=\\alpha$, near $(2m+1)\\lambda/2$, weak (4.5%, 1.6%, ...)",
+      "Intensity ratios $1:\\frac4{9\\pi^2}:\\frac4{25\\pi^2}:\\dots$",
+      "Central width $2\\lambda f/a$, inversely proportional to $a$"
+     ],
+     "questions": [
+      {
+       "id": "s-q1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "The minima of a single-slit Fraunhofer pattern occur at",
+       "options": [
+        "$a\\sin\\theta=m\\lambda$",
+        "$a\\sin\\theta=(2m+1)\\lambda/2$",
+        "$a\\sin\\theta=m\\lambda/2$",
+        "$a\\cos\\theta=m\\lambda$"
+       ],
+       "answer_index": 0,
+       "why": "Minima: $\\alpha=m\\pi$ so $a\\sin\\theta=m\\lambda$, $m\\ne0$."
+      },
+      {
+       "id": "s-q2",
+       "kind": "numerical",
+       "level": 2,
+       "marks": 3,
+       "q": "A slit of width 0.20 mm is lit by $\\lambda=600$ nm and the pattern is formed on a screen in the focal plane of a lens, $f=0.50$ m. Find the position of the first minimum and the width of the central maximum.",
+       "model_answer_md": "First minimum: $a\\sin\\theta=\\lambda$, so $y_1=\\dfrac{\\lambda f}{a}=\\dfrac{600\\times10^{-9}\\times0.50}{0.20\\times10^{-3}}=1.5\\times10^{-3}$ m $=1.5$ mm\n\nCentral maximum width $=2y_1=\\dfrac{2\\lambda f}{a}=3.0$ mm",
+       "points": [
+        "$y_1=\\lambda f/a=1.5$ mm",
+        "Width of central maximum $=2y_1=3.0$ mm"
+       ]
+      },
+      {
+       "id": "s-q3",
+       "kind": "mcq",
+       "level": 2,
+       "q": "If the slit width is halved the width of the central maximum",
+       "options": [
+        "halves",
+        "doubles",
+        "stays the same",
+        "becomes zero"
+       ],
+       "answer_index": 1,
+       "why": "Width $=2\\lambda f/a\\propto1/a$."
+      },
+      {
+       "id": "s-q4",
+       "kind": "short",
+       "level": 3,
+       "marks": 3,
+       "q": "Show that the first secondary maximum has about 4.5% of the intensity of the central maximum.",
+       "model_answer_md": "Secondary maxima: $\\dfrac{dI}{d\\alpha}=0\\Rightarrow\\tan\\alpha=\\alpha$. The first root is just below $3\\pi/2$, so take $\\alpha\\approx3\\pi/2$ where $\\sin^2\\alpha=1$.\n\n$$\\frac I{I_0}=\\frac{\\sin^2\\alpha}{\\alpha^2}=\\frac1{(3\\pi/2)^2}=\\frac4{9\\pi^2}=0.045$$\n\nAbout 4.5% (the exact root $\\alpha=1.43\\pi$ gives 4.7%).",
+       "points": [
+        "$dI/d\\alpha=0$ gives $\\tan\\alpha=\\alpha$",
+        "Root near $3\\pi/2$",
+        "$I/I_0=4/9\\pi^2=0.045$"
+       ]
+      },
+      {
+       "id": "s-p1",
+       "pyq": "e9052f7ad489d391",
+       "level": 3,
+       "points": [
+        "Setup: plane wave, slit width $a$, strips of width $dx$, phase $\\frac{2\\pi}{\\lambda}x\\sin\\theta$",
+        "$R=A_0\\sin\\alpha/\\alpha$, $\\alpha=\\pi a\\sin\\theta/\\lambda$",
+        "$I=I_0(\\sin\\alpha/\\alpha)^2$",
+        "Principal maximum at $\\alpha=0$; minima $a\\sin\\theta=m\\lambda$; secondary maxima from $\\tan\\alpha=\\alpha$, weak",
+        "Diagram of $I$ against $\\sin\\theta$"
+       ]
+      },
+      {
+       "id": "s-p2",
+       "pyq": "027fc5a65b659d35",
+       "level": 3,
+       "points": [
+        "Strips of the slit, phase difference $\\frac{2\\pi}{\\lambda}x\\sin\\theta$",
+        "Integrate to get $R=A_0\\sin\\alpha/\\alpha$",
+        "$I=I_0\\sin^2\\alpha/\\alpha^2$"
+       ]
+      },
+      {
+       "id": "s-p3",
+       "pyq": "850e6ca5eb7d7431",
+       "level": 3,
+       "points": [
+        "Derivation of $I=I_0\\sin^2\\alpha/\\alpha^2$ with a diagram",
+        "Minima $a\\sin\\theta=m\\lambda$",
+        "Central maximum at $\\theta=0$; secondary maxima from $\\tan\\alpha=\\alpha$, about $(2m+1)\\lambda/2$"
+       ]
+      },
+      {
+       "id": "s-p4",
+       "pyq": "25435be54a97e58d",
+       "level": 3,
+       "points": [
+        "Derivation with diagram: $I=I_0\\sin^2\\alpha/\\alpha^2$",
+        "Secondary maxima from $dI/d\\alpha=0$, $\\tan\\alpha=\\alpha$",
+        "First root near $3\\pi/2$: $I=I_0/\\alpha^2=4/9\\pi^2\\approx4.5\\%$"
+       ]
+      },
+      {
+       "id": "s-p5",
+       "pyq": "07a8511ba088dea9",
+       "level": 2,
+       "points": [
+        "Derivation of $I=I_0(\\sin\\alpha/\\alpha)^2$",
+        "Minima $a\\sin\\theta=m\\lambda$",
+        "Maxima $\\alpha=0$ and $\\tan\\alpha=\\alpha$, approximately $a\\sin\\theta=(2m+1)\\lambda/2$, falling intensities"
+       ]
+      },
+      {
+       "id": "s-p6",
+       "pyq": "9177c807e92a8c23",
+       "level": 2,
+       "points": [
+        "Derivation of the single-slit intensity",
+        "Minima $a\\sin\\theta=m\\lambda$, maxima near $(2m+1)\\lambda/2$ and central maximum"
+       ]
+      },
+      {
+       "id": "s-p7",
+       "pyq": "64ca36145f1fc394",
+       "level": 3,
+       "points": [
+        "Explain: plane wave, slit, lens, screen, central bright band with weaker bands",
+        "Derive $I=I_0\\sin^2\\alpha/\\alpha^2$",
+        "Minima $a\\sin\\theta=n\\lambda$; maxima $\\approx(2n+1)\\lambda/2$; ratios $1:4/9\\pi^2:4/25\\pi^2$"
+       ]
+      },
+      {
+       "id": "s-p8",
+       "pyq": "4f15320b917c2ddb",
+       "level": 2,
+       "points": [
+        "Minima: $\\sin\\alpha=0$, $\\alpha=m\\pi$, so $a\\sin\\theta=m\\lambda$",
+        "Maxima: central at $\\alpha=0$, others $\\tan\\alpha=\\alpha$, about $(2m+1)\\lambda/2$"
+       ]
+      },
+      {
+       "id": "s-p9",
+       "pyq": "de52d5b337826617",
+       "level": 3,
+       "points": [
+        "Derive $I=I_0\\sin^2\\alpha/\\alpha^2$; minima at $a\\sin\\theta=n\\lambda$",
+        "Maxima $\\tan\\alpha=\\alpha$, roots just below $(2n+1)\\pi/2$",
+        "$I_n=I_0\\cdot4/((2n+1)^2\\pi^2)$",
+        "Ratio $1:4/9\\pi^2:4/25\\pi^2:4/49\\pi^2$"
+       ]
+      },
+      {
+       "id": "s-p10",
+       "pyq": "576a67cec59f3ba2",
+       "level": 1,
+       "points": [
+        "True: central width $=2\\lambda f/a\\propto1/a$"
+       ]
+      },
+      {
+       "id": "s-p11",
+       "pyq": "3a0e61989cb4bb15",
+       "level": 2,
+       "points": [
+        "Minima: $y_m=m\\lambda f/a$",
+        "$\\lambda=a y_3/(3f)=0.3\\times10^{-3}\\times5\\times10^{-3}/3$",
+        "$\\lambda=5\\times10^{-7}$ m $=500$ nm"
+       ]
+      },
+      {
+       "id": "s-p12",
+       "pyq": "5e02f920cc4392ce",
+       "level": 2,
+       "points": [
+        "$y_m=m\\lambda L/a$ with m=3",
+        "$\\lambda=ay_3/3L=5\\times10^{-7}$ m $=5000$ Å"
+       ]
+      },
+      {
+       "id": "s-p13",
+       "pyq": "9be7efdb526e0a1e",
+       "level": 1,
+       "points": [
+        "Maxima at $y_m\\approx(m+\\tfrac12)\\lambda f/a$, so the spacing of the 1st and 2nd is $\\lambda f/a$",
+        "$\\lambda=ay/f$, option (d)"
+       ]
+      }
+     ]
+    },
+    {
+     "id": "double-slit",
+     "title": "Double slit and missing orders",
+     "theory_md": "Two slits of width $a$, separation $d=a+b$ (centre to centre). The single-slit envelope multiplies the cosine fringes:\n$$I=4I_0\\frac{\\sin^2\\alpha}{\\alpha^2}\\cos^2\\beta,\\quad \\beta=\\frac{\\pi d\\sin\\theta}{\\lambda}$$\n- Interference maxima: $d\\sin\\theta=n\\lambda$.\n- Envelope zeros: $a\\sin\\theta=m\\lambda$.\n\n**Missing orders:** an interference maximum that falls on an envelope zero is absent. Both hold when\n$$\\frac nm=\\frac da,\\quad n=\\frac da\\,m$$\nFor $d=2a$: 2, 4, 6, ...; $d=3a$: 3, 6, 9, ... The central envelope holds $2(d/a)-1$ fringes when $d/a$ is an integer. Fringe width on a screen at $D$: $\\lambda D/d$.",
+     "basics_md": "The two slits make bright and dark stripes, but each slit also sends most of its light into a limited cone. A stripe that lands exactly where that cone has a dark line is simply missing.",
+     "key_points": [
+      "$I\\propto(\\sin\\alpha/\\alpha)^2\\cos^2\\beta$: single-slit envelope times interference",
+      "Maxima $d\\sin\\theta=n\\lambda$; envelope zeros $a\\sin\\theta=m\\lambda$",
+      "Missing orders when $n/m=d/a$, i.e. $n=(d/a)m$",
+      "$d=2a$: 2, 4, 6; $d=3a$: 3, 6, 9",
+      "Fringe width $\\lambda D/d$"
+     ],
+     "questions": [
+      {
+       "id": "ds-q1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "In a double slit pattern with $d=3a$ the missing orders are",
+       "options": [
+        "1, 2, 3 ...",
+        "2, 4, 6 ...",
+        "3, 6, 9 ...",
+        "3, 5, 7 ..."
+       ],
+       "answer_index": 2,
+       "why": "$n=(d/a)m=3m$."
+      },
+      {
+       "id": "ds-q2",
+       "kind": "short",
+       "level": 2,
+       "marks": 2,
+       "q": "What is meant by missing orders in a double-slit pattern?",
+       "model_answer_md": "Interference maxima occur at $d\\sin\\theta=n\\lambda$ but are modulated by the single-slit envelope whose zeros are at $a\\sin\\theta=m\\lambda$. When both conditions are met at the same angle, the order-$n$ maximum falls on a diffraction zero and disappears. Dividing, $n/m=d/a$, so $n=(d/a)m$.",
+       "points": [
+        "Interference maxima $d\\sin\\theta=n\\lambda$",
+        "Diffraction minima $a\\sin\\theta=m\\lambda$ coincide",
+        "Condition $n/m=d/a$"
+       ]
+      },
+      {
+       "id": "ds-q3",
+       "kind": "numerical",
+       "level": 2,
+       "marks": 3,
+       "q": "Slit width 0.10 mm, separation 0.30 mm (centre to centre). Find the missing orders and the number of bright fringes in the central diffraction maximum.",
+       "model_answer_md": "$\\dfrac da=\\dfrac{0.30}{0.10}=3$, so $n=3m$: orders **3, 6, 9, ...** are missing.\n\nThe central envelope extends to the first zero, which coincides with order 3 (missing). The bright fringes are orders $0,\\pm1,\\pm2$: **5 fringes** $=2(3)-1$.",
+       "points": [
+        "$d/a=3$",
+        "Missing orders 3, 6, 9, ...",
+        "Central maximum holds orders 0, 1, 2 on each side: 5 fringes"
+       ]
+      },
+      {
+       "id": "ds-q4",
+       "kind": "numerical",
+       "level": 3,
+       "marks": 4,
+       "q": "Slit width 0.20 mm, separation 0.50 mm, $\\lambda=600$ nm, screen at 1.5 m. Find the fringe width, the first missing order and the number of fringes in the central maximum.",
+       "model_answer_md": "Fringe width $=\\dfrac{\\lambda D}{d}=\\dfrac{600\\times10^{-9}\\times1.5}{0.50\\times10^{-3}}=1.8$ mm\n\n$\\dfrac nm=\\dfrac da=2.5$. The smallest integers with $n/m=2.5$ are $m=2$, $n=5$: orders **5, 10, 15, ...** are missing (the first, 5th order, lies on the second diffraction zero).\n\nThe first diffraction zero is at $n=d/a=2.5$, so the central maximum holds orders $0,\\pm1,\\pm2$: **5 fringes**.",
+       "points": [
+        "Fringe width $\\lambda D/d=1.8$ mm",
+        "$d/a=2.5$ gives $n=5,10,\\dots$",
+        "Central maximum: orders 0, 1, 2 each side, 5 fringes"
+       ]
+      },
+      {
+       "id": "ds-p1",
+       "pyq": "2df1c29c2a3d442d",
+       "level": 2,
+       "points": [
+        "Explanation: interference maxima $d\\sin\\theta=n\\lambda$ coincide with diffraction zeros $a\\sin\\theta=m\\lambda$; $n/m=d/a$",
+        "Taking $d=0.8$ mm centre to centre and $a=0.16$ mm, $d/a=5$",
+        "Missing orders 5, 10, 15, ..."
+       ]
+      },
+      {
+       "id": "ds-p2",
+       "pyq": "ba6e096a876a4ac5",
+       "level": 2,
+       "points": [
+        "Definition of missing orders",
+        "$d/a=0.4/0.08=5$",
+        "Missing orders 5, 10, 15, ..."
+       ]
+      },
+      {
+       "id": "ds-p3",
+       "pyq": "6bf3af3c7ac5d909",
+       "level": 1,
+       "points": [
+        "Interference maximum falls on a diffraction minimum, so that order is absent",
+        "Condition $n/m=d/a$"
+       ]
+      },
+      {
+       "id": "ds-p4",
+       "pyq": "57109613b93b7f4e",
+       "level": 2,
+       "points": [
+        "$n/m=(a+b)/a$",
+        "(i) $b=a$: $n/m=2$, orders 2, 4, 6, ... missing",
+        "(ii) $b=2a$: $n/m=3$, orders 3, 6, 9, ... missing"
+       ]
+      },
+      {
+       "id": "ds-p5",
+       "pyq": "271fa949c26b8e7f",
+       "level": 3,
+       "points": [
+        "Resultant amplitude $2A_0(\\sin\\alpha/\\alpha)\\cos\\beta$, so $I=4I_0\\sin^2\\alpha/\\alpha^2\\cos^2\\beta$",
+        "Diffraction minima $a\\sin\\theta=m\\lambda$; interference maxima $d\\sin\\theta=n\\lambda$, minima $d\\sin\\theta=(2n+1)\\lambda/2$",
+        "Missing orders $n/m=d/a$"
+       ]
+      },
+      {
+       "id": "ds-p6",
+       "pyq": "7dd0ae7316b69f3d",
+       "level": 1,
+       "points": [
+        "Missing orders $n/m=(a+e)/a$ with slit width 0.16 mm and opaque gap 0.8 mm: $0.96/0.16=6$",
+        "Orders 6, 12, 18, ..., option (d)",
+        "(If 0.8 mm were the centre-to-centre distance the ratio would be 5)"
+       ]
+      },
+      {
+       "id": "ds-p7",
+       "pyq": "6e5eb54e3125e514",
+       "level": 2,
+       "points": [
+        "Fringe width $\\beta=\\lambda D/d$, so $\\lambda=\\beta d/D=0.25\\times10^{-2}\\times0.4\\times10^{-3}/1.7$",
+        "$\\lambda=5.88\\times10^{-7}$ m $=5880$ Å",
+        "Missing orders $n/m=d/a=0.4/0.08=5$: 5, 10, 15, ..."
+       ]
+      },
+      {
+       "id": "ds-p8",
+       "pyq": "6afd9c456a4a6907",
+       "level": 3,
+       "points": [
+        "Amplitude $2A_0(\\sin\\alpha/\\alpha)\\cos\\beta$; $I=4I_0(\\sin^2\\alpha/\\alpha^2)\\cos^2\\beta$",
+        "Diffraction minima $a\\sin\\theta=m\\lambda$; interference maxima $d\\sin\\theta=n\\lambda$, $d=a+b$",
+        "Absent spectra: $n/m=(a+b)/a$"
+       ]
+      },
+      {
+       "id": "ds-p9",
+       "pyq": "3530335d48bab8e8",
+       "level": 2,
+       "points": [
+        "Diagram and double-slit amplitude/intensity expression with envelope times $\\cos^2\\beta$",
+        "Missing spectra: interference maxima falling on diffraction minima, $n/m=d/a$"
+       ]
+      },
+      {
+       "id": "ds-p10",
+       "pyq": "b0fbc0e05e78f005",
+       "level": 2,
+       "points": [
+        "$d/a=0.4\\times10^{-3}/0.08\\times10^{-3}=5$",
+        "Missing orders 5, 10, 15, ..."
+       ]
+      },
+      {
+       "id": "ds-p11",
+       "pyq": "75e9e4ea07a82fb3",
+       "level": 3,
+       "points": [
+        "First minimum of the single-slit envelope: $a\\sin\\theta=\\lambda$, $\\sin\\theta=6.5\\times10^{-7}/1.9\\times10^{-4}=3.42\\times10^{-3}$",
+        "Position of first minimum $y\\approx3.42\\times10^{-3}R$",
+        "First secondary maximum $a\\sin\\theta\\approx3\\lambda/2$, $y\\approx5.13\\times10^{-3}R$ (same units as $R$)"
+       ]
+      },
+      {
+       "id": "ds-p12",
+       "pyq": "ec89dd933f6d13bc",
+       "level": 2,
+       "points": [
+        "Explanation of missing orders, $n/m=d/a$",
+        "Substitute $a=0.16$ mm and $d=0.8+0.00R$ mm (roll-number digits) to get $d/a$ and list the orders that are integer multiples"
+       ]
+      }
+     ]
+    },
+    {
+     "id": "grating-equation",
+     "title": "Grating equation, orders and dispersion",
+     "theory_md": "A grating of $N$ lines per cm has **grating element** $d=a+b=1/N$ (convert units: cm to m). For normal incidence\n$$d\\sin\\theta=n\\lambda,\\quad n=0,1,2,\\dots$$\n- **Maximum order:** $\\sin\\theta\\le1$, so $n_{max}$ is the integer part of $d/\\lambda$ (an order at exactly $90^\\circ$ is not seen).\n- **Overlap:** $n_1\\lambda_1=n_2\\lambda_2$ at the same angle.\n- **Dispersion:** $\\Delta\\theta=\\dfrac{n\\,\\Delta\\lambda}{d\\cos\\theta}$ for two close lines.\n- On a screen at $L$: $\\tan\\theta=y/L$.\n\nWhite light: central order white, each higher order a spectrum with violet nearest and red farthest.",
+     "basics_md": "Each slit sends light out in all directions; in directions where neighbouring slits are exactly one wavelength out of step, all the slits add up. That sets $d\\sin\\theta=n\\lambda$.",
+     "key_points": [
+      "Grating element $d=1/N$ (unit conversion)",
+      "$d\\sin\\theta=n\\lambda$; central order is white",
+      "$n_{max}<d/\\lambda$ (integer part)",
+      "Overlap: $n_1\\lambda_1=n_2\\lambda_2$",
+      "Angular separation $\\Delta\\theta=n\\Delta\\lambda/(d\\cos\\theta)$"
+     ],
+     "questions": [
+      {
+       "id": "g-q1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "A grating has 5000 lines per cm. Its grating element is",
+       "options": [
+        "0.5 µm",
+        "2 µm",
+        "5 µm",
+        "20 µm"
+       ],
+       "answer_index": 1,
+       "why": "$d=1/5000$ cm $=2\\times10^{-4}$ cm $=2$ µm."
+      },
+      {
+       "id": "g-q2",
+       "kind": "numerical",
+       "level": 2,
+       "marks": 3,
+       "q": "A grating has 4000 lines/cm. For $\\lambda=589$ nm, find the maximum order observable and the angle of the first order.",
+       "model_answer_md": "$d=\\dfrac1{4000}$ cm $=2.5\\times10^{-6}$ m\n\n$n_{max}<\\dfrac d\\lambda=\\dfrac{2.5\\times10^{-6}}{5.89\\times10^{-7}}=4.24$, so $n_{max}=4$.\n\nFirst order: $\\sin\\theta=\\dfrac{5.89\\times10^{-7}}{2.5\\times10^{-6}}=0.2356$, $\\theta=13.6^\\circ$",
+       "points": [
+        "$d=2.5\\times10^{-6}$ m",
+        "$n_{max}=4$ since $d/\\lambda=4.24$",
+        "First order $\\sin\\theta=0.2356$, $13.6^\\circ$"
+       ]
+      },
+      {
+       "id": "g-q3",
+       "kind": "mcq",
+       "level": 2,
+       "q": "In a grating spectrum the 3rd order of 4000 Å coincides with the 2nd order of",
+       "options": [
+        "3000 Å",
+        "5000 Å",
+        "6000 Å",
+        "8000 Å"
+       ],
+       "answer_index": 2,
+       "why": "$3\\times4000=2\\lambda$, so $\\lambda=6000$ Å."
+      },
+      {
+       "id": "g-q4",
+       "kind": "numerical",
+       "level": 3,
+       "marks": 4,
+       "q": "A grating has 6000 lines/cm. Find the angular separation of the sodium lines 5890 Å and 5896 Å in the second order.",
+       "model_answer_md": "$d=\\dfrac1{6000}$ cm $=1.667\\times10^{-6}$ m\n\n$\\sin\\theta_1=\\dfrac{2\\times5890\\times10^{-10}}{1.667\\times10^{-6}}=0.7068$, $\\theta_1=44.975^\\circ$\n\n$\\sin\\theta_2=0.7075$, $\\theta_2=45.033^\\circ$\n\n$$\\Delta\\theta=0.058^\\circ\\ (1.02\\times10^{-3}\\ \\text{rad})$$\n\nCheck: $\\dfrac{n\\Delta\\lambda}{d\\cos\\theta}=\\dfrac{2\\times6\\times10^{-10}}{1.667\\times10^{-6}\\times0.7074}=1.02\\times10^{-3}$ rad.",
+       "points": [
+        "$d=1.667\\times10^{-6}$ m",
+        "Angles $44.975^\\circ$ and $45.033^\\circ$",
+        "$\\Delta\\theta=0.058^\\circ$ or $1.0\\times10^{-3}$ rad"
+       ]
+      },
+      {
+       "id": "g-p1",
+       "pyq": "bbdbc76f8716e56d",
+       "level": 2,
+       "points": [
+        "Same angle: $3\\times5491=4\\lambda$",
+        "$\\lambda=4118$ Å"
+       ]
+      },
+      {
+       "id": "g-p2",
+       "pyq": "63a3106c8c4c5679",
+       "level": 2,
+       "points": [
+        "$d=0.5\\ \\text{cm}/2500=2\\times10^{-6}$ m",
+        "$\\theta_1=17.128^\\circ$, $\\theta_2=17.146^\\circ$ (sodium lines in Å)",
+        "$\\Delta\\theta\\approx0.018^\\circ=3.1\\times10^{-4}$ rad"
+       ]
+      },
+      {
+       "id": "g-p3",
+       "pyq": "1851f0403a2eb57f",
+       "level": 2,
+       "points": [
+        "$d=1/500$ mm $=2000$ nm",
+        "$n_{max}<d/\\lambda=3.33$",
+        "Maximum order 3"
+       ]
+      },
+      {
+       "id": "g-p4",
+       "pyq": "99b428aa400e7b5d",
+       "level": 3,
+       "points": [
+        "$n\\lambda_1=(n+1)\\lambda_2$ gives $540n=405(n+1)$, $n=3$",
+        "$d=n\\lambda_1/\\sin30^\\circ=3.24\\times10^{-6}$ m",
+        "About 309 lines per mm"
+       ]
+      },
+      {
+       "id": "g-p5",
+       "pyq": "349266e1198c0a55",
+       "level": 2,
+       "points": [
+        "$n_{max}<d/\\lambda=1.5\\times10^{-6}/5.5\\times10^{-7}=2.73$",
+        "Maximum order 2"
+       ]
+      },
+      {
+       "id": "g-p6",
+       "pyq": "be9422bfc20d2085",
+       "level": 2,
+       "points": [
+        "$d=1/6000$ cm $=1.667\\times10^{-6}$ m",
+        "$\\sin\\theta_1=0.30$",
+        "$\\theta_1\\approx17.5^\\circ$"
+       ]
+      },
+      {
+       "id": "g-p7",
+       "pyq": "34f289d4a51b32e9",
+       "level": 2,
+       "points": [
+        "$n_{max}<d/\\lambda=1.667\\times10^{-6}/500\\times10^{-9}=3.33$",
+        "Maximum order 3"
+       ]
+      },
+      {
+       "id": "g-p8",
+       "pyq": "190d1a60afee666c",
+       "level": 2,
+       "points": [
+        "$\\tan\\theta=5.6/55=0.1018$, $\\sin\\theta\\approx0.1016$",
+        "$N=\\sin\\theta/(n\\lambda)$ per unit length",
+        "About $1.6\\times10^3$ slits/cm (1609 using $\\sin\\theta\\approx0.1018$)"
+       ]
+      },
+      {
+       "id": "g-p9",
+       "pyq": "a5c033a0d47ea321",
+       "level": 2,
+       "points": [
+        "$d=1/6000$ cm $=1.667\\times10^{-6}$ m",
+        "Third order seen only if $\\sin\\theta\\le1$: $\\lambda_{max}=d/3$",
+        "$5.56\\times10^{-7}$ m $\\approx5560$ Å"
+       ]
+      },
+      {
+       "id": "g-p10",
+       "pyq": "859086c106f6e9ed",
+       "level": 2,
+       "points": [
+        "$d=10^{-6}$ m",
+        "$n_{max}<d/\\lambda=10^{-6}/4.2\\times10^{-7}=2.38$",
+        "Maximum order 2"
+       ]
+      },
+      {
+       "id": "g-p11",
+       "pyq": "cb2b874b7a143566",
+       "level": 2,
+       "points": [
+        "Order: the integer $n$ in $d\\sin\\theta=n\\lambda$ (n=0 is the undeviated central image)",
+        "$d=2.54$ cm$/10000=2.54\\times10^{-6}$ m",
+        "$n<d/\\lambda=4.01$, maximum order 4"
+       ]
+      },
+      {
+       "id": "g-p12",
+       "pyq": "602ccf82bd5ef39f",
+       "level": 2,
+       "points": [
+        "Order of a spectrum: the $n$ in $d\\sin\\theta=n\\lambda$",
+        "$d=2.54\\times10^{-6}$ m, $n<4.01$",
+        "Maximum order 4"
+       ]
+      },
+      {
+       "id": "g-p13",
+       "pyq": "57ccc91b25e35c45",
+       "level": 1,
+       "points": [
+        "15000 lines in 3 cm gives 5000 lines/cm, $d=2\\times10^{-6}$ m",
+        "$\\sin\\theta=5\\times10^{-7}/2\\times10^{-6}=0.25$",
+        "$\\theta\\approx14.5^\\circ$"
+       ]
+      }
+     ]
+    },
+    {
+     "id": "grating-intensity",
+     "title": "N-slit intensity, absent orders and effect of N",
+     "theory_md": "For $N$ slits (width $a$, element $d$):\n$$I=I_0\\left(\\frac{\\sin\\alpha}{\\alpha}\\right)^2\\left(\\frac{\\sin N\\beta}{\\sin\\beta}\\right)^2,\\ \\ \\alpha=\\frac{\\pi a\\sin\\theta}{\\lambda},\\ \\beta=\\frac{\\pi d\\sin\\theta}{\\lambda}$$\nFirst factor: single-slit envelope. Second: $N$-slit interference.\n\n- **Principal maxima:** $\\beta=\\pm n\\pi$, i.e. $d\\sin\\theta=n\\lambda$; peak intensity $N^2I_0\\sin^2\\alpha/\\alpha^2$.\n- **Minima:** $N\\beta=m\\pi$, $m\\ne0,N,2N,\\dots$, i.e. $Nd\\sin\\theta=m\\lambda$.\n- Between neighbouring principal maxima: $N-1$ minima and $N-2$ weak secondary maxima.\n- **Absent orders:** $d\\sin\\theta=n\\lambda$ and $a\\sin\\theta=m\\lambda$ together, $n/m=d/a$.\n\nLarge $N$: principal maxima sharper (width $\\propto1/N$) and brighter ($\\propto N^2$); secondary maxima negligible. Intensities of orders are not equal: the envelope scales them.",
+     "basics_md": "More slits means the cancellation between slits is more exact everywhere except exactly at the principal maxima. So the bright lines get thinner and brighter and the space between goes nearly dark.",
+     "key_points": [
+      "$I=I_0(\\sin\\alpha/\\alpha)^2(\\sin N\\beta/\\sin\\beta)^2$: envelope times interference",
+      "Principal maxima $d\\sin\\theta=n\\lambda$; minima $Nd\\sin\\theta=m\\lambda$ ($m\\ne$ multiples of $N$)",
+      "$N-1$ minima and $N-2$ secondary maxima between principal maxima",
+      "Larger $N$: sharper, brighter principal maxima, negligible secondary maxima",
+      "Absent orders when $n/m=d/a$; order intensities follow the single-slit envelope"
+     ],
+     "questions": [
+      {
+       "id": "gi-q1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "For a grating with 6 slits, the number of minima between adjacent principal maxima is",
+       "options": [
+        "4",
+        "5",
+        "6",
+        "7"
+       ],
+       "answer_index": 1,
+       "why": "$N-1=5$ minima, and $N-2=4$ secondary maxima."
+      },
+      {
+       "id": "gi-q2",
+       "kind": "short",
+       "level": 2,
+       "marks": 2,
+       "q": "What changes in the diffraction pattern when the number of slits is made large?",
+       "model_answer_md": "1. The principal maxima ($d\\sin\\theta=n\\lambda$) become much sharper, width $\\propto1/N$.\n2. Their intensity rises as $N^2$.\n3. The $N-2$ secondary maxima become very weak and the background almost dark.\n4. Positions of the principal maxima are unchanged.",
+       "points": [
+        "Sharper principal maxima, width $\\propto1/N$",
+        "Intensity $\\propto N^2$",
+        "Secondary maxima negligible; positions unchanged"
+       ]
+      },
+      {
+       "id": "gi-q3",
+       "kind": "mcq",
+       "level": 2,
+       "q": "A grating has slit width $a$ equal to the opaque width $b$. The absent orders are",
+       "options": [
+        "1, 2, 3 ...",
+        "2, 4, 6 ...",
+        "3, 6, 9 ...",
+        "1, 3, 5 ..."
+       ],
+       "answer_index": 1,
+       "why": "$d=2a$, so $n/m=2$."
+      },
+      {
+       "id": "gi-q4",
+       "kind": "numerical",
+       "level": 2,
+       "marks": 2,
+       "q": "A grating has slits 2 µm wide separated by opaque strips 4 µm wide. Which orders are absent?",
+       "model_answer_md": "$d=a+b=2+4=6$ µm, $\\dfrac da=3$, so $n=3m$: orders **3, 6, 9, ...** are absent.",
+       "points": [
+        "$d=6$ µm, $d/a=3$",
+        "Orders 3, 6, 9, ... absent"
+       ]
+      },
+      {
+       "id": "gi-q5",
+       "kind": "short",
+       "level": 3,
+       "marks": 3,
+       "q": "Show that the principal maxima of a grating are not all equally bright.",
+       "model_answer_md": "$I=I_0\\dfrac{\\sin^2\\alpha}{\\alpha^2}\\cdot\\dfrac{\\sin^2N\\beta}{\\sin^2\\beta}$. At the $n$th principal maximum the second factor equals $N^2$, so $I_n=N^2I_0\\dfrac{\\sin^2\\alpha}{\\alpha^2}$ with $\\alpha=\\pi a\\sin\\theta_n/\\lambda$.\n\nThe single-slit factor falls with angle, so higher orders are weaker. Where $\\alpha=m\\pi$ the envelope is zero and the order is absent.",
+       "points": [
+        "Peak value of second factor is $N^2$",
+        "Orders scaled by $\\sin^2\\alpha/\\alpha^2$ and fall with angle",
+        "Absent where $\\alpha=m\\pi$"
+       ]
+      },
+      {
+       "id": "gi-p1",
+       "pyq": "1626504ac7ca4c54",
+       "level": 3,
+       "points": [
+        "Single slit amplitude $A\\sin\\alpha/\\alpha$; adjacent slits differ by $2\\beta$, sum $\\sin N\\beta/\\sin\\beta$",
+        "$I=I_0(\\sin\\alpha/\\alpha)^2(\\sin N\\beta/\\sin\\beta)^2$",
+        "Principal maxima $(a+b)\\sin\\theta=n\\lambda$, intensity $N^2I_0\\sin^2\\alpha/\\alpha^2$",
+        "Minima $N(a+b)\\sin\\theta=m\\lambda$, $m\\ne0,N,2N$; $N-1$ minima and $N-2$ secondary maxima"
+       ]
+      },
+      {
+       "id": "gi-p2",
+       "pyq": "36cc459e9bf3777b",
+       "level": 3,
+       "points": [
+        "Derivation of $I=I_0(\\sin\\alpha/\\alpha)^2(\\sin N\\beta/\\sin\\beta)^2$",
+        "Principal maxima $\\sin\\beta=0$, $d\\sin\\theta=n\\lambda$",
+        "Minima $N\\beta=m\\pi$ with $m\\ne0,N,2N$; secondary maxima in between"
+       ]
+      },
+      {
+       "id": "gi-p3",
+       "pyq": "5b5c757284eb1dce",
+       "level": 1,
+       "points": [
+        "Missing (absent) order: a principal maximum $d\\sin\\theta=n\\lambda$ falls on a single-slit minimum $a\\sin\\theta=m\\lambda$",
+        "So that order is absent, $n/m=d/a$"
+       ]
+      },
+      {
+       "id": "gi-p4",
+       "pyq": "34d067cfa3cb7f45",
+       "level": 2,
+       "points": [
+        "Absent spectra: orders where $d\\sin\\theta=n\\lambda$ and $a\\sin\\theta=m\\lambda$ hold together",
+        "Condition $n=(d/a)m$; e.g. if $a=b$, orders 2, 4, 6 are absent"
+       ]
+      },
+      {
+       "id": "gi-p5",
+       "pyq": "42a4da5fd1293a8f",
+       "level": 2,
+       "points": [
+        "Principal maxima sharper, narrower",
+        "Intensity $\\propto N^2$",
+        "Secondary maxima become very weak, background almost dark",
+        "Positions of maxima unchanged"
+       ]
+      },
+      {
+       "id": "gi-p6",
+       "pyq": "e84d5656cd3b51cd",
+       "level": 3,
+       "points": [
+        "Grating: large number of equal parallel slits with equal opaque spaces, $a+b$ about $10^3$ to $10^4$ lines/cm",
+        "Intensity $I_0(\\sin\\alpha/\\alpha)^2(\\sin N\\beta/\\sin\\beta)^2$; principal maxima $d\\sin\\theta=n\\lambda$",
+        "Spectra with white light: white zero order, violet nearest, red farthest, overlap at higher orders",
+        "Intensity not uniform: orders are modulated by the single-slit envelope"
+       ]
+      },
+      {
+       "id": "gi-p7",
+       "pyq": "b70c5120a710a9e7",
+       "level": 3,
+       "points": [
+        "Intensity $I_0(\\sin\\alpha/\\alpha)^2(\\sin N\\beta/\\sin\\beta)^2$ with derivation",
+        "Principal maxima $(a+b)\\sin\\theta=n\\lambda$; minima $N(a+b)\\sin\\theta=m\\lambda$",
+        "Missing orders $n/m=(a+b)/a$"
+       ]
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "topic": "Michelson's interferometer",
+   "subtopics": [
+    {
+     "id": "construction",
+     "title": "Construction and working",
+     "theory_md": "**Principle:** division of amplitude. An extended monochromatic source $S$ sends light to a half-silvered plate $G_1$ at $45^\\circ$, which splits it towards mirror $M_1$ (movable, micrometer screw) and mirror $M_2$ (fixed, tilt screws). A **compensating plate** $G_2$, same thickness as $G_1$, sits in the $M_2$ arm so both beams cross equal glass. The beams recombine at $G_1$ and are viewed in a telescope $T$.\n\nThe fringes are those of an air film of thickness $d$ between $M_2$ and the image $M_1'$ of $M_1$: $\\Delta=2d\\cos\\theta$. Bright $2d\\cos\\theta=n\\lambda$, dark $(2n+1)\\lambda/2$.\n\n- $M_1\\parallel M_2'$: **circular** fringes (equal inclination).\n- $M_1,M_2'$ slightly inclined: **straight** wedge fringes.\n\nMoving $M_1$ by $\\lambda/2$ shifts one fringe.",
+     "basics_md": "Split a beam, send each half down its own arm, bring them back together. If one arm is longer by half a wavelength, a bright spot turns dark. Move the mirror and the pattern marches across: counting the marches measures length.",
+     "key_points": [
+      "Division of amplitude; $G_1$ half-silvered, $M_1$ movable, $M_2$ fixed, compensating plate $G_2$, telescope",
+      "$G_2$ equalises glass path of the two beams",
+      "Path difference $2d\\cos\\theta$; bright $n\\lambda$, dark $(2n+1)\\lambda/2$",
+      "$M_1\\parallel M_2'$ gives circular fringes; inclined gives straight fringes",
+      "Mirror shift $\\lambda/2$ moves one fringe: $\\lambda=2x/N$"
+     ],
+     "questions": [
+      {
+       "id": "m-q1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "The compensating plate in a Michelson interferometer is used to",
+       "options": [
+        "increase the intensity",
+        "make the glass paths of the two beams equal",
+        "polarise the beams",
+        "reduce the source size"
+       ],
+       "answer_index": 1,
+       "why": "It is identical to the beam splitter and equalises the path in glass."
+      },
+      {
+       "id": "m-q2",
+       "kind": "short",
+       "level": 2,
+       "marks": 3,
+       "q": "Name the types of fringes in a Michelson interferometer and when each is seen. What happens when the movable mirror is moved?",
+       "model_answer_md": "- $M_1$ parallel to $M_2'$ (mirrors exactly perpendicular): **circular** fringes of equal inclination, path difference $2d\\cos\\theta$.\n- $M_1$ and $M_2'$ slightly inclined (wedge): **straight** fringes of equal thickness.\n- Near zero path difference with white light: a few coloured fringes.\n\nMoving $M_1$ through $\\lambda/2$ shifts the pattern by one fringe; as $d$ increases new rings emerge from the centre, as $d$ decreases they collapse into it.",
+       "points": [
+        "Circular fringes for parallel $M_1,M_2'$",
+        "Straight fringes when inclined",
+        "Shift of $\\lambda/2$ per fringe; rings emerge or vanish at centre"
+       ]
+      },
+      {
+       "id": "m-q3",
+       "kind": "mcq",
+       "level": 2,
+       "q": "As the movable mirror of a Michelson interferometer is moved away so that $d$ increases, circular fringes",
+       "options": [
+        "emerge from the centre and expand",
+        "collapse into the centre",
+        "stay fixed",
+        "change to straight lines"
+       ],
+       "answer_index": 0,
+       "why": "Each increase of $d$ by $\\lambda/2$ creates a new fringe at the centre."
+      },
+      {
+       "id": "m-p1",
+       "pyq": "ee336dcb2ea2561b",
+       "level": 3,
+       "points": [
+        "Principle: division of amplitude by a half-silvered plate",
+        "Labelled schematic: source $S$, $G_1$ at $45^\\circ$, $M_1$ (movable, micrometer), $M_2$ (fixed, tilt screws), compensating plate $G_2$, telescope",
+        "Fringes: path difference $2d\\cos\\theta$; bright $n\\lambda$, dark $(2n+1)\\lambda/2$; circular for $M_1\\parallel M_2'$",
+        "Moving $M_1$ by $\\lambda/2$ shifts one fringe: $\\lambda=2x/N$"
+       ]
+      },
+      {
+       "id": "m-p2",
+       "pyq": "394e79689cf6402a",
+       "level": 3,
+       "points": [
+        "Construction with diagram: source, $G_1$, $M_1$, $M_2$, $G_2$, telescope",
+        "Working: air film between $M_2$ and $M_1'$, $\\Delta=2d\\cos\\theta$; circular or straight fringes",
+        "Application: measure $\\lambda=2x/N$ (or $\\Delta\\lambda$ of sodium D lines, refractive index of a thin film, standard metre)"
+       ]
+      }
+     ]
+    },
+    {
+     "id": "michelson-numericals",
+     "title": "Michelson numericals",
+     "theory_md": "Always work in metres.\n- **Mirror shift** $x$ moves $N$ fringes: $2x=N\\lambda$, so $\\lambda=2x/N$. The path difference introduced is $2x=N\\lambda$.\n- **Thin plate** thickness $t$, index $\\mu$, in one arm, $N$ fringes cross: extra path $2(\\mu-1)t=N\\lambda$, so $t=\\dfrac{N\\lambda}{2(\\mu-1)}$ and $\\mu=1+\\dfrac{N\\lambda}{2t}$ (double pass, hence the 2).\n- **Two close wavelengths** (sodium D lines): the fringes vanish periodically; successive disappearances need a mirror shift $x$ with $\\Delta\\lambda=\\dfrac{\\lambda^2}{2x}$, $\\lambda$ the mean.",
+     "basics_md": "One fringe means the path changed by one wavelength. The mirror's move is doubled because the beam goes to the mirror and back. A plate is passed twice as well.",
+     "key_points": [
+      "$2x=N\\lambda$: $\\lambda=2x/N$; path difference for $N$ fringes is $N\\lambda$",
+      "Plate in one arm: $2(\\mu-1)t=N\\lambda$",
+      "Close doublet: $\\Delta\\lambda=\\lambda^2/2x$ for successive disappearances",
+      "Convert Å, mm, µm to metres first"
+     ],
+     "questions": [
+      {
+       "id": "mn-q1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "When the movable mirror moves through $x$ and $N$ fringes cross the field, the wavelength is",
+       "options": [
+        "$x/N$",
+        "$2x/N$",
+        "$N/2x$",
+        "$x/2N$"
+       ],
+       "answer_index": 1,
+       "why": "Path changes by $2x=N\\lambda$."
+      },
+      {
+       "id": "mn-q2",
+       "kind": "numerical",
+       "level": 2,
+       "marks": 2,
+       "q": "The movable mirror is shifted through 0.0295 mm and 100 fringes cross the field. Find the wavelength.",
+       "model_answer_md": "$\\lambda=\\dfrac{2x}{N}=\\dfrac{2\\times0.0295\\times10^{-3}}{100}=5.9\\times10^{-7}$ m $=590$ nm",
+       "points": [
+        "$2x=N\\lambda$",
+        "$\\lambda=590$ nm"
+       ]
+      },
+      {
+       "id": "mn-q3",
+       "kind": "numerical",
+       "level": 2,
+       "marks": 3,
+       "q": "A plate of index 1.5 is placed in one arm of a Michelson interferometer and 40 fringes cross the field. $\\lambda=600$ nm. Find its thickness.",
+       "model_answer_md": "$t=\\dfrac{N\\lambda}{2(\\mu-1)}=\\dfrac{40\\times600\\times10^{-9}}{2\\times0.5}=2.4\\times10^{-5}$ m $=24\\ \\mu$m",
+       "points": [
+        "$2(\\mu-1)t=N\\lambda$",
+        "$t=24\\ \\mu$m"
+       ]
+      },
+      {
+       "id": "mn-q4",
+       "kind": "numerical",
+       "level": 3,
+       "marks": 3,
+       "q": "Fringes of the sodium doublet (mean $\\lambda=5893$ Å) vanish at successive mirror positions 0.289 mm apart. Find the wavelength difference.",
+       "model_answer_md": "$\\Delta\\lambda=\\dfrac{\\lambda^2}{2x}=\\dfrac{(5893\\times10^{-10})^2}{2\\times0.289\\times10^{-3}}=6.0\\times10^{-10}$ m $=6.0$ Å",
+       "points": [
+        "$\\Delta\\lambda=\\lambda^2/2x$",
+        "$\\Delta\\lambda=6.0$ Å"
+       ]
+      },
+      {
+       "id": "mn-p1",
+       "pyq": "7960e97e488eaf6b",
+       "level": 2,
+       "points": [
+        "Plate adds path $2(\\mu-1)t=N\\lambda$",
+        "$t=50\\times5896\\times10^{-10}/(2\\times0.4)=3.685\\times10^{-5}$ m $\\approx36.85\\ \\mu$m"
+       ]
+      },
+      {
+       "id": "mn-p2",
+       "pyq": "0523a25dd806b878",
+       "level": 2,
+       "points": [
+        "$2(\\mu-1)t=N\\lambda$",
+        "$t=50\\times5290\\times10^{-10}/(2\\times0.4)=3.31\\times10^{-5}$ m"
+       ]
+      },
+      {
+       "id": "mn-p3",
+       "pyq": "fef07b3c10d97af1",
+       "level": 2,
+       "points": [
+        "Distance between consecutive coincidences $x=0.8970-0.6025=0.2945$ mm",
+        "$\\Delta\\lambda=\\lambda^2/2x=(5393\\times10^{-10})^2/(2\\times0.2945\\times10^{-3})$",
+        "$\\Delta\\lambda=4.94$ Å"
+       ]
+      },
+      {
+       "id": "mn-p4",
+       "pyq": "1fe0c8a22dbe89e8",
+       "level": 2,
+       "points": [
+        "$2(\\mu-1)t=N\\lambda$",
+        "$\\mu=1+100\\times5000\\times10^{-10}/(2\\times0.05\\times10^{-3})=1.5$"
+       ]
+      },
+      {
+       "id": "mn-p5",
+       "pyq": "41b4bf6f8a9935b6",
+       "level": 1,
+       "points": [
+        "$\\mu=1+N\\lambda/2t=1.5$",
+        "Answer (d) 1.5"
+       ]
+      },
+      {
+       "id": "mn-p6",
+       "pyq": "e01a142bdeb68316",
+       "level": 2,
+       "points": [
+        "$2(\\mu-1)t=N\\lambda$",
+        "$t=50\\times600\\times10^{-9}/(2\\times0.5)=3\\times10^{-5}$ m $=30\\ \\mu$m"
+       ]
+      },
+      {
+       "id": "mn-p7",
+       "pyq": "fc7492bfebd1fe58",
+       "level": 1,
+       "points": [
+        "$2x=N\\lambda$, $\\lambda=2\\times0.0589\\times10^{-3}/200=5.89\\times10^{-7}$ m",
+        "Answer (a) 589.0 nm"
+       ]
+      },
+      {
+       "id": "mn-p8",
+       "pyq": "8cf78ad42abf3c59",
+       "level": 2,
+       "points": [
+        "$\\lambda=2x/N=2\\times0.06\\times10^{-3}/200$",
+        "$\\lambda=6\\times10^{-7}$ m $=6000$ Å"
+       ]
+      },
+      {
+       "id": "mn-p9",
+       "pyq": "4d773f9f4aabcf91",
+       "level": 2,
+       "points": [
+        "N fringes crossing means path difference $N\\lambda=2x$",
+        "$\\Delta=25\\times6328\\times10^{-10}=1.58\\times10^{-5}$ m (mirror shift $7.9\\ \\mu$m)"
+       ]
+      },
+      {
+       "id": "mn-p10",
+       "pyq": "87bc3edc42d2e9f6",
+       "level": 2,
+       "points": [
+        "Principle $2x=N\\lambda$, so $\\lambda=2x/N$ or $x=N\\lambda/2$",
+        "Plate in one path: $2(\\mu-1)t=N\\lambda$",
+        "Substitute the given data in metres"
+       ]
+      }
+     ]
+    }
+   ]
+  }
+ ]
+}

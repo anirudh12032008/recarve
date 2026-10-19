@@ -1,0 +1,1286 @@
+{
+ "code": "MC1101",
+ "unit": "Multiple Integral",
+ "written": "2026-10-19",
+ "by": "claude-sonnet-5-5, in a Claude Code session",
+ "topics": [
+  {
+   "topic": "Double integrals",
+   "subtopics": [
+    {
+     "id": "iterated",
+     "title": "Iterated integrals and limits",
+     "theory_md": "$\\iint_R f\\,dA$ is evaluated as an **iterated integral**: for $R:\\ a\\le x\\le b,\\ y_1(x)\\le y\\le y_2(x)$,\n$$\\iint_R f\\,dA=\\int_a^b\\int_{y_1(x)}^{y_2(x)} f\\,dy\\,dx.$$\nInner limits belong to the inner differential and may contain the outer variable; outer limits are constants.\n\nSteps: sketch $R$; the intersection points of the boundary curves give the outer limits; integrate the inner variable first. Over $-a\\le x\\le a$ an odd term in $x$ integrates to $0$. Area of $R=\\iint_R dx\\,dy$.",
+     "basics_md": "A double integral adds up $f$ over tiny patches of a region. Do it in two passes: cut the region into thin strips, add along each strip (inner integral), then add the strips (outer integral).",
+     "key_points": [
+      "Sketch the region and find the intersection points of the boundary curves",
+      "Inner limits go with the inner differential and may depend on the outer variable",
+      "Outer limits are constants",
+      "Odd terms vanish over a symmetric interval"
+     ],
+     "questions": [
+      {
+       "id": "di-q1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "In $\\int_0^1\\int_x^{\\sqrt x} f\\,dy\\,dx$ the limits $x$ and $\\sqrt x$ are the limits of",
+       "options": [
+        "$x$",
+        "$y$",
+        "both $x$ and $y$",
+        "neither; they are constants"
+       ],
+       "answer_index": 1,
+       "why": "The inner limits belong to the inner differential, which is $dy$."
+      },
+      {
+       "id": "di-q2",
+       "kind": "mcq",
+       "level": 1,
+       "q": "The parabola $y=x^2$ and the line $y=x$ meet at $x=$",
+       "options": [
+        "$0$ and $1$",
+        "$-1$ and $1$",
+        "$0$ and $2$",
+        "$1$ only"
+       ],
+       "answer_index": 0,
+       "why": "$x^2=x$ gives $x=0,1$."
+      },
+      {
+       "id": "di-q3",
+       "kind": "mcq",
+       "level": 2,
+       "q": "The value of $\\int_{-1}^{1}\\int_0^2 x^3y\\,dy\\,dx$ is",
+       "options": [
+        "$0$",
+        "$2$",
+        "$1$",
+        "$4$"
+       ],
+       "answer_index": 0,
+       "why": "$x^3$ is odd in $x$ and the limits $-1$ to $1$ are symmetric, so the integral vanishes."
+      },
+      {
+       "id": "di-q4",
+       "kind": "numerical",
+       "level": 2,
+       "marks": 4,
+       "q": "Evaluate $\\iint_R xy\\,dx\\,dy$ over the region $R$ bounded by $y=x^2$ and $y=x$.",
+       "model_answer_md": "**Limits.** $x^2=x\\Rightarrow x=0,1$. $R:\\ 0\\le x\\le1,\\ x^2\\le y\\le x$.\n\n$$I=\\int_0^1 x\\left[\\frac{y^2}{2}\\right]_{x^2}^{x}dx=\\int_0^1\\frac{x^3-x^5}{2}\\,dx=\\frac12\\left(\\frac14-\\frac16\\right)=\\frac1{24}.$$",
+       "points": [
+        "Intersection points $x=0,1$",
+        "Region $0\\le x\\le1,\\ x^2\\le y\\le x$",
+        "Inner integral in $y$ first",
+        "Answer $1/24$"
+       ]
+      },
+      {
+       "id": "di-p1",
+       "pyq": "656cedeb3ff84578",
+       "level": 2,
+       "points": [
+        "Limits: $2x^2=1+x^2\\Rightarrow x=\\pm1$; $D:-1\\le x\\le1,\\ 2x^2\\le y\\le1+x^2$",
+        "Inner integral: $[xy+y^2]_{2x^2}^{1+x^2}$ gives $x-x^3+1+2x^2-3x^4$",
+        "Odd terms $x-x^3$ vanish over $[-1,1]$",
+        "$I=2\\int_0^1(1+2x^2-3x^4)dx=32/15$"
+       ]
+      },
+      {
+       "id": "di-p2",
+       "pyq": "2164a35774d568c7",
+       "level": 2,
+       "points": [
+        "Limits: parabolas meet at $x=\\pm1$; $2x^2\\le y\\le1+x^2$",
+        "Inner integral $[xy+y^2]$ evaluated between the limits",
+        "Odd terms vanish by symmetry",
+        "$I=32/15$"
+       ]
+      }
+     ]
+    },
+    {
+     "id": "polar",
+     "title": "Polar coordinates in a double integral",
+     "theory_md": "Use polar coordinates when $R$ is a disc, ring or sector, or the integrand has $x^2+y^2$:\n$$x=r\\cos\\theta,\\ y=r\\sin\\theta,\\ x^2+y^2=r^2,\\ dx\\,dy=r\\,dr\\,d\\theta.$$\nThe extra $r$ is the Jacobian; forgetting it is the commonest lost mark.\n\nLimits: disc $x^2+y^2\\le a^2$: $0\\le r\\le a$, $0\\le\\theta\\le2\\pi$; ring $a\\le r\\le b$; first quadrant $0\\le\\theta\\le\\pi/2$; upper half $0\\le\\theta\\le\\pi$.\n\nGeneral substitution $x=x(u,v),\\ y=y(u,v)$: $dx\\,dy=|J|\\,du\\,dv$, $J=\\dfrac{\\partial(x,y)}{\\partial(u,v)}$.",
+     "basics_md": "Polar coordinates describe a point by its distance $r$ from the origin and its angle $\\theta$. A tiny patch at distance $r$ is $dr$ thick and $r\\,d\\theta$ long, so its area is $r\\,dr\\,d\\theta$, not $dr\\,d\\theta$.",
+     "key_points": [
+      "Substitute $x=r\\cos\\theta,\\ y=r\\sin\\theta$ and $dx\\,dy=r\\,dr\\,d\\theta$",
+      "Write the region's limits for $r$ and $\\theta$ (ring: $r$ from inner to outer circle)",
+      "Integrand simplifies using $x^2+y^2=r^2$",
+      "Evaluate and state the answer"
+     ],
+     "questions": [
+      {
+       "id": "di-q5",
+       "kind": "mcq",
+       "level": 1,
+       "q": "In polar coordinates $dx\\,dy$ becomes",
+       "options": [
+        "$dr\\,d\\theta$",
+        "$r\\,dr\\,d\\theta$",
+        "$r^2\\,dr\\,d\\theta$",
+        "$\\frac1r\\,dr\\,d\\theta$"
+       ],
+       "answer_index": 1,
+       "why": "The Jacobian of the polar transformation is $r$."
+      },
+      {
+       "id": "di-q6",
+       "kind": "mcq",
+       "level": 1,
+       "q": "For the part of the disc $x^2+y^2\\le9$ in the first quadrant the limits are",
+       "options": [
+        "$0\\le r\\le3,\\ 0\\le\\theta\\le\\pi/2$",
+        "$0\\le r\\le3,\\ 0\\le\\theta\\le\\pi$",
+        "$0\\le r\\le9,\\ 0\\le\\theta\\le\\pi/2$",
+        "$0\\le r\\le3,\\ 0\\le\\theta\\le2\\pi$"
+       ],
+       "answer_index": 0,
+       "why": "Radius 3, and the first quadrant is a quarter turn."
+      },
+      {
+       "id": "di-q7",
+       "kind": "mcq",
+       "level": 2,
+       "q": "For $x=u,\\ y=uv$ the Jacobian $\\partial(x,y)/\\partial(u,v)$ is",
+       "options": [
+        "$1$",
+        "$u$",
+        "$v$",
+        "$u+v$"
+       ],
+       "answer_index": 1,
+       "why": "$\\begin{vmatrix}1&0\\\\ v&u\\end{vmatrix}=u$."
+      },
+      {
+       "id": "di-q8",
+       "kind": "numerical",
+       "level": 2,
+       "marks": 4,
+       "q": "Evaluate $\\iint e^{-(x^2+y^2)}\\,dx\\,dy$ over the disc $x^2+y^2\\le4$.",
+       "model_answer_md": "Polar form: $x^2+y^2=r^2$, $dx\\,dy=r\\,dr\\,d\\theta$, $0\\le r\\le2$, $0\\le\\theta\\le2\\pi$.\n\n$$I=\\int_0^{2\\pi}\\!\\!\\int_0^2 e^{-r^2}r\\,dr\\,d\\theta=2\\pi\\left[-\\tfrac12e^{-r^2}\\right]_0^2=\\pi\\left(1-e^{-4}\\right)\\approx3.084.$$",
+       "points": [
+        "Change to polar with $dx\\,dy=r\\,dr\\,d\\theta$",
+        "Limits $0\\le r\\le2,\\ 0\\le\\theta\\le2\\pi$",
+        "$\\int re^{-r^2}dr=-\\tfrac12e^{-r^2}$",
+        "$I=\\pi(1-e^{-4})\\approx3.084$"
+       ]
+      },
+      {
+       "id": "di-p3",
+       "pyq": "9ff92defa55089ee",
+       "level": 2,
+       "points": [
+        "Region is the annulus $2\\le r\\le3$",
+        "Polar: $dx\\,dy=r\\,dr\\,d\\theta$ and $\\sqrt{x^2+y^2}=r$",
+        "$\\int_0^{2\\pi}\\int_2^3r^2dr\\,d\\theta=2\\pi\\,[r^3/3]_2^3$",
+        "Answer $38\\pi/3$"
+       ]
+      }
+     ]
+    },
+    {
+     "id": "gamma",
+     "title": "Gaussian, Gamma and Beta integrals",
+     "theory_md": "**Gaussian:** $\\int_0^\\infty e^{-x^2}dx=\\frac{\\sqrt\\pi}2$, so $\\int_{-\\infty}^\\infty e^{-x^2}dx=\\sqrt\\pi$ (square it and go polar).\n\n**Gamma:** $\\Gamma(n)=\\int_0^\\infty e^{-t}t^{n-1}dt$; $\\Gamma(n+1)=n\\Gamma(n)$; $\\Gamma(n+1)=n!$; $\\Gamma(\\tfrac12)=\\sqrt\\pi$.\n**Beta:** $B(m,n)=\\dfrac{\\Gamma(m)\\Gamma(n)}{\\Gamma(m+n)}$.\n\n**Key form:** $\\displaystyle\\int_0^{\\pi/2}\\sin^p\\theta\\cos^q\\theta\\,d\\theta=\\tfrac12B\\!\\left(\\tfrac{p+1}2,\\tfrac{q+1}2\\right)$, and $\\displaystyle\\int_0^\\infty x^{k}e^{-x^2}dx=\\tfrac12\\Gamma\\!\\left(\\tfrac{k+1}2\\right)$.",
+     "basics_md": "The Gamma function is the factorial extended to non-integers: $\\Gamma(n+1)=n!$. The Beta function packages two Gamma values into one integral, which turns awkward powers of $\\sin$ and $\\cos$ into a short calculation.",
+     "key_points": [
+      "Quote $\\int_0^\\infty e^{-x^2}dx=\\sqrt\\pi/2$ and split a product of independent integrals",
+      "Use $\\Gamma(n+1)=n\\Gamma(n)$ and $\\Gamma(\\tfrac12)=\\sqrt\\pi$",
+      "Convert $\\sin^p\\cos^q$ to $\\tfrac12B$ and then to Gamma functions",
+      "Show convergence conditions when asked to prove"
+     ],
+     "questions": [
+      {
+       "id": "di-q9",
+       "kind": "mcq",
+       "level": 1,
+       "q": "$\\Gamma\\!\\left(\\tfrac12\\right)=$",
+       "options": [
+        "$1$",
+        "$\\sqrt\\pi$",
+        "$\\pi$",
+        "$\\pi/2$"
+       ],
+       "answer_index": 1,
+       "why": "Standard value."
+      },
+      {
+       "id": "di-q10",
+       "kind": "mcq",
+       "level": 1,
+       "q": "$\\int_0^{\\pi/2}\\sin^p\\theta\\cos^q\\theta\\,d\\theta=$",
+       "options": [
+        "$B\\!\\left(\\frac{p+1}2,\\frac{q+1}2\\right)$",
+        "$\\frac12B\\!\\left(\\frac{p+1}2,\\frac{q+1}2\\right)$",
+        "$\\frac12B(p,q)$",
+        "$B(p+1,q+1)$"
+       ],
+       "answer_index": 1,
+       "why": "The factor $\\tfrac12$ and the arguments $(p+1)/2$ are what the paper checks."
+      },
+      {
+       "id": "di-q11",
+       "kind": "numerical",
+       "level": 2,
+       "marks": 3,
+       "q": "Use Beta-Gamma functions to evaluate $\\int_0^{\\pi/2}\\sin^4\\theta\\cos^2\\theta\\,d\\theta$.",
+       "model_answer_md": "$$I=\\tfrac12B\\!\\left(\\tfrac52,\\tfrac32\\right)=\\frac{\\Gamma(\\frac52)\\Gamma(\\frac32)}{2\\,\\Gamma(4)}.$$\n$\\Gamma(\\tfrac32)=\\tfrac{\\sqrt\\pi}2$, $\\Gamma(\\tfrac52)=\\tfrac{3\\sqrt\\pi}4$, $\\Gamma(4)=6$.\n\n$$I=\\frac{\\frac{3\\pi}8}{12}=\\frac{\\pi}{32}.$$",
+       "points": [
+        "$p=4,q=2$ so $I=\\tfrac12B(5/2,3/2)$",
+        "$\\Gamma(3/2)=\\sqrt\\pi/2$, $\\Gamma(5/2)=3\\sqrt\\pi/4$, $\\Gamma(4)=6$",
+        "$I=\\pi/32$"
+       ]
+      },
+      {
+       "id": "di-q12",
+       "kind": "numerical",
+       "level": 2,
+       "marks": 3,
+       "q": "Evaluate $\\int_0^\\infty x^4e^{-x^2}\\,dx$.",
+       "model_answer_md": "Here $k=4$: $\\int_0^\\infty x^4e^{-x^2}dx=\\tfrac12\\Gamma\\!\\left(\\tfrac52\\right)=\\tfrac12\\cdot\\tfrac32\\cdot\\tfrac12\\sqrt\\pi=\\dfrac{3\\sqrt\\pi}{8}\\approx0.665.$",
+       "points": [
+        "Use $\\int_0^\\infty x^ke^{-x^2}dx=\\tfrac12\\Gamma((k+1)/2)$ with $k=4$",
+        "$\\Gamma(5/2)=\\tfrac32\\cdot\\tfrac12\\sqrt\\pi$",
+        "Answer $3\\sqrt\\pi/8$"
+       ]
+      },
+      {
+       "id": "di-p4",
+       "pyq": "8c44e1c399af9e0d",
+       "level": 2,
+       "points": [
+        "Limits are constants and the integrand separates into $x$ and $y$ parts",
+        "$\\int_{-\\infty}^\\infty e^{-x^2}dx=\\sqrt\\pi$ and $\\int_0^\\infty e^{-y^2}dy=\\sqrt\\pi/2$",
+        "$I=5\\cdot\\sqrt\\pi\\cdot\\sqrt\\pi/2=5\\pi/2$"
+       ]
+      },
+      {
+       "id": "di-p5",
+       "pyq": "d020b51a03a63673",
+       "level": 3,
+       "points": [
+        "Polar: $x=r\\cos\\theta,\\ y=r\\sin\\theta,\\ dx\\,dy=r\\,dr\\,d\\theta$; $D$: $0\\le r\\le1,\\ 0\\le\\theta\\le\\pi/2$",
+        "Integral separates: $\\int_0^1r^{p+q+1}dr=\\frac1{p+q+2}$ (converges as $p+q+2>0$)",
+        "$\\int_0^{\\pi/2}\\cos^p\\theta\\sin^q\\theta\\,d\\theta=\\tfrac12B(\\frac{p+1}2,\\frac{q+1}2)$, needs $p,q>-1$",
+        "Write $B$ as Gamma functions and multiply to reach the stated result"
+       ]
+      },
+      {
+       "id": "di-p6",
+       "pyq": "3b8d15a3f407ff8e",
+       "level": 3,
+       "points": [
+        "Polar: $dx\\,dy=r\\,dr\\,d\\theta$; $D$: $0\\le r\\le1,\\ 0\\le\\theta\\le\\pi/2$",
+        "$\\int_0^1r^{p+q+1}dr=\\frac1{p+q+2}$",
+        "$\\int_0^{\\pi/2}\\cos^p\\theta\\sin^q\\theta\\,d\\theta=\\tfrac12B(\\frac{p+1}2,\\frac{q+1}2)$ valid for $p,q>-1$",
+        "Combine to get $\\frac1{2(p+q+2)}\\frac{\\Gamma(\\frac{q+1}2)\\Gamma(\\frac{p+1}2)}{\\Gamma(\\frac{p+q+2}2)}$"
+       ]
+      },
+      {
+       "id": "di-p7",
+       "pyq": "99ee865823446e9f",
+       "level": 3,
+       "points": [
+        "$\\int_0^{\\pi/2}\\sin^p\\theta\\,d\\theta=\\frac{\\sqrt\\pi}2\\frac{\\Gamma(\\frac{p+1}2)}{\\Gamma(\\frac p2+1)}$",
+        "$p=\\tfrac12$ gives $\\frac{\\sqrt\\pi}2\\frac{\\Gamma(3/4)}{\\Gamma(5/4)}$; $p=-\\tfrac12$ gives $\\frac{\\sqrt\\pi}2\\frac{\\Gamma(1/4)}{\\Gamma(3/4)}$",
+        "Product $=\\frac\\pi4\\frac{\\Gamma(1/4)}{\\Gamma(5/4)}$",
+        "$\\Gamma(5/4)=\\tfrac14\\Gamma(1/4)$, so the product is $\\pi$"
+       ]
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "topic": "Triple integrals",
+   "subtopics": [
+    {
+     "id": "cartesian",
+     "title": "Triple integrals with variable limits",
+     "theory_md": "$\\iiint_V f\\,dV=\\int\\!\\!\\int\\!\\!\\int f\\,dz\\,dy\\,dx$ is done inside out: innermost limits may depend on the two outer variables, middle limits on the outermost, outermost limits are constants. With $f=1$ it is the **volume** of $V$.\n\nTetrahedron $x,y,z\\ge0,\\ x+y+z\\le1$: $z:0\\to1-x-y$, $y:0\\to1-x$, $x:0\\to1$. A face $x+4z=4$ gives $z\\le\\frac{4-x}4$.\n\n**Dirichlet:** over $x+y+z\\le1$, $\\iiint x^{l-1}y^{m-1}z^{n-1}dV=\\dfrac{\\Gamma(l)\\Gamma(m)\\Gamma(n)}{\\Gamma(l+m+n+1)}$. By symmetry $\\iiint x=\\iiint y=\\iiint z$ there.",
+     "basics_md": "A triple integral adds up $f$ over a solid. Slice the solid into thin columns (inner integral along $z$), add the columns across a slab ($y$), then add the slabs ($x$).",
+     "key_points": [
+      "Sketch the solid and read the bounding planes as limits",
+      "Innermost limits in terms of outer variables, outermost constant",
+      "Integrate inside out, one variable at a time",
+      "Use symmetry or Dirichlet's integral to shorten the tetrahedron"
+     ],
+     "questions": [
+      {
+       "id": "ti-q1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "The volume of a solid $V$ is",
+       "options": [
+        "$\\iiint_V x\\,dV$",
+        "$\\iiint_V dV$",
+        "$\\iiint_V(x+y+z)\\,dV$",
+        "$\\iint_V dA$"
+       ],
+       "answer_index": 1,
+       "why": "Take $f=1$."
+      },
+      {
+       "id": "ti-q2",
+       "kind": "mcq",
+       "level": 1,
+       "q": "For the tetrahedron $x,y,z\\ge0,\\ x+y+z\\le1$ the limits of $z$ are",
+       "options": [
+        "$0$ to $1$",
+        "$0$ to $1-x-y$",
+        "$0$ to $1-x$",
+        "$0$ to $x+y$"
+       ],
+       "answer_index": 1,
+       "why": "The top face is $x+y+z=1$."
+      },
+      {
+       "id": "ti-q3",
+       "kind": "numerical",
+       "level": 2,
+       "marks": 3,
+       "q": "Evaluate $\\int_0^1\\int_0^x\\int_0^y xyz\\,dz\\,dy\\,dx$.",
+       "model_answer_md": "$$\\int_0^y xyz\\,dz=\\frac{xy^3}{2},\\qquad \\int_0^x\\frac{xy^3}{2}\\,dy=\\frac{x^5}{8},\\qquad \\int_0^1\\frac{x^5}{8}\\,dx=\\frac1{48}.$$",
+       "points": [
+        "Integrate $z$ first: $xy^3/2$",
+        "Then $y$: $x^5/8$",
+        "Then $x$: $1/48$"
+       ]
+      },
+      {
+       "id": "ti-q4",
+       "kind": "numerical",
+       "level": 2,
+       "marks": 3,
+       "q": "Find the volume of the tetrahedron bounded by $x=0,\\ y=0,\\ z=0$ and $x+y+z=1$ by a triple integral.",
+       "model_answer_md": "$$V=\\int_0^1\\!\\!\\int_0^{1-x}\\!\\!\\int_0^{1-x-y}dz\\,dy\\,dx=\\int_0^1\\!\\!\\int_0^{1-x}(1-x-y)\\,dy\\,dx=\\int_0^1\\frac{(1-x)^2}{2}\\,dx=\\frac16.$$",
+       "points": [
+        "Limits $z:0\\to1-x-y$, $y:0\\to1-x$, $x:0\\to1$",
+        "Inner integrals give $(1-x)^2/2$",
+        "$V=1/6$"
+       ]
+      },
+      {
+       "id": "ti-p1",
+       "pyq": "338be1e492eac272",
+       "level": 2,
+       "points": [
+        "Region: $0\\le x\\le4,\\ 0\\le y\\le2,\\ 0\\le z\\le\\frac{4-x}4$ (from $x+4z=4$)",
+        "Integrate $z$ first: $x\\cdot\\frac{4-x}4$; then $y$ gives factor 2: $\\frac{x(4-x)}2$",
+        "$\\frac12[2x^2-x^3/3]_0^4$",
+        "Answer $16/3$"
+       ]
+      },
+      {
+       "id": "ti-p2",
+       "pyq": "d062ae2b266a79d6",
+       "level": 2,
+       "points": [
+        "Region $x,y,z\\ge0,\\ x+y+z\\le1$: $x:0\\to1,\\ y:0\\to1-x,\\ z:0\\to1-x-y$",
+        "By symmetry $\\iiint x=\\iiint y=\\iiint z$",
+        "$\\iiint x\\,dV=\\frac12B(2,3)=\\frac1{24}$ (Dirichlet) or by direct limits",
+        "$I=3\\cdot\\frac1{24}=\\frac18$"
+       ]
+      }
+     ]
+    },
+    {
+     "id": "curvilinear",
+     "title": "Cylindrical and spherical coordinates",
+     "theory_md": "**Cylindrical** $(r,\\theta,z)$, for cylinders and discs: $x=r\\cos\\theta,\\ y=r\\sin\\theta,\\ z=z$, $dV=r\\,dr\\,d\\theta\\,dz$.\n\n**Spherical** $(r,\\theta,\\phi)$, for spheres and cones: $x=r\\sin\\theta\\cos\\phi,\\ y=r\\sin\\theta\\sin\\phi,\\ z=r\\cos\\theta$, $dV=r^2\\sin\\theta\\,dr\\,d\\theta\\,d\\phi$, with $\\theta$ measured from the $z$-axis. Full sphere of radius $a$: $0\\le r\\le a,\\ 0\\le\\theta\\le\\pi,\\ 0\\le\\phi\\le2\\pi$.\n\nA separable integrand over a cylinder splits into a $z$ integral times a polar double integral. Volume of sphere $\\frac43\\pi a^3$.",
+     "basics_md": "Cylindrical coordinates are polar coordinates in the $xy$-plane with $z$ kept as it is. Spherical coordinates give each point a distance $r$ from the origin and two angles, like radius, latitude and longitude on a globe.",
+     "key_points": [
+      "Choose coordinates from the shape: cylinder or disc, polar; sphere or cone, spherical",
+      "Volume element: $r\\,dr\\,d\\theta\\,dz$ or $r^2\\sin\\theta\\,dr\\,d\\theta\\,d\\phi$",
+      "Write limits for each variable",
+      "Split a separable integrand into independent integrals"
+     ],
+     "questions": [
+      {
+       "id": "ti-q5",
+       "kind": "mcq",
+       "level": 1,
+       "q": "In spherical coordinates $dV=$",
+       "options": [
+        "$r\\,dr\\,d\\theta\\,d\\phi$",
+        "$r^2\\,dr\\,d\\theta\\,d\\phi$",
+        "$r^2\\sin\\theta\\,dr\\,d\\theta\\,d\\phi$",
+        "$r\\sin\\theta\\,dr\\,d\\theta\\,d\\phi$"
+       ],
+       "answer_index": 2,
+       "why": "Radial, polar and azimuthal arcs give $dr\\cdot r\\,d\\theta\\cdot r\\sin\\theta\\,d\\phi$."
+      },
+      {
+       "id": "ti-q6",
+       "kind": "mcq",
+       "level": 2,
+       "q": "The best coordinates for $\\iiint_V z\\,dV$ over $x^2+y^2\\le4,\\ 0\\le z\\le3$ are",
+       "options": [
+        "Cartesian",
+        "cylindrical",
+        "spherical",
+        "none of these help"
+       ],
+       "answer_index": 1,
+       "why": "A circular cross-section with a flat top and bottom is a cylinder."
+      },
+      {
+       "id": "ti-q7",
+       "kind": "numerical",
+       "level": 2,
+       "marks": 3,
+       "q": "Use spherical coordinates to find the volume of a sphere of radius $3$.",
+       "model_answer_md": "$$V=\\int_0^{2\\pi}\\!\\!\\int_0^\\pi\\!\\!\\int_0^3r^2\\sin\\theta\\,dr\\,d\\theta\\,d\\phi=\\frac{27}{3}\\cdot2\\cdot2\\pi=36\\pi\\ \\text{cubic units}\\ (\\approx113.1).$$",
+       "points": [
+        "$dV=r^2\\sin\\theta\\,dr\\,d\\theta\\,d\\phi$",
+        "Limits $r:0\\to3,\\ \\theta:0\\to\\pi,\\ \\phi:0\\to2\\pi$",
+        "$V=36\\pi=\\frac43\\pi(3)^3$"
+       ]
+      },
+      {
+       "id": "ti-q8",
+       "kind": "numerical",
+       "level": 2,
+       "marks": 4,
+       "q": "Evaluate $\\iiint z\\,dV$ over the cylinder $x^2+y^2\\le4,\\ 0\\le z\\le3$.",
+       "model_answer_md": "Cylindrical: $dV=r\\,dr\\,d\\theta\\,dz$.\n$$I=\\int_0^3z\\,dz\\int_0^{2\\pi}d\\theta\\int_0^2r\\,dr=\\frac92\\cdot2\\pi\\cdot2=18\\pi.$$",
+       "points": [
+        "Cylindrical coordinates, $dV=r\\,dr\\,d\\theta\\,dz$",
+        "Separate: $\\int z\\,dz=9/2$, $\\int d\\theta=2\\pi$, $\\int r\\,dr=2$",
+        "$I=18\\pi$"
+       ]
+      },
+      {
+       "id": "ti-p3",
+       "pyq": "e609d67fa9d1f233",
+       "level": 2,
+       "points": [
+        "$D$ is the cylinder over the unit disc, $0\\le z\\le1$; integrand separates",
+        "$\\int_0^1z\\,dz=\\tfrac12$",
+        "Polar: $\\int_0^{2\\pi}d\\theta\\int_0^1r\\sqrt{1-r^2}\\,dr=2\\pi\\cdot\\tfrac13=\\tfrac{2\\pi}3$",
+        "Result $\\pi/3$"
+       ]
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "topic": "Change of order of integration",
+   "subtopics": [
+    {
+     "id": "method",
+     "title": "The method of reversing the order",
+     "theory_md": "Changing the order means describing the **same region** with strips the other way; the integrand stays, only the limits change.\n\n1. Read the region from the limits (for $\\int_0^{2a}\\int_0^{\\sqrt{2ax-x^2}}dy\\,dx$: $0\\le x\\le2a$ under the upper semicircle $(x-a)^2+y^2=a^2$).\n2. Sketch it and mark the intersection points.\n3. Draw strips in the other direction; solve each boundary for the new inner variable.\n4. If a boundary changes formula, split the region.\n5. Integrate.\n\nStandard: $\\int_0^a\\int_x^a f\\,dy\\,dx=\\int_0^a\\int_0^y f\\,dx\\,dy$.",
+     "basics_md": "A region can be cut into vertical strips or horizontal strips. The integral over the region is the same either way; changing the order just means switching from one cutting to the other and rewriting the limits.",
+     "key_points": [
+      "Draw the region from the given limits",
+      "Redraw the strips in the other direction",
+      "Solve each boundary curve for the new inner variable",
+      "Split the region if a boundary changes formula",
+      "Integrand is unchanged; evaluate with the new limits"
+     ],
+     "questions": [
+      {
+       "id": "co-q1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "$\\int_0^a\\int_x^a f\\,dy\\,dx$ equals",
+       "options": [
+        "$\\int_0^a\\int_0^y f\\,dx\\,dy$",
+        "$\\int_0^a\\int_y^a f\\,dx\\,dy$",
+        "$\\int_0^a\\int_0^x f\\,dx\\,dy$",
+        "$\\int_0^a\\int_x^a f\\,dx\\,dy$"
+       ],
+       "answer_index": 0,
+       "why": "The region is the triangle $0\\le x\\le y\\le a$."
+      },
+      {
+       "id": "co-q2",
+       "kind": "mcq",
+       "level": 2,
+       "q": "The region $0\\le x\\le1,\\ x^2\\le y\\le1$ in reversed order is",
+       "options": [
+        "$0\\le y\\le1,\\ 0\\le x\\le\\sqrt y$",
+        "$0\\le y\\le1,\\ y^2\\le x\\le1$",
+        "$0\\le y\\le1,\\ 0\\le x\\le y^2$",
+        "$x^2\\le y\\le1,\\ 0\\le x\\le1$"
+       ],
+       "answer_index": 0,
+       "why": "$y=x^2$ gives $x=\\sqrt y$ and a horizontal strip runs from the $y$-axis to that curve."
+      },
+      {
+       "id": "co-q3",
+       "kind": "numerical",
+       "level": 2,
+       "marks": 4,
+       "q": "Change the order and evaluate $\\int_0^1\\int_y^1 e^{x^2}\\,dx\\,dy$.",
+       "model_answer_md": "**Region:** $0\\le y\\le1,\\ y\\le x\\le1$, the triangle below $y=x$.\n\n**Reversed:** $0\\le x\\le1,\\ 0\\le y\\le x$.\n\n$$I=\\int_0^1e^{x^2}\\left[y\\right]_0^{x}dx=\\int_0^1xe^{x^2}dx=\\left[\\tfrac12e^{x^2}\\right]_0^1=\\frac{e-1}{2}\\approx0.859.$$",
+       "points": [
+        "Region identified: $0\\le y\\le x\\le1$",
+        "Reversed limits $0\\le x\\le1,\\ 0\\le y\\le x$",
+        "Inner integral gives the factor $x$",
+        "$I=(e-1)/2$"
+       ]
+      },
+      {
+       "id": "co-p1",
+       "pyq": "75dc4c8b8c7b3464",
+       "level": 2,
+       "points": [
+        "Region: $0\\le x\\le2a$ under $y=\\sqrt{2ax-x^2}$, the upper semicircle $(x-a)^2+y^2=a^2$",
+        "Reversed: $0\\le y\\le a$, $a-\\sqrt{a^2-y^2}\\le x\\le a+\\sqrt{a^2-y^2}$",
+        "$\\int_0^a2\\sqrt{a^2-y^2}\\,dy$",
+        "Result $\\pi a^2/2$"
+       ]
+      },
+      {
+       "id": "co-p2",
+       "pyq": "946a919fb539eeb1",
+       "level": 3,
+       "points": [
+        "Region: $0\\le x\\le a,\\ \\sqrt{ax}\\le y\\le a$, equivalently $0\\le y\\le a,\\ 0\\le x\\le y^2/a$",
+        "Inner integral in $x$: $\\frac1a\\sin^{-1}\\frac{ax}{y^2}$ from $0$ to $y^2/a$ gives $\\frac{\\pi}{2a}$",
+        "Outer: $\\frac\\pi{2a}\\int_0^ay^2dy$",
+        "Result $\\pi a^2/6$"
+       ]
+      }
+     ]
+    },
+    {
+     "id": "hard",
+     "title": "When the given order fails, and triple integrals",
+     "theory_md": "Reverse the order when the inner integral has no elementary antiderivative: $e^{x^2}$, $\\frac{\\sin y}y$, $\\frac{e^{-y}}y$. After reversing, the inner integral gives a factor that makes the outer one easy.\n\nSketch the region from the limits as given (outer limits $x:0\\to2$ with inner $y:0\\to4-x^2$ describes the area under a parabola), then take the other strips: $0\\le y\\le4,\\ 0\\le x\\le\\sqrt{4-y}$.\n\nFor a **triple** integral, re-describe the solid in the order asked. Prism $0\\le x\\le4,\\ 0\\le z\\le\\frac{4-x}4$ becomes $0\\le z\\le1,\\ 0\\le x\\le4-4z$. The value is the same in every order: use it as a check.",
+     "basics_md": "Some integrals are impossible in one order and easy in the other. Switching is not a trick; it is just choosing the strips that make the inside integral doable.",
+     "key_points": [
+      "State the region and sketch it",
+      "Spot the integrand that cannot be integrated in the given order",
+      "Reverse, with new limits solved from the boundary curves",
+      "Check: the answer is independent of the order in a triple integral"
+     ],
+     "questions": [
+      {
+       "id": "co-q4",
+       "kind": "mcq",
+       "level": 1,
+       "q": "Why is $\\int_0^1\\int_x^1\\frac{\\sin y}{y}\\,dy\\,dx$ reversed?",
+       "options": [
+        "$\\frac{\\sin y}y$ has no elementary antiderivative in $y$",
+        "The region is a triangle",
+        "The limits are constants",
+        "The integrand is odd"
+       ],
+       "answer_index": 0,
+       "why": "Integrating $dx$ first removes the difficulty."
+      },
+      {
+       "id": "co-q5",
+       "kind": "mcq",
+       "level": 2,
+       "q": "Reversed, $\\int_0^1\\int_x^1\\frac{\\sin y}{y}\\,dy\\,dx$ has limits",
+       "options": [
+        "$0\\le y\\le1,\\ 0\\le x\\le y$",
+        "$0\\le y\\le1,\\ y\\le x\\le1$",
+        "$0\\le x\\le1,\\ 0\\le y\\le x$",
+        "$x\\le y\\le1,\\ 0\\le x\\le1$"
+       ],
+       "answer_index": 0,
+       "why": "The region is $0\\le x\\le y\\le1$."
+      },
+      {
+       "id": "co-q6",
+       "kind": "numerical",
+       "level": 2,
+       "marks": 3,
+       "q": "Evaluate $\\int_0^1\\int_x^1\\frac{\\sin y}{y}\\,dy\\,dx$ by changing the order.",
+       "model_answer_md": "Reverse: $0\\le y\\le1,\\ 0\\le x\\le y$.\n$$I=\\int_0^1\\frac{\\sin y}{y}\\left[x\\right]_0^{y}dy=\\int_0^1\\sin y\\,dy=1-\\cos1\\approx0.460.$$",
+       "points": [
+        "Reversed limits $0\\le y\\le1,\\ 0\\le x\\le y$",
+        "Inner integral gives $y$, which cancels the denominator",
+        "$I=1-\\cos1\\approx0.460$"
+       ]
+      },
+      {
+       "id": "co-q7",
+       "kind": "numerical",
+       "level": 3,
+       "marks": 4,
+       "q": "Evaluate $\\int_0^2\\int_{x/2}^1 e^{y^2}\\,dy\\,dx$ by changing the order.",
+       "model_answer_md": "**Region:** $0\\le x\\le2,\\ \\frac x2\\le y\\le1$, i.e. $0\\le y\\le1,\\ 0\\le x\\le2y$.\n\n$$I=\\int_0^1e^{y^2}\\left[x\\right]_0^{2y}dy=\\int_0^12ye^{y^2}dy=\\left[e^{y^2}\\right]_0^1=e-1\\approx1.718.$$",
+       "points": [
+        "Region triangle with vertices $(0,0),(0,1),(2,1)$",
+        "Reversed limits $0\\le y\\le1,\\ 0\\le x\\le2y$",
+        "$\\int_0^12ye^{y^2}dy=e-1$"
+       ]
+      },
+      {
+       "id": "co-p3",
+       "pyq": "f9df57a975cfa832",
+       "level": 3,
+       "points": [
+        "Region: $0\\le x\\le2,\\ 0\\le y\\le4-x^2$, the part of the first quadrant under the parabola with vertices $(0,0),(2,0),(0,4)$",
+        "Reversed: $0\\le y\\le4,\\ 0\\le x\\le\\sqrt{4-y}$",
+        "Inner integral $\\frac{4-y}2$ cancels the denominator",
+        "$I=\\frac12\\int_0^4e^{2y}dy=\\frac{e^8-1}4$"
+       ]
+      },
+      {
+       "id": "co-p4",
+       "pyq": "4b7ec96e2b666592",
+       "level": 2,
+       "points": [
+        "Prism: $0\\le y\\le2,\\ 0\\le z\\le1,\\ 0\\le x\\le4-4z$",
+        "$\\int_0^{4-4z}x\\,dx=\\frac{(4-4z)^2}2$",
+        "$\\int_0^2dy$ gives 2, then $\\int_0^116(1-z)^2dz=16/3$",
+        "$I=16/3$, same as the other order"
+       ]
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "topic": "Length of curves",
+   "subtopics": [
+    {
+     "id": "cartparam",
+     "title": "Arc length: Cartesian and parametric",
+     "theory_md": "Arc length adds pieces $ds=\\sqrt{dx^2+dy^2}$.\n\n- Cartesian $y=f(x)$: $s=\\int_a^b\\sqrt{1+(y')^2}\\,dx$.\n- Parametric: $s=\\int_{t_1}^{t_2}\\sqrt{\\dot x^2+\\dot y^2}\\,dt$.\n\nUse symmetry and integrate only where the root keeps one sign. Astroid $x=a\\cos^3t,\\ y=a\\sin^3t$: four times the first-quadrant arc, $t:0\\to\\frac\\pi2$, where $\\sqrt{\\dot x^2+\\dot y^2}=3a\\sin t\\cos t$. Standard results: astroid $6a$; one arch of the cycloid $x=a(t-\\sin t),\\ y=a(1-\\cos t)$, $0\\le t\\le2\\pi$, is $8a$.",
+     "basics_md": "Cut the curve into tiny straight pieces. Each piece is the hypotenuse of a tiny right triangle with sides $dx$ and $dy$, so its length is $\\sqrt{dx^2+dy^2}$; adding them is the integral.",
+     "key_points": [
+      "Choose the formula for the way the curve is given",
+      "Differentiate and simplify the root (perfect square)",
+      "Use symmetry and take the right multiple",
+      "Substitute limits and state the length with units"
+     ],
+     "questions": [
+      {
+       "id": "len-q1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "The arc length of $y=f(x)$ from $x=a$ to $x=b$ is",
+       "options": [
+        "$\\int\\sqrt{1+y'}\\,dx$",
+        "$\\int\\sqrt{1+(y')^2}\\,dx$",
+        "$\\int(1+(y')^2)\\,dx$",
+        "$\\int\\sqrt{1-(y')^2}\\,dx$"
+       ],
+       "answer_index": 1,
+       "why": "Square the derivative inside the root."
+      },
+      {
+       "id": "len-q2",
+       "kind": "mcq",
+       "level": 1,
+       "q": "The total length of the astroid $x^{2/3}+y^{2/3}=a^{2/3}$ is",
+       "options": [
+        "$3a$",
+        "$6a$",
+        "$8a$",
+        "$12a$"
+       ],
+       "answer_index": 1,
+       "why": "Four quadrants of $\\tfrac32a$ each."
+      },
+      {
+       "id": "len-q3",
+       "kind": "numerical",
+       "level": 2,
+       "marks": 4,
+       "q": "Find the length of one arch of the cycloid $x=2(t-\\sin t),\\ y=2(1-\\cos t)$.",
+       "model_answer_md": "$\\dot x=2(1-\\cos t)$, $\\dot y=2\\sin t$.\n$$\\dot x^2+\\dot y^2=4\\left[(1-\\cos t)^2+\\sin^2t\\right]=8(1-\\cos t)=16\\sin^2\\tfrac t2,\\quad ds=4\\sin\\tfrac t2\\,dt.$$\n$$s=\\int_0^{2\\pi}4\\sin\\tfrac t2\\,dt=4\\left[-2\\cos\\tfrac t2\\right]_0^{2\\pi}=16\\ \\text{units}\\quad(=8a,\\ a=2).$$",
+       "points": [
+        "$\\dot x=2(1-\\cos t),\\ \\dot y=2\\sin t$",
+        "$\\dot x^2+\\dot y^2=16\\sin^2(t/2)$",
+        "Limits $0$ to $2\\pi$ for one arch",
+        "$s=16=8a$"
+       ]
+      },
+      {
+       "id": "len-q4",
+       "kind": "numerical",
+       "level": 2,
+       "marks": 4,
+       "q": "Find the length of the curve $y=x^{3/2}$ from $x=0$ to $x=4$.",
+       "model_answer_md": "$y'=\\tfrac32x^{1/2}$, so $1+(y')^2=1+\\tfrac94x$.\n$$s=\\int_0^4\\sqrt{1+\\tfrac94x}\\,dx=\\frac49\\cdot\\frac23\\left[\\left(1+\\tfrac94x\\right)^{3/2}\\right]_0^4=\\frac8{27}\\left(10^{3/2}-1\\right)=\\frac{80\\sqrt{10}-8}{27}\\approx9.07\\ \\text{units}.$$",
+       "points": [
+        "$y'=\\tfrac32\\sqrt x$ and $1+y'^2=1+\\tfrac94x$",
+        "Integral $\\frac8{27}[(1+\\tfrac94x)^{3/2}]$",
+        "Substitute $x=4$ (value $10^{3/2}$) and $x=0$",
+        "$s\\approx9.07$"
+       ]
+      },
+      {
+       "id": "len-p1",
+       "pyq": "d799c5acbeddb58a",
+       "level": 3,
+       "points": [
+        "Astroid: symmetric about both axes; $\\dot x=-3a\\cos^2t\\sin t,\\ \\dot y=3a\\sin^2t\\cos t$",
+        "$\\sqrt{\\dot x^2+\\dot y^2}=3a\\sin t\\cos t$ for $0\\le t\\le\\pi/2$",
+        "Length $=4\\int_0^{\\pi/2}3a\\sin t\\cos t\\,dt=6a$",
+        "Area $=4\\int y\\,|dx/dt|dt=12a^2\\int_0^{\\pi/2}\\sin^4t\\cos^2t\\,dt=12a^2\\cdot\\frac\\pi{32}=\\frac{3\\pi a^2}8$"
+       ]
+      }
+     ]
+    },
+    {
+     "id": "polar",
+     "title": "Arc length in polar form: the cardioid",
+     "theory_md": "For $r=f(\\theta)$: $s=\\int_{\\theta_1}^{\\theta_2}\\sqrt{r^2+\\left(\\dfrac{dr}{d\\theta}\\right)^2}\\,d\\theta$.\n\nCardioid $r=a(1+\\cos\\theta)$: $r^2+r'^2=a^2(1+\\cos\\theta)^2+a^2\\sin^2\\theta=2a^2(1+\\cos\\theta)=4a^2\\cos^2\\tfrac\\theta2$, so $ds=2a\\cos\\tfrac\\theta2\\,d\\theta$ for $0\\le\\theta\\le\\pi$.\n\n$$s=2\\int_0^\\pi2a\\cos\\tfrac\\theta2\\,d\\theta=8a.$$\n**Trap:** $\\sqrt{\\cos^2\\frac\\theta2}=\\left|\\cos\\frac\\theta2\\right|$ changes sign on $(\\pi,2\\pi)$; integrate the upper half and double it.",
+     "basics_md": "A polar curve is traced by a point at distance $r$ and angle $\\theta$. A small step has a radial part $dr$ and a sideways part $r\\,d\\theta$, so its length is $\\sqrt{dr^2+r^2d\\theta^2}$.",
+     "key_points": [
+      "State the polar arc-length formula",
+      "Compute $r^2+r'^2$ and reduce with the half-angle identity",
+      "Take the upper half ($0\\le\\theta\\le\\pi$) and double it",
+      "Cardioid length is $8a$"
+     ],
+     "questions": [
+      {
+       "id": "len-q5",
+       "kind": "mcq",
+       "level": 1,
+       "q": "The arc length of $r=f(\\theta)$ is",
+       "options": [
+        "$\\int\\sqrt{r+r'}\\,d\\theta$",
+        "$\\int\\sqrt{r^2+(r')^2}\\,d\\theta$",
+        "$\\int\\sqrt{1+r^2}\\,d\\theta$",
+        "$\\int r\\sqrt{1+r'^2}\\,d\\theta$"
+       ],
+       "answer_index": 1,
+       "why": "Radial part $r'$, sideways part $r$."
+      },
+      {
+       "id": "len-q6",
+       "kind": "mcq",
+       "level": 2,
+       "q": "Why is the cardioid length taken as twice the integral from $0$ to $\\pi$?",
+       "options": [
+        "The curve is a circle",
+        "The root $|\\cos(\\theta/2)|$ changes sign on $(\\pi,2\\pi)$ and the lower half is the mirror image",
+        "The formula needs $\\theta\\le\\pi$ always",
+        "$r$ is negative for $\\theta>\\pi$"
+       ],
+       "answer_index": 1,
+       "why": "Integrating $2a\\cos\\frac\\theta2$ over $0$ to $2\\pi$ gives $0$."
+      },
+      {
+       "id": "len-q7",
+       "kind": "short",
+       "level": 2,
+       "marks": 4,
+       "q": "Find the length of the cardioid $r=a(1-\\cos\\theta)$.",
+       "model_answer_md": "$r'=a\\sin\\theta$, so $r^2+r'^2=a^2(1-\\cos\\theta)^2+a^2\\sin^2\\theta=2a^2(1-\\cos\\theta)=4a^2\\sin^2\\tfrac\\theta2$.\n\nThe curve is symmetric about the initial line; take $0\\le\\theta\\le\\pi$ where $\\sin\\frac\\theta2\\ge0$:\n$$s=2\\int_0^\\pi2a\\sin\\tfrac\\theta2\\,d\\theta=2\\cdot2a\\left[-2\\cos\\tfrac\\theta2\\right]_0^\\pi=8a.$$",
+       "points": [
+        "$r^2+r'^2=4a^2\\sin^2(\\theta/2)$",
+        "Use symmetry: twice the integral over $0$ to $\\pi$",
+        "Integrate $2a\\sin(\\theta/2)$ correctly",
+        "$s=8a$"
+       ]
+      },
+      {
+       "id": "len-q8",
+       "kind": "numerical",
+       "level": 2,
+       "marks": 3,
+       "q": "Find the length of the cardioid $r=3(1+\\cos\\theta)$.",
+       "model_answer_md": "Here $a=3$ in $s=8a$: $s=2\\int_0^\\pi6\\cos\\tfrac\\theta2\\,d\\theta=2\\cdot6\\cdot2=24$ units.",
+       "points": [
+        "$ds=2a\\cos(\\theta/2)\\,d\\theta$ with $a=3$",
+        "Twice the upper half",
+        "$s=24$ units"
+       ]
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "topic": "Area",
+   "subtopics": [
+    {
+     "id": "cartesian",
+     "title": "Area in Cartesian and parametric form",
+     "theory_md": "Area of a region is $A=\\iint_R dx\\,dy=\\int_a^b(y_{upper}-y_{lower})\\,dx$. Sketch, find intersections, choose strips, use symmetry.\n\nIf a curve is easier solved for $x$ (as $a^2x^2=4y^2(a^2-y^2)$, so $x=\\pm\\frac{2y}a\\sqrt{a^2-y^2}$), use horizontal strips: a loop symmetric about the $y$-axis has $A=\\int 2|x|\\,dy$.\n\nParametric: $A=\\int y\\left|\\dfrac{dx}{dt}\\right|dt$ over one pass.\n\nChecks: circle $\\pi a^2$, ellipse $\\pi ab$, between $y^2=4ax$ and $x^2=4ay$: $\\frac{16a^2}3$, astroid $\\frac{3\\pi a^2}8$.",
+     "basics_md": "Area under a curve is the sum of thin rectangles. When the region is between two curves, each rectangle's height is the top minus the bottom.",
+     "key_points": [
+      "Sketch the curve and the region; find intersection points",
+      "Pick vertical or horizontal strips (solve for the easier variable)",
+      "Use symmetry to multiply a quadrant or half",
+      "Evaluate and state the answer in square units"
+     ],
+     "questions": [
+      {
+       "id": "area-q1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "The area of the ellipse $\\frac{x^2}{a^2}+\\frac{y^2}{b^2}=1$ is",
+       "options": [
+        "$\\pi a^2$",
+        "$\\pi ab$",
+        "$2\\pi ab$",
+        "$\\pi(a+b)$"
+       ],
+       "answer_index": 1,
+       "why": "Standard result."
+      },
+      {
+       "id": "area-q2",
+       "kind": "mcq",
+       "level": 1,
+       "q": "Area between two curves with $y_1\\le y_2$ on $[a,b]$ is",
+       "options": [
+        "$\\int_a^b(y_1+y_2)\\,dx$",
+        "$\\int_a^b(y_2-y_1)\\,dx$",
+        "$\\int_a^b y_2\\,dx$",
+        "$\\int_a^b(y_2^2-y_1^2)\\,dx$"
+       ],
+       "answer_index": 1,
+       "why": "Top minus bottom."
+      },
+      {
+       "id": "area-q3",
+       "kind": "numerical",
+       "level": 2,
+       "marks": 3,
+       "q": "Find the area between $y^2=x$ and $y=x^2$.",
+       "model_answer_md": "Intersections: $x^4=x\\Rightarrow x=0,1$. For $0\\le x\\le1$, $\\sqrt x\\ge x^2$.\n$$A=\\int_0^1(\\sqrt x-x^2)\\,dx=\\frac23-\\frac13=\\frac13\\ \\text{square units}.$$",
+       "points": [
+        "Intersections $x=0,1$",
+        "Integrand $\\sqrt x-x^2$ (upper minus lower)",
+        "$A=1/3$ square units"
+       ]
+      },
+      {
+       "id": "area-q4",
+       "kind": "numerical",
+       "level": 2,
+       "marks": 4,
+       "q": "Find the area of the ellipse $x=3\\cos t,\\ y=2\\sin t$ using the parametric form.",
+       "model_answer_md": "By symmetry $A=4\\int_0^{\\pi/2}y\\left|\\dfrac{dx}{dt}\\right|dt=4\\int_0^{\\pi/2}2\\sin t\\cdot3\\sin t\\,dt=24\\int_0^{\\pi/2}\\sin^2t\\,dt=24\\cdot\\frac\\pi4=6\\pi$ square units $(=\\pi ab)$.",
+       "points": [
+        "Four times the first quadrant",
+        "$y|dx/dt|=6\\sin^2t$",
+        "$A=6\\pi$ square units"
+       ]
+      },
+      {
+       "id": "area-p1",
+       "pyq": "e3816c9b235926de",
+       "level": 2,
+       "points": [
+        "Solve for $x$: $x=\\pm\\frac{2y}a\\sqrt{a^2-y^2}$; symmetric about both axes, needs $y^2\\le a^2$",
+        "One loop lies on one side of the $x$-axis: $0\\le y\\le a$",
+        "$A=\\int_0^a2|x|\\,dy=\\frac4a\\int_0^ay\\sqrt{a^2-y^2}\\,dy$",
+        "$=\\frac4a\\cdot\\frac{a^3}3=\\frac{4a^2}3$ square units"
+       ]
+      }
+     ]
+    },
+    {
+     "id": "polar",
+     "title": "Area in polar form",
+     "theory_md": "Polar area: $A=\\iint r\\,dr\\,d\\theta=\\tfrac12\\int_\\alpha^\\beta r^2\\,d\\theta$. Between two curves: $\\tfrac12\\int(r_{outer}^2-r_{inner}^2)\\,d\\theta$ over the angles where the first is outside.\n\nFind the meeting angles by equating the two $r$ (circles $r=a,\\ r=2a\\cos\\theta$ meet at $\\cos\\theta=\\frac12$, $\\theta=\\pm\\frac\\pi3$). If the outer curve changes over the range, split the integral (circles $r=\\sqrt2$ and $r=2\\cos\\theta$ swap at $\\theta=\\frac\\pi4$). Use symmetry.\n\nChecks: cardioid $r=a(1+\\cos\\theta)$ has area $\\frac{3\\pi a^2}2$; one petal of $r=a\\cos2\\theta$ has $\\frac{\\pi a^2}8$.",
+     "basics_md": "In polar form the region is swept by a radius turning through an angle. A thin wedge of angle $d\\theta$ and length $r$ has area $\\tfrac12r^2d\\theta$.",
+     "key_points": [
+      "Find the intersection angles by equating the radii",
+      "Decide which curve is outer on each angular range",
+      "Use $\\tfrac12\\int(r_{outer}^2-r_{inner}^2)d\\theta$, splitting if needed",
+      "Use symmetry about the initial line and state units"
+     ],
+     "questions": [
+      {
+       "id": "area-q5",
+       "kind": "mcq",
+       "level": 1,
+       "q": "The area enclosed by $r=f(\\theta)$ between $\\theta=\\alpha$ and $\\beta$ is",
+       "options": [
+        "$\\int r\\,d\\theta$",
+        "$\\frac12\\int r^2\\,d\\theta$",
+        "$\\int r^2\\,d\\theta$",
+        "$\\frac12\\int r\\,d\\theta$"
+       ],
+       "answer_index": 1,
+       "why": "A wedge has area $\\frac12r^2d\\theta$."
+      },
+      {
+       "id": "area-q6",
+       "kind": "mcq",
+       "level": 2,
+       "q": "The circles $r=a$ and $r=2a\\cos\\theta$ meet at $\\theta=$",
+       "options": [
+        "$\\pm\\pi/3$",
+        "$\\pm\\pi/6$",
+        "$\\pm\\pi/4$",
+        "$\\pm\\pi/2$"
+       ],
+       "answer_index": 0,
+       "why": "$2a\\cos\\theta=a\\Rightarrow\\cos\\theta=\\frac12$."
+      },
+      {
+       "id": "area-q7",
+       "kind": "numerical",
+       "level": 2,
+       "marks": 3,
+       "q": "Find the area of the cardioid $r=2(1+\\cos\\theta)$.",
+       "model_answer_md": "$$A=2\\cdot\\tfrac12\\int_0^\\pi4(1+\\cos\\theta)^2d\\theta=4\\int_0^\\pi\\left(1+2\\cos\\theta+\\tfrac{1+\\cos2\\theta}2\\right)d\\theta=4\\cdot\\tfrac{3\\pi}2=6\\pi\\ \\text{square units}\\ (=\\tfrac32\\pi a^2).$$",
+       "points": [
+        "Symmetry: twice the upper half",
+        "$(1+\\cos\\theta)^2$ expanded and integrated",
+        "$A=6\\pi$ square units"
+       ]
+      },
+      {
+       "id": "area-q8",
+       "kind": "numerical",
+       "level": 2,
+       "marks": 3,
+       "q": "Find the area of one petal of $r=2\\cos2\\theta$.",
+       "model_answer_md": "One petal: $-\\frac\\pi4\\le\\theta\\le\\frac\\pi4$.\n$$A=\\tfrac12\\int_{-\\pi/4}^{\\pi/4}4\\cos^22\\theta\\,d\\theta=\\int_{-\\pi/4}^{\\pi/4}(1+\\cos4\\theta)\\,d\\theta=\\frac\\pi2\\ \\text{square units}.$$",
+       "points": [
+        "Petal limits $-\\pi/4$ to $\\pi/4$ (where $r=0$)",
+        "$A=\\tfrac12\\int r^2d\\theta$ with $\\cos^2 2\\theta$ reduced",
+        "$A=\\pi/2$ square units"
+       ]
+      },
+      {
+       "id": "area-p2",
+       "pyq": "554fc2d9b9f088b6",
+       "level": 2,
+       "points": [
+        "Intersection: $\\sin\\theta=1-\\cos\\theta\\Rightarrow\\theta=0,\\ \\pi/2$",
+        "For $0\\le\\theta\\le\\pi/2$ the circle is outer: $A=\\frac12\\int_0^{\\pi/2}[\\sin^2\\theta-(1-\\cos\\theta)^2]d\\theta$",
+        "Simplify to $\\frac12\\int(-\\cos2\\theta-1+2\\cos\\theta)d\\theta$",
+        "$A=1-\\frac\\pi4$ square units"
+       ]
+      },
+      {
+       "id": "area-p3",
+       "pyq": "a959e15af010bdf0",
+       "level": 2,
+       "points": [
+        "Circles meet at $\\theta=\\pm\\pi/4$ ($2\\cos\\theta=\\sqrt2$)",
+        "Boundary: $r=\\sqrt2$ for $0\\le\\theta\\le\\pi/4$, $r=2\\cos\\theta$ for $\\pi/4\\le\\theta\\le\\pi/2$",
+        "$A=2[\\frac12\\int_0^{\\pi/4}2\\,d\\theta+\\frac12\\int_{\\pi/4}^{\\pi/2}4\\cos^2\\theta\\,d\\theta]$",
+        "$A=\\pi-1$ square units"
+       ]
+      }
+     ]
+    },
+    {
+     "id": "tracing",
+     "title": "Tracing a curve",
+     "theory_md": "**Checklist:**\n1. **Symmetry:** only even powers of $y$, symmetric about the $x$-axis; only even powers of $x$, about the $y$-axis; $f(-x)=f(x)$ same. Polar: $\\theta\\to-\\theta$ unchanged, symmetric about the initial line.\n2. **Origin or pole:** does it pass; tangents there (lowest-degree terms set to zero).\n3. **Intercepts** with the axes.\n4. **Region:** where $y^2\\ge0$.\n5. **Asymptotes:** vertical where the denominator vanishes; horizontal from $\\lim_{x\\to\\pm\\infty}y$.\n6. **Concavity:** sign of $y''$; inflection where it changes sign.\n\nThen join the points. Polar: find where $r=0$ and the maximum $|r|$.",
+     "basics_md": "Tracing a curve means finding its main features first (symmetry, where it crosses the axes, where it stops or blows up) so the sketch can be drawn without plotting many points.",
+     "key_points": [
+      "Check symmetry about the axes and origin",
+      "Find intercepts and the region where the curve exists",
+      "Find asymptotes (vertical and horizontal)",
+      "Find concavity and inflection points, then sketch"
+     ],
+     "questions": [
+      {
+       "id": "area-q9",
+       "kind": "mcq",
+       "level": 1,
+       "q": "A curve is symmetric about the $y$-axis if",
+       "options": [
+        "replacing $x$ by $-x$ leaves the equation unchanged",
+        "replacing $y$ by $-y$ leaves it unchanged",
+        "replacing $x$ by $y$ leaves it unchanged",
+        "it passes through the origin"
+       ],
+       "answer_index": 0,
+       "why": "That is the $y$-axis test."
+      },
+      {
+       "id": "area-q10",
+       "kind": "mcq",
+       "level": 2,
+       "q": "The horizontal asymptote of $y=\\dfrac{x^2+a^2}{x^2-a^2}$ is",
+       "options": [
+        "$y=0$",
+        "$y=1$",
+        "$y=-1$",
+        "$y=a$"
+       ],
+       "answer_index": 1,
+       "why": "Divide through by $x^2$: $y\\to1$ as $x\\to\\pm\\infty$."
+      },
+      {
+       "id": "area-q11",
+       "kind": "long",
+       "level": 3,
+       "marks": 5,
+       "q": "Trace the curve $y^2=x^2(a^2-x^2)$.",
+       "model_answer_md": "1. **Symmetry:** only even powers of $x$ and $y$, so symmetric about both axes.\n2. **Origin:** passes through it. Near the origin $y^2\\approx a^2x^2$, so the tangents are $y=\\pm ax$: the origin is a **node**.\n3. **Intercepts:** $y=0$ at $x=0,\\pm a$; $x=0$ at $y=0$ only.\n4. **Region:** $y^2\\ge0$ needs $a^2-x^2\\ge0$, so $-a\\le x\\le a$. No asymptotes (bounded).\n5. At $x=\\pm a$ the tangent is vertical. The maximum $|y|$ is at $x^2=\\frac{a^2}2$, $|y|=\\frac{a^2}2$.\n\n**Shape:** two loops, one on each side of the $y$-axis, meeting at the origin (figure of eight along the $x$-axis).",
+       "points": [
+        "Symmetric about both axes",
+        "Origin is a node with tangents $y=\\pm ax$",
+        "Intercepts $x=0,\\pm a$; curve exists for $|x|\\le a$",
+        "Vertical tangents at $x=\\pm a$; maximum $|y|=a^2/2$ at $x=\\pm a/\\sqrt2$",
+        "Two loops (figure of eight)"
+       ]
+      },
+      {
+       "id": "area-p4",
+       "pyq": "c4f4d04975112d56",
+       "level": 3,
+       "points": [
+        "$y=\\frac{x^2+a^2}{x^2-a^2}=1+\\frac{2a^2}{x^2-a^2}$, defined for $x\\ne\\pm a$",
+        "$f''=\\frac{4a^2(3x^2+a^2)}{(x^2-a^2)^3}$: concave up for $|x|>a$, concave down for $|x|<a$; no inflection point",
+        "Symmetric about the $y$-axis ($f(-x)=f(x)$), not the $x$-axis",
+        "Vertical asymptotes $x=\\pm a$; horizontal asymptote $y=1$",
+        "Meets the $y$-axis at $(0,-1)$ (local maximum); no $x$-intercept"
+       ]
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "topic": "Volume of solids of revolution",
+   "subtopics": [
+    {
+     "id": "axis",
+     "title": "Volume by discs and washers",
+     "theory_md": "Revolving a region about an axis, each strip sweeps a disc.\n- About the $x$-axis: $V=\\pi\\int_a^b y^2\\,dx$.\n- About the $y$-axis: $V=\\pi\\int_c^d x^2\\,dy$.\n- Washer (region between two curves): $V=\\pi\\int(y_2^2-y_1^2)\\,dx$.\n\nFor a loop symmetric about the $x$-axis revolve the upper half only, between the $x$-values where $y=0$.\n\n**Trap:** the radius is squared; $\\pi\\int y\\,dx$ is wrong. Checks: sphere $\\frac43\\pi a^3$, cone $\\frac13\\pi r^2h$.",
+     "basics_md": "Spin a thin strip of height $y$ about the axis and it sweeps out a flat disc of radius $y$, whose volume is $\\pi y^2$ times its thickness. Add the discs.",
+     "key_points": [
+      "Identify the axis of revolution and choose the variable",
+      "Radius squared: $\\pi\\int y^2dx$ or $\\pi\\int x^2dy$",
+      "Use the correct limits (loop ends where $y=0$)",
+      "Washer: outer squared minus inner squared",
+      "Write units (cubic units)"
+     ],
+     "questions": [
+      {
+       "id": "vol-q1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "Volume generated by revolving the region about the $y$-axis is",
+       "options": [
+        "$\\pi\\int y^2\\,dx$",
+        "$\\pi\\int x^2\\,dy$",
+        "$2\\pi\\int x\\,dy$",
+        "$\\pi\\int y\\,dx$"
+       ],
+       "answer_index": 1,
+       "why": "Disc radius is $x$ and the thickness is $dy$."
+      },
+      {
+       "id": "vol-q2",
+       "kind": "mcq",
+       "level": 2,
+       "q": "The region between $y=x$ and $y=x^2$ revolves about the $x$-axis. The integrand is",
+       "options": [
+        "$\\pi(x^2-x^4)$",
+        "$\\pi(x-x^2)^2$",
+        "$\\pi(x-x^2)$",
+        "$\\pi(x^4-x^2)$"
+       ],
+       "answer_index": 0,
+       "why": "Washer: outer radius $x$, inner radius $x^2$, both squared."
+      },
+      {
+       "id": "vol-q3",
+       "kind": "numerical",
+       "level": 2,
+       "marks": 3,
+       "q": "Find the volume generated by revolving the area bounded by $y^2=4x$, $x=4$ and the $x$-axis about the $x$-axis.",
+       "model_answer_md": "$$V=\\pi\\int_0^4y^2\\,dx=\\pi\\int_0^44x\\,dx=\\pi\\left[2x^2\\right]_0^4=32\\pi\\ \\text{cubic units}.$$",
+       "points": [
+        "$V=\\pi\\int y^2dx$",
+        "$y^2=4x$, limits $0$ to $4$",
+        "$V=32\\pi$ cubic units"
+       ]
+      },
+      {
+       "id": "vol-q4",
+       "kind": "numerical",
+       "level": 2,
+       "marks": 3,
+       "q": "Find the volume generated by revolving the region between $y=x$ and $y=x^2$ about the $x$-axis.",
+       "model_answer_md": "They meet at $x=0,1$; $y=x$ is above.\n$$V=\\pi\\int_0^1(x^2-x^4)\\,dx=\\pi\\left(\\frac13-\\frac15\\right)=\\frac{2\\pi}{15}\\ \\text{cubic units}.$$",
+       "points": [
+        "Intersections $0,1$",
+        "Washer $\\pi\\int(x^2-x^4)dx$",
+        "$V=2\\pi/15$ cubic units"
+       ]
+      },
+      {
+       "id": "vol-p1",
+       "pyq": "d5528ef5a9371ae2",
+       "level": 2,
+       "points": [
+        "Region $0\\le x\\le2/y,\\ 2\\le y\\le6$; revolve about the $y$-axis, so discs of radius $x$",
+        "$V=\\pi\\int_2^6x^2dy=\\pi\\int_2^64/y^2\\,dy$",
+        "$=4\\pi[-1/y]_2^6=4\\pi(\\frac12-\\frac16)$",
+        "$V=4\\pi/3$ cubic units"
+       ]
+      },
+      {
+       "id": "vol-p2",
+       "pyq": "8fb5b931cb11b76f",
+       "level": 2,
+       "points": [
+        "$y^2=\\frac{x(x-a)^2}{2a}\\ge0$ needs $x\\ge0$; loop between $x=0$ and $x=a$, symmetric about the $x$-axis",
+        "$V=\\pi\\int_0^ay^2dx=\\frac\\pi{2a}\\int_0^ax(x-a)^2dx$",
+        "Expand: $\\frac\\pi{2a}[\\frac{a^4}4-\\frac{2a^4}3+\\frac{a^4}2]=\\frac\\pi{2a}\\cdot\\frac{a^4}{12}$",
+        "$V=\\pi a^3/24$ cubic units"
+       ]
+      }
+     ]
+    },
+    {
+     "id": "polar",
+     "title": "Volume of revolution of polar and parametric curves",
+     "theory_md": "Polar curve about the initial line: $V=\\dfrac{2\\pi}3\\int_\\alpha^\\beta r^3\\sin\\theta\\,d\\theta$. Parametric about the $x$-axis: $V=\\pi\\int y^2\\dfrac{dx}{dt}\\,dt$.\n\nRevolve only the half above the axis: the cardioid is $0\\le\\theta\\le\\pi$ (the full $0$ to $2\\pi$ counts it twice). Cardioid volume $\\frac83\\pi a^3$; cycloid about its base $5\\pi^2a^3$.\n\n**Rose** $r=a\\cos3\\theta$: symmetric about the initial line; $r=0$ at $\\theta=\\frac\\pi6,\\frac\\pi2,\\frac{5\\pi}6$, so the **pole is a multiple point** where the three loops meet, with those tangents. The first-quadrant arc is $0\\le\\theta\\le\\frac\\pi6$. For $\\cos^3 3\\theta\\sin\\theta$ put $c=\\cos\\theta$, $\\cos3\\theta=4c^3-3c$.",
+     "basics_md": "A curve given by distance and angle sweeps a solid when turned about the line from which the angle is measured. Thin wedges of the region each sweep a thin cone-shaped shell; adding them gives the factor $\\tfrac{2\\pi}{3}r^3\\sin\\theta$.",
+     "key_points": [
+      "Trace the curve; mark the loop or arc to revolve",
+      "Use the polar formula with the correct angle range (upper half only)",
+      "Substitute $c=\\cos\\theta$ to integrate $\\sin\\theta$ times a power of $\\cos$",
+      "State the answer in cubic units"
+     ],
+     "questions": [
+      {
+       "id": "vol-q5",
+       "kind": "mcq",
+       "level": 1,
+       "q": "Volume of a polar curve revolved about the initial line is",
+       "options": [
+        "$\\frac{2\\pi}3\\int r^3\\sin\\theta\\,d\\theta$",
+        "$\\pi\\int r^2\\sin\\theta\\,d\\theta$",
+        "$\\frac{\\pi}3\\int r^3\\,d\\theta$",
+        "$2\\pi\\int r\\sin\\theta\\,d\\theta$"
+       ],
+       "answer_index": 0,
+       "why": "Standard polar formula."
+      },
+      {
+       "id": "vol-q6",
+       "kind": "mcq",
+       "level": 2,
+       "q": "The cardioid $r=a(1+\\cos\\theta)$ is revolved about the initial line. The limits are",
+       "options": [
+        "$0$ to $\\pi$",
+        "$0$ to $2\\pi$",
+        "$-\\pi$ to $\\pi$",
+        "$0$ to $\\pi/2$"
+       ],
+       "answer_index": 0,
+       "why": "The upper half already generates the whole solid."
+      },
+      {
+       "id": "vol-q7",
+       "kind": "numerical",
+       "level": 2,
+       "marks": 4,
+       "q": "Find the volume generated by revolving the cardioid $r=2(1+\\cos\\theta)$ about the initial line.",
+       "model_answer_md": "$$V=\\frac{2\\pi}3\\int_0^\\pi8(1+\\cos\\theta)^3\\sin\\theta\\,d\\theta=\\frac{16\\pi}3\\left[-\\frac{(1+\\cos\\theta)^4}4\\right]_0^\\pi=\\frac{16\\pi}3\\cdot4=\\frac{64\\pi}{3}\\ \\text{cubic units}\\ (\\approx67.0).$$\nThis equals $\\frac83\\pi a^3$ with $a=2$.",
+       "points": [
+        "$V=\\frac{2\\pi}3\\int_0^\\pi r^3\\sin\\theta\\,d\\theta$, upper half only",
+        "Substitution $u=1+\\cos\\theta$",
+        "$V=64\\pi/3$ cubic units"
+       ]
+      },
+      {
+       "id": "vol-p3",
+       "pyq": "153a69522497597f",
+       "level": 3,
+       "points": [
+        "Rose $r=12\\cos3\\theta$: symmetric about the initial line, $|r|\\le12$, three loops",
+        "$r=0$ at $\\theta=\\pi/6,\\pi/2,5\\pi/6$: pole is a multiple point (loops meet, with those tangents)",
+        "First-quadrant arc is $0\\le\\theta\\le\\pi/6$; $V=\\frac{2\\pi}3\\int_0^{\\pi/6}r^3\\sin\\theta\\,d\\theta$",
+        "Substitute $c=\\cos\\theta$, $\\cos3\\theta=4c^3-3c$; integral $=\\frac{19}{640}$",
+        "$V=\\frac{2\\pi}3\\cdot1728\\cdot\\frac{19}{640}=\\frac{171\\pi}5\\approx107.4$ cubic units"
+       ]
+      }
+     ]
+    },
+    {
+     "id": "surface",
+     "title": "Surface area of revolution",
+     "theory_md": "About the $x$-axis: $S=2\\pi\\int y\\,ds$, with $ds=\\sqrt{1+(y')^2}\\,dx$ (Cartesian) or $\\sqrt{\\dot x^2+\\dot y^2}\\,dt$ (parametric). Revolve the upper half only for a loop symmetric about the axis.\n\nSphere: $y=\\sqrt{a^2-x^2}$, $y\\,ds=a\\,dx$, so $S=2\\pi a\\cdot2a=4\\pi a^2$.\n\nIf the expression under the root is not a perfect square the integral may have no elementary form: write the set-up and a numerical value. Tracing step for $a^2y^2=x^2(2a-x)(x-a)$: it exists only for $a\\le x\\le2a$ (a loop), and the origin is an isolated point.",
+     "basics_md": "The surface swept by a small arc of length $ds$ at height $y$ is a thin band, a ring of circumference $2\\pi y$ and width $ds$. Add up all the bands.",
+     "key_points": [
+      "Trace the curve; identify the loop or arc",
+      "Write $S=2\\pi\\int y\\,ds$ with the correct $ds$",
+      "Simplify the root; if it is not elementary, give the set-up and a numerical value",
+      "Square units for area"
+     ],
+     "questions": [
+      {
+       "id": "vol-q8",
+       "kind": "mcq",
+       "level": 1,
+       "q": "Curved surface area when an arc revolves about the $x$-axis is",
+       "options": [
+        "$2\\pi\\int y\\,ds$",
+        "$\\pi\\int y^2\\,dx$",
+        "$2\\pi\\int ds$",
+        "$\\pi\\int y\\,ds$"
+       ],
+       "answer_index": 0,
+       "why": "Circumference $2\\pi y$ times arc element $ds$."
+      },
+      {
+       "id": "vol-q9",
+       "kind": "mcq",
+       "level": 2,
+       "q": "To find the surface generated by a loop symmetric about the $x$-axis you revolve",
+       "options": [
+        "the upper half only",
+        "the whole loop",
+        "the upper half twice",
+        "the lower half only"
+       ],
+       "answer_index": 0,
+       "why": "The upper half already generates the whole surface; the full loop would count it twice."
+      },
+      {
+       "id": "vol-q10",
+       "kind": "numerical",
+       "level": 2,
+       "marks": 3,
+       "q": "Find the surface area generated by revolving the line $y=x$ from $x=0$ to $x=1$ about the $x$-axis.",
+       "model_answer_md": "$y'=1$, $ds=\\sqrt2\\,dx$.\n$$S=2\\pi\\int_0^1x\\sqrt2\\,dx=2\\pi\\sqrt2\\cdot\\frac12=\\sqrt2\\,\\pi\\approx4.443\\ \\text{square units}.$$",
+       "points": [
+        "$ds=\\sqrt2\\,dx$",
+        "$S=2\\pi\\int x\\sqrt2\\,dx$",
+        "$S=\\sqrt2\\pi\\approx4.44$"
+       ]
+      },
+      {
+       "id": "vol-q11",
+       "kind": "numerical",
+       "level": 2,
+       "marks": 3,
+       "q": "Find the surface area of a sphere of radius $2$ as a surface of revolution.",
+       "model_answer_md": "$y=\\sqrt{4-x^2}$, $y\\,ds=2\\,dx$ (radius times $dx$).\n$$S=2\\pi\\int_{-2}^22\\,dx=2\\pi\\cdot2\\cdot4=16\\pi\\ \\text{square units}\\ (=4\\pi a^2).$$",
+       "points": [
+        "$y\\,ds=a\\,dx$ for the circle",
+        "$S=2\\pi a\\cdot2a$",
+        "$S=16\\pi$ square units"
+       ]
+      },
+      {
+       "id": "vol-p4",
+       "pyq": "a08eb1a219a9a074",
+       "level": 3,
+       "points": [
+        "Trace: $y^2=\\frac{x^2(2a-x)(x-a)}{a^2}$ is even in $y$, so symmetric about the $x$-axis",
+        "$y^2\\ge0$ needs $a\\le x\\le2a$: a closed loop meeting the axis at $(a,0)$ and $(2a,0)$; the origin is an isolated point",
+        "$S=2\\pi\\int y\\,ds$, upper half only",
+        "$y^2+(yy')^2$ gives $S=\\frac\\pi{a^2}\\int_a^{2a}x\\sqrt{16x^4-72ax^3+109a^2x^2-60a^3x+8a^4}\\,dx$",
+        "Not a perfect square, so evaluate numerically: $S\\approx5.79a^2$"
+       ]
+      }
+     ]
+    }
+   ]
+  }
+ ]
+}

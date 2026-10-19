@@ -1,0 +1,3753 @@
+{
+ "code": "CS1105",
+ "unit": "Programming in C",
+ "written": "2026-10-19",
+ "by": "claude-sonnet-5-5, in a Claude Code session",
+ "topics": [
+  {
+   "topic": "Developing and running C programs",
+   "subtopics": [
+    {
+     "id": "prog-structure",
+     "title": "Program structure, compiling and data types",
+     "theory_md": "A C program is `#include <stdio.h>`, then `int main(void) { declarations; statements; return 0; }`. Every statement ends with `;`, and every variable is declared before use.\n\n**Build steps:** source `.c` -> preprocessor (`#include`, `#define`) -> compiler (object code) -> **linker** (adds library code such as `printf`) -> executable. With gcc: `gcc prog.c -o prog`, run `./prog`. Syntax errors appear at compile time; logic errors only when you run.\n\n**Types and formats:** `char` 1 byte (`%c`, signed range -128 to 127, wraps), `int` 4 bytes (`%d`), `float` 4 bytes (`%f`), `double` 8 bytes (`%lf` in scanf). `scanf` needs the address: `scanf(\"%d\", &n);`. Extra `printf` arguments are ignored.",
+     "basics_md": "A program is a recipe the computer follows top to bottom. The compiler translates your text into machine code first; the linker attaches ready-made pieces such as printf.",
+     "key_points": [
+      "Stages: preprocessing, compilation, linking, execution; the linker joins library code",
+      "Format specifiers: %d int, %f float, %lf double, %c char, %s string",
+      "scanf needs & before a variable (except a string name)",
+      "char is signed: 128 wraps to -128",
+      "Syntax errors are caught by the compiler, logic errors are not"
+     ],
+     "figures": [],
+     "questions": [
+      {
+       "id": "ps-1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "Which stage of building a C program attaches the code of library functions such as `printf`?",
+       "options": [
+        "Preprocessor",
+        "Compiler",
+        "Assembler",
+        "Linker"
+       ],
+       "answer_index": 3,
+       "why": "The linker combines the object code with library code to make the executable."
+      },
+      {
+       "id": "ps-2",
+       "kind": "mcq",
+       "level": 1,
+       "q": "What is wrong with `int n; scanf(\"%d\", n);`?",
+       "options": [
+        "Nothing, it is correct",
+        "The address operator is missing: it must be &n",
+        "%d must be %i",
+        "n must be float"
+       ],
+       "answer_index": 1,
+       "why": "scanf stores the value at an address, so it needs &n."
+      },
+      {
+       "id": "p109",
+       "pyq": "a86689c1284f07db",
+       "level": 1,
+       "points": [
+        "Output: A1=14, B1=23, C1=12",
+        "printf prints only as many values as there are format specifiers",
+        "The extra argument d is ignored, no error"
+       ]
+      },
+      {
+       "id": "p114",
+       "pyq": "4f550e93dd70c9f0",
+       "level": 1,
+       "points": [
+        "Output: -128",
+        "char is signed with range -128 to 127",
+        "128 wraps around: 128 - 256 = -128"
+       ]
+      },
+      {
+       "id": "p193",
+       "pyq": "2090866f46adcc72",
+       "level": 1,
+       "points": [
+        "unsigned int basic; TA = 5% and HRA = 10%",
+        "total = basic + 0.05 * basic + 0.10 * basic = 1.15 * basic",
+        "Flowchart: Start, input, process, output, Stop"
+       ]
+      },
+      {
+       "id": "p194",
+       "pyq": "34a92978c5317a9a",
+       "level": 1,
+       "points": [
+        "Reads marks of three subjects",
+        "total = m1 + m2 + m3; percentage = total / 3 (out of 100 each)",
+        "Prints both; flowchart with input, process, output"
+       ]
+      },
+      {
+       "id": "ps-3",
+       "kind": "short",
+       "level": 2,
+       "marks": 2,
+       "q": "State the stages by which a C source file becomes a running program, and name the tool for each.",
+       "model_answer_md": "1. **Preprocessing**: handles `#include` and `#define`.\n2. **Compilation**: compiler (gcc) translates the source into object code and reports syntax errors.\n3. **Linking**: linker joins the object code with library functions (`printf`) to give the executable.\n4. **Execution**: the loader runs the executable (`./a.out`).",
+       "points": [
+        "Preprocessing, compilation, linking, execution in order",
+        "Compiler reports syntax errors",
+        "Linker adds library code to produce the executable"
+       ]
+      },
+      {
+       "id": "ps-4",
+       "kind": "numerical",
+       "level": 2,
+       "marks": 2,
+       "q": "What do `printf(\"%d\", 7/2);` and `printf(\"%f\", 7/2.0);` print? Give the reason for each.",
+       "model_answer_md": "```\n3\n3.500000\n```\n`7/2` has two integer operands, so integer division truncates the answer to 3. `7/2.0` has a double operand, so the result is the real number 3.5, printed as 3.500000.",
+       "points": [
+        "7/2 prints 3 (integer division truncates)",
+        "7/2.0 prints 3.500000 (one real operand gives real division)"
+       ]
+      }
+     ]
+    },
+    {
+     "id": "expressions",
+     "title": "Operators, precedence and evaluation of expressions",
+     "theory_md": "**Precedence (high to low):** `( )`, postfix `++ --`, unary `! ~ ++ -- -`, `* / %`, `+ -`, `<< >>`, `< <= > >=`, `== !=`, `&`, `^`, `|`, `&&`, `||`, `?:`, `=`, `,`.\nEqual precedence goes **left to right** (assignment right to left).\n\n- Integer division truncates toward zero: `7/2 = 3`, `3/-2 = -1`; `%` takes the sign of the dividend and needs integers.\n- `x++` uses then increments; `++x` increments then uses.\n- A relational expression gives 1 or 0, so `x == y > z` means `x == (y > z)` and `a > b > c` means `(a > b) > c`.\n- Changing one variable twice in an expression (`a = ++a + ++a`) is undefined behaviour.",
+     "basics_md": "Evaluate like school arithmetic: multiplication and division before addition. When two operators tie, work from the left. Whole-number division throws away the fraction.",
+     "key_points": [
+      "Order: ( ), ++ --, * / %, + -, shifts, relational, ==, &&, ||, =",
+      "Integer division truncates; % needs ints and takes the dividend's sign",
+      "Show each evaluation step in a table for full marks",
+      "Relational operators return 1 or 0 and are left associative",
+      "Two modifications of one variable in one expression: undefined behaviour"
+     ],
+     "figures": [],
+     "questions": [
+      {
+       "id": "ex-1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "What is the value of `7 / 2 * 2` in C?",
+       "options": [
+        "7",
+        "6",
+        "8",
+        "3.5"
+       ],
+       "answer_index": 1,
+       "why": "Left to right with integers: 7/2 = 3, then 3*2 = 6."
+      },
+      {
+       "id": "p7",
+       "pyq": "fa2a778ea7f691ff",
+       "level": 1,
+       "points": [
+        "Output: 2 3 3",
+        "y = --x: pre-decrement, x becomes 3 and y = 3",
+        "z = x--: post-decrement, z gets 3, then x becomes 2"
+       ]
+      },
+      {
+       "id": "p24",
+       "pyq": "6ac6e0353f013512",
+       "level": 1,
+       "points": [
+        "*, /, % before +, -; equal precedence goes left to right",
+        "5*2 = 10, 10/8 = 1 (integer division), 1%3 = 1, then 2 - 3 + 1",
+        "x = 0"
+       ]
+      },
+      {
+       "id": "p25",
+       "pyq": "fdb4559146d4e9e9",
+       "level": 1,
+       "points": [
+        "%, /, * are equal precedence, left to right: 5%3 = 2, 2/8 = 0, 0*3 = 0",
+        "Then 0 + 4",
+        "z = 4"
+       ]
+      },
+      {
+       "id": "p105",
+       "pyq": "c9f482251db7788c",
+       "level": 1,
+       "points": [
+        "Output: l=-1, k=1",
+        "Integer division truncates toward zero: 3 / -2 = -1",
+        "The remainder takes the sign of the dividend: 3 % -2 = 1"
+       ]
+      },
+      {
+       "id": "p192",
+       "pyq": "90c512fcdd3b59e0",
+       "level": 1,
+       "points": [
+        "y = x = 10 is right associative: x = 10 and y = 10",
+        "z = x < 10 is false, z = 0",
+        "Output: x=10 y=10 z=0"
+       ]
+      },
+      {
+       "id": "ex-2",
+       "kind": "mcq",
+       "level": 2,
+       "q": "`int x = 3 + 4 * 2 % 5;` What is x?",
+       "options": [
+        "3",
+        "6",
+        "14",
+        "2"
+       ],
+       "answer_index": 1,
+       "why": "4*2 = 8, 8%5 = 3 (same level, left to right), then 3 + 3 = 6."
+      },
+      {
+       "id": "ex-3",
+       "kind": "numerical",
+       "level": 2,
+       "marks": 3,
+       "q": "Evaluate `a = 7 / 2 * 2.0 + 5 % 3;` for `int a;` showing each step.",
+       "model_answer_md": "| Step | Operation | Result |\n|---|---|---|\n| 1 | `7 / 2` (int division) | 3 |\n| 2 | `3 * 2.0` (int becomes double) | 6.0 |\n| 3 | `5 % 3` | 2 |\n| 4 | `6.0 + 2` | 8.0 |\n| 5 | assign 8.0 to int `a` | **a = 8** |",
+       "points": [
+        "`/`, `*`, `%` before `+`, left to right",
+        "7/2 = 3 as integer division, 5%3 = 2",
+        "Mixed int and double gives double 8.0, stored as 8 in the int a"
+       ]
+      },
+      {
+       "id": "p26",
+       "pyq": "fc6e9be10928c23a",
+       "level": 2,
+       "points": [
+        "Relational > has higher precedence than ==",
+        "i = x == (y > z) = 1 == (40 > 10) = 1 == 1",
+        "Output: 1"
+       ]
+      },
+      {
+       "id": "p27",
+       "pyq": "5aa020793523b66a",
+       "level": 2,
+       "points": [
+        "i/j*j is evaluated left to right in integers: (2/3)*3 = 0",
+        "j/i*i = (3/2)*2 = 2",
+        "Float variables only store 0.0 and 2.0, the division was already integer",
+        "Output: 0 2 0.000000 2.000000"
+       ]
+      },
+      {
+       "id": "p28",
+       "pyq": "941b05f3562a96f4",
+       "level": 2,
+       "points": [
+        "> is left associative: (x > y) > z",
+        "(20 > 15) = 1, then 1 > 10 = 0",
+        "Output: 0"
+       ]
+      },
+      {
+       "id": "p29",
+       "pyq": "f4bee84840e9ae07",
+       "level": 2,
+       "points": [
+        "Output: compilation error",
+        "% needs integer operands, a and b are float",
+        "Use fmod() from math.h for floats",
+        "Without that line d = a/2 = 2.5 is truncated to 2"
+       ]
+      },
+      {
+       "id": "p38",
+       "pyq": "749b599d24f145ac",
+       "level": 2,
+       "points": [
+        "As printed \"= =\" with a space is two tokens, a syntax error",
+        "Intended a = ++a == 6: == has higher precedence than =",
+        "++a makes a = 6, 6 == 6 is true, so 1 is assigned and printed: 1"
+       ]
+      },
+      {
+       "id": "p111",
+       "pyq": "5cbc4476827f16e8",
+       "level": 2,
+       "points": [
+        "x++ + 10 uses the old x: 10 + 10 = 20, non-zero so true",
+        "x becomes 11 after the test",
+        "Output: 11"
+       ]
+      },
+      {
+       "id": "p191",
+       "pyq": "568a8874f31e9b0c",
+       "level": 2,
+       "points": [
+        "i/j*j and j/i*i are integer operations left to right: (2/3)*3 = 0, (3/2)*2 = 2",
+        "a and b only store those integers as float",
+        "Output: 0 2 0.000000 2.000000"
+       ]
+      },
+      {
+       "id": "ex-4",
+       "kind": "short",
+       "level": 3,
+       "marks": 3,
+       "q": "Differentiate pre-increment and post-increment with the program below and state the output.\n```c\nint x = 5, y, z;\ny = x++;\nz = ++x;\nprintf(\"%d %d %d\", x, y, z);\n```",
+       "model_answer_md": "**Pre-increment** (`++x`) increments first and then uses the new value. **Post-increment** (`x++`) uses the current value and then increments.\n\n- `y = x++;` y gets 5, then x becomes 6.\n- `z = ++x;` x becomes 7, z gets 7.\n\nOutput: `7 5 7`",
+       "points": [
+        "Pre: increment then use; post: use then increment",
+        "y = 5, x = 6 after the first statement",
+        "z = 7, final x = 7",
+        "Output 7 5 7"
+       ]
+      },
+      {
+       "id": "p30",
+       "pyq": "0bdcbea14fa8fa28",
+       "level": 3,
+       "points": [
+        "a is modified twice with no sequence point between, so the behaviour is undefined",
+        "Usual answer (gcc, Turbo C): both ++a run first, a = 7, result 7 + 7 = 14",
+        "Another compiler may give 13, so the result is compiler dependent"
+       ]
+      },
+      {
+       "id": "p174",
+       "pyq": "8624d79feb3f28a2",
+       "level": 3,
+       "points": [
+        "int x = 2.5 truncates, x = 2",
+        "Expr_1 = 2 - (4 x 5 x -3.0) - (-3) = 65.000000",
+        "Expr_2: x + y < z + w is 7 < 3 = 0 (short-circuit), then (!x) < 5 = 1; 0 || 1 = 1.000000"
+       ]
+      },
+      {
+       "id": "p175",
+       "pyq": "348188957bde3148",
+       "level": 3,
+       "points": [
+        "++ has higher precedence than +, and + higher than <<",
+        "c = (++a) << (1 + b++): ++a = 3, b++ gives 3, 1 + 3 = 4",
+        "3 << 4 = 3 x 16 = 48"
+       ]
+      }
+     ]
+    },
+    {
+     "id": "digits-bitwise",
+     "title": "Digit extraction, swapping and bitwise operators",
+     "theory_md": "**Digits:** `n % 10` is the last digit, `n / 10` removes it. 3-digit number: units `n % 10`, tens `(n/10) % 10`, hundreds `n / 100`.\n\n**Bitwise operators** (on bits of ints): `&` AND, `|` OR, `^` XOR, `~` NOT, `<<`, `>>`.\n- `x << k` is $x \\times 2^k$; `x >> k` is $x / 2^k$ (so `n >> 3` divides by 8).\n- `n & 1` is 1 for odd, 0 for even. `n & 0xFF` is the least significant byte.\n- `~n = -(n+1)`, so `~35 = -36`. `a ^ b` is 0 only if a equals b.\n- Swap without a third variable: `a = a + b; b = a - b; a = a - b;` or `a ^= b; b ^= a; a ^= b;`.\n- Comma operator returns its last operand: `z = (b, a)` gives `a`.",
+     "basics_md": "Dividing by 10 chops the last digit off a number and the remainder is that digit. Inside the computer numbers are rows of 0/1 bits; bitwise operators work on those rows directly.",
+     "key_points": [
+      "n%10 last digit, n/10 drops it; reverse with rev = rev*10 + n%10",
+      "Shifts: << multiplies by 2^k, >> divides by 2^k",
+      "n & 1 tests odd/even; n & 0xFF gives the low byte",
+      "~n = -(n+1); a ^ b = 0 iff a == b",
+      "Swap with + - or with XOR, no third variable"
+     ],
+     "figures": [],
+     "questions": [
+      {
+       "id": "db-1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "What is `25 & 12`?",
+       "options": [
+        "37",
+        "8",
+        "29",
+        "4"
+       ],
+       "answer_index": 1,
+       "why": "25 = 11001, 12 = 01100; AND gives 01000 = 8."
+      },
+      {
+       "id": "db-2",
+       "kind": "mcq",
+       "level": 1,
+       "q": "The value of `~7` is",
+       "options": [
+        "-7",
+        "-8",
+        "8",
+        "7"
+       ],
+       "answer_index": 1,
+       "why": "~n = -(n+1) = -8."
+      },
+      {
+       "id": "p31",
+       "pyq": "21233b8b51792cc8",
+       "level": 1,
+       "points": [
+        "Units digit n % 10, tens digit (n / 10) % 10, hundreds digit n / 100",
+        "sum = the three digits, printed (e.g. 123 gives 6)"
+       ]
+      },
+      {
+       "id": "p129",
+       "pyq": "584e662406773d50",
+       "level": 1,
+       "points": [
+        "n % 10 gives the last digit, n / 10 removes it",
+        "Repeat four times (or while n > 0), adding each digit to sum",
+        "Prints sum"
+       ]
+      },
+      {
+       "id": "p147",
+       "pyq": "fa4e58d23c6e03fe",
+       "level": 1,
+       "points": [
+        "rev = (n % 10) * 100 + ((n / 10) % 10) * 10 + n / 100",
+        "Reads n and prints rev"
+       ]
+      },
+      {
+       "id": "db-3",
+       "kind": "numerical",
+       "level": 2,
+       "marks": 2,
+       "q": "Find the values of `12 ^ 10`, `12 | 10`, `12 << 2` and `12 >> 2`.",
+       "model_answer_md": "12 = 1100 and 10 = 1010 in binary.\n\n- `12 ^ 10` = 0110 = **6**\n- `12 | 10` = 1110 = **14**\n- `12 << 2` = $12 \\times 4$ = **48**\n- `12 >> 2` = $12 / 4$ = **3**",
+       "points": [
+        "12 ^ 10 = 6",
+        "12 | 10 = 14",
+        "12 << 2 = 48",
+        "12 >> 2 = 3"
+       ]
+      },
+      {
+       "id": "p64",
+       "pyq": "e6bed416b0363f1a",
+       "level": 2,
+       "points": [
+        "LSB = n & 0xFF",
+        "High nibble (lsb >> 4) & 0x0F and low nibble lsb & 0x0F",
+        "Compare the nibbles and print Equal or Not equal"
+       ]
+      },
+      {
+       "id": "p95",
+       "pyq": "2f48a6433e5d068b",
+       "level": 2,
+       "points": [
+        "Sum method: a = a + b; b = a - b; a = a - b",
+        "Or XOR method: a ^= b; b ^= a; a ^= b",
+        "Prints values before and after"
+       ]
+      },
+      {
+       "id": "p177",
+       "pyq": "950dd18a44be13c4",
+       "level": 2,
+       "points": [
+        "First digit n / 1000",
+        "Last digit n - (n / 10) * 10 (replaces %)",
+        "Sum printed"
+       ]
+      },
+      {
+       "id": "p178",
+       "pyq": "5564e9524826c97c",
+       "level": 2,
+       "points": [
+        "Right shift by 3 divides by 8: n >> 3",
+        "Remainder n & 7 if needed",
+        "No / and no 8 used"
+       ]
+      },
+      {
+       "id": "p180",
+       "pyq": "203871c80fe488a4",
+       "level": 2,
+       "points": [
+        "High byte x >> 8, low byte x << 8 (for a 16-bit unsigned value)",
+        "Swapped = (x >> 8) | (x << 8), masked to 16 bits",
+        "Prints the result"
+       ]
+      },
+      {
+       "id": "db-4",
+       "kind": "short",
+       "level": 3,
+       "marks": 4,
+       "q": "Write a C program to count the number of 1 bits in an integer. State the answer for 9.",
+       "model_answer_md": "```c\n#include <stdio.h>\nint main(void)\n{\n    unsigned int n, count = 0;\n    printf(\"Enter n: \");\n    scanf(\"%u\", &n);\n    while (n != 0) {\n        count += n & 1;   /* add the last bit */\n        n = n >> 1;       /* drop the last bit */\n    }\n    printf(\"Number of 1 bits = %u\\n\", count);\n    return 0;\n}\n```\nFor 9 = 1001 the program prints 2.",
+       "points": [
+        "Loop until n becomes 0",
+        "Adds n & 1 (the last bit) to the count",
+        "Shifts right with n >> 1 each pass",
+        "Prints 2 for n = 9"
+       ]
+      },
+      {
+       "id": "p11",
+       "pyq": "9f30c4ddaaccd971",
+       "level": 3,
+       "points": [
+        "B1 and B3 are ~n (one's complement gives -(n+1))",
+        "B2 and B4 are n + 1",
+        "Check: 40, -41, -40, 39, 40 and -40, 39, 40, -41, -40 both match the figure",
+        "Program reads Num and applies the four statements in order, printing each block output (no minus operator needed)"
+       ]
+      },
+      {
+       "id": "p88",
+       "pyq": "483ce87651cf43e8",
+       "level": 3,
+       "points": [
+        "t = 31 >> 2 = 7 and u = 31 << 2 = 124 (last pass of the loop)",
+        "v = 1 because 5 ^ 10 = 15 equals c",
+        "w = ~35 = -36; x = 10 & (31 ^ 5) = 10 & 26 = 10",
+        "y = 5 because = binds before the comma; z = 10 because the comma operator returns the last operand; num = 31"
+       ]
+      },
+      {
+       "id": "p96",
+       "pyq": "a75730bb846756bc",
+       "level": 3,
+       "points": [
+        "Loop gives t = 31 >> 2 = 7 and u = 31 << 2 = 124 at the last pass (i = 2)",
+        "v = 1; w = ~35 = -36; x = 10; y = 5; z = 10",
+        "num is unchanged: 31"
+       ]
+      },
+      {
+       "id": "p98",
+       "pyq": "612ed3a2b9d2d4dd",
+       "level": 3,
+       "points": [
+        "B1 and B3 are ~n (one's complement)",
+        "B2 and B4 are n + 1",
+        "For 40: -41, -40, 39, 40; for -40: 39, 40, -41, -40"
+       ]
+      },
+      {
+       "id": "p176",
+       "pyq": "abe141cee6e4959b",
+       "level": 3,
+       "points": [
+        "LSB = n & 0xFF",
+        "Or through a pointer: unsigned char *p = (unsigned char *)&n; *p on a little-endian machine",
+        "Printed as a character with %c (its ASCII value is the byte), no loop"
+       ]
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "topic": "Conditions",
+   "subtopics": [
+    {
+     "id": "if-else",
+     "title": "if, if-else, else-if ladder and the ?: operator",
+     "theory_md": "`if (cond) S1; else S2;` runs S1 if `cond` is non-zero (true). An **else-if ladder** tests conditions in order and runs the first true branch; put the narrowest or highest slab first, and use `&&` for ranges: `x >= 5 && x < 10` (not `5 <= x < 10`).\n\n- `=` assigns, `==` compares: `if (x = 5)` is always true.\n- `else` belongs to the nearest unmatched `if`.\n- **Conditional operator:** `max = (a > b) ? a : b;` is an if-else in one expression; it can be nested and used inside `printf` when `if` is not allowed.\n- Independent checks need separate `if`s; exclusive slabs need `else if`.\n- A flowchart decision is a diamond with Yes and No exits.",
+     "basics_md": "A program chooses between paths by asking a yes/no question. The first question that answers yes decides which instructions run.",
+     "key_points": [
+      "Condition is true if non-zero; use == for comparing, = for assigning",
+      "Exclusive cases: else-if ladder; independent cases: separate ifs",
+      "Ranges need && between two comparisons",
+      "?: is the conditional operator: cond ? value_if_true : value_if_false",
+      "Dangling else attaches to the nearest if"
+     ],
+     "figures": [],
+     "questions": [
+      {
+       "id": "ie-1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "What does `if (x = 5) printf(\"yes\");` do when x is 0?",
+       "options": [
+        "Prints nothing",
+        "Prints yes",
+        "Compile error",
+        "Compares x with 5"
+       ],
+       "answer_index": 1,
+       "why": "x = 5 is an assignment whose value 5 is non-zero, so the condition is true."
+      },
+      {
+       "id": "p33",
+       "pyq": "e3c9c3beb1a4c08b",
+       "level": 1,
+       "points": [
+        "Reads three scores",
+        "if (s1 < 65 || s2 < 65 || s3 < 65) prints FAIL, because || is true if any one condition is true"
+       ]
+      },
+      {
+       "id": "p195",
+       "pyq": "51d6e7cd6594f968",
+       "level": 1,
+       "points": [
+        "Reads a character",
+        "if (ch >= 'A' && ch <= 'Z') uppercase, else not",
+        "Flowchart with the decision diamond"
+       ]
+      },
+      {
+       "id": "ie-2",
+       "kind": "mcq",
+       "level": 2,
+       "q": "For `int a = 7;`, which condition correctly tests 5 <= a <= 10?",
+       "options": [
+        "5 <= a <= 10",
+        "a >= 5 && a <= 10",
+        "a >= 5 || a <= 10",
+        "a = 5 && a = 10"
+       ],
+       "answer_index": 1,
+       "why": "Chained comparisons are evaluated left to right and give wrong results; use &&."
+      },
+      {
+       "id": "ie-3",
+       "kind": "short",
+       "level": 2,
+       "marks": 3,
+       "q": "Write a C program to find whether a year is a leap year.",
+       "model_answer_md": "```c\n#include <stdio.h>\nint main(void)\n{\n    int y;\n    printf(\"Enter year: \");\n    scanf(\"%d\", &y);\n    if ((y % 4 == 0 && y % 100 != 0) || y % 400 == 0)\n        printf(\"%d is a leap year\\n\", y);\n    else\n        printf(\"%d is not a leap year\\n\", y);\n    return 0;\n}\n```\nA year is leap if divisible by 4 but not by 100, or divisible by 400.",
+       "points": [
+        "Reads the year",
+        "Condition (y%4==0 && y%100!=0) || y%400==0",
+        "if-else prints the correct message"
+       ]
+      },
+      {
+       "id": "ie-4",
+       "kind": "short",
+       "level": 2,
+       "marks": 2,
+       "q": "Find the largest of three numbers a, b, c using only the conditional operator.",
+       "model_answer_md": "```c\nint max;\nmax = (a > b) ? ((a > c) ? a : c) : ((b > c) ? b : c);\nprintf(\"Largest = %d\", max);\n```\nThe outer `?:` compares a and b; the inner one compares the winner with c.",
+       "points": [
+        "Uses nested ?: and no if",
+        "Compares a with b, then the winner with c",
+        "Prints the result"
+       ]
+      },
+      {
+       "id": "p0",
+       "pyq": "3b52dba13a521d3e",
+       "level": 2,
+       "points": [
+        "Declares float cgpa and char variables for every y/n answer",
+        "Reads each input (scanf(\" %c\") with the space before %c)",
+        "Case 1: if (cgpa >= 6 && join_Army == 'y' && physical_health_good == 'y' && mental_health_good == 'y') else prints \"Sorry, better luck next time\"",
+        "Case 2: separate if with cgpa >= 7.5 && program_skill_good == 'y' && project_done == 'y'",
+        "Case 3: separate if for member_of_society == 'y'",
+        "Three independent ifs, not one else-if chain, because more than one message can print"
+       ]
+      },
+      {
+       "id": "p21",
+       "pyq": "486f3919c70cc1f9",
+       "level": 2,
+       "points": [
+        "Rejects if weight > 20 or distance > 10 with a \"cannot be delivered\" message",
+        "if-else-if chain on weight for the rate: <= 2 gives 10, < 5 gives 15, < 10 gives 20, <= 20 gives 30",
+        "Units of 2 km = ceil(distance / 2)",
+        "Charges = rate x units, printed"
+       ]
+      },
+      {
+       "id": "p48",
+       "pyq": "f33c81b417a69616",
+       "level": 2,
+       "points": [
+        "Uses the conditional operator ?: nested, no if-else",
+        "Alphabet: (ch >= 'a' && ch <= 'z') || (ch >= 'A' && ch <= 'Z'); digit: ch >= '0' && ch <= '9'",
+        "Otherwise special character; result printed with printf"
+       ]
+      },
+      {
+       "id": "p128",
+       "pyq": "d5e961d815ce55aa",
+       "level": 2,
+       "points": [
+        "Hundreds digit n / 100 and units digit n % 10",
+        "Palindrome if they are equal (middle digit stays in place)",
+        "Prints palindrome or not"
+       ]
+      },
+      {
+       "id": "p183",
+       "pyq": "0f42c8a6e8160dce",
+       "level": 2,
+       "points": [
+        "System n works when (n - 1) % 3 == 0 (systems 1, 4, 7, 10, 13, 16, 19)",
+        "Validate 1 to 20",
+        "Prints working or not working"
+       ]
+      },
+      {
+       "id": "p52",
+       "pyq": "e54cb8b596461581",
+       "level": 3,
+       "points": [
+        "isPrime(x): x >= 2 and no divisor from 2 to sqrt(x)",
+        "Choice 'p': search downward from Num-1 until a prime is found",
+        "Choice 'N': search upward from Num+1 until a prime is found",
+        "Prints M; if-else (or switch) on Choice"
+       ]
+      },
+      {
+       "id": "p181",
+       "pyq": "33fbbbe2c6302879",
+       "level": 3,
+       "points": [
+        "Computes c1, c2, c3 for hardness > 50, carbon < 0.7, tensile > 5600",
+        "Grade 10 if all three; 9 if (i) and (ii); 8 if (ii) and (iii); 7 if (i) and (iii)",
+        "Grade 6 if exactly one is met; 5 if none (if-else-if ladder in this order)",
+        "Flowchart: Start, input, decisions in the same order, print grade, Stop"
+       ]
+      },
+      {
+       "id": "p188",
+       "pyq": "f9b0b37025c1440d",
+       "level": 3,
+       "points": [
+        "Both times converted to minutes from midnight; diff = arrival - start",
+        "diff > 0 Late; -30 <= diff <= 0 On time; diff < -30 Early",
+        "Second line printed when diff is not 0: under 60 minutes as X minutes, else H:MM hours"
+       ]
+      }
+     ]
+    },
+    {
+     "id": "logical-ops",
+     "title": "Logical operators and short-circuit evaluation",
+     "theory_md": "`&&` (AND), `||` (OR), `!` (NOT) work on truth values: 0 is false, any non-zero is true, and the result is always 1 or 0. Precedence: `!` > `&&` > `||`.\n\n**Short-circuit:**\n- `A && B`: if A is false, B is **not evaluated**.\n- `A || B`: if A is true, B is **not evaluated**.\n\nSo side effects in the skipped operand never happen: after `int d = 0 && a++;` the value of `a` is unchanged. `m = ++j && ++i || ++k;` groups as `(++j && ++i) || ++k`.\n\nRelational results are 1 or 0: `!x < 5` is `(!x) < 5`. Test hand-traces with a table of each variable after each step.",
+     "basics_md": "AND needs both sides true, OR needs one. The computer stops reading as soon as the answer is certain, so the unread part never runs.",
+     "key_points": [
+      "0 is false, non-zero is true; result is 1 or 0",
+      "&& stops at the first false operand, || stops at the first true operand",
+      "Skipped operands do not run: ++, -- and function calls in them are lost",
+      "Precedence: ! then && then ||",
+      "State final values of every variable in the answer"
+     ],
+     "figures": [],
+     "questions": [
+      {
+       "id": "lo-1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "The value of `5 && 0 || 3` is",
+       "options": [
+        "0",
+        "1",
+        "3",
+        "5"
+       ],
+       "answer_index": 1,
+       "why": "(5 && 0) is 0, then 0 || 3 is true, which gives 1."
+      },
+      {
+       "id": "p10",
+       "pyq": "029cfb319b17d6cc",
+       "level": 1,
+       "points": [
+        "Output: m=1  n=0",
+        "m = i > 9 gives 1 because 15 > 9",
+        "n = j==2 && j!=2: j==2 is false, && short-circuits, n = 0"
+       ]
+      },
+      {
+       "id": "p39",
+       "pyq": "6864abe1fb58ebb7",
+       "level": 1,
+       "points": [
+        "Output: m=1 n=0",
+        "15 > 9 is true, so m = 1",
+        "j == 2 is false, && short-circuits, n = 0"
+       ]
+      },
+      {
+       "id": "p139",
+       "pyq": "308da6605d16fc5e",
+       "level": 1,
+       "points": [
+        "Output: m=1 and n=1 (on separate lines)",
+        "m: 15 > 9 is true, so || gives 1",
+        "n: 4 > 2 and 4 != 2 are both true, so && gives 1"
+       ]
+      },
+      {
+       "id": "lo-2",
+       "kind": "mcq",
+       "level": 2,
+       "q": "After `int a = 0, b = 1; a && b++;` the value of b is",
+       "options": [
+        "0",
+        "1",
+        "2",
+        "undefined"
+       ],
+       "answer_index": 1,
+       "why": "a is 0, so && short-circuits and b++ is never executed."
+      },
+      {
+       "id": "lo-3",
+       "kind": "numerical",
+       "level": 2,
+       "marks": 2,
+       "q": "Find the output.\n```c\nint i = 0, j = 1, k = 2, r;\nr = i++ && j++ || k++;\nprintf(\"%d %d %d %d\", r, i, j, k);\n```",
+       "model_answer_md": "`i++ && j++ || k++` groups as `(i++ && j++) || k++`.\n\n- `i++` gives 0 (false) and i becomes 1; `&&` short-circuits, so `j++` is skipped and j stays 1.\n- `0 || k++`: `k++` gives 2 (true), k becomes 3, so r = 1.\n\nOutput: `1 1 1 3`",
+       "points": [
+        "&& and || grouped as (i++ && j++) || k++",
+        "j++ skipped by short-circuit",
+        "r = 1, i = 1, j = 1, k = 3"
+       ]
+      },
+      {
+       "id": "p17",
+       "pyq": "bf6b52cef90c144a",
+       "level": 2,
+       "points": [
+        "Output: -2 3 0 1",
+        "&& has higher precedence than ||: m = (++j && ++i) || ++k",
+        "++j = 3 and ++i = -2 are both non-zero, so the && part is 1",
+        "|| short-circuits, ++k is not executed: k stays 0 and m = 1"
+       ]
+      },
+      {
+       "id": "p32",
+       "pyq": "795344a9014483b7",
+       "level": 2,
+       "points": [
+        "a > b is 8 > 9, false, so || evaluates its right operand",
+        "b++ gives 9 (true) and then b becomes 10, so ans = 1",
+        "Output: 1 10"
+       ]
+      },
+      {
+       "id": "p106",
+       "pyq": "364a2af13b8ca56b",
+       "level": 2,
+       "points": [
+        "Output: i=1,j=1",
+        "i++ == j++ compares the old values 0 == 0 (true); both then become 1",
+        "i-- and j-- in printf pass the current values 1 and 1"
+       ]
+      },
+      {
+       "id": "p165",
+       "pyq": "86956a1db7eb5aad",
+       "level": 2,
+       "points": [
+        "Output: d=0, a=1, e=1, c=5",
+        "b && a++: b is 0, so a++ is skipped",
+        "++b || c++: ++b is 1, so c++ is skipped"
+       ]
+      },
+      {
+       "id": "lo-4",
+       "kind": "short",
+       "level": 3,
+       "marks": 2,
+       "q": "Why does `if (b != 0 && a / b > 1)` never crash when b is 0?",
+       "model_answer_md": "`&&` evaluates left to right and stops as soon as the result is known. When `b != 0` is false (b is 0), the whole condition is false and `a / b` is **never evaluated**, so there is no division by zero. This is short-circuit evaluation.",
+       "points": [
+        "Short-circuit evaluation of &&",
+        "Right operand a/b skipped when b is 0"
+       ]
+      },
+      {
+       "id": "p185",
+       "pyq": "cf93a4f7eb162b5c",
+       "level": 3,
+       "points": [
+        "res1 = 0: a > b is false, && short-circuits",
+        "res2 = 0: a == c is 0 and a > b is 0",
+        "res3 = 1: && before ||, b > 10 is already true",
+        "res4 = 1: a/2.0 == 0.0 is 0, c < 0.0 is 1, so 0 || 1"
+       ]
+      }
+     ]
+    },
+    {
+     "id": "switch",
+     "title": "switch statement and fall-through",
+     "theory_md": "```c\nswitch (expr) { case 1: ...; break; case 2: case 3: ...; break; default: ...; }\n```\n- `expr` must be an integer or char; `case` labels are distinct integer/char **constants** (no ranges, floats or variables).\n- Control jumps to the matching label and then runs on **through all following cases** until a `break`: this is **fall-through**. Without `break` in a case, the next case's code also runs.\n- `default` runs if nothing matches; it can sit anywhere, and falls through if it has no `break`.\n- Statements placed before the first `case` are never executed.\n- Grouped labels share code: `case 1: case 3: case 5: days = 31; break;`\n- The expression is evaluated once; `switch (a > b)` has only cases 0 and 1.",
+     "basics_md": "A switch is a menu: the value picks a line to jump to, and the computer then keeps reading downwards until it meets a break.",
+     "key_points": [
+      "Expression is int or char; case labels are constants",
+      "No break means fall-through into the next case",
+      "default may appear anywhere and has no break needed at the end",
+      "Code before the first case is skipped",
+      "Group labels (case 4: case 5: case 6:) to share one action"
+     ],
+     "figures": [],
+     "questions": [
+      {
+       "id": "sw-1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "Which of these cannot be used as the controlling expression of a `switch`?",
+       "options": [
+        "char",
+        "int",
+        "float",
+        "long"
+       ],
+       "answer_index": 2,
+       "why": "switch works on integer types (char, int, long) only."
+      },
+      {
+       "id": "sw-2",
+       "kind": "mcq",
+       "level": 2,
+       "q": "If a `break` is missing at the end of a matched case,",
+       "options": [
+        "a compile error occurs",
+        "the next case's statements also execute",
+        "the program exits",
+        "the default is skipped but the next case is also skipped"
+       ],
+       "answer_index": 1,
+       "why": "Execution falls through to the following statements."
+      },
+      {
+       "id": "sw-3",
+       "kind": "numerical",
+       "level": 2,
+       "marks": 2,
+       "q": "Find the output.\n```c\nint x = 2;\nswitch (x) {\n  case 1: printf(\"A\");\n  case 2: printf(\"B\");\n  case 3: printf(\"C\"); break;\n  default: printf(\"D\");\n}\n```",
+       "model_answer_md": "x = 2 jumps to `case 2` and prints B. There is no `break`, so it falls through into `case 3`, prints C and stops at that `break`.\n\nOutput: `BC`",
+       "points": [
+        "Matches case 2 and prints B",
+        "Falls through to case 3 and prints C",
+        "break stops it; output BC"
+       ]
+      },
+      {
+       "id": "sw-4",
+       "kind": "short",
+       "level": 2,
+       "marks": 4,
+       "q": "Write a menu-driven program using switch: read two numbers and a choice 1 to 4 (add, subtract, multiply, divide) and print the result.",
+       "model_answer_md": "```c\n#include <stdio.h>\nint main(void)\n{\n    float a, b;\n    int ch;\n    printf(\"Enter two numbers: \");\n    scanf(\"%f %f\", &a, &b);\n    printf(\"1.Add 2.Sub 3.Mul 4.Div: \");\n    scanf(\"%d\", &ch);\n    switch (ch) {\n    case 1: printf(\"%f\\n\", a + b); break;\n    case 2: printf(\"%f\\n\", a - b); break;\n    case 3: printf(\"%f\\n\", a * b); break;\n    case 4: if (b != 0) printf(\"%f\\n\", a / b);\n            else printf(\"Divide by zero\\n\");\n            break;\n    default: printf(\"Invalid choice\\n\");\n    }\n    return 0;\n}\n```",
+       "points": [
+        "Reads the numbers and the choice",
+        "switch(ch) with four cases each ending in break",
+        "default for an invalid choice",
+        "Division checks for zero"
+       ]
+      },
+      {
+       "id": "p16",
+       "pyq": "39e05eb66f29ac2c",
+       "level": 2,
+       "points": [
+        "Output: \"This is default case\" then \"This is second case\"",
+        "i = 4 matches no case, so control goes to default (its position does not matter)",
+        "default has no break, so it falls through into case 2, which ends with break"
+       ]
+      },
+      {
+       "id": "p67",
+       "pyq": "3c4a2cf4f4583f8d",
+       "level": 2,
+       "points": [
+        "int Bitwise(int a, int b, char ch) with switch(ch)",
+        "case '&': result = a & b; break; case '|': result = a | b; break; default for invalid",
+        "main reads two integers and the choice (scanf(\" %c\")) and prints the returned result"
+       ]
+      },
+      {
+       "id": "p75",
+       "pyq": "819cd411148fa121",
+       "level": 2,
+       "points": [
+        "Switch falls through (no break after case 2, 22, 1): input 2 prints twotwelve, 12 prints twelve, 22 prints twenty twooneNothing, 1 prints oneNothing, other prints Nothing",
+        "if-else-if equivalent must reproduce the fall-through (e.g. for 2 print \"two\" and \"twelve\")",
+        "Output shown for the roll-number input"
+       ]
+      },
+      {
+       "id": "p94",
+       "pyq": "7d9986b780c7e934",
+       "level": 2,
+       "points": [
+        "Month in switch with grouped labels: 1,3,5,7,8,10,12 give 31; 4,6,9,11 give 30",
+        "case 2 uses leap char: 'L' or 'l' gives 29, 'n' or 'N' gives 28",
+        "break after each group; default for an invalid month"
+       ]
+      },
+      {
+       "id": "p110",
+       "pyq": "3c05f433ec5cac11",
+       "level": 2,
+       "points": [
+        "Output: \"choice A\" on one line, then \"choice B No Choice\"",
+        "printf before the first case is never executed",
+        "No break: control falls through B, C, D and default"
+       ]
+      },
+      {
+       "id": "p122",
+       "pyq": "a811db6d7fc5205d",
+       "level": 2,
+       "points": [
+        "Output: \"This is default case\" then \"This is second case\"",
+        "No case matches 4, so default runs (its position does not matter)",
+        "default has no break and falls through into case 2, which breaks"
+       ]
+      },
+      {
+       "id": "p145",
+       "pyq": "6710a83fdadff732",
+       "level": 2,
+       "points": [
+        "Output: A, B, C on separate lines",
+        "i != 1 && i % 2 == 0 is 1 && 1 = 1, so case 1",
+        "No break, so it falls through case 0 and default"
+       ]
+      },
+      {
+       "id": "p148",
+       "pyq": "1ecc9105c2b03e63",
+       "level": 2,
+       "points": [
+        "switch(choice): case 1 computes factorial with a loop (long long, starting at 1), break",
+        "case 2 checks num % 2 for odd or even, break",
+        "default for an invalid choice"
+       ]
+      },
+      {
+       "id": "p182",
+       "pyq": "06f0adfb3e374ad3",
+       "level": 2,
+       "points": [
+        "switch(gb): case 1: 149, case 2: 249, case 3: 349",
+        "case 4: case 5: case 6: share 499; case 10: 699",
+        "default prints \"invalid data plan\"; break after each"
+       ]
+      },
+      {
+       "id": "p187",
+       "pyq": "78243e90109eef14",
+       "level": 2,
+       "points": [
+        "Each hex digit mapped to its 4-bit group in a switch (case '0' to case 'F')",
+        "A helper function prints one digit; called for both digits",
+        "Output 0001 1010 for 1 and A"
+       ]
+      },
+      {
+       "id": "p124",
+       "pyq": "808540f576f70c68",
+       "level": 3,
+       "points": [
+        "First pass i = 0: all cases fall through, +5 +2 +5 +4 = 16, printed",
+        "Then i++ makes 17; default adds 4 giving 21, printed; i++ gives 22 and the loop ends",
+        "Output: 16 21"
+       ]
+      },
+      {
+       "id": "p164",
+       "pyq": "47bf6d1b92d74838",
+       "level": 3,
+       "points": [
+        "Test i++ < 20 compares the old value, then increments",
+        "Pass 1: i = 1, case 1 falls through +2 +3 +4 = 10, printed",
+        "Pass 2: i = 11, default +4 = 15; pass 3: i = 16, default +4 = 20; then 20 < 20 fails",
+        "Output: 10 15 20"
+       ]
+      },
+      {
+       "id": "p171",
+       "pyq": "d30cd0f8beea3822",
+       "level": 3,
+       "points": [
+        "Comma operator evaluates left to right and gives the last value: 10 * 2 = 20 = L*2",
+        "So case L*2 runs, and without break falls through to case L*3",
+        "Output: 456 and 789",
+        "if-else version: if (x == L) 123 else if (x == L*2) { 456 789 } else if (x == L*3) 789 else def"
+       ]
+      }
+     ]
+    },
+    {
+     "id": "no-relational",
+     "title": "Solving without relational operators",
+     "theory_md": "Papers ask for tests \"without `<`, `>`, `==`\" or \"without `%`\". The tools:\n\n- **Non-zero is true:** `if (a - b)` means a is not equal to b; `if (a ^ b)` is the same via XOR.\n- **Sign bit:** for a 32-bit int, `(unsigned)n >> 31` is 1 for negative, 0 otherwise.\n- **Parity:** `n & 1` is 1 for odd, 0 for even.\n- **Formula:** $\\max(a,b) = \\dfrac{a+b+|a-b|}{2}$, $\\min(a,b) = \\dfrac{a+b-|a-b|}{2}$ (`abs()` from `<stdlib.h>`).\n- **Mask select:** `mask = (a - b) >> 31` is all 1s if a < b, else 0; `max = (b & mask) | (a & ~mask)`.\n- **Quotient trick:** `switch (n / 10)` tests the range 10 to 99 using case 1 to case 9.\n- Characters: `!(c1 - c2)` is 1 when equal.",
+     "basics_md": "If you may not ask 'is this bigger?', ask a different question that has the same answer: the sign of a difference, the last bit of a number, or whether something is zero.",
+     "key_points": [
+      "Non-zero means true: a - b, a ^ b, n & 1 as conditions",
+      "Sign bit: >> 31 on a 32-bit int",
+      "max = (a + b + |a - b|) / 2 and min = (a + b - |a - b|) / 2",
+      "Mask (a - b) >> 31 chooses between a and b",
+      "switch (n / 10) tests a two digit range"
+     ],
+     "figures": [],
+     "questions": [
+      {
+       "id": "nr-1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "Which expression is non-zero only when the integers a and b are different?",
+       "options": [
+        "a & b",
+        "a ^ b",
+        "a | b",
+        "a && b"
+       ],
+       "answer_index": 1,
+       "why": "XOR of equal values is 0."
+      },
+      {
+       "id": "nr-2",
+       "kind": "mcq",
+       "level": 2,
+       "q": "For `int n`, the expression `n & 1` is 1 when n is",
+       "options": [
+        "negative",
+        "positive",
+        "odd",
+        "even"
+       ],
+       "answer_index": 2,
+       "why": "The last bit of an odd number is 1."
+      },
+      {
+       "id": "nr-3",
+       "kind": "numerical",
+       "level": 2,
+       "marks": 2,
+       "q": "Find the maximum and minimum of 14 and 9 using $\\max = (a+b+|a-b|)/2$ and $\\min = (a+b-|a-b|)/2$.",
+       "model_answer_md": "$a+b = 23$ and $|a-b| = 5$.\n\n- $\\max = (23 + 5)/2 = 14$\n- $\\min = (23 - 5)/2 = 9$\n\nNo comparison, loop or condition is used.",
+       "points": [
+        "a+b = 23, |a-b| = 5",
+        "max = 14",
+        "min = 9"
+       ]
+      },
+      {
+       "id": "nr-4",
+       "kind": "short",
+       "level": 2,
+       "marks": 4,
+       "q": "Write a program to tell whether an integer is positive, negative or zero without using any relational operator.",
+       "model_answer_md": "```c\n#include <stdio.h>\nint main(void)\n{\n    int n;\n    printf(\"Enter n: \");\n    scanf(\"%d\", &n);\n    if (n)                              /* non-zero */\n        if ((unsigned)n >> 31)          /* sign bit 1 */\n            printf(\"Negative\\n\");\n        else\n            printf(\"Positive\\n\");\n    else\n        printf(\"Zero\\n\");\n    return 0;\n}\n```\nThe sign bit (bit 31 of a 32-bit int) is 1 for negative numbers.",
+       "points": [
+        "Non-zero test with if (n) separates zero",
+        "Sign bit extracted by (unsigned)n >> 31",
+        "Prints negative, positive or zero correctly"
+       ]
+      },
+      {
+       "id": "p84",
+       "pyq": "fdefc95638369193",
+       "level": 2,
+       "points": [
+        "The last bit is 0 for even and 1 for odd",
+        "n & 1 used as the condition, so no %, / or relational operator",
+        "Prints even or odd accordingly"
+       ]
+      },
+      {
+       "id": "p127",
+       "pyq": "f8d0ef7d77a98a92",
+       "level": 2,
+       "points": [
+        "max = (a + b + |a - b|) / 2",
+        "Case a >= b gives a, case a < b gives b",
+        "abs() from stdlib.h; no <, >, <=, >="
+       ]
+      },
+      {
+       "id": "p130",
+       "pyq": "807eda23b89fdef7",
+       "level": 2,
+       "points": [
+        "Sign bit is the most significant bit: 1 for negative, 0 otherwise",
+        "Shift right by 31 (sizeof(int)*8 - 1) and use the bit as the condition",
+        "Zero tested separately with the value itself as condition"
+       ]
+      },
+      {
+       "id": "p179",
+       "pyq": "acef711744de2568",
+       "level": 2,
+       "points": [
+        "a ^ b is 0 only when all bits are equal",
+        "Condition: if (a ^ b) not equal, else equal",
+        "No -, /, %, == or != used"
+       ]
+      },
+      {
+       "id": "p53",
+       "pyq": "9bf2d531b01bc6b1",
+       "level": 3,
+       "points": [
+        "max = (a + b + |a - b|) / 2",
+        "min = (a + b - |a - b|) / 2",
+        "abs() from stdlib.h; no loop, if, switch or ?:"
+       ]
+      },
+      {
+       "id": "p115",
+       "pyq": "e72b614a53396369",
+       "level": 3,
+       "points": [
+        "Counts votes of M1, M2, F1, F2 over the 100 slips",
+        "Larger of two numbers found from the sign bit of the difference: (unsigned)(a - b) >> 31 is 1 if a - b is negative and 0 otherwise; tested with == only",
+        "If the vote difference is 0 (tie), the difference of the JEE marks decides",
+        "Prints the male CR and female CR"
+       ]
+      },
+      {
+       "id": "p156",
+       "pyq": "faff627caa4ca1b6",
+       "level": 3,
+       "points": [
+        "Equality: diff = a - b; non-zero (true) means not equal, 0 means equal",
+        "Maximum: sign bit of a - b (shift right by 31 or 63) selects the larger without <, >",
+        "Prints \"Equal x\" or \"Not Equal max\""
+       ]
+      },
+      {
+       "id": "p167",
+       "pyq": "aee24fb9f25e47cf",
+       "level": 3,
+       "points": [
+        "mask = (a - b) >> 31 is all 1s if a < b, else 0",
+        "max = (b & mask) | (a & ~mask)",
+        "min = (a & mask) | (b & ~mask)",
+        "Prints max and min"
+       ]
+      },
+      {
+       "id": "p168",
+       "pyq": "9129b0629d1a1e7e",
+       "level": 3,
+       "points": [
+        "For 10 to 99, n / 10 is 1 to 9; any other number gives 0, 10 or more or negative",
+        "switch (n / 10) with case 1 to case 9 grouped: valid two digit positive number",
+        "default: invalid number"
+       ]
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "topic": "Loops",
+   "subtopics": [
+    {
+     "id": "loop-trace",
+     "title": "for, while, do-while and tracing loops",
+     "theory_md": "- `for (init; cond; update) body` and `while (cond) body` test **before** each pass (entry controlled); `do body while (cond);` tests **after**, so it runs at least once.\n- A `;` straight after `for(...)` or `while(...)` is an **empty body**: the loop runs and does nothing, and statements below it run after the loop ends.\n- An update that adds 0 never ends: `i = i + 2/3` adds 0 (integer division). `i+2;` alone changes nothing.\n- `break` leaves the loop, `continue` skips to the next pass.\n- Passes of `for (i = a; i <= b; i += s)` = $\\lfloor (b-a)/s \\rfloor + 1$. Nested loops multiply: inner passes are counted for every outer pass.\n\n**Tracing:** write a table of the variables for each pass until the condition fails.",
+     "basics_md": "A loop repeats a block while a condition stays true. To predict its output, play computer: write the variables down and update them pass by pass.",
+     "key_points": [
+      "for and while test first; do-while tests last and runs at least once",
+      "A semicolon after the loop header makes an empty body",
+      "If the variable never changes the loop is infinite",
+      "Count passes with (b - a)/s + 1; nested loops multiply",
+      "Trace with a table of variable values"
+     ],
+     "figures": [],
+     "questions": [
+      {
+       "id": "lt-1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "A loop that must run its body at least once is",
+       "options": [
+        "for",
+        "while",
+        "do-while",
+        "all of these"
+       ],
+       "answer_index": 2,
+       "why": "do-while tests its condition after the body."
+      },
+      {
+       "id": "p41",
+       "pyq": "f8afab214181c049",
+       "level": 1,
+       "points": [
+        "Infinite loop",
+        "The ; after the for makes the body an empty statement",
+        "2/3 is 0 in integer division, so i never changes and i <= 5 is always true"
+       ]
+      },
+      {
+       "id": "p140",
+       "pyq": "008e092f439118e0",
+       "level": 1,
+       "points": [
+        "Infinite loop",
+        "The ; after the for is an empty body",
+        "2/3 = 0, so i never changes"
+       ]
+      },
+      {
+       "id": "p141",
+       "pyq": "b4757338031e4549",
+       "level": 1,
+       "points": [
+        "Infinite loop",
+        "The ; after while(i<=5) is the whole body",
+        "Nothing changes i, so the condition stays true"
+       ]
+      },
+      {
+       "id": "lt-2",
+       "kind": "mcq",
+       "level": 2,
+       "q": "How many times does the body run? `for (i = 10; i > 0; i -= 3)`",
+       "options": [
+        "3",
+        "4",
+        "10",
+        "infinite"
+       ],
+       "answer_index": 1,
+       "why": "i takes 10, 7, 4, 1 and then -2 fails the test."
+      },
+      {
+       "id": "lt-3",
+       "kind": "numerical",
+       "level": 2,
+       "marks": 2,
+       "q": "How many times does `printf` execute?\n```c\nfor (i = 1; i <= 3; i++)\n   for (j = i; j <= 3; j++)\n      printf(\"*\");\n```",
+       "model_answer_md": "For i = 1 the inner loop runs j = 1, 2, 3 (3 times); for i = 2, j = 2, 3 (2 times); for i = 3, j = 3 (1 time).\n\nTotal = 3 + 2 + 1 = **6** times.",
+       "points": [
+        "Inner passes: 3, 2, 1 for i = 1, 2, 3",
+        "Total 6 stars"
+       ]
+      },
+      {
+       "id": "p18",
+       "pyq": "c2dcf3ccefed6e8a",
+       "level": 2,
+       "points": [
+        "Output: 120",
+        "Inner loop j = i to j <= i runs exactly once for each i",
+        "sum = 1 + 2 + ... + 15 = 15 x 16 / 2 = 120"
+       ]
+      },
+      {
+       "id": "p42",
+       "pyq": "efc0a693f9e53569",
+       "level": 2,
+       "points": [
+        "Output: 16",
+        "The loop is the subtraction form of Euclid's algorithm, it finds GCD(16, 64)",
+        "n goes 64, 48, 32, 16; when m == n the loop stops"
+       ]
+      },
+      {
+       "id": "p107",
+       "pyq": "28cc7d7ef3d4fb1c",
+       "level": 2,
+       "points": [
+        "Output: count:9",
+        "Each num >>= 1 drops one bit, so the loop runs once per bit",
+        "435 = 110110011 in binary has 9 bits, so count = 9"
+       ]
+      },
+      {
+       "id": "p112",
+       "pyq": "f5dfd7cd1614056b",
+       "level": 2,
+       "points": [
+        "Output: 16",
+        "The ; after for makes the body empty",
+        "x increases until x <= 15 fails at 16, then printf prints 16"
+       ]
+      },
+      {
+       "id": "p113",
+       "pyq": "03ce854a2327e4b8",
+       "level": 2,
+       "points": [
+        "do-while runs the body first",
+        "Prints 20, then tests 20 <= 20 (true, x becomes 21), prints 21, then tests 21 <= 20 (false)",
+        "Output: 20 and 21 on separate lines (the second line starts with a space from the format string)"
+       ]
+      },
+      {
+       "id": "p142",
+       "pyq": "a50f637079911c70",
+       "level": 2,
+       "points": [
+        "Infinite loop printing MANIT repeatedly on one line",
+        "i+2; computes a value but does not store it, so i stays 1",
+        "i <= 10 is always true"
+       ]
+      },
+      {
+       "id": "p166",
+       "pyq": "b564ca4643fb3109",
+       "level": 2,
+       "points": [
+        "Output: count=5,n=5",
+        "Subtraction Euclid algorithm: finds GCD(55, 15) = 5",
+        "Pairs (55,15) (40,15) (25,15) (10,15) (10,5) (5,5): 5 iterations"
+       ]
+      },
+      {
+       "id": "lt-4",
+       "kind": "short",
+       "level": 3,
+       "marks": 3,
+       "q": "Find the output and trace it.\n```c\nint i = 1, s = 0;\nwhile (i <= 6) {\n   if (i % 2 == 0) { i++; continue; }\n   s += i;\n   i++;\n}\nprintf(\"%d\", s);\n```",
+       "model_answer_md": "Even values of i skip the addition; odd i add to s.\n\n| i | action | s |\n|---|---|---|\n| 1 | add | 1 |\n| 2 | skip | 1 |\n| 3 | add | 4 |\n| 4 | skip | 4 |\n| 5 | add | 9 |\n| 6 | skip | 9 |\n\nOutput: `9` (the sum of the odd numbers 1, 3, 5).",
+       "points": [
+        "continue skips the addition for even i",
+        "Odd i = 1, 3, 5 added",
+        "Output 9"
+       ]
+      },
+      {
+       "id": "p3",
+       "pyq": "b0f628d2f397d7b7",
+       "level": 3,
+       "points": [
+        "[A] num_2 % 2 != 0 (or num_2 & 1): add only when the second column is odd",
+        "[B] result = result + num_1: accumulate the first column",
+        "[C] num_2 == 1: loop stops when the second column reaches 1, after the last row is added",
+        "[D] num_1 * 2: double the first column",
+        "[E] num_2 / 2: halve the second column (integer division)"
+       ]
+      },
+      {
+       "id": "p173",
+       "pyq": "4ce2d7448e2e39e2",
+       "level": 3,
+       "points": [
+        "== is left associative: ((i+j)%2 == 0) == 0",
+        "That is true when i + j is odd, so it prints 2 for odd and 3 for even i+j",
+        "Output: 3, 23, 323, 2323, 32323 (one row each)"
+       ]
+      }
+     ]
+    },
+    {
+     "id": "patterns",
+     "title": "Pattern printing with nested loops",
+     "theory_md": "**Outer loop = rows, inner loop = columns.** Print `\\n` after the inner loop, not inside it. For row `i` of `n` rows:\n\n- **Left-aligned triangle:** inner `j = 1..i` prints `*` or `j`.\n- **Pyramid:** print `n - i` spaces, then `2i - 1` symbols (or `i` numbers followed by a space).\n- **Inverted:** `i` runs from `n` down to 1.\n- **Floyd:** one counter `k` carried across rows: `1 / 2 3 / 4 5 6`.\n- **Alternating digits:** print `(i + j) % 2` or `j % 2`.\n- **Mirror (diamond/zigzag):** two loops, upper half then lower half.\n- **Hollow or boundary patterns:** print the symbol only when `j == 1 || j == i || i == n`.\n\nWrite the rule for row `i`, then code it.",
+     "basics_md": "A pattern is a table of rows and columns. Find how many spaces and symbols each row needs, then let the outer loop walk the rows and the inner loops print one row.",
+     "key_points": [
+      "Outer loop for rows, inner loop for columns, newline after each row",
+      "Pyramid row i: n - i spaces then 2i - 1 symbols",
+      "Floyd's triangle uses a counter that is never reset",
+      "Alternating 0/1 uses (i + j) % 2 or j % 2",
+      "Mirror patterns use a second loop that counts the other way"
+     ],
+     "figures": [],
+     "questions": [
+      {
+       "id": "pt-1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "In a nested loop that prints a pattern, the outer loop normally controls",
+       "options": [
+        "columns",
+        "rows",
+        "the symbol",
+        "the newline character only"
+       ],
+       "answer_index": 1,
+       "why": "One pass of the outer loop prints one row."
+      },
+      {
+       "id": "pt-2",
+       "kind": "mcq",
+       "level": 2,
+       "q": "In a star pyramid of n rows, the number of stars in row i is",
+       "options": [
+        "i",
+        "n - i",
+        "2i - 1",
+        "2i"
+       ],
+       "answer_index": 2,
+       "why": "Row 1 has 1, row 2 has 3, row 3 has 5, ..."
+      },
+      {
+       "id": "pt-3",
+       "kind": "short",
+       "level": 2,
+       "marks": 3,
+       "q": "Write a C program to print the following pattern for n = 4.\n```\n1\n2 3\n4 5 6\n7 8 9 10\n```",
+       "model_answer_md": "```c\n#include <stdio.h>\nint main(void)\n{\n    int n = 4, i, j, k = 1;\n    for (i = 1; i <= n; i++) {\n        for (j = 1; j <= i; j++)\n            printf(\"%d \", k++);\n        printf(\"\\n\");\n    }\n    return 0;\n}\n```\nRow `i` has `i` numbers; `k` is not reset, so it keeps counting.",
+       "points": [
+        "Outer loop for the rows 1 to n",
+        "Inner loop prints i numbers",
+        "Counter k carried across rows with k++",
+        "Newline after each row"
+       ]
+      },
+      {
+       "id": "p1",
+       "pyq": "9294aa76cf8a2d7f",
+       "level": 2,
+       "points": [
+        "Reads N; there are 2N-1 rows",
+        "First loop: i from N down to 1, inner loop prints i dots each followed by a space, then a newline",
+        "Second loop: i from 2 up to N, same inner loop",
+        "Nested for loops with the newline outside the inner loop"
+       ]
+      },
+      {
+       "id": "p47",
+       "pyq": "a97040372f425444",
+       "level": 2,
+       "points": [
+        "Row i (1 to 5) has i characters",
+        "Character at position j is (i - j) % 2, so every row ends in 0 and digits alternate",
+        "Newline after each row"
+       ]
+      },
+      {
+       "id": "p71",
+       "pyq": "629cd240dc8680f9",
+       "level": 2,
+       "points": [
+        "4 rows and 9 columns",
+        "In row i, $ appears at columns j == i, j == 4 and j == 8 - i",
+        "Every other position prints 0; newline after each row"
+       ]
+      },
+      {
+       "id": "p119",
+       "pyq": "8f4e958b0343268d",
+       "level": 2,
+       "points": [
+        "Row i has i digits",
+        "Digit at position j is j % 2 (1 for odd j, 0 for even j)",
+        "Number of columns equals the row number; newline after each row"
+       ]
+      },
+      {
+       "id": "p131",
+       "pyq": "32a0825349beb155",
+       "level": 2,
+       "points": [
+        "n = 4 rows",
+        "Row i prints n - i leading spaces",
+        "Then numbers 1 to i each followed by a space; newline after each row"
+       ]
+      },
+      {
+       "id": "p150",
+       "pyq": "fc6bab81fc274859",
+       "level": 2,
+       "points": [
+        "Row i has i numbers and n - i leading spaces",
+        "A single counter k increases across rows (1, 2 3, 4 5 6, 7 8 9 10)",
+        "Newline after each row"
+       ]
+      },
+      {
+       "id": "p151",
+       "pyq": "ceb87f4017351a90",
+       "level": 2,
+       "points": [
+        "4 rows; row i has 2i - 1 terms",
+        "Each term is a * followed by j for j = 1 to 2i - 1",
+        "Newline after each row"
+       ]
+      },
+      {
+       "id": "p184",
+       "pyq": "312500ea03c73b09",
+       "level": 2,
+       "points": [
+        "Row r uses base b = r + 1 for b = 2 to 6",
+        "Each term is the previous times b, starting at 1, 6 terms per row (no pow)",
+        "Newline after each row"
+       ]
+      },
+      {
+       "id": "pt-4",
+       "kind": "short",
+       "level": 3,
+       "marks": 4,
+       "q": "Write a program to print the pattern for n = 4 using nested loops.\n```\nA\nB C\nD E F\nG H I J\n```",
+       "model_answer_md": "```c\n#include <stdio.h>\nint main(void)\n{\n    int n = 4, i, j;\n    char c = 'A';\n    for (i = 1; i <= n; i++) {\n        for (j = 1; j <= i; j++)\n            printf(\"%c \", c++);\n        printf(\"\\n\");\n    }\n    return 0;\n}\n```\nOutput:\n```\nA \nB C \nD E F \nG H I J \n```\nThe letter variable is increased after every print and never reset.",
+       "points": [
+        "Row i prints i letters",
+        "A char counter starts at 'A' and increments after each print",
+        "Counter not reset between rows",
+        "Newline after each row"
+       ]
+      },
+      {
+       "id": "p23",
+       "pyq": "c15cc84bf44a6c07",
+       "level": 3,
+       "points": [
+        "Square of size 2n-1 rows and columns",
+        "d = min(i, j, 2n-2-i, 2n-2-j) is the distance of cell (i, j) from the nearest edge",
+        "Value printed is n - d (border n, centre 1)",
+        "Nested loops with a newline after each row"
+       ]
+      },
+      {
+       "id": "p57",
+       "pyq": "660fd173e451d3f6",
+       "level": 3,
+       "points": [
+        "Numbers fill the n x n grid along anti-diagonals (cells with the same i + j), starting at the top-left",
+        "Inside one anti-diagonal numbers increase going upward and to the right",
+        "A counter k increments from 1 for every cell",
+        "Grid printed row by row"
+       ]
+      },
+      {
+       "id": "p100",
+       "pyq": "7415e15a192e475b",
+       "level": 3,
+       "points": [
+        "Each row has 2N-1 columns; column j prints 2N - j (9 down to 1)",
+        "In row i the middle 2i-3 columns print '*'",
+        "A column j is a star when |j - N| < i - 1",
+        "Nested loops with newline after each row"
+       ]
+      },
+      {
+       "id": "p158",
+       "pyq": "e146bd83e0f6a1f1",
+       "level": 3,
+       "points": [
+        "Row i (1 to N): leading spaces 2(N - i)",
+        "Rising part i, i+1, ..., 2i-1",
+        "Falling part 2i-2, ..., i",
+        "Newline after each row"
+       ]
+      },
+      {
+       "id": "p172",
+       "pyq": "1177e1fbb953247a",
+       "level": 3,
+       "points": [
+        "Row i has 2(n - i) leading spaces",
+        "Rising letters A up to 'A' + i - 1",
+        "Then falling letters back to A",
+        "Newline after each row"
+       ]
+      },
+      {
+       "id": "p186",
+       "pyq": "5994c74132aafac2",
+       "level": 3,
+       "points": [
+        "Entry in row i, column j is j x i^j",
+        "Running power p = p x i so no pow() is needed",
+        "printf(\"%5d\") for right justification",
+        "Newline after each row"
+       ]
+      }
+     ]
+    },
+    {
+     "id": "number-programs",
+     "title": "Digit and divisor programs: palindrome, prime, factors",
+     "theory_md": "**Digit loop:** `while (n > 0) { d = n % 10; ...; n = n / 10; }`. Uses: count digits, sum of digits, reverse (`rev = rev*10 + d`), palindrome (`rev == original`), Armstrong (sum of digit cubes equals the number, e.g. $153 = 1^3+5^3+3^3$), swap first and last digit, factorial of a digit. Keep a copy of `n` if the original is needed afterwards. Handle `0` separately when counting digits.\n\n**Prime:** `n > 1` and no divisor from 2 to $\\sqrt{n}$ (if $n = ab$ one factor is $\\le \\sqrt n$): `for (i = 2; i*i <= n; i++) if (n % i == 0) ...`. Stop at the first divisor.\n\n**Prime factors:** divide by `i` while divisible, then `i++`; leftover `n > 1` is a prime. **Divisible by 3 without %:** subtract 3 repeatedly.",
+     "basics_md": "Taking digits off a number is just repeating 'remainder after dividing by 10, then divide by 10'. A prime has no divisor except 1 and itself, and you only need to look up to its square root.",
+     "key_points": [
+      "Digit loop: d = n % 10, then n = n / 10",
+      "Reverse: rev = rev * 10 + d; palindrome if rev equals the original",
+      "Prime test up to sqrt(n), stop at the first divisor",
+      "Prime factors: divide repeatedly by i, leftover n > 1 is prime",
+      "Keep a copy of n before the loop destroys it"
+     ],
+     "figures": [],
+     "questions": [
+      {
+       "id": "np-1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "Which statement removes the last digit of the integer n?",
+       "options": [
+        "n = n % 10;",
+        "n = n / 10;",
+        "n = n - 10;",
+        "n = n * 10;"
+       ],
+       "answer_index": 1,
+       "why": "Integer division by 10 drops the last digit."
+      },
+      {
+       "id": "np-2",
+       "kind": "mcq",
+       "level": 2,
+       "q": "To test whether n is prime it is enough to check divisors up to",
+       "options": [
+        "n",
+        "n/2",
+        "sqrt(n)",
+        "n-1"
+       ],
+       "answer_index": 2,
+       "why": "If n = a*b, one of a, b is at most sqrt(n)."
+      },
+      {
+       "id": "np-3",
+       "kind": "short",
+       "level": 2,
+       "marks": 3,
+       "q": "Write a program to check whether a number is an Armstrong number (153 is one).",
+       "model_answer_md": "```c\n#include <stdio.h>\nint main(void)\n{\n    int n, t, d, sum = 0;\n    printf(\"Enter n: \");\n    scanf(\"%d\", &n);\n    t = n;                      /* keep the original */\n    while (t > 0) {\n        d = t % 10;\n        sum += d * d * d;       /* cube of each digit */\n        t = t / 10;\n    }\n    if (sum == n)\n        printf(\"%d is an Armstrong number\\n\", n);\n    else\n        printf(\"%d is not an Armstrong number\\n\", n);\n    return 0;\n}\n```\nFor 153: $1 + 125 + 27 = 153$, so it is Armstrong.",
+       "points": [
+        "Copy of n kept in t",
+        "Digit extraction with % 10 and / 10",
+        "Sum of cubes of digits",
+        "Compare sum with the original"
+       ]
+      },
+      {
+       "id": "np-4",
+       "kind": "numerical",
+       "level": 2,
+       "marks": 2,
+       "q": "Trace the reverse loop `rev = 0; while (n > 0) { rev = rev*10 + n%10; n = n/10; }` for n = 1230.",
+       "model_answer_md": "| n | digit | rev |\n|---|---|---|\n| 1230 | 0 | 0 |\n| 123 | 3 | 3 |\n| 12 | 2 | 32 |\n| 1 | 1 | 321 |\n\nThe loop ends when n = 0 and rev = **321**: the trailing zero of 1230 becomes a leading zero and disappears.",
+       "points": [
+        "Digits extracted 0, 3, 2, 1",
+        "rev built as 0, 3, 32, 321",
+        "Final rev = 321 (leading zero lost)"
+       ]
+      },
+      {
+       "id": "p44",
+       "pyq": "2b65c07a55570dbe",
+       "level": 2,
+       "points": [
+        "Divisor test is in the for condition: i*i <= n && n % i != 0, so the loop stops at the first divisor",
+        "After the loop n is prime iff n > 1 and i*i > n",
+        "Result printed with the conditional operator ?: so no if is used"
+       ]
+      },
+      {
+       "id": "p65",
+       "pyq": "e596fb0f82bc3ed1",
+       "level": 2,
+       "points": [
+        "d = n % 10 gives the last digit, n = n / 10 removes it, repeat while n > 0",
+        "Inner loop finds d! (0! = 1)",
+        "sum of the factorials accumulated and printed"
+       ]
+      },
+      {
+       "id": "p149",
+       "pyq": "dfb0d09158128aa9",
+       "level": 2,
+       "points": [
+        "Divide by 10 repeatedly, count++ each time, while n != 0",
+        "Number 0 handled separately (1 digit)",
+        "Prints the count"
+       ]
+      },
+      {
+       "id": "p169",
+       "pyq": "ed931fd18c681d0d",
+       "level": 2,
+       "points": [
+        "Make the number positive",
+        "Loop: while n >= 3, n = n - 3 (repeated subtraction)",
+        "Divisible if the remainder left is 0"
+       ]
+      },
+      {
+       "id": "p170",
+       "pyq": "5c53c0d43313b5c6",
+       "level": 2,
+       "points": [
+        "Divisibility test in the for condition: i*i <= NUM && NUM % i != 0, so the loop stops at the first divisor",
+        "After the loop: prime iff NUM > 1 and i*i > NUM",
+        "Printed with the conditional operator, no if-else or switch"
+       ]
+      },
+      {
+       "id": "p54",
+       "pyq": "ff195412f0cfda7c",
+       "level": 3,
+       "points": [
+        "i starts at 2; while i divides n print i and set n = n / i",
+        "Otherwise i++; stop when i*i > n",
+        "If n > 1 remains, it is itself a prime factor and is printed",
+        "No user-defined function, all in main"
+       ]
+      },
+      {
+       "id": "p85",
+       "pyq": "7ce6f1f2858429ff",
+       "level": 3,
+       "points": [
+        "Reverse digits: rev = rev * 10 + n % 10, n = n / 10; palindrome if rev equals the original",
+        "Prime: n > 1 and no divisor from 2 to sqrt(n)",
+        "Two flags decide which of the three messages prints"
+       ]
+      },
+      {
+       "id": "p89",
+       "pyq": "4588496bbbb9e997",
+       "level": 3,
+       "points": [
+        "Reads Num and Choice (scanf(\" %c\"))",
+        "isPrime tests divisors up to sqrt",
+        "'p' or 'P': search downward from Num-1; 'N': search upward from Num+1",
+        "Prints the first prime found"
+       ]
+      },
+      {
+       "id": "p99",
+       "pyq": "2dc519dec2c4c311",
+       "level": 3,
+       "points": [
+        "sq = n * n stored in long long",
+        "Compare last digits one by one: n % 10 with sq % 10, then n /= 10 and sq /= 10 until n becomes 0",
+        "Any mismatch means not automorphic (5, 25, 376 are)"
+       ]
+      },
+      {
+       "id": "p116",
+       "pyq": "38d08775e09339ae",
+       "level": 3,
+       "points": [
+        "The loop finds the digital root: add the digits, and if the sum has two digits add again",
+        "For a 3-digit number the first sum is at most 27, so at most two more digit sums are needed",
+        "Straight-line statements: sum = a/100 + (a/10)%10 + a%10, then sum = sum/10 + sum%10 repeated",
+        "Or the formula 1 + (num - 1) % 9, keeping the 100 to 999 check"
+       ]
+      },
+      {
+       "id": "p189",
+       "pyq": "1b725603f4ab8018",
+       "level": 3,
+       "points": [
+        "last = N % 10; first digit found by dividing a copy until it is below 10",
+        "p = place value of the first digit (10^(digits-1))",
+        "new = N - first*p - last + last*p + first",
+        "Prints the original and swapped numbers"
+       ]
+      }
+     ]
+    },
+    {
+     "id": "running-totals",
+     "title": "Running totals, sentinel loops and series",
+     "theory_md": "**Accumulator pattern:** initialise before the loop, update inside, print after.\n- Sum: `sum = 0; sum += x;` Product or factorial: start at **1**. Counter: `count = 0; count++`.\n- Max/min: start with the first value (or a very small/large number), update when a new value is bigger/smaller; use strict `>` to keep the **first** occurrence.\n- **Sentinel loop:** `while (1) { scanf(\"%d\", &x); if (x == -1) break; ... }` reads until a marker.\n- Average and percentage: use a real number, `avg = (float)sum / n` or `count * 100.0 / n`; plain `sum / n` with ints truncates.\n- No array is needed when only the total, count or maximum is wanted.\n- Series: $n^{th}$ term of 1, 4, 9, 16 is $n^2$; sum of first N odd numbers is $N^2$.",
+     "basics_md": "Keep a running tally while the numbers stream past, like a shopkeeper adding each bill to a total. You never need to remember every number, only the tally.",
+     "key_points": [
+      "Initialise accumulators before the loop: 0 for sum, 1 for product",
+      "Sentinel loop reads until -1 (or other marker) then breaks",
+      "Use 100.0 or a float cast so division is not integer division",
+      "Max/min: initialise with the first value; strict > keeps the first occurrence",
+      "Sum of first N odd numbers = N squared"
+     ],
+     "figures": [],
+     "questions": [
+      {
+       "id": "rt-1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "The accumulator used to compute a factorial in a loop should start at",
+       "options": [
+        "0",
+        "1",
+        "n",
+        "-1"
+       ],
+       "answer_index": 1,
+       "why": "Starting at 0 would make every product 0."
+      },
+      {
+       "id": "p45",
+       "pyq": "c1b8a8573813d187",
+       "level": 1,
+       "points": [
+        "Loop i from 1 to 99",
+        "Condition i % 7 == 0 && i % 3 != 0",
+        "sum += i and count++ inside; both printed (sum = 525, count = 10)"
+       ]
+      },
+      {
+       "id": "p132",
+       "pyq": "3cc495ce3fc524b4",
+       "level": 1,
+       "points": [
+        "The nth term is n squared",
+        "Reads n and prints n * n",
+        "(Or add consecutive odd numbers in a loop)"
+       ]
+      },
+      {
+       "id": "rt-2",
+       "kind": "mcq",
+       "level": 2,
+       "q": "With `int sum = 7, n = 2; float avg = sum / n;` the value of avg is",
+       "options": [
+        "3.5",
+        "3.0",
+        "4.0",
+        "3"
+       ],
+       "answer_index": 1,
+       "why": "sum / n is integer division = 3, stored as 3.0. Use (float)sum / n."
+      },
+      {
+       "id": "rt-3",
+       "kind": "short",
+       "level": 2,
+       "marks": 3,
+       "q": "Write a program to read integers until -1 is entered and print how many were entered and their average.",
+       "model_answer_md": "```c\n#include <stdio.h>\nint main(void)\n{\n    int x, count = 0, sum = 0;\n    while (1) {\n        scanf(\"%d\", &x);\n        if (x == -1)\n            break;\n        sum += x;\n        count++;\n    }\n    if (count > 0)\n        printf(\"Count = %d, average = %.2f\\n\", count, (float)sum / count);\n    return 0;\n}\n```",
+       "points": [
+        "Loop reads until -1 and breaks",
+        "sum and count accumulated, -1 not included",
+        "Average with a float cast",
+        "Guard against count = 0"
+       ]
+      },
+      {
+       "id": "rt-4",
+       "kind": "numerical",
+       "level": 2,
+       "marks": 2,
+       "q": "Find the average of 7, 8 and 10 correct to 2 decimals using the correct C expression.",
+       "model_answer_md": "sum = 7 + 8 + 10 = 25. In C the average must use real division: `(float)25 / 3` = **8.33**. Writing `25 / 3` with ints would give only 8.",
+       "points": [
+        "sum = 25",
+        "Cast to float before dividing",
+        "Average 8.33"
+       ]
+      },
+      {
+       "id": "p12",
+       "pyq": "c9a267cbfdc1e788",
+       "level": 2,
+       "points": [
+        "Reads n and each number; a number outside 1 to 1000 gives an error and is read again",
+        "Three counters for divisible by 2, 3 and 4 (no array needed)",
+        "Percentage = count / n * 100.0 (100.0 forces floating-point division)",
+        "Prints p1, p2, p3 with two decimals"
+       ]
+      },
+      {
+       "id": "p22",
+       "pyq": "9adf3508150ae0f9",
+       "level": 3,
+       "points": [
+        "Reads the starting money (double) and then numbers in a loop until -1 (break)",
+        "0 < x < 100: cost = 500x + 50; if cost <= money, money reduces by 40% of cost and the product count increases",
+        "x >= 100: money is halved and count increases",
+        "x = 0: money += 2000 (ATM), not counted as a product",
+        "Prints products purchased and money left"
+       ]
+      },
+      {
+       "id": "p97",
+       "pyq": "bb4fae97e684de7e",
+       "level": 3,
+       "points": [
+        "(i) Sum of the first N odd numbers is N squared (4 gives 16)",
+        "(ii) Sum of the P - M odd numbers after the first M is P squared - M squared (4 and 6 give 36 - 16 = 20)",
+        "Program uses * and bitwise operators for subtraction, no + or -"
+       ]
+      },
+      {
+       "id": "p118",
+       "pyq": "0f0aa21261a54b89",
+       "level": 3,
+       "points": [
+        "Starts with 10 waiters; capacity per day is 2 x waiters",
+        "At the start of every 3rd day, before customers arrive, if unattended > attended then waiters++",
+        "Each day: attended += min(c, capacity), unattended += c - capacity when positive",
+        "Sample 38 44 52 45 23 10 gives attended 116 and unattended 96"
+       ]
+      },
+      {
+       "id": "p157",
+       "pyq": "5bf8112b8e0e8702",
+       "level": 3,
+       "points": [
+        "Reads daily values until -1 with a running total and a day counter",
+        "After each day if total is odd and greater than the best odd total, store total and day (strict > keeps the first day)",
+        "If no odd total ever occurred prints 0 0",
+        "30 45 20 9 gives 95 3"
+       ]
+      },
+      {
+       "id": "p190",
+       "pyq": "b157ff293dbb91fa",
+       "level": 3,
+       "points": [
+        "Only a running sum S and the maximum M are kept (no array, no nested loops)",
+        "Perfect balance when 2M equals S: prints \"Yes, Sum = value\"",
+        "Otherwise additional energy = |S - 2M|",
+        "Sample 10 25 20 gives 5"
+       ]
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "topic": "Arrays",
+   "subtopics": [
+    {
+     "id": "arrays-1d",
+     "title": "One dimensional arrays: traversal, search and sort",
+     "theory_md": "`int a[10];` is 10 ints with indices **0 to 9**; there is no bounds checking. `int a[5] = {1,2};` fills the rest with 0; `int a[] = {3,4,5};` takes its size from the list. Read and print with a loop; `a[i]` is the same as `*(a + i)`.\n\nStandard jobs, one pass each: sum, count even/odd, maximum/minimum (start with `a[0]`), second largest (keep two variables), frequency (a `visited[]` array), reverse (swap `a[i]` and `a[n-1-i]`), sum formula for a missing number $\\frac{n(n+1)}{2} - \\sum a_i$.\n\n**Linear search** compares from index 0; the key at index $k$ needs $k+1$ comparisons (worst case $n$).\n**Bubble sort** compares neighbours and swaps; after pass 1 the largest is at the end.",
+     "basics_md": "An array is a row of numbered boxes of the same type. The first box is number 0, so a row of 5 boxes is numbered 0 to 4.",
+     "key_points": [
+      "Indices run 0 to n-1; no bounds check in C",
+      "Uninitialised remaining elements become 0 when the list is shorter",
+      "Max/min: start from a[0], compare in one loop",
+      "Linear search: key at index k takes k+1 comparisons",
+      "Bubble sort swaps neighbouring elements using a temp variable"
+     ],
+     "figures": [],
+     "questions": [
+      {
+       "id": "a1-1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "For `int a[5];` the valid indices are",
+       "options": [
+        "1 to 5",
+        "0 to 5",
+        "0 to 4",
+        "0 to 6"
+       ],
+       "answer_index": 2,
+       "why": "Indexing starts at 0, so the last index is size - 1."
+      },
+      {
+       "id": "p51",
+       "pyq": "aa2a4ab2575f7e46",
+       "level": 1,
+       "points": [
+        "Loop over all 100 elements",
+        "a[i] % 2 == 0 adds to evenSum, else to oddSum",
+        "Prints both sums"
+       ]
+      },
+      {
+       "id": "p136",
+       "pyq": "0d78a3a6e532ed02",
+       "level": 1,
+       "points": [
+        "largest = a[0]",
+        "Loop from index 1, if a[i] > largest then update",
+        "Prints largest"
+       ]
+      },
+      {
+       "id": "a1-2",
+       "kind": "mcq",
+       "level": 2,
+       "q": "After `int a[5] = {1, 2};` the value of a[4] is",
+       "options": [
+        "garbage",
+        "0",
+        "2",
+        "error"
+       ],
+       "answer_index": 1,
+       "why": "Elements without an initialiser are set to 0."
+      },
+      {
+       "id": "a1-3",
+       "kind": "short",
+       "level": 2,
+       "marks": 3,
+       "q": "Write a program to reverse an array of 5 integers.",
+       "model_answer_md": "```c\n#include <stdio.h>\nint main(void)\n{\n    int a[5], i, t;\n    for (i = 0; i < 5; i++)\n        scanf(\"%d\", &a[i]);\n    for (i = 0; i < 5 / 2; i++) {      /* swap a[i] and a[4-i] */\n        t = a[i];\n        a[i] = a[4 - i];\n        a[4 - i] = t;\n    }\n    for (i = 0; i < 5; i++)\n        printf(\"%d \", a[i]);\n    return 0;\n}\n```",
+       "points": [
+        "Reads the 5 elements with a loop",
+        "Swaps a[i] with a[4-i] through a temp for half the array",
+        "Prints the reversed array"
+       ]
+      },
+      {
+       "id": "p8",
+       "pyq": "bb869b38b45bb78f",
+       "level": 2,
+       "points": [
+        "Output: 2,3, then on a new line \" 2, 2\"",
+        "i = ++a[1]: a[1] becomes 2 first, i = 2",
+        "j = a[1]++: j gets 2, then a[1] becomes 3"
+       ]
+      },
+      {
+       "id": "p46",
+       "pyq": "1c78af7c15de5131",
+       "level": 2,
+       "points": [
+        "Reads 10 elements",
+        "Keeps first (largest) and second in one pass: if a[i] > first then second = first, first = a[i]; else if a[i] > second and a[i] != first then second = a[i]",
+        "Prints second"
+       ]
+      },
+      {
+       "id": "p59",
+       "pyq": "baf048496ad768c5",
+       "level": 2,
+       "points": [
+        "a[i] & 1 is 1 for odd and 0 for even",
+        "Each element is replaced by a[i] & 1, no % or == used",
+        "Prints the array"
+       ]
+      },
+      {
+       "id": "p80",
+       "pyq": "ad1d93ce9999ce6b",
+       "level": 2,
+       "points": [
+        "a[i] & 1 is 1 for odd and 0 for even",
+        "Each element is replaced by a[i] & 1, no % or == used",
+        "Prints the array"
+       ]
+      },
+      {
+       "id": "p91",
+       "pyq": "9a701c7fd08aa5da",
+       "level": 2,
+       "points": [
+        "visited[] array initialised to 0",
+        "For each unvisited a[i], count its occurrences from i onwards and mark them visited",
+        "Prints \"Frequency of x = count\" once per distinct element"
+       ]
+      },
+      {
+       "id": "p135",
+       "pyq": "9507361fe79aa835",
+       "level": 2,
+       "points": [
+        "Linear search compares the key with each element from index 0",
+        "15 is at index 6, so 7 comparisons",
+        "A counter is incremented per comparison and printed"
+       ]
+      },
+      {
+       "id": "p152",
+       "pyq": "802991202b4e5d40",
+       "level": 2,
+       "points": [
+        "Reads 10 integers",
+        "Even numbers counted and added into evenSum, odd into oddSum",
+        "Prints both counts and evenSum - oddSum"
+       ]
+      },
+      {
+       "id": "a1-4",
+       "kind": "numerical",
+       "level": 3,
+       "marks": 3,
+       "q": "Array {5, 3, 9, 1, 7}. (a) How many comparisons does linear search take for the key 7? (b) Show the array after the first pass of bubble sort.",
+       "model_answer_md": "**(a)** 7 is at index 4, so linear search makes **5 comparisons**.\n\n**(b)** Pass 1 compares neighbours: (5,3) swap gives 3 5 9 1 7; (5,9) no swap; (9,1) swap gives 3 5 1 9 7; (9,7) swap gives 3 5 1 7 9.\n\nAfter pass 1: **3 5 1 7 9** (the largest, 9, is at the end).",
+       "points": [
+        "7 is at index 4 so 5 comparisons",
+        "Bubble sort compares neighbouring pairs",
+        "Array after pass 1: 3 5 1 7 9"
+       ]
+      },
+      {
+       "id": "p4",
+       "pyq": "e391fe747ac93faa",
+       "level": 3,
+       "points": [
+        "Reads n and the n integers into an array",
+        "Tries k = 1, 2, 3, ... in order; the answer is at most n+1",
+        "Inner loop searches the array for k and sets a found flag",
+        "First k that is not found is printed and the loop stops (break); zero and negatives are ignored"
+       ]
+      },
+      {
+       "id": "p74",
+       "pyq": "3ab55a8b8d2bb76f",
+       "level": 3,
+       "points": [
+        "Scholar number read into an array digit by digit starting at index 0",
+        "Even-index elements added into sumE, odd-index elements into sumO",
+        "Product sumE x sumO printed (for 2 0 3 1 1 2 5 0 1 it is 12 x 3 = 36)"
+       ]
+      },
+      {
+       "id": "p120",
+       "pyq": "f572647815a5e258",
+       "level": 3,
+       "points": [
+        "Keep the minimum price seen so far",
+        "Profit if sold on day i = prices[i] - min; keep the largest",
+        "Buy day is always before the sell day; one pass",
+        "Prints the maximum profit (0 if no profit is possible)"
+       ]
+      },
+      {
+       "id": "p161",
+       "pyq": "56ffdaa348cc2ddf",
+       "level": 3,
+       "points": [
+        "Array of n-1 distinct numbers from 1 to n",
+        "Expected sum = n(n + 1) / 2",
+        "Missing = expected sum - sum of array; n = size + 1"
+       ]
+      }
+     ]
+    },
+    {
+     "id": "arrays-2d",
+     "title": "Two dimensional arrays and matrices",
+     "theory_md": "`int a[3][4];` has 3 rows and 4 columns (12 elements), stored row by row. Access `a[i][j]` with **nested loops** (outer rows, inner columns). Initialise by rows: `{{1,2},{3,4}}`.\n\n- Row sum: fix `i`, add over `j`; column sum: fix `j`, add over `i`.\n- Main diagonal of a square matrix: `i == j`; other diagonal: `i + j == n-1`.\n- **Transpose:** `b[j][i] = a[i][j]`.\n- **Addition:** `c[i][j] = a[i][j] + b[i][j]`.\n- **Multiplication** needs columns of A = rows of B: `c[i][j] = c[i][j] + a[i][k]*b[k][j]` with three nested loops, `c[i][j]` set to 0 first. A $2\\times3$ times $3\\times2$ gives $2\\times2$.\n- Corner elements: `a[0][0], a[0][n-1], a[n-1][0], a[n-1][n-1]`.",
+     "basics_md": "A 2-D array is a table: first number picks the row, second picks the column. To visit every cell, loop over rows and, inside it, over columns.",
+     "key_points": [
+      "Elements = rows x columns; indices from 0",
+      "Visit every cell with two nested loops",
+      "Main diagonal i == j, other diagonal i + j == n-1",
+      "Matrix product: cols of A must equal rows of B; three loops",
+      "Transpose swaps the indices: b[j][i] = a[i][j]"
+     ],
+     "figures": [],
+     "questions": [
+      {
+       "id": "a2-1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "How many elements does `int a[3][4];` hold?",
+       "options": [
+        "7",
+        "12",
+        "3",
+        "4"
+       ],
+       "answer_index": 1,
+       "why": "3 rows x 4 columns = 12."
+      },
+      {
+       "id": "a2-2",
+       "kind": "mcq",
+       "level": 2,
+       "q": "For a square matrix a[n][n] the elements of the main diagonal satisfy",
+       "options": [
+        "i + j == n",
+        "i == j",
+        "i + j == n - 1",
+        "i == n - j"
+       ],
+       "answer_index": 1,
+       "why": "Main diagonal: row index equals column index."
+      },
+      {
+       "id": "a2-3",
+       "kind": "short",
+       "level": 2,
+       "marks": 3,
+       "q": "Write a program to find the transpose of a 3x3 matrix.",
+       "model_answer_md": "```c\n#include <stdio.h>\nint main(void)\n{\n    int a[3][3], t[3][3], i, j;\n    for (i = 0; i < 3; i++)\n        for (j = 0; j < 3; j++)\n            scanf(\"%d\", &a[i][j]);\n    for (i = 0; i < 3; i++)\n        for (j = 0; j < 3; j++)\n            t[j][i] = a[i][j];        /* swap row and column */\n    for (i = 0; i < 3; i++) {\n        for (j = 0; j < 3; j++)\n            printf(\"%d \", t[i][j]);\n        printf(\"\\n\");\n    }\n    return 0;\n}\n```",
+       "points": [
+        "Reads the 3x3 matrix with nested loops",
+        "t[j][i] = a[i][j]",
+        "Prints the transposed matrix row by row"
+       ]
+      },
+      {
+       "id": "p13",
+       "pyq": "98b7a46c052988bd",
+       "level": 2,
+       "points": [
+        "Reads the 4x4 array with nested loops",
+        "Each row is sorted separately, with bubble sort comparing a[i][j] and a[i][j+1]",
+        "Swap done through a temporary variable",
+        "Prints the array row by row"
+       ]
+      },
+      {
+       "id": "p49",
+       "pyq": "e1269c6c8ace78b4",
+       "level": 2,
+       "points": [
+        "C[i][j] = sum over k of A[i][k] x B[k][j]",
+        "Three nested loops i, j, k; c[i][j] set to 0 before the k loop",
+        "Reads A and B and prints C"
+       ]
+      },
+      {
+       "id": "p83",
+       "pyq": "343cf6a76ff73411",
+       "level": 2,
+       "points": [
+        "Marks stored in g[2][5], one row per group",
+        "Per-group max and min found with a loop starting from the first element",
+        "Overall high = larger of the two group highs; overall low = smaller of the two group lows",
+        "All four values printed"
+       ]
+      },
+      {
+       "id": "p153",
+       "pyq": "e861c8b4957e90f2",
+       "level": 2,
+       "points": [
+        "3 x 3 matrix initialised",
+        "Key read at run time",
+        "Nested loops compare each element with the key and set a found flag",
+        "Prints present or not present"
+       ]
+      },
+      {
+       "id": "a2-4",
+       "kind": "numerical",
+       "level": 3,
+       "marks": 3,
+       "q": "Multiply $A=\\begin{bmatrix}1&2\\\\3&4\\end{bmatrix}$ and $B=\\begin{bmatrix}5&6\\\\7&8\\end{bmatrix}$ and state how many loops a program needs.",
+       "model_answer_md": "$C[i][j]=\\sum_k A[i][k]B[k][j]$\n\n- $C_{00} = 1\\cdot5+2\\cdot7 = 19$\n- $C_{01} = 1\\cdot6+2\\cdot8 = 22$\n- $C_{10} = 3\\cdot5+4\\cdot7 = 43$\n- $C_{11} = 3\\cdot6+4\\cdot8 = 50$\n\n$C=\\begin{bmatrix}19&22\\\\43&50\\end{bmatrix}$\n\nA program needs **three nested loops** (row i, column j, inner k).",
+       "points": [
+        "C00 = 19, C01 = 22",
+        "C10 = 43, C11 = 50",
+        "Three nested loops i, j, k"
+       ]
+      },
+      {
+       "id": "p5",
+       "pyq": "8060781f30e5144b",
+       "level": 3,
+       "points": [
+        "Reads m, n, the m x n array and r, c",
+        "Reshape is possible only if m*n == r*c, otherwise prints a message",
+        "Element number k (row-wise) is at a[k / n][k % n] and goes to res[k / c][k % c]",
+        "Prints the r x c array with nested loops"
+       ]
+      },
+      {
+       "id": "p62",
+       "pyq": "db6ba54dc3a336ba",
+       "level": 3,
+       "points": [
+        "Reads the 3x3 board and counts T0 and T2",
+        "If not (T0 == T2 + 1 or T0 == T2 - 1) prints \"invalid player movement\"",
+        "Checks the 3 rows, 3 columns and 2 diagonals for three equal elements; that value wins",
+        "If no line is complete prints \"Match Draw\""
+       ]
+      },
+      {
+       "id": "p63",
+       "pyq": "3a4df7e60c23af87",
+       "level": 3,
+       "points": [
+        "Only the 12 border cells are used; each of row 1, row 4, col 1, col 4 must total 8",
+        "Board total + corner sum = 32, so every added marble must reduce the corner sum by 1",
+        "Move: add 1 to an edge cell next to a corner, take 1 from that corner, add 1 to the other edge cell beside it",
+        "Steps continue until side board is 0 (board totals 22 to 28); program prints the board after each step with 0 for X"
+       ]
+      },
+      {
+       "id": "p76",
+       "pyq": "e1f59b3a50d5c7c9",
+       "level": 3,
+       "points": [
+        "Row N holds the value N in every column",
+        "Corner sum = a[0][0] + a[0][N-1] + a[N-1][0] + a[N-1][N-1] = 2N + 2",
+        "Compares with 10 (true only for N = 4) and prints the result"
+       ]
+      },
+      {
+       "id": "p103",
+       "pyq": "fe0b98a701a7b650",
+       "level": 3,
+       "points": [
+        "Product exists because columns of A (3) equal rows of B (3); C is 2 x 2",
+        "C[i][j] = sum over k of A[i][k] B[k][j]",
+        "C00 = 38, C01 = 44, C10 = 92, C11 = 107",
+        "Each element written out as a sum of three products",
+        "Three loops are needed (rows, columns and the inner k loop)"
+       ]
+      }
+     ]
+    },
+    {
+     "id": "strings",
+     "title": "Strings and character arrays",
+     "theory_md": "A string is a `char` array ending with the null character `'\\0'`; `char s[6] = \"HELLO\";` needs 6 bytes. `strlen` counts characters (5), `sizeof` counts bytes (6).\n\n- `scanf(\"%s\", s)` stops at a space; read a line with `fgets` or `scanf(\"%[^\\n]\", s)`. No `&` for a string.\n- Loop `for (i = 0; s[i] != '\\0'; i++)`.\n- `<string.h>`: `strlen`, `strcpy(dest, src)`, `strcat`, `strcmp` (0 if equal). A string cannot be compared with `==` or copied with `=`.\n- Characters are small integers: `'a' - 'A' = 32`, `c - '0'` is a digit's value, `c1 - c2 == 0` means equal.\n- Vowel test, case change, counting a character, reversing, palindrome and removing characters all follow the one loop.",
+     "basics_md": "A string is a chain of characters with a hidden stop sign, '\\0', at the end. Every string program walks along the chain until it meets that stop sign.",
+     "key_points": [
+      "String ends with '\\0'; array size is length + 1",
+      "Loop until s[i] == '\\0'",
+      "Use strcmp, strcpy, strlen; never == or = on strings",
+      "c - '0' gives the digit value; 'a' - 'A' is 32",
+      "%s stops at a space; use fgets for a full line"
+     ],
+     "figures": [],
+     "questions": [
+      {
+       "id": "st-1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "A string in C is terminated by",
+       "options": [
+        "'\\n'",
+        "' '",
+        "'\\0'",
+        "'0'"
+       ],
+       "answer_index": 2,
+       "why": "The null character marks the end."
+      },
+      {
+       "id": "st-2",
+       "kind": "mcq",
+       "level": 2,
+       "q": "`strcmp(\"abc\", \"abc\")` returns",
+       "options": [
+        "1",
+        "-1",
+        "0",
+        "true"
+       ],
+       "answer_index": 2,
+       "why": "strcmp returns 0 for equal strings."
+      },
+      {
+       "id": "st-3",
+       "kind": "short",
+       "level": 2,
+       "marks": 3,
+       "q": "Write a program to count the vowels in a string.",
+       "model_answer_md": "```c\n#include <stdio.h>\nint main(void)\n{\n    char s[100];\n    int i, count = 0;\n    printf(\"Enter a string: \");\n    scanf(\"%99[^\\n]\", s);\n    for (i = 0; s[i] != '\\0'; i++)\n        switch (s[i]) {\n        case 'a': case 'e': case 'i': case 'o': case 'u':\n        case 'A': case 'E': case 'I': case 'O': case 'U':\n            count++;\n        }\n    printf(\"Vowels = %d\\n\", count);\n    return 0;\n}\n```",
+       "points": [
+        "Reads the string including spaces",
+        "Loop until '\\0'",
+        "Tests both lower and upper case vowels",
+        "Prints the count"
+       ]
+      },
+      {
+       "id": "st-4",
+       "kind": "numerical",
+       "level": 2,
+       "marks": 2,
+       "q": "For `char s[] = \"HELLO\";` find `strlen(s)` and `sizeof(s)`, and explain the difference.",
+       "model_answer_md": "`strlen(s)` = **5**: it counts characters before the null character.\n`sizeof(s)` = **6**: the array also stores the terminating `'\\0'`.",
+       "points": [
+        "strlen = 5",
+        "sizeof = 6",
+        "Difference is the null character"
+       ]
+      },
+      {
+       "id": "p40",
+       "pyq": "4c8bdea055f55fee",
+       "level": 2,
+       "points": [
+        "Output: HLOWRD",
+        "The loop visits every character of \"HELLO WORLD\" until '\\0'",
+        "Only even indices 0, 2, 4, 6, 8, 10 are printed: H L O W R D (the space is at index 5)"
+       ]
+      },
+      {
+       "id": "p77",
+       "pyq": "2c5d5accb7a157d5",
+       "level": 2,
+       "points": [
+        "!(str[i] - ch) is 1 when characters are equal, so count += !(str[i] - ch) replaces ==",
+        "Reads the string and the character",
+        "Prints the frequency (awesome, e gives 2)"
+       ]
+      },
+      {
+       "id": "p90",
+       "pyq": "d906419b36b1b6b9",
+       "level": 2,
+       "points": [
+        "!(str[i] - ch) is 1 when characters are equal, so it replaces ==",
+        "Count accumulated in a loop until '\\0'",
+        "Prints the frequency"
+       ]
+      },
+      {
+       "id": "p55",
+       "pyq": "8e71cce2efd93e31",
+       "level": 3,
+       "points": [
+        "!(str[i] - ch) is 1 when characters are equal, so count += !(str[i] - ch) replaces ==",
+        "Reads the string and the character to find",
+        "Loop until '\\0'; prints the frequency (for awesome and e it is 2)"
+       ]
+      },
+      {
+       "id": "p73",
+       "pyq": "e57b2a5dc60a5010",
+       "level": 3,
+       "points": [
+        "Reads first and last name as strings",
+        "Each letter becomes 1 for a vowel and 0 for a consonant, padded with leading 0s to 16 bits",
+        "AND, OR and XOR computed position by position on the two 16-bit strings",
+        "Sample: abc gives 100 and mno gives 001"
+       ]
+      },
+      {
+       "id": "p82",
+       "pyq": "91a29d16dbb73f37",
+       "level": 3,
+       "points": [
+        "Scholar number read as a string, name read with spaces (fgets or %[^\\n])",
+        "Keep a digit only if it is even ((ch - '0') % 2 == 0)",
+        "Skip vowels a e i o u in both cases, keep consonants and the space",
+        "Sample 211112001 AMIT ROY gives 2200 MT RY"
+       ]
+      },
+      {
+       "id": "p101",
+       "pyq": "438aa8d7928956ad",
+       "level": 3,
+       "points": [
+        "Length checked with strlen: 8 to 50",
+        "Flags set for lowercase, uppercase, digit and special character",
+        "No three consecutive numeric values (compare s[i+1] == s[i] + 1 twice, or minus 1), no three same digits, no three same letters",
+        "Prints accepted, or the specific error for the failed rule"
+       ]
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "topic": "Functions",
+   "subtopics": [
+    {
+     "id": "function-basics",
+     "title": "Defining and calling functions, call by value and scope",
+     "theory_md": "`return_type name(parameters) { body }`. Declare a **prototype** (`int add(int, int);`) above `main` if the function is defined below it. `void` means no value is returned, so `a = f();` for a void `f` is a compile error.\n\n- **Call by value:** the function receives **copies** of the arguments; changing a parameter does not change the caller's variable (a `swap(int a, int b)` fails to swap in `main`).\n- An **array** is passed by its address, so the function changes the original array; pass the size separately.\n- A function returns one value; `return i++;` returns the old value of `i`.\n- **Scope:** a local variable hides a global of the same name; a global is visible in all functions; locals vanish when the function ends.\n- Arguments are matched by position and type.",
+     "basics_md": "A function is a named mini-program. You hand it values, it works on its own private copies, and hands back one answer.",
+     "key_points": [
+      "Prototype, definition, call; return type void returns nothing",
+      "Call by value: parameters are copies, caller is unchanged",
+      "Arrays are passed by address, so the function can change them",
+      "Local variable hides a global of the same name",
+      "return i++ returns the old value"
+     ],
+     "figures": [],
+     "questions": [
+      {
+       "id": "fb-1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "In call by value, if a function changes its parameter,",
+       "options": [
+        "the caller's variable changes too",
+        "only the function's copy changes",
+        "a compile error occurs",
+        "the program stops"
+       ],
+       "answer_index": 1,
+       "why": "Parameters are copies of the arguments."
+      },
+      {
+       "id": "p126",
+       "pyq": "6b827f7c53e59aff",
+       "level": 1,
+       "points": [
+        "Compile-time error",
+        "f is declared void, it returns no value",
+        "a = f() tries to use a value that does not exist (\"void value not ignored\")"
+       ]
+      },
+      {
+       "id": "fb-2",
+       "kind": "mcq",
+       "level": 2,
+       "q": "After `void f(void);` which statement is a compile error?",
+       "options": [
+        "f();",
+        "int a = f();",
+        "f(); f();",
+        "void f(void);"
+       ],
+       "answer_index": 1,
+       "why": "A void function returns no value to assign."
+      },
+      {
+       "id": "fb-3",
+       "kind": "short",
+       "level": 2,
+       "marks": 3,
+       "q": "Write a function `int larger(int a, int b)` that returns the larger number and call it from main.",
+       "model_answer_md": "```c\n#include <stdio.h>\n\nint larger(int a, int b);        /* prototype */\n\nint main(void)\n{\n    int x, y;\n    printf(\"Enter two numbers: \");\n    scanf(\"%d %d\", &x, &y);\n    printf(\"Larger = %d\\n\", larger(x, y));\n    return 0;\n}\n\nint larger(int a, int b)\n{\n    return (a > b) ? a : b;\n}\n```",
+       "points": [
+        "Prototype or definition before main",
+        "Function returns the larger with a conditional or if",
+        "main reads, calls and prints"
+       ]
+      },
+      {
+       "id": "p37",
+       "pyq": "fafbd9f00fd07e79",
+       "level": 2,
+       "points": [
+        "As printed main has no closing brace, so Data and Mata are nested inside main: an error",
+        "With the brace: Mata(5) = (5+1)+5 = 11 and Data(5) = Mata(5) = 11",
+        "Each pass y += 11 + 11: y = 32, then 54",
+        "Output (intended): 3254"
+       ]
+      },
+      {
+       "id": "p93",
+       "pyq": "a6066920d71942c8",
+       "level": 2,
+       "points": [
+        "Array of 10 initialised in main and passed as MaxMin(arr, 10)",
+        "An array is passed by address, so its size is passed separately",
+        "max = min = arr[0], then each element is compared",
+        "Maximum and minimum printed"
+       ]
+      },
+      {
+       "id": "p133",
+       "pyq": "7ceeb6f25af216a4",
+       "level": 2,
+       "points": [
+        "int isPrime(int n) returns 0 for n < 2",
+        "Loop i from 2 while i*i <= n; if n % i == 0 return 0",
+        "Returns 1 after the loop; main reads, calls and prints"
+       ]
+      },
+      {
+       "id": "p144",
+       "pyq": "b7eda87922025780",
+       "level": 2,
+       "points": [
+        "Output: 9",
+        "return i++ returns the old value 10",
+        "In main i = 10, then --i prints 9",
+        "(abc used before declaration: C89 assumes int; later standards need a prototype)"
+       ]
+      },
+      {
+       "id": "p154",
+       "pyq": "4f16e383ffa25134",
+       "level": 2,
+       "points": [
+        "swap(int a, int b) uses a temporary variable",
+        "Call by value: the function swaps its own copies",
+        "Values printed in main before and after are the same; inside swap they are exchanged"
+       ]
+      },
+      {
+       "id": "fb-4",
+       "kind": "numerical",
+       "level": 3,
+       "marks": 2,
+       "q": "Find the output.\n```c\nint x = 10;\nvoid f(void) { int x = 5; x++; printf(\"%d \", x); }\nint main(void) { f(); printf(\"%d\", x); return 0; }\n```",
+       "model_answer_md": "Inside `f` the local `x = 5` hides the global `x`; `x++` makes it 6 and prints 6. The global `x` is untouched, so `main` prints 10.\n\nOutput: `6 10`",
+       "points": [
+        "Local x hides the global x",
+        "f prints 6",
+        "main prints the global 10"
+       ]
+      }
+     ]
+    },
+    {
+     "id": "recursion-trace",
+     "title": "Tracing recursive functions",
+     "theory_md": "A recursive function calls itself on a smaller problem and stops at a **base case**. Each call gets its own variables on the stack.\n\n**Tracing method:** write the calls down in order until the base case, then substitute the returned values going back up.\n\n- Work done **before** the recursive call happens on the way down (forward order): `printf(\"%d\", n); f(n-1);` prints 3 2 1.\n- Work done **after** the call happens on the way back (reverse order): `f(n-1); printf(\"%d\", n);` prints 1 2 3. That is why `get(n/2); printf(\"%d\", n%2)` prints a number in binary.\n- Number of calls of `f(a, 6)` that stops at n = 0 is 7 (n = 6 to 0).\n- If a function returns a value that `main` never prints, nothing appears.\n- No base case: infinite calls and a stack overflow.",
+     "basics_md": "Recursion is a set of nested errands. Each call waits for the smaller call inside it, so the last call finishes first and the answers come back in reverse.",
+     "key_points": [
+      "Base case stops the recursion",
+      "Print before the call: forward order; print after the call: reverse order",
+      "Draw the call chain and substitute return values on the way back",
+      "Count calls including the one that hits the base case",
+      "A returned value that is not printed gives no output"
+     ],
+     "figures": [],
+     "questions": [
+      {
+       "id": "rtr-1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "The purpose of the base case in a recursive function is to",
+       "options": [
+        "declare variables",
+        "stop the recursion",
+        "make the function faster",
+        "return a pointer"
+       ],
+       "answer_index": 1,
+       "why": "Without a base case the calls never end."
+      },
+      {
+       "id": "rtr-2",
+       "kind": "mcq",
+       "level": 2,
+       "q": "For `void f(int n){ if (n > 0) { f(n - 1); printf(\"%d \", n); } }` the call `f(3)` prints",
+       "options": [
+        "3 2 1",
+        "1 2 3",
+        "3",
+        "1 2 3 0"
+       ],
+       "answer_index": 1,
+       "why": "The printf runs after the recursive call returns, so the smallest n prints first."
+      },
+      {
+       "id": "rtr-3",
+       "kind": "numerical",
+       "level": 2,
+       "marks": 3,
+       "q": "Trace `fact(4)` for `int fact(int n){ if (n <= 1) return 1; return n * fact(n - 1); }`.",
+       "model_answer_md": "Calls go down: fact(4) -> fact(3) -> fact(2) -> fact(1) (base case, returns 1).\n\nValues come back up:\n- fact(2) = 2 x 1 = 2\n- fact(3) = 3 x 2 = 6\n- fact(4) = 4 x 6 = **24**\n\nFour calls are made.",
+       "points": [
+        "Call chain fact(4) to fact(1)",
+        "Base case returns 1",
+        "Returns multiplied back: 2, 6, 24",
+        "fact(4) = 24"
+       ]
+      },
+      {
+       "id": "p34",
+       "pyq": "e61321286ee8c871",
+       "level": 2,
+       "points": [
+        "Data(10,5,19) calls Data(10,19,5), which calls Data(19,10,5)",
+        "In the last call a >= b and c < b, so it returns b = 10",
+        "Output: 10"
+       ]
+      },
+      {
+       "id": "p43",
+       "pyq": "1fe57f7f6c63963d",
+       "level": 2,
+       "points": [
+        "Output: 1101",
+        "get(n/2) is called before printing n%2, so remainders print in reverse order of computation",
+        "Prints the binary of 13: 1101"
+       ]
+      },
+      {
+       "id": "p137",
+       "pyq": "48ecd902b9345b42",
+       "level": 2,
+       "points": [
+        "Data(10,20,5) calls Data(20,10,5)",
+        "That returns b = 10, but the value is not used or printed",
+        "Output: nothing is printed"
+       ]
+      },
+      {
+       "id": "p162",
+       "pyq": "2a93e1def158334f",
+       "level": 2,
+       "points": [
+        "Output: 2",
+        "Print(n) adds the last bit (n & 1) and recurses on n >> 1, so it counts the 1 bits",
+        "9 = 1001 has two 1 bits"
+       ]
+      },
+      {
+       "id": "rtr-4",
+       "kind": "numerical",
+       "level": 3,
+       "marks": 3,
+       "q": "How many times is `fib(5)` called in total, where `int fib(int n){ if (n <= 1) return n; return fib(n-1) + fib(n-2); }`?",
+       "model_answer_md": "Let C(n) be the calls made by fib(n). C(0) = C(1) = 1 and C(n) = 1 + C(n-1) + C(n-2).\n\nC(2) = 3, C(3) = 5, C(4) = 9, C(5) = **15**.\n\nThe result fib(5) = 5, but the calls repeat work, which is why this recursion is slow.",
+       "points": [
+        "Recurrence C(n) = 1 + C(n-1) + C(n-2)",
+        "C(2)=3, C(3)=5, C(4)=9",
+        "Total 15 calls"
+       ]
+      },
+      {
+       "id": "p72",
+       "pyq": "df92df461a2a1ce4",
+       "level": 3,
+       "points": [
+        "f is called 7 times (n = 6, 5, 4, 3, 2, 1, 0)",
+        "Even *a returns *a + f(next), odd *a returns *a - f(next), n <= 0 returns 0",
+        "Values return upward: 6, 5, 9, 4, 3, 15",
+        "Tree drawn clearly: 12 + (7 - (13 - (4 + (11 - (6 + 0))))) gives the output 15"
+       ]
+      },
+      {
+       "id": "p78",
+       "pyq": "c3e3b41e79703f64",
+       "level": 3,
+       "points": [
+        "myFunc1 reads one character and recurses until it reads 'X'",
+        "Each character read (including each X) needs one call",
+        "Calls = (F + 1) + (L + 1) = F + L + 2, e.g. AMIT ROY gives 4 + 3 + 2 = 9"
+       ]
+      },
+      {
+       "id": "p79",
+       "pyq": "ff9e89f95f08ec96",
+       "level": 3,
+       "points": [
+        "Characters are printed on the way back, so in reverse order; X is printed first",
+        "Output = X + first name reversed + X + last name reversed, no spaces",
+        "Example AMIT ROY gives XTIMAXYOR"
+       ]
+      }
+     ]
+    },
+    {
+     "id": "recursion-programs",
+     "title": "Writing recursive programs",
+     "theory_md": "Write the **recurrence and base case** first, then the code.\n\n- Factorial: `f(n) = n * f(n-1)`, `f(0) = 1`.\n- Sum of digits: `s(n) = n % 10 + s(n / 10)`, `s(0) = 0`. Smallest digit: min of `n % 10` and the answer for `n / 10`, base `n < 10`.\n- Power: `p(x, n) = x * p(x, n-1)`, `p(x, 0) = 1`.\n- GCD: `gcd(a, b) = gcd(b, a % b)`, `gcd(a, 0) = a`.\n- Series: $T_n = 2T_{n-1} + T_{n-2}$ with two base cases.\n- Multiply by repeated addition: `a * b = a + a * (b-1)`.\n- Print 10 to 1: print `n`, then call with `n-1`.\n- Two nested loops become two recursive functions (outer calls inner).\n- \"Without any loop\" means every repetition is a recursive call.",
+     "basics_md": "To solve a big problem by recursion, trust that the function already works for a smaller one, and only write the single step that links the two.",
+     "key_points": [
+      "State the recurrence and the base case first",
+      "Digit programs use n % 10 and n / 10 in the call",
+      "Printing before the call gives forward order",
+      "gcd(a, b) = gcd(b, a % b), base b == 0",
+      "A recursive function replaces a loop; two loops need two functions"
+     ],
+     "figures": [],
+     "questions": [
+      {
+       "id": "rp-1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "A recursive definition of gcd(a, b) is",
+       "options": [
+        "gcd(b, a % b) with gcd(a, 0) = a",
+        "gcd(a - 1, b)",
+        "gcd(a / b, b)",
+        "gcd(a, b + 1)"
+       ],
+       "answer_index": 0,
+       "why": "Euclid: gcd(a, b) = gcd(b, a mod b)."
+      },
+      {
+       "id": "p134",
+       "pyq": "43978e6e271fa9d2",
+       "level": 1,
+       "points": [
+        "Prints n, then calls itself with n - 1",
+        "Base case: n == 0 returns",
+        "main calls print(10)"
+       ]
+      },
+      {
+       "id": "rp-2",
+       "kind": "mcq",
+       "level": 2,
+       "q": "For recursive sum of digits, the correct base case is",
+       "options": [
+        "n == 1 return 1",
+        "n == 0 return 0",
+        "n == 10 return 1",
+        "n < 0 return 0"
+       ],
+       "answer_index": 1,
+       "why": "When no digits remain the sum is 0."
+      },
+      {
+       "id": "rp-3",
+       "kind": "short",
+       "level": 2,
+       "marks": 3,
+       "q": "Write a recursive function to find $x^n$ for $n \\ge 0$.",
+       "model_answer_md": "```c\n#include <stdio.h>\n\nlong power(int x, int n)\n{\n    if (n == 0)                 /* base case */\n        return 1;\n    return x * power(x, n - 1); /* x^n = x * x^(n-1) */\n}\n\nint main(void)\n{\n    int x, n;\n    scanf(\"%d %d\", &x, &n);\n    printf(\"%d^%d = %ld\\n\", x, n, power(x, n));\n    return 0;\n}\n```",
+       "points": [
+        "Base case n == 0 returns 1",
+        "Recursive step x * power(x, n-1)",
+        "main reads x and n and prints"
+       ]
+      },
+      {
+       "id": "p50",
+       "pyq": "01a0c2375f257005",
+       "level": 2,
+       "points": [
+        "a x b = a + a x (b-1), base case b == 0 returns 0",
+        "Negative b handled by multiplying by |b| and changing the sign",
+        "No * operator used; main reads and prints"
+       ]
+      },
+      {
+       "id": "p66",
+       "pyq": "9a3871b0913f0ec3",
+       "level": 2,
+       "points": [
+        "T1 = 1, T2 = 2, Tn = 2 T(n-1) + T(n-2)",
+        "Base cases n == 1 and n == 2",
+        "main prints term(1) to term(7): 1 2 5 12 29 70 169"
+       ]
+      },
+      {
+       "id": "p81",
+       "pyq": "5901a196089cebb6",
+       "level": 2,
+       "points": [
+        "sum(n) = 0 when n == 0 (base case)",
+        "sum(n) = n % 10 + sum(n / 10)",
+        "main reads n and prints the result"
+       ]
+      },
+      {
+       "id": "p102",
+       "pyq": "ed8dbc6a5d89b193",
+       "level": 2,
+       "points": [
+        "Base case: m > p stops",
+        "If m is odd print it and call Rec_ODD(m + 2, p)",
+        "If m is even call Rec_ODD(m + 1, p)",
+        "Rec_ODD(1,10) prints 1,3,5,7,9"
+       ]
+      },
+      {
+       "id": "p117",
+       "pyq": "2e7dd4949a5e32fb",
+       "level": 2,
+       "points": [
+        "sum(n) = 0 when n == 0 (base case)",
+        "sum(n) = n % 10 + sum(n / 10)",
+        "main reads a valid integer and prints the result"
+       ]
+      },
+      {
+       "id": "rp-4",
+       "kind": "short",
+       "level": 3,
+       "marks": 4,
+       "q": "Write a recursive function for gcd and trace gcd(48, 18).",
+       "model_answer_md": "```c\nint gcd(int a, int b)\n{\n    if (b == 0)\n        return a;\n    return gcd(b, a % b);\n}\n```\nTrace: gcd(48, 18) -> gcd(18, 12) -> gcd(12, 6) -> gcd(6, 0) returns 6.\nSo gcd(48, 18) = **6**.",
+       "points": [
+        "Base case b == 0 returns a",
+        "Recursive call gcd(b, a % b)",
+        "Chain 48,18 -> 18,12 -> 12,6 -> 6,0",
+        "Result 6"
+       ]
+      },
+      {
+       "id": "p2",
+       "pyq": "1e0e76e8e7c1e283",
+       "level": 3,
+       "points": [
+        "Base case: n < 10 returns n (a single digit is its own smallest)",
+        "last = n % 10 and rest = smallest(n / 10) (recursive call)",
+        "Returns the smaller of last and rest",
+        "main reads n and prints the result"
+       ]
+      },
+      {
+       "id": "p56",
+       "pyq": "eb336f6feeefb22d",
+       "level": 3,
+       "points": [
+        "block(k) prints k, k-1, ..., 1 recursively (inner loop)",
+        "pattern(k) prints block(k) then calls pattern(k-1) (outer loop)",
+        "Base cases stop the recursion; commas placed between numbers",
+        "No loop used; for n = 5 output is 5,4,3,2,1,4,3,2,1,3,2,1,2,1"
+       ]
+      },
+      {
+       "id": "p92",
+       "pyq": "4fe3c6a5d62bcb14",
+       "level": 3,
+       "points": [
+        "block(k) prints k, k-1, ..., 1 recursively",
+        "pattern(k) prints block(k) then calls pattern(k-1) until k reaches 1",
+        "Commas handled so there is none at the end; no loop used"
+       ]
+      },
+      {
+       "id": "p160",
+       "pyq": "8bde8bb05efafeed",
+       "level": 3,
+       "points": [
+        "countdown(k) prints k, k-1, ..., 1",
+        "pattern(n) calls countdown(n) then pattern(n-1) until n is 0",
+        "No loops used; n = 5 gives 5 4 3 2 1 4 3 2 1 3 2 1 2 1 1"
+       ]
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "topic": "Pointers",
+   "subtopics": [
+    {
+     "id": "pointer-basics",
+     "title": "Pointers, addresses and pointer arithmetic",
+     "theory_md": "A **pointer** stores the address of a variable. `int a = 10, *p = &a;` then `*p` is `a` (dereference), `&a` is the address, `p` is the address.\n\n- A pointer is 8 bytes on a 64-bit machine whatever it points to.\n- **Arithmetic is scaled:** `p + 1` moves by `sizeof(*p)` bytes: for `int *` by 4. If `arr` starts at 65486: `arr + 1 = 65490`.\n- `&arr + 1` moves by the **whole array** (5 ints = 20 bytes): 65506.\n- For `int a[3][4]`: `a + 1` moves one row (16 bytes), `&a + 1` moves the whole 48 bytes.\n- The array name is the address of its first element: `arr[i]` is `*(arr + i)`.\n- `pointer - pointer` is allowed (count of elements); `pointer + pointer` is **not** allowed.\n- `NULL` is the null pointer; use a pointer only after it holds a valid address.",
+     "basics_md": "A pointer is a note with a house address on it. The * operator walks to that house and reads or changes what is inside.",
+     "key_points": [
+      "p = &a stores the address; *p is the value at that address",
+      "Pointer arithmetic is scaled by the size of the pointed type",
+      "arr + 1 moves one element; &arr + 1 moves the whole array",
+      "Pointer size is 8 bytes on 64-bit regardless of type",
+      "pointer + pointer is illegal; pointer - pointer is allowed"
+     ],
+     "figures": [],
+     "questions": [
+      {
+       "id": "pb-1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "If `int a = 5, *p = &a;` then `*p` is",
+       "options": [
+        "the address of a",
+        "the value 5",
+        "the address of p",
+        "an error"
+       ],
+       "answer_index": 1,
+       "why": "* dereferences: it gives the value stored at the address."
+      },
+      {
+       "id": "p123",
+       "pyq": "ff82ffef6bf72be8",
+       "level": 1,
+       "points": [
+        "Output: 8 8",
+        "Every pointer holds an address, 8 bytes on a 64-bit machine",
+        "The type pointed to (int or char) does not change the pointer size"
+       ]
+      },
+      {
+       "id": "p143",
+       "pyq": "8d4bb1a3a100a2b8",
+       "level": 1,
+       "points": [
+        "Output: \" a = 20\"",
+        "b points to a: *b = *b + 10 makes a = 14",
+        "a += 6 makes a = 20"
+       ]
+      },
+      {
+       "id": "pb-2",
+       "kind": "mcq",
+       "level": 2,
+       "q": "If an int array starts at address 1000 (int = 4 bytes) and `p = arr + 3`, the value of p is",
+       "options": [
+        "1003",
+        "1012",
+        "1006",
+        "1004"
+       ],
+       "answer_index": 1,
+       "why": "Arithmetic is scaled: 1000 + 3 x 4 = 1012."
+      },
+      {
+       "id": "pb-3",
+       "kind": "numerical",
+       "level": 2,
+       "marks": 2,
+       "q": "Find the output.\n```c\nint a = 10, *p = &a;\n*p += 5;\n(*p)++;\nprintf(\"%d\", a);\n```",
+       "model_answer_md": "`p` points to `a`. `*p += 5` makes a = 15, `(*p)++` makes a = 16.\n\nOutput: `16`",
+       "points": [
+        "*p changes a directly",
+        "a becomes 15 then 16",
+        "Output 16"
+       ]
+      },
+      {
+       "id": "p19",
+       "pyq": "7e70b6bd8729d27e",
+       "level": 2,
+       "points": [
+        "Output: 65490 65506 (int is 4 bytes)",
+        "arr + 1 moves by sizeof(int) = 4 bytes: 65486 + 4 = 65490",
+        "&arr is a pointer to the whole array of 5 ints (20 bytes): &arr + 1 = 65486 + 20 = 65506"
+       ]
+      },
+      {
+       "id": "pb-4",
+       "kind": "numerical",
+       "level": 3,
+       "marks": 3,
+       "q": "A double array `d[5]` starts at address 3000. Find the addresses `d + 2`, `&d[4]` and `&d + 1` (double = 8 bytes).",
+       "model_answer_md": "- `d + 2` = 3000 + 2 x 8 = **3016**\n- `&d[4]` = 3000 + 4 x 8 = **3032**\n- `&d + 1` moves the whole array of 5 doubles (40 bytes) = **3040**",
+       "points": [
+        "d + 2 = 3016",
+        "&d[4] = 3032",
+        "&d + 1 = 3040 (whole array of 40 bytes)"
+       ]
+      },
+      {
+       "id": "p125",
+       "pyq": "47d92f491d648fa1",
+       "level": 3,
+       "points": [
+        "Output: 65472 65488 65520",
+        "*a is the first row, the address 65472",
+        "a + 1 moves one row (4 ints = 16 bytes): 65488",
+        "&a + 1 moves the whole 3 x 4 array (48 bytes): 65520"
+       ]
+      }
+     ]
+    },
+    {
+     "id": "pointers-and-functions",
+     "title": "Pointers and functions: call by reference",
+     "theory_md": "Pass an address and receive a pointer to change the caller's variable (call by reference):\n```c\nvoid swap(int *a, int *b) { int t = *a; *a = *b; *b = t; }   /* call: swap(&x, &y); */\n```\n- `*p = value` inside the function changes the caller's variable.\n- A pointer **parameter is itself a copy**: `p = p + 1` or `y = y + 4` changes only the local pointer and nothing in the caller.\n- Several results can be returned through pointer parameters (a maximum returned, its index through `int *idx`).\n- `Data(&y, &x, &x)` passes addresses; inside, `x + y` of two pointers is a compile error.\n- A global variable is hidden by a local of the same name; a function without that local uses the global.\n- An array parameter is really a pointer: `*(seats + i)`.",
+     "basics_md": "If you give a function a copy of your number, your number cannot change. If you give it the address, it can walk to your house and change it.",
+     "key_points": [
+      "Pass &variable and receive int *p to modify the caller's variable",
+      "Assigning to the pointer itself changes only the local copy",
+      "A function returns one value; use pointers for more",
+      "pointer + pointer is a compile error",
+      "Local variable hides a global of the same name"
+     ],
+     "figures": [],
+     "questions": [
+      {
+       "id": "pf-1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "To let a function modify the caller's `int x` we pass",
+       "options": [
+        "x",
+        "&x",
+        "*x",
+        "x + 1"
+       ],
+       "answer_index": 1,
+       "why": "The function needs the address of x."
+      },
+      {
+       "id": "pf-2",
+       "kind": "mcq",
+       "level": 2,
+       "q": "In `void f(int *p) { p = p + 1; }` the effect on the caller's data is",
+       "options": [
+        "the value it points to increases by 1",
+        "the value it points to is unchanged",
+        "a compile error",
+        "the program crashes"
+       ],
+       "answer_index": 1,
+       "why": "p is a local copy of the address; moving it changes nothing in the caller."
+      },
+      {
+       "id": "pf-3",
+       "kind": "short",
+       "level": 2,
+       "marks": 3,
+       "q": "Write a function using pointers to swap two integers and show the call from main.",
+       "model_answer_md": "```c\n#include <stdio.h>\n\nvoid swap(int *a, int *b)\n{\n    int t = *a;\n    *a = *b;\n    *b = t;\n}\n\nint main(void)\n{\n    int x = 3, y = 8;\n    swap(&x, &y);\n    printf(\"x = %d, y = %d\\n\", x, y);   /* 8 and 3 */\n    return 0;\n}\n```",
+       "points": [
+        "Parameters are int *a and int *b",
+        "Swap done with *a, *b and a temp",
+        "Called with swap(&x, &y)",
+        "Prints x = 8, y = 3"
+       ]
+      },
+      {
+       "id": "p9",
+       "pyq": "ecf47498d75dbfcc",
+       "level": 2,
+       "points": [
+        "Output: compilation error",
+        "z = x + y + z adds two pointers, and pointer + pointer is not allowed",
+        "Pointer + integer and pointer - pointer are legal",
+        "Data is also used before its declaration (needs a prototype); y and z are local pointer copies"
+       ]
+      },
+      {
+       "id": "p36",
+       "pyq": "885c8f9df1a36654",
+       "level": 2,
+       "points": [
+        "Output: compilation error",
+        "z = x + y + z adds two pointers, and pointer + pointer is invalid",
+        "Pointer + integer and pointer - pointer are allowed"
+       ]
+      },
+      {
+       "id": "p86",
+       "pyq": "4dbf59586784760e",
+       "level": 2,
+       "points": [
+        "getInput() reads with scanf and returns the number",
+        "main: a = getInput(); b = getInput(); sum = calSum(&a, &b)",
+        "calSum receives int *p, int *q and returns *p + *q",
+        "Prints sum"
+       ]
+      },
+      {
+       "id": "p138",
+       "pyq": "92aaa8ae73182ad7",
+       "level": 2,
+       "points": [
+        "Output: 1514",
+        "Local x = *y + 5 = 15 hides the global x",
+        "*y = x - 1 = 14 changes the global x",
+        "Get prints 15, main prints 14"
+       ]
+      },
+      {
+       "id": "p159",
+       "pyq": "50e97ffe8e191c40",
+       "level": 2,
+       "points": [
+        "Function takes the address of score: void update(int *score, int amount)",
+        "*score = *score + amount changes the variable in main",
+        "main prints the updated score; only two variables used"
+       ]
+      },
+      {
+       "id": "pf-4",
+       "kind": "numerical",
+       "level": 3,
+       "marks": 3,
+       "q": "Find the output.\n```c\nvoid f(int *a, int *b) { *a = *a + *b; *b = *a - *b; *a = *a - *b; }\nint main() { int x = 3, y = 8; f(&x, &y); printf(\"%d %d\", x, y); }\n```",
+       "model_answer_md": "- `*a = 3 + 8 = 11` (x = 11)\n- `*b = 11 - 8 = 3` (y = 3)\n- `*a = 11 - 3 = 8` (x = 8)\n\nOutput: `8 3`: the function swaps without a third variable.",
+       "points": [
+        "x becomes 11, then y becomes 3",
+        "x becomes 8",
+        "Output 8 3"
+       ]
+      },
+      {
+       "id": "p14",
+       "pyq": "9faca23fcfd3507a",
+       "level": 3,
+       "points": [
+        "Seat array accessed through a pointer, e.g. *(seats + cur)",
+        "Base case 1: checked == n, no seat free, return -1",
+        "Base case 2: *(seats + cur) == 0, seat is free, return cur",
+        "Recursive step: findSeat(seats, n, (cur + 1) % n, checked + 1), the % n makes it circular",
+        "Marks the seat occupied and prints the allocated seat number, else a \"no seat\" message"
+       ]
+      },
+      {
+       "id": "p35",
+       "pyq": "d026ec3f320be391",
+       "level": 3,
+       "points": [
+        "Output: 12 , 7 , 6",
+        "Local x = *y + 2 = 7 in Get hides the global x",
+        "Set has no local x, so it uses the global x = 5: z = 7 + 5 = 12 (printed first)",
+        "*y = x - 1 = 6 changes the global x; Get prints its local 7; main prints 6"
+       ]
+      }
+     ]
+    },
+    {
+     "id": "dynamic-memory",
+     "title": "Dynamic memory allocation",
+     "theory_md": "Memory requested at run time comes from the **heap** (`<stdlib.h>`):\n\n- `malloc(size)`: allocates `size` bytes, **uninitialised**, returns `void *` (NULL if it fails).\n- `calloc(n, size)`: allocates `n x size` bytes, **set to 0**.\n- `realloc(p, newsize)`: resizes a block.\n- `free(p)`: releases it. Forgetting `free` is a memory leak; do not use a pointer after freeing.\n\n```c\nint *a = (int *) malloc(n * sizeof(int));\nif (a == NULL) { printf(\"No memory\"); return 1; }\n```\nThen use `a[i]` like an array. `malloc(10 * sizeof(float))` is 40 bytes. A function can take the array and return the maximum with its index through a pointer.",
+     "basics_md": "Instead of fixing the array size when you write the program, you ask the computer for exactly as much room as you need while it runs, and hand it back when finished.",
+     "key_points": [
+      "malloc(n * sizeof(type)) returns uninitialised heap memory",
+      "calloc zero-initialises; realloc resizes; free releases",
+      "Always check for NULL after allocation",
+      "The returned pointer is used like an array",
+      "Include <stdlib.h>"
+     ],
+     "figures": [],
+     "questions": [
+      {
+       "id": "dm-1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "Which header declares malloc and free?",
+       "options": [
+        "stdio.h",
+        "string.h",
+        "stdlib.h",
+        "math.h"
+       ],
+       "answer_index": 2,
+       "why": "They are in stdlib.h."
+      },
+      {
+       "id": "dm-2",
+       "kind": "mcq",
+       "level": 2,
+       "q": "The difference between malloc and calloc is that calloc",
+       "options": [
+        "frees memory",
+        "initialises the memory to zero",
+        "allocates on the stack",
+        "returns an int"
+       ],
+       "answer_index": 1,
+       "why": "calloc(n, size) zero-fills the block; malloc leaves garbage."
+      },
+      {
+       "id": "dm-3",
+       "kind": "short",
+       "level": 2,
+       "marks": 4,
+       "q": "Write a program that reads n, allocates an array of n integers dynamically, reads them, prints their sum and frees the memory.",
+       "model_answer_md": "```c\n#include <stdio.h>\n#include <stdlib.h>\n\nint main(void)\n{\n    int n, i, sum = 0, *a;\n    printf(\"Enter n: \");\n    scanf(\"%d\", &n);\n    a = (int *) malloc(n * sizeof(int));\n    if (a == NULL) {\n        printf(\"Memory not available\\n\");\n        return 1;\n    }\n    for (i = 0; i < n; i++) {\n        scanf(\"%d\", &a[i]);\n        sum += a[i];\n    }\n    printf(\"Sum = %d\\n\", sum);\n    free(a);\n    return 0;\n}\n```",
+       "points": [
+        "malloc(n * sizeof(int)) with a cast",
+        "Checks for NULL",
+        "Reads with a[i] and adds to sum",
+        "Prints the sum and calls free(a)"
+       ]
+      },
+      {
+       "id": "dm-4",
+       "kind": "numerical",
+       "level": 2,
+       "marks": 2,
+       "q": "How many bytes does `malloc(10 * sizeof(float))` allocate (float = 4 bytes)? What does it contain?",
+       "model_answer_md": "$10 \\times 4 =$ **40 bytes**. malloc does not initialise memory, so the block holds garbage values until the program writes to it.",
+       "points": [
+        "40 bytes",
+        "Contents are uninitialised"
+       ]
+      },
+      {
+       "id": "p58",
+       "pyq": "c55464b4857d9b88",
+       "level": 3,
+       "points": [
+        "Reads n and allocates with malloc(n * sizeof(int)); checks for NULL",
+        "Reads the elements",
+        "A function findMax(arr, n, &index) returns the maximum and gives the index through a pointer",
+        "Prints 8, 2 for the test data and calls free(arr)"
+       ]
+      }
+     ]
+    },
+    {
+     "id": "file-handling",
+     "title": "File handling with FILE pointers",
+     "theory_md": "```c\nFILE *fp = fopen(\"data.txt\", \"w\");      /* returns NULL on failure */\nfprintf(fp, \"%s %d %.2f\\n\", name, roll, marks);\nfclose(fp);\n```\n**Modes:** `\"r\"` read (file must exist), `\"w\"` write (creates or **erases** the file), `\"a\"` append at the end, `\"r+\"` read and write.\n\n- Write with `fprintf`, `fputs`, `fputc`; read with `fscanf`, `fgets`, `fgetc`.\n- Read until the end: `while (fscanf(fp, \"%s %d %f\", n, &r, &m) == 3)` or `while ((c = fgetc(fp)) != EOF)`.\n- Always test `fp == NULL` and call `fclose`.\n- To change text in a file, copy it to a temporary file while replacing, then `remove` the old and `rename` the new.\n- `strstr(line, \"hello\")` finds a word in a line.",
+     "basics_md": "A file is a notebook kept on disk. You open it in a mode (read, write or append), write or read lines through a FILE pointer, and close it when done.",
+     "key_points": [
+      "fopen modes: r read, w write (erases), a append",
+      "fprintf and fscanf work like printf and scanf on a file",
+      "Check fopen for NULL and fclose at the end",
+      "Read in a loop until fscanf fails or EOF",
+      "Edit a file via a temporary file, then remove and rename"
+     ],
+     "figures": [],
+     "questions": [
+      {
+       "id": "fh-1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "Which mode adds new data at the end of an existing file?",
+       "options": [
+        "\"r\"",
+        "\"w\"",
+        "\"a\"",
+        "\"x\""
+       ],
+       "answer_index": 2,
+       "why": "\"a\" is append mode."
+      },
+      {
+       "id": "fh-2",
+       "kind": "mcq",
+       "level": 2,
+       "q": "Opening an existing file with mode \"w\"",
+       "options": [
+        "appends to it",
+        "erases its old contents",
+        "fails",
+        "opens it read only"
+       ],
+       "answer_index": 1,
+       "why": "\"w\" creates the file or truncates an existing one."
+      },
+      {
+       "id": "fh-3",
+       "kind": "short",
+       "level": 2,
+       "marks": 4,
+       "q": "Write a program to copy the contents of `a.txt` into `b.txt` character by character.",
+       "model_answer_md": "```c\n#include <stdio.h>\nint main(void)\n{\n    FILE *src = fopen(\"a.txt\", \"r\");\n    FILE *dst = fopen(\"b.txt\", \"w\");\n    int c;\n    if (src == NULL || dst == NULL) {\n        printf(\"Cannot open file\\n\");\n        return 1;\n    }\n    while ((c = fgetc(src)) != EOF)\n        fputc(c, dst);\n    fclose(src);\n    fclose(dst);\n    return 0;\n}\n```",
+       "points": [
+        "Opens a.txt in \"r\" and b.txt in \"w\"",
+        "Checks for NULL",
+        "Reads with fgetc until EOF and writes with fputc",
+        "Closes both files"
+       ]
+      },
+      {
+       "id": "p61",
+       "pyq": "3f03eecdbc5b73be",
+       "level": 2,
+       "points": [
+        "fopen(\"StudentRecord.txt\", \"w\"), write one record with fprintf, fclose",
+        "fopen in \"a\" (append) mode, add two more records, fclose",
+        "fopen in \"r\" mode, read with fscanf in a loop until EOF, print the records",
+        "Checks that fopen did not return NULL"
+       ]
+      },
+      {
+       "id": "p68",
+       "pyq": "ba1ef3967e936d70",
+       "level": 3,
+       "points": [
+        "Opens test.txt in \"r\" and a temporary file in \"w\"",
+        "Finds \"hello\" with strstr, copies the text before it, writes \"bye\", skips 5 characters, count++",
+        "Copies the rest of the file; closes, deletes the original and renames the temp file",
+        "Returns or prints the number of replacements"
+       ]
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "topic": "Structures",
+   "subtopics": [
+    {
+     "id": "struct-basics",
+     "title": "Defining and using structures",
+     "theory_md": "A **structure** groups variables of different types:\n```c\nstruct student { int roll; char name[50]; float marks; };\nstruct student s1 = {1, \"Amit\", 78.5};\n```\n- The type is `struct student` (not just `student`; so `sizeof(student)` is an error). `typedef` shortens it.\n- Members are accessed with the dot operator: `s1.marks`.\n- A partial initialiser `{1}` sets the rest to 0; a **global** structure is zero-initialised.\n- Assigning `s2 = s1` copies all members, but strings inside need `strcpy` when assigned one by one, and structures cannot be compared with `==`.\n- A structure passed to a function is **copied** (call by value): changes inside do not reach the caller.\n- Size can exceed the sum of members because of padding.",
+     "basics_md": "An array holds many things of the same kind; a structure holds different kinds of facts about one thing, like a student card with a roll number, a name and a mark.",
+     "key_points": [
+      "struct tag { members }; the type name is struct tag",
+      "Access members with the dot operator",
+      "Partial initialiser: remaining members become 0",
+      "Passing a structure to a function copies it",
+      "Strings inside a structure are copied with strcpy, not ="
+     ],
+     "figures": [],
+     "questions": [
+      {
+       "id": "sb-1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "Which operator accesses a member of a structure variable?",
+       "options": [
+        "->",
+        "::",
+        ".",
+        "&"
+       ],
+       "answer_index": 2,
+       "why": "Dot for a variable, arrow for a pointer to a structure."
+      },
+      {
+       "id": "p146",
+       "pyq": "e2134b1e6b30c502",
+       "level": 1,
+       "points": [
+        "Output: 0 1",
+        "Partial initialiser {1} gives h = 1",
+        "Remaining members are set to 0, so w = 0"
+       ]
+      },
+      {
+       "id": "sb-2",
+       "kind": "mcq",
+       "level": 2,
+       "q": "For `struct p { int x; int y; } a = {3};` the value of a.y is",
+       "options": [
+        "3",
+        "garbage",
+        "0",
+        "error"
+       ],
+       "answer_index": 2,
+       "why": "Members without initialisers are set to 0."
+      },
+      {
+       "id": "sb-3",
+       "kind": "short",
+       "level": 2,
+       "marks": 3,
+       "q": "Write a program with a structure to read and print the roll number, name and marks of one student.",
+       "model_answer_md": "```c\n#include <stdio.h>\n\nstruct student {\n    int roll;\n    char name[50];\n    float marks;\n};\n\nint main(void)\n{\n    struct student s;\n    printf(\"Enter roll, name, marks: \");\n    scanf(\"%d %s %f\", &s.roll, s.name, &s.marks);\n    printf(\"Roll %d, Name %s, Marks %.2f\\n\", s.roll, s.name, s.marks);\n    return 0;\n}\n```",
+       "points": [
+        "Defines struct student with the three members",
+        "Reads members with the dot operator (no & for the string)",
+        "Prints all three members"
+       ]
+      },
+      {
+       "id": "p15",
+       "pyq": "b05e395d0568404b",
+       "level": 2,
+       "points": [
+        "struct complex { float real; float imag; };",
+        "Reads both complex numbers using the dot operator",
+        "sum.real = c1.real + c2.real and sum.imag = c1.imag + c2.imag",
+        "Prints the result in a + ib form"
+       ]
+      },
+      {
+       "id": "p20",
+       "pyq": "6a2e5b95c782f5e0",
+       "level": 2,
+       "points": [
+        "Output: 10 then 0 (separated by tabs)",
+        "s is global, so s.a is initialised to 0",
+        "A structure is passed by value: func changes only its copy and prints 10",
+        "main prints the original s.a, still 0"
+       ]
+      },
+      {
+       "id": "p108",
+       "pyq": "81350502ac66c93f",
+       "level": 2,
+       "points": [
+        "Output: compilation error",
+        "In C the type name is struct abc, not abc",
+        "sizeof(abc) refers to an undeclared identifier (valid in C++)"
+       ]
+      },
+      {
+       "id": "p121",
+       "pyq": "7cd3251448f68c20",
+       "level": 2,
+       "points": [
+        "Reads and prints S1 and S2 (incorrect results)",
+        "Strings cannot be swapped with =; swap names using strcpy through a temporary array",
+        "Swap marks through a temporary float; roll_no is left unchanged",
+        "Prints the corrected results"
+       ]
+      },
+      {
+       "id": "p163",
+       "pyq": "035dc7267d1c919f",
+       "level": 2,
+       "points": [
+        "Output: 10 then 0 (tabs)",
+        "s is global, so s.a = 0",
+        "Passed by value: func changes only its copy"
+       ]
+      },
+      {
+       "id": "sb-4",
+       "kind": "numerical",
+       "level": 3,
+       "marks": 2,
+       "q": "Find sizeof of `struct s { int a; char b; float c; }` on a typical 32/64-bit machine and explain.",
+       "model_answer_md": "Typical result: **12 bytes**. The members need 4 + 1 + 4 = 9 bytes, but the compiler adds 3 bytes of **padding** after `b` so that `c` starts at an address divisible by 4, and the total is rounded up to a multiple of 4.",
+       "points": [
+        "Answer 12 bytes",
+        "Members add to 9 bytes",
+        "Padding added for alignment"
+       ]
+      }
+     ]
+    },
+    {
+     "id": "struct-arrays-pointers",
+     "title": "Arrays of structures, pointers to structures and functions",
+     "theory_md": "**Array of structures:** `struct emp e[10];` then `e[i].salary`. Read and process with a loop (search, maximum, filter by a condition, sort by a member; compare string members with `strcmp`).\n\n**Pointer to a structure:** `struct emp *p = e;` gives `p->salary`, the same as `(*p).salary`; `p++` moves to the next element. Dynamic array: `p = (struct emp *) malloc(n * sizeof(struct emp));`.\n\n**Functions:**\n- By value: a copy is made, caller unchanged.\n- By address: `void modify(struct student *s)` and `s->cgpa = 8.5;` changes the original.\n- A function can return a structure (as in adding two complex numbers).\n\nA menu-driven program uses an array of structures, a count, a loop and `switch`.",
+     "basics_md": "Many cards of the same type form an array of structures. A pointer can hold the address of one card; the arrow '->' reaches inside the card it points to.",
+     "key_points": [
+      "Array of structures: e[i].member with a loop",
+      "Pointer to structure uses ->; p++ moves to the next record",
+      "Pass &variable and use -> to modify the caller's structure",
+      "Compare string members with strcmp",
+      "Menu programs: array + count + do-while + switch"
+     ],
+     "figures": [],
+     "questions": [
+      {
+       "id": "sa-1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "If `p` points to a structure with member `age`, the member is accessed as",
+       "options": [
+        "p.age",
+        "p->age",
+        "*p.age",
+        "p::age"
+       ],
+       "answer_index": 1,
+       "why": "The arrow operator dereferences the pointer and picks the member."
+      },
+      {
+       "id": "sa-2",
+       "kind": "mcq",
+       "level": 2,
+       "q": "`p->x` is equivalent to",
+       "options": [
+        "*p.x",
+        "(*p).x",
+        "&p.x",
+        "p.x"
+       ],
+       "answer_index": 1,
+       "why": "The brackets are needed because . binds tighter than *."
+      },
+      {
+       "id": "sa-3",
+       "kind": "short",
+       "level": 2,
+       "marks": 4,
+       "q": "Write a program to read the name and salary of n employees (n <= 20) into an array of structures and print the name of the highest paid employee.",
+       "model_answer_md": "```c\n#include <stdio.h>\n\nstruct emp { char name[30]; float salary; };\n\nint main(void)\n{\n    struct emp e[20];\n    int n, i, top = 0;\n    scanf(\"%d\", &n);\n    for (i = 0; i < n; i++)\n        scanf(\"%s %f\", e[i].name, &e[i].salary);\n    for (i = 1; i < n; i++)\n        if (e[i].salary > e[top].salary)\n            top = i;\n    printf(\"Highest paid: %s (%.2f)\\n\", e[top].name, e[top].salary);\n    return 0;\n}\n```",
+       "points": [
+        "Array of struct emp",
+        "Reads n records in a loop",
+        "Tracks the index of the maximum salary",
+        "Prints the name and salary"
+       ]
+      },
+      {
+       "id": "p6",
+       "pyq": "87542810c51e3c81",
+       "level": 2,
+       "points": [
+        "struct student with rollNo, year, section (1 to 3) and float cgpa",
+        "main reads the new section and CGPA",
+        "Function takes struct student * and changes members with the arrow operator",
+        "Address is passed, so the change is visible in main, which prints the updated structure"
+       ]
+      },
+      {
+       "id": "p69",
+       "pyq": "74f5b46accaf1bdb",
+       "level": 2,
+       "points": [
+        "struct student { char name[50]; int age; float height; };",
+        "n read, array allocated with malloc(n * sizeof(struct student)), pointer p",
+        "Reads and prints through the pointer using p->name, p->age, p->height and p++"
+       ]
+      },
+      {
+       "id": "p87",
+       "pyq": "00ddd3629b42ebb1",
+       "level": 2,
+       "points": [
+        "struct Student { char name[50]; int roll_no; float marks[5]; }",
+        "Reads two records; average = sum of 5 marks / 5",
+        "Compares the averages and prints the name of the higher one (tie handled)"
+       ]
+      },
+      {
+       "id": "p104",
+       "pyq": "d06a5d2199de57e1",
+       "level": 2,
+       "points": [
+        "struct Employee { char Name[50]; int Age; int Roll_in_job; float salary; }",
+        "Array e[2] filled in a loop",
+        "Job_Profile: Manager if Roll_in_job == 1 else Normal Employee (if-else or ?:)",
+        "Prints Name, Age, Job_Profile, salary"
+       ]
+      },
+      {
+       "id": "p155",
+       "pyq": "f9059cb8752ddcfc",
+       "level": 2,
+       "points": [
+        "struct employee { int id; char name[50]; float salary; }",
+        "Reads N and the records into an array of structures",
+        "Prints only those with salary > 5000"
+       ]
+      },
+      {
+       "id": "sa-4",
+       "kind": "short",
+       "level": 3,
+       "marks": 4,
+       "q": "Write a program to sort an array of n students by marks in descending order (structure with name and marks).",
+       "model_answer_md": "```c\n#include <stdio.h>\n\nstruct student { char name[30]; float marks; };\n\nint main(void)\n{\n    struct student s[20], t;\n    int n, i, j;\n    scanf(\"%d\", &n);\n    for (i = 0; i < n; i++)\n        scanf(\"%s %f\", s[i].name, &s[i].marks);\n    for (i = 0; i < n - 1; i++)\n        for (j = 0; j < n - 1 - i; j++)\n            if (s[j].marks < s[j + 1].marks) {\n                t = s[j];            /* whole structure swap */\n                s[j] = s[j + 1];\n                s[j + 1] = t;\n            }\n    for (i = 0; i < n; i++)\n        printf(\"%s %.1f\\n\", s[i].name, s[i].marks);\n    return 0;\n}\n```",
+       "points": [
+        "Array of structures read in a loop",
+        "Bubble sort comparing the marks member",
+        "Whole structures swapped through a temporary structure",
+        "Prints the sorted records"
+       ]
+      },
+      {
+       "id": "p70",
+       "pyq": "4d2cacf5dc4242d5",
+       "level": 3,
+       "points": [
+        "struct library { int accNo; char title[]; char author[]; float price; int issued; } and an array with a count",
+        "do-while loop showing the menu, switch on the choice",
+        "Author search with strcmp; title search by accession number",
+        "Order by accession number: sort (bubble sort on accNo) then print",
+        "Option 7 exits the loop"
+       ]
+      }
+     ]
+    },
+    {
+     "id": "union",
+     "title": "Unions and space-efficient structures",
+     "theory_md": "A **union** is declared like a structure, but all members **share the same memory**:\n```c\nunion data { int i; float f; char c; };\n```\n- Its size is the size of its **largest member**; a structure's size is the sum of its members (plus padding).\n- Only the member written last holds a valid value.\n- Use a union when only one of several alternatives is needed at a time, to save memory.\n- **Space-efficient record:** keep the common members in a structure and put the alternatives in a union, with a tag to remember which one is valid:\n```c\nstruct item { int id; char color; int type;\n              union { int ram; float eer; } u; };\n```\nMembers are accessed with the dot operator as usual.",
+     "basics_md": "A structure gives every fact its own shelf. A union has a single shelf that different facts take turns using, so it is small but holds only one at a time.",
+     "key_points": [
+      "Union members share one memory location",
+      "Union size = size of the largest member",
+      "Only the last written member is valid",
+      "Use when only one alternative is needed at a time",
+      "Common fields in the struct, alternatives in a union, plus a type tag"
+     ],
+     "figures": [],
+     "questions": [
+      {
+       "id": "un-1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "All members of a union",
+       "options": [
+        "are stored one after another",
+        "share the same memory",
+        "must be of the same type",
+        "must be pointers"
+       ],
+       "answer_index": 1,
+       "why": "They overlap in one memory block."
+      },
+      {
+       "id": "un-2",
+       "kind": "mcq",
+       "level": 2,
+       "q": "On a typical machine `union { int i; double d; }` has size",
+       "options": [
+        "4",
+        "8",
+        "12",
+        "16"
+       ],
+       "answer_index": 1,
+       "why": "The union is as large as its largest member, the 8-byte double."
+      },
+      {
+       "id": "un-3",
+       "kind": "short",
+       "level": 2,
+       "marks": 3,
+       "q": "Differentiate between a structure and a union with an example of their sizes.",
+       "model_answer_md": "| | Structure | Union |\n|---|---|---|\n| Memory | each member has its own memory | all members share one memory |\n| Size | sum of members (plus padding) | size of the largest member |\n| Values | all members hold values at once | only the last written member is valid |\n| Use | related data kept together | save space when one alternative is used at a time |\n\nFor `{int a; char b; float c;}` the structure takes **12 bytes** and the union **4 bytes**.",
+       "points": [
+        "Structure members have separate memory, union members share it",
+        "Structure size is the sum, union size is the largest member",
+        "Only one union member valid at a time",
+        "Sizes 12 and 4 for the example"
+       ]
+      },
+      {
+       "id": "un-4",
+       "kind": "short",
+       "level": 3,
+       "marks": 3,
+       "q": "A shop sells a book (pages as int) or a bottle (volume as float), one item per order. Define a space-efficient structure and print the right member.",
+       "model_answer_md": "```c\n#include <stdio.h>\n\nstruct item {\n    int id;\n    char kind;            /* 'B' book, 'W' bottle */\n    union {\n        int pages;\n        float volume;\n    } u;\n};\n\nint main(void)\n{\n    struct item it;\n    scanf(\"%d %c\", &it.id, &it.kind);\n    if (it.kind == 'B') { scanf(\"%d\", &it.u.pages);  printf(\"Pages %d\\n\", it.u.pages); }\n    else                { scanf(\"%f\", &it.u.volume); printf(\"Volume %.1f\\n\", it.u.volume); }\n    return 0;\n}\n```",
+       "points": [
+        "Common members id and kind in the structure",
+        "pages and volume in a union",
+        "kind tag decides which member is read and printed"
+       ]
+      },
+      {
+       "id": "p60",
+       "pyq": "30e60eae0dedb291",
+       "level": 3,
+       "points": [
+        "Only one item is ordered at a time, so RAM_SIZE and Energy_Efficiency_Ratio share memory in a union",
+        "Structure holds ITEM_ID, COLOR_CODE (common) and the union",
+        "Union size is its largest member, not the sum",
+        "A tag tells which union member is valid; the program reads and prints the right one"
+       ]
+      }
+     ]
+    }
+   ]
+  }
+ ]
+}

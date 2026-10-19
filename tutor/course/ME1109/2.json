@@ -1,0 +1,1584 @@
+{
+ "code": "ME1109",
+ "unit": "Welding Shop",
+ "written": "2026-10-19",
+ "by": "claude-sonnet-5-5, in a Claude Code session",
+ "topics": [
+  {
+   "topic": "Classification of welding processes",
+   "subtopics": [
+    {
+     "id": "fusion-pressure",
+     "title": "Fusion and pressure welding",
+     "theory_md": "**Welding** permanently joins metals by heat, with or without pressure and filler, so they coalesce.\n- **Fusion (non-pressure)**: edges melted, filler usually added, no pressure. Gas (oxy-acetylene), arc (SMAW, carbon, TIG, MIG, submerged, plasma), thermit, electron beam, laser.\n- **Pressure (plastic)**: heated to a plastic state (or not at all) and pressed. Forge (heated in a forge to about 1200 to 1300 $^\\circ$C and hammered), resistance (spot, seam, projection, butt, flash), friction, ultrasonic, explosive, diffusion.\n\nResistance heat: $H = I^2Rt$. Arc about 3500 $^\\circ$C, oxy-acetylene flame about 3200 $^\\circ$C.",
+     "basics_md": "Two ways to join metal: melt the edges so they flow together (fusion), or soften them and squeeze them together (pressure).",
+     "key_points": [
+      "Welding = joining by heat, with or without pressure and filler",
+      "Fusion: gas, arc, thermit, electron beam, laser (no pressure)",
+      "Pressure: forge, resistance, friction, ultrasonic, explosive",
+      "Resistance welding is a pressure process, heat $I^2Rt$",
+      "Forge welding: forge heat, plastic state, hammering, no filler"
+     ],
+     "questions": [
+      {
+       "id": "c1-q1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "Resistance spot welding is classed as",
+       "options": [
+        "fusion welding",
+        "pressure welding",
+        "brazing",
+        "soldering"
+       ],
+       "answer_index": 1,
+       "why": "Heat comes from $I^2Rt$ and the pieces are forged together under electrode pressure."
+      },
+      {
+       "id": "c1-q2",
+       "kind": "mcq",
+       "level": 1,
+       "q": "Which of these is a fusion welding process?",
+       "options": [
+        "Forge welding",
+        "Friction welding",
+        "Thermit welding",
+        "Ultrasonic welding"
+       ],
+       "answer_index": 2,
+       "why": "Thermit melts the metal with an Al + iron oxide reaction; the others are pressure or solid-state processes."
+      },
+      {
+       "id": "c1-q3",
+       "kind": "short",
+       "level": 2,
+       "marks": 2,
+       "q": "Differentiate fusion welding from pressure welding.",
+       "model_answer_md": "| Point | Fusion welding | Pressure welding |\n|---|---|---|\n| Metal state | Edges melted | Plastic state (or solid) |\n| Pressure | None | Applied |\n| Filler | Usually added | Not used |\n| Examples | Arc, gas, thermit | Forge, resistance, friction |",
+       "points": [
+        "Fusion: edges melted, no pressure",
+        "Pressure: plastic state, pressure applied",
+        "Filler used in fusion, not in pressure welding",
+        "One example of each"
+       ]
+      },
+      {
+       "id": "c1-q4",
+       "kind": "numerical",
+       "level": 2,
+       "marks": 2,
+       "q": "In spot welding a current of 10 kA passes for 0.2 s through a contact resistance of 100 $\\mu\\Omega$. Find the heat generated.",
+       "model_answer_md": "$H = I^2Rt = (10\\,000)^2 \\times (100\\times10^{-6}) \\times 0.2 = 2000\\ \\mathrm{J}$ (2 kJ)",
+       "points": [
+        "Formula $H = I^2Rt$",
+        "Resistance converted to ohm: $10^{-4}\\ \\Omega$",
+        "H = 2000 J"
+       ]
+      },
+      {
+       "id": "c1-p1",
+       "pyq": "574b8b8f126528d6",
+       "level": 2,
+       "points": [
+        "Welding tree: plastic (pressure) and fusion (non-pressure) welding",
+        "Plastic: forge, resistance (spot, seam, projection, butt, flash), friction, ultrasonic, explosive",
+        "Fusion: arc (carbon, SMAW, SAW, TIG, MIG, plasma), gas (oxy-acetylene, oxy-hydrogen), thermit, electroslag, electron beam, laser",
+        "Brazing and soldering as a third group; line diagram drawn"
+       ]
+      },
+      {
+       "id": "c1-p2",
+       "pyq": "9711d9b4ef79b1e6",
+       "level": 1,
+       "points": [
+        "Welding: permanent joining by heating to molten or plastic state, with or without pressure and filler",
+        "Classified as fusion, pressure, and brazing/soldering",
+        "Examples under each class"
+       ]
+      },
+      {
+       "id": "c1-p3",
+       "pyq": "c9018b5d74fe78c2",
+       "level": 1,
+       "points": [
+        "Welding defined as permanent joining by heat, with or without pressure and filler",
+        "Fusion welding: gas, arc, thermit, electron beam, laser",
+        "Pressure welding: forge, resistance, friction, ultrasonic",
+        "Cold or solid-state welding (explosive)"
+       ]
+      },
+      {
+       "id": "c1-p4",
+       "pyq": "aea6e6170edafebf",
+       "level": 3,
+       "points": [
+        "Full classification: fusion, pressure, brazing and soldering",
+        "Arc: electric arc about 3500 $^\\circ$C, consumable electrode filler, high skill, structures and pipes",
+        "Gas: flame about 3200 $^\\circ$C, filler rod and flux, slow, thin sheet and repair",
+        "Resistance: $I^2Rt$ heat plus pressure, no filler, very fast, low skill, costly fixed machine, sheet metal in bulk"
+       ]
+      },
+      {
+       "id": "c1-p5",
+       "pyq": "9087f77c4d39316e",
+       "level": 2,
+       "points": [
+        "Forge welding: heated in forge to plastic state (about 1300 $^\\circ$C), flux, hammered; no filler; blacksmith work, chains, tools",
+        "Fusion welding: edges melted by arc or gas flame, filler if needed, no pressure; structures, vessels, pipelines",
+        "Coating reason: stabilises arc, gas shield, slag cover, deoxidises, adds alloying elements"
+       ]
+      }
+     ]
+    },
+    {
+     "id": "weld-braze-solder",
+     "title": "Welding, brazing and soldering",
+     "theory_md": "In **welding** the base metal melts (fusion) and the joint is about as strong as the parent metal, at 1500 $^\\circ$C and above.\n\nIn **brazing** a filler (brass, Cu-Zn, silver alloys) melting **above 450 $^\\circ$C** but below the base metal fills the joint by capillary action; the base metal does **not** melt. Medium strength: tools, pipes.\n\nIn **soldering** the filler (Pb-Sn) melts **below 450 $^\\circ$C**; base metal not melted. Lowest strength: electronics, tin work. Some books use 427 $^\\circ$C (800 $^\\circ$F).",
+     "basics_md": "Welding melts the parts themselves. Brazing and soldering melt only a glue-like filler between solid parts; the dividing line between them is 450 $^\\circ$C.",
+     "key_points": [
+      "Welding: base metal melts, strongest joint",
+      "Brazing: filler above 450 $^\\circ$C, base metal not melted",
+      "Soldering: filler below 450 $^\\circ$C, base metal not melted",
+      "Filler flows by capillary action in brazing and soldering",
+      "Strength order: welding > brazing > soldering"
+     ],
+     "questions": [
+      {
+       "id": "c2-q1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "In soldering the filler metal melts",
+       "options": [
+        "above 450 $^\\circ$C",
+        "below 450 $^\\circ$C",
+        "at the melting point of the base metal",
+        "above the base metal's melting point"
+       ],
+       "answer_index": 1,
+       "why": "Soldering fillers such as Pb-Sn melt below 450 $^\\circ$C."
+      },
+      {
+       "id": "c2-q2",
+       "kind": "mcq",
+       "level": 2,
+       "q": "Which statement about brazing is wrong?",
+       "options": [
+        "Filler melts above 450 $^\\circ$C",
+        "Base metal is not melted",
+        "Filler is drawn in by capillary action",
+        "Base metal is melted at the joint"
+       ],
+       "answer_index": 3,
+       "why": "The base metal never melts in brazing; that is what separates it from welding."
+      },
+      {
+       "id": "c2-q3",
+       "kind": "short",
+       "level": 2,
+       "marks": 3,
+       "q": "Differentiate welding, brazing and soldering.",
+       "model_answer_md": "| Point | Welding | Brazing | Soldering |\n|---|---|---|---|\n| Base metal | Melted | Not melted | Not melted |\n| Filler | Same or similar metal | Brass, Cu-Zn (above 450 $^\\circ$C) | Pb-Sn (below 450 $^\\circ$C) |\n| Temperature | 1500 $^\\circ$C and above | 450 to 900 $^\\circ$C | Below 450 $^\\circ$C |\n| Strength | Highest | Medium | Low |\n| Use | Structures, vessels | Tools, pipes | Electronics |",
+       "points": [
+        "Base metal melts only in welding",
+        "Brazing filler above 450 $^\\circ$C, soldering below",
+        "Strength order stated",
+        "Examples or uses given"
+       ]
+      },
+      {
+       "id": "c2-q4",
+       "kind": "short",
+       "level": 1,
+       "marks": 1,
+       "q": "Define welding.",
+       "model_answer_md": "**Welding** is a process of permanently joining two or more metal pieces by heating them to a molten or plastic state, with or without pressure and filler metal, so that they form one continuous piece.",
+       "points": [
+        "Permanent joining of metals",
+        "Heat, with or without pressure and filler"
+       ]
+      }
+     ]
+    },
+    {
+     "id": "gas-flames",
+     "title": "Gas welding and its flames",
+     "theory_md": "**Gas welding**: a flame of acetylene burning in oxygen melts the edges; a filler rod and flux are added; no pressure. Oxy-acetylene neutral flame about 3200 $^\\circ$C.\n\n**Equipment**: oxygen (black) and acetylene (maroon) cylinders, regulators with gauges, hoses (oxygen green, acetylene red), torch with mixing chamber and nozzle, filler rod, flux, goggles, gloves, spark lighter, flash-back arrestor.\n\n| Flame | O$_2$ : C$_2$H$_2$ | Look | Use |\n|---|---|---|---|\n| Neutral | about 1 : 1 | bright inner cone, blue envelope | mild steel, cast iron, copper |\n| Oxidising | excess O$_2$ (about 1.5 : 1) | short, pointed, hissing | brass, bronze |\n| Carburising (reducing) | excess C$_2$H$_2$ | white feather round cone | aluminium, hard facing, high-carbon steel |",
+     "basics_md": "A gas torch is a controlled flame. The mix of oxygen and fuel gas decides how hot it is and whether it adds or removes oxygen at the metal.",
+     "key_points": [
+      "Gas welding: oxy-acetylene flame, filler rod, flux, no pressure",
+      "Neutral flame O$_2$:C$_2$H$_2$ about 1:1, hottest, steel and copper",
+      "Oxidising flame: excess oxygen, brass and bronze, not steel",
+      "Carburising flame: excess acetylene, feather, aluminium and hard facing",
+      "Obtained by adjusting the torch oxygen and acetylene valves"
+     ],
+     "questions": [
+      {
+       "id": "c3-q1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "A white feather around the inner cone shows a(n)",
+       "options": [
+        "neutral flame",
+        "oxidising flame",
+        "carburising flame",
+        "flash-back"
+       ],
+       "answer_index": 2,
+       "why": "The feather is unburnt acetylene, i.e. excess acetylene."
+      },
+      {
+       "id": "c3-q2",
+       "kind": "mcq",
+       "level": 2,
+       "q": "Brass is gas welded with an oxidising flame mainly because",
+       "options": [
+        "it is the hottest flame for steel",
+        "it forms a skin of oxide that stops zinc from boiling off",
+        "it adds carbon to the brass",
+        "it removes the flux"
+       ],
+       "answer_index": 1,
+       "why": "The slight excess of oxygen forms a protective oxide film that limits zinc loss."
+      },
+      {
+       "id": "c3-q3",
+       "kind": "short",
+       "level": 2,
+       "marks": 3,
+       "q": "List the equipment of oxy-acetylene gas welding.",
+       "model_answer_md": "1. Oxygen cylinder (black) and acetylene cylinder (maroon)\n2. Pressure regulators with gauges\n3. Rubber hoses (oxygen green, acetylene red)\n4. Welding torch with mixing chamber and nozzle\n5. Filler rod and flux\n6. Goggles, gloves, spark lighter, flash-back arrestor",
+       "points": [
+        "Two gas cylinders",
+        "Regulators and hoses",
+        "Torch with mixing chamber and nozzle",
+        "Filler rod, flux, safety items"
+       ]
+      },
+      {
+       "id": "c3-q4",
+       "kind": "long",
+       "level": 3,
+       "marks": 5,
+       "q": "What is gas welding? How are neutral, oxidising and reducing flames obtained, and where is each used?",
+       "model_answer_md": "**Gas welding**: fusion process using a flame of acetylene in oxygen (about 3200 $^\\circ$C) with filler rod and flux; no pressure.\n\n**Obtaining the flames** (by the torch valves)\n1. **Neutral**: light acetylene (smoky yellow flame), add oxygen until the feather vanishes and a sharp inner cone appears; O$_2$:C$_2$H$_2$ about 1:1. Use: mild steel, cast iron, copper.\n2. **Oxidising**: from neutral, open the oxygen valve more; short, pointed, hissing, bluish cone. Use: brass, bronze.\n3. **Reducing (carburising)**: from neutral, reduce oxygen until a white feather of acetylene shows around the cone; cooler. Use: aluminium, Monel, hard surfacing.",
+       "points": [
+        "Gas welding defined with temperature",
+        "Neutral flame: ratio about 1:1, how set, use",
+        "Oxidising: excess oxygen, how set, use",
+        "Reducing: excess acetylene, feather, use"
+       ]
+      },
+      {
+       "id": "c3-p1",
+       "pyq": "bb19c756f818b6cb",
+       "level": 2,
+       "points": [
+        "Gas welding: fusion by flame of fuel gas in oxygen, filler rod, no pressure, about 3200 $^\\circ$C",
+        "Neutral flame: equal oxygen and acetylene, hottest, mild steel, cast iron, copper",
+        "Oxidising flame: excess oxygen from neutral by opening oxygen valve; brass, bronze",
+        "Reducing flame: reduce oxygen until feather appears; aluminium, hard surfacing"
+       ]
+      },
+      {
+       "id": "c3-p2",
+       "pyq": "88a2e471af8e61d5",
+       "level": 3,
+       "points": [
+        "Classification: fusion (gas, arc, thermit, beam), pressure, allied (brazing, soldering, cutting, hard facing)",
+        "Gas welding process: acetylene-oxygen flame, filler rod, flux, about 3200 $^\\circ$C",
+        "Equipment: cylinders, regulators, hoses, torch, filler, goggles, flash-back arrestor",
+        "Three flames with ratio and uses"
+       ]
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "topic": "Concept of a weld",
+   "subtopics": [
+    {
+     "id": "joints-fillet",
+     "title": "Welded joints and fillet weld",
+     "theory_md": "**Joints** (how the parts meet): **butt** (edge to edge in one plane; square, V, U, double-V), **lap** (overlapped, fillet welded), **T** (one plate perpendicular to the other), **corner** (right angle at a corner), **edge** (parallel plates, edges welded).\n\n**Weld types** (the bead itself): fillet, groove (butt), plug, spot.\n\nFillet weld of leg $s$: the **throat** is $t = s\\cos45^\\circ = 0.707\\,s$ and the strength of one weld of length $l$ is $P = 0.707\\,s\\,l\\,\\tau$, with permissible shear stress $\\tau$. The throat, not the leg, carries the load.",
+     "basics_md": "A joint is how two plates sit against each other. A weld is the metal you lay in it. A fillet weld is a triangle; its weakest cut is the short line from corner to face, the throat.",
+     "key_points": [
+      "Five joints: butt, lap, T, corner, edge",
+      "Joint type is different from weld type (fillet, groove)",
+      "Lap and T joints use fillet welds, butt uses groove welds",
+      "Throat $t = 0.707\\,s$ of the leg",
+      "Fillet strength $P = 0.707\\,s\\,l\\,\\tau$"
+     ],
+     "questions": [
+      {
+       "id": "w1-q1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "Two plates overlapping each other and joined by a fillet weld form a",
+       "options": [
+        "butt joint",
+        "lap joint",
+        "T-joint",
+        "edge joint"
+       ],
+       "answer_index": 1,
+       "why": "Overlapped plates give a lap joint."
+      },
+      {
+       "id": "w1-q2",
+       "kind": "mcq",
+       "level": 2,
+       "q": "For a fillet weld of leg $s$ the throat is",
+       "options": [
+        "$s$",
+        "$0.5\\,s$",
+        "$0.707\\,s$",
+        "$1.414\\,s$"
+       ],
+       "answer_index": 2,
+       "why": "The throat is the shortest distance across the triangle: $s\\cos45^\\circ$."
+      },
+      {
+       "id": "w1-q3",
+       "kind": "short",
+       "level": 1,
+       "marks": 2,
+       "q": "Name and sketch in words the five basic types of welded joints.",
+       "model_answer_md": "1. **Butt**: plates edge to edge in one plane.\n2. **Lap**: plates overlap.\n3. **T**: one plate stands perpendicular on the other.\n4. **Corner**: two plates meet at a right-angled corner.\n5. **Edge**: edges of two parallel plates welded together.",
+       "points": [
+        "Butt, lap, T, corner, edge named",
+        "Each with a one-line description"
+       ]
+      },
+      {
+       "id": "w1-q4",
+       "kind": "numerical",
+       "level": 2,
+       "marks": 3,
+       "q": "A single fillet weld has leg 8 mm and length 100 mm. Permissible shear stress in the weld is 80 MPa. Find the load it can carry.",
+       "model_answer_md": "Throat $t = 0.707 \\times 8 = 5.66$ mm\n\n$P = 0.707\\,s\\,l\\,\\tau = 0.707 \\times 8 \\times 100 \\times 80 = 45\\,248\\ \\mathrm{N} \\approx 45.2\\ \\mathrm{kN}$\n\n(MPa = N/mm$^2$, so the answer is in newton.)",
+       "points": [
+        "Throat = 0.707 s",
+        "Formula $P = 0.707\\,s\\,l\\,\\tau$",
+        "Units: mm and N/mm$^2$ give N",
+        "P about 45.2 kN"
+       ]
+      }
+     ]
+    },
+    {
+     "id": "weldability",
+     "title": "Weldability",
+     "theory_md": "**Weldability** is the ease with which a metal can be welded into a sound joint of the required properties, free of cracks, porosity and distortion, by ordinary procedures.\n\nIt **depends on**: chemical composition (carbon equivalent; carbon, sulphur, phosphorus lower it), thermal conductivity and expansion, melting point, surface oxide films (Al, stainless steel), thickness, process and filler or flux, preheat and joint design, and welder skill.\n\nLow-carbon steel: good. High-carbon steel and cast iron: poor, they harden and crack, so preheat. The **heat-affected zone (HAZ)** is the base metal that is heated but does not melt.",
+     "basics_md": "A metal with good weldability forgives mistakes. Metals that crack when they cool quickly, or that grow a stubborn oxide skin, do not.",
+     "key_points": [
+      "Weldability = ease of making a sound joint",
+      "Depends on composition, conductivity, expansion, oxide films, process, preheat",
+      "Low-carbon steel good; high-carbon steel and cast iron poor",
+      "HAZ is heated but not melted",
+      "Preheating improves weldability of hardenable steels"
+     ],
+     "questions": [
+      {
+       "id": "w2-q1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "Which has the best weldability?",
+       "options": [
+        "Cast iron",
+        "High-carbon steel",
+        "Low-carbon steel",
+        "Hardened tool steel"
+       ],
+       "answer_index": 2,
+       "why": "Low carbon means little hardening and cracking."
+      },
+      {
+       "id": "w2-q2",
+       "kind": "mcq",
+       "level": 2,
+       "q": "The heat-affected zone is the portion of the base metal that",
+       "options": [
+        "melts and fuses",
+        "is heated but does not melt",
+        "is the slag layer",
+        "is the filler deposit"
+       ],
+       "answer_index": 1,
+       "why": "It is hot enough to change structure but stays solid."
+      },
+      {
+       "id": "w2-q3",
+       "kind": "short",
+       "level": 2,
+       "marks": 3,
+       "q": "Define weldability and list four factors on which it depends.",
+       "model_answer_md": "**Weldability**: the ease with which a metal can be welded into a sound joint with the required properties and no defects by an ordinary process.\n\nFactors: (1) chemical composition, mainly carbon, (2) thermal conductivity and expansion, (3) surface oxide films, (4) process, filler and preheat.",
+       "points": [
+        "Definition: sound joint, no defects, ordinary procedure",
+        "Any four factors"
+       ]
+      },
+      {
+       "id": "w2-p1",
+       "pyq": "9c5d4ecf6bb3ad6f",
+       "level": 1,
+       "points": [
+        "Weldability: ability to be welded into a sound joint without cracking or defects by a given process",
+        "Low-carbon steel good",
+        "High-carbon steel and cast iron poor, need preheat"
+       ]
+      },
+      {
+       "id": "w2-p2",
+       "pyq": "23c451b495033a84",
+       "level": 3,
+       "points": [
+        "Weldability defined; depends on composition, conductivity, melting point, oxide films, process, preheat",
+        "Forge welding: forge heat, plastic state, hammering; fusion: arc, gas, thermit melts the joint",
+        "Polarity: straight (electrode negative, deep penetration) and reverse (electrode positive, shallow)",
+        "Arc blow: deflection of the arc by magnetic fields, with causes and remedies"
+       ]
+      }
+     ]
+    },
+    {
+     "id": "defects-merits",
+     "title": "Weld defects, advantages and disadvantages",
+     "theory_md": "| Defect | Cause | Remedy |\n|---|---|---|\n| Porosity | damp electrode, rust, long arc | dry electrode, clean job, short arc |\n| Slag inclusion | slag left between passes | chip and brush |\n| Undercut | high current, fast travel | reduce both |\n| Overlap | low current, slow travel | correct current |\n| Incomplete fusion/penetration | low current, narrow gap | raise current, bevel |\n| Cracks | high carbon, fast cooling | preheat, low-hydrogen electrode |\n| Distortion | uneven heating | tack, clamp, balanced sequence |\n\n**Advantages**: permanent strong leak-proof joint, light, fast, repairable. **Disadvantages**: distortion and residual stress, skill needed, HAZ, cannot be dismantled, fumes and UV.",
+     "basics_md": "Most defects come from two things: weld metal that cooled in a bad atmosphere (gas, slag) or heat that was wrong (too much or too little).",
+     "key_points": [
+      "Porosity, slag inclusion, undercut, overlap, cracks, distortion",
+      "Each defect has a cause and a remedy",
+      "Advantages: strong, leak-proof, light, economical",
+      "Disadvantages: distortion, residual stress, skill, HAZ, hazards"
+     ],
+     "questions": [
+      {
+       "id": "w3-q1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "Gas holes (porosity) in a weld are mainly caused by",
+       "options": [
+        "dry electrodes",
+        "damp electrodes or rust",
+        "a short arc",
+        "low travel speed"
+       ],
+       "answer_index": 1,
+       "why": "Moisture and rust give hydrogen and gases that stay trapped."
+      },
+      {
+       "id": "w3-q2",
+       "kind": "mcq",
+       "level": 2,
+       "q": "Undercut is caused by",
+       "options": [
+        "excess current or fast travel",
+        "low current",
+        "slag left on the bead",
+        "a short arc"
+       ],
+       "answer_index": 0,
+       "why": "Too much heat melts a groove in the base metal beside the bead."
+      },
+      {
+       "id": "w3-q3",
+       "kind": "short",
+       "level": 2,
+       "marks": 4,
+       "q": "Name four welding defects with cause and remedy.",
+       "model_answer_md": "| Defect | Cause | Remedy |\n|---|---|---|\n| Porosity | damp electrode, rust | dry electrode, clean job |\n| Slag inclusion | slag not removed | chip and brush between passes |\n| Undercut | excess current, fast travel | reduce current and speed |\n| Cracks | high carbon, rapid cooling | preheat, low-hydrogen electrode |",
+       "points": [
+        "Four defects named",
+        "Cause for each",
+        "Remedy for each"
+       ]
+      },
+      {
+       "id": "w3-q4",
+       "kind": "short",
+       "level": 2,
+       "marks": 3,
+       "q": "State three advantages and three disadvantages of welding.",
+       "model_answer_md": "**Advantages**\n1. Permanent, strong joint (about parent strength)\n2. Lighter than riveted or bolted structures\n3. Leak-proof, fast, repairs castings\n\n**Disadvantages**\n1. Distortion and residual stresses\n2. Needs skilled welder and inspection\n3. Cannot be dismantled; HAZ and fumes",
+       "points": [
+        "Three advantages",
+        "Three disadvantages"
+       ]
+      },
+      {
+       "id": "w3-p1",
+       "pyq": "52bc5e713800e69d",
+       "level": 2,
+       "points": [
+        "Defects: porosity, slag inclusion, incomplete fusion and penetration, undercut, overlap, cracks, spatter, distortion",
+        "Advantages: permanent strong joint, saves weight, complex and large structures, fast, leak-proof",
+        "Disadvantages: residual stress and distortion, skill, fumes and UV, cannot dismantle, NDT needed"
+       ]
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "topic": "Electric arc welding principle",
+   "subtopics": [
+    {
+     "id": "arc-principle",
+     "title": "Principle of arc welding",
+     "theory_md": "An **electric arc** is struck between the electrode and the job. Touch the electrode to the work and withdraw it 2 to 4 mm: current keeps flowing through the ionised gas as a bright arc at about **3500 to 6000 $^\\circ$C**. The heat melts the edges of the base metal and the electrode tip; they fuse in a pool and solidify as the weld. No pressure is used (fusion welding).\n\nArc voltage 20 to 40 V, current 50 to 600 A, supplied by a transformer (AC) or rectifier or generator (DC). Arc power $P = VI$. Heat input per length $H = \\dfrac{\\eta VI}{v}$ with travel speed $v$.",
+     "basics_md": "A spark that is made to stay alive. A low voltage, very high current keeps a gap of hot ionised gas glowing, and that heat does the melting.",
+     "key_points": [
+      "Arc between electrode and job gives the heat",
+      "Arc about 3500 to 6000 $^\\circ$C, 20 to 40 V, 50 to 600 A",
+      "Melts base metal and electrode, pool solidifies to weld",
+      "Fusion process, no pressure",
+      "Sketch: source, cables, holder, electrode, arc, job, earth clamp"
+     ],
+     "questions": [
+      {
+       "id": "a1-q1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "The arc voltage during welding is typically",
+       "options": [
+        "2 to 4 V",
+        "20 to 40 V",
+        "200 to 400 V",
+        "about 1000 V"
+       ],
+       "answer_index": 1,
+       "why": "Low voltage, high current; 20 to 40 V is the working arc voltage."
+      },
+      {
+       "id": "a1-q2",
+       "kind": "mcq",
+       "level": 1,
+       "q": "Arc welding is a",
+       "options": [
+        "pressure welding process",
+        "fusion welding process",
+        "solid-state process",
+        "brazing process"
+       ],
+       "answer_index": 1,
+       "why": "The base metal is melted and no pressure is applied."
+      },
+      {
+       "id": "a1-q3",
+       "kind": "short",
+       "level": 2,
+       "marks": 3,
+       "q": "State the principle of arc welding. Name the parts of the welding circuit.",
+       "model_answer_md": "**Principle**: heat of an electric arc between electrode and job melts the edges of the joint and the electrode; on cooling the pool solidifies into a permanent joint.\n\n**Circuit** (sketch): power source $\\rightarrow$ electrode cable $\\rightarrow$ electrode holder with electrode $\\rightarrow$ arc $\\rightarrow$ job on table $\\rightarrow$ earth cable $\\rightarrow$ power source.",
+       "points": [
+        "Arc heat melts the joint edges",
+        "Pool solidifies to a weld",
+        "Power source, cables, holder, electrode, job, earth clamp"
+       ]
+      },
+      {
+       "id": "a1-q4",
+       "kind": "numerical",
+       "level": 2,
+       "marks": 3,
+       "q": "A welder uses 25 V and 200 A with travel speed 5 mm/s and arc efficiency 0.8. Find the arc power and the heat input per mm of weld.",
+       "model_answer_md": "Arc power $P = VI = 25 \\times 200 = 5000\\ \\mathrm{W}$\n\nHeat input $H = \\dfrac{\\eta VI}{v} = \\dfrac{0.8 \\times 5000}{5} = 800\\ \\mathrm{J/mm}$",
+       "points": [
+        "P = VI = 5000 W",
+        "Formula $H = \\eta VI/v$",
+        "H = 800 J/mm"
+       ]
+      },
+      {
+       "id": "a1-p1",
+       "pyq": "e5890dcdf99ddc14",
+       "level": 1,
+       "points": [
+        "Electric arc between electrode and job, ionised gas about 3500 $^\\circ$C",
+        "Heat melts base metal and electrode to form the weld pool",
+        "Coating gives shielding gas and slag",
+        "30 to 400 A at 20 to 40 V"
+       ]
+      },
+      {
+       "id": "a1-p2",
+       "pyq": "c68d27c67955c9a1",
+       "level": 2,
+       "points": [
+        "Electrode touched to work and withdrawn 2 to 4 mm, arc forms, 3500 to 6000 $^\\circ$C",
+        "20 to 40 V, 50 to 600 A",
+        "Melts edges and electrode tip, pool solidifies; no pressure",
+        "Flux gas shield and slag; sketch with source, cables, holder, electrode, arc, pool, earth clamp"
+       ]
+      },
+      {
+       "id": "a1-p3",
+       "pyq": "d46cee4103e05f1b",
+       "level": 2,
+       "points": [
+        "Arc welding: fusion process, heat of electric arc between electrode and workpiece",
+        "Principle: low voltage high current source, arc 3500 $^\\circ$C melts parent metal and electrode",
+        "Circuit diagram: source, electrode cable, holder, arc gap, job, work cable back to source"
+       ]
+      },
+      {
+       "id": "a1-p4",
+       "pyq": "26880b049e10c689",
+       "level": 1,
+       "points": [
+        "Electrical energy to heat by arc between electrode and job",
+        "20 to 40 V at 50 to 600 A, 3500 to 6000 $^\\circ$C",
+        "Melts base and electrode, fuses and solidifies; coating shields; no pressure"
+       ]
+      }
+     ]
+    },
+    {
+     "id": "smaw",
+     "title": "Shielded metal arc welding (SMAW)",
+     "theory_md": "**SMAW** (stick or metal arc welding): a flux-coated consumable electrode in a holder; supply connected between electrode and work. Once the arc is struck (20 to 40 V, 50 to 400 A) the core wire and base metal melt. The coating gives a **gas shield** and a **slag** blanket. Keep arc length about the core diameter and the electrode at 70 to 80$^\\circ$ to the plate; chip the slag when cooled.\n\n**Preparing rusted mild steel**: wire brush, grind or blast off rust and scale; degrease with solvent; clean bright 25 mm each side; bevel thick plate; use dry low-hydrogen electrodes.",
+     "basics_md": "A stick of filler wrapped in a protective coating. As it burns, the coating makes its own gas and crust so the molten pool never meets air.",
+     "key_points": [
+      "Coated consumable electrode, holder, source and earth return",
+      "Arc melts core wire and base metal",
+      "Coating gives gas shield and slag",
+      "Arc length about core diameter, 70 to 80$^\\circ$ angle",
+      "Clean rust, scale and grease before welding; chip slag after"
+     ],
+     "questions": [
+      {
+       "id": "s1-q1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "In SMAW, slag is removed with a",
+       "options": [
+        "file",
+        "chipping hammer",
+        "hacksaw",
+        "punch"
+       ],
+       "answer_index": 1,
+       "why": "A chipping hammer breaks the slag crust, then a wire brush cleans the bead."
+      },
+      {
+       "id": "s1-q2",
+       "kind": "mcq",
+       "level": 2,
+       "q": "The usual arc length in SMAW is about equal to the",
+       "options": [
+        "plate thickness",
+        "core wire diameter of the electrode",
+        "length of the electrode",
+        "distance from the earth clamp"
+       ],
+       "answer_index": 1,
+       "why": "Too long an arc gives porosity and spatter; about one core diameter is right."
+      },
+      {
+       "id": "s1-q3",
+       "kind": "long",
+       "level": 2,
+       "marks": 5,
+       "q": "Describe the SMAW process with a neat sketch.",
+       "model_answer_md": "**Sketch**: power source $\\rightarrow$ cable $\\rightarrow$ electrode holder $\\rightarrow$ coated electrode $\\rightarrow$ arc $\\rightarrow$ plate on table $\\rightarrow$ earth cable. Label core wire, coating, gas shield, molten pool, solidified weld, slag.\n\n**Process**\n1. Clean and fix the plates; set current by electrode size.\n2. Strike the arc (20 to 40 V, 50 to 400 A).\n3. Core wire and base metal melt; droplets transfer into the pool.\n4. Coating burns to a gas shield and forms slag over the pool.\n5. Move at steady speed and arc length; pool solidifies behind.\n6. Chip off slag and brush.",
+       "points": [
+        "Sketch with labels",
+        "Arc melts electrode and plate",
+        "Coating gives gas and slag",
+        "Arc length and angle",
+        "Slag removal"
+       ]
+      },
+      {
+       "id": "s1-q4",
+       "kind": "short",
+       "level": 2,
+       "marks": 3,
+       "q": "How is a heavily rusted mild steel plate prepared before welding?",
+       "model_answer_md": "1. Remove rust and scale by wire brushing, grinding or shot blasting.\n2. Remove oil and grease with a solvent.\n3. Pickle and neutralise if needed, then dry.\n4. Clean to bright metal about 25 mm each side; bevel thick plate.\n5. Dry the electrodes and use a low-hydrogen type.",
+       "points": [
+        "Mechanical removal of rust",
+        "Degrease",
+        "Clean to bright metal near the joint",
+        "Dry electrodes, low hydrogen"
+       ]
+      },
+      {
+       "id": "s1-p1",
+       "pyq": "65c466cb072ba69e",
+       "level": 3,
+       "points": [
+        "Rust prep: wire brush or grind, solvent degrease, pickle if needed, clean 25 mm each side, bevel, dry electrodes",
+        "SMAW: coated electrode, arc 20 to 40 V and 50 to 400 A melts core and base metal",
+        "Coating gives gas shield and slag; arc length about core diameter, angle 70 to 80$^\\circ$",
+        "Schematic: source, cable, holder, electrode, arc, plate, earth cable with labels"
+       ]
+      },
+      {
+       "id": "s1-p2",
+       "pyq": "cf8a7d944e383bca",
+       "level": 3,
+       "points": [
+        "Metal arc welding: arc between coated consumable electrode and work, 3500 $^\\circ$C, pool and filler solidify",
+        "Coating: gas shield, slag, arc stability",
+        "Sketch: source, cables, holder, electrode, arc, job, pool, slag, gas shield",
+        "Fusion: gas, arc, thermit, beams; forge (pressure): forge, resistance, friction, ultrasonic, explosive"
+       ]
+      }
+     ]
+    },
+    {
+     "id": "polarity",
+     "title": "Polarity and flux",
+     "theory_md": "**Polarity** is how the electrode is connected to the terminals of a **DC** source. The anode (positive) gets more heat, about two thirds.\n- **Straight polarity (DCEN/DCSP)**: electrode negative, work positive. More heat at the work: **deep penetration**, thick plates, slower electrode melting.\n- **Reverse polarity (DCEP/DCRP)**: electrode positive, work negative. More heat at the electrode: **shallow penetration**, faster melting, thin sheets, non-ferrous metals, oxide cleaning.\n- **AC**: no polarity, heat shared equally.\n\n**Flux** in arc welding (the coating): gas shield, slag, arc stabiliser, deoxidiser. In gas welding, borax-type flux dissolves oxides on cast iron, brass, aluminium and stainless steel.",
+     "basics_md": "Where electrons crash in, heat is released. Put the work on the positive side and the plate gets hotter and melts deeper; swap them and the electrode gets hotter instead.",
+     "key_points": [
+      "Polarity applies to DC only; AC has none",
+      "Straight: electrode negative, work positive, deep penetration",
+      "Reverse: electrode positive, work negative, shallow, thin sheets and non-ferrous",
+      "About 2/3 of heat at the positive terminal",
+      "Flux: gas, slag, arc stability, deoxidation; gas welding flux removes oxides"
+     ],
+     "questions": [
+      {
+       "id": "p1-q1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "In straight polarity the electrode is",
+       "options": [
+        "positive",
+        "negative",
+        "neutral",
+        "alternating"
+       ],
+       "answer_index": 1,
+       "why": "Straight (DCEN) means electrode negative, work positive."
+      },
+      {
+       "id": "p1-q2",
+       "kind": "mcq",
+       "level": 2,
+       "q": "Thin sheets are welded with",
+       "options": [
+        "straight polarity for deep penetration",
+        "reverse polarity for shallow penetration",
+        "any polarity gives equal penetration",
+        "no current"
+       ],
+       "answer_index": 1,
+       "why": "Reverse polarity puts more heat on the electrode, so the plate is not burnt through."
+      },
+      {
+       "id": "p1-q3",
+       "kind": "short",
+       "level": 2,
+       "marks": 3,
+       "q": "Define polarity. Compare straight and reverse polarity.",
+       "model_answer_md": "**Polarity**: connection of the electrode to the positive or negative terminal of a DC welding source.\n\n| Point | Straight (DCEN) | Reverse (DCEP) |\n|---|---|---|\n| Electrode | Negative | Positive |\n| Heat | About 2/3 at work | About 2/3 at electrode |\n| Penetration | Deep | Shallow |\n| Use | Thick plate | Thin sheet, non-ferrous |",
+       "points": [
+        "Definition for DC source",
+        "Electrode sign for each",
+        "Heat distribution",
+        "Penetration and use"
+       ]
+      },
+      {
+       "id": "p1-q4",
+       "kind": "short",
+       "level": 2,
+       "marks": 2,
+       "q": "What is the use of flux in gas welding?",
+       "model_answer_md": "Flux (such as borax) is applied to cast iron, brass, aluminium and stainless steel. It dissolves the oxides, floats impurities out as slag and prevents fresh oxidation, so the filler wets the metal and bonds well.",
+       "points": [
+        "Dissolves oxides",
+        "Forms slag and protects against re-oxidation"
+       ]
+      },
+      {
+       "id": "p1-p1",
+       "pyq": "adbfadcc546010ce",
+       "level": 3,
+       "points": [
+        "Principle: arc between electrode and work melts edges and electrode, permanent joint on solidifying",
+        "Straight polarity: electrode negative, deep penetration; reverse: electrode positive, shallow, thin sheets and non-ferrous",
+        "AC has no fixed polarity",
+        "Flux in arc welding: gas shield, slag, arc stability, deoxidation; in gas welding: borax dissolves oxides"
+       ]
+      },
+      {
+       "id": "p1-p2",
+       "pyq": "f4fd22be857f6b0e",
+       "level": 1,
+       "points": [
+        "Polarity: how electrode and work connect to DC terminals",
+        "Straight (DCEN): electrode negative, deeper penetration, thick plate",
+        "Reverse (DCEP): electrode positive, shallow, thin sheet and non-ferrous; AC has none"
+       ]
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "topic": "Arc blow",
+   "subtopics": [
+    {
+     "id": "arc-blow-cause",
+     "title": "What arc blow is and why it happens",
+     "theory_md": "**Arc blow** is the **deflection of the arc** from its intended path by **magnetic forces**.\n\nDC current in the electrode, arc and work sets up magnetic fields. The arc is a flexible current-carrying column, so when the field is **unbalanced** it is pushed sideways. This happens near the ends of plates, in corners, at gaps, near a large ferromagnetic mass, and with an off-centre earth clamp.\n\n**Effects**: spatter, poor fusion and penetration, irregular bead, porosity. It occurs in **DC**; AC rarely suffers because the field keeps reversing. Wind is not arc blow.",
+     "basics_md": "Current makes a magnetic field. A bending current path or a lump of iron near the arc makes the field lopsided, and the arc gets shoved sideways like a flame in a draught.",
+     "key_points": [
+      "Arc blow = arc deflected by magnetic fields",
+      "Cause: unbalanced field of DC current in work and arc",
+      "Occurs at plate ends, corners, gaps, heavy ferrous masses, wrong earth position",
+      "Effects: spatter, poor penetration, irregular bead",
+      "Mainly a DC problem; wind is not the cause"
+     ],
+     "questions": [
+      {
+       "id": "b1-q1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "Arc blow is caused by",
+       "options": [
+        "wind",
+        "magnetic forces on the arc",
+        "moisture in the coating",
+        "a long arc"
+       ],
+       "answer_index": 1,
+       "why": "Unbalanced magnetic fields deflect the arc."
+      },
+      {
+       "id": "b1-q2",
+       "kind": "mcq",
+       "level": 2,
+       "q": "Arc blow is most troublesome in",
+       "options": [
+        "AC welding",
+        "DC welding",
+        "gas welding",
+        "brazing"
+       ],
+       "answer_index": 1,
+       "why": "In DC the field is steady and one directional; AC fields reverse and average out."
+      },
+      {
+       "id": "b1-q3",
+       "kind": "short",
+       "level": 2,
+       "marks": 2,
+       "q": "Define arc blow. State two effects of it.",
+       "model_answer_md": "**Arc blow** is the deflection of the welding arc from its intended path by magnetic forces set up by the welding current in the electrode and work, strongest near plate ends, corners and gaps.\n\nEffects: spatter and poor penetration or fusion; irregular bead shape.",
+       "points": [
+        "Deflection of the arc by magnetic forces",
+        "Cause in current and unbalanced field",
+        "Two effects"
+       ]
+      },
+      {
+       "id": "b1-p1",
+       "pyq": "6929b27426fcc982",
+       "level": 2,
+       "points": [
+        "Arc blow: deflection of the arc from its path by magnetic forces",
+        "Fields from current in work and electrode become unbalanced near ends, corners, gaps, ferromagnetic masses",
+        "Causes spatter, poor penetration, irregular beads",
+        "Remedies: AC, weld towards the heavy mass, earth clamp at the far end, short arc, reduced current, back-step"
+       ]
+      }
+     ]
+    },
+    {
+     "id": "arc-blow-remedies",
+     "title": "Remedies for arc blow",
+     "theory_md": "Remedies work by **restoring a balanced magnetic field**, or by removing the field:\n1. Use **AC** (field keeps reversing).\n2. **Shorten the arc** (less arm for the force to act on).\n3. **Change the earth clamp position**, usually to the far end of the joint, or use two earths.\n4. Reduce the **current**; use **back-step** welding.\n5. Place **run-off tabs** or tack the ends; weld towards the heavy mass or the direction of the blow.\n6. **Demagnetise** the job; keep ferrous masses away.\n\nAn answer that lists remedies without the cause loses marks.",
+     "basics_md": "If a lopsided field is the problem, balance it (move the earth), shorten the part the field can push (short arc), or switch to a current whose field keeps flipping (AC).",
+     "key_points": [
+      "Use AC instead of DC",
+      "Short arc and reduced current",
+      "Move earth clamp or use two earths",
+      "Back-step, run-off tabs, tack welds",
+      "Demagnetise the job"
+     ],
+     "questions": [
+      {
+       "id": "b2-q1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "Which change most directly cures arc blow?",
+       "options": [
+        "Use a heavier coating",
+        "Switch from DC to AC",
+        "Use reverse polarity",
+        "Use a longer arc"
+       ],
+       "answer_index": 1,
+       "why": "AC fields reverse so the sideways force averages out."
+      },
+      {
+       "id": "b2-q2",
+       "kind": "mcq",
+       "level": 2,
+       "q": "A welder gets arc blow near the end of a plate. Which is a sensible remedy?",
+       "options": [
+        "Lengthen the arc",
+        "Move the earth clamp to the far end and shorten the arc",
+        "Increase the current",
+        "Use a thicker electrode only"
+       ],
+       "answer_index": 1,
+       "why": "Rebalances the field and reduces the deflecting force."
+      },
+      {
+       "id": "b2-q3",
+       "kind": "short",
+       "level": 2,
+       "marks": 3,
+       "q": "List four remedies for arc blow with the reason for each.",
+       "model_answer_md": "1. Use AC: the magnetic field alternates, so no steady deflection.\n2. Shorten the arc: less length for the field to deflect.\n3. Change the earth clamp position: rebalances the magnetic field.\n4. Back-step welding or run-off tabs: place metal that evens the field at the joint ends.",
+       "points": [
+        "Four remedies",
+        "Reason attached to each"
+       ]
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "topic": "Arc welding equipment",
+   "subtopics": [
+    {
+     "id": "setup-source",
+     "title": "The SMAW setup and power source",
+     "theory_md": "**Equipment**: power source, welding cables (electrode lead and earth lead), electrode holder, earth (work) clamp, electrodes, welding table, protective gear, chipping hammer, wire brush, tongs.\n\n**Power source**: an **AC step-down transformer** (cheap, simple, efficient, no polarity), or a **DC** rectifier or motor-generator set (stable arc, polarity). The source gives a drooping characteristic: high open-circuit voltage (OCV) to strike the arc, then 20 to 40 V at the arc.\n\nCircuit: source $\\rightarrow$ electrode cable $\\rightarrow$ holder + electrode $\\rightarrow$ arc $\\rightarrow$ job $\\rightarrow$ earth cable $\\rightarrow$ source.\n\n**Types of joint** used with it: see the Concept of a weld topic.",
+     "basics_md": "The welder is a closed electrical loop: source, cable, electrode, arc, plate, cable back. The transformer steps the mains voltage down and the current up.",
+     "key_points": [
+      "Source, cables, holder, earth clamp, electrodes, table",
+      "Welding transformer is step-down: low voltage, high current",
+      "DC from rectifier or generator allows polarity",
+      "OCV higher than arc voltage",
+      "Closed circuit through electrode, arc, job, earth cable"
+     ],
+     "questions": [
+      {
+       "id": "e1-q1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "A welding transformer is a",
+       "options": [
+        "step-up transformer",
+        "step-down transformer",
+        "auto-transformer only",
+        "frequency changer"
+       ],
+       "answer_index": 1,
+       "why": "Mains voltage is stepped down to a low voltage with high current."
+      },
+      {
+       "id": "e1-q2",
+       "kind": "mcq",
+       "level": 1,
+       "q": "The earth (work) clamp",
+       "options": [
+        "holds the electrode",
+        "completes the welding circuit through the job",
+        "removes slag",
+        "protects the eyes"
+       ],
+       "answer_index": 1,
+       "why": "It connects the job to the source so the current can return."
+      },
+      {
+       "id": "e1-q3",
+       "kind": "short",
+       "level": 2,
+       "marks": 3,
+       "q": "List the equipment used in manual arc welding.",
+       "model_answer_md": "1. Power source (AC transformer or DC rectifier or generator)\n2. Cables (electrode lead and earth lead)\n3. Electrode holder and earth clamp\n4. Coated electrodes\n5. Helmet with filter glass, gloves, apron\n6. Chipping hammer, wire brush, tongs, welding table",
+       "points": [
+        "Power source",
+        "Cables, holder, earth clamp",
+        "Electrodes",
+        "Protective items and hand tools"
+       ]
+      },
+      {
+       "id": "e1-p1",
+       "pyq": "476209b6c4259a38",
+       "level": 3,
+       "points": [
+        "Setup: source, cable, holder with flux-coated electrode, arc, job on table, earth cable",
+        "Working: 20 to 40 V, 50 to 400 A, arc 3000 to 5000 $^\\circ$C melts core and base metal, coating gives gas and slag",
+        "Joints: butt, lap, T, corner, edge"
+       ]
+      },
+      {
+       "id": "e1-p2",
+       "pyq": "d3c08a46edc9e995",
+       "level": 1,
+       "points": [
+        "Power source (transformer or rectifier or generator)",
+        "Cables, electrode holder, earth clamp, electrodes",
+        "Helmet with filter glass, gloves, apron",
+        "Chipping hammer, wire brush, tongs, table"
+       ]
+      },
+      {
+       "id": "e1-p3",
+       "pyq": "7f597d544632f361",
+       "level": 1,
+       "points": [
+        "Equipment: power source, cables, holder, earth clamp, table",
+        "Tools: chipping hammer, wire brush, tongs, files, clamps",
+        "Protective items: helmet with filter glass, gloves, apron, safety shoes"
+       ]
+      }
+     ]
+    },
+    {
+     "id": "duty-cycle",
+     "title": "Duty cycle and ratings",
+     "theory_md": "**Duty cycle** is the percentage of a 10-minute period for which a source can deliver its rated current without overheating: $D = \\dfrac{\\text{arc-on time}}{10\\ \\text{min}} \\times 100$. A 60% duty cycle means 6 min welding, 4 min rest.\n\nAt another current $I_2$: $D_2 = D_1\\left(\\dfrac{I_1}{I_2}\\right)^2$ (heating is proportional to $I^2$).\n\nCurrent for continuous (100%) use: $I_{100} = I_r\\sqrt{D_r}$ with $D_r$ as a fraction.\n\nThe transformer **steps voltage down**, never up. OCV (about 50 to 100 V) is higher than the arc voltage.",
+     "basics_md": "A machine heats up while it welds and cools while it rests. A duty cycle says how big a fraction of each ten minutes it may work flat out.",
+     "key_points": [
+      "Duty cycle = arc-on time / 10 min $\\times$ 100",
+      "60% duty = 6 min on, 4 min off",
+      "$D_2 = D_1(I_1/I_2)^2$",
+      "$I_{100} = I_r\\sqrt{D_r}$",
+      "Period is 10 min, not 1 hour"
+     ],
+     "questions": [
+      {
+       "id": "e2-q1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "Duty cycle is normally defined over a period of",
+       "options": [
+        "1 minute",
+        "5 minutes",
+        "10 minutes",
+        "1 hour"
+       ],
+       "answer_index": 2,
+       "why": "The standard welding period is 10 minutes."
+      },
+      {
+       "id": "e2-q2",
+       "kind": "mcq",
+       "level": 2,
+       "q": "If the current is raised above the rated value, the permissible duty cycle",
+       "options": [
+        "rises",
+        "falls",
+        "stays the same",
+        "becomes zero"
+       ],
+       "answer_index": 1,
+       "why": "Heating goes with $I^2$, so less on-time is allowed."
+      },
+      {
+       "id": "e2-q3",
+       "kind": "numerical",
+       "level": 2,
+       "marks": 3,
+       "q": "A welding set is rated 300 A at 60% duty cycle. Find the current it can deliver continuously (100% duty).",
+       "model_answer_md": "$I_{100} = I_r\\sqrt{D_r} = 300\\sqrt{0.6} = 300 \\times 0.7746 = 232.4\\ \\mathrm{A}$",
+       "points": [
+        "Formula $I_{100} = I_r\\sqrt{D_r}$",
+        "D as a fraction 0.6",
+        "About 232 A"
+       ]
+      },
+      {
+       "id": "e2-q4",
+       "kind": "numerical",
+       "level": 3,
+       "marks": 4,
+       "q": "The same 300 A, 60% set is used at 350 A. Find the permissible duty cycle, and the arc-on time in each 10 minutes.",
+       "model_answer_md": "$D_2 = D_1\\left(\\dfrac{I_1}{I_2}\\right)^2 = 0.6 \\times \\left(\\dfrac{300}{350}\\right)^2 = 0.6 \\times 0.7347 = 0.441$\n\nDuty cycle about **44%**, so arc-on time = $0.441 \\times 10 = 4.4$ min in each 10 min.",
+       "points": [
+        "Formula with squared ratio",
+        "D2 about 44%",
+        "Arc-on time 4.4 min per 10 min"
+       ]
+      },
+      {
+       "id": "e2-q5",
+       "kind": "short",
+       "level": 1,
+       "marks": 2,
+       "q": "Define duty cycle of a welding machine.",
+       "model_answer_md": "The percentage of a 10-minute period in which the machine can supply its rated current without overheating. Example: 60% duty is 6 min of arc and 4 min of rest.",
+       "points": [
+        "Percentage of 10 min",
+        "Rated current without overheating"
+       ]
+      }
+     ]
+    },
+    {
+     "id": "tools-safety",
+     "title": "Hand tools, protective gear and safety",
+     "theory_md": "**Chipping hammer**: chisel head and pointed tail; **chips slag** from the cooled bead between passes so no slag is trapped. **Wire brush** cleans after chipping. **Tongs** hold hot work. **Helmet or hand shield with filter glass** protects eyes and face from arc rays and spatter.\n\n**Safety**: leather gloves, apron and safety shoes; dry clothes and hands; ventilation and fume extraction; no flammable material near; check cables, insulation and earthing; switch off before changing the electrode; screens for others; let hot metal cool and mark it; fire extinguisher ready. For gas welding add flash-back arrestors, upright secured oil-free cylinders and leak checks.",
+     "basics_md": "Welding means intense light, heat, sparks, electric current and fumes. Each tool or garment answers one of those hazards.",
+     "key_points": [
+      "Chipping hammer removes slag; wire brush cleans",
+      "Filter glass shields eyes from arc rays",
+      "Leather gloves, apron, safety shoes",
+      "Dry area, ventilation, no flammables, good earthing",
+      "Switch off before changing electrode; fire extinguisher ready"
+     ],
+     "questions": [
+      {
+       "id": "t1-q1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "A chipping hammer is used to",
+       "options": [
+        "drive the electrode",
+        "remove slag from the weld",
+        "mark the job",
+        "cut the plates"
+       ],
+       "answer_index": 1,
+       "why": "It chips the hard flux crust off the cooled bead."
+      },
+      {
+       "id": "t1-q2",
+       "kind": "mcq",
+       "level": 1,
+       "q": "The filter glass in a welding helmet protects against",
+       "options": [
+        "noise",
+        "arc rays and glare",
+        "fumes",
+        "electric shock"
+       ],
+       "answer_index": 1,
+       "why": "It cuts the intense visible, UV and infrared radiation of the arc."
+      },
+      {
+       "id": "t1-q3",
+       "kind": "short",
+       "level": 2,
+       "marks": 3,
+       "q": "List five safety precautions in arc welding.",
+       "model_answer_md": "1. Wear helmet with filter glass, gloves, apron, safety shoes.\n2. Keep the area dry, ventilated and free of flammables.\n3. Check cables, insulation and earthing; avoid wet hands.\n4. Switch off before changing the electrode.\n5. Use screens for others; keep a fire extinguisher ready.",
+       "points": [
+        "Five distinct precautions",
+        "Eye and body protection included"
+       ]
+      },
+      {
+       "id": "t1-p1",
+       "pyq": "fe0ba3a034f66c4b",
+       "level": 2,
+       "points": [
+        "Chipping hammer chips off slag from cooled bead between passes; wire brush after",
+        "Advantages: strong permanent joint, lighter than riveted, any thickness, fast and economical, leak-proof",
+        "Disadvantages: distortion and residual stress, skilled welder, cannot dismantle, HAZ and defects, fumes and radiation"
+       ]
+      },
+      {
+       "id": "t1-p2",
+       "pyq": "2d33ae917d62e00d",
+       "level": 1,
+       "points": [
+        "Helmet with filter glass; leather gloves, apron, safety shoes",
+        "Dry, ventilated area, no flammables, fume extraction",
+        "Check cables, insulation, earthing; switch off before changing electrode",
+        "Screens for others; gas welding: flash-back arrestors, secured cylinders, leak checks",
+        "Cool and mark hot metal; fire extinguisher ready"
+       ]
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "topic": "AC vs DC for welding",
+   "subtopics": [
+    {
+     "id": "ac-dc-table",
+     "title": "AC against DC arc welding",
+     "theory_md": "| Point | AC | DC |\n|---|---|---|\n| Source | step-down transformer | generator or transformer-rectifier |\n| Polarity | none | straight or reverse |\n| Arc | less stable, goes out at each current zero | stable, smooth |\n| Arc blow | rare | common |\n| Electrodes | need coating with ionising agents | all types |\n| Thin sheet, non-ferrous | unsuitable | suitable (reverse) |\n| Cost, efficiency | cheap, efficient, low maintenance | costlier, more maintenance |\n| OCV, shock risk | higher OCV, more risk | lower, safer |",
+     "basics_md": "AC is the cheap, rugged choice but its arc flickers out 100 times a second and must be rekindled. DC gives a steady arc and a choice of polarity, but costs more and suffers arc blow.",
+     "key_points": [
+      "AC: transformer, cheap, no polarity, arc blow rare",
+      "DC: generator or rectifier, stable arc, polarity control",
+      "AC needs coated electrodes; bare ones fail",
+      "DC suits thin sheets and non-ferrous (reverse polarity)",
+      "AC has higher OCV, so more shock risk"
+     ],
+     "questions": [
+      {
+       "id": "d1-q1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "Arc blow is a problem mainly with",
+       "options": [
+        "AC",
+        "DC",
+        "both equally",
+        "neither"
+       ],
+       "answer_index": 1,
+       "why": "The steady DC field deflects the arc."
+      },
+      {
+       "id": "d1-q2",
+       "kind": "mcq",
+       "level": 2,
+       "q": "Which statement is correct?",
+       "options": [
+        "DC welding has no arc blow",
+        "AC has a higher open-circuit voltage and is less safe",
+        "Bare electrodes work well on AC",
+        "AC allows straight and reverse polarity"
+       ],
+       "answer_index": 1,
+       "why": "AC sets are made with higher OCV to restart the arc each half cycle."
+      },
+      {
+       "id": "d1-q3",
+       "kind": "short",
+       "level": 2,
+       "marks": 3,
+       "q": "Differentiate between AC and DC arc welding (four points).",
+       "model_answer_md": "| Point | AC | DC |\n|---|---|---|\n| Source | transformer | generator or rectifier |\n| Polarity | none | straight or reverse |\n| Arc | less stable | stable |\n| Arc blow | rare | common |\n| Cost | low | higher |",
+       "points": [
+        "Four points of difference",
+        "Each stated for both AC and DC"
+       ]
+      },
+      {
+       "id": "d1-p1",
+       "pyq": "fe229181d57c18d0",
+       "level": 2,
+       "points": [
+        "Source: transformer for AC; generator or rectifier for DC",
+        "Polarity: none in AC; straight or reverse in DC",
+        "Arc stability: DC stable, AC less stable",
+        "Arc blow: rare in AC, common in DC",
+        "AC cheap and efficient; DC costlier; thin sheets and non-ferrous with DC; AC needs coated electrodes; AC higher OCV"
+       ]
+      }
+     ]
+    },
+    {
+     "id": "ac-dc-choice",
+     "title": "Choosing between AC and DC",
+     "theory_md": "**Why AC is harder**: at 50 Hz the current passes through zero **100 times per second**, and the arc tries to go out each time. Ionising agents (sodium, potassium compounds) in the coating keep the gap conductive, so electrodes for AC are specially coated; bare ones do not work.\n\n**Choose DC** for thin sheets, non-ferrous metals and stainless steel (reverse polarity), deep penetration (straight polarity), and easy arc striking with small electrodes.\n\n**Choose AC** for thick steel plate in ordinary workshops: cheap, low maintenance, **no arc blow**, no polarity to set.",
+     "basics_md": "AC is a current that swings to zero twice every cycle. The coating keeps the hot gas ready to conduct again straight away.",
+     "key_points": [
+      "50 Hz AC gives 100 current zeros per second",
+      "Coating with ionising agents re-ignites the arc",
+      "DC for thin sheet, non-ferrous, stable arc",
+      "AC for cheap general work, no arc blow"
+     ],
+     "questions": [
+      {
+       "id": "d2-q1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "On AC, electrodes need ionising agents in the coating because",
+       "options": [
+        "the arc must be re-struck after each current zero",
+        "AC has deeper penetration",
+        "DC arcs are unstable",
+        "coatings cool the arc"
+       ],
+       "answer_index": 0,
+       "why": "The ions keep the gap conducting while the current passes through zero."
+      },
+      {
+       "id": "d2-q2",
+       "kind": "mcq",
+       "level": 2,
+       "q": "For welding thin aluminium sheet the best choice is",
+       "options": [
+        "AC with bare electrode",
+        "DC reverse polarity",
+        "DC straight polarity with a very high current",
+        "gas flame only"
+       ],
+       "answer_index": 1,
+       "why": "Reverse polarity gives shallow penetration and oxide cleaning."
+      },
+      {
+       "id": "d2-q3",
+       "kind": "numerical",
+       "level": 2,
+       "marks": 2,
+       "q": "How many times per second does the arc tend to extinguish on 50 Hz AC? Why?",
+       "model_answer_md": "In each cycle the current is zero twice (at the end of each half cycle). So $2 \\times 50 = 100$ times per second. The arc is re-ignited by the OCV and by ionising agents in the electrode coating.",
+       "points": [
+        "Two zeros per cycle",
+        "100 per second",
+        "Re-ignition by OCV and coating"
+       ]
+      },
+      {
+       "id": "d2-q4",
+       "kind": "short",
+       "level": 2,
+       "marks": 2,
+       "q": "Why are AC and DC chosen for different jobs? Give two cases for each.",
+       "model_answer_md": "**DC**: thin sheets and non-ferrous metals (reverse polarity), deep penetration on thick plate (straight polarity); stable arc.\n**AC**: ordinary thick steel work where cost matters, and jobs where arc blow is a problem.",
+       "points": [
+        "Two uses of DC",
+        "Two uses of AC"
+       ]
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "topic": "Electrodes and their selection",
+   "subtopics": [
+    {
+     "id": "electrode-types",
+     "title": "Purpose and types of electrodes",
+     "theory_md": "**Purpose**: an electrode (1) carries current and maintains the arc, (2) in consumable types supplies **filler metal**, (3) its coating shields the pool, stabilises the arc and forms slag.\n\n- **Non-consumable**: carbon or graphite (carbon arc, brazing), **tungsten** (TIG, with inert gas); filler added separately.\n- **Consumable**: **bare** (poor quality, rare), **flux-coated** (most common): light-coated (stabilises arc) and heavy-coated (structural quality).\n\nBy coating: **cellulose** (E6010, deep penetration, pipelines), **rutile** (E6013, easy, general work and sheet), **basic or low-hydrogen** (E7018, high strength, pressure vessels), iron-powder (high deposition).",
+     "basics_md": "Some electrodes only carry the current and stay whole (tungsten, carbon). Others carry current and also melt into the joint as filler, usually wearing a coating.",
+     "key_points": [
+      "Electrode carries current, may supply filler, coating protects",
+      "Non-consumable: carbon, tungsten (TIG)",
+      "Consumable: bare, light-coated, heavy-coated",
+      "Coating types: cellulose, rutile, basic (low hydrogen), iron powder",
+      "Bare electrodes give poor quality and are rarely used"
+     ],
+     "questions": [
+      {
+       "id": "l1-q1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "Which electrode does not melt into the weld?",
+       "options": [
+        "Mild steel coated rod",
+        "Tungsten electrode in TIG",
+        "E7018 rod",
+        "Bare steel wire"
+       ],
+       "answer_index": 1,
+       "why": "Tungsten is non-consumable; filler is added separately."
+      },
+      {
+       "id": "l1-q2",
+       "kind": "mcq",
+       "level": 2,
+       "q": "A rutile coated electrode such as E6013 is chosen for",
+       "options": [
+        "pipeline root runs needing deep penetration",
+        "general work and sheet metal, easy to use",
+        "high-strength pressure vessels",
+        "cast iron repair"
+       ],
+       "answer_index": 1,
+       "why": "Rutile gives a smooth, easy arc and a good bead appearance."
+      },
+      {
+       "id": "l1-q3",
+       "kind": "short",
+       "level": 2,
+       "marks": 3,
+       "q": "State the purpose of an electrode in welding and name two types.",
+       "model_answer_md": "**Purpose**: carries current and maintains the arc; consumable electrodes supply filler metal; the coating shields the pool and stabilises the arc.\n\n**Types**: consumable (bare, coated) and non-consumable (tungsten, carbon).",
+       "points": [
+        "Carries current and maintains arc",
+        "Supplies filler (consumable)",
+        "Two types named"
+       ]
+      },
+      {
+       "id": "l1-p1",
+       "pyq": "74d75517cf6dc33a",
+       "level": 3,
+       "points": [
+        "Welding: permanent joining by melting edges; table of differences from brazing and soldering",
+        "Purpose of electrode: carry current and arc, filler metal, coating shield",
+        "Non-consumable: carbon, tungsten (TIG)",
+        "Consumable: bare, light and heavy flux-coated; cellulose E6010, rutile E6013, basic E7018 with uses"
+       ]
+      },
+      {
+       "id": "l1-p2",
+       "pyq": "55f1833084f97d4d",
+       "level": 1,
+       "points": [
+        "Consumable: bare and coated (cellulosic, rutile, basic) with codes like E6013, E7018",
+        "Non-consumable: tungsten (TIG), carbon or graphite",
+        "Selection by base metal, thickness, position, current type"
+       ]
+      }
+     ]
+    },
+    {
+     "id": "coating",
+     "title": "Electrode coating: composition and functions",
+     "theory_md": "**Composition**: arc stabilisers (sodium or potassium silicates, titanium dioxide), gas formers (cellulose, starch, limestone giving CO$_2$), slag formers (rutile, silica, lime, fluorspar), deoxidisers (ferro-manganese, ferro-silicon), alloying elements (Cr, Ni, Mo), iron powder, and a **binder** (sodium silicate).\n\n**Functions**\n1. Stabilises the arc.\n2. Gas shield against O$_2$ and N$_2$.\n3. Slag covers, slows cooling, shapes the bead.\n4. Deoxidises and cleans the pool.\n5. Adds alloying elements and filler (iron powder).\n6. Supports metal in vertical and overhead work.\n7. Insulates the core wire and focuses the arc.",
+     "basics_md": "The coating is the electrode's coat of armour: when it burns it releases gas and melts to a crust that keeps air off the weld.",
+     "key_points": [
+      "Constituents: stabilisers, gas formers, slag formers, deoxidisers, alloying, iron powder, binder",
+      "Arc stabilisation by ionising agents",
+      "Gas shield and slag protect against O$_2$ and N$_2$",
+      "Deoxidises and refines the pool",
+      "Slag slows cooling and supports the bead out of position"
+     ],
+     "questions": [
+      {
+       "id": "l2-q1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "The binder in an electrode coating is usually",
+       "options": [
+        "sodium silicate",
+        "ferro-manganese",
+        "titanium dioxide",
+        "limestone"
+       ],
+       "answer_index": 0,
+       "why": "Sodium silicate holds the coating together on the core wire."
+      },
+      {
+       "id": "l2-q2",
+       "kind": "mcq",
+       "level": 2,
+       "q": "Ferro-manganese and ferro-silicon in the coating act as",
+       "options": [
+        "arc stabilisers",
+        "deoxidisers",
+        "gas formers",
+        "binders"
+       ],
+       "answer_index": 1,
+       "why": "They remove oxides from the molten pool."
+      },
+      {
+       "id": "l2-q3",
+       "kind": "short",
+       "level": 2,
+       "marks": 3,
+       "q": "List the functions of the electrode coating.",
+       "model_answer_md": "1. Stabilises the arc.\n2. Provides gas shield against oxygen and nitrogen.\n3. Forms slag that protects the bead and slows cooling.\n4. Deoxidises the weld pool.\n5. Adds alloying elements and filler metal.",
+       "points": [
+        "Arc stabilisation",
+        "Gas shield",
+        "Slag formation",
+        "Deoxidation",
+        "Alloying or deposition"
+       ]
+      },
+      {
+       "id": "l2-p1",
+       "pyq": "bbf06ba88fe6405c",
+       "level": 3,
+       "points": [
+        "Coating composition: stabilisers, gas formers, slag formers, deoxidisers, alloying elements, iron powder, binder",
+        "Functions: arc stability, gas shield, slag, deoxidation, alloying, insulation",
+        "Defects table: porosity, slag inclusion, undercut, overlap, lack of fusion, cracks, spatter, distortion with causes and remedies"
+       ]
+      },
+      {
+       "id": "l2-p2",
+       "pyq": "9f0083a4f79f39b9",
+       "level": 2,
+       "points": [
+        "Arc stabilisation by ionising agents",
+        "Gas shielding with CO$_2$, CO, H$_2$",
+        "Slag formation: protects, slows cooling, smooth bead",
+        "Deoxidisation and refining with ferro-manganese and ferro-silicon",
+        "Alloying and iron powder; position control; insulation and focused arc"
+       ]
+      }
+     ]
+    },
+    {
+     "id": "selection-coding",
+     "title": "Electrode coding and selection",
+     "theory_md": "**AWS code**, e.g. **E6013**: E = electrode; first two digits = tensile strength in ksi (60 ksi = 60 $\\times$ 6.895 = **413.7 MPa**); third digit = **position** (1 = all positions); last digit = coating and current type (3 = rutile, AC or DC). **E7018**: 70 ksi = 482.65 MPa, low hydrogen, pressure vessels. **E6010**: cellulose, DC reverse, deep penetration.\n\nElectrode size means the **core wire diameter**. Rule of thumb: current $I \\approx (35 \\text{ to } 40)\\,d$ amperes for $d$ in mm.\n\n**Select by**: base metal, thickness, position, current type (AC or DC), joint, required strength.",
+     "basics_md": "The letters and digits are a label: strength first, then where you may use it, then what coating and current it likes.",
+     "key_points": [
+      "E = electrode, first two digits strength in ksi",
+      "Third digit position, last digit coating and current",
+      "E6013 rutile general; E7018 low hydrogen; E6010 cellulose",
+      "Size = core wire diameter; $I \\approx 35$ to $40\\,d$",
+      "Select by metal, thickness, position, current, strength"
+     ],
+     "questions": [
+      {
+       "id": "l3-q1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "In E7018 the digits '70' mean",
+       "options": [
+        "70 MPa tensile strength",
+        "70 ksi tensile strength",
+        "7.0 mm diameter",
+        "70 A current"
+       ],
+       "answer_index": 1,
+       "why": "AWS strength digits are in ksi (70 ksi about 483 MPa)."
+      },
+      {
+       "id": "l3-q2",
+       "kind": "mcq",
+       "level": 2,
+       "q": "The electrode size is the diameter of the",
+       "options": [
+        "coating",
+        "core wire",
+        "holder",
+        "earth cable"
+       ],
+       "answer_index": 1,
+       "why": "Size is the core wire diameter, not the coated diameter."
+      },
+      {
+       "id": "l3-q3",
+       "kind": "numerical",
+       "level": 2,
+       "marks": 3,
+       "q": "Convert the strength of E6013 and E7018 electrodes into MPa (1 ksi = 6.895 MPa).",
+       "model_answer_md": "E6013: $60 \\times 6.895 = 413.7$ MPa\n\nE7018: $70 \\times 6.895 = 482.65 \\approx 483$ MPa",
+       "points": [
+        "60 and 70 ksi read from the code",
+        "Conversion factor 6.895",
+        "413.7 MPa and about 483 MPa"
+       ]
+      },
+      {
+       "id": "l3-q4",
+       "kind": "numerical",
+       "level": 2,
+       "marks": 2,
+       "q": "Estimate the welding current range for a 4 mm core-diameter electrode using $I = (35\\text{ to }40)\\,d$.",
+       "model_answer_md": "$I = 35 \\times 4 = 140$ A to $40 \\times 4 = 160$ A, so 140 to 160 A.",
+       "points": [
+        "Formula used with d in mm",
+        "140 to 160 A"
+       ]
+      },
+      {
+       "id": "l3-q5",
+       "kind": "short",
+       "level": 3,
+       "marks": 3,
+       "q": "Decode E6013 and list the factors for selecting an electrode.",
+       "model_answer_md": "**E6013**: E electrode, 60 = 60 ksi (about 414 MPa) tensile strength, 1 = all positions, 3 = rutile coating, AC or DC.\n\n**Selection**: base metal and strength needed, plate thickness, welding position, available current (AC or DC), joint type, and quality required.",
+       "points": [
+        "Each digit decoded",
+        "At least four selection factors"
+       ]
+      }
+     ]
+    }
+   ]
+  }
+ ]
+}

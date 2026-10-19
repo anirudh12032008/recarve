@@ -1,0 +1,1704 @@
+{
+ "code": "EE1108",
+ "unit": "DC Circuits",
+ "written": "2026-10-19",
+ "by": "claude-sonnet-5-5, in a Claude Code session",
+ "topics": [
+  {
+   "topic": "KCL and KVL",
+   "subtopics": [
+    {
+     "id": "laws",
+     "title": "Ohm's law, KCL and KVL",
+     "theory_md": "**Ohm's law:** at constant temperature, $V = IR$.\n\n**KCL:** the algebraic sum of currents at a node is zero, $\\sum I = 0$ (current in = current out). It rests on conservation of charge.\n\n**KVL:** around any closed loop the algebraic sum of emfs equals the algebraic sum of $IR$ drops, $\\sum E = \\sum IR$. It rests on conservation of energy.\n\n**Signs:** pick one direction for every branch current and one direction round each loop. A resistor met along the current is a drop, against it a rise. A battery met from $-$ to $+$ is a rise. A negative answer only means the real current is opposite.",
+     "basics_md": "Charge cannot pile up at a junction, so what flows into a node flows out. Going round a loop you return to the same potential, so the rises and drops cancel. That is all the two laws say.",
+     "key_points": [
+      "KCL: $\\sum I = 0$ at a node, from conservation of charge",
+      "KVL: $\\sum E = \\sum IR$ round a closed loop, from conservation of energy",
+      "Ohm's law: $V = IR$ at constant temperature",
+      "Sign rule: along the current a drop, against it a rise; battery $-$ to $+$ is a rise",
+      "Negative current means the actual direction is opposite to the assumed one"
+     ],
+     "questions": [
+      {
+       "id": "l-q1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "Kirchhoff's current law is a consequence of conservation of",
+       "options": [
+        "energy",
+        "charge",
+        "momentum",
+        "power"
+       ],
+       "answer_index": 1,
+       "why": "Charge cannot accumulate at a node, so current in equals current out."
+      },
+      {
+       "id": "l-q2",
+       "kind": "mcq",
+       "level": 1,
+       "q": "Going round a loop, you pass through a battery from its negative to its positive terminal. In the KVL equation this is",
+       "options": [
+        "a drop of $E$",
+        "a rise of $E$",
+        "zero, batteries are ignored",
+        "a drop only if current is leaving"
+       ],
+       "answer_index": 1,
+       "why": "Moving from $-$ to $+$ inside a source raises the potential by $E$, whatever the current does."
+      },
+      {
+       "id": "l-q3",
+       "kind": "short",
+       "level": 2,
+       "marks": 2,
+       "q": "In a branch-current solution you obtain $I_2 = -0.86$ A. Does this mean an error was made? What does it show?",
+       "model_answer_md": "**No error.** The direction of $I_2$ was assumed at the start. A negative value means the current actually flows **opposite** to the assumed direction, with magnitude 0.86 A.\n\nIf $I_2$ is in a battery branch, the battery is **being charged** (current enters its positive terminal). The equations need not be redone.",
+       "points": [
+        "Not an error: the assumed direction was only a guess",
+        "Negative sign means the real current is opposite, magnitude 0.86 A",
+        "In a battery branch it means the battery is being charged"
+       ]
+      },
+      {
+       "id": "l-p1",
+       "pyq": "256b58d72c187d01",
+       "level": 1,
+       "points": [
+        "Ohm's law: $V = IR$, current proportional to voltage at constant temperature",
+        "KCL: algebraic sum of currents at a node is zero ($\\sum I_{in} = \\sum I_{out}$)",
+        "KVL: algebraic sum of emfs and drops round a closed loop is zero ($\\sum E = \\sum IR$)"
+       ]
+      },
+      {
+       "id": "l-p2",
+       "pyq": "489287844a427c31",
+       "level": 2,
+       "points": [
+        "KVL: algebraic sum of voltages round any closed loop is zero",
+        "In mesh analysis one KVL equation is written per mesh",
+        "Drops in own resistors minus drops from neighbouring mesh currents in shared branches equal the emfs in the mesh",
+        "Gives the $b-n+1$ independent equations solved for the mesh currents"
+       ]
+      }
+     ]
+    },
+    {
+     "id": "closed-surface",
+     "title": "KCL on a closed surface",
+     "theory_md": "KCL holds not only at a node but for **any closed surface (cut-set)** drawn round part of a network: the algebraic sum of currents crossing it is zero.\n\n**Method:**\n1. Draw a closed curve that cuts only branches whose currents are known, plus the one you want.\n2. Currents entering = currents leaving.\n3. Currents in branches wholly inside the curve never appear.\n\nThis finds a current or voltage in one line when the circuit is large. With a known resistor current $I = (V_A - V_B)/R$, the same current must return through the rest of the cut.",
+     "basics_md": "A closed surface is just a very big node. Whatever enters it must leave it, however complicated the inside is.",
+     "key_points": [
+      "KCL applies to any closed surface, not only a single node",
+      "Draw the surface so it cuts only the branches you know plus the unknown",
+      "Entering = leaving; branches wholly inside do not appear",
+      "A negative answer means the current is opposite to the arrow drawn"
+     ],
+     "questions": [
+      {
+       "id": "c-q1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "A closed surface encloses part of a network. Currents of 7 A and 3 A enter it and 5 A leaves it through a third wire. The only other wire carries",
+       "options": [
+        "5 A out of the surface",
+        "5 A into the surface",
+        "15 A out of the surface",
+        "0 A"
+       ],
+       "answer_index": 0,
+       "why": "$7 + 3 = 5 + I_{out}$ gives $I_{out} = 5$ A leaving."
+      },
+      {
+       "id": "c-q2",
+       "kind": "mcq",
+       "level": 2,
+       "q": "Which branches appear in KCL written for a closed surface?",
+       "options": [
+        "all branches in the circuit",
+        "only the branches inside the surface",
+        "only the branches that cross the surface",
+        "only the branches containing sources"
+       ],
+       "answer_index": 2,
+       "why": "Only wires cutting the surface carry charge across it."
+      },
+      {
+       "id": "c-q3",
+       "kind": "numerical",
+       "level": 2,
+       "marks": 3,
+       "q": "A block of network is connected to the rest of a circuit by four wires. Three carry currents of 6 A, 2 A and 5 A into the block. Find the current in the fourth wire and its direction.",
+       "model_answer_md": "KCL on the closed surface round the block: total in = total out.\n\n$$6 + 2 + 5 = I_4 \\Rightarrow I_4 = 13\\ \\text{A}$$\n\nThe fourth wire carries **13 A out of the block**.",
+       "points": [
+        "Apply KCL to the closed surface",
+        "Sum of entering currents $6 + 2 + 5 = 13$ A",
+        "$I_4 = 13$ A directed out of the block"
+       ]
+      },
+      {
+       "id": "c-p1",
+       "pyq": "d14f15b30ed63949",
+       "level": 2,
+       "points": [
+        "Apply KCL to a closed surface cutting only the four horizontal branches",
+        "$I_1 + I_4 + I_2 = I_3$ with arrows as drawn: $5 + I_4 + 3 = 4$",
+        "$I_4 = -4$ A, i.e. 4 A flows opposite to the marked arrow",
+        "The 7 A diagonal lies inside a section and does not enter the equation"
+       ]
+      },
+      {
+       "id": "c-p2",
+       "pyq": "148f2c405aa51339",
+       "level": 3,
+       "points": [
+        "Current in the 2 Ω from A to B: $6/2 = 3$ A",
+        "KCL on the cut round the right-hand section: the 3 A entering at B leaves at D, so 3 A flows from D to C",
+        "In the C-D branch: $I_R - 2 = 3$, so the 1 Ω carries 5 A from D to C",
+        "$V_D - V_C = 5$ V, hence $V_C - V_D = -5$ V"
+       ]
+      }
+     ]
+    },
+    {
+     "id": "branch-current",
+     "title": "Branch-current method (two batteries)",
+     "theory_md": "For $b$ branches and $n$ nodes you need $b$ equations: KCL at $n-1$ nodes and KVL for $b-n+1$ independent loops (the meshes).\n\n**Steps:**\n1. Mark a current in every branch, using KCL to reduce the unknowns.\n2. Write KVL for each mesh, one direction, one sign rule.\n3. Solve; interpret negative values.\n4. Check: the voltage of a node found by two paths must agree.\n\nFor two batteries $E_1, r_1$ and $E_2, r_2$ feeding a load $R$ in parallel, the quick form is $V = \\dfrac{E_1/r_1 + E_2/r_2}{1/r_1 + 1/r_2 + 1/R}$ (Millman).",
+     "basics_md": "Unknown currents need as many equations as unknowns. KCL gives the relations between currents; KVL gives the relations between voltages. Together they are enough.",
+     "key_points": [
+      "Number of independent KVL equations = $b - n + 1$; KCL equations = $n - 1$",
+      "Assume directions freely; interpret negatives at the end",
+      "Never use the outer loop together with both inner meshes: dependent set",
+      "Check by finding a node voltage along two paths"
+     ],
+     "questions": [
+      {
+       "id": "b-q1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "A network has 6 branches and 4 nodes. The number of independent KVL equations is",
+       "options": [
+        "2",
+        "3",
+        "4",
+        "6"
+       ],
+       "answer_index": 1,
+       "why": "$b - n + 1 = 6 - 4 + 1 = 3$."
+      },
+      {
+       "id": "b-q2",
+       "kind": "mcq",
+       "level": 2,
+       "q": "In the branch-current method a student writes KVL for the two inner meshes and also for the outer loop. The result is",
+       "options": [
+        "three independent equations",
+        "a dependent set that cannot be solved uniquely",
+        "a check that must be added to the answer",
+        "the same as the nodal method"
+       ],
+       "answer_index": 1,
+       "why": "The outer loop equation is the sum of the two mesh equations, so it adds nothing."
+      },
+      {
+       "id": "b-q3",
+       "kind": "numerical",
+       "level": 2,
+       "marks": 5,
+       "q": "Two batteries are connected in parallel across a load of 4 Ω: $E_1 = 12$ V with internal resistance 2 Ω, and $E_2 = 6$ V with internal resistance 1 Ω. Find the current in each battery and in the load.",
+       "model_answer_md": "**Assume** $I_1$ (from $E_1$), $I_2$ (from $E_2$), both towards the load; load current $I_1 + I_2$.\n\n**Loop 1:** $12 - 2I_1 = 4(I_1 + I_2) \\Rightarrow 6I_1 + 4I_2 = 12$\n\n**Loop 2:** $6 - I_2 = 4(I_1 + I_2) \\Rightarrow 4I_1 + 5I_2 = 6$\n\nSolving: $I_1 = 2.571$ A, $I_2 = -0.857$ A.\n\n**Load:** $I_1 + I_2 = 1.714$ A.\n\n$I_2$ is negative: 0.857 A flows **into** battery 2, which is being charged.\n\n**Check:** $V_{load} = 4 \\times 1.714 = 6.857$ V; $12 - 2(2.571) = 6.857$ V.",
+       "points": [
+        "Assume branch currents and use KCL for the load current",
+        "Two KVL equations: $6I_1 + 4I_2 = 12$ and $4I_1 + 5I_2 = 6$",
+        "$I_1 = 2.571$ A, $I_2 = -0.857$ A, load 1.714 A",
+        "Negative $I_2$: battery 2 is being charged",
+        "Check with the load voltage 6.857 V"
+       ]
+      },
+      {
+       "id": "b-q4",
+       "kind": "numerical",
+       "level": 3,
+       "marks": 5,
+       "q": "Batteries $E_1 = 20$ V ($r_1 = 5$ Ω) and $E_2 = 10$ V ($r_2 = 10$ Ω) are in parallel across a 10 Ω load. Find the three currents and state which battery, if any, is being charged.",
+       "model_answer_md": "Let the load voltage be $V$ (KCL at the top node, Millman form):\n\n$$V = \\frac{20/5 + 10/10}{1/5 + 1/10 + 1/10} = \\frac{5}{0.4} = 12.5\\ \\text{V}$$\n\n$$I_1 = \\frac{20 - 12.5}{5} = 1.5\\ \\text{A},\\quad I_2 = \\frac{10 - 12.5}{10} = -0.25\\ \\text{A},\\quad I_{load} = \\frac{12.5}{10} = 1.25\\ \\text{A}$$\n\n**Check:** $1.5 - 0.25 = 1.25$ A. Battery 2 is **charged** by 0.25 A, because the common voltage 12.5 V is above its emf 10 V.",
+       "points": [
+        "Common voltage $V = 12.5$ V",
+        "$I_1 = 1.5$ A, load 1.25 A",
+        "$I_2 = -0.25$ A",
+        "Battery 2 is being charged since $V > E_2$",
+        "KCL check $1.5 - 0.25 = 1.25$"
+       ]
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "topic": "Loop and nodal equations",
+   "subtopics": [
+    {
+     "id": "mesh",
+     "title": "Mesh (loop) analysis",
+     "theory_md": "Give each window of a planar circuit a clockwise mesh current $I_1, I_2, \\dots$ and write KVL round each.\n\nA resistor shared by meshes 1 and 2 carries $I_1 - I_2$ (seen from mesh 1). By inspection:\n\n$$\\begin{bmatrix}R_{11} & -R_{12}\\\\ -R_{21} & R_{22}\\end{bmatrix}\\begin{bmatrix}I_1\\\\I_2\\end{bmatrix} = \\begin{bmatrix}E_1\\\\E_2\\end{bmatrix}$$\n\n$R_{kk}$ is the total resistance of mesh $k$, $R_{kj}$ the shared resistance. An emf is positive if the mesh current leaves its $+$ terminal. The number of equations is $b - n + 1$.\n\nSolve by Cramer's rule, $I_k = \\Delta_k/\\Delta$, and show the determinants. Branch current in a shared element is the **difference** of mesh currents.",
+     "basics_md": "A mesh current is a loop of current imagined to circulate round one window. Where two windows touch, the two loops pass through the same resistor in opposite directions, so their difference is the real current.",
+     "key_points": [
+      "One clockwise mesh current per window; $b - n + 1$ KVL equations",
+      "Inspection form: diagonal = own total R, off-diagonal = minus shared R",
+      "Emf positive when the mesh current leaves its + terminal",
+      "Solve by Cramer's rule or elimination; branch current = difference of mesh currents",
+      "Check by KVL in an outer path or a node voltage found two ways"
+     ],
+     "questions": [
+      {
+       "id": "m-q1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "In the mesh equation for mesh 1, a resistor shared with mesh 2 contributes",
+       "options": [
+        "$R(I_1 + I_2)$",
+        "$R(I_1 - I_2)$",
+        "$RI_2$ only",
+        "nothing"
+       ],
+       "answer_index": 1,
+       "why": "Both mesh currents are clockwise, so they oppose in the shared branch and the drop is $R(I_1 - I_2)$."
+      },
+      {
+       "id": "m-q2",
+       "kind": "mcq",
+       "level": 2,
+       "q": "A planar network has 7 branches and 5 nodes. The number of mesh equations is",
+       "options": [
+        "2",
+        "3",
+        "4",
+        "5"
+       ],
+       "answer_index": 1,
+       "why": "$b - n + 1 = 7 - 5 + 1 = 3$."
+      },
+      {
+       "id": "m-q3",
+       "kind": "numerical",
+       "level": 2,
+       "marks": 4,
+       "q": "Left mesh: a 24 V source, a 6 Ω resistor and a 3 Ω resistor shared with the right mesh. Right mesh: the shared 3 Ω, another 3 Ω and a 3 V battery that opposes the clockwise mesh current $I_2$. Find $I_1$, $I_2$ and the current in the shared 3 Ω.",
+       "model_answer_md": "Clockwise $I_1$ (left), $I_2$ (right).\n\n**Mesh 1:** $24 = 6I_1 + 3(I_1 - I_2) \\Rightarrow 9I_1 - 3I_2 = 24$\n\n**Mesh 2:** $-3 = 3I_2 + 3(I_2 - I_1) \\Rightarrow -3I_1 + 6I_2 = -3$\n\n$$\\Delta = 54 - 9 = 45,\\quad I_1 = \\frac{24(6) - (-3)(-3)}{45} = \\frac{135}{45} = 3\\ \\text{A}$$\n\n$$I_2 = \\frac{9(-3) - (-3)(24)}{45} = \\frac{45}{45} = 1\\ \\text{A}$$\n\nShared 3 Ω: $I_1 - I_2 = 2$ A.",
+       "points": [
+        "Mesh currents $I_1$, $I_2$ clockwise",
+        "$9I_1 - 3I_2 = 24$ and $-3I_1 + 6I_2 = -3$",
+        "$\\Delta = 45$, $I_1 = 3$ A, $I_2 = 1$ A",
+        "Shared resistor carries $I_1 - I_2 = 2$ A"
+       ]
+      },
+      {
+       "id": "m-p1",
+       "pyq": "e277632461649df4",
+       "level": 2,
+       "points": [
+        "Convert current sources: 12 A with 10 Ω gives 120 V with 10 Ω; 10 A with 2 Ω gives 20 V with 2 Ω",
+        "Mesh 1: $22I_1 - 2I_2 = 100$; Mesh 2: $-2I_1 + 3I_2 = 0$",
+        "$I_2 = 3.226$ A, $I_1 = 4.839$ A"
+       ]
+      },
+      {
+       "id": "m-p2",
+       "pyq": "7c0f53b17165bc78",
+       "level": 2,
+       "points": [
+        "Self and mutual resistances: loop 1 30 Ω, loop 2 50 Ω, loop 3 20 Ω; mutual 20 Ω and 10 Ω",
+        "Three mesh equations in matrix form with emfs 10, 30 and -40 V (polarities as drawn)",
+        "$I_1 = 0.684$ A, $I_2 = 0.526$ A, $I_3 = -1.737$ A (anticlockwise)"
+       ]
+      },
+      {
+       "id": "m-p3",
+       "pyq": "9424326813665d08",
+       "level": 3,
+       "points": [
+        "Write the three mesh equations with $V$ in meshes 1 and 3",
+        "Condition: current in the 5 V source is $i_1 = 0$",
+        "Then $i_3 = 8i_2$ and $V = 71i_2$, giving $i_2 = 5/9$ A",
+        "$V = 355/9 = 39.44$ V; check that the middle branch has exactly 5 V across it"
+       ]
+      },
+      {
+       "id": "m-p4",
+       "pyq": "6312e262563ea918",
+       "level": 3,
+       "points": [
+        "Three clockwise mesh currents; bridge network",
+        "Mesh 1: $13I_1 - 2I_2 - 11I_3 = 54$; mesh 2: $-2I_1 + 48I_2 - 32I_3 = 0$; mesh 3: $-11I_1 - 32I_2 + 46I_3 = 0$",
+        "$I_1 = 8$ A, $I_2 = 3$ A, $I_3 = 4$ A",
+        "Branch currents: 2 Ω 5 A, 14 Ω 3 A, 32 Ω 1 A, 11 Ω 4 A, 3 Ω 4 A"
+       ]
+      }
+     ]
+    },
+    {
+     "id": "nodal",
+     "title": "Nodal analysis",
+     "theory_md": "Choose a reference node (ground). Call the other node voltages $V_1, V_2, \\dots$ and write KCL at each: sum of currents **leaving** the node = 0, each as (this voltage $-$ other voltage)$/R$. This gives $n - 1$ equations.\n\nBy inspection, $[G][V] = [I]$: the diagonal term is the total conductance at the node, the off-diagonal term is minus the conductance between the two nodes, and the right side is the source current injected into the node.\n\nA voltage source in series with a resistor $R$ feeding a node gives the term $(V - E)/R$. Branch current $= (V_a - V_b)/R$.\n\nNodal suits circuits with current sources and few nodes; mesh suits many nodes and few loops.",
+     "basics_md": "The voltage at a node tells you the current in every resistor touching it. So solve for the node voltages first, then use Ohm's law.",
+     "key_points": [
+      "Reference node, then $n - 1$ KCL equations",
+      "Use leaving = (this voltage $-$ other voltage)$/R$ in every term",
+      "Inspection: $G_{kk}$ total conductance, $G_{kj}$ minus shared conductance, RHS injected current",
+      "Source with series resistor: $(V - E)/R$",
+      "Finish with Ohm's law for branch currents and powers $P = (\\Delta V)^2/R$"
+     ],
+     "questions": [
+      {
+       "id": "n-q1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "A circuit has 5 nodes. The number of nodal equations is",
+       "options": [
+        "3",
+        "4",
+        "5",
+        "6"
+       ],
+       "answer_index": 1,
+       "why": "One node is the reference, so $n - 1 = 4$."
+      },
+      {
+       "id": "n-q2",
+       "kind": "mcq",
+       "level": 1,
+       "q": "In the nodal equation of a node, a current source pushing 2 A into the node appears on the right side as",
+       "options": [
+        "$-2$ A",
+        "$+2$ A",
+        "0",
+        "$2R$"
+       ],
+       "answer_index": 1,
+       "why": "$[G][V] = [I]$ with injected current positive."
+      },
+      {
+       "id": "n-q3",
+       "kind": "numerical",
+       "level": 2,
+       "marks": 4,
+       "q": "A 24 V source with a 4 Ω resistor feeds node 1. Node 1 is joined to ground by 12 Ω and to node 2 by 6 Ω. Node 2 is joined to ground by 3 Ω and has a 2 A current source injecting into it. Find $V_1$, $V_2$ and the current in the 6 Ω.",
+       "model_answer_md": "Reference = ground.\n\n**Node 1:** $\\dfrac{V_1 - 24}{4} + \\dfrac{V_1}{12} + \\dfrac{V_1 - V_2}{6} = 0 \\Rightarrow \\dfrac{1}{2}V_1 - \\dfrac{1}{6}V_2 = 6$\n\n**Node 2:** $\\dfrac{V_2 - V_1}{6} + \\dfrac{V_2}{3} = 2 \\Rightarrow -\\dfrac{1}{6}V_1 + \\dfrac{1}{2}V_2 = 2$\n\nSolving: $V_1 = 15$ V, $V_2 = 9$ V.\n\nCurrent in 6 Ω: $(15 - 9)/6 = 1$ A from node 1 to node 2.\n\n**Check at node 1:** in $(24 - 15)/4 = 2.25$ A; out $15/12 + 1 = 2.25$ A.",
+       "points": [
+        "KCL at each non-reference node",
+        "$\\tfrac12 V_1 - \\tfrac16 V_2 = 6$ and $-\\tfrac16 V_1 + \\tfrac12 V_2 = 2$",
+        "$V_1 = 15$ V, $V_2 = 9$ V",
+        "Current in 6 Ω is 1 A, node 1 to node 2",
+        "KCL check at node 1"
+       ]
+      },
+      {
+       "id": "n-p1",
+       "pyq": "951ad56e419e57cc",
+       "level": 2,
+       "points": [
+        "Reference = bottom line; node equations at node 1 and node 2",
+        "Node 1: $0.12917V_1 - 0.06667V_2 = 20$; node 2: $-0.06667V_1 + 0.17778V_2 = 20$",
+        "$V_1 = 264$ V, $V_2 = 211.5$ V",
+        "$I_{15\\Omega} = (264 - 211.5)/15 = 3.5$ A, node 1 to node 2"
+       ]
+      },
+      {
+       "id": "n-p2",
+       "pyq": "0ce95a220578624d",
+       "level": 2,
+       "points": [
+        "Left half: node A gives $V_A = 0.75V_J$; node J gives $V_J = 10.667$ V, so $V_A = 8$ V",
+        "Right half: the 48 V source puts its top at -48 V; node B gives $V_B = -36$ V",
+        "$V_{AB} = 8 - (-36) = 44$ V"
+       ]
+      },
+      {
+       "id": "n-p3",
+       "pyq": "5e8e7f5f312ad1d7",
+       "level": 2,
+       "points": [
+        "Nodal equations at $V_1$ and $V_2$ with the 10 A source and the 60 V source ($V_P = 60$ V)",
+        "$0.5V_1 - 0.1667V_2 = 70$ and $-0.1667V_1 + 0.2833V_2 = 5$",
+        "$V_1 = 181.46$ V, $V_2 = 124.39$ V",
+        "$V_x = 58.54$ V, $V_y = 64.39$ V, $P_{6\\Omega} = (57.07)^2/6 = 542.9$ W"
+       ]
+      },
+      {
+       "id": "n-p4",
+       "pyq": "c2e4eb746b9f9d49",
+       "level": 2,
+       "points": [
+        "One unknown node: the middle node, $V$",
+        "$(V-15)/5 + (V-10)/10 + V/10 = 0$ gives $V = 10$ V",
+        "$I_1 = 1$ A, $I_3 = 0$ A, $I_2 = 1$ A",
+        "KCL check $I_1 = I_2 + I_3$"
+       ]
+      },
+      {
+       "id": "n-p5",
+       "pyq": "ac363fa927394517",
+       "level": 3,
+       "points": [
+        "Reference D; three node equations for $V_A, V_B, V_C$ with the 1 A source into A and out of C",
+        "$V_A = 0.803$ V, $V_B = 0.409$ V, $V_C = 0.166$ V",
+        "$P_{2\\Omega} = (V_A - V_B)^2/2 = 77.7$ mW",
+        "$P_{4\\Omega} = (V_B - V_C)^2/4 = 14.8$ mW"
+       ]
+      }
+     ]
+    },
+    {
+     "id": "supermesh",
+     "title": "Supermesh, supernode and source power",
+     "theory_md": "**Current source in a mesh.** If a current source lies in a branch shared by two meshes, its voltage is unknown. Do not write KVL through it. Instead:\n1. Write one KVL round the **supermesh**, the outer loop of the two meshes that omits the source branch.\n2. Add the constraint $I_1 - I_2 = I_s$.\n\nIf the source is on an outer branch, that mesh current simply equals $I_s$.\n\n**Voltage source between two non-reference nodes.** Form a **supernode**: one KCL for both nodes together, plus $V_1 - V_2 = V_s$.\n\n**Power of a source:** $P = V \\times I$ through it, with the current found from KCL at its node. A source with zero current supplies zero power.",
+     "basics_md": "An ideal current source forces its current but lets the voltage across it be whatever the circuit needs. An ideal voltage source does the reverse. So the unknown quantity in that branch is hidden, and we avoid it.",
+     "key_points": [
+      "Current source shared by two meshes: supermesh KVL plus $I_1 - I_2 = I_s$",
+      "Voltage source between two nodes: supernode KCL plus $V_1 - V_2 = V_s$",
+      "Current source on an outer branch fixes that mesh current directly",
+      "Source power $P = VI$; find the current by KCL at the source node"
+     ],
+     "questions": [
+      {
+       "id": "s-q1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "A 5 A current source is in the branch shared by meshes 1 and 2. The extra equation needed is",
+       "options": [
+        "$I_1 + I_2 = 5$ always",
+        "$I_1 - I_2 = \\pm 5$ according to direction",
+        "$I_1 = I_2$",
+        "none, KVL through the source is enough"
+       ],
+       "answer_index": 1,
+       "why": "The branch current is the difference of the mesh currents."
+      },
+      {
+       "id": "s-q2",
+       "kind": "mcq",
+       "level": 2,
+       "q": "A 6 V battery is connected between nodes 1 and 2, neither being the reference. The best method is",
+       "options": [
+        "ignore the battery",
+        "supernode, with $V_1 - V_2 = 6$",
+        "short the battery",
+        "write ordinary KCL at each node and ignore the battery"
+       ],
+       "answer_index": 1,
+       "why": "A supernode removes the unknown battery current."
+      },
+      {
+       "id": "s-q3",
+       "kind": "numerical",
+       "level": 2,
+       "marks": 4,
+       "q": "Nodes 1 and 2 are joined by a 6 V source (node 1 higher). Node 1 has a 4 Ω to ground and a 9 A source injecting into it. Node 2 has a 2 Ω to ground. Find $V_1$ and $V_2$.",
+       "model_answer_md": "Supernode (nodes 1 and 2) with constraint:\n\n$$V_1 - V_2 = 6$$\n\nKCL for the supernode: current leaving through the resistors = injected current\n\n$$\\frac{V_1}{4} + \\frac{V_2}{2} = 9$$\n\nSubstitute $V_1 = V_2 + 6$: $\\dfrac{V_2}{4} + 1.5 + \\dfrac{V_2}{2} = 9 \\Rightarrow V_2 = 10$ V, $V_1 = 16$ V.\n\n**Check:** $16/4 + 10/2 = 4 + 5 = 9$ A.",
+       "points": [
+        "Form the supernode and write the constraint $V_1 - V_2 = 6$",
+        "Supernode KCL: $V_1/4 + V_2/2 = 9$",
+        "$V_2 = 10$ V, $V_1 = 16$ V",
+        "Check $4 + 5 = 9$ A"
+       ]
+      },
+      {
+       "id": "s-q4",
+       "kind": "numerical",
+       "level": 3,
+       "marks": 5,
+       "q": "Two clockwise meshes share a branch containing a 5 A current source directed downwards. Left mesh: a 24 V source and 2 Ω. Right mesh: 3 Ω and a 4 V battery opposing $I_2$. Find $I_1$ and $I_2$.",
+       "model_answer_md": "The source branch is downward, which is the direction of the clockwise $I_1$, so\n\n$$I_1 - I_2 = 5$$\n\n**Supermesh KVL** (outer loop, omitting the source branch):\n\n$$24 - 4 = 2I_1 + 3I_2 \\Rightarrow 20 = 2I_1 + 3I_2$$\n\nSubstitute $I_1 = I_2 + 5$: $20 = 2I_2 + 10 + 3I_2 \\Rightarrow I_2 = 2$ A, $I_1 = 7$ A.",
+       "points": [
+        "Constraint $I_1 - I_2 = 5$",
+        "Supermesh KVL $24 - 4 = 2I_1 + 3I_2$",
+        "$I_2 = 2$ A, $I_1 = 7$ A"
+       ]
+      },
+      {
+       "id": "s-p1",
+       "pyq": "f8647570ce357e54",
+       "level": 3,
+       "points": [
+        "The 3 A source across the top fixes a third mesh current, so the 5 Ω and 6 Ω carry $I_X + 3$ and $I_Y + 3$",
+        "Mesh X: $7I_X - 2I_Y = -3$; mesh Y: $-2I_X + 12I_Y = -24$",
+        "$I_X = -1.05$ A, $I_Y = -2.175$ A (anticlockwise)",
+        "Branch currents: 5 Ω 1.95 A, 6 Ω 0.825 A, 2 Ω 1.125 A"
+       ]
+      },
+      {
+       "id": "s-p2",
+       "pyq": "e97c7ce78871d738",
+       "level": 3,
+       "points": [
+        "Power supplied by a source is $P = V \\times I$ through it",
+        "Find the source current by KCL at its node, with the 1 A and 2 A sources as injected currents",
+        "Net current in the 10 V source is zero, so $P = 0$ W",
+        "Answer: 0 W"
+       ]
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "topic": "Network theorems",
+   "subtopics": [
+    {
+     "id": "thevenin",
+     "title": "Thevenin's theorem",
+     "theory_md": "**Statement:** any linear, bilateral two-terminal network can be replaced, as seen from terminals A-B, by a voltage source $V_{th}$ in series with a resistance $R_{th}$.\n\n**Steps:**\n1. Remove the load $R_L$; mark A-B.\n2. $V_{th}$ = open-circuit voltage across A-B (nodal, divider or KVL).\n3. $R_{th}$ = resistance seen from A-B with sources dead: **voltage sources shorted, current sources opened**, internal resistances kept.\n4. Redraw $V_{th}$, $R_{th}$, $R_L$: $I_L = \\dfrac{V_{th}}{R_{th} + R_L}$.\n\nWith a **dependent source**, do not switch it off: short only independent sources, apply a test source $V_t$ (or $I_t$) at A-B and take $R_{th} = V_t/I_t$. A resistor directly across an ideal voltage source, or in series with a current source, does not change $V_{th}$ or $R_{th}$.",
+     "basics_md": "Whatever the inside looks like, from two terminals a linear network behaves like one battery and one resistor. Find that battery (open-circuit voltage) and that resistor (what is left with the sources dead).",
+     "key_points": [
+      "Statement: $V_{th}$ in series with $R_{th}$, linear bilateral network",
+      "Remove $R_L$; $V_{th}$ is the open-circuit voltage, found without the load",
+      "$R_{th}$: short voltage sources, open current sources, keep internal resistances",
+      "$I_L = V_{th}/(R_{th} + R_L)$; redraw the equivalent circuit",
+      "Dependent sources: test source method, $R_{th} = V_t/I_t$"
+     ],
+     "questions": [
+      {
+       "id": "t-q1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "To find $R_{th}$, the ideal current sources in the network are",
+       "options": [
+        "short-circuited",
+        "open-circuited",
+        "left as they are",
+        "replaced by 1 Ω"
+       ],
+       "answer_index": 1,
+       "why": "A dead current source carries zero current, which is an open circuit."
+      },
+      {
+       "id": "t-q2",
+       "kind": "mcq",
+       "level": 1,
+       "q": "The Thevenin voltage $V_{th}$ is measured",
+       "options": [
+        "with the load connected",
+        "across the open terminals with the load removed",
+        "with the terminals shorted",
+        "across the load after reconnection"
+       ],
+       "answer_index": 1,
+       "why": "It is the open-circuit voltage."
+      },
+      {
+       "id": "t-q3",
+       "kind": "numerical",
+       "level": 2,
+       "marks": 4,
+       "q": "A 30 V source with a series 6 Ω feeds terminals A-B, across which a 12 Ω resistor is permanently connected. Using Thevenin's theorem find the current in a 6 Ω load placed across A-B.",
+       "model_answer_md": "**Remove the load.**\n\n$$V_{th} = 30 \\times \\frac{12}{6 + 12} = 20\\ \\text{V}$$\n\n**Source shorted:** $R_{th} = 6 \\parallel 12 = 4\\ \\Omega$.\n\n**Load current:**\n$$I_L = \\frac{V_{th}}{R_{th} + R_L} = \\frac{20}{4 + 6} = \\mathbf{2\\ A}$$",
+       "points": [
+        "Remove the load",
+        "$V_{th} = 20$ V by voltage divider",
+        "$R_{th} = 6 \\parallel 12 = 4$ Ω",
+        "$I_L = 2$ A"
+       ]
+      },
+      {
+       "id": "t-q4",
+       "kind": "numerical",
+       "level": 3,
+       "marks": 5,
+       "q": "A 24 V source with a 4 Ω series resistor and a 3 A current source (directed into the node) both feed a node A. A 12 Ω resistor joins A to B (ground). Find the Thevenin equivalent at A-B and the current in a 6 Ω load.",
+       "model_answer_md": "**$V_{th}$** (load removed), KCL at A:\n$$\\frac{V_A - 24}{4} + \\frac{V_A}{12} = 3 \\Rightarrow V_A = \\frac{6 + 3}{1/4 + 1/12} = \\frac{9}{1/3} = 27\\ \\text{V}$$\n\n**$R_{th}$:** 24 V shorted, 3 A opened: $4 \\parallel 12 = 3\\ \\Omega$.\n\n$$I_L = \\frac{27}{3 + 6} = \\mathbf{3\\ A}$$",
+       "points": [
+        "$V_{th}$ by KCL at A with the current source included: 27 V",
+        "$R_{th}$: voltage source shorted, current source opened, $4 \\parallel 12 = 3$ Ω",
+        "$I_L = 27/9 = 3$ A"
+       ]
+      },
+      {
+       "id": "t-p1",
+       "pyq": "9c219c51843c24d0",
+       "level": 1,
+       "points": [
+        "Remove the 0.8 Ω; $V_{th} = 12 \\times 4/10 = 4.8$ V",
+        "$R_{th} = (1 + 5) \\parallel 4 = 2.4$ Ω",
+        "$I = 4.8/(2.4 + 0.8) = 1.5$ A"
+       ]
+      },
+      {
+       "id": "t-p2",
+       "pyq": "ca65af63a3d203bb",
+       "level": 2,
+       "points": [
+        "Remove the 5 Ω; KCL at the top node: $5 = (V_{th}-10)/2 + V_{th}/10$",
+        "$V_{th} = 16.67$ V",
+        "$R_{th} = 2 \\parallel 10 = 1.667$ Ω (5 A opened, 10 V shorted)",
+        "$I_5 = 16.67/6.667 = 2.5$ A"
+       ]
+      },
+      {
+       "id": "t-p3",
+       "pyq": "6284fe747ba7e189",
+       "level": 2,
+       "points": [
+        "Remove the 5 Ω; dividers give $V_{M1} = 1.5$ V and $V_{M2} = 5$ V, so $V_{th} = 3.5$ V",
+        "Battery shorted: $R_{th} = (17 \\parallel 3) + (10 \\parallel 10) = 7.55$ Ω",
+        "$I_5 = 3.5/12.55 = 0.279$ A"
+       ]
+      },
+      {
+       "id": "t-p4",
+       "pyq": "34736776f52984f4",
+       "level": 2,
+       "points": [
+        "Remove the 3 Ω; no current in the 6 Ω, so $V_{th} = V_M$",
+        "KCL at M: $(V_M - 24)/12 + V_M/4 = 2$, giving 12 V",
+        "$R_{th} = [(4+8) \\parallel 4] + 6 = 9$ Ω",
+        "$I_3 = 12/12 = 1$ A"
+       ]
+      },
+      {
+       "id": "t-p5",
+       "pyq": "9f06817cc69eb2ef",
+       "level": 2,
+       "points": [
+        "Same method with an 8 Ω in the output arm: $V_{th} = V_M = 12$ V",
+        "$R_{th} = [(4+8) \\parallel 4] + 8 = 11$ Ω",
+        "$I_3 = 12/14 = 0.857$ A"
+       ]
+      },
+      {
+       "id": "t-p6",
+       "pyq": "c97cc013215e46f8",
+       "level": 2,
+       "points": [
+        "Remove the 5 Ω; no current in the series 3 Ω, so $V_{th} = V_T$",
+        "$V_T = (20/3 + 10/8)/(1/3 + 1/8) = 17.27$ V",
+        "$R_{th} = (3 \\parallel 8) + 3 = 5.182$ Ω",
+        "$I_5 = 17.27/10.18 = 1.70$ A"
+       ]
+      },
+      {
+       "id": "t-p7",
+       "pyq": "a8791366216097bd",
+       "level": 2,
+       "points": [
+        "Remove the 3 Ω; KCL at the top node with three sources: $V_T = 27.4/1.7 = 16.12$ V",
+        "$R_{th} = 2 \\parallel 5 \\parallel 1 = 0.588$ Ω",
+        "$I = 16.12/3.588 = 4.49$ A",
+        "Power loss $= I^2R = 4.49^2 \\times 3 = 60.5$ W"
+       ]
+      },
+      {
+       "id": "t-p8",
+       "pyq": "3953ba73c42f78c6",
+       "level": 2,
+       "points": [
+        "Remove the 5 Ω; single loop gives $I = 120/16 = 7.5$ A",
+        "$V_P = 25$ V, $V_Q = 30$ V, so $|V_{th}| = 5$ V",
+        "$R_{th} = 2 \\parallel 14 = 1.75$ Ω",
+        "$I_5 = 5/6.75 = 0.741$ A, Q to P"
+       ]
+      },
+      {
+       "id": "t-p9",
+       "pyq": "66a0a0ce7ea92ac0",
+       "level": 3,
+       "points": [
+        "$V_{th}$ by nodal analysis; symmetry gives $V_L = V_a$",
+        "$V_a = 9.6$ V, so $V_{th} = 9.6$ V",
+        "$R_{th}$ with all 12 V sources shorted: delta to star on the 2, 6, 6 triangle, giving 3 Ω in parallel with 2 Ω = 1.2 Ω",
+        "Equivalent: 9.6 V in series with 1.2 Ω"
+       ]
+      },
+      {
+       "id": "t-p10",
+       "pyq": "7b102ed949da679a",
+       "level": 3,
+       "points": [
+        "$V_{th}$ by nodal analysis: $V_M = 2.4$ V, $V_a = 9.6$ V",
+        "$R_{th}$ by delta-star with sources shorted: 1.2 Ω",
+        "Thevenin equivalent: 9.6 V in series with 1.2 Ω across a-b"
+       ]
+      },
+      {
+       "id": "t-p11",
+       "pyq": "aae6668e7e849abe",
+       "level": 3,
+       "points": [
+        "Remove the 1 Ω; KCL at P gives $V_P = 13.68$ V, $V_X = 15.49$ V, $V_Z = 7.82$ V",
+        "$V_{th} = 7.67$ V",
+        "$R_{th}$ with sources shorted: star-delta on the bridge gives 3.188 Ω",
+        "$I = 7.67/4.188 = 1.831$ A, $P = I^2 \\times 1 = 3.35$ W"
+       ]
+      },
+      {
+       "id": "t-p12",
+       "pyq": "5bf1c580ef7e4280",
+       "level": 3,
+       "points": [
+        "Remove the 1 Ω; $V_{th} = V_X - V_Z = 7.67$ V",
+        "$R_{th} = 3.188$ Ω by star-delta on the bridge with sources shorted",
+        "$I = 1.831$ A and $P = 3.35$ W in the 1 Ω"
+       ]
+      },
+      {
+       "id": "t-p13",
+       "pyq": "9470a65874e7b97c",
+       "level": 2,
+       "points": [
+        "The block (5 V with 2 Ω) in parallel with 3 Ω has Thevenin form 3 V with 1.2 Ω",
+        "$V_{th} = 10 + 3 = 13$ V (batteries aiding)",
+        "$R_{th} = 1 + 1.2 = 2.2$ Ω",
+        "Equivalent: 13 V in series with 2.2 Ω"
+       ]
+      },
+      {
+       "id": "t-p14",
+       "pyq": "0e6756fa8e4e6c45",
+       "level": 3,
+       "points": [
+        "Open-circuit KCL between A and X, then add the 4 V source and the 54 V drop of the 9 A source in 6 Ω",
+        "$V_{th} = 43.4$ V (polarities as read)",
+        "$R_{th}$ with voltage sources shorted and current sources opened: $(2 \\parallel 3) + 6 = 7.2$ Ω",
+        "Equivalent: 43.4 V in series with 7.2 Ω"
+       ]
+      },
+      {
+       "id": "t-p15",
+       "pyq": "d0d91c1c52f4aca5",
+       "level": 3,
+       "points": [
+        "With a-b open, KCL at the middle node gives $v_x = 0$, so $V_{th} = 8$ V",
+        "Dependent source stays: short only the 8 V source and apply a test current $I_t$",
+        "$R_{th} = V_t/I_t = 10$ kΩ",
+        "Max power at $R_L = R_{th} = 10$ kΩ: $P_{max} = 8^2/(4 \\times 10000) = 1.6$ mW"
+       ]
+      }
+     ]
+    },
+    {
+     "id": "norton",
+     "title": "Norton's theorem and duality",
+     "theory_md": "**Statement:** any linear bilateral two-terminal network can be replaced, as seen from A-B, by a current source $I_N$ in parallel with $R_N$.\n\n- $I_N$ = short-circuit current through A-B.\n- $R_N = R_{th}$ (sources dead).\n- Load current by the current divider: $I_L = I_N\\dfrac{R_N}{R_N + R_L}$.\n- Conversion: $V_{th} = I_N R_N$.\n\n**Steps:** remove $R_L$ and short A-B to get $I_N$; kill sources and find $R_N$; draw $I_N \\parallel R_N$; reconnect $R_L$.\n\n**Dual theorems:** Thevenin and Norton are duals. Interchange voltage and current, series and parallel, open and short, resistance and conductance, and one statement turns into the other.",
+     "basics_md": "Norton is Thevenin turned inside out. Instead of the open-circuit voltage in series with $R$, use the short-circuit current in parallel with $R$.",
+     "key_points": [
+      "Norton: $I_N$ (short-circuit current) in parallel with $R_N = R_{th}$",
+      "$I_L = I_N R_N/(R_N + R_L)$ by the current divider",
+      "$V_{th} = I_N R_N$ links the two forms",
+      "Thevenin and Norton are duals: series-parallel, V-I, open-short"
+     ],
+     "questions": [
+      {
+       "id": "nt-q1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "In Norton's equivalent, $I_N$ is",
+       "options": [
+        "the open-circuit voltage divided by $R_L$",
+        "the short-circuit current between the terminals",
+        "the load current",
+        "the source current in the original circuit"
+       ],
+       "answer_index": 1,
+       "why": "Short the terminals and measure the current."
+      },
+      {
+       "id": "nt-q2",
+       "kind": "mcq",
+       "level": 2,
+       "q": "A network has $V_{th} = 12$ V and $R_{th} = 4$ Ω. Its Norton equivalent is",
+       "options": [
+        "12 A in parallel with 4 Ω",
+        "3 A in parallel with 4 Ω",
+        "3 A in series with 4 Ω",
+        "48 A in parallel with 4 Ω"
+       ],
+       "answer_index": 1,
+       "why": "$I_N = V_{th}/R_{th} = 3$ A; $R_N = 4$ Ω in parallel."
+      },
+      {
+       "id": "nt-q3",
+       "kind": "numerical",
+       "level": 2,
+       "marks": 4,
+       "q": "An 18 V source with a 3 Ω series resistor feeds terminals A-B, across which a 6 Ω resistor is connected. Find the Norton equivalent at A-B and the current in a 4 Ω load.",
+       "model_answer_md": "**$I_N$:** short A-B. The 6 Ω is shorted out, so $I_N = 18/3 = 6$ A.\n\n**$R_N$:** source shorted: $3 \\parallel 6 = 2\\ \\Omega$.\n\n**Load:**\n$$I_L = I_N\\frac{R_N}{R_N + R_L} = 6 \\times \\frac{2}{2 + 4} = \\mathbf{2\\ A}$$\n\n**Check:** $V_{th} = I_N R_N = 12$ V, and $12/(2 + 4) = 2$ A.",
+       "points": [
+        "$I_N = 6$ A (short A-B)",
+        "$R_N = 3 \\parallel 6 = 2$ Ω",
+        "Current divider: $I_L = 2$ A",
+        "Check with $V_{th} = I_N R_N = 12$ V"
+       ]
+      },
+      {
+       "id": "nt-p1",
+       "pyq": "b33b46043c1a5342",
+       "level": 1,
+       "points": [
+        "Statement: network replaced by $I_N$ in parallel with $R_N$",
+        "$I_N$ is the short-circuit current; $R_N$ is the resistance with sources deactivated, equal to $R_{th}$",
+        "Application: find $I_N$, find $R_N$, reconnect load, $I_L = I_N R_N/(R_N + R_L)$"
+       ]
+      },
+      {
+       "id": "nt-p2",
+       "pyq": "80bc688f0aa8b4a3",
+       "level": 2,
+       "points": [
+        "Thevenin: $V_{th}$ (open-circuit) in series with $R_{th}$",
+        "Norton steps: remove load, short A-B to get $I_N$",
+        "Deactivate sources and find $R_N$",
+        "Draw $I_N \\parallel R_N$, reconnect load, current divider"
+       ]
+      },
+      {
+       "id": "nt-p3",
+       "pyq": "7df0e5db39150e78",
+       "level": 2,
+       "points": [
+        "The 4 Ω across the ideal 12 V battery has no effect",
+        "Thevenin: $V_{th} = 18$ V, $R_{th} = 2$ Ω, $I_L = 18/7 = 2.57$ A",
+        "Norton: $I_N = 12/4 + 24/4 = 9$ A, $R_N = 2$ Ω, $I_L = 9 \\times 2/7 = 2.57$ A",
+        "Justification: $V_{th} = I_N R_N$, the two are the same network"
+       ]
+      },
+      {
+       "id": "nt-p4",
+       "pyq": "126ec9ea87ac872a",
+       "level": 2,
+       "points": [
+        "$V_{th} = 9.6$ V by nodal analysis (symmetry gives no current in the top 2 Ω)",
+        "$R_{th} = 1.2$ Ω",
+        "Norton: $I_N = 9.6/1.2 = 8$ A in parallel with 1.2 Ω"
+       ]
+      },
+      {
+       "id": "nt-p5",
+       "pyq": "f7c1bcffc97efbe4",
+       "level": 3,
+       "points": [
+        "Remove the 10 Ω; convert 2.5 A with 16 Ω to 40 V with 16 Ω, add the 4 Ω",
+        "Combine with 50 V in 5 Ω: $V = 48$ V, $R = 4$ Ω",
+        "$R_N = 4 + 1 = 5$ Ω, $I_N = 9.6$ A",
+        "$I_L = 9.6 \\times 5/15 = 3.2$ A, $V_o = 32$ V"
+       ]
+      },
+      {
+       "id": "nt-p6",
+       "pyq": "30c2617afd0344b7",
+       "level": 2,
+       "points": [
+        "Short A-B: $V_J = 20$ V, 3 Ω is across the 20 V source and does not matter",
+        "$I_N = 10 + 20/6 = 13.33$ A",
+        "$R_N = 6$ Ω (10 A opened, 20 V shorted)",
+        "Check: $V_{oc} = 20 + 60 = 80$ V $= I_N R_N$"
+       ]
+      },
+      {
+       "id": "nt-p7",
+       "pyq": "c67fd95a8afc9775",
+       "level": 3,
+       "points": [
+        "Duals: Thevenin and Norton, since duality swaps V and I, series and parallel, open and short",
+        "Remove the 15 Ω; $V_{th} = V_N = 34.05$ V by KCL",
+        "$R_{th} = (8 \\parallel 13) + 17 = 21.95$ Ω",
+        "$I = 34.05/36.95 = 0.921$ A"
+       ]
+      },
+      {
+       "id": "nt-p8",
+       "pyq": "bfa7ee6c0f9f4ce8",
+       "level": 3,
+       "points": [
+        "Duals: Thevenin (V in series) and Norton (I in parallel), linked by $I_N = V_{th}/R_{th}$",
+        "$V_{th} = 34.67$ V by superposition of the 16 V and 5 A sources",
+        "$R_{th} = 8 \\parallel 13 = 4.952$ Ω; total circuit resistance includes 15 Ω and 17 Ω",
+        "$I = 34.67/36.95 = 0.938$ A"
+       ]
+      }
+     ]
+    },
+    {
+     "id": "superposition",
+     "title": "Superposition theorem",
+     "theory_md": "**Statement:** in a linear bilateral network with several independent sources, the current in (or voltage across) any element is the **algebraic sum** of the values produced by each source acting alone, the others being deactivated.\n\n**Deactivate:** voltage source becomes a short, current source becomes an open; internal resistances stay.\n\n**Steps:** (1) mark the required current's direction; (2) for each source in turn redraw, reduce by series-parallel and use a divider; (3) add, subtracting contributions in the opposite direction.\n\n**Limits:** valid for linear circuits and only for **voltage and current, never power**. For power, add currents first, then $I^2R$. A resistor across an ideal voltage source does not affect the rest of the circuit.",
+     "basics_md": "In a linear circuit each source does its own job independently of the others. So find what each source does alone and add the results.",
+     "key_points": [
+      "Statement with deactivation rules: V source short, I source open",
+      "Result is the algebraic sum; opposite directions subtract",
+      "Valid for linear networks and for V and I only, not power",
+      "Dependent sources are never deactivated",
+      "One redrawn circuit per source, showing the divider"
+     ],
+     "questions": [
+      {
+       "id": "sp-q1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "Superposition cannot be used directly to calculate",
+       "options": [
+        "current in a branch",
+        "voltage across a resistor",
+        "power in a resistor",
+        "node voltage"
+       ],
+       "answer_index": 2,
+       "why": "Power $= I^2R$ is not linear in the source values."
+      },
+      {
+       "id": "sp-q2",
+       "kind": "mcq",
+       "level": 2,
+       "q": "When one source acts alone, the others are replaced by",
+       "options": [
+        "voltage sources open, current sources short",
+        "voltage sources short, current sources open",
+        "both short",
+        "both open"
+       ],
+       "answer_index": 1,
+       "why": "Dead voltage source: zero volts, a short. Dead current source: zero amps, an open."
+      },
+      {
+       "id": "sp-q3",
+       "kind": "numerical",
+       "level": 2,
+       "marks": 5,
+       "q": "Two batteries $E_1 = 12$ V (3 Ω in series) and $E_2 = 6$ V (6 Ω in series) are connected in parallel (plus terminals together) across a 6 Ω load. Find the load current by superposition.",
+       "model_answer_md": "**$E_1$ alone** ($E_2$ shorted): load and 6 Ω in parallel $= 3\\ \\Omega$.\n\n$$I = \\frac{12}{3 + 3} = 2\\ \\text{A},\\quad I_L' = 2 \\times \\frac{6}{6 + 6} = 1\\ \\text{A}$$\n\n**$E_2$ alone** ($E_1$ shorted): load and 3 Ω in parallel $= 2\\ \\Omega$.\n\n$$I = \\frac{6}{6 + 2} = 0.75\\ \\text{A},\\quad I_L'' = 0.75 \\times \\frac{3}{3 + 6} = 0.25\\ \\text{A}$$\n\n**Total:** $I_L = 1 + 0.25 = \\mathbf{1.25\\ A}$ (both in the same direction).\n\n**Check:** $V = (12/3 + 6/6)/(1/3 + 1/6 + 1/6) = 7.5$ V, $7.5/6 = 1.25$ A.",
+       "points": [
+        "$E_1$ alone: $I_L' = 1$ A",
+        "$E_2$ alone: $I_L'' = 0.25$ A",
+        "Same direction, so add: 1.25 A",
+        "Check by nodal: 7.5 V across 6 Ω"
+       ]
+      },
+      {
+       "id": "sp-q4",
+       "kind": "numerical",
+       "level": 3,
+       "marks": 5,
+       "q": "A 10 V source with a 5 Ω series resistor and a 4 A current source (into the node) both feed a node T. A 20 Ω load joins T to ground. Find the load current by superposition and verify.",
+       "model_answer_md": "**10 V alone** (4 A opened): 5 Ω + 20 Ω in series, $I_{20}' = 10/25 = 0.4$ A.\n\n**4 A alone** (10 V shorted): 5 Ω and 20 Ω share the 4 A,\n$$I_{20}'' = 4 \\times \\frac{5}{5 + 20} = 0.8\\ \\text{A}$$\n\n**Total:** $0.4 + 0.8 = \\mathbf{1.2\\ A}$.\n\n**Check:** $V_T = (10/5 + 4)/(1/5 + 1/20) = 24$ V, $24/20 = 1.2$ A.",
+       "points": [
+        "Voltage source alone: 0.4 A (current source opened)",
+        "Current source alone: current divider 0.8 A (voltage source shorted)",
+        "Add: 1.2 A",
+        "Nodal check gives 24 V, 1.2 A"
+       ]
+      },
+      {
+       "id": "sp-p1",
+       "pyq": "e1cd6d9b9842b3c8",
+       "level": 1,
+       "points": [
+        "Statement: response is the algebraic sum of responses due to each source acting alone",
+        "Others deactivated: voltage sources shorted, current sources opened",
+        "Circuit illustration: $E_1$ alone gives $I_3'$, $E_2$ alone gives $I_3''$, $I_3 = I_3' + I_3''$",
+        "Not valid for power"
+       ]
+      },
+      {
+       "id": "sp-p2",
+       "pyq": "4ca99c35deff2bc7",
+       "level": 2,
+       "points": [
+        "$E_1$ alone: $3 + (2 \\parallel 18) = 4.8$ Ω, $I_{18}' = 0.1667$ A",
+        "$E_2$ alone: $2 + (3 \\parallel 18) = 4.571$ Ω, $I_{18}'' = 0.0938$ A",
+        "$I_{18} = 0.260$ A and $V_{18} = 4.69$ V"
+       ]
+      },
+      {
+       "id": "sp-p3",
+       "pyq": "28af6aa59588b5b5",
+       "level": 2,
+       "points": [
+        "12 V alone (6 A opened, 8 V shorted): $I_1' = 12/8 = 1.5$ A",
+        "6 A alone: current divider $I_1'' = 6 \\times 6/8 = 4.5$ A",
+        "8 V alone: $I_1''' = -8/8 = -1$ A",
+        "$I_1 = 1.5 + 4.5 - 1 = 5$ A"
+       ]
+      },
+      {
+       "id": "sp-p4",
+       "pyq": "4b3dbf29e092492e",
+       "level": 2,
+       "points": [
+        "The 10 Ω across the 10 V source has no effect",
+        "10 V alone: $I_1' = 1.154$ A downward",
+        "14 A alone: $I_1'' = 2.154$ A downward by two current dividers",
+        "$I_1 = 3.31$ A"
+       ]
+      },
+      {
+       "id": "sp-p5",
+       "pyq": "667906f7e95ff22b",
+       "level": 2,
+       "points": [
+        "The 20 Ω across the 25 V and the 30 Ω across the 10 V sources do not affect the rest",
+        "25 V alone: $I_{40}' = 0.0862$ A downward",
+        "10 V alone (node at -10 V): $I_{40}'' = 0.1724$ A upward",
+        "Net $0.0862$ A upward through the 40 Ω"
+       ]
+      },
+      {
+       "id": "sp-p6",
+       "pyq": "8204da2d9be40f60",
+       "level": 3,
+       "points": [
+        "20 A alone (10 V shorted): $I_3' = 20 \\times 9/(9 + 4.5) = 13.33$ A",
+        "10 V alone (20 A opened): $I_3'' = 0.556$ A in the opposite direction",
+        "$I_3 = 13.33 - 0.556 = 12.78$ A",
+        "Verify by nodal: $(65 - 26.67)/3 = 12.78$ A"
+       ]
+      },
+      {
+       "id": "sp-p7",
+       "pyq": "5ea2ca43f291fadc",
+       "level": 3,
+       "points": [
+        "20 A alone: $I_3' = 13.33$ A (10 Ω in series with the source has no effect)",
+        "10 V alone: $I_3'' = 0.556$ A opposite",
+        "$I_3 = 12.78$ A"
+       ]
+      },
+      {
+       "id": "sp-p8",
+       "pyq": "1e10f1addfdae3f7",
+       "level": 3,
+       "points": [
+        "30 V alone: $I_L' = 2.143$ A",
+        "20 V alone: $I_L'' = 0.714$ A",
+        "5 A alone (voltage sources shorted): current divider gives $I_L''' = 1.071$ A",
+        "$I_L = 2.143 + 0.714 + 1.071 = 3.93$ A"
+       ]
+      },
+      {
+       "id": "sp-p9",
+       "pyq": "71cde31bcb798c2f",
+       "level": 3,
+       "points": [
+        "$V_1$ alone: $I_6' = 0.823$ A downward",
+        "$V_2$ alone: $I_6'' = 0.439$ A upward",
+        "$V_3$ alone: $I_6''' = 0.627$ A downward",
+        "$I_6 = 0.823 - 0.439 + 0.627 = 1.011$ A downward"
+       ]
+      },
+      {
+       "id": "sp-p10",
+       "pyq": "50c48f5e152fd42f",
+       "level": 3,
+       "points": [
+        "Label nodes and mark the direction of $I_L$",
+        "4 A alone: 25 V source shorted, reduce by series-parallel, current divider $I_1 = I R_2/(R_1 + R_2)$ for $I_L'$",
+        "25 V alone: 4 A opened (5 Ω stays), find $I_L''$ by divider",
+        "$I_L = I_L' \\pm I_L''$ by direction; power uses the total current"
+       ]
+      }
+     ]
+    },
+    {
+     "id": "max-power",
+     "title": "Maximum power transfer",
+     "theory_md": "**Statement:** a load receives maximum power from a linear DC network when $R_L = R_{th}$, the Thevenin resistance seen from the load.\n\n**Derivation:** with the network as $V_{th}$ and $R_{th}$,\n$$P = I^2R_L = \\frac{V_{th}^2R_L}{(R_{th} + R_L)^2}$$\nSetting $dP/dR_L = 0$ gives $(R_{th} + R_L) - 2R_L = 0$, so $R_L = R_{th}$.\n\n$$P_{max} = \\frac{V_{th}^2}{4R_{th}}$$\n\n**Efficiency:** the source supplies $V_{th}I = V_{th}^2/2R_{th}$, so $\\eta = 50\\%$. Half the power is lost in $R_{th}$. Power systems run at high efficiency, not at maximum power; MPT is used in communication circuits. Find $R_{th}$ with current sources opened.",
+     "basics_md": "A small load takes little current; a large load takes little current too. In between, the product of voltage and current peaks, and that happens when the load matches the source resistance.",
+     "key_points": [
+      "Condition $R_L = R_{th}$ (from $dP/dR_L = 0$)",
+      "$P_{max} = V_{th}^2/4R_{th}$",
+      "Efficiency at maximum power is 50 percent",
+      "Find $R_{th}$ with sources dead: current sources opened, voltage sources shorted",
+      "Maximum power transfer is not maximum efficiency"
+     ],
+     "questions": [
+      {
+       "id": "mp-q1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "At maximum power transfer the efficiency is",
+       "options": [
+        "100 percent",
+        "75 percent",
+        "50 percent",
+        "25 percent"
+       ],
+       "answer_index": 2,
+       "why": "Equal source and load resistance means equal power in each."
+      },
+      {
+       "id": "mp-q2",
+       "kind": "mcq",
+       "level": 2,
+       "q": "A source has $V_{th} = 24$ V and $R_{th} = 6$ Ω. The maximum power available to a load is",
+       "options": [
+        "24 W",
+        "48 W",
+        "96 W",
+        "12 W"
+       ],
+       "answer_index": 0,
+       "why": "$V_{th}^2/4R_{th} = 576/24 = 24$ W, at $R_L = 6$ Ω."
+      },
+      {
+       "id": "mp-q3",
+       "kind": "numerical",
+       "level": 2,
+       "marks": 3,
+       "q": "A 40 V source with a 10 Ω series resistor feeds terminals A-B, across which a 15 Ω resistor is connected. Find the load resistance for maximum power and that power.",
+       "model_answer_md": "**Remove the load:** $V_{th} = 40 \\times \\dfrac{15}{10 + 15} = 24$ V.\n\n**Source shorted:** $R_{th} = 10 \\parallel 15 = 6\\ \\Omega$.\n\n**Condition:** $R_L = R_{th} = \\mathbf{6\\ \\Omega}$.\n\n$$P_{max} = \\frac{V_{th}^2}{4R_{th}} = \\frac{24^2}{4 \\times 6} = \\mathbf{24\\ W}$$",
+       "points": [
+        "$V_{th} = 24$ V",
+        "$R_{th} = 6$ Ω",
+        "$R_L = R_{th} = 6$ Ω",
+        "$P_{max} = 24$ W"
+       ]
+      },
+      {
+       "id": "mp-q4",
+       "kind": "numerical",
+       "level": 3,
+       "marks": 3,
+       "q": "A source has $V_{th} = 12$ V and $R_{th} = 4$ Ω. Compare the load power at $R_L = 4$ Ω and at $R_L = 12$ Ω and the efficiency in each case.",
+       "model_answer_md": "**$R_L = 4$ Ω:** $I = 12/8 = 1.5$ A, $P = 1.5^2 \\times 4 = 9$ W $= V_{th}^2/4R_{th}$ (maximum). Efficiency $= 4/8 = 50\\%$.\n\n**$R_L = 12$ Ω:** $I = 12/16 = 0.75$ A, $P = 0.75^2 \\times 12 = 6.75$ W (less). Efficiency $= 12/16 = 75\\%$.\n\nHigher efficiency at a larger load, but less power.",
+       "points": [
+        "4 Ω: 9 W at 50 percent",
+        "12 Ω: 6.75 W at 75 percent",
+        "Maximum power is not maximum efficiency"
+       ]
+      },
+      {
+       "id": "mp-p1",
+       "pyq": "50875ea9c20665c4",
+       "level": 2,
+       "points": [
+        "Statement: $R_L = R_{th}$ for maximum power",
+        "$P_L = V_{th}^2R_L/(R_{th} + R_L)^2$",
+        "$dP_L/dR_L = 0$ gives $R_L = R_{th}$",
+        "$P_{max} = V_{th}^2/4R_{th}$"
+       ]
+      },
+      {
+       "id": "mp-p2",
+       "pyq": "f1edf5d64c8e5702",
+       "level": 3,
+       "points": [
+        "Replace the network by $V_{th}$ and $R_{th}$; $I = V_{th}/(R_{th} + R_L)$, $P_L = I^2R_L$",
+        "Differentiate and equate to zero: $R_L = R_{th}$",
+        "$P_{max} = V_{th}^2/4R_{th}$",
+        "Efficiency: source power $V_{th}^2/2R_{th}$, so $\\eta = 50\\%$"
+       ]
+      },
+      {
+       "id": "mp-p3",
+       "pyq": "8f5e7d198fad62c1",
+       "level": 2,
+       "points": [
+        "Using the Thevenin equivalent: $V_{th} = 13$ V, $R_{th} = 2.2$ Ω",
+        "$R_L = R_{th} = 2.2$ Ω",
+        "$P_{max} = 13^2/(4 \\times 2.2) = 19.2$ W"
+       ]
+      },
+      {
+       "id": "mp-p4",
+       "pyq": "148d2067bd928164",
+       "level": 3,
+       "points": [
+        "$R_L = R_{th}$ with 5 V and 2 V shorted and 1 A opened",
+        "$10 \\parallel 10 = 5$ Ω, plus the series 10 Ω gives 15 Ω",
+        "$R_L = 15$ Ω",
+        "Trap: shorting the current source would give a wrong $R_{th}$"
+       ]
+      },
+      {
+       "id": "mp-p5",
+       "pyq": "74ac100e2b1572b6",
+       "level": 3,
+       "points": [
+        "$R_L = R_{th}$ with the 20 V source shorted",
+        "Delta of three 21 Ω to star (each 7 Ω); $8 \\parallel 12 = 4.8$ Ω; $7 + 4.8 = 11.8$ Ω",
+        "$14.8 \\parallel 6 = 4.269$, then $+6$, then $\\parallel 6$",
+        "$R_L = R_{th} \\approx 3.79$ Ω"
+       ]
+      }
+     ]
+    },
+    {
+     "id": "source-conversion",
+     "title": "Source transformation",
+     "theory_md": "A voltage source $E$ in series with $R$ is equivalent, at its terminals, to a current source $I = E/R$ in parallel with the same $R$ (and back: $E = IR$).\n\n**Use:** repeat the conversion and combine:\n- Resistors in series with a voltage source add; resistors in parallel with a current source combine as parallel.\n- Parallel current sources add algebraically; series voltage sources add.\n- A resistor in parallel with an ideal voltage source, or in series with an ideal current source, is redundant and can be dropped.\n\nKeep track of polarity: the arrow of the current source points towards the + end of the voltage source.",
+     "basics_md": "A battery with its internal resistance behaves the same as a current source with a resistor beside it, as far as anything outside can tell. Swap whichever form makes the next step easier.",
+     "key_points": [
+      "$E$ in series with $R$ $\\leftrightarrow$ $I = E/R$ in parallel with $R$",
+      "Series: add voltage sources and resistors; parallel: add current sources and conductances",
+      "Current arrow points towards the + of the equivalent voltage source",
+      "Drop resistors in parallel with a voltage source or in series with a current source"
+     ],
+     "questions": [
+      {
+       "id": "sc-q1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "A 24 V source in series with 8 Ω converts to",
+       "options": [
+        "24 A in parallel with 8 Ω",
+        "3 A in parallel with 8 Ω",
+        "3 A in series with 8 Ω",
+        "192 A in parallel with 8 Ω"
+       ],
+       "answer_index": 1,
+       "why": "$I = E/R = 3$ A with the same resistor in parallel."
+      },
+      {
+       "id": "sc-q2",
+       "kind": "mcq",
+       "level": 2,
+       "q": "A resistor connected directly across an ideal voltage source, in a source-conversion problem, is",
+       "options": [
+        "added to the series resistance",
+        "redundant for the rest of the circuit",
+        "converted into a current source",
+        "shorted"
+       ],
+       "answer_index": 1,
+       "why": "The voltage across it is fixed, so it does not change the rest."
+      },
+      {
+       "id": "sc-q3",
+       "kind": "numerical",
+       "level": 2,
+       "marks": 3,
+       "q": "Two branches are in parallel across the same terminals: 12 V in series with 3 Ω, and 6 V in series with 6 Ω (plus terminals on the same side). Reduce them to a single source with a series resistance.",
+       "model_answer_md": "Convert to current sources: $12/3 = 4$ A with 3 Ω and $6/6 = 1$ A with 6 Ω.\n\nParallel: currents add, $I = 5$ A; resistances $3 \\parallel 6 = 2\\ \\Omega$.\n\nConvert back: $E = 5 \\times 2 = \\mathbf{10\\ V}$ in series with $\\mathbf{2\\ \\Omega}$.",
+       "points": [
+        "Convert to 4 A and 1 A current sources",
+        "Add currents to 5 A, parallel resistance 2 Ω",
+        "Equivalent 10 V in series with 2 Ω"
+       ]
+      },
+      {
+       "id": "sc-p1",
+       "pyq": "afbb937f444e1b6e",
+       "level": 2,
+       "points": [
+        "40 V with 4 Ω becomes 10 A with 4 Ω; with the 12 Ω gives 3 Ω, back to 30 V with 3 Ω",
+        "Add series 2 Ω: 30 V with 5 Ω, convert to 6 A, with 20 Ω gives 4 Ω, 24 V with 4 Ω",
+        "Add series 4 Ω: 24 V with 8 Ω feeding the 4 Ω load",
+        "$V_L = 24 \\times 4/12 = 8$ V"
+       ]
+      },
+      {
+       "id": "sc-p2",
+       "pyq": "54d7b48874953921",
+       "level": 3,
+       "points": [
+        "Left: 50 V with 10 Ω gives 5 A with 10 Ω; with 40 Ω gives 8 Ω; back to 40 V with 8 Ω",
+        "Right: 40 V with 20 Ω gives 2 A, added to 8 A gives 10 A with 20 Ω; back to 200 V with 20 Ω",
+        "Single loop: $i = (40 - 200)/(8 + 12 + 20) = -4$ A",
+        "$v_x = 12i = -48$ V"
+       ]
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "topic": "Star-delta transformation",
+   "subtopics": [
+    {
+     "id": "formulas",
+     "title": "Delta-star and star-delta formulas",
+     "theory_md": "Three resistors in a triangle between A, B, C form a **delta**; three joined at a common point, one to each terminal, form a **star**. They are equivalent when the resistance between every pair of terminals is the same (third terminal open).\n\n**Delta to star:** each arm is the product of the two delta resistors touching that terminal over the sum of all three:\n$$R_A = \\frac{R_{AB}R_{CA}}{R_{AB} + R_{BC} + R_{CA}}$$\n\n**Star to delta:** each delta resistor is the sum of products of the star arms over the arm opposite:\n$$R_{AB} = \\frac{R_AR_B + R_BR_C + R_CR_A}{R_C}$$\n\nFor equal resistors, $R_Y = R_\\Delta/3$.\n\n**Derivation:** equate the resistance between A-B, B-C, C-A in both forms; subtract to solve for the star arms; multiply pairs and add to get the delta.",
+     "basics_md": "A triangle and a Y can look the same to the three outside wires. The formulas make the three pair resistances the same in both.",
+     "key_points": [
+      "$\\Delta \\to$ Y: arm = product of the two adjacent delta resistors / sum of all three",
+      "Y $\\to \\Delta$: $R_{AB} = (R_AR_B + R_BR_C + R_CR_A)/R_C$",
+      "Equal resistors: $R_Y = R_\\Delta/3$",
+      "Derivation: equate the pair resistances with the third terminal open"
+     ],
+     "questions": [
+      {
+       "id": "f-q1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "Three equal 12 Ω resistors in delta are converted to a star. Each arm is",
+       "options": [
+        "4 Ω",
+        "6 Ω",
+        "12 Ω",
+        "36 Ω"
+       ],
+       "answer_index": 0,
+       "why": "$R_Y = R_\\Delta/3 = 4$ Ω."
+      },
+      {
+       "id": "f-q2",
+       "kind": "mcq",
+       "level": 2,
+       "q": "In delta to star, the arm at A uses",
+       "options": [
+        "$R_{BC}$ in the numerator",
+        "the two delta resistors that touch A in the numerator",
+        "the sum of the star arms",
+        "$R_{AB}$ alone"
+       ],
+       "answer_index": 1,
+       "why": "$R_A = R_{AB}R_{CA}/\\Sigma R_\\Delta$; $R_{BC}$ is the one not touching A."
+      },
+      {
+       "id": "f-q3",
+       "kind": "numerical",
+       "level": 2,
+       "marks": 3,
+       "q": "A delta has $R_{AB} = 30$ Ω, $R_{BC} = 20$ Ω, $R_{CA} = 10$ Ω. Find the equivalent star. Then convert a star with arms 2 Ω, 3 Ω, 6 Ω to a delta.",
+       "model_answer_md": "**Delta to star:** $\\Sigma = 60\\ \\Omega$.\n\n$$R_A = \\frac{30 \\times 10}{60} = 5\\ \\Omega,\\quad R_B = \\frac{30 \\times 20}{60} = 10\\ \\Omega,\\quad R_C = \\frac{20 \\times 10}{60} = 3.33\\ \\Omega$$\n\n**Star to delta** ($R_A = 2$, $R_B = 3$, $R_C = 6$): sum of products $= 6 + 18 + 12 = 36$.\n\n$$R_{AB} = \\frac{36}{6} = 6\\ \\Omega,\\quad R_{BC} = \\frac{36}{2} = 18\\ \\Omega,\\quad R_{CA} = \\frac{36}{3} = 12\\ \\Omega$$",
+       "points": [
+        "Delta to star: 5 Ω, 10 Ω, 3.33 Ω",
+        "Star to delta: sum of products 36",
+        "6 Ω, 18 Ω, 12 Ω (divide by the opposite arm)"
+       ]
+      },
+      {
+       "id": "f-q4",
+       "kind": "long",
+       "level": 3,
+       "marks": 5,
+       "q": "Derive the expressions for the arms of a star equivalent to a given delta.",
+       "model_answer_md": "**Equivalence:** the resistance between each pair of terminals (third open) must be equal.\n\n**Between A and B:** $R_A + R_B = \\dfrac{R_{AB}(R_{BC} + R_{CA})}{R_{AB} + R_{BC} + R_{CA}}$ ... (1)\n\n**Between B and C:** $R_B + R_C = \\dfrac{R_{BC}(R_{CA} + R_{AB})}{R_{AB} + R_{BC} + R_{CA}}$ ... (2)\n\n**Between C and A:** $R_C + R_A = \\dfrac{R_{CA}(R_{AB} + R_{BC})}{R_{AB} + R_{BC} + R_{CA}}$ ... (3)\n\nAdd (1) and (3), subtract (2), and divide by 2. With $\\Sigma = R_{AB} + R_{BC} + R_{CA}$:\n\n$$R_A = \\frac{R_{AB}R_{CA}}{\\Sigma}$$\n\nand cyclically $R_B = \\dfrac{R_{AB}R_{BC}}{\\Sigma}$, $R_C = \\dfrac{R_{BC}R_{CA}}{\\Sigma}$.",
+       "points": [
+        "Equate resistance between each pair of terminals, third terminal open",
+        "Write the three equations (1), (2), (3)",
+        "Add and subtract to isolate one arm",
+        "$R_A = R_{AB}R_{CA}/\\Sigma$ and cyclic forms"
+       ]
+      }
+     ]
+    },
+    {
+     "id": "bridge-reduction",
+     "title": "Equivalent resistance of bridge networks",
+     "theory_md": "A network that is not purely series or parallel (an unbalanced bridge) is reduced by star-delta conversion.\n\n**Method:**\n1. Label the nodes and list every element with its end nodes.\n2. **Check balance** first: if $R_1/R_2 = R_3/R_4$ the centre arm carries no current and can be removed.\n3. Otherwise pick one delta (or star) whose conversion leaves series-parallel paths, convert it, redraw with new labels.\n4. Reduce, and add the resistances in series with the terminals.\n5. If another bridge appears, convert again.\n\nThen $I = V/R_{eq}$ for the source current. Check one node voltage from both sides.",
+     "basics_md": "Pick a triangle in the middle of the tangle and swap it for a Y. The middle node disappears and ordinary series and parallel rules finish the job.",
+     "key_points": [
+      "Test for balance first: $R_1/R_2 = R_3/R_4$ means centre arm carries no current",
+      "Convert one delta to star so the rest is series-parallel; redraw with node labels",
+      "Add resistors in series with the terminals at the end",
+      "Source current $I = V/R_{eq}$"
+     ],
+     "questions": [
+      {
+       "id": "br-q1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "In a Wheatstone bridge the centre arm carries no current when",
+       "options": [
+        "$R_1 = R_3$",
+        "$R_1/R_2 = R_3/R_4$",
+        "the source is removed",
+        "all four arms are different"
+       ],
+       "answer_index": 1,
+       "why": "The two midpoints are then at the same potential."
+      },
+      {
+       "id": "br-q2",
+       "kind": "mcq",
+       "level": 2,
+       "q": "A delta with each side 6 Ω is replaced by a star. Each arm is",
+       "options": [
+        "2 Ω",
+        "3 Ω",
+        "6 Ω",
+        "18 Ω"
+       ],
+       "answer_index": 0,
+       "why": "$6/3 = 2$ Ω."
+      },
+      {
+       "id": "br-q3",
+       "kind": "numerical",
+       "level": 3,
+       "marks": 5,
+       "q": "A bridge between terminals A and B has A-C = A-D = C-D = 6 Ω, C-B = 4 Ω and D-B = 10 Ω. Find $R_{AB}$.",
+       "model_answer_md": "The bridge is unbalanced ($6/4 \\ne 6/10$), so convert the delta A-C-D to a star (centre S), all sides 6 Ω:\n\n$$R_{SA} = R_{SC} = R_{SD} = \\frac{6 \\times 6}{18} = 2\\ \\Omega$$\n\n**Paths from S to B:** via C: $2 + 4 = 6\\ \\Omega$; via D: $2 + 10 = 12\\ \\Omega$.\n\n$$6 \\parallel 12 = 4\\ \\Omega$$\n\n$$R_{AB} = 2 + 4 = \\mathbf{6\\ \\Omega}$$",
+       "points": [
+        "Check balance: unbalanced",
+        "Delta A-C-D to star: three arms of 2 Ω",
+        "$(2+4) \\parallel (2+10) = 4$ Ω",
+        "$R_{AB} = 2 + 4 = 6$ Ω"
+       ]
+      },
+      {
+       "id": "br-p1",
+       "pyq": "b21d5edcd943ad57",
+       "level": 2,
+       "points": [
+        "Check balance: $24/30 \\ne 10/50$, so use delta-star",
+        "Delta X-L-R (24, 10, 20; sum 54) to star: 4.444, 8.889, 3.704 Ω",
+        "$(8.889 + 30) \\parallel (3.704 + 50) = 22.556$ Ω; $R_{Xb} = 27$ Ω",
+        "$R_{eq} = 13 + 27 = 40$ Ω and $i = 100/40 = 2.5$ A"
+       ]
+      },
+      {
+       "id": "br-p2",
+       "pyq": "cb521feadeda8d77",
+       "level": 3,
+       "points": [
+        "Label nodes; the delta $P_1$-$P_2$-J of three 2 Ω converts to a star of 0.667 Ω arms",
+        "Redraw: still a bridge A, S, M, B; convert delta A-S-M (3.667, 3.667, 8 Ω) to star",
+        "Series-parallel on the remaining paths",
+        "$R_{AB} = 5.16$ Ω"
+       ]
+      },
+      {
+       "id": "br-p3",
+       "pyq": "733136fbf6ab9763",
+       "level": 3,
+       "points": [
+        "Label the nodes and list the elements from the figure",
+        "Delta $n_1$-$n_2$-J (6, 1.5, 4.5; sum 12 Ω) to star: 0.75, 2.25, 0.5625 Ω",
+        "Redraw as a bridge A, S, $b_2$, B and convert delta A-S-$b_2$ to star",
+        "$R_{AB} = 1.561 + 2.860 = 4.42$ Ω"
+       ]
+      },
+      {
+       "id": "br-p4",
+       "pyq": "ea807f1bde1d8a4c",
+       "level": 3,
+       "points": [
+        "Delta-star on the top triangle (2, 2, 4 Ω; sum 8 Ω): arms 0.5, 1, 1 Ω",
+        "Redraw with the source feeding the star point, reduce the lower inverted-V branches by series-parallel",
+        "$R_{eq}$ seen by the source, then $I = 30/R_{eq}$",
+        "State the node connections you assumed from the figure"
+       ]
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "topic": "Series and parallel circuits",
+   "subtopics": [
+    {
+     "id": "rules-dividers",
+     "title": "Series, parallel and dividers",
+     "theory_md": "**Series:** same current, voltages add, $R_{eq} = R_1 + R_2 + \\dots$. Voltage divider: $V_1 = V\\dfrac{R_1}{R_1 + R_2}$.\n\n**Parallel:** same voltage, currents add, $\\dfrac{1}{R_{eq}} = \\dfrac{1}{R_1} + \\dfrac{1}{R_2} + \\dots$. Two resistors: $R_{eq} = \\dfrac{R_1R_2}{R_1 + R_2}$. Current divider: $I_1 = I\\dfrac{R_2}{R_1 + R_2}$ (the **other** resistor in the numerator).\n\nA parallel combination is smaller than its smallest branch. Two elements are in parallel only if both ends are on the same two nodes.\n\n**Lamps:** $R = V^2/P$. In series the lower-wattage lamp has the higher $R$, takes more power $I^2R$ and glows brighter.",
+     "basics_md": "Same current through everything means series. Same voltage across everything means parallel. Dividers just share the voltage or current in proportion to the resistances.",
+     "key_points": [
+      "Series: $R_{eq} = \\sum R$, same current, voltage divider",
+      "Parallel: $G_{eq} = \\sum G$, same voltage, current divider with the other resistor in the numerator",
+      "Parallel equivalent is less than the smallest branch",
+      "Rated lamp resistance $R = V^2/P$; in series the lower wattage glows brighter"
+     ],
+     "questions": [
+      {
+       "id": "sp2-q1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "Resistors of 12 Ω, 6 Ω and 4 Ω are connected in parallel. The equivalent resistance is",
+       "options": [
+        "22 Ω",
+        "2 Ω",
+        "0.5 Ω",
+        "6 Ω"
+       ],
+       "answer_index": 1,
+       "why": "$1/R = 1/12 + 1/6 + 1/4 = 6/12 = 0.5$, so $R = 2$ Ω."
+      },
+      {
+       "id": "sp2-q2",
+       "kind": "mcq",
+       "level": 1,
+       "q": "A current of 12 A enters a parallel pair of 4 Ω and 8 Ω. The current in the 4 Ω is",
+       "options": [
+        "4 A",
+        "6 A",
+        "8 A",
+        "12 A"
+       ],
+       "answer_index": 2,
+       "why": "$12 \\times 8/(4 + 8) = 8$ A: the smaller resistor takes more current."
+      },
+      {
+       "id": "sp2-q3",
+       "kind": "numerical",
+       "level": 2,
+       "marks": 3,
+       "q": "A 100 W and a 60 W lamp, both rated 230 V, are connected in series across 230 V. Which glows brighter? Find the power in each.",
+       "model_answer_md": "$R_{100} = \\dfrac{230^2}{100} = 529\\ \\Omega$, $R_{60} = \\dfrac{230^2}{60} = 881.7\\ \\Omega$.\n\nSeries current: $I = \\dfrac{230}{529 + 881.7} = 0.163\\ \\text{A}$.\n\n$$P_{100} = I^2R = 0.163^2 \\times 529 = 14.1\\ \\text{W},\\quad P_{60} = 0.163^2 \\times 881.7 = 23.4\\ \\text{W}$$\n\nThe **60 W lamp glows brighter**: it has the higher resistance and the same current.",
+       "points": [
+        "$R = V^2/P$: 529 Ω and 881.7 Ω",
+        "Series current 0.163 A",
+        "Powers 14.1 W and 23.4 W",
+        "The 60 W lamp is brighter, higher $R$ in series"
+       ]
+      },
+      {
+       "id": "sp2-q4",
+       "kind": "numerical",
+       "level": 2,
+       "marks": 3,
+       "q": "A 100 V supply feeds 5 Ω in series with a parallel pair of 20 Ω and 30 Ω, which is in series with 3 Ω. Find the total resistance, the supply current and the voltage across the parallel pair.",
+       "model_answer_md": "$20 \\parallel 30 = 12\\ \\Omega$.\n\n$$R_{eq} = 5 + 12 + 3 = 20\\ \\Omega,\\quad I = \\frac{100}{20} = 5\\ \\text{A}$$\n\n$$V_{parallel} = 5 \\times 12 = 60\\ \\text{V}$$",
+       "points": [
+        "Parallel pair 12 Ω",
+        "$R_{eq} = 20$ Ω",
+        "$I = 5$ A",
+        "Voltage across the pair 60 V"
+       ]
+      },
+      {
+       "id": "sp2-p1",
+       "pyq": "46fff52fccfe69eb",
+       "level": 2,
+       "points": [
+        "$R_1 = 230/12 = 19.17$ Ω",
+        "In parallel $R_1$ still draws 12 A, so the new resistor draws $16 - 12 = 4$ A",
+        "$R_2 = 230/4 = 57.5$ Ω",
+        "Check: $19.17 \\parallel 57.5 = 14.375$ Ω and $230/14.375 = 16$ A"
+       ]
+      }
+     ]
+    },
+    {
+     "id": "balanced-bridge",
+     "title": "Voltage dividers and balanced bridge",
+     "theory_md": "Two dividers across the same supply give two midpoint voltages $V_A = V\\dfrac{R_2}{R_1 + R_2}$ and $V_B = V\\dfrac{R_4}{R_3 + R_4}$. The voltage between them is $V_{AB} = V_A - V_B$.\n\nThe bridge is **balanced** when $\\dfrac{R_1}{R_2} = \\dfrac{R_3}{R_4}$. Then $V_A = V_B$, $V_{AB} = 0$, and anything connected between A and B (a resistor, a galvanometer) carries **no current** and can be removed for finding $R_{eq}$:\n$$R_{eq} = (R_1 + R_2) \\parallel (R_3 + R_4)$$",
+     "basics_md": "If both dividers cut the voltage in the same ratio, their midpoints sit at the same voltage, so nothing flows between them.",
+     "key_points": [
+      "$V_A = V R_2/(R_1 + R_2)$, $V_B = V R_4/(R_3 + R_4)$",
+      "Balanced when $R_1/R_2 = R_3/R_4$: $V_{AB} = 0$",
+      "In a balanced bridge the middle arm carries no current and is removed"
+     ],
+     "questions": [
+      {
+       "id": "bb-q1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "A bridge has arms 10 Ω, 20 Ω on one side and 15 Ω, 30 Ω on the other. It is",
+       "options": [
+        "balanced",
+        "unbalanced",
+        "balanced only if the centre arm is 5 Ω",
+        "short-circuited"
+       ],
+       "answer_index": 0,
+       "why": "$10/20 = 15/30$."
+      },
+      {
+       "id": "bb-q2",
+       "kind": "mcq",
+       "level": 2,
+       "q": "A balanced bridge has a 5 Ω resistor between the midpoints. Its current is",
+       "options": [
+        "zero",
+        "determined by the 5 Ω alone",
+        "equal to the supply current",
+        "infinite"
+       ],
+       "answer_index": 0,
+       "why": "Both midpoints are at the same potential."
+      },
+      {
+       "id": "bb-q3",
+       "kind": "numerical",
+       "level": 2,
+       "marks": 3,
+       "q": "Arms of a bridge across a supply are 10 Ω and 20 Ω in one branch and 15 Ω and 30 Ω in the other, with a 5 Ω between the midpoints. Find the equivalent resistance seen by the supply.",
+       "model_answer_md": "$\\dfrac{10}{20} = \\dfrac{15}{30}$: the bridge is balanced, so the 5 Ω carries no current and is removed.\n\n$$R_{eq} = (10 + 20) \\parallel (15 + 30) = 30 \\parallel 45 = \\mathbf{18\\ \\Omega}$$",
+       "points": [
+        "Balanced since $10/20 = 15/30$",
+        "Centre 5 Ω carries no current",
+        "$30 \\parallel 45 = 18$ Ω"
+       ]
+      },
+      {
+       "id": "bb-p1",
+       "pyq": "f381bd7d339f8823",
+       "level": 2,
+       "points": [
+        "Voltage dividers: $V_A = 100 \\times 12/15 = 80$ V and $V_B = 100 \\times 80/100 = 80$ V",
+        "$V_{AB} = 0$ V",
+        "Balanced bridge since $3/12 = 20/80$"
+       ]
+      }
+     ]
+    },
+    {
+     "id": "node-tracing",
+     "title": "Reading a network: which nodes are the same",
+     "theory_md": "Before reducing, **label the nodes**. Every point joined by a plain wire is one node.\n\n- A resistor with **both ends on the same node** carries no current and drops out. A pair of resistors in series with both outer ends on one node does the same.\n- Two wires that **cross without a dot** (a hop) do not connect: they are two separate nodes.\n- Two wires that cross **with a dot** form one node.\n\nThen the remaining elements are series and parallel between the labelled nodes. Always say how you read a crossing, since the answer changes.",
+     "basics_md": "Wires have no resistance, so everything on one wire sits at one voltage. If both ends of a resistor are at the same voltage, no current flows through it.",
+     "key_points": [
+      "Label nodes; every wire-connected point is one node",
+      "A resistor (or series chain) with both ends on one node carries no current",
+      "A hop (no dot) does not connect; a dot does",
+      "State your reading of the figure in the answer"
+     ],
+     "questions": [
+      {
+       "id": "nd-q1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "A 10 Ω resistor has both of its ends joined by wires to the same node. Its current is",
+       "options": [
+        "zero",
+        "equals the node current",
+        "$V/10$",
+        "undefined"
+       ],
+       "answer_index": 0,
+       "why": "No voltage across it, so no current."
+      },
+      {
+       "id": "nd-q2",
+       "kind": "mcq",
+       "level": 2,
+       "q": "Two wires cross on a circuit diagram with no dot at the crossing. They are",
+       "options": [
+        "one node",
+        "two separate nodes",
+        "a short circuit",
+        "a resistor"
+       ],
+       "answer_index": 1,
+       "why": "A crossing without a dot (a hop) is not a connection."
+      },
+      {
+       "id": "nd-q3",
+       "kind": "short",
+       "level": 2,
+       "marks": 3,
+       "q": "Three pairs of resistors are each connected with both outer ends on node N: (15 Ω, 10 Ω), (10 Ω, 40 Ω) and (20 Ω, 30 Ω). N is connected to A through 8 Ω and to B through 2 Ω. Find $R_{AB}$.",
+       "model_answer_md": "Each pair forms a closed path from N back to N, so no current flows in them; they drop out.\n\nOnly the series path remains:\n\n$$R_{AB} = 8 + 2 = \\mathbf{10\\ \\Omega}$$",
+       "points": [
+        "Pairs with both ends on node N carry no current",
+        "Only the 8 Ω and 2 Ω remain, in series",
+        "$R_{AB} = 10$ Ω"
+       ]
+      },
+      {
+       "id": "nd-p1",
+       "pyq": "400f4eecf926585c",
+       "level": 3,
+       "points": [
+        "Reading: the vertical and horizontal wires meet, so all those points are one node N",
+        "The 15+10, 10+40 and 20+30 pairs each start and end on N and carry no current",
+        "Remaining: A, 8 Ω, N, 2 Ω, B in series",
+        "$R_{AB} = 10$ Ω (if the wires only cross with a hop it would be 22.5 Ω)"
+       ]
+      },
+      {
+       "id": "nd-p2",
+       "pyq": "6c4aa5938c598f79",
+       "level": 2,
+       "points": [
+        "The wires cross without connecting (hop), so there are two nodes H and V",
+        "Paths H to V: $15 + 10 = 25$ Ω, $10 + 40 = 50$ Ω, $20 + 30 = 50$ Ω",
+        "$25 \\parallel 50 \\parallel 50 = 12.5$ Ω",
+        "$R_{AB} = 8 + 12.5 + 2 = 22.5$ Ω"
+       ]
+      }
+     ]
+    }
+   ]
+  }
+ ]
+}

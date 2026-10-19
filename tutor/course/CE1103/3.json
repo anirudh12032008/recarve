@@ -1,0 +1,1326 @@
+{
+ "code": "CE1103",
+ "unit": "Centroid and Moment of Inertia",
+ "written": "2026-10-19",
+ "by": "claude-sonnet-5-5, in a Claude Code session",
+ "topics": [
+  {
+   "topic": "Centroid of areas",
+   "subtopics": [
+    {
+     "id": "standard-shapes",
+     "title": "Centroid, centre of gravity and standard shapes",
+     "theory_md": "**Centre of gravity (CG)** is the point through which the weight of a body acts; for a uniform plane lamina it coincides with the **centroid** of the area. A wire has its CG at the centroid of its **length**, not of the enclosed area.\n\nMethods: (1) symmetry, (2) moments of simple parts, (3) integration, (4) graphical (force and funicular polygon), (5) experimental (suspend from two points, plumb line).\n\nFrom the base: rectangle $d/2$, triangle $h/3$. Semicircle $\\dfrac{4R}{3\\pi}=0.424R$ from the diameter. Quadrant $\\dfrac{4R}{3\\pi}$ from each straight edge.",
+     "basics_md": "The centroid is the balance point of a flat plate. If the plate has a mirror line, it must balance on that line.",
+     "key_points": [
+      "CG: point where the resultant weight acts; centroid for a plane area",
+      "Five methods: symmetry, moments, integration, graphical, experimental",
+      "Triangle h/3 from base; semicircle and quadrant 4R/3π",
+      "Wire (line) CG uses lengths; lamina uses areas"
+     ],
+     "questions": [
+      {
+       "id": "sh-q1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "The centroid of a triangle of height $h$ lies at what distance from its base?",
+       "options": [
+        "$h/2$",
+        "$h/3$",
+        "$h/4$",
+        "$2h/3$ measured from the base"
+       ],
+       "answer_index": 1,
+       "why": "The medians meet at one third of the height from the base."
+      },
+      {
+       "id": "sh-q2",
+       "kind": "mcq",
+       "level": 1,
+       "q": "The centroid of a semicircle of radius $R$ is at what distance from its diameter?",
+       "options": [
+        "$R/2$",
+        "$\\dfrac{3R}{4\\pi}$",
+        "$\\dfrac{4R}{3\\pi}$",
+        "$\\dfrac{2R}{\\pi}$"
+       ],
+       "answer_index": 2,
+       "why": "$4R/3\\pi=0.424R$; $2R/\\pi$ is the value for a semicircular arc (wire), a common mix-up."
+      },
+      {
+       "id": "sh-q3",
+       "kind": "short",
+       "level": 2,
+       "marks": 2,
+       "q": "Distinguish between centre of gravity and centroid.",
+       "model_answer_md": "**Centre of gravity** is the point through which the resultant weight of a body acts in every orientation.\n\n**Centroid** is the geometric centre of a line, area or volume.\n\nFor a homogeneous body of uniform thickness the two coincide; for a body of varying density the CG shifts towards the denser part while the centroid does not.",
+       "points": [
+        "CG is the point of action of the weight",
+        "Centroid is a purely geometric centre",
+        "They coincide for a homogeneous body of uniform thickness"
+       ]
+      },
+      {
+       "id": "sh-q4",
+       "kind": "numerical",
+       "level": 2,
+       "marks": 2,
+       "q": "Find the distance of the centroid of a quadrant of a circle of radius $R=100$ mm from each straight edge.",
+       "model_answer_md": "$\\bar x=\\bar y=\\dfrac{4R}{3\\pi}=\\dfrac{4\\times100}{3\\pi}=42.44$ mm from each straight edge.",
+       "points": [
+        "Formula 4R/3π",
+        "42.44 mm from each straight edge"
+       ]
+      },
+      {
+       "id": "sh-p1",
+       "pyq": "b65f9834b790ac76",
+       "level": 2,
+       "points": [
+        "CG is the point of action of the resultant weight; centroid for a plane area",
+        "Symmetry, with example",
+        "Moments of composite parts with formulas, holes negative",
+        "Integration with strip",
+        "Graphical (force and funicular polygon) and experimental (suspension, plumb line) methods"
+       ]
+      },
+      {
+       "id": "sh-p2",
+       "pyq": "a0de40ad7c1f405f",
+       "level": 3,
+       "points": [
+        "Area centroid at h/3 from the base",
+        "Wire CG: BC (2l) at 0, AB and AC (L each) at h/2",
+        "y-wire = Lh/(2(l + L))",
+        "Equate: L = 2l, so cos θ = 1/2",
+        "θ = 60 degrees, an equilateral triangle"
+       ]
+      }
+     ]
+    },
+    {
+     "id": "composite-centroid",
+     "title": "Composite lamina by the method of moments",
+     "theory_md": "Split the lamina into rectangles, triangles, semicircles and so on. Take axes at a corner (or the base and a symmetry line). For each part write area $a$ and its centroid $(x,y)$. A **hole or cut-out is a negative area**.\n$$\\bar x=\\frac{\\sum a x}{\\sum a},\\qquad \\bar y=\\frac{\\sum a y}{\\sum a}$$\nSet out a table: part, $a$, $x$, $y$, $ax$, $ay$. If an axis of symmetry exists, the centroid lies on it, so one coordinate is free.",
+     "basics_md": "Every part pulls the balance point towards itself, in proportion to its area. A hole pulls with negative strength, so the balance point moves away from it.",
+     "key_points": [
+      "Split into standard shapes with known areas and centroids",
+      "Hole or cut-out entered as negative area",
+      "Table of a, x, y, ax, ay and the two divisions",
+      "Use a symmetry axis to save one coordinate",
+      "State the answer with the reference origin and units"
+     ],
+     "questions": [
+      {
+       "id": "cc-q1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "In the method of moments, a circular hole in a plate is treated as",
+       "options": [
+        "a positive area at its centre",
+        "a negative area at its centre",
+        "an area of zero weight at the plate centroid",
+        "ignored if smaller than the plate"
+       ],
+       "answer_index": 1,
+       "why": "Remove the hole by subtracting its area and its moment."
+      },
+      {
+       "id": "cc-q2",
+       "kind": "mcq",
+       "level": 2,
+       "q": "A rectangular plate has a circular hole off-centre to the right. Compared with the plate centre, the centroid of the plate with hole moves",
+       "options": [
+        "to the right, towards the hole",
+        "to the left, away from the hole",
+        "up",
+        "it does not move"
+       ],
+       "answer_index": 1,
+       "why": "The material removed was on the right, so the balance point shifts left."
+      },
+      {
+       "id": "cc-q3",
+       "kind": "numerical",
+       "level": 2,
+       "marks": 4,
+       "q": "A T-section has a flange 100 mm wide and 20 mm thick on top of a web 20 mm wide and 80 mm deep (overall depth 100 mm). Locate the centroid from the top face.",
+       "model_answer_md": "Y-axis of symmetry, so $\\bar x$ is on it. Measure $y$ from the top face.\n\n| Part | $a$ ($\\mathrm{mm^2}$) | $y$ (mm) | $ay$ ($\\mathrm{mm^3}$) |\n|---|---|---|---|\n| Flange 100 x 20 | 2000 | 10 | 20 000 |\n| Web 20 x 80 | 1600 | 20 + 40 = 60 | 96 000 |\n| Total | 3600 | | 116 000 |\n\n$\\bar y=\\dfrac{116000}{3600}=32.22$ mm below the top face, on the axis of symmetry.",
+       "points": [
+        "Axis of symmetry gives x",
+        "Table of areas and y values",
+        "Sum a = 3600, sum ay = 116 000",
+        "ybar = 32.22 mm from top"
+       ]
+      },
+      {
+       "id": "cc-p1",
+       "pyq": "dacba7950ce74ece",
+       "level": 3,
+       "points": [
+        "Split into rectangle 120 x 80, semicircle r = 60 on top, circular hole r = 40 (negative), triangle below the x-axis",
+        "Semicircle centroid 80 + 4r/3π = 105.46 mm; triangle centroid (40, -20)",
+        "Areas 9600, 5654.87, -5026.55, 3600; total 13 828.32 mm²",
+        "x = 54.79 mm, y = 36.61 mm from O"
+       ]
+      },
+      {
+       "id": "cc-p2",
+       "pyq": "8b497f7998d90604",
+       "level": 2,
+       "points": [
+        "Origin at left of semicircle; rectangle 5000 at (75, 25), semicircle 981.75 at (14.39, 25), triangle 1250 at (100, 66.67)",
+        "Total area 7231.75 mm²",
+        "x = 71.09 mm, y = 32.20 mm"
+       ]
+      },
+      {
+       "id": "cc-p3",
+       "pyq": "15127f1f496d8cc4",
+       "level": 3,
+       "points": [
+        "Quadrant R = 200 minus semicircle r = 100 on the x-axis",
+        "Quadrant centroid 84.88 mm each way; semicircle centroid (100, 42.44)",
+        "Areas 31 415.93 and -15 707.96 mm²",
+        "x = 69.77 mm, y = 127.32 mm"
+       ]
+      },
+      {
+       "id": "cc-p4",
+       "pyq": "a9d018c295cfb3bb",
+       "level": 3,
+       "points": [
+        "Y on the axis of symmetry, 100 mm from the base",
+        "Semicircle 15 707.96 at x = -42.44; square 40 000 at 100; triangle cut -20 000 at 133.33",
+        "Net area 35 707.96 mm²",
+        "x = 18.67 mm from the diameter (118.67 mm from the leftmost point)"
+       ]
+      },
+      {
+       "id": "cc-p5",
+       "pyq": "6cc243faaaf2f10b",
+       "level": 3,
+       "points": [
+        "Rectangle 10 x 9 plus triangle at (11, 7), minus semicircle at (2, 8.151), minus quadrant at (8.727, 1.273)",
+        "Net area 85.648 mm²",
+        "x = 5.54 mm, y = 4.76 mm"
+       ]
+      }
+     ]
+    },
+    {
+     "id": "integration-centroid",
+     "title": "Centroid by integration",
+     "theory_md": "Take an elemental strip $dA$ and the coordinates of **its own centroid** $(x_c,y_c)$:\n$$\\bar x=\\frac{\\int x_c\\,dA}{\\int dA},\\quad \\bar y=\\frac{\\int y_c\\,dA}{\\int dA}$$\nVertical strip of height $y$ and width $dx$: $dA=y\\,dx$, $x_c=x$, $y_c=y/2$. Horizontal strip: $dA=x\\,dy$, $x_c=x/2$, $y_c=y$. Between two curves use $y_1-y_2$ and the mean height $(y_1+y_2)/2$.\nFor $y=kx^n$ under the curve up to $(a,b)$: $\\bar x=\\dfrac{n+1}{n+2}a$, $\\bar y=\\dfrac{n+1}{4n+2}b$.",
+     "basics_md": "Chop the area into thin strips, find each strip's tiny moment, add them up (integrate) and divide by the total area.",
+     "key_points": [
+      "Choose strip, write dA and strip's own centroid",
+      "Integrate A, ∫x dA and ∫y dA between the limits",
+      "Divide to get x-bar and y-bar",
+      "Between two curves: height y1 - y2, mean height (y1+y2)/2",
+      "Check with a known case (n = 1 triangle gives 2a/3, b/3)"
+     ],
+     "questions": [
+      {
+       "id": "ic-q1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "For a vertical strip of height $y$ under a curve, the strip centroid is at",
+       "options": [
+        "$(x/2,\\ y)$",
+        "$(x,\\ y/2)$",
+        "$(x,\\ y)$",
+        "$(x/2,\\ y/2)$"
+       ],
+       "answer_index": 1,
+       "why": "The strip is tall and thin: its centre is at its own $x$ and half its height."
+      },
+      {
+       "id": "ic-q2",
+       "kind": "mcq",
+       "level": 2,
+       "q": "A horizontal strip of length $x$ is measured from the y-axis out to the curve. Its centroid is at",
+       "options": [
+        "$(x,\\ y)$",
+        "$(x/2,\\ y)$",
+        "$(x,\\ y/2)$",
+        "$(x/2,\\ y/2)$"
+       ],
+       "answer_index": 1,
+       "why": "Horizontal strip: half its length along x, at its own height y."
+      },
+      {
+       "id": "ic-q3",
+       "kind": "numerical",
+       "level": 2,
+       "marks": 5,
+       "q": "Find the centroid of the area under the parabola $y=x^2$ from $x=0$ to $x=3$ and the x-axis.",
+       "model_answer_md": "Vertical strip: $dA=y\\,dx=x^2dx$, centroid $(x,\\ x^2/2)$.\n\n$A=\\int_0^3x^2dx=9$\n\n$\\int x\\,dA=\\int_0^3x^3dx=\\dfrac{81}{4}$, so $\\bar x=\\dfrac{81/4}{9}=2.25$\n\n$\\int \\dfrac y2\\,dA=\\int_0^3\\dfrac{x^4}{2}dx=\\dfrac{243}{10}$, so $\\bar y=\\dfrac{24.3}{9}=2.7$\n\nCentroid $(2.25,\\ 2.7)$. Check with $n=2$, $a=3$, $b=9$: $\\tfrac34a=2.25$, $\\tfrac3{10}b=2.7$.",
+       "points": [
+        "Vertical strip dA = x² dx, centroid (x, x²/2)",
+        "A = 9",
+        "x-bar = 2.25",
+        "y-bar = 2.7"
+       ]
+      },
+      {
+       "id": "ic-p1",
+       "pyq": "74b2afbf84291a00",
+       "level": 3,
+       "points": [
+        "k = b/a^n from the point (a, b)",
+        "A = ab/(n+1)",
+        "x-bar = (n+1)a/(n+2)",
+        "y-bar = (n+1)b/(4n+2)",
+        "Checks: n = 1 gives 2a/3 and b/3"
+       ]
+      },
+      {
+       "id": "ic-p2",
+       "pyq": "15da79ac828278b3",
+       "level": 2,
+       "points": [
+        "k = a/b³; horizontal strip of length (a - ky³)",
+        "A = 3ab/4",
+        "x-bar = 4a/7",
+        "y-bar = 2b/5"
+       ]
+      },
+      {
+       "id": "ic-p3",
+       "pyq": "94e23dea4b5f1cd6",
+       "level": 3,
+       "points": [
+        "Intersection of y = 3x/2 and y = x²/4 at x = 0 and x = 6",
+        "Strip height 3x/2 - x²/4; A = 9",
+        "x-bar = 27/9 = 3",
+        "y-bar = 32.4/9 = 3.6"
+       ]
+      },
+      {
+       "id": "ic-p4",
+       "pyq": "e0d3a72b818a1074",
+       "level": 2,
+       "points": [
+        "Divide into elements; sum of moments equals moment of total weight",
+        "x-bar = ∫x dW/∫dW, same for y and z; lamina uses dA",
+        "Steps: axes, element and its centroid, integrate, divide",
+        "Example: rectangle b/2 or triangle h/3"
+       ]
+      },
+      {
+       "id": "ic-p5",
+       "pyq": "c8cbdcde561d8e89",
+       "level": 2,
+       "points": [
+        "x-bar = 0 by symmetry",
+        "Half-width at height y is y/√3, dA = 2y dy/√3",
+        "A = (b² - a²)/√3",
+        "y-bar = 2(a² + ab + b²)/(3(a + b))"
+       ]
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "topic": "Moment of inertia of areas",
+   "subtopics": [
+    {
+     "id": "definition",
+     "title": "Moment of inertia, polar moment and radius of gyration",
+     "theory_md": "**Moment of inertia (second moment) of an area** about an axis in its plane: $I_{xx}=\\int y^2\\,dA$, $I_{yy}=\\int x^2\\,dA$. Unit $\\mathrm{mm^4}$, always positive; it measures resistance to bending ($M/I=\\sigma/y$).\n\n**Polar moment** about an axis perpendicular to the plane through O: $I_P=J=\\int r^2dA=I_{xx}+I_{yy}$; it measures resistance to twisting ($T/J=\\tau/r$).\n\n**Radius of gyration** $k=\\sqrt{I/A}$, so $I=Ak^2$.",
+     "basics_md": "Area far from an axis counts for much more than area near it, because the distance is squared.",
+     "key_points": [
+      "I = ∫y² dA, unit length⁴, always positive",
+      "Polar J = ∫r² dA = Ixx + Iyy, axis perpendicular to plane",
+      "Ixx relates to bending, J to torsion",
+      "Radius of gyration k = √(I/A)"
+     ],
+     "questions": [
+      {
+       "id": "df-q1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "The SI unit of moment of inertia of an area is",
+       "options": [
+        "$\\mathrm{kg\\,m^2}$",
+        "$\\mathrm{m^3}$",
+        "$\\mathrm{m^4}$",
+        "$\\mathrm{N\\,m}$"
+       ],
+       "answer_index": 2,
+       "why": "Area times length squared gives length to the fourth. $\\mathrm{kg\\,m^2}$ is the mass moment of inertia."
+      },
+      {
+       "id": "df-q2",
+       "kind": "mcq",
+       "level": 1,
+       "q": "The radius of gyration of an area $A$ about an axis where the moment of inertia is $I$ is",
+       "options": [
+        "$I/A$",
+        "$\\sqrt{I/A}$",
+        "$\\sqrt{IA}$",
+        "$I\\sqrt A$"
+       ],
+       "answer_index": 1,
+       "why": "$I=Ak^2$."
+      },
+      {
+       "id": "df-q3",
+       "kind": "numerical",
+       "level": 2,
+       "marks": 3,
+       "q": "A rectangle 60 mm wide and 100 mm deep. Find $I_{xx}$ about its horizontal centroidal axis and the radius of gyration about it.",
+       "model_answer_md": "$I_{xx}=\\dfrac{bd^3}{12}=\\dfrac{60\\times100^3}{12}=5.0\\times10^6\\ \\mathrm{mm^4}$\n\n$A=60\\times100=6000\\ \\mathrm{mm^2}$\n\n$k=\\sqrt{I/A}=\\sqrt{5.0\\times10^6/6000}=28.87$ mm",
+       "points": [
+        "I = bd³/12 = 5.0 x 10⁶ mm⁴",
+        "A = 6000 mm²",
+        "k = 28.87 mm"
+       ]
+      },
+      {
+       "id": "df-p1",
+       "pyq": "eec2651d58f20406",
+       "level": 2,
+       "points": [
+        "I = ∫y² dA, ∫x² dA; unit mm⁴; always positive; k = √(I/A)",
+        "Relates to bending resistance",
+        "Polar I = ∫r² dA about axis perpendicular to plane, equals Ixx + Iyy",
+        "Relates to torsion; circle J = πd⁴/32"
+       ]
+      }
+     ]
+    },
+    {
+     "id": "standard-derivations",
+     "title": "Derivations of standard sections",
+     "theory_md": "Strip method: $I_{xx}=\\int y^2\\,dA$ with $dA$ = width x $dy$.\n- Rectangle: $\\dfrac{bd^3}{12}$ centroidal, $\\dfrac{bd^3}{3}$ about the base.\n- Triangle: $\\dfrac{bh^3}{12}$ about base, $\\dfrac{bh^3}{36}$ centroidal (shift by $h/3$).\n- Circle: ring $dA=2\\pi r\\,dr$, $J=\\dfrac{\\pi R^4}{2}$, so $I_{diameter}=\\dfrac{\\pi R^4}{4}=\\dfrac{\\pi d^4}{64}$.\n- Semicircle: $\\dfrac{\\pi R^4}{8}$ about the diameter, $0.1098R^4$ centroidal.\n- Trapezium (parallel sides $a$ base, $b$ top): $I_{base}=\\dfrac{h^3(a+3b)}{12}$.",
+     "basics_md": "Slice the shape into thin strips parallel to the axis; each strip has area (width x thickness) and distance y. Add y² dA.",
+     "key_points": [
+      "Strip parallel to the axis, dA = width x dy",
+      "Rectangle bd³/12 and bd³/3; triangle bh³/12 base and bh³/36 centroidal",
+      "Circle πd⁴/64 via ring J = πR⁴/2 and symmetry",
+      "Semicircle πR⁴/8 about diameter",
+      "Trapezium h³(a+3b)/12 about its base"
+     ],
+     "questions": [
+      {
+       "id": "sd-q1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "The moment of inertia of a rectangle $b\\times d$ about its base is",
+       "options": [
+        "$bd^3/12$",
+        "$bd^3/3$",
+        "$bd^3/36$",
+        "$b^3d/3$"
+       ],
+       "answer_index": 1,
+       "why": "$bd^3/12+bd(d/2)^2=bd^3/3$."
+      },
+      {
+       "id": "sd-q2",
+       "kind": "mcq",
+       "level": 1,
+       "q": "The moment of inertia of a circle of diameter $d$ about a diameter is",
+       "options": [
+        "$\\pi d^4/32$",
+        "$\\pi d^4/64$",
+        "$\\pi d^4/16$",
+        "$\\pi d^4/128$"
+       ],
+       "answer_index": 1,
+       "why": "$\\pi d^4/32$ is the polar value; the diametral value is half of it."
+      },
+      {
+       "id": "sd-q3",
+       "kind": "numerical",
+       "level": 2,
+       "marks": 3,
+       "q": "A triangle has base 120 mm and height 90 mm. Find $I$ about its base and about the centroidal axis parallel to the base.",
+       "model_answer_md": "$I_{base}=\\dfrac{bh^3}{12}=\\dfrac{120\\times90^3}{12}=7.29\\times10^6\\ \\mathrm{mm^4}$\n\n$I_G=\\dfrac{bh^3}{36}=\\dfrac{120\\times90^3}{36}=2.43\\times10^6\\ \\mathrm{mm^4}$\n\nCheck: $A=5400$, shift $h/3=30$ mm, $A(30)^2=4.86\\times10^6$, and $7.29-4.86=2.43$ ($\\times10^6$).",
+       "points": [
+        "Base: bh³/12 = 7.29 x 10⁶ mm⁴",
+        "Centroidal: bh³/36 = 2.43 x 10⁶ mm⁴"
+       ]
+      },
+      {
+       "id": "sd-q4",
+       "kind": "numerical",
+       "level": 3,
+       "marks": 3,
+       "q": "A semicircle has radius 40 mm. Find $I$ about its diameter and about the centroidal axis parallel to it.",
+       "model_answer_md": "About the diameter: $\\dfrac{\\pi R^4}{8}=\\dfrac{\\pi(40)^4}{8}=1.005\\times10^6\\ \\mathrm{mm^4}$.\n\n$A=\\dfrac{\\pi(40)^2}{2}=2513.3\\ \\mathrm{mm^2}$, centroid $\\dfrac{4R}{3\\pi}=16.98$ mm from the diameter.\n\n$I_G=1.005\\times10^6-2513.3\\times16.98^2=0.281\\times10^6\\ \\mathrm{mm^4}$ (that is $0.1098R^4$).",
+       "points": [
+        "Diameter: πR⁴/8 = 1.005 x 10⁶ mm⁴",
+        "Centroid 16.98 mm from diameter, A = 2513.3 mm²",
+        "I_G = I - A y² = 0.281 x 10⁶ mm⁴"
+       ]
+      },
+      {
+       "id": "sd-p1",
+       "pyq": "609b5e082b31d1bd",
+       "level": 2,
+       "points": [
+        "Ring dA = 2πr dr, J = πR⁴/2",
+        "Symmetry Ixx = Iyy",
+        "Perpendicular axis: J = 2 Ixx, so Ixx = πR⁴/4 = πd⁴/64"
+       ]
+      },
+      {
+       "id": "sd-p2",
+       "pyq": "88c7efceef39c880",
+       "level": 2,
+       "points": [
+        "Ring dA = 2πr dr, J = πR⁴/2",
+        "Symmetry and perpendicular axis theorem",
+        "Ixx = πR⁴/4 = πd⁴/64"
+       ]
+      },
+      {
+       "id": "sd-p3",
+       "pyq": "79a8579d06ac65d0",
+       "level": 2,
+       "points": [
+        "Strip width 2√(R² - y²), Ixx = ∫y²(2√(R²-y²))dy",
+        "Substitute y = R sin θ to get πR⁴/4",
+        "Or: ring J = πR⁴/2 halved by symmetry",
+        "Result πR⁴/4 = πd⁴/64"
+       ]
+      },
+      {
+       "id": "sd-p4",
+       "pyq": "ac987e5a0e565a39",
+       "level": 2,
+       "points": [
+        "Strip at height y has width a + (b-a)y/h",
+        "I_base = ∫y² w dy = ah³/3 + (b-a)h³/4",
+        "Result h³(a + 3b)/12",
+        "Checks: a = b rectangle, b = 0 triangle"
+       ]
+      },
+      {
+       "id": "sd-p5",
+       "pyq": "20692587b203bc0e",
+       "level": 2,
+       "points": [
+        "Strip at depth y from apex, width by/h, distance (h - y) from base",
+        "I_base = bh³/12",
+        "Centroid at h/3, parallel axis: I_G = bh³/12 - A(h/3)² = bh³/36"
+       ]
+      }
+     ]
+    },
+    {
+     "id": "diagonal",
+     "title": "Moment of inertia about a diagonal",
+     "theory_md": "An axis along a diagonal splits a rectangle into **two equal triangles, each with the diagonal as base**. So\n$$I_{diag}=2\\times\\frac{(\\text{base})\\,h^3}{12}$$\nwhere base $=\\sqrt{b^2+d^2}$ and the height of each triangle (perpendicular from the corner to the diagonal) $=\\dfrac{bd}{\\sqrt{b^2+d^2}}$. This gives\n$$I_{diag}=\\frac{b^3d^3}{6(b^2+d^2)}$$\nFor a square of side $a$: $a^4/12$, the same as any centroidal axis.",
+     "basics_md": "Cut along the diagonal: each half is a triangle sitting on the diagonal. A triangle about its own base is bh³/12.",
+     "key_points": [
+      "Diagonal divides rectangle into two triangles on that base",
+      "Base = √(b²+d²), height = bd/√(b²+d²)",
+      "I = b³d³/(6(b²+d²)); square gives a⁴/12"
+     ],
+     "questions": [
+      {
+       "id": "dg-q1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "The moment of inertia of a square of side $a$ about a diagonal is",
+       "options": [
+        "$a^4/3$",
+        "$a^4/6$",
+        "$a^4/12$",
+        "$a^4/36$"
+       ],
+       "answer_index": 2,
+       "why": "Equal to the value about a centroidal axis parallel to a side, since all centroidal axes of a square are equivalent."
+      },
+      {
+       "id": "dg-q2",
+       "kind": "mcq",
+       "level": 2,
+       "q": "For a rectangle $b\\times d$, the height of each triangle formed by a diagonal, measured from the opposite corner, is",
+       "options": [
+        "$\\dfrac{b+d}{2}$",
+        "$\\dfrac{bd}{\\sqrt{b^2+d^2}}$",
+        "$\\sqrt{b^2+d^2}$",
+        "$\\dfrac{bd}{b+d}$"
+       ],
+       "answer_index": 1,
+       "why": "Area $bd/2=\\tfrac12\\times\\text{diagonal}\\times h$."
+      },
+      {
+       "id": "dg-q3",
+       "kind": "numerical",
+       "level": 2,
+       "marks": 4,
+       "q": "Find the moment of inertia of a rectangle 4 cm by 3 cm about its diagonal.",
+       "model_answer_md": "Diagonal $=\\sqrt{4^2+3^2}=5$ cm. Height of each triangle $h=\\dfrac{4\\times3}{5}=2.4$ cm.\n\n$I=2\\times\\dfrac{5\\times2.4^3}{12}=11.52\\ \\mathrm{cm^4}$\n\nCheck: $\\dfrac{b^3d^3}{6(b^2+d^2)}=\\dfrac{64\\times27}{6\\times25}=11.52$.",
+       "points": [
+        "Diagonal 5 cm, height 2.4 cm",
+        "Two triangles on the diagonal as base",
+        "I = 11.52 cm⁴"
+       ]
+      },
+      {
+       "id": "dg-p1",
+       "pyq": "2c83fa60a14f0809",
+       "level": 2,
+       "points": [
+        "Diagonal splits rectangle into two equal triangles",
+        "AC = √13 = 3.606 m, h = bd/AC = 1.664 m",
+        "I = 2 x AC h³/12 = b³d³/(6(b² + d²))",
+        "I_AC = 2.769 m⁴"
+       ]
+      },
+      {
+       "id": "dg-p2",
+       "pyq": "13378a110bfc1c0e",
+       "level": 2,
+       "points": [
+        "Diagonal a√2 splits the square into two triangles of height a/√2",
+        "I = 2 x (a√2)(a/√2)³/12",
+        "I = a⁴/12"
+       ]
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "topic": "Principal moments of inertia",
+   "subtopics": [
+    {
+     "id": "product-of-inertia",
+     "title": "Product of inertia",
+     "theory_md": "**Product of inertia** $I_{xy}=\\int xy\\,dA$. Unlike $I_{xx}$ it can be **positive, negative or zero**; unit $\\mathrm{mm^4}$.\n- If either axis is an **axis of symmetry**, $I_{xy}=0$.\n- Parallel axis: $I_{xy}=I_{x'y'}+A\\bar x\\bar y$, with $\\bar x,\\bar y$ the centroid coordinates (with sign) in the new axes.\n- Rectangle $b\\times d$ about two edges at a corner: $\\dfrac{b^2d^2}{4}$.\nSign: positive if the area lies mostly in quadrants 1 and 3, negative if in 2 and 4.",
+     "basics_md": "Each bit of area contributes x times y. Area in the upper-right or lower-left adds; area in the other two quadrants subtracts.",
+     "key_points": [
+      "Ixy = ∫xy dA, may be + , - or 0",
+      "Zero if either axis is a symmetry axis",
+      "Transfer: Ixy = Ix'y' + A x-bar y-bar (signed)",
+      "Rectangle at corner: b²d²/4"
+     ],
+     "questions": [
+      {
+       "id": "pi-q1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "A T-section has the y-axis as its axis of symmetry. Its product of inertia about the centroidal $x$-$y$ axes is",
+       "options": [
+        "positive",
+        "negative",
+        "zero",
+        "equal to $I_{xx}$"
+       ],
+       "answer_index": 2,
+       "why": "Contributions of the two mirror halves cancel."
+      },
+      {
+       "id": "pi-q2",
+       "kind": "mcq",
+       "level": 2,
+       "q": "A lamina lies entirely in the second quadrant of the axes. Its $I_{xy}$ is",
+       "options": [
+        "positive",
+        "negative",
+        "zero",
+        "cannot be said"
+       ],
+       "answer_index": 1,
+       "why": "There $x<0$ and $y>0$, so every $xy$ is negative."
+      },
+      {
+       "id": "pi-q3",
+       "kind": "numerical",
+       "level": 2,
+       "marks": 3,
+       "q": "A rectangle 60 mm by 40 mm has its 60 mm side along the x-axis and its 40 mm side along the y-axis, with one corner at the origin. Find $I_{xy}$.",
+       "model_answer_md": "Centroidal $I_{x'y'}=0$ (symmetry). Centroid $(30,\\ 20)$ mm, $A=2400\\ \\mathrm{mm^2}$.\n\n$I_{xy}=0+A\\bar x\\bar y=2400\\times30\\times20=1.44\\times10^6\\ \\mathrm{mm^4}$\n\nCheck: $b^2d^2/4=3600\\times1600/4=1.44\\times10^6$.",
+       "points": [
+        "Centroidal Ixy = 0",
+        "Use A x-bar y-bar with centroid (30, 20)",
+        "Ixy = 1.44 x 10⁶ mm⁴"
+       ]
+      }
+     ]
+    },
+    {
+     "id": "principal-axes",
+     "title": "Principal axes and principal moments",
+     "theory_md": "**Principal axes** are the pair of perpendicular axes about which $I_{xy}=0$ and $I$ is maximum on one and minimum on the other. For an area with an axis of symmetry, that axis and its perpendicular are principal.\n$$\\tan2\\theta_p=\\frac{-2I_{xy}}{I_{xx}-I_{yy}}$$\n$$I_{max,min}=\\frac{I_{xx}+I_{yy}}{2}\\pm\\sqrt{\\left(\\frac{I_{xx}-I_{yy}}{2}\\right)^2+I_{xy}^2}$$\n$I_{max}+I_{min}=I_{xx}+I_{yy}$ always. Mohr's circle: centre at $(I_{xx}+I_{yy})/2$, radius the root above.",
+     "basics_md": "Rotate the axes and I changes. There is one direction where it is largest and the perpendicular direction where it is smallest; there, Ixy vanishes.",
+     "key_points": [
+      "Principal axes: Ixy = 0, I is max and min",
+      "tan 2θ = -2Ixy/(Ixx - Iyy), two roots 90 degrees apart",
+      "Imax,min = average ± √(((Ixx - Iyy)/2)² + Ixy²)",
+      "Imax + Imin = Ixx + Iyy",
+      "Symmetry axes are principal axes"
+     ],
+     "questions": [
+      {
+       "id": "pa-q1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "About the principal axes the product of inertia is",
+       "options": [
+        "maximum",
+        "minimum",
+        "zero",
+        "equal to $I_{xx}$"
+       ],
+       "answer_index": 2,
+       "why": "Principal axes are defined by $I_{xy}=0$."
+      },
+      {
+       "id": "pa-q2",
+       "kind": "mcq",
+       "level": 2,
+       "q": "For any pair of perpendicular axes through the same point, $I_{xx}+I_{yy}$ is",
+       "options": [
+        "largest for the principal axes",
+        "smallest for the principal axes",
+        "the same, equal to $I_{max}+I_{min}$",
+        "equal to $I_{xy}$"
+       ],
+       "answer_index": 2,
+       "why": "The sum is the polar moment about the point and does not depend on rotation."
+      },
+      {
+       "id": "pa-q4",
+       "kind": "numerical",
+       "level": 3,
+       "marks": 6,
+       "q": "For a section, $I_{xx}=8000\\ \\mathrm{cm^4}$, $I_{yy}=2000\\ \\mathrm{cm^4}$ and $I_{xy}=-2000\\ \\mathrm{cm^4}$ about its centroid. Find the principal moments and the inclination of the principal axis of $I_{max}$ to the x-axis.",
+       "model_answer_md": "$\\dfrac{I_{xx}+I_{yy}}{2}=5000$, $\\dfrac{I_{xx}-I_{yy}}{2}=3000$\n\n$R=\\sqrt{3000^2+2000^2}=3605.6$\n\n$I_{max}=5000+3605.6=8605.6\\ \\mathrm{cm^4}$, $I_{min}=5000-3605.6=1394.4\\ \\mathrm{cm^4}$\n\n$\\tan2\\theta=\\dfrac{-2(-2000)}{8000-2000}=0.6667$, $2\\theta=33.69^\\circ$, $\\theta=16.85^\\circ$ from the x-axis (for $I_{max}$); the other principal axis is at $106.85^\\circ$.\n\nCheck: $8605.6+1394.4=10000=I_{xx}+I_{yy}$.",
+       "points": [
+        "Average 5000, radius 3605.6",
+        "Imax = 8605.6 cm⁴, Imin = 1394.4 cm⁴",
+        "tan 2θ = 0.6667, θ = 16.85 degrees",
+        "Check sum = Ixx + Iyy"
+       ]
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "topic": "Parallel axis theorem",
+   "subtopics": [
+    {
+     "id": "pat-proof",
+     "title": "Statement and proof",
+     "theory_md": "**Statement:** the moment of inertia of an area about any axis in its plane equals the moment of inertia about a **parallel centroidal axis** plus the **area times the square of the distance** between the axes: $I_{AB}=I_G+Ah^2$.\n\n**Proof:** an element $dA$ is at $y$ from the centroidal axis G-G, so at $(h+y)$ from AB.\n$$I_{AB}=\\int(h+y)^2dA=h^2\\!\\int dA+2h\\!\\int y\\,dA+\\int y^2dA=Ah^2+0+I_G$$\n$\\int y\\,dA=0$ because it is the first moment about the centroidal axis. Draw the sketch: area with centroid G, axes GG and AB, element at $y$.",
+     "basics_md": "Moving the axis away from the centroid always increases I by A times distance squared; the centroidal value is the smallest of all parallel axes.",
+     "key_points": [
+      "Statement: I_AB = I_G + A h²",
+      "Sketch with G-G, AB, h, element dA at y",
+      "Expand (h + y)²",
+      "∫y dA = 0 about a centroidal axis",
+      "Result I_AB = I_G + A h²"
+     ],
+     "questions": [
+      {
+       "id": "pp-q1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "In $I_{AB}=I_G+Ah^2$, the axis G-G must",
+       "options": [
+        "pass through the centroid",
+        "pass through the origin",
+        "be perpendicular to AB",
+        "be the neutral axis of the beam"
+       ],
+       "answer_index": 0,
+       "why": "The cross term vanishes only because the first moment about G-G is zero."
+      },
+      {
+       "id": "pp-q2",
+       "kind": "mcq",
+       "level": 2,
+       "q": "Among all parallel axes, the moment of inertia is least about",
+       "options": [
+        "the base",
+        "the centroidal axis",
+        "the top edge",
+        "any axis through the middle of a side"
+       ],
+       "answer_index": 1,
+       "why": "Every other axis adds $Ah^2\\ge0$."
+      },
+      {
+       "id": "pp-q3",
+       "kind": "short",
+       "level": 2,
+       "marks": 2,
+       "q": "Why does the cross term $2h\\int y\\,dA$ vanish in the proof of the parallel axis theorem?",
+       "model_answer_md": "$\\int y\\,dA=A\\bar y$ is the first moment of the area about the axis G-G. G-G passes through the centroid, so $\\bar y=0$ and the term is zero. This is why one of the two axes must be centroidal.",
+       "points": [
+        "∫y dA is the first moment about G-G",
+        "Centroid lies on G-G, so it is zero",
+        "Hence one axis must be centroidal"
+       ]
+      },
+      {
+       "id": "pp-p1",
+       "pyq": "908b5021fbeb9918",
+       "level": 2,
+       "points": [
+        "Statement: I = I_G + A h²",
+        "Sketch: area, centroid G, axes GG and AB, element at y",
+        "Expand (h + y)²",
+        "∫y dA = 0",
+        "Result"
+       ]
+      },
+      {
+       "id": "pp-p2",
+       "pyq": "ea57df943ccbc70e",
+       "level": 2,
+       "points": [
+        "Statement with centroidal axis, A and h",
+        "Proof by expansion of ∫(h + y)² dA",
+        "∫y dA = 0",
+        "I_AB = I_G + A h²"
+       ]
+      },
+      {
+       "id": "pp-p3",
+       "pyq": "609961862c6e3002",
+       "level": 2,
+       "points": [
+        "Statement and sketch",
+        "Expansion giving h²A + 2h∫y dA + ∫y² dA",
+        "Middle term zero",
+        "I_AB = I_G + A h²; example rectangle bd³/3"
+       ]
+      }
+     ]
+    },
+    {
+     "id": "pat-use",
+     "title": "Using the theorem",
+     "theory_md": "Use it to move an axis **from or to the centroid**, never directly between two non-centroidal axes without passing through G.\n\nTwo non-centroidal axes: $I_2=I_1-Ah_1^2+Ah_2^2$ (first go down to $I_G$, then up).\n\nExamples: rectangle about base $\\dfrac{bd^3}{3}$; circle of diameter $d$ about a tangent $\\dfrac{5\\pi d^4}{64}$; triangle about base $\\dfrac{bh^3}{12}$.",
+     "basics_md": "Always route through the centroid: down to I_G, then up to the new axis. The area in the formula is the whole area.",
+     "key_points": [
+      "Only one of the two axes can be non-centroidal in one step",
+      "Two off-centroid axes: subtract A h1², add A h2²",
+      "Circle about tangent 5πd⁴/64",
+      "h is the perpendicular distance between the parallel axes"
+     ],
+     "questions": [
+      {
+       "id": "pu-q1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "Moment of inertia of a circle of diameter $d$ about a tangent is",
+       "options": [
+        "$\\pi d^4/64$",
+        "$\\pi d^4/16$",
+        "$5\\pi d^4/64$",
+        "$3\\pi d^4/64$"
+       ],
+       "answer_index": 2,
+       "why": "$\\pi d^4/64+(\\pi d^2/4)(d/2)^2$."
+      },
+      {
+       "id": "pu-q2",
+       "kind": "numerical",
+       "level": 2,
+       "marks": 3,
+       "q": "A circle of diameter 100 mm. Find $I$ about a tangent.",
+       "model_answer_md": "$I_G=\\dfrac{\\pi d^4}{64}=\\dfrac{\\pi(100)^4}{64}=4.909\\times10^6\\ \\mathrm{mm^4}$\n\n$A=\\dfrac{\\pi(100)^2}{4}=7853.98\\ \\mathrm{mm^2}$, $h=50$ mm\n\n$I_{tangent}=4.909\\times10^6+7853.98\\times50^2=24.54\\times10^6\\ \\mathrm{mm^4}$ (which is $5\\pi d^4/64$).",
+       "points": [
+        "I_G = πd⁴/64 = 4.909 x 10⁶ mm⁴",
+        "h = radius = 50 mm",
+        "I = 24.54 x 10⁶ mm⁴"
+       ]
+      },
+      {
+       "id": "pu-q3",
+       "kind": "numerical",
+       "level": 3,
+       "marks": 4,
+       "q": "A section of area $2000\\ \\mathrm{mm^2}$ has $I=4.2\\times10^6\\ \\mathrm{mm^4}$ about an axis 30 mm from its centroid. Find $I$ about a parallel axis 50 mm from the centroid on the opposite side.",
+       "model_answer_md": "First to the centroid: $I_G=4.2\\times10^6-2000\\times30^2=2.4\\times10^6\\ \\mathrm{mm^4}$.\n\nThen out: $I=2.4\\times10^6+2000\\times50^2=7.4\\times10^6\\ \\mathrm{mm^4}$.\n\nThe side does not matter: only the square of the distance.",
+       "points": [
+        "Go down to the centroid first: I_G = 2.4 x 10⁶ mm⁴",
+        "Then add A h² with h = 50 mm",
+        "I = 7.4 x 10⁶ mm⁴"
+       ]
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "topic": "Perpendicular axis theorem",
+   "subtopics": [
+    {
+     "id": "pet-proof",
+     "title": "Statement and proof",
+     "theory_md": "**Statement:** for a plane area, the moment of inertia about an axis **perpendicular to the plane** through O equals the sum of the moments of inertia about **two perpendicular axes in the plane meeting at O**: $I_{ZZ}=I_{XX}+I_{YY}$.\n\n**Proof:** sketch the lamina in the x-y plane, OZ perpendicular at O, element $dA$ at $(x,y)$ and distance $r$ from O, $r^2=x^2+y^2$.\n$$I_{ZZ}=\\int r^2dA=\\int(x^2+y^2)dA=\\int x^2dA+\\int y^2dA=I_{YY}+I_{XX}$$\nApplies to plane areas (laminae) only.",
+     "basics_md": "Distance from O is the hypotenuse of x and y, and squares add like Pythagoras.",
+     "key_points": [
+      "Statement: Izz = Ixx + Iyy",
+      "Sketch with OX, OY in the plane, OZ perpendicular, element at (x, y), r",
+      "r² = x² + y²",
+      "Result by splitting the integral",
+      "Valid for plane laminae only"
+     ],
+     "questions": [
+      {
+       "id": "pe-q1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "The perpendicular axis theorem applies to",
+       "options": [
+        "any solid body",
+        "plane areas (laminae) only",
+        "only circles",
+        "only symmetric sections"
+       ],
+       "answer_index": 1,
+       "why": "It relies on $r^2=x^2+y^2$ for an element lying in a plane."
+      },
+      {
+       "id": "pe-q2",
+       "kind": "mcq",
+       "level": 2,
+       "q": "In $I_{ZZ}=I_{XX}+I_{YY}$, the axes X and Y",
+       "options": [
+        "must be centroidal",
+        "must meet at O on the Z axis, in the plane of the area",
+        "must be parallel to Z",
+        "must be the principal axes"
+       ],
+       "answer_index": 1,
+       "why": "Any perpendicular pair meeting at the point O where Z passes through the plane will do."
+      },
+      {
+       "id": "pe-q3",
+       "kind": "short",
+       "level": 2,
+       "marks": 2,
+       "q": "State the perpendicular axis theorem. Why does it not apply to a three-dimensional body?",
+       "model_answer_md": "**Statement:** for a plane area, $I_{ZZ}=I_{XX}+I_{YY}$ with X and Y perpendicular in the plane and Z perpendicular to it, all through O.\n\nIt rests on $r^2=x^2+y^2$ for an element lying in the plane (all of its $z$ is zero). For a solid, elements lie at different $z$, so $r^2$ about Z is not $x^2+y^2$ alone for the other axes.",
+       "points": [
+        "Statement Izz = Ixx + Iyy",
+        "Uses r² = x² + y² for an element in the plane",
+        "Not valid for solids"
+       ]
+      },
+      {
+       "id": "pe-p1",
+       "pyq": "60b47c014cfbfae2",
+       "level": 2,
+       "points": [
+        "Statement Izz = Ixx + Iyy",
+        "Neat sketch: lamina, axes X, Y in the plane, Z perpendicular, element dA at (x, y), r",
+        "r² = x² + y², Izz = ∫r² dA",
+        "Result; example circle πd⁴/32 = 2 x πd⁴/64"
+       ]
+      }
+     ]
+    },
+    {
+     "id": "pet-use",
+     "title": "Using the theorem",
+     "theory_md": "Gives the **polar moment** from two in-plane values, or one in-plane value from the polar value when symmetry makes $I_{XX}=I_{YY}$.\n- Circle: $J=\\dfrac{\\pi d^4}{32}$, so $I_{XX}=I_{YY}=\\dfrac{\\pi d^4}{64}$.\n- Hollow circle: $J=\\dfrac{\\pi(D^4-d^4)}{32}$.\n- Rectangle: $J=\\dfrac{bd(b^2+d^2)}{12}$.\nA rectangle has $I_{XX}\\ne I_{YY}$, so $J$ alone cannot give either.",
+     "basics_md": "Only symmetry lets you halve J: for a circle, every diameter is the same.",
+     "key_points": [
+      "J = Ixx + Iyy",
+      "Circle: Ixx = J/2 by symmetry",
+      "Rectangle: J = bd(b² + d²)/12",
+      "Cannot halve J when Ixx ≠ Iyy"
+     ],
+     "questions": [
+      {
+       "id": "pe2-q1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "The polar moment of inertia of a circle of diameter $d$ about its centre is",
+       "options": [
+        "$\\pi d^4/64$",
+        "$\\pi d^4/32$",
+        "$\\pi d^4/16$",
+        "$\\pi d^4/8$"
+       ],
+       "answer_index": 1,
+       "why": "Twice the diametral value $\\pi d^4/64$."
+      },
+      {
+       "id": "pe2-q2",
+       "kind": "numerical",
+       "level": 2,
+       "marks": 3,
+       "q": "A rectangle 60 mm by 40 mm. Find the polar moment of inertia about its centroid.",
+       "model_answer_md": "$I_{XX}=\\dfrac{60\\times40^3}{12}=0.32\\times10^6\\ \\mathrm{mm^4}$, $I_{YY}=\\dfrac{40\\times60^3}{12}=0.72\\times10^6\\ \\mathrm{mm^4}$\n\n$J=I_{XX}+I_{YY}=1.04\\times10^6\\ \\mathrm{mm^4}$\n\nCheck: $\\dfrac{bd(b^2+d^2)}{12}=\\dfrac{2400\\times5200}{12}=1.04\\times10^6$.",
+       "points": [
+        "Ixx = 0.32 x 10⁶ mm⁴",
+        "Iyy = 0.72 x 10⁶ mm⁴",
+        "J = 1.04 x 10⁶ mm⁴"
+       ]
+      },
+      {
+       "id": "pe2-q3",
+       "kind": "numerical",
+       "level": 3,
+       "marks": 4,
+       "q": "A hollow circular section has outer diameter 100 mm and inner diameter 60 mm. Find the polar moment of inertia and the moment of inertia about a diameter.",
+       "model_answer_md": "$J=\\dfrac{\\pi(D^4-d^4)}{32}=\\dfrac{\\pi(100^4-60^4)}{32}=8.545\\times10^6\\ \\mathrm{mm^4}$\n\nBy symmetry $I_{XX}=I_{YY}=J/2=4.273\\times10^6\\ \\mathrm{mm^4}$.",
+       "points": [
+        "J = π(D⁴ - d⁴)/32 = 8.545 x 10⁶ mm⁴",
+        "Symmetry: Ixx = Iyy",
+        "I diameter = 4.273 x 10⁶ mm⁴"
+       ]
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "topic": "Moment of inertia of composite areas",
+   "subtopics": [
+    {
+     "id": "cutouts-centroidal",
+     "title": "Cut-out sections about the centroidal axis",
+     "theory_md": "For a shape with semicircle, triangle or rectangle added or cut:\n1. **Centroid** $\\bar y$ from the base by the table (cut-outs negative).\n2. **I about the base** (or any convenient axis): standard formulas, cut-outs subtracted. Semicircle about its diameter $\\dfrac{\\pi R^4}{8}$; triangle about base $\\dfrac{bh^3}{12}$; rectangle on base $\\dfrac{bd^3}{3}$.\n3. **Shift:** $I_{XX}=I_{base}-A\\bar y^2$, with $A$ the net area.\nFor a semicircle or triangle not on the axis, use $I=I_G+ah^2$ with $I_G=0.1098R^4$ or $bh^3/36$.",
+     "basics_md": "Find the balance point, take I about an easy line (the base), then come back to the balance point with the parallel axis theorem.",
+     "key_points": [
+      "Step 1: centroid by table, cut-outs negative",
+      "Step 2: I about the base, cut-outs subtracted",
+      "Step 3: I_XX = I_base - A ybar² with net A",
+      "Part not on the axis: I_G + a h²",
+      "Final answer in mm⁴ with units"
+     ],
+     "questions": [
+      {
+       "id": "co-q1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "After finding $I$ about the base of a composite lamina, the centroidal value is obtained from",
+       "options": [
+        "$I_{base}+A\\bar y^2$",
+        "$I_{base}-A\\bar y^2$",
+        "$I_{base}/A$",
+        "$I_{base}\\bar y$"
+       ],
+       "answer_index": 1,
+       "why": "The base is away from the centroid, so $I_{base}=I_G+A\\bar y^2$."
+      },
+      {
+       "id": "co-q2",
+       "kind": "mcq",
+       "level": 2,
+       "q": "A semicircular cut-out has its diameter on the base. Its contribution to subtract from $I_{base}$ is",
+       "options": [
+        "$\\pi R^4/4$",
+        "$\\pi R^4/8$",
+        "$\\pi R^4/16$",
+        "$0.1098R^4$"
+       ],
+       "answer_index": 1,
+       "why": "About its own diameter the semicircle has $\\pi R^4/8$; $0.1098R^4$ is about its centroidal axis."
+      },
+      {
+       "id": "co-q3",
+       "kind": "numerical",
+       "level": 2,
+       "marks": 4,
+       "q": "A rectangle 100 mm wide and 60 mm deep has a circular hole of diameter 40 mm at its centre. Find $I_{xx}$ about the horizontal centroidal axis.",
+       "model_answer_md": "Both are centred, so the centroid is unchanged at the rectangle centre.\n\n$I_{rect}=\\dfrac{100\\times60^3}{12}=1.8\\times10^6\\ \\mathrm{mm^4}$\n\n$I_{hole}=\\dfrac{\\pi(40)^4}{64}=0.1257\\times10^6\\ \\mathrm{mm^4}$\n\n$I_{xx}=1.8\\times10^6-0.1257\\times10^6=1.674\\times10^6\\ \\mathrm{mm^4}$",
+       "points": [
+        "Hole concentric, centroid at centre",
+        "Rectangle 1.8 x 10⁶ mm⁴",
+        "Hole 0.1257 x 10⁶ mm⁴",
+        "Ixx = 1.674 x 10⁶ mm⁴"
+       ]
+      },
+      {
+       "id": "co-p1",
+       "pyq": "0fd21de7cd3264d6",
+       "level": 3,
+       "points": [
+        "Semicircle R = 60 (5654.87 mm², y = 25.465) minus rectangle 40 x 20 (800 mm², y = 10)",
+        "y-bar = 136000/4854.87 = 28.01 mm above LM",
+        "I_LM = 5 089 380 - 106 667 = 4 982 713 mm⁴",
+        "I_XX = I_LM - A y-bar² = 1.173 x 10⁶ mm⁴"
+       ]
+      },
+      {
+       "id": "co-p2",
+       "pyq": "4c0a9e52f9097d7b",
+       "level": 3,
+       "points": [
+        "Semicircle R = 60 minus rectangle 40 x 20 at the base",
+        "y-bar = 28.01 mm",
+        "I_LM = 4 982 713 mm⁴",
+        "I_XX = 1.173 x 10⁶ mm⁴"
+       ]
+      },
+      {
+       "id": "co-p3",
+       "pyq": "a945189e34f3043e",
+       "level": 3,
+       "points": [
+        "Triangle 240 x 120 (y = 40) minus semicircle r = 80 (y = 33.953)",
+        "Net area 4346.90 mm², y-bar = 53.98 mm",
+        "I_base = 34.56 x 10⁶ - 16.085 x 10⁶ = 18.475 x 10⁶ mm⁴",
+        "I_XX = 18.475 x 10⁶ - A y-bar² = 5.807 x 10⁶ mm⁴"
+       ]
+      },
+      {
+       "id": "co-p4",
+       "pyq": "25b26195d73a04ce",
+       "level": 3,
+       "points": [
+        "Rectangle 80 x 40 plus triangle (b = 80, h = 20) minus semicircle R = 20",
+        "Net area 3371.68 mm², y-bar = 28.47 mm above base",
+        "I_ED = 1 706 667 + 1 760 000 - 62 832 = 3 403 835 mm⁴",
+        "I_XX = 6.705 x 10⁵ mm⁴"
+       ]
+      },
+      {
+       "id": "co-p5",
+       "pyq": "84847acbad281e10",
+       "level": 3,
+       "points": [
+        "Semicircle R = 5 minus square 2 x 2 on the diameter",
+        "Net area 35.270 cm², y-bar = 2.249 cm",
+        "I_base = 245.437 - 5.333 = 240.104 cm⁴",
+        "I_XX = 240.104 - 35.270(2.249)² = 61.66 cm⁴"
+       ]
+      },
+      {
+       "id": "co-p6",
+       "pyq": "9da7ce0576a4f780",
+       "level": 3,
+       "points": [
+        "Rectangle 100 x 150 minus semicircle r = 50 at the top (centroid 21.221 mm below top)",
+        "y-bar = 55.93 mm from bottom",
+        "I_base = 112.5 x 10⁶ - 65.812 x 10⁶ = 46.688 x 10⁶ mm⁴",
+        "I_XX = 46.688 x 10⁶ - 11073 (55.93)² = 12.05 x 10⁶ mm⁴"
+       ]
+      }
+     ]
+    },
+    {
+     "id": "given-axis",
+     "title": "Moment of inertia about a given axis",
+     "theory_md": "When the question names the axis (AB, LM, an edge), **no centroid is needed**. Take each part's I about **that** axis: $I=I_G+ah^2$ with $h$ the distance from the part's centroid to AB. Add the solid parts, **subtract** the holes and cut-outs.\n\nRadius of gyration about that axis: $k=\\sqrt{I_{AB}/A}$ with $A$ the net area.\nStandard: triangle on AB $\\dfrac{bh^3}{12}$, rectangle on AB $\\dfrac{bd^3}{3}$, semicircle on its diameter $\\dfrac{\\pi R^4}{8}$, circle centred on AB $\\dfrac{\\pi d^4}{64}$.",
+     "basics_md": "Do not look for the centroid unless asked. Measure every distance from the given axis and use the parallel axis theorem part by part.",
+     "key_points": [
+      "Use the axis given, no composite centroid",
+      "I of each part = I_G + a h² about that axis",
+      "Subtract holes and cut-outs",
+      "k = √(I/A) with net area",
+      "Check that a hole lies inside the lamina"
+     ],
+     "questions": [
+      {
+       "id": "ga-q1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "To find $I$ about an edge AB of a composite lamina, one",
+       "options": [
+        "must find the composite centroid first",
+        "adds each part's $I_G+ah^2$ taken about AB",
+        "uses only the largest part",
+        "uses the perpendicular axis theorem"
+       ],
+       "answer_index": 1,
+       "why": "Each part is referred directly to AB."
+      },
+      {
+       "id": "ga-q3",
+       "kind": "mcq",
+       "level": 2,
+       "q": "A circular hole of diameter $d$ is centred on the given axis AB. Its $I_{AB}$ to subtract is",
+       "options": [
+        "$\\pi d^4/64$",
+        "$\\pi d^4/64+Ah^2$ with $h=d$",
+        "$\\pi d^4/32$",
+        "$\\pi d^4/8$"
+       ],
+       "answer_index": 0,
+       "why": "The axis passes through the hole centre, so $h=0$ and only $\\pi d^4/64$."
+      },
+      {
+       "id": "ga-q2",
+       "kind": "numerical",
+       "level": 2,
+       "marks": 5,
+       "q": "A rectangle 40 mm wide and 60 mm high stands on the edge AB. A circular hole of diameter 20 mm has its centre 30 mm above AB. Find $I_{AB}$ and the radius of gyration about AB.",
+       "model_answer_md": "Rectangle on AB: $\\dfrac{40\\times60^3}{3}=2.88\\times10^6\\ \\mathrm{mm^4}$\n\nHole: $I_G=\\dfrac{\\pi(20)^4}{64}=7854\\ \\mathrm{mm^4}$, $a=\\pi(10)^2=314.16\\ \\mathrm{mm^2}$, $h=30$ mm\n$I_{hole}=7854+314.16\\times30^2=290\\,597\\ \\mathrm{mm^4}$\n\n$I_{AB}=2\\,880\\,000-290\\,597=2.589\\times10^6\\ \\mathrm{mm^4}$\n\n$A=2400-314.16=2085.84\\ \\mathrm{mm^2}$, $k=\\sqrt{2.589\\times10^6/2085.84}=35.23$ mm",
+       "points": [
+        "Rectangle bd³/3 = 2.88 x 10⁶ mm⁴",
+        "Hole I_G + a h² = 290 597 mm⁴",
+        "I_AB = 2.589 x 10⁶ mm⁴",
+        "A = 2085.84 mm², k = 35.23 mm"
+       ]
+      },
+      {
+       "id": "ga-p1",
+       "pyq": "3626313eee2661c8",
+       "level": 2,
+       "points": [
+        "Rectangle 20 x 25 about LM: bd³/3 = 104 166.67 mm⁴",
+        "Semicircle cut: a = 157.08, centroid 4.244 mm below PN, h = 20.756 mm from LM",
+        "I_G = πr⁴/8 - a(4.244)² = 1097.57; about LM 68 768.43 mm⁴",
+        "I_LM = 104 166.67 - 68 768.43 = 35 398 mm⁴"
+       ]
+      },
+      {
+       "id": "ga-p2",
+       "pyq": "3114bc065732b866",
+       "level": 3,
+       "points": [
+        "Semicircle r = 30 on AB: πr⁴/8 = 318 086 mm⁴",
+        "Triangle on base AB: bh³/12 = 1 080 000 mm⁴",
+        "Hole d = 30 centred on AB: πd⁴/64 = 39 761 mm⁴ subtracted",
+        "I_AB = 1.358 x 10⁶ mm⁴"
+       ]
+      },
+      {
+       "id": "ga-p3",
+       "pyq": "295bb24aff97f481",
+       "level": 3,
+       "points": [
+        "Triangle on AB 50 x 15: 14 062.5 mm⁴; rectangle with top edge on AB 50 x 20: 133 333 mm⁴",
+        "Semicircle cut r = 15: I_G = 5556.45, h = 13.634 mm, I = 71 252 mm⁴",
+        "I_AB = 14 062.5 + 133 333 - 71 252 = 76 144 mm⁴",
+        "A = 1021.57 mm², k = √(I/A) = 8.63 mm"
+       ]
+      }
+     ]
+    },
+    {
+     "id": "sections",
+     "title": "Built-up and hollow sections (T, I, Z, channel, box)",
+     "theory_md": "Split into rectangles. **Symmetric about X-X:** centroid at mid-depth. **Z-section:** two equal flanges give the centroid at the centre of the web. Otherwise find $\\bar y$ by the table.\n$$I_{XX}=\\sum\\left(\\frac{bd^3}{12}+ah^2\\right)$$\nwith $h$ = distance of each part's centroid from X-X. A hollow rectangle: $\\dfrac{BD^3-bd^3}{12}$. Tapered flange: rectangle plus triangle ($bh^3/36+ah^2$). Cut-outs on a side: semicircle about its own centroid, then transfer.",
+     "basics_md": "Each rectangle contributes its own bd³/12 plus a h² for how far it sits from the axis. Wide flanges far from the axis give most of the I.",
+     "key_points": [
+      "Divide into rectangles, state b, d and a",
+      "Centroid by table (mid-depth if symmetric, centre of web for Z)",
+      "Ixx = Σ(bd³/12 + a h²)",
+      "Hollow section: outer minus inner",
+      "Tapered flange: rectangle plus triangle",
+      "Units and final value"
+     ],
+     "questions": [
+      {
+       "id": "sc-q1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "A hollow rectangular section, outer $B\\times D$, inner $b\\times d$ (concentric). $I_{XX}$ about the horizontal centroidal axis is",
+       "options": [
+        "$\\dfrac{BD^3}{12}+\\dfrac{bd^3}{12}$",
+        "$\\dfrac{BD^3}{12}-\\dfrac{bd^3}{12}$",
+        "$\\dfrac{(B-b)(D-d)^3}{12}$",
+        "$\\dfrac{BD^3-bd^3}{3}$"
+       ],
+       "answer_index": 1,
+       "why": "Outer solid minus inner void, both about the common centroid."
+      },
+      {
+       "id": "sc-q2",
+       "kind": "mcq",
+       "level": 2,
+       "q": "A Z-section has equal flanges and a central web. Its centroid lies",
+       "options": [
+        "on the top flange",
+        "at the centre of the web",
+        "at the junction of the web and top flange",
+        "cannot be found without a table"
+       ],
+       "answer_index": 1,
+       "why": "The section is symmetric about the point at the centre of the web (skew-symmetric)."
+      },
+      {
+       "id": "sc-q3",
+       "kind": "numerical",
+       "level": 2,
+       "marks": 6,
+       "q": "Find $I_{xx}$ of the T-section with flange 100 mm x 20 mm on top and web 20 mm x 80 mm below, about the horizontal centroidal axis.",
+       "model_answer_md": "Centroid from the top face: $\\bar y=\\dfrac{2000\\times10+1600\\times60}{3600}=32.22$ mm.\n\nFlange: $\\dfrac{100\\times20^3}{12}+2000(32.22-10)^2=66\\,667+987\\,654=1.054\\times10^6\\ \\mathrm{mm^4}$\n\nWeb: $\\dfrac{20\\times80^3}{12}+1600(60-32.22)^2=853\\,333+1\\,234\\,568=2.088\\times10^6\\ \\mathrm{mm^4}$\n\n$I_{xx}=1.054\\times10^6+2.088\\times10^6=3.142\\times10^6\\ \\mathrm{mm^4}$",
+       "points": [
+        "ybar = 32.22 mm from top",
+        "Flange 1.054 x 10⁶ mm⁴",
+        "Web 2.088 x 10⁶ mm⁴",
+        "Ixx = 3.142 x 10⁶ mm⁴"
+       ]
+      },
+      {
+       "id": "sx-p1",
+       "pyq": "e5df5fbb19b327ba",
+       "level": 3,
+       "points": [
+        "Z-section: flanges 10 x 2, web 2 x 14, depth 18 cm; centroid at mid-depth 9 cm",
+        "Flange: 6.667 + 20(8)² = 1286.667 cm⁴ each",
+        "Web: 2 x 14³/12 = 457.333 cm⁴",
+        "I_XX = 3030.67 cm⁴"
+       ]
+      },
+      {
+       "id": "sx-p2",
+       "pyq": "fe1efc6174ec0440",
+       "level": 3,
+       "points": [
+        "Parts: 10 x 40, 60 x 10, 10 x 40; total area 1400 mm²",
+        "Centroid x = 30 mm, y = 45 mm (centre of Part 2)",
+        "Parts 1 and 3: 53 333 + 400(25)² = 303 333 mm⁴ each; part 2: 5000 mm⁴",
+        "I_XX = 611 667 mm⁴"
+       ]
+      },
+      {
+       "id": "sx-p3",
+       "pyq": "f4ac569d1df16585",
+       "level": 3,
+       "points": [
+        "Flanges 6 x 3 and 6 x 4, web 2 x 9; total area 60 cm²",
+        "y-bar = 462/60 = 7.7 cm from bottom",
+        "Top flange 845.82, web 133.02, bottom flange 811.76 cm⁴",
+        "I_XX = 1790.6 cm⁴"
+       ]
+      },
+      {
+       "id": "sx-p4",
+       "pyq": "28ff98b70098e9ce",
+       "level": 3,
+       "points": [
+        "Split: web 4 x 20, two flange rectangles 8 x 2, two taper triangles (8 base, 2.5 high); X-X at mid-depth",
+        "Web 2666.67; flange rectangle 1301.33 each",
+        "Triangle: 8(2.5)³/36 + 10(7.167)² = 517.08 cm⁴ each",
+        "I_XX = 6303.5 cm⁴"
+       ]
+      },
+      {
+       "id": "sx-p5",
+       "pyq": "882320531b4eb78b",
+       "level": 2,
+       "points": [
+        "Outer 30 x 40 minus inner 15 x 25, concentric",
+        "I_XX = (30 x 40³ - 15 x 25³)/12 = 140 468.75 mm⁴",
+        "I_YY = (40 x 30³ - 25 x 15³)/12 = 82 968.75 mm⁴"
+       ]
+      },
+      {
+       "id": "sx-p6",
+       "pyq": "22c0881666121ac0",
+       "level": 3,
+       "points": [
+        "Rectangle 12 x 15 minus two semicircles r = 5 on the sides",
+        "I_xx: 3375 - 2 x (πr⁴/8) = 3375 - 490.87 = 2884.13 cm⁴",
+        "I_yy: each semicircle I_G = 68.60, h = 3.878 cm, so 659.15 cm⁴ about y-y",
+        "I_yy = 2160 - 2 x 659.15 = 841.69 cm⁴"
+       ]
+      }
+     ]
+    }
+   ]
+  }
+ ]
+}

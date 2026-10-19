@@ -1,0 +1,1164 @@
+{
+ "code": "PY1102",
+ "unit": "Nuclear Physics",
+ "written": "2026-10-19",
+ "by": "claude-sonnet-5-5, in a Claude Code session",
+ "topics": [
+  {
+   "topic": "Nuclear properties",
+   "subtopics": [
+    {
+     "id": "size-density",
+     "title": "Constituents, size and density; no electron in the nucleus",
+     "theory_md": "The nucleus contains **protons and neutrons** (nucleons). It is labelled $^A_ZX$: $Z$ protons, $N=A-Z$ neutrons. Radius $R=R_0A^{1/3}$ with $R_0\\approx1.2$ fm ($1\\ \\mathrm{fm}=10^{-15}$ m). Volume $\\propto A$, so **density is the same for all nuclei**, about $2.3\\times10^{17}$ kg/m$^3$.\n\n**Why no electron in the nucleus:** confining an electron in $\\Delta x\\approx10^{-14}$ m gives $\\Delta p\\ge\\hbar/2\\Delta x$, so $E\\approx pc\\approx10$ MeV or more, but beta electrons carry only 1 to 4 MeV. Nuclear spin and magnetic moment also do not fit protons plus electrons. The beta electron is created at decay: $n\\to p+e^-+\\bar\\nu$.",
+     "basics_md": "Every atom has a tiny, dense core. Think of a cricket ball at the centre of a stadium holding the whole mass of the atom. Its radius grows only as the cube root of the number of nucleons, so every nucleus is equally dense.",
+     "key_points": [
+      "Nucleus = protons + neutrons; $A=Z+N$",
+      "$R=R_0A^{1/3}$, $R_0\\approx1.2$ fm",
+      "Density about $2.3\\times10^{17}$ kg/m$^3$, independent of $A$",
+      "Electron not present: uncertainty principle gives $E\\gtrsim10$ MeV, beta electrons carry 1 to 4 MeV; spin and magnetic moment mismatch"
+     ],
+     "questions": [
+      {
+       "id": "sd-q1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "The radius of a nucleus of mass number $A$ varies as",
+       "options": [
+        "$A$",
+        "$A^{1/2}$",
+        "$A^{1/3}$",
+        "$A^{2}$"
+       ],
+       "answer_index": 2,
+       "why": "Volume is proportional to $A$, so radius goes as $A^{1/3}$."
+      },
+      {
+       "id": "sd-q2",
+       "kind": "mcq",
+       "level": 2,
+       "q": "The density of nuclear matter is",
+       "options": [
+        "larger for heavier nuclei",
+        "about the same for all nuclei",
+        "smaller for heavier nuclei",
+        "zero at the centre"
+       ],
+       "answer_index": 1,
+       "why": "$V\\propto A$ and mass $\\propto A$, so the ratio is constant."
+      },
+      {
+       "id": "sd-q3",
+       "kind": "numerical",
+       "level": 2,
+       "marks": 3,
+       "q": "Find the radius of the $^{27}_{13}$Al nucleus and its density. Take $R_0=1.2$ fm and nucleon mass $1.67\\times10^{-27}$ kg.",
+       "model_answer_md": "**Radius:** $R=R_0A^{1/3}=1.2\\times27^{1/3}=1.2\\times3=3.6$ fm.\n\n**Density:** $\\rho=\\dfrac{A m_N}{\\frac43\\pi R_0^3A}=\\dfrac{1.67\\times10^{-27}}{\\frac43\\pi(1.2\\times10^{-15})^3}\\approx2.3\\times10^{17}$ kg/m$^3$ (independent of $A$).",
+       "points": [
+        "$R=R_0A^{1/3}$ used",
+        "$R=3.6$ fm",
+        "Density formula with $A$ cancelling",
+        "$\\rho\\approx2.3\\times10^{17}$ kg/m$^3$"
+       ]
+      },
+      {
+       "id": "sd-p1",
+       "pyq": "d1394ec7c89e9bd4",
+       "level": 2,
+       "points": [
+        "Nuclear size about $10^{-14}$ m so $\\Delta x\\approx10^{-14}$ m",
+        "Uncertainty principle: $\\Delta p\\ge\\hbar/2\\Delta x\\approx5\\times10^{-21}$ kg m/s",
+        "Gives $E\\approx pc\\ge10$ MeV, but beta electrons carry only 1 to 4 MeV",
+        "Spin and magnetic moment do not fit; beta electron is created at decay ($n\\to p+e^-+\\bar\\nu$)"
+       ]
+      },
+      {
+       "id": "sd-q4",
+       "kind": "mcq",
+       "level": 3,
+       "q": "A student argues that an electron can sit in the nucleus because beta decay emits electrons. The correct reply is",
+       "options": [
+        "the electron is created at the moment of decay from $n\\to p+e^-+\\bar\\nu$",
+        "the electron is stored in the neutron",
+        "the electron comes from the K shell only",
+        "beta electrons have energy above 100 MeV"
+       ],
+       "answer_index": 0,
+       "why": "Confinement would need $E\\gtrsim10$ MeV, but emitted electrons have 1 to 4 MeV, so they are made at decay."
+      }
+     ]
+    },
+    {
+     "id": "binding-energy",
+     "title": "Mass defect, binding energy and the BE/A curve",
+     "theory_md": "**Mass defect** $\\Delta m=Zm_p+Nm_n-M_{nucleus}$ (use atomic masses with $m_H$ for $Z$ protons). **Binding energy** $B=\\Delta m\\,c^2$, with $1\\ \\mathrm{u}=931.5$ MeV. **BE per nucleon** $B/A$ is the measure of stability.\n\nBE/A curve: rises steeply for light nuclei, peak about **8.8 MeV at $^{56}$Fe**, then falls slowly to about 7.6 MeV for U. So **fusion of light nuclei and fission of heavy nuclei both release energy** by moving towards the peak. $^4$He is a spike (7.07 MeV), showing its stability.",
+     "basics_md": "Joined parts weigh less than separate parts; the missing mass left as energy when the nucleus formed. To pull it apart again you must put that energy back in.",
+     "key_points": [
+      "$\\Delta m=Zm_p+Nm_n-M$; $B=\\Delta m\\,c^2$; 1 u = 931.5 MeV",
+      "BE/A peaks near $^{56}$Fe at about 8.8 MeV",
+      "Light nuclei fuse and heavy nuclei fission to move towards the peak",
+      "Higher BE/A means more stable"
+     ],
+     "questions": [
+      {
+       "id": "be-q1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "The BE/A curve has its maximum near",
+       "options": [
+        "$^4$He",
+        "$^{16}$O",
+        "$^{56}$Fe",
+        "$^{238}$U"
+       ],
+       "answer_index": 2,
+       "why": "Iron-56 is the most tightly bound per nucleon, about 8.8 MeV."
+      },
+      {
+       "id": "be-q2",
+       "kind": "mcq",
+       "level": 2,
+       "q": "Energy is released when",
+       "options": [
+        "iron fuses with hydrogen",
+        "uranium splits into two middle-mass nuclei",
+        "iron splits into two halves",
+        "two heavy nuclei fuse"
+       ],
+       "answer_index": 1,
+       "why": "Fission of heavy nuclei goes towards the BE/A peak, so energy is released."
+      },
+      {
+       "id": "be-q3",
+       "kind": "numerical",
+       "level": 2,
+       "marks": 4,
+       "q": "Find the binding energy and BE per nucleon of $^4_2$He. $m_H=1.007825$ u, $m_n=1.008665$ u, $M(^4\\mathrm{He})=4.002603$ u.",
+       "model_answer_md": "**Mass defect:** $\\Delta m=2(1.007825)+2(1.008665)-4.002603=0.030377$ u.\n\n**Binding energy:** $B=0.030377\\times931.5\\approx28.3$ MeV.\n\n**Per nucleon:** $B/A=28.3/4\\approx7.07$ MeV.",
+       "points": [
+        "$\\Delta m=0.030377$ u",
+        "$B=\\Delta m\\times931.5$",
+        "$B\\approx28.3$ MeV",
+        "$B/A\\approx7.07$ MeV/nucleon"
+       ]
+      },
+      {
+       "id": "be-q4",
+       "kind": "short",
+       "level": 3,
+       "marks": 3,
+       "q": "Draw and explain the binding energy per nucleon curve. What does it tell about fission and fusion?",
+       "model_answer_md": "**Curve (described):** x-axis mass number $A$, y-axis $B/A$ in MeV. It rises sharply from about 1 MeV for $^2$H, has a peak at 7.07 MeV for $^4$He, flattens near 8.8 MeV at $A\\approx56$ (Fe), then slowly falls to about 7.6 MeV at $A=238$.\n\n**Conclusions:**\n1. Nuclei near $A=56$ are most stable.\n2. Light nuclei fuse to move up the curve: energy released (fusion).\n3. Heavy nuclei split to move up the curve: energy released (fission).",
+       "points": [
+        "Curve described with axes, peak at $A\\approx56$, 8.8 MeV",
+        "Fusion of light nuclei releases energy",
+        "Fission of heavy nuclei releases energy"
+       ]
+      }
+     ]
+    },
+    {
+     "id": "nuclear-force",
+     "title": "Nuclear forces and stability",
+     "theory_md": "The **nuclear force** is the strong force binding nucleons.\n- Strongest known, but **short range** (about 1 to 2 fm).\n- **Charge independent**: p-p, n-n and p-n forces are about equal.\n- **Saturated**: a nucleon feels only its neighbours, so $B\\propto A$.\n- **Spin dependent and non-central** (tensor part).\n- Carried by **meson (pion) exchange** (Yukawa).\n\n**Stability:** light stable nuclei have $N\\approx Z$; heavy ones need $N/Z\\approx1.5$ because proton Coulomb repulsion grows as $Z^2$ while the nuclear force saturates. Even-even nuclei are the most stable.",
+     "basics_md": "Protons repel each other by charge, yet the nucleus holds together. A much stronger, very short-range glue acts between neighbouring nucleons; beyond 2 fm it is gone.",
+     "key_points": [
+      "Short range (1 to 2 fm), much stronger than Coulomb at that range",
+      "Charge independent and saturated",
+      "Spin dependent, non-central; exchange of pions",
+      "$N/Z\\to1.5$ for heavy stable nuclei; even-even most stable"
+     ],
+     "questions": [
+      {
+       "id": "nf-q1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "The range of the nuclear force is about",
+       "options": [
+        "$10^{-10}$ m",
+        "$10^{-15}$ m",
+        "$10^{-20}$ m",
+        "infinite"
+       ],
+       "answer_index": 1,
+       "why": "Nuclear force acts only within 1 to 2 fm."
+      },
+      {
+       "id": "nf-q2",
+       "kind": "mcq",
+       "level": 2,
+       "q": "Why do heavy stable nuclei have more neutrons than protons?",
+       "options": [
+        "neutrons are lighter",
+        "neutrons add nuclear attraction without Coulomb repulsion",
+        "neutrons have charge",
+        "protons are unstable"
+       ],
+       "answer_index": 1,
+       "why": "Extra neutrons dilute proton repulsion while adding attractive nuclear force."
+      },
+      {
+       "id": "nf-q3",
+       "kind": "short",
+       "level": 2,
+       "marks": 3,
+       "q": "List the properties of nuclear force. Who proposed the meson theory?",
+       "model_answer_md": "1. Short range, about 1 to 2 fm.\n2. Strongest of the forces, about 100 times Coulomb at this range.\n3. Charge independent.\n4. Saturated: nucleon interacts only with neighbours.\n5. Spin dependent, non-central.\n6. Arises by exchange of mesons (pions): **Yukawa**, 1935.",
+       "points": [
+        "Short range, strong",
+        "Charge independent",
+        "Saturation",
+        "Spin dependent, non-central",
+        "Meson exchange, Yukawa"
+       ]
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "topic": "Nuclear models",
+   "subtopics": [
+    {
+     "id": "liquid-drop",
+     "title": "Liquid drop model and the mass formula",
+     "theory_md": "**Idea (Bohr and Wheeler):** the nucleus behaves like a charged incompressible liquid drop: constant density, short-range forces between neighbours (like surface tension and cohesion). It explains binding energy and **fission**.\n\n**Semi-empirical mass formula** for binding energy:\n$$B=a_vA-a_sA^{2/3}-a_c\\frac{Z(Z-1)}{A^{1/3}}-a_a\\frac{(A-2Z)^2}{A}\\pm\\delta$$\nVolume (+), surface (-), Coulomb (-), asymmetry (-) and pairing ($\\delta>0$ even-even, $<0$ odd-odd, 0 odd $A$). Typical: $a_v=15.8$, $a_s=17.8$, $a_c=0.71$, $a_a=23.7$ MeV.\n\n**Fails** for magic numbers and excited-state spectra.",
+     "basics_md": "A nucleus is like a water drop: molecules inside are bound on all sides, those on the surface fewer, so surface lowers the binding. Charges push the drop apart.",
+     "key_points": [
+      "Nucleus as charged incompressible liquid drop; explains fission",
+      "Five terms: volume, surface, Coulomb, asymmetry, pairing",
+      "Signs: volume +, surface and Coulomb and asymmetry -, pairing $\\pm$",
+      "Cannot explain magic numbers"
+     ],
+     "questions": [
+      {
+       "id": "ld-q1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "Which term in the mass formula is positive?",
+       "options": [
+        "surface",
+        "Coulomb",
+        "volume",
+        "asymmetry"
+       ],
+       "answer_index": 2,
+       "why": "Volume term $a_vA$ adds binding; the others reduce it."
+      },
+      {
+       "id": "ld-q2",
+       "kind": "mcq",
+       "level": 2,
+       "q": "The surface term reduces binding because",
+       "options": [
+        "surface nucleons have fewer neighbours",
+        "protons repel",
+        "there are too many neutrons",
+        "density is not constant"
+       ],
+       "answer_index": 0,
+       "why": "Nucleons at the surface are bound on fewer sides."
+      },
+      {
+       "id": "ld-q3",
+       "kind": "long",
+       "level": 2,
+       "marks": 5,
+       "q": "State the assumptions of the liquid drop model and write the semi-empirical mass formula, naming each term.",
+       "model_answer_md": "**Assumptions:**\n1. Nucleus is a drop of incompressible nuclear fluid of constant density.\n2. Forces are short range and saturated, like molecular forces in a liquid.\n3. Nucleons move randomly like molecules; the surface has tension.\n\n**Formula:** $B=a_vA-a_sA^{2/3}-a_c\\dfrac{Z(Z-1)}{A^{1/3}}-a_a\\dfrac{(A-2Z)^2}{A}\\pm\\delta$\n- $a_vA$: volume term, $B\\propto A$ by saturation.\n- $a_sA^{2/3}$: surface correction.\n- Coulomb term: proton repulsion.\n- Asymmetry term: $N\\ne Z$ lowers binding.\n- $\\delta$: pairing (+ even-even, - odd-odd, 0 odd $A$).",
+       "points": [
+        "Assumptions: incompressible, constant density, short range forces",
+        "Formula written correctly",
+        "Volume, surface, Coulomb, asymmetry terms named",
+        "Pairing term and its sign rule"
+       ]
+      }
+     ]
+    },
+    {
+     "id": "shell-model",
+     "title": "Shell model and magic numbers",
+     "theory_md": "**Idea (Mayer, Jensen):** each nucleon moves in an average potential of the others and fills discrete energy levels obeying the Pauli principle, like electron shells.\n\n**Magic numbers:** $2,8,20,28,50,82,126$ (for protons or neutrons). Nuclei with these are specially stable: large binding, high first excitation energy, many stable isotopes and isotones, small neutron capture cross-section. Doubly magic: $^4$He, $^{16}$O, $^{40}$Ca, $^{208}$Pb.\n\nA strong **spin-orbit coupling** ($\\vec l\\cdot\\vec s$) splits levels and reproduces the numbers above 20. Success: spins, magnetic moments, magic numbers. Weakness: fails for deformed nuclei and does not explain fission.",
+     "basics_md": "Electrons in noble gases fill a shell completely and become inert. Nucleons do the same: when a proton or neutron count completes a shell the nucleus is unusually stable.",
+     "key_points": [
+      "Nucleons fill discrete levels in an average potential",
+      "Magic numbers 2, 8, 20, 28, 50, 82, 126",
+      "Spin-orbit coupling is essential to reproduce them",
+      "Evidence: high stability, BE jumps, abundance, low capture cross-section"
+     ],
+     "questions": [
+      {
+       "id": "sm-q1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "Which set contains only magic numbers?",
+       "options": [
+        "2, 8, 20, 28",
+        "2, 6, 20, 28",
+        "4, 8, 20, 28",
+        "2, 8, 18, 28"
+       ],
+       "answer_index": 0,
+       "why": "The magic numbers are 2, 8, 20, 28, 50, 82, 126."
+      },
+      {
+       "id": "sm-q2",
+       "kind": "mcq",
+       "level": 2,
+       "q": "The shell model needed which addition to explain magic numbers beyond 20?",
+       "options": [
+        "Coulomb term",
+        "Spin-orbit coupling",
+        "Surface tension",
+        "Pairing energy"
+       ],
+       "answer_index": 1,
+       "why": "Spin-orbit splitting of levels gives 28, 50, 82, 126."
+      },
+      {
+       "id": "sm-q3",
+       "kind": "short",
+       "level": 2,
+       "marks": 4,
+       "q": "What are magic numbers? Give experimental evidence for them. Name two points where the shell model succeeds and one where it fails.",
+       "model_answer_md": "**Magic numbers:** the nucleon counts $2,8,20,28,50,82,126$ at which a shell closes and the nucleus is exceptionally stable.\n\n**Evidence:**\n1. Binding energy per nucleon is high at these numbers.\n2. More stable isotopes and isotones (e.g. $Z=50$, tin has 10 isotopes).\n3. Low neutron capture cross-section and high first excited state.\n\n**Success:** magic numbers; spins and magnetic moments of ground states.\n**Failure:** deformed nuclei, fission, large quadrupole moments.",
+       "points": [
+        "Definition with the seven numbers",
+        "At least two pieces of evidence",
+        "Two successes",
+        "One failure"
+       ]
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "topic": "Particle accelerators",
+   "subtopics": [
+    {
+     "id": "cyclotron",
+     "title": "Cyclotron: principle, working, frequency, limits",
+     "theory_md": "**Principle:** a charged particle is accelerated by an alternating electric field across a gap and bent into semicircles by a uniform magnetic field $B$.\n\n**Construction:** two hollow D-shaped **dees** in a vacuum chamber between electromagnet poles; RF oscillator across the gap; ion source at the centre; deflector at the rim.\n\n**Frequency:** $qvB=mv^2/r\\Rightarrow r=mv/qB$. Period $T=2\\pi m/qB$, independent of $v$ and $r$, so\n$$f=\\frac{qB}{2\\pi m},\\qquad E_{max}=\\frac{q^2B^2R^2}{2m}$$\n**Limits:** relativistic mass rise (about 25 MeV for protons); no electrons; no neutral particles; field non-uniformity.",
+     "basics_md": "A magnet only turns a charge; it never speeds it up. So each time the particle reaches the gap, the electric field must be in the right direction. Because the half-circle time does not depend on speed, a fixed-frequency oscillator can do that.",
+     "key_points": [
+      "Electric field accelerates, magnetic field bends",
+      "$f=qB/2\\pi m$ independent of speed and radius",
+      "$E_{max}=q^2B^2R^2/2m$",
+      "Limits: relativistic mass, not for electrons or neutrons"
+     ],
+     "questions": [
+      {
+       "id": "cy-q1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "The cyclotron frequency of a particle of charge $q$ and mass $m$ in field $B$ is",
+       "options": [
+        "$qB/m$",
+        "$qB/2\\pi m$",
+        "$2\\pi m/qB$",
+        "$qBR/m$"
+       ],
+       "answer_index": 1,
+       "why": "$f=1/T$ and $T=2\\pi m/qB$."
+      },
+      {
+       "id": "cy-q2",
+       "kind": "mcq",
+       "level": 2,
+       "q": "A cyclotron cannot accelerate electrons because",
+       "options": [
+        "they have no charge",
+        "they become relativistic at low energy and fall out of resonance",
+        "they are too heavy",
+        "dees repel electrons"
+       ],
+       "answer_index": 1,
+       "why": "The mass rises quickly, changing the orbital frequency."
+      },
+      {
+       "id": "cy-q3",
+       "kind": "short",
+       "level": 2,
+       "marks": 3,
+       "q": "Why does the cyclotron frequency not depend on speed, and why does the cyclotron fail at high energy?",
+       "model_answer_md": "From $r=mv/qB$, the half-circle time is $\\pi r/v=\\pi m/qB$: faster ions go on bigger circles and take the same time. So a fixed RF frequency stays in step.\n\nAt high speed $m=\\gamma m_0$ rises, $f=qB/2\\pi\\gamma m_0$ falls, the ion arrives late at the gap and stops gaining energy. Hence about 25 MeV for protons.",
+       "points": [
+        "Half-circle time $=\\pi m/qB$, independent of $v$ and $r$",
+        "Relativistic mass increase lowers the frequency",
+        "Ion falls out of step with the RF field"
+       ]
+      },
+      {
+       "id": "cy-p1",
+       "pyq": "678e0cbea0001968",
+       "level": 2,
+       "points": [
+        "Principle: electric field across gap accelerates, magnetic field bends into semicircles",
+        "Working: field reverses as ion returns to the gap, gains $qV$ each crossing",
+        "Derive $r=mv/qB$, $T=2\\pi m/qB$, so $f=qB/2\\pi m$",
+        "Limitations: relativistic mass change, not for neutral particles or electrons"
+       ]
+      },
+      {
+       "id": "cy-p2",
+       "pyq": "6f99a06a36273712",
+       "level": 3,
+       "points": [
+        "Statement: electric field gives energy $qV$, magnetic field steers, repeated passes build MeV",
+        "Labelled diagram: dees, gap, RF oscillator, source, magnet poles, deflector",
+        "Working with $f=qB/2\\pi m$ and $E_{max}=q^2B^2R^2/2m$",
+        "Limitations: relativistic mass increase (about 25 MeV for protons), no electrons or neutrals, field non-uniformity"
+       ]
+      }
+     ]
+    },
+    {
+     "id": "cyclotron-numericals",
+     "title": "Cyclotron numericals",
+     "theory_md": "Three formulas cover every cyclotron numerical:\n- Frequency: $f=\\dfrac{qB}{2\\pi m}$, or $B=\\dfrac{2\\pi fm}{q}$.\n- Exit speed: $v=\\dfrac{qBR}{m}=2\\pi fR$.\n- Maximum energy: $E_{max}=\\dfrac{q^2B^2R^2}{2m}$ (in J; divide by $1.6\\times10^{-13}$ for MeV).\n\nCheck: **diameter** is given sometimes, so use $R=D/2$. Ion charge: proton $e$, deuteron $e$, alpha $2e$. Energy per revolution is $2qV$ (two gap crossings), so revolutions $N=E_{max}/2qV$ needs the dee voltage $V$.",
+     "basics_md": "Write what is given with units first. Find which of $f$, $B$, $R$ you are given, then use the formula that links them to what is asked.",
+     "key_points": [
+      "Write $f=qB/2\\pi m$, $v=2\\pi fR$, $E=q^2B^2R^2/2m$",
+      "Convert diameter to radius and use correct charge ($\\alpha$ has $2e$)",
+      "Revolutions $N=E_{max}/2qV$ needs the dee voltage"
+     ],
+     "questions": [
+      {
+       "id": "cn-q1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "A He$^{2+}$ ion has charge",
+       "options": [
+        "$e$",
+        "$2e$",
+        "$4e$",
+        "$e/2$"
+       ],
+       "answer_index": 1,
+       "why": "Doubly ionised helium has two units of charge."
+      },
+      {
+       "id": "cn-q2",
+       "kind": "numerical",
+       "level": 2,
+       "marks": 3,
+       "q": "Find the cyclotron frequency for protons in a field of 1.5 T. ($m_p=1.67\\times10^{-27}$ kg, $e=1.6\\times10^{-19}$ C.)",
+       "model_answer_md": "$f=\\dfrac{eB}{2\\pi m}=\\dfrac{1.6\\times10^{-19}\\times1.5}{2\\pi\\times1.67\\times10^{-27}}\\approx2.29\\times10^{7}$ Hz $\\approx22.9$ MHz.",
+       "points": [
+        "Formula $f=eB/2\\pi m$",
+        "Substitution with units",
+        "$f\\approx22.9$ MHz"
+       ]
+      },
+      {
+       "id": "cn-q3",
+       "kind": "numerical",
+       "level": 2,
+       "marks": 3,
+       "q": "Find the maximum energy of protons in a cyclotron with dee radius 0.5 m and field 1.2 T. ($m_p=1.67\\times10^{-27}$ kg, $e=1.6\\times10^{-19}$ C.)",
+       "model_answer_md": "$E_{max}=\\dfrac{e^2B^2R^2}{2m}=\\dfrac{(1.6\\times10^{-19})^2(1.2)^2(0.5)^2}{2\\times1.67\\times10^{-27}}\\approx2.76\\times10^{-12}$ J $\\approx17.3$ MeV.",
+       "points": [
+        "$E_{max}=e^2B^2R^2/2m$",
+        "Substitution with units",
+        "$E\\approx2.76\\times10^{-12}$ J",
+        "$\\approx17.3$ MeV"
+       ]
+      },
+      {
+       "id": "cn-p1",
+       "pyq": "da964ca55f14b936",
+       "level": 2,
+       "points": [
+        "Formula $E_{max}=q^2B^2R^2/2m$ with $R=2$ m, $B=0.75$ T",
+        "Substitution",
+        "$E_{max}\\approx1.72\\times10^{-11}$ J",
+        "About 108 MeV (non-relativistic estimate)"
+       ]
+      },
+      {
+       "id": "cn-p2",
+       "pyq": "5cce381e7529a6b1",
+       "level": 2,
+       "points": [
+        "Formula $B=2\\pi fm/q$",
+        "$B\\approx1.30$ T",
+        "Speed $v=2\\pi fr$",
+        "$v\\approx2.01\\times10^{7}$ m/s"
+       ]
+      },
+      {
+       "id": "cn-p3",
+       "pyq": "a4f9392e25f11b05",
+       "level": 3,
+       "points": [
+        "$D=1.8$ m so $R=0.9$ m; charge of He$^{2+}$ is $2e=3.2\\times10^{-19}$ C",
+        "$E_{max}=q^2B^2R^2/2m\\approx3.98\\times10^{-12}$ J $\\approx24.9$ MeV",
+        "Revolutions $N=E_{max}/2qV$: $V$ is not given, so state the formula and note the dee voltage is needed",
+        "Frequency $f\\approx6.1$ MHz"
+       ]
+      }
+     ]
+    },
+    {
+     "id": "betatron",
+     "title": "Betatron: principle, working and condition",
+     "theory_md": "**Principle:** an electron is accelerated in a circular orbit of **fixed radius $r_0$** by the electric field induced by a changing magnetic flux (transformer action, the electron beam is the secondary).\n\n**Construction:** doughnut-shaped evacuated tube between shaped poles of an AC-fed laminated magnet; injector gun; target for X-rays. Electrons are injected as the field rises and used in the first quarter cycle.\n\n**Role of time-varying B:** its changing flux induces $E=\\dfrac{1}{2\\pi r_0}\\dfrac{d\\phi}{dt}$ that accelerates electrons; the field at the orbit holds them in the circle.\n\n**Condition:** $p=eB_0r_0$ and $p=\\dfrac{e\\phi}{2\\pi r_0}$ give $\\phi=2\\pi r_0^2B_0$, i.e. $\\bar B=2B_0$.",
+     "basics_md": "Change the magnetic flux through a loop and an electric field circulates around it (Faraday). The betatron uses that circulating field to push electrons round. The magnet must also keep the radius constant, which fixes a 2:1 rule.",
+     "key_points": [
+      "Induced emf from changing flux accelerates electrons",
+      "Orbit radius fixed by $B_0$ at the orbit",
+      "Condition $\\bar B=2B_0$ (flux $=2\\pi r_0^2B_0$)",
+      "Pole pieces tapered to meet the condition"
+     ],
+     "questions": [
+      {
+       "id": "bt-q1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "The betatron condition is",
+       "options": [
+        "$\\bar B=B_0$",
+        "$\\bar B=2B_0$",
+        "$\\bar B=B_0/2$",
+        "$\\bar B=4B_0$"
+       ],
+       "answer_index": 1,
+       "why": "Average field inside the orbit equals twice the field at the orbit."
+      },
+      {
+       "id": "bt-q2",
+       "kind": "numerical",
+       "level": 2,
+       "marks": 3,
+       "q": "In a betatron the orbit radius is 0.5 m and the field at the orbit is 0.4 T. Find the momentum and energy of the electron. ($e=1.6\\times10^{-19}$ C, $c=3\\times10^8$ m/s.)",
+       "model_answer_md": "$p=eB_0r_0=1.6\\times10^{-19}\\times0.4\\times0.5=3.2\\times10^{-20}$ kg m/s.\n\nUltra-relativistic: $E\\approx pc=3.2\\times10^{-20}\\times3\\times10^8=9.6\\times10^{-12}$ J $=60$ MeV.",
+       "points": [
+        "$p=eB_0r_0$",
+        "$p=3.2\\times10^{-20}$ kg m/s",
+        "$E\\approx pc$",
+        "$E\\approx60$ MeV"
+       ]
+      },
+      {
+       "id": "bt-q3",
+       "kind": "mcq",
+       "level": 2,
+       "q": "In a betatron, the electrons are accelerated by",
+       "options": [
+        "the RF voltage across dees",
+        "the induced electric field of the changing flux",
+        "a constant magnetic field",
+        "a static electric field"
+       ],
+       "answer_index": 1,
+       "why": "Changing flux gives a circulating electric field by Faraday's law."
+      },
+      {
+       "id": "bt-p1",
+       "pyq": "8b396f55294ce5f8",
+       "level": 3,
+       "points": [
+        "Principle: electron accelerated in fixed orbit by induced electric field of changing flux",
+        "Construction: doughnut tube, laminated AC magnet, injector, target",
+        "Working: inject on rising field, $E=\\frac{1}{2\\pi r_0}\\frac{d\\phi}{dt}$ accelerates, $B_0$ gives centripetal force",
+        "Derivation: $p=e\\phi/2\\pi r_0$ and $p=eB_0r_0$ so $\\phi=2\\pi r_0^2B_0$, $\\bar B=2B_0$"
+       ]
+      },
+      {
+       "id": "bt-p2",
+       "pyq": "cc774bf2546a4ca7",
+       "level": 2,
+       "points": [
+        "Condition: flux changes at twice the rate of $\\pi r^2B_0$: $\\Delta\\Phi=2\\pi r^2\\Delta B_0$",
+        "Equivalent: $B_{av}=2B_0$",
+        "Reason: $dp/dt=eE$ and staying on radius needs $p=eB_0r$",
+        "Keeps electron on circular orbit while it gains energy"
+       ]
+      },
+      {
+       "id": "bt-p3",
+       "pyq": "ccf51bfcd84b861d",
+       "level": 1,
+       "points": [
+        "Changing magnetic flux induces tangential electric field (Faraday) that accelerates electrons",
+        "Magnetic field also holds them in the fixed circular orbit ($B_{orbit}=\\frac12\\bar B$)"
+       ]
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "topic": "Fission and fusion",
+   "subtopics": [
+    {
+     "id": "fission",
+     "title": "Nuclear fission and energy released",
+     "theory_md": "**Fission:** a heavy nucleus splits into two medium fragments plus neutrons, releasing energy. Example (slow neutron on $^{235}$U):\n$$^{235}_{92}\\mathrm{U}+n\\to{}^{141}_{56}\\mathrm{Ba}+{}^{92}_{36}\\mathrm{Kr}+3n+Q$$\nFragment pairs vary; 2 to 3 neutrons per fission (average 2.5).\n\n**Energy:** about **200 MeV per fission**, mostly as kinetic energy of fragments (about 165 MeV). Reason: BE/A is about 7.6 MeV for U and 8.5 MeV for fragments, giving $\\approx0.9\\times236\\approx200$ MeV. One kg of $^{235}$U releases about $8\\times10^{13}$ J. Fissile: $^{235}$U, $^{233}$U, $^{239}$Pu. Fertile: $^{238}$U, $^{232}$Th.",
+     "basics_md": "A heavy nucleus is like an overfull drop; one extra neutron makes it wobble and split. The pieces are more tightly bound per nucleon, so the difference is released.",
+     "key_points": [
+      "Heavy nucleus + neutron gives two fragments + 2 to 3 neutrons + energy",
+      "About 200 MeV per fission, mostly fragment kinetic energy",
+      "Reason: BE/A of fragments (8.5) exceeds that of U (7.6)",
+      "Fissile $^{235}$U, $^{233}$U, $^{239}$Pu; fertile $^{238}$U, $^{232}$Th"
+     ],
+     "questions": [
+      {
+       "id": "fi-q1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "Energy released per fission of $^{235}$U is about",
+       "options": [
+        "2 MeV",
+        "20 MeV",
+        "200 MeV",
+        "2000 MeV"
+       ],
+       "answer_index": 2,
+       "why": "About 200 MeV per fission."
+      },
+      {
+       "id": "fi-q2",
+       "kind": "mcq",
+       "level": 2,
+       "q": "Most of the fission energy appears as",
+       "options": [
+        "kinetic energy of fragments",
+        "gamma rays",
+        "kinetic energy of neutrons",
+        "beta particles"
+       ],
+       "answer_index": 0,
+       "why": "About 165 MeV of 200 MeV is fragment kinetic energy."
+      },
+      {
+       "id": "fi-q3",
+       "kind": "numerical",
+       "level": 2,
+       "marks": 4,
+       "q": "A reactor produces 100 MW of power from fission at 200 MeV per event. Find the fissions per second and the $^{235}$U mass burnt per day. ($1\\ \\mathrm{MeV}=1.6\\times10^{-13}$ J.)",
+       "model_answer_md": "Energy per fission: $200\\times1.6\\times10^{-13}=3.2\\times10^{-11}$ J.\n\nFissions per second: $\\dfrac{100\\times10^6}{3.2\\times10^{-11}}=3.1\\times10^{18}$ s$^{-1}$.\n\nPer day: $3.1\\times10^{18}\\times86400=2.7\\times10^{23}$ fissions; moles $=2.7\\times10^{23}/6.02\\times10^{23}=0.45$; mass $=0.45\\times235\\approx105$ g (about 0.1 kg).",
+       "points": [
+        "Energy per fission in joules",
+        "Rate $3.1\\times10^{18}$ s$^{-1}$",
+        "Fissions in one day",
+        "Mass about 0.1 kg"
+       ]
+      },
+      {
+       "id": "fi-q4",
+       "kind": "short",
+       "level": 3,
+       "marks": 3,
+       "q": "Explain why fission releases energy using the BE/A curve. Why is the energy about 200 MeV?",
+       "model_answer_md": "For $A=236$, $B/A\\approx7.6$ MeV. The fragments ($A\\approx118$ each) have $B/A\\approx8.5$ MeV. Gain per nucleon $\\approx0.9$ MeV.\n\nTotal $\\approx0.9\\times236\\approx200$ MeV. Mass of the products is less than that of the reactants by this energy $/c^2$.",
+       "points": [
+        "Fragments are more tightly bound than U",
+        "Difference about 0.9 MeV per nucleon",
+        "$0.9\\times236\\approx200$ MeV"
+       ]
+      }
+     ]
+    },
+    {
+     "id": "fusion",
+     "title": "Nuclear fusion and stellar energy",
+     "theory_md": "**Fusion:** two light nuclei join into a heavier one, releasing energy because BE/A rises. Example: \n$$^2_1\\mathrm{H}+{}^3_1\\mathrm{H}\\to{}^4_2\\mathrm{He}+n+17.6\\ \\mathrm{MeV}$$\n**Conditions:** nuclei must overcome the Coulomb barrier, so temperatures of $10^7$ to $10^8$ K (**thermonuclear reaction**), plus enough density and confinement time (Lawson criterion).\n\n**Sun and stars:** the **proton-proton chain** (and CNO cycle in hotter stars) turns $4\\,^1$H into $^4$He and releases **26.7 MeV**.\n\nFusion per unit mass releases more than fission, and its fuel is plentiful, but confinement is hard.",
+     "basics_md": "Two nuclei are both positive, so they repel. Only when they move fast enough (very hot) do they get close enough for the nuclear force to pull them together.",
+     "key_points": [
+      "Light nuclei join, energy released since BE/A rises",
+      "Needs about $10^7$ to $10^8$ K to beat Coulomb barrier",
+      "D-T gives 17.6 MeV; p-p chain gives 26.7 MeV for $4p\\to{}^4$He",
+      "Powers the Sun and stars; Lawson criterion for confinement"
+     ],
+     "questions": [
+      {
+       "id": "fu-q1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "Fusion needs very high temperature to",
+       "options": [
+        "break electrons",
+        "overcome Coulomb repulsion",
+        "melt the nuclei",
+        "produce neutrons"
+       ],
+       "answer_index": 1,
+       "why": "Nuclei are positive and must approach within about 1 fm."
+      },
+      {
+       "id": "fu-q2",
+       "kind": "mcq",
+       "level": 2,
+       "q": "The energy released when four hydrogen nuclei form helium in the Sun is about",
+       "options": [
+        "0.7 MeV",
+        "7 MeV",
+        "26.7 MeV",
+        "200 MeV"
+       ],
+       "answer_index": 2,
+       "why": "p-p chain gives 26.7 MeV per helium nucleus."
+      },
+      {
+       "id": "fu-q3",
+       "kind": "numerical",
+       "level": 2,
+       "marks": 3,
+       "q": "Find the energy released in $^2$H + $^3$H $\\to$ $^4$He + n. Masses: 2.014102 u, 3.016049 u, 4.002603 u, 1.008665 u.",
+       "model_answer_md": "$\\Delta m=(2.014102+3.016049)-(4.002603+1.008665)=0.018883$ u.\n\n$Q=0.018883\\times931.5\\approx17.6$ MeV.",
+       "points": [
+        "$\\Delta m=0.018883$ u",
+        "$Q=\\Delta m\\times931.5$",
+        "$Q\\approx17.6$ MeV"
+       ]
+      },
+      {
+       "id": "fu-q4",
+       "kind": "short",
+       "level": 3,
+       "marks": 4,
+       "q": "Compare fission and fusion.",
+       "model_answer_md": "| | Fission | Fusion |\n|---|---|---|\n| Process | heavy nucleus splits | light nuclei join |\n| Trigger | slow neutron | $10^7$ to $10^8$ K |\n| Energy | about 200 MeV per event | 17.6 MeV (D-T), but more per unit mass |\n| Products | radioactive fragments | mostly helium, little waste |\n| Control | achieved in reactors | not yet commercial |\n| Example | atom bomb, reactor | Sun, hydrogen bomb |",
+       "points": [
+        "Process difference",
+        "Condition difference",
+        "Energy per unit mass",
+        "Waste and control difference"
+       ]
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "topic": "Chain reaction",
+   "subtopics": [
+    {
+     "id": "multiplication",
+     "title": "Chain reaction and multiplication factor",
+     "theory_md": "**Chain reaction:** neutrons released in fission cause further fissions, each generation producing more. Multiplication factor $k=\\dfrac{\\text{neutrons in one generation}}{\\text{neutrons in the previous}}$.\n- $k<1$: subcritical, dies out.\n- $k=1$: **critical**, steady (reactor).\n- $k>1$: **supercritical**, grows (bomb).\n\n**Four-factor formula** (infinite medium): $k_\\infty=\\eta f p\\varepsilon$ ($\\eta$ neutrons per absorption in fuel, $f$ thermal utilisation, $p$ resonance escape probability, $\\varepsilon$ fast fission factor). With leakage, $k=k_\\infty P_FP_T$.\n\n**Controlled** chain reaction: reactor. **Uncontrolled**: atom bomb. About 0.65% of neutrons are **delayed**, making control possible.",
+     "basics_md": "Each fission gives about 2.5 neutrons. If on average exactly one of them goes on to cause a new fission, the process neither fades nor explodes.",
+     "key_points": [
+      "$k=$ neutrons in a generation / neutrons in previous generation",
+      "$k<1,=1,>1$: sub, critical, supercritical",
+      "$k_\\infty=\\eta fp\\varepsilon$",
+      "Delayed neutrons allow control"
+     ],
+     "questions": [
+      {
+       "id": "mu-q1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "A reactor operating at steady power has",
+       "options": [
+        "$k<1$",
+        "$k=1$",
+        "$k>1$",
+        "$k=0$"
+       ],
+       "answer_index": 1,
+       "why": "Steady chain reaction means $k=1$, critical."
+      },
+      {
+       "id": "mu-q2",
+       "kind": "mcq",
+       "level": 2,
+       "q": "The four factors in $k_\\infty$ are",
+       "options": [
+        "$\\eta,f,p,\\varepsilon$",
+        "$\\eta,f,p,\\sigma$",
+        "$\\alpha,\\beta,\\gamma,\\delta$",
+        "$\\eta,Q,p,\\varepsilon$"
+       ],
+       "answer_index": 0,
+       "why": "Reproduction factor, utilisation, resonance escape, fast fission."
+      },
+      {
+       "id": "mu-q3",
+       "kind": "numerical",
+       "level": 2,
+       "marks": 3,
+       "q": "A reactor has $k=1.05$ and 1000 neutrons in one generation. How many neutrons are present after 10 generations? Is the reactor safe without control?",
+       "model_answer_md": "$N=N_0k^n=1000\\times1.05^{10}=1000\\times1.629\\approx1629$ neutrons.\n\nThe population keeps growing by 5% per generation, so power rises without control. Control rods must bring $k$ back to 1.",
+       "points": [
+        "$N=N_0k^n$",
+        "$N\\approx1629$",
+        "Supercritical, grows, needs control rods"
+       ]
+      }
+     ]
+    },
+    {
+     "id": "critical-moderator",
+     "title": "Critical mass, moderator and control",
+     "theory_md": "**Critical mass:** the smallest mass of fissile material that sustains a chain reaction ($k=1$). Neutron loss is by leakage through the surface, so a larger, spherical, reflected mass leaks relatively less (surface/volume falls).\n\n**Moderator** slows fast fission neutrons (about 2 MeV) to thermal (0.025 eV) by elastic collisions, since $^{235}$U fissions best with slow neutrons: light nuclei such as **heavy water, graphite, light water**.\n\n**Control rods** of **cadmium or boron** absorb neutrons to hold $k=1$. **Reflector** returns escaping neutrons.\n\n**Uncontrolled** chain: more than critical mass assembled quickly, as in the atom bomb.",
+     "basics_md": "Neutrons that escape through the surface are wasted. A bigger lump has more inside than surface, so it can keep the reaction going.",
+     "key_points": [
+      "Critical mass: minimum mass for $k=1$; leakage depends on surface to volume",
+      "Moderator slows neutrons to thermal (0.025 eV): heavy water, graphite, water",
+      "Control rods: cadmium, boron",
+      "Reflector reduces leakage"
+     ],
+     "questions": [
+      {
+       "id": "cm-q1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "Which is a good moderator?",
+       "options": [
+        "cadmium",
+        "boron",
+        "heavy water",
+        "lead"
+       ],
+       "answer_index": 2,
+       "why": "Heavy water is a moderator; cadmium and boron are absorbers."
+      },
+      {
+       "id": "cm-q2",
+       "kind": "mcq",
+       "level": 2,
+       "q": "Control rods are made of",
+       "options": [
+        "graphite",
+        "cadmium or boron",
+        "uranium",
+        "heavy water"
+       ],
+       "answer_index": 1,
+       "why": "They absorb neutrons strongly."
+      },
+      {
+       "id": "cm-q3",
+       "kind": "short",
+       "level": 2,
+       "marks": 4,
+       "q": "Define critical mass. How does a moderator help a chain reaction? Why are control rods needed?",
+       "model_answer_md": "**Critical mass:** the minimum mass of fissile material for which $k=1$ (self-sustaining chain).\n\n**Moderator:** fission neutrons (about 2 MeV) are slowed to thermal (0.025 eV) by elastic collisions with light nuclei; slow neutrons have a much larger fission cross-section in $^{235}$U.\n\n**Control rods:** cadmium or boron absorb neutrons, holding $k$ at 1 and shutting the reactor down.",
+       "points": [
+        "Critical mass definition",
+        "Moderator slows to thermal, why",
+        "Control rods absorb neutrons to keep $k=1$"
+       ]
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "topic": "Nuclear reactor",
+   "subtopics": [
+    {
+     "id": "components",
+     "title": "Reactor: components and working",
+     "theory_md": "A **nuclear reactor** sustains a controlled fission chain and takes out heat.\n- **Fuel:** natural or enriched uranium ($^{235}$U) as rods.\n- **Moderator:** heavy water, graphite or light water.\n- **Control rods:** cadmium, boron.\n- **Coolant:** water, heavy water, CO$_2$ or liquid sodium; carries heat to a **heat exchanger** and steam turbine.\n- **Reflector** and **shield** (concrete, lead) against neutrons and gamma rays.\n\nNeutrons from fission are moderated, cause more fission; rods fix $k=1$; heat goes to steam and the turbine.",
+     "basics_md": "A reactor is a controlled furnace: fuel supplies heat from fission, the moderator keeps the reaction going, rods are the throttle, coolant brings the heat out.",
+     "key_points": [
+      "Fuel, moderator, control rods, coolant, reflector, shield",
+      "Control rods hold $k=1$",
+      "Coolant takes heat to a steam turbine",
+      "Shielding: concrete and lead"
+     ],
+     "questions": [
+      {
+       "id": "co-q1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "A coolant in a reactor",
+       "options": [
+        "slows neutrons only",
+        "carries heat away from the core",
+        "absorbs neutrons",
+        "protects against radiation"
+       ],
+       "answer_index": 1,
+       "why": "Coolant transfers heat to the heat exchanger."
+      },
+      {
+       "id": "co-q2",
+       "kind": "mcq",
+       "level": 2,
+       "q": "A reactor using natural uranium needs",
+       "options": [
+        "no moderator",
+        "a heavy water or graphite moderator",
+        "only boron",
+        "a reflector only"
+       ],
+       "answer_index": 1,
+       "why": "Natural uranium has little $^{235}$U, so a low-absorption moderator is needed."
+      },
+      {
+       "id": "co-q3",
+       "kind": "long",
+       "level": 2,
+       "marks": 5,
+       "q": "Describe the main parts of a nuclear reactor and their functions with a neat diagram described in words.",
+       "model_answer_md": "**Diagram (in words):** a core of fuel rods in a moderator tank; control rods enter from above; coolant pipes carry heat to a heat exchanger and steam turbine; reflector around the core; thick concrete shield outside.\n\n1. **Fuel rods:** $^{235}$U (natural or enriched).\n2. **Moderator:** slows neutrons to thermal.\n3. **Control rods:** Cd or B, absorb neutrons to hold $k=1$.\n4. **Coolant:** removes heat to the heat exchanger and turbine.\n5. **Reflector:** returns escaping neutrons.\n6. **Shield:** concrete and lead against radiation.",
+       "points": [
+        "Fuel",
+        "Moderator",
+        "Control rods",
+        "Coolant and heat exchanger",
+        "Reflector and shield",
+        "Diagram described"
+       ]
+      }
+     ]
+    },
+    {
+     "id": "types-breeder",
+     "title": "Reactor types and the breeder reactor",
+     "theory_md": "- **PHWR** (India's main type): natural uranium, **heavy water** as moderator and coolant.\n- **PWR:** enriched uranium (3 to 5%), light water as both moderator and coolant, kept under high pressure so it does not boil.\n- **BWR:** light water boils in the core.\n- **Breeder (FBR):** fast neutrons, **liquid sodium** coolant, no moderator. It converts fertile $^{238}$U to fissile $^{239}$Pu: $^{238}$U$+n\\to{}^{239}$U$\\xrightarrow{\\beta}{}^{239}$Np$\\xrightarrow{\\beta}{}^{239}$Pu. It produces more fuel than it consumes.\n\nIndia's three-stage plan: PHWR, then FBR, then thorium ($^{232}$Th to $^{233}$U).",
+     "basics_md": "Natural uranium is only 0.7% fissile $^{235}$U. A breeder uses spare neutrons to turn the abundant $^{238}$U into new fissile plutonium.",
+     "key_points": [
+      "PHWR: natural U, heavy water",
+      "PWR/BWR: enriched U, light water",
+      "Breeder: fast neutrons, sodium coolant, $^{238}$U to $^{239}$Pu",
+      "Thorium cycle: $^{232}$Th to $^{233}$U"
+     ],
+     "questions": [
+      {
+       "id": "tb-q1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "A breeder reactor converts",
+       "options": [
+        "$^{235}$U to $^{238}$U",
+        "$^{238}$U to $^{239}$Pu",
+        "$^{239}$Pu to $^{235}$U",
+        "water to heavy water"
+       ],
+       "answer_index": 1,
+       "why": "Fertile $^{238}$U captures a neutron and becomes fissile $^{239}$Pu."
+      },
+      {
+       "id": "tb-q2",
+       "kind": "mcq",
+       "level": 2,
+       "q": "The coolant in a fast breeder reactor is usually",
+       "options": [
+        "heavy water",
+        "graphite",
+        "liquid sodium",
+        "air"
+       ],
+       "answer_index": 2,
+       "why": "Liquid sodium transfers heat without moderating neutrons."
+      },
+      {
+       "id": "tb-q3",
+       "kind": "short",
+       "level": 2,
+       "marks": 3,
+       "q": "What is a breeder reactor? Write the reactions that produce fissile material from $^{238}$U.",
+       "model_answer_md": "A breeder reactor produces more fissile fuel than it consumes using fast neutrons, with liquid sodium as coolant.\n\n$^{238}_{92}\\mathrm{U}+n\\to{}^{239}_{92}\\mathrm{U}\\xrightarrow{\\beta^-}{}^{239}_{93}\\mathrm{Np}\\xrightarrow{\\beta^-}{}^{239}_{94}\\mathrm{Pu}$",
+       "points": [
+        "Definition: produces more fissile than consumed",
+        "Fast neutrons, liquid sodium",
+        "Reaction chain to $^{239}$Pu"
+       ]
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "topic": "Particle detectors",
+   "subtopics": [
+    {
+     "id": "gm-counter",
+     "title": "G.M. counter: construction and working",
+     "theory_md": "**Construction:** a metal cylinder (cathode) with a thin axial tungsten wire (anode), a thin mica window, filled with argon at low pressure (about 0.1 atm) plus a little quenching vapour (alcohol or halogen). About **1000 V** (Geiger plateau) is applied through a large resistor $R$ ($\\sim10^9\\ \\Omega$).\n\n**Working:** a particle makes primary ion pairs; electrons drift to the wire and multiply in a Townsend avalanche which spreads along the whole wire, so pulse size is independent of primary ionisation. The positive-ion sheath lowers the field and stops the discharge. The pulse across $R$ is amplified and counted.\n\nUsed to count $\\alpha,\\beta,\\gamma$, not to measure energy.",
+     "basics_md": "Any ionising particle triggers a full avalanche in the gas, like a tiny lightning strike. Each strike is one count, always the same size.",
+     "key_points": [
+      "Cylinder cathode, tungsten wire anode, mica window, Ar + quencher, 1000 V",
+      "Primary ionisation triggers avalanche along the entire wire",
+      "Pulse size independent of primary ionisation",
+      "Counts particles but cannot give energy"
+     ],
+     "questions": [
+      {
+       "id": "gm-q1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "The anode of a G.M. tube is",
+       "options": [
+        "a cylinder",
+        "a thin central tungsten wire",
+        "a mica sheet",
+        "the gas"
+       ],
+       "answer_index": 1,
+       "why": "Thin wire gives the very high field near it."
+      },
+      {
+       "id": "gm-q2",
+       "kind": "mcq",
+       "level": 2,
+       "q": "In the G.M. region the output pulse height",
+       "options": [
+        "is proportional to particle energy",
+        "is independent of particle energy",
+        "is zero",
+        "depends on the particle charge"
+       ],
+       "answer_index": 1,
+       "why": "Avalanche spreads over the whole wire, saturating the pulse."
+      },
+      {
+       "id": "gm-p1",
+       "pyq": "4e22fc446f4a1b7b",
+       "level": 2,
+       "points": [
+        "Definition: gas-filled detector that counts ionising radiation",
+        "Construction: cathode cylinder, tungsten wire anode, Ar + quencher, about 1000 V through large $R$",
+        "Working: ionisation, Townsend avalanche along wire, positive-ion sheath stops it, pulse counted",
+        "Dead time (about $10^{-4}$ s) and recovery time defined"
+       ]
+      },
+      {
+       "id": "gm-q3",
+       "kind": "short",
+       "level": 2,
+       "marks": 3,
+       "q": "A G.M. counter shows an observed rate of 5000 counts/s with dead time $100\\ \\mu$s. Find the true rate.",
+       "model_answer_md": "$n=\\dfrac{m}{1-m\\tau}=\\dfrac{5000}{1-5000\\times10^{-4}}=\\dfrac{5000}{0.5}=10\\,000$ counts/s.",
+       "points": [
+        "Formula $n=m/(1-m\\tau)$",
+        "Substitution",
+        "$n=10\\,000$ s$^{-1}$"
+       ]
+      }
+     ]
+    },
+    {
+     "id": "quench-dead",
+     "title": "Quenching, dead time and recovery time",
+     "theory_md": "**Dead time:** the time (about $10^{-4}$ s) after a pulse during which the counter cannot respond, since the positive-ion sheath has cut the field below threshold. **Recovery time:** the further time for the sheath to clear and full-size pulses to return. Dead + recovery gives the resolving time. Correction: $n=m/(1-m\\tau)$.\n\n**Quenching:** stopping the discharge after one count. **Needed** because positive ions hitting the cathode release secondary electrons, causing false repeated pulses.\n\n**Internal quenching:** add a polyatomic vapour (ethyl alcohol, or Br$_2$/Cl$_2$). Argon ions are neutralised by collision with alcohol; alcohol ions dissociate at the cathode instead of releasing electrons; it also absorbs UV. **External:** large series resistor.",
+     "basics_md": "After one count the gas is saturated with positive ions and must recover. A quencher soaks up the ions' energy so there is no false second pulse.",
+     "key_points": [
+      "Dead time about $10^{-4}$ s; recovery time further; sum is resolving time",
+      "Quenching = stop continuous discharge",
+      "Needed: secondary emission from cathode gives multiple pulses",
+      "Internal: alcohol or halogen vapour; external: large $R$"
+     ],
+     "questions": [
+      {
+       "id": "qd-q1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "Which vapour is used for internal quenching?",
+       "options": [
+        "hydrogen",
+        "ethyl alcohol",
+        "oxygen",
+        "nitrogen"
+       ],
+       "answer_index": 1,
+       "why": "Organic vapours such as ethyl alcohol (or halogens) are used."
+      },
+      {
+       "id": "qd-q2",
+       "kind": "mcq",
+       "level": 2,
+       "q": "If the dead time is not corrected, the observed count rate is",
+       "options": [
+        "higher than true",
+        "lower than true",
+        "equal to true",
+        "zero"
+       ],
+       "answer_index": 1,
+       "why": "Particles arriving in the dead time are missed."
+      },
+      {
+       "id": "qd-p1",
+       "pyq": "d3a9364dc2caaa56",
+       "level": 3,
+       "points": [
+        "Construction: cylinder, tungsten wire, mica window, Ar + vapour at low pressure, about 1000 V through high $R$",
+        "Working: avalanche along wire, ion sheath stops it, pulse counted",
+        "Dead time about $10^{-4}$ s; recovery time about $10^{-3}$ s; resolving time is their total",
+        "Quenching: stopping repeated discharge; needed due to secondary electrons from the cathode",
+        "Internal quenching with alcohol or halogen vapour"
+       ]
+      },
+      {
+       "id": "qd-q3",
+       "kind": "short",
+       "level": 2,
+       "marks": 3,
+       "q": "Why does a G.M. counter need a quenching agent, and how does internal quenching work?",
+       "model_answer_md": "**Need:** positive ions that reach the cathode release secondary electrons, restarting the discharge and giving several pulses per particle.\n\n**Internal quenching:** a polyatomic organic vapour (alcohol) is mixed with argon. Argon ions are neutralised by collisions with alcohol molecules, and alcohol ions dissociate at the cathode instead of emitting electrons. Alcohol also absorbs UV photons.",
+       "points": [
+        "Need: secondary emission gives false pulses",
+        "Argon ions neutralised by alcohol",
+        "Alcohol ions dissociate at cathode",
+        "Absorbs UV"
+       ]
+      }
+     ]
+    },
+    {
+     "id": "other-detectors",
+     "title": "Other detectors: ionisation chamber, proportional, scintillation",
+     "theory_md": "- **Ionisation chamber:** low voltage, collects primary ions only (no multiplication); current is proportional to dose rate. Used for dosimetry.\n- **Proportional counter:** higher voltage, gas multiplication of $10^3$ to $10^5$, pulse **proportional** to particle energy; distinguishes $\\alpha$ from $\\beta$.\n- **G.M. counter:** full avalanche, pulse independent of energy.\n- **Scintillation counter:** NaI(Tl) crystal + photomultiplier; flash proportional to energy; fast; good for $\\gamma$.\n- **Semiconductor (Si, Ge):** best energy resolution.",
+     "basics_md": "As you raise the voltage on a gas detector, it passes through regions: ionisation, proportional, Geiger. Each region suits a different job.",
+     "key_points": [
+      "Ionisation chamber: no multiplication, dose",
+      "Proportional: pulse proportional to energy",
+      "GM: pulse independent of energy",
+      "Scintillation: crystal + PMT; semiconductor: best resolution"
+     ],
+     "questions": [
+      {
+       "id": "od-q1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "A scintillation counter uses",
+       "options": [
+        "a gas and wire",
+        "a crystal and photomultiplier tube",
+        "a cloud chamber",
+        "photographic film"
+       ],
+       "answer_index": 1,
+       "why": "NaI(Tl) crystal flashes and a PMT converts it to an electrical pulse."
+      },
+      {
+       "id": "od-q2",
+       "kind": "mcq",
+       "level": 2,
+       "q": "Which detector can tell alpha from beta by pulse height?",
+       "options": [
+        "ionisation chamber at saturation only",
+        "proportional counter",
+        "G.M. counter",
+        "Wilson chamber"
+       ],
+       "answer_index": 1,
+       "why": "Pulse height is proportional to primary ionisation, so energy and type differ."
+      },
+      {
+       "id": "od-q3",
+       "kind": "short",
+       "level": 2,
+       "marks": 4,
+       "q": "Compare ionisation chamber, proportional counter and G.M. counter.",
+       "model_answer_md": "| | Ionisation chamber | Proportional | G.M. |\n|---|---|---|---|\n| Voltage | low | medium | high (about 1000 V) |\n| Gas multiplication | none | $10^3$ to $10^5$ | full avalanche |\n| Pulse height | proportional, small | proportional to energy | independent of energy |\n| Use | dose | energy and type | counting |",
+       "points": [
+        "Voltage difference",
+        "Multiplication difference",
+        "Pulse height behaviour",
+        "Uses"
+       ]
+      }
+     ]
+    }
+   ]
+  }
+ ]
+}

@@ -1,0 +1,1408 @@
+{
+ "code": "BS1111",
+ "unit": "Genetic Engineering",
+ "written": "2026-10-19",
+ "by": "claude-sonnet-5-5, in a Claude Code session",
+ "topics": [
+  {
+   "topic": "Recombinant DNA technology and cloning",
+   "subtopics": [
+    {
+     "id": "rdna-tools",
+     "title": "Restriction enzymes, ligase and vectors",
+     "theory_md": "**Recombinant DNA (rDNA) technology** joins a gene of interest to a carrier DNA and puts it into a host that copies and expresses it (Cohen and Boyer, 1972).\n\n- **Restriction endonucleases** (\"molecular scissors\") cut DNA at specific **palindromic** sites. **EcoRI** (from *E. coli* RY13) cuts G^AATTC between G and A and leaves **sticky ends**. A site of $k$ bp occurs about once in $4^k$ bp.\n- **DNA ligase** (\"molecular glue\") seals the sugar-phosphate backbone (phosphodiester bonds).\n- **Vector**: carries the insert into the host. A **plasmid** (e.g. **pBR322**) needs an **ori**, a **selectable marker** (amp$^R$, tet$^R$) and unique **cloning sites**.",
+     "basics_md": "DNA is a long thread. A restriction enzyme is scissors that only cut at one particular word, and ligase is glue that sticks two cut ends together. A plasmid is a small DNA ring the bacterium copies along with its own DNA, so a gene stuck into it gets copied too.",
+     "key_points": [
+      "Restriction enzymes cut DNA at specific palindromic sequences; EcoRI cuts G^AATTC and leaves sticky ends",
+      "DNA ligase joins the cut fragments by forming phosphodiester bonds; it does not cut",
+      "Plasmid vector: small circular self-replicating DNA with ori, selectable marker and cloning sites",
+      "Vector and insert are cut with the same enzyme so the sticky ends are complementary"
+     ],
+     "questions": [
+      {
+       "id": "t-q1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "The recognition sequence of EcoRI is",
+       "options": [
+        "GGATCC",
+        "GAATTC",
+        "AAGCTT",
+        "CTGCAG"
+       ],
+       "answer_index": 1,
+       "why": "EcoRI is G^AATTC. GGATCC is BamHI, AAGCTT is HindIII, CTGCAG is PstI."
+      },
+      {
+       "id": "t-p1",
+       "pyq": "a0f9b69d517cf321",
+       "level": 1,
+       "points": [
+        "C) Restriction enzyme cuts DNA at specific sites (e.g. EcoRI at G^AATTC)",
+        "Ligase (a) joins fragments, it does not cut"
+       ]
+      },
+      {
+       "id": "t-p2",
+       "pyq": "651151ef20d18078",
+       "level": 1,
+       "points": [
+        "A) DNA ligase joins DNA pieces by forming phosphodiester bonds (molecular glue)",
+        "Restriction enzyme cuts, it does not join"
+       ]
+      },
+      {
+       "id": "t-p3",
+       "pyq": "36d635f9c900c0d8",
+       "level": 1,
+       "points": [
+        "B) The plasmid is the vector that carries foreign DNA into the host",
+        "Small circular self-replicating DNA with ori, selectable marker and cloning sites, e.g. pBR322",
+        "Restriction enzyme cuts; host cell is e.g. E. coli"
+       ]
+      },
+      {
+       "id": "t-q2",
+       "kind": "short",
+       "level": 2,
+       "marks": 3,
+       "q": "List the features of a good cloning vector, taking pBR322 as the example.",
+       "model_answer_md": "1. **Origin of replication (ori)**: lets the vector copy itself in the host and fixes the copy number.\n2. **Selectable markers**: genes such as amp$^R$ and tet$^R$ in pBR322 that identify the host cells that took up the vector.\n3. **Unique cloning (recognition) sites**: a single site for an enzyme such as EcoRI, BamHI or HindIII; two sites would cut the vector into pieces.\n4. A cloning site inside a marker (BamHI in tet$^R$) allows **insertional inactivation** to find recombinants.\n5. Small size, easy to isolate.",
+       "points": [
+        "Origin of replication (ori)",
+        "Selectable marker(s), e.g. amp^R and tet^R in pBR322",
+        "Unique cloning sites for restriction enzymes",
+        "Cloning site inside a marker gives insertional inactivation",
+        "Small size"
+       ]
+      },
+      {
+       "id": "t-q3",
+       "kind": "short",
+       "level": 2,
+       "marks": 3,
+       "q": "What are restriction enzymes? Explain the name EcoRI and its mode of action.",
+       "model_answer_md": "**Restriction endonucleases** cut DNA at specific recognition sequences; bacteria use them to cut up invading phage DNA.\n\n**Name EcoRI:** E = genus *Escherichia*, co = species *coli*, R = strain RY13, I = first enzyme isolated from that strain.\n\n**Action:** it recognises the palindrome 5'-GAATTC-3' (the same on both strands read 5' to 3') and cuts between G and A on each strand. The cuts are off-centre, leaving single-stranded **sticky ends** (5'-AATT) that pair with any fragment cut by the same enzyme.",
+       "points": [
+        "Cut DNA at specific palindromic recognition sequences",
+        "Name: E (Escherichia), co (coli), R (strain), I (first enzyme)",
+        "EcoRI recognises GAATTC and cuts between G and A",
+        "Leaves complementary sticky ends"
+       ]
+      },
+      {
+       "id": "t-q4",
+       "kind": "numerical",
+       "level": 3,
+       "marks": 3,
+       "q": "pBR322 is 4361 bp long. Assuming random base order, how many sites would you expect for (a) a 6-bp cutter such as EcoRI and (b) a 4-bp cutter? Why does pBR322 itself have only one EcoRI site?",
+       "model_answer_md": "A given $k$-bp sequence occurs with probability $(1/4)^k$ at any position, so the expected number of sites is $L/4^k$.\n\n(a) 6-bp: $4^6 = 4096$, so $4361/4096 \\approx 1.06$, about **1 site**.\n\n(b) 4-bp: $4^4 = 256$, so $4361/256 \\approx 17.0$, about **17 sites**.\n\nA vector must carry only one site for the enzyme (so it opens into one linear piece and the insert goes in one place); pBR322 was engineered to have a single EcoRI site. A 4-bp cutter would chop it into many pieces.",
+       "points": [
+        "Expected sites = L / 4^k",
+        "6-bp cutter: 4361/4096 = about 1 site",
+        "4-bp cutter: 4361/256 = about 17 sites",
+        "Vector needs a single site so it is not cut into many pieces"
+       ]
+      }
+     ]
+    },
+    {
+     "id": "steps-selection",
+     "title": "Steps, transformation and selection of recombinants",
+     "theory_md": "**Steps:** isolate DNA → cut vector and gene with the **same restriction enzyme** → **ligate** with DNA ligase → **transform** the host → **select** recombinants → culture in a **bioreactor** → **downstream processing**.\n\n- **Transformation**: *E. coli* made competent with **$\\mathrm{CaCl_2}$**, rDNA added on ice, **heat shock at 42 °C**, back on ice. Others: electroporation, microinjection, gene gun.\n- **Selection**: antibiotic markers. **Insertional inactivation**: a gene inserted in a marker (tet$^R$ of pBR322 at BamHI, or *lacZ*) switches it off. In **blue-white screening** recombinants are **white** (no $\\beta$-galactosidase, X-gal not cleaved); non-recombinants are blue.",
+     "basics_md": "After you glue the gene into the plasmid you still do not know which bacteria took it up, and only a few do. So you put the plasmid with an antibiotic-resistance gene into them and then spread them on antibiotic. Only those that took the plasmid survive. A second trick tells you which of those also have the insert.",
+     "key_points": [
+      "Order: isolate, cut with same enzyme, ligate, transform, select, culture in bioreactor, purify",
+      "Competent cells: CaCl2, ice, heat shock at 42 degrees C, ice",
+      "Insertional inactivation: insert inside a marker gene (tet^R or lacZ) disables it",
+      "Blue-white screening: recombinant colonies are white, non-recombinants blue"
+     ],
+     "questions": [
+      {
+       "id": "s-q1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "In blue-white screening on X-gal, recombinant colonies are",
+       "options": [
+        "Blue, because lacZ is active",
+        "White, because the insert has inactivated lacZ",
+        "Blue, because they are ampicillin resistant",
+        "White, because they lack the plasmid"
+       ],
+       "answer_index": 1,
+       "why": "The insert breaks lacZ, so no beta-galactosidase and no blue product. A cell with no plasmid would not grow on the antibiotic plate at all."
+      },
+      {
+       "id": "s-q2",
+       "kind": "mcq",
+       "level": 1,
+       "q": "Competent E. coli is transformed by treating with CaCl2 and then giving a heat shock at",
+       "options": [
+        "4 °C",
+        "25 °C",
+        "37 °C",
+        "42 °C"
+       ],
+       "answer_index": 3,
+       "why": "Cells are chilled with CaCl2 and rDNA, shocked at 42 °C and returned to ice so the DNA enters."
+      },
+      {
+       "id": "s-q3",
+       "kind": "short",
+       "level": 2,
+       "marks": 3,
+       "q": "Explain insertional inactivation with the example of pBR322.",
+       "model_answer_md": "pBR322 carries amp$^R$ and tet$^R$. A foreign gene is cloned at the **BamHI** site, which lies **inside tet$^R$**, so the tetracycline-resistance gene is broken (**inactivated**).\n\n- Transformant with plain plasmid: grows on ampicillin **and** on tetracycline.\n- Recombinant: grows on ampicillin but **not** on tetracycline.\n- Cell with no plasmid: grows on neither.\n\nPicking colonies that grow on ampicillin but not tetracycline therefore gives recombinants.",
+       "points": [
+        "Gene inserted at BamHI inside tet^R",
+        "tet^R is inactivated by the insert",
+        "Recombinants: amp resistant, tet sensitive",
+        "Non-recombinants resist both antibiotics"
+       ]
+      },
+      {
+       "id": "s-q4",
+       "kind": "short",
+       "level": 3,
+       "marks": 3,
+       "q": "A bacterium transformed with pBR322 carrying a gene cloned at BamHI is plated first on ampicillin and its colonies are then replica-plated on tetracycline. Colony X grows on both, colony Y grows only on ampicillin. Which has the insert? What would a colony that grows on neither be?",
+       "model_answer_md": "BamHI lies inside tet$^R$, so inserting the gene destroys tetracycline resistance.\n\n- **Colony Y** (ampicillin yes, tetracycline no) is the **recombinant**.\n- **Colony X** (both) took up the plasmid **without** an insert (self-closed vector).\n- A colony growing on **neither** did not take up any plasmid (untransformed cell); it should not appear on the ampicillin plate at all.",
+       "points": [
+        "BamHI is in tet^R so insert kills tet resistance",
+        "Y (amp^R, tet^S) is the recombinant",
+        "X has plasmid without insert",
+        "No growth means no plasmid"
+       ]
+      },
+      {
+       "id": "s-p1",
+       "pyq": "6504297b515db9d5",
+       "level": 2,
+       "points": [
+        "Definition: rDNA technology cuts a desired gene, joins it into a vector and introduces it into a host where it replicates and is expressed",
+        "Steps: isolate DNA, restriction enzyme, vector (plasmid) with ligase, transform E. coli, select recombinants, culture",
+        "Applications in chosen field (medicine): vaccine production (HBsAg in yeast), transgenic organisms (Bt cotton, Rosie), gene therapy (ADA, retroviral vector), insulin and growth hormone, diagnosis by PCR/probes"
+       ]
+      }
+     ]
+    },
+    {
+     "id": "pcr",
+     "title": "PCR and its numericals",
+     "theory_md": "**PCR** makes millions of copies of a DNA segment in a thermocycler using two **primers**, the four dNTPs and heat-stable **Taq polymerase** (from *Thermus aquaticus*). Each cycle has three steps:\n\n1. **Denaturation**, about **94 °C**: strands separate.\n2. **Annealing**, about **50-60 °C**: primers bind.\n3. **Extension**, **72 °C**: Taq adds nucleotides.\n\nEach cycle doubles the DNA, so after $n$ ideal cycles $N = N_0 \\cdot 2^{n}$. With efficiency $E$: $N = N_0(1+E)^n$. DNA fragments are then separated by **agarose gel electrophoresis**: DNA is negative, so it moves to the **anode**, smaller pieces faster.",
+     "basics_md": "Imagine photocopying a page, then photocopying both copies, and so on. One copy becomes two, four, eight. PCR does this with DNA by heating to pull the strands apart, cooling so short starter pieces stick on, and letting an enzyme build the new strand.",
+     "key_points": [
+      "Three steps: denaturation 94 degrees C, annealing 50-60 degrees C, extension 72 degrees C",
+      "Taq polymerase is heat-stable (Thermus aquaticus); needs primers and dNTPs",
+      "Copies after n cycles = N0 x 2^n",
+      "Gel electrophoresis: DNA moves to the anode, smaller fragments move faster"
+     ],
+     "questions": [
+      {
+       "id": "p-q1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "In PCR the step at about 72 °C is",
+       "options": [
+        "Denaturation",
+        "Annealing",
+        "Extension",
+        "Ligation"
+       ],
+       "answer_index": 2,
+       "why": "Taq polymerase extends the primers at 72 °C. Denaturation is about 94 °C and annealing 50-60 °C."
+      },
+      {
+       "id": "p-q2",
+       "kind": "mcq",
+       "level": 1,
+       "q": "Taq polymerase is used in PCR because it",
+       "options": [
+        "Cuts DNA at palindromes",
+        "Is stable at 94 °C",
+        "Joins Okazaki fragments",
+        "Works only below 20 °C"
+       ],
+       "answer_index": 1,
+       "why": "It comes from the hot-spring bacterium Thermus aquaticus and survives denaturation, so it need not be added each cycle."
+      },
+      {
+       "id": "p-q3",
+       "kind": "numerical",
+       "level": 2,
+       "marks": 2,
+       "q": "Starting with 10 copies of template DNA, how many copies are present after 25 cycles of an ideal PCR?",
+       "model_answer_md": "$N = N_0 \\cdot 2^{n} = 10 \\times 2^{25} = 10 \\times 33\\,554\\,432 = 3.36 \\times 10^{8}$ copies.",
+       "points": [
+        "Formula N = N0 x 2^n",
+        "2^25 = 33 554 432",
+        "N = 3.36 x 10^8 copies"
+       ]
+      },
+      {
+       "id": "p-q4",
+       "kind": "numerical",
+       "level": 3,
+       "marks": 3,
+       "q": "For the same 10 starting copies and 25 cycles, how many copies result if the efficiency of each cycle is 90%? And how many cycles does an ideal PCR need to turn 1 copy into more than $10^6$ copies?",
+       "model_answer_md": "With efficiency $E = 0.9$: $N = N_0(1+E)^n = 10 \\times 1.9^{25}$. Since $1.9^{25} = 9.31 \\times 10^{6}$, $N \\approx 9.3 \\times 10^{7}$ copies (about 3.6 times fewer than the ideal $3.36 \\times 10^{8}$).\n\nFor $2^n > 10^6$: $2^{19} = 524\\,288$ is too small and $2^{20} = 1\\,048\\,576$ is enough, so **20 cycles**.",
+       "points": [
+        "N = N0(1+E)^n with E = 0.9",
+        "10 x 1.9^25 = 9.3 x 10^7 copies",
+        "2^20 = 1 048 576 > 10^6 while 2^19 is not",
+        "20 cycles"
+       ]
+      },
+      {
+       "id": "p-q5",
+       "kind": "short",
+       "level": 2,
+       "marks": 3,
+       "q": "Describe the three steps of one PCR cycle with the temperature of each.",
+       "model_answer_md": "1. **Denaturation (about 94 °C):** heat breaks the hydrogen bonds and separates the two strands.\n2. **Annealing (about 50-60 °C):** the two primers bind to their complementary sequences at the ends of the target.\n3. **Extension (72 °C):** thermostable **Taq polymerase** adds dNTPs to the primers and copies each strand.\n\nOne cycle doubles the target; $n$ cycles give $2^n$ copies.",
+       "points": [
+        "Denaturation about 94 degrees C separates strands",
+        "Annealing 50-60 degrees C: primers bind",
+        "Extension 72 degrees C: Taq polymerase",
+        "Doubling each cycle"
+       ]
+      }
+     ]
+    },
+    {
+     "id": "insulin-applications",
+     "title": "Insulin by rDNA and applications",
+     "theory_md": "**Human insulin (Humulin, Eli Lilly, 1983):** insulin has chain **A (21 amino acids)** and chain **B (30 amino acids)** joined by **disulphide bridges**. Genes for A and B are made separately (chemically synthesised, or cDNA), cloned into plasmids, and expressed in ***E. coli***. The chains are purified and **joined by disulphide bonds**. It is identical to human insulin, unlike pig or cattle insulin, so it rarely gives an allergy and supply is unlimited.\n\n**Other products:** growth hormone (*E. coli*), **hepatitis B vaccine** (HBsAg in yeast), interferon, tPA, erythropoietin and factor VIII (mammalian cells). Cloning also means making identical copies (a gene, or an organism as in Dolly).",
+     "basics_md": "Pancreas insulin from cattle and pigs works but differs slightly from ours, so some patients react to it. If we put the human insulin gene into bacteria, the bacteria become small factories that make exactly human insulin in tanks.",
+     "key_points": [
+      "Insulin: chain A (21 aa) and chain B (30 aa) joined by disulphide bonds",
+      "A and B chains made separately in E. coli, then joined",
+      "Recombinant insulin: human-identical, no allergy, unlimited supply, no animals",
+      "Other rDNA products: growth hormone, HBsAg vaccine, interferon, tPA, EPO, factor VIII"
+     ],
+     "questions": [
+      {
+       "id": "i-q1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "Human insulin made by rDNA technology consists of",
+       "options": [
+        "One chain of 51 amino acids with C-peptide",
+        "Chain A of 21 and chain B of 30 amino acids joined by disulphide bonds",
+        "Four chains",
+        "Two chains of 30 amino acids each"
+       ],
+       "answer_index": 1,
+       "why": "Pro-insulin has a C-peptide that is removed; mature insulin is A (21) plus B (30), 51 amino acids in all."
+      },
+      {
+       "id": "i-q2",
+       "kind": "mcq",
+       "level": 1,
+       "q": "The hepatitis B vaccine made by rDNA technology uses which host?",
+       "options": [
+        "E. coli",
+        "Yeast",
+        "Bacillus thuringiensis",
+        "Agrobacterium"
+       ],
+       "answer_index": 1,
+       "why": "The HBsAg gene is expressed in yeast (Saccharomyces cerevisiae)."
+      },
+      {
+       "id": "i-q3",
+       "kind": "short",
+       "level": 2,
+       "marks": 3,
+       "q": "Why is recombinant human insulin preferred to insulin extracted from pig or cattle pancreas?",
+       "model_answer_md": "| Point | Animal insulin | Recombinant insulin |\n|---|---|---|\n| Structure | Differs from human (bovine by 3 amino acids, porcine by 1) | Identical to human |\n| Immune reaction | Antibodies and allergy | Rare |\n| Supply | Limited by slaughter of animals | Unlimited in fermenters |\n| Purity | Batch variation, animal pathogens | High and consistent |",
+       "points": [
+        "Recombinant insulin is identical to human insulin",
+        "Animal insulin differs and causes immune or allergic reactions",
+        "Unlimited supply, no dependence on slaughter",
+        "Higher purity and consistency"
+       ]
+      },
+      {
+       "id": "i-p1",
+       "pyq": "0a3b520b65dfdd2f",
+       "level": 3,
+       "points": [
+        "Define RDT and name tools: restriction enzyme, DNA ligase, vector (pBR322), host (E. coli, yeast), PCR",
+        "Insulin: chain A 21 aa and chain B 30 aa joined by disulphide bridges; pro-insulin has C-peptide",
+        "Steps: isolate/synthesise gene (or cDNA by reverse transcriptase), cut gene and plasmid with the same enzyme, ligate, transform E. coli (CaCl2, heat shock 42 C), select (antibiotic, blue-white), culture in bioreactor, downstream purification, join A and B chains by disulphide bonds, quality control",
+        "Flow chart: gene, cut, ligate into vector, transform, select, culture, purify",
+        "Comparison with conventional (animal pancreas) insulin: human-identical, fewer allergies, unlimited supply, pure",
+        "Other examples: growth hormone (replaced cadaver pituitary, CJD risk), HBsAg vaccine, interferon, tPA, EPO, factor VIII"
+       ]
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "topic": "Gene therapy",
+   "subtopics": [
+    {
+     "id": "gene-therapy-basics",
+     "title": "Gene therapy: approaches, ex vivo/in vivo and vectors",
+     "theory_md": "**Gene therapy** treats a genetic disease by delivering a normal gene into a patient's cells, or by silencing or editing the faulty gene. The **gene is the medicine**.\n\n- **Ex vivo**: cells taken out, corrected in culture, returned. **In vivo**: vector injected into the body.\n- **Approaches**: augmentation (add a working gene), silencing (RNAi, antisense), editing (**CRISPR-Cas9**: guide RNA leads Cas9 to cut the target), suicide genes in cancer.\n- **Vectors**: viral (**retrovirus/lentivirus** integrate; **adenovirus**, **AAV** mostly do not); non-viral (liposomes, electroporation, gene gun).\n- **Risks**: immune reaction, insertional mutagenesis, off-target edits, cost, ethics.",
+     "basics_md": "Many diseases happen because one gene is broken. Instead of giving medicine for ever, we try to give the cell a working copy of the gene. We need a delivery van for it, and viruses with their disease genes removed make good vans.",
+     "key_points": [
+      "Gene therapy: delivering a functional gene (or silencing/editing a faulty one) to treat a genetic disease",
+      "Ex vivo (cells modified outside, returned) versus in vivo (vector given directly)",
+      "Approaches: augmentation, silencing, CRISPR-Cas9 editing, suicide genes",
+      "Vectors: retrovirus, lentivirus, adenovirus, AAV, liposomes; risk: insertional mutagenesis, immune reaction"
+     ],
+     "questions": [
+      {
+       "id": "g-q1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "Which vector integrates its genetic material into the host genome?",
+       "options": [
+        "Adeno-associated virus",
+        "Retrovirus",
+        "Liposome",
+        "Plasmid injected as naked DNA"
+       ],
+       "answer_index": 1,
+       "why": "Retroviruses and lentiviruses integrate (long-lasting expression but risk of insertional mutagenesis); AAV mostly stays outside the chromosome."
+      },
+      {
+       "id": "g-q2",
+       "kind": "mcq",
+       "level": 1,
+       "q": "Giving a patient the injected enzyme ADA itself (instead of the gene) is",
+       "options": [
+        "Gene therapy",
+        "Enzyme replacement therapy",
+        "Germline therapy",
+        "Gene editing"
+       ],
+       "answer_index": 1,
+       "why": "The protein is the medicine, not the gene, so it is not gene therapy."
+      },
+      {
+       "id": "g-q3",
+       "kind": "short",
+       "level": 2,
+       "marks": 3,
+       "q": "Distinguish ex vivo and in vivo gene therapy with an example of each.",
+       "model_answer_md": "| Ex vivo | In vivo |\n|---|---|\n| Cells removed, genetically corrected in culture, returned to the patient | Vector carrying the gene is injected directly into the body or tissue |\n| Example: ADA-SCID lymphocytes; CRISPR-edited blood stem cells for sickle-cell disease | Example: AAV carrying the RPE65 gene injected into the retina |\n| Cells can be checked before return | Simpler but less control |",
+       "points": [
+        "Ex vivo: cells modified outside and returned",
+        "In vivo: vector given directly",
+        "Example for each (ADA-SCID / AAV RPE65)"
+       ]
+      },
+      {
+       "id": "g-q4",
+       "kind": "short",
+       "level": 3,
+       "marks": 3,
+       "q": "How can CRISPR-Cas9 be used to treat a genetic disease?",
+       "model_answer_md": "- A **guide RNA** (about 20 nt) directs the **Cas9 nuclease** to the matching DNA next to a PAM site, where it makes a double-strand break.\n- The cell repairs by **NHEJ** (usually disables the gene) or by **homology-directed repair** with a supplied template (precise correction).\n- Example: haematopoietic stem cells of sickle-cell or $\\beta$-thalassaemia patients are edited ex vivo and returned.\n- Concerns: off-target cuts, delivery, cost, ethics of germline editing.",
+       "points": [
+        "Guide RNA directs Cas9 to target DNA",
+        "Double-strand break repaired by NHEJ (knockout) or HDR (correction)",
+        "Example: sickle-cell or thalassaemia stem cells edited ex vivo",
+        "Off-target and ethical concerns"
+       ]
+      }
+     ]
+    },
+    {
+     "id": "somatic-germline",
+     "title": "Somatic versus germline therapy and the ADA case",
+     "theory_md": "**Somatic gene therapy** targets body cells (lymphocytes, liver, retina, bone marrow): the change is **not inherited**; it is accepted and approved. **Germline gene therapy** targets sperm, eggs or the early embryo: the change is **inherited** by all descendants; it is banned in most countries (ethics, unknown long-term effects).\n\n**First clinical case, 1990: ADA deficiency** (a form of SCID). The patient's lymphocytes were grown outside the body, a functional **ADA cDNA** was inserted using a **retroviral vector** and the cells were returned. Lymphocytes are not immortal, so **periodic infusions** were needed. A permanent cure needs the gene in **bone-marrow stem cells** or early embryos.\n\nApproved somatic examples: **Luxturna** (AAV, RPE65, inherited blindness), **Zolgensma** (SMN1, spinal muscular atrophy).",
+     "basics_md": "Your body cells and your egg or sperm cells are different. A change in a skin or liver cell stays with you. A change in an egg or sperm cell is handed down to your children, which is why it is so controversial.",
+     "key_points": [
+      "Somatic: body cells, not inherited, accepted, example ADA-SCID",
+      "Germline: gametes or embryo, inherited by descendants, banned in most countries",
+      "1990 ADA deficiency: lymphocytes treated ex vivo with retroviral vector, needed repeated infusions",
+      "Permanent cure needs the gene in bone-marrow stem cells"
+     ],
+     "questions": [
+      {
+       "id": "sg-q1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "The first gene therapy (1990) was given for",
+       "options": [
+        "Cystic fibrosis",
+        "ADA deficiency",
+        "Haemophilia",
+        "Sickle-cell anaemia"
+       ],
+       "answer_index": 1,
+       "why": "ADA (adenosine deaminase) deficiency causes SCID; a functional ADA gene went into the patient's lymphocytes."
+      },
+      {
+       "id": "sg-q2",
+       "kind": "mcq",
+       "level": 2,
+       "q": "A change introduced into a human zygote by gene therapy will be",
+       "options": [
+        "Confined to the treated individual",
+        "Lost after a few months",
+        "Passed on to the offspring",
+        "Present only in blood cells"
+       ],
+       "answer_index": 2,
+       "why": "The zygote gives rise to all cells including gametes, so the change is heritable: germline therapy."
+      },
+      {
+       "id": "sg-q3",
+       "kind": "short",
+       "level": 2,
+       "marks": 3,
+       "q": "Describe the first clinical gene therapy. Why was it not a permanent cure?",
+       "model_answer_md": "- In **1990**, a 4-year-old girl with **ADA (adenosine deaminase) deficiency**, an immune disorder (SCID), was treated.\n- Her **lymphocytes** were grown in culture outside the body.\n- A **functional ADA cDNA** was introduced with a **retroviral vector**.\n- The corrected cells were returned to the patient.\n- Lymphocytes are **not immortal**, so she needed **periodic infusions**. A permanent cure needs the gene in **bone-marrow stem cells** (or at the embryonic stage).",
+       "points": [
+        "ADA deficiency (SCID), 1990",
+        "Lymphocytes cultured outside, functional ADA cDNA via retroviral vector, returned",
+        "Lymphocytes are mortal so periodic infusions needed",
+        "Permanent cure needs marrow stem cells"
+       ]
+      },
+      {
+       "id": "sg-p1",
+       "pyq": "b09b87049a35c012",
+       "level": 2,
+       "points": [
+        "Gene therapy: introducing a normal gene (or correcting/silencing a faulty one) so the product corrects the disorder; the gene is the medicine; vectors viral or non-viral; ex vivo and in vivo",
+        "Somatic: body cells, not inherited, only the patient, may need repeat doses, clinically accepted",
+        "Germline: gametes or embryo, inherited by future generations, permanent in lineage, not permitted in most countries",
+        "Somatic example: ADA deficiency 1990 (lymphocytes, retroviral vector), or Luxturna/Zolgensma",
+        "Germline example: CRISPR-edited embryo (CCR5 babies, 2018) or mitochondrial replacement; experimental only"
+       ]
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "topic": "Cell therapy",
+   "subtopics": [
+    {
+     "id": "cell-therapy-stem",
+     "title": "Cell therapy and stem cells",
+     "theory_md": "**Cell therapy** transplants **living cells** into a patient to replace, repair or fight; the **cell is the medicine** (not a gene or a drug).\n\n- **Autologous**: patient's own cells, no rejection. **Allogeneic**: donor cells, need HLA matching, risk of rejection and **graft-versus-host disease (GVHD)**.\n- **Haematopoietic stem cell (bone-marrow) transplant**: the classic cell therapy, for leukaemia, thalassaemia, aplastic anaemia.\n- **Stem cells**: embryonic (pluripotent), adult (HSC, mesenchymal; multipotent), cord blood. **iPSCs**: adult cells reprogrammed by **Oct4, Sox2, Klf4, c-Myc** (Yamanaka, 2006).\n- Others: islet cells for diabetes, skin sheets for burns, chondrocytes for cartilage.",
+     "basics_md": "Some diseases destroy cells, like the blood-making cells in leukaemia. A cell transplant puts in fresh living cells that settle in and do the job. Stem cells are special because they can become many cell types.",
+     "key_points": [
+      "Cell therapy: transplanting living cells to replace damaged tissue; the cell is the medicine",
+      "Autologous (own cells, no rejection) versus allogeneic (donor, GVHD risk)",
+      "Bone-marrow/haematopoietic stem cell transplant is the classic example",
+      "iPSCs: reprogramming with Oct4, Sox2, Klf4, c-Myc (Yamanaka 2006)"
+     ],
+     "questions": [
+      {
+       "id": "c-p1",
+       "pyq": "017d440555ffef95",
+       "level": 1,
+       "points": [
+        "B) Cell therapy transplants live cells to replace damaged tissue",
+        "A is drug therapy; C (cutting DNA) is genetic engineering/editing; D is diagnosis"
+       ]
+      },
+      {
+       "id": "c-q1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "Induced pluripotent stem cells are made by reprogramming adult cells with",
+       "options": [
+        "Insulin and glucagon",
+        "Oct4, Sox2, Klf4 and c-Myc",
+        "Restriction enzymes",
+        "Interferons"
+       ],
+       "answer_index": 1,
+       "why": "Yamanaka (2006) used these four transcription factors."
+      },
+      {
+       "id": "c-q2",
+       "kind": "mcq",
+       "level": 2,
+       "q": "The main risk of allogeneic cell therapy that is absent in autologous therapy is",
+       "options": [
+        "Cost of culture",
+        "Graft-versus-host disease and rejection",
+        "Contamination in culture",
+        "Need for a bioreactor"
+       ],
+       "answer_index": 1,
+       "why": "Donor cells can be attacked by the host (rejection) or can attack the host (GVHD); the patient's own cells carry neither risk."
+      },
+      {
+       "id": "c-q3",
+       "kind": "short",
+       "level": 2,
+       "marks": 3,
+       "q": "Differentiate between autologous and allogeneic cell therapy.",
+       "model_answer_md": "| Autologous | Allogeneic |\n|---|---|\n| Patient's own cells | Cells from a donor |\n| No rejection or GVHD | HLA matching needed; risk of rejection and GVHD |\n| Made patient by patient: slow, costly | Can be made in batches |\n| Example: CAR-T cells | Example: donor bone-marrow transplant |",
+       "points": [
+        "Own cells versus donor cells",
+        "No rejection versus rejection/GVHD risk",
+        "Example of each"
+       ]
+      },
+      {
+       "id": "c-q4",
+       "kind": "short",
+       "level": 2,
+       "marks": 3,
+       "q": "Give three therapeutic applications of stem cells.",
+       "model_answer_md": "1. **Haematopoietic stem cell transplant** to rebuild blood and immunity in leukaemia, thalassaemia, aplastic anaemia.\n2. **Regenerative repair**: mesenchymal stem cells for bone and cartilage, skin cells for burns, limbal stem cells for the cornea.\n3. **Replacing lost cells and disease modelling** with iPSC-derived cells (neurons in Parkinson's disease, islet cells in Type 1 diabetes).",
+       "points": [
+        "Haematopoietic stem cell transplant (blood diseases)",
+        "Regenerative repair of bone, cartilage, skin or cornea",
+        "iPSC-derived cells for replacement or disease models"
+       ]
+      }
+     ]
+    },
+    {
+     "id": "car-t-vs-gene",
+     "title": "CAR-T cells and gene versus cell therapy",
+     "theory_md": "**CAR-T therapy**: the patient's **T cells** are collected, engineered (lentiviral vector) to carry a **chimeric antigen receptor** (e.g. against **CD19**), multiplied and infused. They kill B-cell leukaemia and lymphoma cells. It is **autologous**; side effect: cytokine release syndrome. India approved NexCAR19 in 2023.\n\n**Gene vs cell therapy:** gene therapy delivers **genetic material** (a gene or editor) to correct a gene; cell therapy delivers **whole living cells** to replace or fight. Gene therapy risks: vector immunity, insertional mutagenesis. Cell therapy risks: rejection, GVHD, infection, tumour formation. **CAR-T is both**: cells that were genetically modified.",
+     "basics_md": "A T cell is a soldier that normally cannot see some cancer cells. In CAR-T we take the patient's soldiers out, give them a new pair of glasses (the receptor) that spots the cancer, and put them back.",
+     "key_points": [
+      "CAR-T: patient's T cells engineered with chimeric antigen receptor (anti-CD19) and re-infused",
+      "Gene therapy delivers genes; cell therapy delivers whole living cells",
+      "CAR-T and ex vivo gene therapies are both gene and cell therapy",
+      "Cell therapy risks: rejection, GVHD; gene therapy risks: insertional mutagenesis, vector immune reaction"
+     ],
+     "questions": [
+      {
+       "id": "v-q1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "In CAR-T cell therapy the cells modified and infused are",
+       "options": [
+        "B cells",
+        "T lymphocytes",
+        "Red blood cells",
+        "Neurons"
+       ],
+       "answer_index": 1,
+       "why": "The patient's T lymphocytes get a chimeric antigen receptor, for example against CD19."
+      },
+      {
+       "id": "v-q2",
+       "kind": "mcq",
+       "level": 2,
+       "q": "Transplanting a donor's bone-marrow stem cells into a leukaemia patient is",
+       "options": [
+        "Gene therapy",
+        "Cell therapy",
+        "Vaccination",
+        "Enzyme replacement"
+       ],
+       "answer_index": 1,
+       "why": "Living cells are the medicine and no gene is delivered: cell therapy."
+      },
+      {
+       "id": "v-q3",
+       "kind": "short",
+       "level": 2,
+       "marks": 3,
+       "q": "What is CAR-T cell therapy? Outline how it is carried out.",
+       "model_answer_md": "1. **T cells** are collected from the patient's blood.\n2. They are genetically modified (lentiviral vector) to express a **chimeric antigen receptor (CAR)**, an antibody-like antigen-binding part joined to T-cell signalling domains, e.g. against **CD19** on B cells.\n3. The CAR-T cells are multiplied in the laboratory and **infused** back.\n4. They find and kill cancer cells bearing the antigen.\n\nUsed in relapsed B-cell leukaemia and lymphoma; autologous, so no rejection; side effect is cytokine release syndrome.",
+       "points": [
+        "T cells collected from the patient",
+        "Engineered to express a CAR (e.g. anti-CD19)",
+        "Expanded and infused",
+        "Kills antigen-bearing cancer cells; autologous"
+       ]
+      },
+      {
+       "id": "v-q4",
+       "kind": "long",
+       "level": 3,
+       "marks": 5,
+       "q": "Differentiate between gene therapy and cell therapy.",
+       "model_answer_md": "| Feature | Gene therapy | Cell therapy |\n|---|---|---|\n| What is delivered | Genetic material (gene, RNA, editor) | Whole living cells |\n| Aim | Correct, replace, silence or edit a faulty gene | Replace damaged cells, regenerate tissue or fight disease |\n| Delivery | Viral vectors, liposomes, electroporation | Infusion or implantation of cells |\n| Genetic change in patient | Yes | Not necessarily (plain stem-cell transplant) |\n| Typical diseases | Single-gene disorders: ADA-SCID, sickle cell, SMA | Leukaemia (marrow transplant), burns, cartilage defects |\n| Risks | Insertional mutagenesis, vector immune reaction | Rejection, GVHD, tumour formation |\n| Classic example | 1990 ADA deficiency | Bone-marrow transplant |\n\n**Overlap:** CAR-T and ex vivo gene therapies are genetically modified cells.",
+       "points": [
+        "Gene therapy delivers genetic material, cell therapy delivers living cells",
+        "Aims differ: fix a gene versus replace or supply cells",
+        "Delivery methods differ (vectors versus infusion)",
+        "Risks differ with example risk each",
+        "Example of each; CAR-T overlap"
+       ]
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "topic": "Biochips",
+   "subtopics": [
+    {
+     "id": "biosensor-principle",
+     "title": "Biosensor: components and principle",
+     "theory_md": "A **biosensor** is an analytical device that joins a **biological recognition element** (bioreceptor) to a **transducer** to give a signal **proportional to the analyte** concentration.\n\n**Block diagram:** analyte → **bioreceptor** (enzyme, antibody, DNA, cell; gives **selectivity**) → **transducer** → **amplifier/signal processor** → **display**.\n\n**Transducers:** electrochemical (amperometric, potentiometric, conductometric), optical (absorbance, fluorescence, SPR), piezoelectric (mass change shifts crystal frequency), thermal.\n\n**Principle:** specific recognition, then conversion of the biochemical change into an electrical or optical signal. Quality terms: **selectivity** (responds only to the analyte), **sensitivity** (signal per unit concentration), detection limit, response time, stability. Example: glucometer.",
+     "basics_md": "A smoke alarm notices smoke and rings a bell. A biosensor does the same for a chemical: a biological part recognises exactly one substance, another part turns that recognition into an electric signal, and a screen shows the number.",
+     "key_points": [
+      "Biosensor = bioreceptor + transducer + signal processor/display",
+      "Bioreceptor gives selectivity: enzyme, antibody, nucleic acid, whole cell",
+      "Transducer types: electrochemical, optical, piezoelectric, thermal",
+      "Signal is proportional to analyte concentration; example glucometer"
+     ],
+     "questions": [
+      {
+       "id": "b-p1",
+       "pyq": "0bcc2c67615dcf43",
+       "level": 1,
+       "points": [
+        "A) Monitoring blood glucose: glucose oxidase (bioreceptor) with an electrode (transducer) gives a signal proportional to glucose",
+        "Photosynthesis, protein synthesis, digestion are natural processes, not analytical devices"
+       ]
+      },
+      {
+       "id": "b-q1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "The part of a biosensor that gives it selectivity is the",
+       "options": [
+        "Amplifier",
+        "Display",
+        "Bioreceptor",
+        "Battery"
+       ],
+       "answer_index": 2,
+       "why": "Only the bioreceptor (enzyme, antibody, DNA) binds or reacts with the analyte alone."
+      },
+      {
+       "id": "b-q2",
+       "kind": "mcq",
+       "level": 2,
+       "q": "A quartz crystal microbalance biosensor detects binding by a change in",
+       "options": [
+        "Light absorbance",
+        "Resonance frequency due to bound mass",
+        "pH",
+        "Temperature"
+       ],
+       "answer_index": 1,
+       "why": "Mass bound on the crystal lowers its resonance frequency: a piezoelectric transducer."
+      },
+      {
+       "id": "b-q3",
+       "kind": "short",
+       "level": 2,
+       "marks": 3,
+       "q": "Classify biosensors by their transducer, with one example each.",
+       "model_answer_md": "1. **Electrochemical**: amperometric (current), e.g. glucose oxidase glucose sensor; potentiometric (voltage), e.g. ion-selective or urease urea sensor.\n2. **Optical**: absorbance, fluorescence or SPR, e.g. lateral-flow pregnancy strip.\n3. **Piezoelectric**: frequency change with bound mass, e.g. quartz crystal immunosensor.\n4. **Thermal**: heat of reaction by a thermistor, e.g. enzyme thermistor for cholesterol.",
+       "points": [
+        "Electrochemical with example",
+        "Optical with example",
+        "Piezoelectric with example",
+        "Thermal with example"
+       ]
+      },
+      {
+       "id": "b-q4",
+       "kind": "short",
+       "level": 2,
+       "marks": 2,
+       "q": "Differentiate between selectivity and sensitivity of a biosensor.",
+       "model_answer_md": "**Selectivity** is the ability to respond only to the target analyte and not to other substances (set by the bioreceptor). **Sensitivity** is the change in signal per unit change in concentration, i.e. the slope of the calibration curve, $S = \\Delta \\text{signal}/\\Delta C$.",
+       "points": [
+        "Selectivity: responds only to the analyte",
+        "Sensitivity: signal change per unit concentration (slope)"
+       ]
+      },
+      {
+       "id": "b-p2",
+       "pyq": "f76bdb2d931c9f50",
+       "level": 2,
+       "points": [
+        "Principle: specific biological recognition coupled to physicochemical transduction giving a signal proportional to analyte concentration",
+        "Components with block diagram: analyte, bioreceptor, transducer, signal processor/amplifier, display",
+        "Bioreceptor types and transducer types (electrochemical, optical, piezoelectric, thermal)",
+        "Example: glucose biosensor, glucose + O2 to gluconic acid + H2O2, oxidation of H2O2 gives current"
+       ]
+      },
+      {
+       "id": "b-p3",
+       "pyq": "99d64238bbfce546",
+       "level": 3,
+       "points": [
+        "Definition of biosensor: bioreceptor plus transducer giving a signal proportional to analyte; example glucometer",
+        "Components: analyte, bioreceptor, transducer, signal processor/amplifier, readout; labelled block diagram",
+        "Working principle in steps: recognition, biochemical change (glucose + O2 to gluconic acid + H2O2), transduction (H2O2 oxidised at electrode), processing, output",
+        "Analogy table: analyte = intruder/defect, bioreceptor = motion sensor/camera, transducer = signal converter, processor = panel/PLC, readout = siren/reject signal",
+        "How both detect and respond: specific detection, conversion to signal, threshold comparison, response; difference: biomolecule can denature"
+       ]
+      }
+     ]
+    },
+    {
+     "id": "glucose-biosensor",
+     "title": "The glucose biosensor",
+     "theory_md": "The glucometer is an **amperometric enzyme biosensor**. **Glucose oxidase (GOx)**, with FAD, is immobilised on the strip and is specific for glucose:\n\n$$\\mathrm{Glucose + O_2 \\xrightarrow{GOx} Gluconic\\ acid + H_2O_2}$$\n\nThe working electrode (Pt or carbon) at a fixed potential **oxidises $\\mathrm{H_2O_2}$**: $\\mathrm{H_2O_2 \\to O_2 + 2H^+ + 2e^-}$. The **current** is **proportional to glucose concentration**; the meter converts it using a calibration curve. It measures the **product**, not glucose directly. Modern strips use a **mediator** (ferrocene, ferricyanide) instead of $\\mathrm{O_2}$.\n\n**Why popular:** diabetes is common, result in seconds from about 1 µL blood, cheap strips, portable, home use.",
+     "basics_md": "The enzyme eats glucose and makes a by-product. The electrode detects the by-product by the tiny current it creates when it reacts. More glucose means more by-product, which means more current.",
+     "key_points": [
+      "Glucose oxidase is the bioreceptor and is specific for glucose",
+      "Glucose + O2 gives gluconic acid + H2O2; H2O2 is oxidised at the electrode",
+      "Current is proportional to glucose concentration",
+      "Mediators remove the dependence on oxygen; strips are cheap, fast, small sample"
+     ],
+     "questions": [
+      {
+       "id": "gl-q1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "In an amperometric glucose biosensor the current arises from",
+       "options": [
+        "Direct oxidation of glucose by the electrode",
+        "Oxidation of H2O2 produced by glucose oxidase",
+        "Change in mass of the electrode",
+        "Heat from the reaction"
+       ],
+       "answer_index": 1,
+       "why": "The meter measures the enzyme-reaction product H2O2, not glucose itself."
+      },
+      {
+       "id": "gl-q2",
+       "kind": "mcq",
+       "level": 2,
+       "q": "The role of a mediator such as ferrocene in a second-generation glucose strip is to",
+       "options": [
+        "Cut the DNA",
+        "Carry electrons from the enzyme to the electrode so O2 is not needed",
+        "Increase the temperature",
+        "Replace the enzyme"
+       ],
+       "answer_index": 1,
+       "why": "It shuttles electrons from reduced GOx to the electrode, so the reading does not depend on dissolved oxygen."
+      },
+      {
+       "id": "gl-q3",
+       "kind": "short",
+       "level": 2,
+       "marks": 3,
+       "q": "Write the reactions in a glucose oxidase biosensor and state how the current is related to glucose concentration.",
+       "model_answer_md": "Enzyme layer: $\\mathrm{Glucose + O_2 \\xrightarrow{glucose\\ oxidase} Gluconic\\ acid + H_2O_2}$\n\nElectrode: $\\mathrm{H_2O_2 \\to O_2 + 2H^+ + 2e^-}$\n\nThe electrons released give a current that is **directly proportional to the glucose concentration**, read off a calibration curve.",
+       "points": [
+        "Glucose + O2 to gluconic acid + H2O2 by glucose oxidase",
+        "H2O2 oxidised at the electrode releasing electrons",
+        "Current proportional to glucose concentration"
+       ]
+      },
+      {
+       "id": "gl-p1",
+       "pyq": "468cc5d62f830d2c",
+       "level": 3,
+       "points": [
+        "Principle: amperometric enzyme biosensor; block diagram blood, enzyme layer (GOx), electrode, amplifier, display",
+        "Role of enzyme: glucose oxidase with FAD, specific for glucose, glucose + O2 to gluconic acid + H2O2",
+        "Role of electrode: working electrode at fixed potential oxidises H2O2; mediator in second-generation strips",
+        "Electrical signal: current proportional to glucose concentration, read from calibration curve, within seconds from about 1 microlitre blood",
+        "Why widely used: common disease needing daily monitoring, specificity, fast and simple, small sample, low cost, portable, leads to continuous monitors"
+       ]
+      }
+     ]
+    },
+    {
+     "id": "dna-biochip",
+     "title": "DNA biochips, microarrays and DNA and protein properties",
+     "theory_md": "A **biochip** is a miniaturised array of biological probes on glass, silicon or polymer for many parallel tests. It is a biological assay device, not a memory chip.\n\n**DNA microarray:** thousands of single-stranded DNA probes fixed at known spots. Sample mRNA → **fluorescently labelled cDNA** → **hybridisation** (complementary base pairing) → washing → **laser scanning** → analysis (gene expression, mutations, SNPs). Types: protein chip (antibody array), **lab-on-a-chip** (microfluidics).\n\n**DNA** is useful for design because of **complementary base pairing** (specific probes), programmability and easy amplification (PCR); **DNA computing** (Adleman, 1994). **Proteins** give specific binding (antibody-antigen) and catalysis (enzymes) that amplifies a signal.",
+     "basics_md": "A microarray is a tiny grid where every square holds a different DNA 'hook'. Wash your labelled sample over it. Only the matching pieces stick, and they glow. The pattern of glowing squares tells you which genes are active.",
+     "key_points": [
+      "Biochip: miniaturised array of biological probes for parallel analysis",
+      "DNA microarray workflow: probes, labelled cDNA, hybridisation, wash, scan",
+      "DNA property used: complementary base pairing gives specific, programmable binding",
+      "Protein properties used: specific binding and catalysis; examples lateral-flow test, glucometer"
+     ],
+     "questions": [
+      {
+       "id": "d-p1",
+       "pyq": "f262005894fc6b25",
+       "level": 1,
+       "points": [
+        "B) DNA analysis: biochips (DNA microarrays) carry thousands of probes that hybridise with labelled sample DNA",
+        "Data storage is tempting because of the word chip, but a biochip is an assay device"
+       ]
+      },
+      {
+       "id": "d-q1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "The principle on which a DNA microarray detects a gene is",
+       "options": [
+        "Antigen-antibody binding",
+        "Hybridisation by complementary base pairing",
+        "Electrophoresis",
+        "Enzyme catalysis"
+       ],
+       "answer_index": 1,
+       "why": "A labelled cDNA binds only a probe with the complementary sequence."
+      },
+      {
+       "id": "d-q2",
+       "kind": "mcq",
+       "level": 2,
+       "q": "In a two-colour microarray a yellow spot means the gene is",
+       "options": [
+        "Expressed more in the test sample",
+        "Expressed more in the control",
+        "Expressed equally in both",
+        "Not expressed in either"
+       ],
+       "answer_index": 2,
+       "why": "Red (test) plus green (control) overlap gives yellow: equal expression. A dark spot means no expression."
+      },
+      {
+       "id": "d-q3",
+       "kind": "long",
+       "level": 2,
+       "marks": 5,
+       "q": "What is a DNA microarray? Describe how it is used to study gene expression.",
+       "model_answer_md": "A **DNA microarray (gene chip)** is a glass or silicon slide with thousands of known single-stranded DNA probes fixed at defined spots.\n\n1. **Probes** are spotted or synthesised on the chip.\n2. **Sample:** mRNA from test and control cells is converted to cDNA labelled with fluorescent dyes (Cy5 red for test, Cy3 green for control).\n3. **Hybridisation:** labelled cDNAs bind complementary probes.\n4. **Washing** removes unbound cDNA.\n5. **Scanning** by laser records fluorescence at each spot.\n6. **Analysis:** red = more in test, green = more in control, yellow = equal, dark = not expressed.\n\nUses: expression profiling, cancer classification, SNP and mutation detection, pathogen identification.",
+       "points": [
+        "Definition: array of known DNA probes on a chip",
+        "Labelled cDNA from sample mRNA",
+        "Hybridisation, washing, laser scanning",
+        "Colour interpretation",
+        "Applications (expression, mutations, cancer)"
+       ]
+      },
+      {
+       "id": "d-p2",
+       "pyq": "ede77b85ba3d3817",
+       "level": 3,
+       "points": [
+        "DNA properties: complementary base pairing (specific hybridisation), programmability/information density, stability and easy amplification by PCR and synthesis",
+        "DNA example: DNA microarray/biochip (probes hybridise with fluorescent sample DNA) or DNA computing (Adleman 1994)",
+        "Protein properties: specific binding (antibody-antigen, enzyme-substrate), catalysis amplifying signal, conformational change on binding",
+        "Protein example: lateral-flow rapid diagnostic test (antibody-gold nanoparticles, test line) or glucometer with glucose oxidase",
+        "Summary table linking property, system and working"
+       ]
+      }
+     ]
+    },
+    {
+     "id": "biosensor-applications",
+     "title": "Applications: electronic nose and tongue, food safety, synthetic biology",
+     "theory_md": "**Electronic tongue**: array of cross-sensitive sensors in liquid plus pattern recognition (neural network); used for taste of beverages, drug bitterness, adulteration.\n\n**Electronic nose**: array of gas sensors (metal-oxide, conducting polymer, quartz microbalance) giving a smell fingerprint; used for food spoilage, fermentation, explosives, breath diagnosis.\n\n**Other uses**: glucose, urea, cholesterol sensors in diagnostics; pesticide (acetylcholinesterase inhibition) and BOD sensors; pathogen detection in food; biowarfare agents; drug discovery (SPR).\n\n**Milk adulteration kit** (e.g. MANIT's portable device): reagent or enzyme reacts with the adulterant (**urease** for urea, iodine for starch), transducer gives colour or conductivity change, electronics display pure/adulterated.\n\n**Synthetic biology in electronics**: genetic logic circuits, **DNA data storage**, microbial fuel cells, biosensors.",
+     "basics_md": "An electronic nose is not one detector but many slightly different ones. Each smell lights up the group in its own pattern, like a fingerprint, and software learns the patterns. Tongues work the same way for liquids.",
+     "key_points": [
+      "Electronic tongue: sensor array in liquid plus pattern recognition, for taste and adulteration",
+      "Electronic nose: gas sensor array giving smell fingerprint, for spoilage and breath diagnosis",
+      "Food safety kits use a selective reagent or enzyme (urease for urea) with a colour or electrical transducer",
+      "Synthetic biology in electronics: genetic circuits, DNA data storage, biosensors"
+     ],
+     "questions": [
+      {
+       "id": "a-q1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "An electronic nose uses",
+       "options": [
+        "A single DNA probe",
+        "An array of gas sensors with pattern recognition",
+        "An antibody column",
+        "A gel electrophoresis tank"
+       ],
+       "answer_index": 1,
+       "why": "The response pattern across many gas sensors is the smell fingerprint."
+      },
+      {
+       "id": "a-q2",
+       "kind": "mcq",
+       "level": 2,
+       "q": "Which enzyme could the recognition element of a urea-in-milk sensor use?",
+       "options": [
+        "Glucose oxidase",
+        "Urease",
+        "Taq polymerase",
+        "Ligase"
+       ],
+       "answer_index": 1,
+       "why": "Urease hydrolyses urea to ammonia and carbon dioxide, changing pH and conductivity, which the transducer reads."
+      },
+      {
+       "id": "a-q3",
+       "kind": "short",
+       "level": 2,
+       "marks": 3,
+       "q": "Differentiate between an electronic nose and an electronic tongue, with one use each.",
+       "model_answer_md": "| Electronic nose | Electronic tongue |\n|---|---|\n| Array of gas sensors for volatile compounds | Array of cross-sensitive sensors dipped in a liquid |\n| Smell fingerprint read by pattern recognition | Taste fingerprint read by pattern recognition (neural network) |\n| Use: freshness of meat and fish, breath diagnosis | Use: bitterness of drugs, adulteration in beverages |",
+       "points": [
+        "Nose: gas phase volatile compounds; tongue: liquid",
+        "Both sensor arrays plus pattern recognition",
+        "One use for each"
+       ]
+      },
+      {
+       "id": "a-p1",
+       "pyq": "e1ffe6d9148d0f58",
+       "level": 2,
+       "points": [
+        "Biosensor definition: bioreceptor plus transducer plus processor giving signal proportional to analyte",
+        "Electronic tongue: array of non-specific sensors plus pattern recognition; beverages, drug bitterness, adulteration",
+        "Electronic nose: gas sensor array, smell fingerprint; food spoilage, fermentation, explosives, breath diagnosis",
+        "Biochip: DNA microarray hybridisation and scanning, protein chips, lab-on-a-chip",
+        "Other examples: glucose biosensor, pesticide and BOD sensors, pathogen detection, biowarfare agents, SPR in drug discovery"
+       ]
+      },
+      {
+       "id": "a-p2",
+       "pyq": "ca347d10bbcaa9be",
+       "level": 2,
+       "points": [
+        "Problem: common adulterants (water, urea, detergent, starch, H2O2/formalin, melamine) and health risks",
+        "Working: selective recognition element (urease for urea, iodine for starch, peroxidase for H2O2), transducer (colour read optically, or conductivity/pH/current), electronics and display",
+        "Home-use features: portable, low cost, few drops, results in minutes, same platform for water and juice",
+        "Significance: consumer protection, food safety regulation, point-of-care testing"
+       ]
+      },
+      {
+       "id": "a-p3",
+       "pyq": "9338a04d654ec3cd",
+       "level": 2,
+       "points": [
+        "Synthetic biology: design of new biological parts, circuits and systems using engineering principles",
+        "Biological logic and memory: genetic circuits, DNA data storage (high density)",
+        "Bio-based devices: biosensors, biochips, microbial fuel cells, bio-fabricated nanowires"
+       ]
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "topic": "Vaccines and antibodies",
+   "subtopics": [
+    {
+     "id": "vaccine-types",
+     "title": "Vaccines, immunity and vaccine types",
+     "theory_md": "A **vaccine** is an antigen preparation that gives **active immunity** and **memory** (a faster, stronger secondary response) without causing the disease. **Passive immunity** is ready-made antibody (antiserum, colostrum, placental IgG): immediate, short-lived, no memory.\n\n**Types, one example each:**\n- **Live attenuated**: BCG (tuberculosis), oral polio (Sabin), MMR.\n- **Inactivated**: Salk polio, rabies.\n- **Toxoid**: tetanus, diphtheria.\n- **Subunit/recombinant**: hepatitis B (HBsAg in yeast), HPV.\n- **Conjugate**: Hib.\n- **Viral vector**: Covishield. **mRNA**: Pfizer-BioNTech.",
+     "basics_md": "The first meeting with a germ is slow and risky. A vaccine arranges a safe first meeting using a harmless piece or a weak copy of the germ, so the body remembers it and fights quickly next time.",
+     "key_points": [
+      "Vaccine gives active immunity with memory cells; passive immunity gives immediate antibodies without memory",
+      "Live attenuated: BCG, OPV, MMR; inactivated: Salk polio, rabies; toxoid: tetanus, diphtheria",
+      "Subunit/recombinant: hepatitis B in yeast, HPV",
+      "BCG is for tuberculosis"
+     ],
+     "questions": [
+      {
+       "id": "vt-p1",
+       "pyq": "06b529f832f4f378",
+       "level": 1,
+       "points": [
+        "B) Tuberculosis: BCG is a live attenuated strain of Mycobacterium bovis",
+        "Hepatitis B vaccine is a recombinant HBsAg vaccine, not BCG"
+       ]
+      },
+      {
+       "id": "vt-q1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "Tetanus and diphtheria vaccines are",
+       "options": [
+        "Live attenuated",
+        "Toxoids",
+        "mRNA vaccines",
+        "Conjugate vaccines"
+       ],
+       "answer_index": 1,
+       "why": "The toxin is inactivated by formaldehyde, which keeps its antigenicity."
+      },
+      {
+       "id": "vt-q2",
+       "kind": "mcq",
+       "level": 2,
+       "q": "Which gives passive immunity?",
+       "options": [
+        "BCG injection",
+        "Anti-tetanus serum",
+        "Salk polio vaccine",
+        "MMR vaccine"
+       ],
+       "answer_index": 1,
+       "why": "Ready-made antibodies act at once but fade; the others make the body produce its own."
+      },
+      {
+       "id": "vt-q3",
+       "kind": "long",
+       "level": 2,
+       "marks": 5,
+       "q": "What is a vaccine? Classify vaccines with one example of each type.",
+       "model_answer_md": "A **vaccine** is an antigenic preparation (weakened or killed pathogen or a component) that induces **active immunity** and **memory B and T cells**.\n\n1. **Live attenuated**: weakened pathogen; strong, long immunity. BCG, OPV (Sabin), MMR.\n2. **Inactivated (killed)**: heat or formalin; safe, needs boosters. Salk IPV, rabies.\n3. **Toxoid**: inactivated toxin. Tetanus, diphtheria.\n4. **Subunit/recombinant**: purified antigen made by rDNA. Hepatitis B (HBsAg in yeast), HPV.\n5. **Conjugate**: polysaccharide linked to a protein carrier. Hib, pneumococcal.\n6. **Viral vector**: harmless virus carrying the antigen gene. Covishield.\n7. **mRNA / DNA**: instructs host cells to make the antigen. Pfizer-BioNTech, ZyCoV-D.",
+       "points": [
+        "Definition: antigen preparation giving active immunity and memory",
+        "Live attenuated with example",
+        "Inactivated and toxoid with examples",
+        "Subunit/recombinant and conjugate with examples",
+        "Viral vector and mRNA/DNA with examples"
+       ]
+      },
+      {
+       "id": "vt-q4",
+       "kind": "short",
+       "level": 2,
+       "marks": 3,
+       "q": "Differentiate between active and passive immunity.",
+       "model_answer_md": "| Active immunity | Passive immunity |\n|---|---|\n| Body makes its own antibodies | Ready-made antibodies are given |\n| Natural (infection) or artificial (vaccine) | Natural (colostrum IgA, placental IgG) or artificial (antiserum) |\n| Slow to develop, long-lasting, has memory | Immediate, short-lived, no memory |\n| Example: polio vaccine | Example: anti-tetanus serum, snake antivenom |",
+       "points": [
+        "Own antibodies versus ready-made",
+        "Slow and long-lasting versus immediate and short-lived",
+        "Memory present versus absent",
+        "Example of each"
+       ]
+      }
+     ]
+    },
+    {
+     "id": "recombinant-vaccine",
+     "title": "Recombinant versus traditional vaccines",
+     "theory_md": "**Traditional vaccines** need the **whole pathogen grown in bulk**: live attenuated (BCG, OPV) can **revert to virulence**; killed (Salk) may be **incompletely inactivated** (Cutter incident, 1955); they carry egg or animal contaminants.\n\n**Recombinant (subunit) vaccines** use only the gene for a protective antigen. Steps: isolate antigen gene (e.g. **HBsAg**) → insert into plasmid with restriction enzyme and ligase → transform **yeast** → grow in bioreactor → purify the antigen (adjuvant added). No infectious agent, no genome, defined and uniform, safe for the immunocompromised and pregnant. Limits: weaker response, needs **adjuvant** and boosters.\n\nExamples: hepatitis B (yeast, 1986), HPV (L1 protein in yeast), Corbevax.",
+     "basics_md": "A traditional vaccine is like keeping a tiger in the lab to take a tooth. A recombinant vaccine copies only the recipe for the tooth and makes it in a harmless factory, so no tiger is ever there.",
+     "key_points": [
+      "Traditional: whole pathogen grown, attenuated strain can revert or killing can fail",
+      "Recombinant: only the antigen gene is expressed in a safe host (yeast), no pathogen involved",
+      "Steps: gene, vector, host, bioreactor, purification with adjuvant",
+      "Examples: hepatitis B (HBsAg in yeast), HPV; limitation: needs adjuvant and boosters"
+     ],
+     "questions": [
+      {
+       "id": "r-q1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "The hepatitis B vaccine made by rDNA technology is a",
+       "options": [
+        "Live attenuated vaccine",
+        "Toxoid",
+        "Recombinant subunit vaccine from yeast",
+        "mRNA vaccine"
+       ],
+       "answer_index": 2,
+       "why": "The HBsAg gene is expressed in yeast and the purified protein is the vaccine."
+      },
+      {
+       "id": "r-q2",
+       "kind": "mcq",
+       "level": 2,
+       "q": "A real risk of the oral polio vaccine that a recombinant vaccine does not have is",
+       "options": [
+        "Cost of the adjuvant",
+        "Reversion of the attenuated virus to virulence",
+        "Weak immune memory",
+        "Need for boosters"
+       ],
+       "answer_index": 1,
+       "why": "OPV is live attenuated and can revert (vaccine-derived polio); a subunit vaccine contains no infectious agent."
+      },
+      {
+       "id": "r-q3",
+       "kind": "short",
+       "level": 2,
+       "marks": 3,
+       "q": "Outline the production of a recombinant hepatitis B vaccine.",
+       "model_answer_md": "1. Isolate the gene for the surface antigen **HBsAg**.\n2. Insert it into an expression vector (plasmid) using **restriction enzyme and DNA ligase**.\n3. **Transform yeast** (*Saccharomyces cerevisiae*).\n4. Grow the yeast in a **bioreactor**; it expresses HBsAg.\n5. **Purify** the antigen, add an **adjuvant**, formulate, test.\n\nResult: a subunit vaccine with no virus.",
+       "points": [
+        "Isolate HBsAg gene",
+        "Insert in plasmid with restriction enzyme and ligase",
+        "Transform yeast and grow in bioreactor",
+        "Purify and add adjuvant"
+       ]
+      },
+      {
+       "id": "r-p1",
+       "pyq": "b4109a630dcbd9a5",
+       "level": 3,
+       "points": [
+        "Vaccine: antigen preparation giving active immunity and memory without disease",
+        "Traditional production: live attenuated (BCG, OPV), killed (Salk, rabies), toxoid (tetanus, diphtheria); whole pathogen grown in bulk",
+        "Recombinant production: antigen gene, plasmid, safe host (yeast), bioreactor, purification, adjuvant; flow antigen gene to subunit vaccine",
+        "Why safer: no infectious agent so no reversion, no incomplete inactivation, no handling of pathogen, purer and uniform, usable in immunocompromised",
+        "Examples: hepatitis B (HBsAg in yeast, earlier from plasma), HPV, Novavax/Corbevax; limitation: weaker response, needs adjuvant and boosters"
+       ]
+      }
+     ]
+    },
+    {
+     "id": "antibodies",
+     "title": "Antibody structure, classes and monoclonal antibodies",
+     "theory_md": "An **antibody (immunoglobulin)** is a **Y-shaped** protein made by **plasma cells** (activated B cells): **two heavy and two light chains (H$_2$L$_2$)** held by **disulphide bonds**. Each chain has a **variable region** (the tips; together they form **two antigen-binding sites**) and a **constant region**. The arms are **Fab**, the stem **Fc**, joined by a **hinge**.\n\n**Classes:** **IgG** (most abundant, crosses placenta), **IgA** (secretions, colostrum), **IgM** (pentamer, first in primary response), **IgE** (allergy), **IgD** (B-cell receptor).\n\n**Monoclonal antibodies** (Kohler and Milstein, 1975): fuse antibody-producing **B cells** with **myeloma** cells to form **hybridomas**, select in **HAT medium**, screen and culture. Uses: pregnancy kits, ELISA, cancer therapy.",
+     "basics_md": "Think of an antibody as a Y-shaped grabber. The two top tips are the claws that fit one particular germ. Because the claws differ from antibody to antibody, the body can make a grabber for almost any germ.",
+     "key_points": [
+      "Y-shaped, four chains: two heavy and two light, joined by disulphide bonds",
+      "Variable regions at the tips form two antigen-binding sites; Fab arms, Fc stem, hinge",
+      "Classes: IgG placenta, IgA secretions, IgM first, IgE allergy, IgD receptor",
+      "Monoclonal antibodies from hybridoma (B cell + myeloma), selected in HAT medium"
+     ],
+     "questions": [
+      {
+       "id": "ab-q1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "An antibody molecule is made of",
+       "options": [
+        "Two heavy chains only",
+        "One heavy and one light chain",
+        "Two heavy and two light chains",
+        "Four heavy chains"
+       ],
+       "answer_index": 2,
+       "why": "H2L2 held by disulphide bonds, with two antigen-binding sites."
+      },
+      {
+       "id": "ab-q2",
+       "kind": "mcq",
+       "level": 1,
+       "q": "The antibody class that crosses the placenta is",
+       "options": [
+        "IgA",
+        "IgE",
+        "IgG",
+        "IgM"
+       ],
+       "answer_index": 2,
+       "why": "IgG is the small monomer that crosses the placenta. IgA is in colostrum; IgM is a pentamer, too big to cross."
+      },
+      {
+       "id": "ab-q3",
+       "kind": "long",
+       "level": 2,
+       "marks": 5,
+       "q": "Draw and label an antibody molecule and describe its structure.",
+       "model_answer_md": "**Diagram (in words):** a Y. Two long **heavy chains** run from the base up each arm; a shorter **light chain** lies alongside the upper half of each arm. **Disulphide bonds** link H to H at the hinge and H to L in each arm. At each arm tip the variable regions ($V_H$ and $V_L$) form an **antigen-binding site** (two in all). The lower parts are constant regions ($C_H$, $C_L$). Labels: Fab arms, Fc stem, hinge, N-termini at the tips, C-termini at the base.\n\n**Structure:** four polypeptide chains, 2 heavy + 2 light (H$_2$L$_2$); variable regions give specificity; constant region decides class and effector function; papain cuts at the hinge into two Fab and one Fc.",
+       "points": [
+        "Y-shaped, two heavy and two light chains",
+        "Disulphide bonds link chains",
+        "Variable regions form two antigen-binding sites",
+        "Constant region, Fab, Fc and hinge labelled"
+       ]
+      },
+      {
+       "id": "ab-q4",
+       "kind": "short",
+       "level": 2,
+       "marks": 3,
+       "q": "What are monoclonal antibodies? How are they produced?",
+       "model_answer_md": "**Monoclonal antibodies** are identical antibodies from one clone of B cells, all against one epitope.\n\n**Hybridoma technique:**\n1. Immunise a mouse; collect B cells from the spleen.\n2. Fuse them with immortal **myeloma** cells (PEG) to form **hybridomas**.\n3. Select hybridomas in **HAT medium** (unfused cells die).\n4. Screen for the clone making the wanted antibody and culture it.\n\nUses: pregnancy test kits, ELISA, cancer therapy.",
+       "points": [
+        "Identical antibodies from a single clone",
+        "B cell fused with myeloma gives hybridoma",
+        "Selection in HAT medium and screening",
+        "Uses"
+       ]
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "topic": "Transgenic plants and animals",
+   "subtopics": [
+    {
+     "id": "transgenic-bt",
+     "title": "Transgenic organisms and Bt cotton",
+     "theory_md": "A **transgenic organism** carries a **foreign gene** (transgene) put in by genetic engineering. Plants: ***Agrobacterium tumefaciens*** (**Ti plasmid** as vector) or **gene gun**. Animals: **microinjection** into the fertilised egg. A natural or merely selected organism (wild rice, bread yeast) is not transgenic.\n\n**Bt cotton** carries **cry genes** from ***Bacillus thuringiensis***: *cryIAc* and *cryIIAb* against cotton bollworms, *cryIAb* against corn borer. The Cry protein is made as an inactive **protoxin**; in the **alkaline gut** of the larva it is activated, binds midgut epithelial cells, forms **pores**; cells swell, lyse and the insect dies. Approved in India in 2002.",
+     "basics_md": "The soil bacterium Bt naturally makes a protein that kills certain caterpillars. Putting its gene into cotton lets the cotton make that protein itself, so the caterpillars die when they eat it.",
+     "key_points": [
+      "Transgenic = carries a foreign gene; Agrobacterium Ti plasmid, gene gun, microinjection",
+      "Bt cotton: cry genes from Bacillus thuringiensis",
+      "Protoxin activated in alkaline insect gut, binds midgut cells, forms pores, insect dies",
+      "cryIAc and cryIIAb for bollworm, cryIAb for corn borer"
+     ],
+     "questions": [
+      {
+       "id": "tb-p1",
+       "pyq": "67f184cacef0ce55",
+       "level": 1,
+       "points": [
+        "B) Bt cotton: a transgenic organism carries a foreign gene; Bt cotton has the cry gene from Bacillus thuringiensis",
+        "Natural rice, wild bacteria and bread yeast are unmodified"
+       ]
+      },
+      {
+       "id": "tb-q1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "The Bt protoxin becomes active in the insect because of",
+       "options": [
+        "Acidic pH",
+        "Alkaline pH of the gut",
+        "Low temperature",
+        "Presence of oxygen"
+       ],
+       "answer_index": 1,
+       "why": "It is solubilised and cleaved to active toxin in the alkaline midgut; it is harmless in the plant and in the bacterium."
+      },
+      {
+       "id": "tb-q2",
+       "kind": "mcq",
+       "level": 2,
+       "q": "Which vector is used to transfer genes into plant cells?",
+       "options": [
+        "Retrovirus",
+        "Ti plasmid of Agrobacterium",
+        "Bacteriophage lambda",
+        "pBR322 alone"
+       ],
+       "answer_index": 1,
+       "why": "The disarmed Ti plasmid carries the transgene into the plant genome."
+      },
+      {
+       "id": "tb-q3",
+       "kind": "long",
+       "level": 2,
+       "marks": 5,
+       "q": "What is Bt cotton? Explain how the Bt toxin protects the plant.",
+       "model_answer_md": "**Bt cotton** is transgenic cotton carrying **cry genes** from the soil bacterium *Bacillus thuringiensis*. *cryIAc* and *cryIIAb* control cotton bollworms; *cryIAb* controls corn borer.\n\n**Mechanism:**\n1. Cry protein is formed as an inactive **protoxin**, so it does not harm the bacterium or the plant.\n2. The larva eats plant tissue.\n3. In the **alkaline midgut** the protoxin dissolves and is cleaved to the **active toxin**.\n4. The toxin binds **midgut epithelial cells** and forms **pores**.\n5. Cells swell and lyse, the gut is damaged and the insect dies.\n\nAdvantages: less insecticide, higher yield. Concern: resistance in pests.",
+       "points": [
+        "cry genes from Bacillus thuringiensis in cotton",
+        "Inactive protoxin",
+        "Activated in alkaline gut",
+        "Binds midgut cells, forms pores, cell lysis, death",
+        "Advantage or concern"
+       ]
+      }
+     ]
+    },
+    {
+     "id": "golden-rice-animals",
+     "title": "Golden rice, RNAi and transgenic animals",
+     "theory_md": "**Golden rice** makes **$\\beta$-carotene** (provitamin A) in the grain, against vitamin A deficiency; genes *psy* (daffodil or maize) and *crtI* (bacterium *Erwinia*). It contains $\\beta$-carotene, not vitamin A.\n\n**RNAi against nematode:** nematode-specific genes put into tobacco by *Agrobacterium* make **sense and antisense RNA**, which form **dsRNA** and silence the nematode (*Meloidogyne incognita*) mRNA.\n\n**Transgenic animals** (mostly mice): **Rosie** (1997), milk with human **$\\alpha$-lactalbumin**; sheep making **$\\alpha$-1-antitrypsin**. Uses: normal physiology and development, disease models, biological products, **vaccine safety** testing, chemical safety testing. **GEAC** regulates GM organisms in India.",
+     "basics_md": "Rice normally has no beta-carotene in the grain, so rice-eating children can lack vitamin A. Adding two genes makes the grain golden yellow with it. Animals can be edited the same way so that they make a useful human protein in their milk.",
+     "key_points": [
+      "Golden rice: beta-carotene via psy and crtI genes, for vitamin A deficiency",
+      "RNAi: sense and antisense RNA form dsRNA that silences nematode mRNA",
+      "Rosie cow: human alpha-lactalbumin in milk; sheep: alpha-1-antitrypsin",
+      "Uses of transgenic animals: physiology, disease models, products, vaccine safety, chemical safety testing"
+     ],
+     "questions": [
+      {
+       "id": "ga-q1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "Golden rice is rich in",
+       "options": [
+        "Vitamin C",
+        "Iron",
+        "Beta-carotene",
+        "Lysine"
+       ],
+       "answer_index": 2,
+       "why": "Beta-carotene (provitamin A) from the transgenes psy and crtI; the body converts it to vitamin A."
+      },
+      {
+       "id": "ga-q2",
+       "kind": "mcq",
+       "level": 1,
+       "q": "The first transgenic cow, Rosie, produced milk containing",
+       "options": [
+        "Human insulin",
+        "Human alpha-lactalbumin",
+        "Human growth hormone",
+        "Bt toxin"
+       ],
+       "answer_index": 1,
+       "why": "Human alpha-lactalbumin (2.4 g/L), making milk better balanced for babies."
+      },
+      {
+       "id": "ga-q3",
+       "kind": "short",
+       "level": 2,
+       "marks": 3,
+       "q": "How is RNA interference used to make nematode-resistant tobacco?",
+       "model_answer_md": "- The nematode *Meloidogyne incognita* infects tobacco roots.\n- Using ***Agrobacterium***, nematode-specific genes are introduced into tobacco so that it makes **sense and antisense RNA**.\n- The two RNAs form **double-stranded RNA**, which triggers **RNAi**.\n- RNAi silences the nematode's specific **mRNA**, so the parasite cannot survive on the transgenic plant.",
+       "points": [
+        "Nematode-specific genes introduced by Agrobacterium",
+        "Sense and antisense RNA form dsRNA",
+        "RNAi silences nematode mRNA",
+        "Parasite cannot survive"
+       ]
+      },
+      {
+       "id": "ga-q4",
+       "kind": "long",
+       "level": 3,
+       "marks": 5,
+       "q": "Explain the uses of transgenic animals with examples.",
+       "model_answer_md": "1. **Normal physiology and development:** study how genes are regulated and how they affect growth.\n2. **Study of disease:** transgenic models of cancer, cystic fibrosis, Alzheimer's help to understand and treat.\n3. **Biological products:** $\\alpha$-1-antitrypsin (emphysema) from transgenic sheep; **Rosie** the cow, milk with human $\\alpha$-lactalbumin.\n4. **Vaccine safety:** transgenic mice test polio vaccine safety instead of monkeys.\n5. **Chemical safety testing:** animals sensitive to toxins give results faster.\n\nMost transgenic animals are mice.",
+       "points": [
+        "Physiology and development",
+        "Disease models",
+        "Biological products with example",
+        "Vaccine safety testing",
+        "Chemical safety testing"
+       ]
+      }
+     ]
+    },
+    {
+     "id": "gm-agriculture-india",
+     "title": "Problems of intensive cultivation and the biological way forward",
+     "theory_md": "**Problems** in the Green Revolution belt (Punjab, Haryana, western UP; rice-wheat monoculture):\n- **Falling water table**: water-hungry paddy and free power over-extract groundwater.\n- **Excess chemical fertiliser** (NPK, urea): soil health falls, nitrate pollution, eutrophication.\n- **Pesticide residues**: bioaccumulation, linked to **cancer** (Malwa region).\n- Monoculture and stubble burning.\n\n**Way forward:** crop diversification and legume rotation; **biofertilisers** (*Rhizobium*, *Azotobacter*, cyanobacteria, mycorrhiza); **biopesticides** (*Bt*, *Trichoderma*, neem) and IPM; **genetic engineering** (Bt crops, drought- and salt-tolerant, biofortified crops, with biosafety checks); drip irrigation, direct-seeded rice; use residue for biogas or compost.",
+     "basics_md": "Growing the same thirsty crop with lots of chemicals every year drains the groundwater, tires the soil and leaves poison in food. Biology offers gentler tools: helpful microbes instead of fertiliser, natural pest killers instead of sprays, and crops engineered to need less water and fewer sprays.",
+     "key_points": [
+      "Disadvantages: falling water table, excess fertiliser, pesticide residues and cancer, monoculture and stubble burning",
+      "Biofertilisers: Rhizobium, Azotobacter, cyanobacteria, mycorrhiza",
+      "Biopesticides and IPM: Bt, Trichoderma, neem",
+      "Genetic engineering: Bt, drought-tolerant and biofortified crops, with biosafety assessment"
+     ],
+     "questions": [
+      {
+       "id": "ag-q1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "Which is a biofertiliser that fixes nitrogen in legume root nodules?",
+       "options": [
+        "Rhizobium",
+        "Trichoderma",
+        "Bacillus thuringiensis",
+        "Agrobacterium"
+       ],
+       "answer_index": 0,
+       "why": "Rhizobium fixes nitrogen in root nodules. Trichoderma is a biocontrol fungus and Bt a biopesticide."
+      },
+      {
+       "id": "ag-q2",
+       "kind": "mcq",
+       "level": 2,
+       "q": "Why does Bt cotton reduce the need for chemical pesticide?",
+       "options": [
+        "It fixes nitrogen",
+        "The plant itself makes the Cry toxin that kills bollworm",
+        "It needs no water",
+        "It repels all insects with smell"
+       ],
+       "answer_index": 1,
+       "why": "The cry gene makes the plant produce the insecticidal protein, so spraying against bollworm is reduced."
+      },
+      {
+       "id": "ag-q3",
+       "kind": "short",
+       "level": 2,
+       "marks": 3,
+       "q": "Name three biofertilisers or biopesticides with the organism and its role.",
+       "model_answer_md": "1. ***Rhizobium***: biofertiliser, fixes atmospheric nitrogen in legume root nodules.\n2. ***Azotobacter*** / cyanobacteria (*Anabaena*, *Nostoc*): free-living nitrogen fixers; mycorrhiza helps phosphorus uptake.\n3. ***Bacillus thuringiensis***: biopesticide, Cry toxin kills caterpillars; *Trichoderma* controls plant-pathogenic fungi.",
+       "points": [
+        "Rhizobium fixes nitrogen in legume nodules",
+        "Azotobacter/cyanobacteria or mycorrhiza with role",
+        "Bt or Trichoderma as biopesticide with role"
+       ]
+      },
+      {
+       "id": "ag-p1",
+       "pyq": "66d4de5cc161b812",
+       "level": 2,
+       "points": [
+        "Disadvantages: falling water table from water-intensive paddy; excess chemical fertiliser causing soil degradation and nitrate pollution; pesticide residues linked to cancer (Malwa region); monoculture and stubble burning",
+        "Way forward: crop diversification and rotation with legumes; biofertilisers (Rhizobium, Azotobacter, cyanobacteria, mycorrhiza); biopesticides/IPM (Bt, Trichoderma, neem)",
+        "Genetic engineering: Bt crops, drought- and salt-tolerant, biofortified crops (Golden rice) with biosafety assessment",
+        "Water saving and residue management as supporting measures"
+       ]
+      }
+     ]
+    }
+   ]
+  }
+ ]
+}

@@ -1,0 +1,1877 @@
+{
+ "code": "EE1108",
+ "unit": "AC Circuits",
+ "written": "2026-10-19",
+ "by": "claude-sonnet-5-5, in a Claude Code session",
+ "topics": [
+  {
+   "topic": "Waveforms and RMS value",
+   "subtopics": [
+    {
+     "id": "ac-terms",
+     "title": "AC terms, instantaneous value, electrical degrees",
+     "theory_md": "An alternating quantity reverses direction and varies in magnitude periodically: $v = V_m\\sin\\omega t$, with $\\omega = 2\\pi f$ rad/s and $T = 1/f$. **Cycle**: one complete set of values (360 electrical degrees). **Amplitude**: the peak $V_m$. **Instantaneous value**: $v$ at a given $t$ (put $\\omega t$ in radians).\n\nIn a $P$-pole machine, $\\theta_{elec} = \\dfrac{P}{2}\\,\\theta_{mech}$ and $f = \\dfrac{PN}{120}$ ($N$ in rpm).\n\nTo find the time to reach a value, solve $\\sin\\omega t = v/V_m$ and take the first angle.",
+     "basics_md": "A coil spinning in a magnetic field gives a voltage that rises, falls, reverses and repeats. One full turn of the coil in a two-pole field is one full cycle. Frequency is how many cycles per second; the period is the time for one.",
+     "key_points": [
+      "Alternating quantity: changes magnitude and direction periodically; $\\omega = 2\\pi f$, $T = 1/f$",
+      "Cycle, amplitude (peak), time period, frequency defined with units",
+      "$\\theta_{elec} = (P/2)\\,\\theta_{mech}$; a 4-pole machine gives 2 cycles per revolution",
+      "Instantaneous value: substitute $t$ with $\\omega t$ in radians"
+     ],
+     "questions": [
+      {
+       "id": "a-q1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "A 50 Hz supply has a time period of",
+       "options": [
+        "50 ms",
+        "20 ms",
+        "2 ms",
+        "0.2 s"
+       ],
+       "answer_index": 1,
+       "why": "$T = 1/f = 1/50 = 20$ ms."
+      },
+      {
+       "id": "a-q2",
+       "kind": "mcq",
+       "level": 2,
+       "q": "How many electrical degrees does a coil of a 6-pole alternator pass through in one revolution?",
+       "options": [
+        "360",
+        "720",
+        "1080",
+        "2160"
+       ],
+       "answer_index": 2,
+       "why": "$\\theta_{elec} = (6/2)\\times360^\\circ = 1080^\\circ$, i.e. 3 cycles."
+      },
+      {
+       "id": "a-q3",
+       "kind": "numerical",
+       "level": 2,
+       "marks": 3,
+       "q": "A current is $i = 10\\sin 100\\pi t$ A. Find its frequency, time period and the value of $i$ at $t = 2.5$ ms.",
+       "model_answer_md": "**Compare with** $i = I_m\\sin\\omega t$: $I_m = 10$ A, $\\omega = 100\\pi$ rad/s.\n\n$f = \\omega/2\\pi = 50$ Hz, $T = 1/f = 20$ ms.\n\nAt $t = 2.5$ ms: $\\omega t = 100\\pi \\times 2.5\\times10^{-3} = \\pi/4$ rad $= 45^\\circ$.\n\n$i = 10\\sin45^\\circ = 7.07$ A.",
+       "points": [
+        "$\\omega = 100\\pi$ so $f = 50$ Hz",
+        "$T = 20$ ms",
+        "$\\omega t = \\pi/4$ (radians, not degrees)",
+        "$i = 7.07$ A"
+       ]
+      },
+      {
+       "id": "p-ad3130ad",
+       "pyq": "ad3130adb9611e0f",
+       "level": 1,
+       "points": [
+        "Alternating quantity: reverses direction and varies in magnitude periodically, e.g. $v = V_m\\sin\\omega t$",
+        "Labelled sine wave: $V_m$ at the peaks, $T$ between successive positive-going zero crossings",
+        "Cycle (0 to $2\\pi$), amplitude $V_m$, frequency $f = 1/T$ in Hz, time period $T$ in s",
+        "RMS: the DC value giving the same heat; $V_m/\\sqrt2 = 0.707V_m$ for a sine"
+       ]
+      },
+      {
+       "id": "p-55d09066",
+       "pyq": "55d090662ab02462",
+       "level": 1,
+       "points": [
+        "$V_{rms} = 282.8/\\sqrt2 = 200$ V"
+       ]
+      },
+      {
+       "id": "p-a2405771",
+       "pyq": "a240577169aa9b12",
+       "level": 1,
+       "points": [
+        "$\\omega = 314$ rad/s, so $f = 314/2\\pi = 49.97 \\approx 50$ Hz"
+       ]
+      },
+      {
+       "id": "p-f769c37c",
+       "pyq": "f769c37c2232037d",
+       "level": 2,
+       "points": [
+        "$\\omega t = 314\\times0.004 = 1.256$ rad $= 71.96^\\circ$ (radians, not degrees)",
+        "$v = 282.8\\sin(1.256) = 268.9$ V"
+       ]
+      },
+      {
+       "id": "p-c39f19a2",
+       "pyq": "c39f19a26e87c542",
+       "level": 1,
+       "points": [
+        "$\\omega = 2\\pi\\times50 = 314$ rad/s",
+        "$i = 20\\sin314t$ A"
+       ]
+      },
+      {
+       "id": "p-262cf1f0",
+       "pyq": "262cf1f0d16d1225",
+       "level": 1,
+       "points": [
+        "$\\omega t = 2\\pi\\times50\\times0.01 = \\pi$ rad",
+        "$i = 20\\sin\\pi = 0$ A"
+       ]
+      },
+      {
+       "id": "p-652f2c41",
+       "pyq": "652f2c412d41c6a9",
+       "level": 2,
+       "points": [
+        "$20\\sin\\omega t = 10$, so $\\sin\\omega t = 0.5$ and $\\omega t = \\pi/6$",
+        "$t = \\dfrac{\\pi/6}{314.16} = 1.667$ ms ($=1/600$ s)"
+       ]
+      },
+      {
+       "id": "p-c0a0d950",
+       "pyq": "c0a0d9507a262e54",
+       "level": 1,
+       "points": [
+        "$\\theta_{elec} = (P/2)\\,\\theta_{mech}$",
+        "Mechanical $360^\\circ$, electrical $720^\\circ$ (2 cycles per revolution)"
+       ]
+      }
+     ]
+    },
+    {
+     "id": "rms-avg-sine",
+     "title": "RMS and average value of a sine wave",
+     "theory_md": "**RMS value**: the steady value that gives the same heating in a resistor, $V_{rms} = \\sqrt{\\dfrac1T\\int_0^T v^2\\,dt}$. **Average value** $=\\dfrac1T\\int_0^T v\\,dt$; for a symmetrical wave the full-cycle average is zero, so it is taken over a half cycle.\n\nFor $v = V_m\\sin\\omega t$:\n- $V_{rms} = \\dfrac{V_m}{\\sqrt2} = 0.707V_m$ (use $\\sin^2\\theta = \\tfrac{1-\\cos2\\theta}{2}$)\n- $V_{av} = \\dfrac{2V_m}{\\pi} = 0.637V_m$ (half cycle)\n- Form factor $= V_{rms}/V_{av} = 1.11$, peak factor $= V_m/V_{rms} = 1.414$.\n\nThese ratios hold only for a sine.",
+     "basics_md": "An AC and a DC supply can heat the same heater equally. The DC value that matches is the RMS value, which is why a \"230 V\" supply is 230 V RMS and its peak is higher, 325 V.",
+     "key_points": [
+      "RMS = square root of the mean of the square (heating-effect definition)",
+      "Sine: $V_{rms} = V_m/\\sqrt2$, $V_{av}$ (half cycle) $= 2V_m/\\pi$",
+      "Form factor 1.11, peak factor 1.414 for a sine",
+      "Full-cycle average of a symmetrical wave is zero"
+     ],
+     "questions": [
+      {
+       "id": "r-q1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "The form factor of a sinusoidal wave is",
+       "options": [
+        "1.414",
+        "1.11",
+        "0.637",
+        "1.57"
+       ],
+       "answer_index": 1,
+       "why": "$0.707V_m/0.637V_m = 1.11$."
+      },
+      {
+       "id": "r-q2",
+       "kind": "mcq",
+       "level": 2,
+       "q": "The peak value of a 230 V (RMS) single-phase supply is nearest to",
+       "options": [
+        "230 V",
+        "325 V",
+        "163 V",
+        "460 V"
+       ],
+       "answer_index": 1,
+       "why": "$230\\times\\sqrt2 = 325$ V; 230 V is the RMS value."
+      },
+      {
+       "id": "r-q3",
+       "kind": "short",
+       "level": 2,
+       "marks": 4,
+       "q": "Derive the RMS value of $v = V_m\\sin\\omega t$.",
+       "model_answer_md": "$V_{rms}^2 = \\dfrac{1}{2\\pi}\\int_0^{2\\pi}V_m^2\\sin^2\\theta\\,d\\theta = \\dfrac{V_m^2}{2\\pi}\\int_0^{2\\pi}\\dfrac{1-\\cos2\\theta}{2}\\,d\\theta$\n\n$= \\dfrac{V_m^2}{4\\pi}\\left[\\theta - \\dfrac{\\sin2\\theta}{2}\\right]_0^{2\\pi} = \\dfrac{V_m^2}{4\\pi}(2\\pi) = \\dfrac{V_m^2}{2}$\n\n$$V_{rms} = \\dfrac{V_m}{\\sqrt2} = 0.707\\,V_m$$",
+       "points": [
+        "Definition $\\sqrt{\\frac1T\\int v^2dt}$",
+        "Identity $\\sin^2\\theta = (1-\\cos2\\theta)/2$",
+        "Integral evaluates to $V_m^2/2$",
+        "$V_{rms} = V_m/\\sqrt2$"
+       ]
+      },
+      {
+       "id": "r-q4",
+       "kind": "numerical",
+       "level": 2,
+       "marks": 3,
+       "q": "A current $i = 5 + 10\\sin\\omega t$ A flows in a resistor. Find the RMS value and the average over a full cycle.",
+       "model_answer_md": "DC part $I_0 = 5$ A; AC part has RMS $10/\\sqrt2 = 7.07$ A.\n\n$I_{rms} = \\sqrt{I_0^2 + (I_m/\\sqrt2)^2} = \\sqrt{25 + 50} = 8.66$ A\n\nFull-cycle average $= 5$ A (the sine part averages to zero).\n\nThe RMS values are not added directly: $5 + 7.07 = 12.07$ A is wrong.",
+       "points": [
+        "$I_{rms}^2$ = sum of squares of the parts",
+        "$I_{rms} = 8.66$ A",
+        "Average over a full cycle $= 5$ A"
+       ]
+      },
+      {
+       "id": "p-ed9d61f2",
+       "pyq": "ed9d61f25a5c55ff",
+       "level": 2,
+       "points": [
+        "$V_{rms} = \\sqrt{\\frac{1}{2\\pi}\\int_0^{2\\pi}V_m^2\\sin^2\\theta\\,d\\theta}$ using $\\sin^2\\theta = (1-\\cos2\\theta)/2$",
+        "$V_{rms} = V_m/\\sqrt2 = 0.707V_m$",
+        "$V_{av} = \\frac{1}{\\pi}\\int_0^\\pi V_m\\sin\\theta\\,d\\theta = 2V_m/\\pi = 0.637V_m$ (half cycle; full cycle gives zero)"
+       ]
+      },
+      {
+       "id": "p-ac246ef9",
+       "pyq": "ac246ef93f63cd96",
+       "level": 2,
+       "points": [
+        "$I_{av} = 2\\times20/\\pi = 12.73$ A (half cycle)",
+        "$I_{rms} = 20/\\sqrt2 = 14.14$ A"
+       ]
+      }
+     ]
+    },
+    {
+     "id": "rms-avg-waves",
+     "title": "RMS and average of non-sinusoidal waves",
+     "theory_md": "For any periodic wave, integrate over **one full period**, including the zero portions:\n\n$V_{av} = \\dfrac1T\\int_0^T v\\,dt$ (area under the curve $/\\,T$), $V_{rms} = \\sqrt{\\dfrac1T\\int_0^T v^2\\,dt}$.\n\nMethod: write $v$ for each segment (constant, straight line, or $V_m\\sin\\theta$), integrate $v$ and $v^2$ segment by segment, add, divide by $T$.\n\nStandard results: half-wave rectified sine $V_{av} = V_m/\\pi$, $V_{rms} = V_m/2$. Straight ramp from $a$ to $b$: mean $(a+b)/2$, mean square $(a^2+ab+b^2)/3$. Never use $V_m/\\sqrt2$ here.",
+     "basics_md": "RMS means: square it, average it, root it. Average means: area under the curve divided by the period. A flat zero stretch still counts in the period, so it lowers both values.",
+     "key_points": [
+      "Integrate over the full period, zero portions included",
+      "Segment by segment: integrate $v$ for the average, $v^2$ for the RMS",
+      "Half-wave rectified sine: $V_{av} = V_m/\\pi$, $V_{rms} = V_m/2$",
+      "$V_m/\\sqrt2$ and $2V_m/\\pi$ apply to a sine only"
+     ],
+     "questions": [
+      {
+       "id": "w-q1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "The RMS value of a half-wave rectified sine of peak $V_m$ is",
+       "options": [
+        "$V_m/\\sqrt2$",
+        "$V_m/2$",
+        "$V_m/\\pi$",
+        "$2V_m/\\pi$"
+       ],
+       "answer_index": 1,
+       "why": "Half the cycle is zero, so the mean square is $V_m^2/4$."
+      },
+      {
+       "id": "w-q2",
+       "kind": "mcq",
+       "level": 2,
+       "q": "A voltage is 10 V for half of each period and 0 V for the other half. Its RMS value is",
+       "options": [
+        "10 V",
+        "7.07 V",
+        "5 V",
+        "3.54 V"
+       ],
+       "answer_index": 1,
+       "why": "Mean square $= 100\\times\\tfrac12 = 50$, so $\\sqrt{50} = 7.07$ V; the average is 5 V."
+      },
+      {
+       "id": "w-q3",
+       "kind": "numerical",
+       "level": 2,
+       "marks": 4,
+       "q": "A half-wave rectified sine has a peak of 100 V. Find the average value, RMS value and form factor.",
+       "model_answer_md": "Over the period $2\\pi$ only $0$ to $\\pi$ is non-zero.\n\n$V_{av} = \\dfrac{1}{2\\pi}\\int_0^\\pi 100\\sin\\theta\\,d\\theta = \\dfrac{100\\times2}{2\\pi} = 31.83$ V\n\n$V_{rms}^2 = \\dfrac{1}{2\\pi}\\int_0^\\pi 100^2\\sin^2\\theta\\,d\\theta = \\dfrac{10^4}{2\\pi}\\cdot\\dfrac{\\pi}{2} = 2500$, so $V_{rms} = 50$ V\n\nForm factor $= 50/31.83 = 1.57$.",
+       "points": [
+        "Average over the full period $2\\pi$",
+        "$V_{av} = 31.83$ V",
+        "$V_{rms} = 50$ V",
+        "Form factor $= 1.57$"
+       ]
+      },
+      {
+       "id": "w-q4",
+       "kind": "numerical",
+       "level": 3,
+       "marks": 5,
+       "q": "A periodic voltage of period 6 ms rises linearly from 0 to 12 V in 0 to 4 ms and is 0 V from 4 to 6 ms. Find its average and RMS values.",
+       "model_answer_md": "For $0<t<4$ ms: $v = 3t$ (V, $t$ in ms). For $4<t<6$: $v = 0$.\n\n$V_{av} = \\dfrac16\\int_0^4 3t\\,dt = \\dfrac16\\left[1.5t^2\\right]_0^4 = \\dfrac{24}{6} = 4$ V\n\n$V_{rms}^2 = \\dfrac16\\int_0^4 9t^2\\,dt = \\dfrac16\\left[3t^3\\right]_0^4 = \\dfrac{192}{6} = 32$\n\n$V_{rms} = \\sqrt{32} = 5.66$ V",
+       "points": [
+        "Segment equation $v = 3t$",
+        "Divide by the full period 6 ms",
+        "$V_{av} = 4$ V",
+        "$V_{rms} = 5.66$ V"
+       ]
+      },
+      {
+       "id": "p-0cb1c91f",
+       "pyq": "0cb1c91f732a8143",
+       "level": 3,
+       "points": [
+        "Segment: ramp $v = -4 + 7t/T$ over one period, then a vertical drop",
+        "$V_{av} = (-4+3)/2 = -0.5$",
+        "$V_{rms}^2 = (a^2+ab+b^2)/3 = (16-12+9)/3 = 4.33$, so $V_{rms} = 2.08$",
+        "$V_m/\\sqrt2$ must not be used for a non-sinusoid"
+       ]
+      },
+      {
+       "id": "p-0730d33b",
+       "pyq": "0730d33bab898ab9",
+       "level": 3,
+       "points": [
+        "$v = 50\\sin\\theta$ for $\\pi/3<\\theta<\\pi$, zero elsewhere; period $2\\pi$",
+        "$V_{av} = \\frac{50}{2\\pi}(\\cos60^\\circ+1) = 11.94$ V",
+        "$V_{rms}^2 = \\frac{2500}{2\\pi}\\left[\\frac\\theta2 - \\frac{\\sin2\\theta}{4}\\right]_{\\pi/3}^{\\pi} = 502.8$",
+        "$V_{rms} = 22.42$ V"
+       ]
+      },
+      {
+       "id": "p-6796dbc6",
+       "pyq": "6796dbc6b6e5acb1",
+       "level": 3,
+       "points": [
+        "Read the period (5 ms) and each segment: 2 V for 3 ms, 1 V for 1 ms, ramp 1 V to $-2$ V for 1 ms",
+        "$V_{av} = (6+1-0.5)/5 = 1.3$ V",
+        "$V_{rms}^2 = (12+1+1)/5 = 2.8$, so $V_{rms} = 1.673$ V",
+        "Average power in $Z = 2\\angle45^\\circ$ m$\\Omega$: $P = \\frac{V_{rms}^2}{|Z|}\\cos45^\\circ = 989.9$ W"
+       ]
+      },
+      {
+       "id": "p-67241472",
+       "pyq": "67241472f8c94f2d",
+       "level": 2,
+       "points": [
+        "$I_{av} = \\frac1\\pi\\int_\\theta^\\pi I_m\\sin\\phi\\,d\\phi = \\frac{I_m}{\\pi}(1+\\cos\\theta)$ (period $\\pi$)",
+        "Set equal to $I_m/2$: $\\cos\\theta = \\pi/2 - 1 = 0.5708$",
+        "$\\theta = 55.2^\\circ$"
+       ]
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "topic": "Phase and phase difference",
+   "subtopics": [
+    {
+     "id": "phasor-lead-lag",
+     "title": "Phasors, phase difference, lead and lag",
+     "theory_md": "A **phasor** is a line representing a sinusoid of fixed frequency: its length is the amplitude (or RMS value) and its angle from the reference is the phase, rotating anticlockwise at $\\omega$.\n\n$v = V_m\\sin(\\omega t + \\phi)$: $\\phi > 0$ means $v$ **leads** the reference, $\\phi < 0$ means it **lags**. Phase difference is the angle between two waves of the **same frequency**; the time shift is $\\Delta t = \\phi/\\omega$.\n\nConvert cosine to sine first: $\\cos x = \\sin(x + 90^\\circ)$. For a given instantaneous value at $t=0$, $\\phi = \\sin^{-1}(v_0/V_m)$.",
+     "basics_md": "Two runners on a circular track at the same speed keep a fixed gap between them. The gap is the phase difference. The runner ahead leads; the one behind lags. A phasor is just a snapshot of the runner's position.",
+     "key_points": [
+      "Phasor: rotating line, length = amplitude or RMS, angle = phase, anticlockwise at $\\omega$",
+      "Leading = ahead (anticlockwise); lagging = behind; same frequency only",
+      "$\\Delta t = \\phi/\\omega$",
+      "Convert cos to sin before comparing phases"
+     ],
+     "questions": [
+      {
+       "id": "l-q1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "In a pure inductor the current",
+       "options": [
+        "leads the voltage by $90^\\circ$",
+        "lags the voltage by $90^\\circ$",
+        "is in phase with the voltage",
+        "lags the voltage by $180^\\circ$"
+       ],
+       "answer_index": 1,
+       "why": "ELI: voltage E leads current I in an inductor L."
+      },
+      {
+       "id": "l-q2",
+       "kind": "mcq",
+       "level": 2,
+       "q": "$v = 100\\sin(\\omega t + 30^\\circ)$ and $i = 5\\sin(\\omega t - 20^\\circ)$. Then",
+       "options": [
+        "$i$ leads $v$ by $50^\\circ$",
+        "$v$ leads $i$ by $50^\\circ$",
+        "$v$ leads $i$ by $10^\\circ$",
+        "they are in phase"
+       ],
+       "answer_index": 1,
+       "why": "$30 - (-20) = 50^\\circ$ and $v$ has the larger phase angle, so $v$ leads."
+      },
+      {
+       "id": "l-q3",
+       "kind": "numerical",
+       "level": 2,
+       "marks": 3,
+       "q": "$v = 100\\sin(314t + 30^\\circ)$ V and $i = 5\\sin(314t - 20^\\circ)$ A. Find the phase difference and the time by which $i$ is behind $v$.",
+       "model_answer_md": "Phase difference $\\phi = 30^\\circ - (-20^\\circ) = 50^\\circ$, $v$ leads $i$ (current lags).\n\n$\\Delta t = \\dfrac{\\phi}{\\omega} = \\dfrac{50\\times\\pi/180}{314} = 2.78$ ms\n\nCheck: $T = 20$ ms, $\\dfrac{50}{360}\\times20 = 2.78$ ms.",
+       "points": [
+        "$\\phi = 50^\\circ$, voltage leads",
+        "$\\Delta t = \\phi/\\omega$ with $\\phi$ in radians",
+        "$\\Delta t = 2.78$ ms"
+       ]
+      },
+      {
+       "id": "p-0ecf0f47",
+       "pyq": "0ecf0f47cfbf15ce",
+       "level": 1,
+       "points": [
+        "Phasor: a line representing a sinusoidal quantity; length = max (or RMS) value, angle = phase angle",
+        "Imagined to rotate anticlockwise at $\\omega$ rad/s; $v = V_m\\sin(\\omega t+\\phi)$ is $V\\angle\\phi$"
+       ]
+      },
+      {
+       "id": "p-2b022b36",
+       "pyq": "2b022b368b245a08",
+       "level": 2,
+       "points": [
+        "$\\omega = 2\\pi\\times50 = 314$ rad/s",
+        "$\\sin\\phi_v = 283/400 = 0.7075$, so $\\phi_v = 45^\\circ$; $\\sin\\phi_i = 10/20 = 0.5$, so $\\phi_i = 30^\\circ$ (both increasing, so the first quadrant)",
+        "$v = 400\\sin(314t + 45^\\circ)$ V",
+        "$i = 20\\sin(314t + 30^\\circ)$ A"
+       ]
+      }
+     ]
+    },
+    {
+     "id": "elements-parallel",
+     "title": "R, L, C response and parallel RLC phasors",
+     "theory_md": "With the reference taken as the common quantity:\n\n- **R**: $v$ and $i$ in phase, $V = IR$.\n- **L**: $i$ lags $v$ by $90^\\circ$, $V = IX_L$, $X_L = \\omega L$.\n- **C**: $i$ leads $v$ by $90^\\circ$, $V = IX_C$, $X_C = 1/\\omega C$.\n\nIn a **series** circuit $I$ is the reference. In a **parallel** circuit $V$ is the reference: $I_R$ in phase, $I_L$ lags $90^\\circ$, $I_C$ leads $90^\\circ$, and\n$$I = \\sqrt{I_R^2 + (I_C - I_L)^2}.$$\n$I_C > I_L$: circuit leads; $I_L > I_C$: lags.",
+     "basics_md": "An inductor resists a change of current, so its current is late. A capacitor must be charged by a current before its voltage can rise, so its current is early. A resistor has no delay.",
+     "key_points": [
+      "R in phase; L current lags $90^\\circ$; C current leads $90^\\circ$",
+      "Series: $I$ is the reference; parallel: $V$ is the reference",
+      "Parallel: $I = \\sqrt{I_R^2+(I_C-I_L)^2}$, $I_L$ and $I_C$ oppose",
+      "Shorted C or open R changes the branch currents as the phasor diagram shows"
+     ],
+     "questions": [
+      {
+       "id": "e-q1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "The current through a pure capacitor",
+       "options": [
+        "lags the voltage by $90^\\circ$",
+        "leads the voltage by $90^\\circ$",
+        "is in phase with the voltage",
+        "is zero"
+       ],
+       "answer_index": 1,
+       "why": "ICE: in a capacitor C the current I leads E."
+      },
+      {
+       "id": "e-q2",
+       "kind": "numerical",
+       "level": 2,
+       "marks": 3,
+       "q": "A current $i = 2\\sin314t$ A flows through a 0.1 H inductor. Write the expression for the voltage across it.",
+       "model_answer_md": "$X_L = \\omega L = 314\\times0.1 = 31.4\\ \\Omega$\n\n$V_m = I_mX_L = 2\\times31.4 = 62.8$ V\n\nVoltage leads current by $90^\\circ$:\n$$v = 62.8\\sin(314t + 90^\\circ)\\ \\text{V} = 62.8\\cos314t$$",
+       "points": [
+        "$X_L = \\omega L = 31.4\\ \\Omega$",
+        "$V_m = 62.8$ V",
+        "Voltage leads by $90^\\circ$"
+       ]
+      },
+      {
+       "id": "e-q3",
+       "kind": "numerical",
+       "level": 2,
+       "marks": 4,
+       "q": "A resistor of $10\\ \\Omega$, an inductor with $X_L = 5\\ \\Omega$ and a capacitor with $X_C = 10\\ \\Omega$ are in parallel across 100 V. Find the supply current and its phase with respect to the voltage. Draw the phasor diagram in words.",
+       "model_answer_md": "$V$ is the reference. $I_R = 100/10 = 10$ A (in phase), $I_L = 100/5 = 20$ A (lagging $90^\\circ$), $I_C = 100/10 = 10$ A (leading $90^\\circ$).\n\n$I = \\sqrt{I_R^2 + (I_L - I_C)^2} = \\sqrt{10^2 + 10^2} = 14.14$ A\n\n$\\phi = \\tan^{-1}\\dfrac{I_L - I_C}{I_R} = 45^\\circ$, current **lagging** since $I_L > I_C$.\n\nDiagram: $V$ along the x-axis, $I_R$ on it, $I_L$ down, $I_C$ up; $I$ is the diagonal below the axis.",
+       "points": [
+        "$V$ as reference; branch currents $10$, $20$, $10$ A",
+        "$I = \\sqrt{I_R^2+(I_L-I_C)^2} = 14.14$ A",
+        "$\\phi = 45^\\circ$ lagging",
+        "Phasor diagram described"
+       ]
+      },
+      {
+       "id": "p-25e3e011",
+       "pyq": "25e3e011c805e857",
+       "level": 2,
+       "points": [
+        "$X_L = \\omega L = 400\\times0.08 = 32\\ \\Omega$",
+        "$V_m = 0.1\\times32 = 3.2$ V",
+        "Voltage leads current by $90^\\circ$: $v = 3.2\\sin(400t + 65^\\circ)$ V"
+       ]
+      },
+      {
+       "id": "p-e22880b8",
+       "pyq": "e22880b835e34887",
+       "level": 3,
+       "points": [
+        "Parallel RLC: $V$ reference; $I_R$ in phase, $I_L$ lags $90^\\circ$, $I_C$ leads $90^\\circ$; $I = \\sqrt{I_R^2+(I_C-I_L)^2}$",
+        "Capacitor shorted: it shorts the supply and R and L, so $V\\to0$, $I_R=I_L=0$, a very large current flows (limited only by the source), the fuse trips",
+        "R infinite (open): $I_R = 0$; only $I_L$ and $I_C$ remain on the vertical line, $I = |I_C - I_L|$, current at $90^\\circ$ to $V$",
+        "Phasor diagram drawn for each case"
+       ]
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "topic": "Power and power factor",
+   "subtopics": [
+    {
+     "id": "inst-avg-power",
+     "title": "Instantaneous and average power",
+     "theory_md": "With $v = V_m\\sin\\omega t$ and $i = I_m\\sin(\\omega t - \\phi)$:\n$$p = vi = \\tfrac{V_mI_m}{2}\\left[\\cos\\phi - \\cos(2\\omega t - \\phi)\\right]$$\nThe second term has frequency $2f$ and averages to zero, so\n$$P = \\dfrac{V_mI_m}{2}\\cos\\phi = VI\\cos\\phi = I^2R\\ \\text{(W)}$$\nwith $V, I$ RMS and $\\phi$ the angle **between** $v$ and $i$.\n\nPure R: $\\phi = 0$, $P = VI$. Pure L or C: $\\phi = 90^\\circ$, $P = 0$ (energy is stored and returned each quarter cycle). Capacitive reactance falls as $f$ rises.",
+     "basics_md": "Power is voltage times current at each instant. In a resistor both are positive together, so power is always positive. In an inductor or capacitor, the power is positive for a quarter cycle (energy stored) and negative the next (energy returned), so the average is zero.",
+     "key_points": [
+      "$p = vi$ has an average part $VI\\cos\\phi$ and a part at double frequency averaging zero",
+      "$P = VI\\cos\\phi = I^2R$ with RMS values; $\\phi$ is the angle between $v$ and $i$",
+      "Pure L or C: average power zero (energy exchanged, not consumed)",
+      "With peak values $P = \\frac{V_mI_m}{2}\\cos\\phi$"
+     ],
+     "questions": [
+      {
+       "id": "p-q1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "The average power consumed by a pure inductor is",
+       "options": [
+        "$VI$",
+        "$VI/2$",
+        "zero",
+        "$I^2X_L$"
+       ],
+       "answer_index": 2,
+       "why": "$\\phi = 90^\\circ$ so $\\cos\\phi = 0$; energy is stored and returned."
+      },
+      {
+       "id": "p-q2",
+       "kind": "mcq",
+       "level": 2,
+       "q": "The instantaneous power in an AC circuit at supply frequency $f$ pulsates at",
+       "options": [
+        "$f/2$",
+        "$f$",
+        "$2f$",
+        "$4f$"
+       ],
+       "answer_index": 2,
+       "why": "The product of two sinusoids at $f$ has a $\\cos(2\\omega t - \\phi)$ term."
+      },
+      {
+       "id": "p-q3",
+       "kind": "numerical",
+       "level": 2,
+       "marks": 4,
+       "q": "A circuit has $v = 200\\sin314t$ V and $i = 10\\sin(314t - 60^\\circ)$ A. Find the average power, apparent power and reactive power.",
+       "model_answer_md": "$V = 200/\\sqrt2 = 141.4$ V, $I = 10/\\sqrt2 = 7.07$ A, $\\phi = 60^\\circ$ (lagging).\n\n$P = VI\\cos\\phi = 141.4\\times7.07\\times0.5 = 500$ W\n\n$S = VI = 1000$ VA\n\n$Q = VI\\sin\\phi = 1000\\times0.866 = 866$ VAR",
+       "points": [
+        "RMS values $141.4$ V and $7.07$ A (not the peaks)",
+        "$P = 500$ W",
+        "$S = 1000$ VA",
+        "$Q = 866$ VAR"
+       ]
+      },
+      {
+       "id": "p-cd34b281",
+       "pyq": "cd34b28171ee5df4",
+       "level": 2,
+       "points": [
+        "Pure C: $i$ leads $v$ by $90^\\circ$, so $P = VI\\cos90^\\circ = 0$",
+        "Energy is stored in the electric field in one quarter cycle and returned in the next, so the average is zero",
+        "$X_C = 1/2\\pi fC$ falls as frequency rises (infinite for DC, so C blocks DC)"
+       ]
+      },
+      {
+       "id": "p-44039c2f",
+       "pyq": "44039c2f665059c2",
+       "level": 2,
+       "points": [
+        "Resistance is $100\\ \\Omega$ (written as W in the paper)",
+        "$p = i^2R = 9\\cos^2\\omega t\\times100 = 900\\cos^2\\omega t = 450(1+\\cos2\\omega t)$ W"
+       ]
+      },
+      {
+       "id": "p-c30eb0db",
+       "pyq": "c30eb0dbaaf15649",
+       "level": 1,
+       "points": [
+        "Average of $450(1+\\cos2\\omega t)$ is $450$ W",
+        "Same as $I^2R = (3/\\sqrt2)^2\\times100 = 450$ W"
+       ]
+      },
+      {
+       "id": "p-108bb223",
+       "pyq": "108bb22327c85ad5",
+       "level": 2,
+       "points": [
+        "$P = \\frac{V_mI_m}{2}\\cos(\\phi_v-\\phi_i) = \\frac{400\\times20}{2}\\cos(45^\\circ-30^\\circ)$",
+        "$P = 4000\\times0.9659 = 3864$ W"
+       ]
+      },
+      {
+       "id": "p-1b0d3ef6",
+       "pyq": "1b0d3ef6bb4263ed",
+       "level": 3,
+       "points": [
+        "$\\bar I = \\bar V/\\bar Z = 115\\angle45^\\circ/16.26\\angle19.3^\\circ = 7.07\\angle25.7^\\circ$ A",
+        "$p = \\frac{V_mI_m}{2}\\left[\\cos(\\theta_v-\\theta_i) + \\cos(2\\omega t+\\theta_v+\\theta_i)\\right]$",
+        "$\\frac{V_mI_m}{2} = 406.7$, $\\cos19.3^\\circ = 0.944$",
+        "$p(t) = 383.8 + 406.7\\cos(100t+70.7^\\circ)$ W, treating 115 V as a peak (if RMS, double each term)"
+       ]
+      }
+     ]
+    },
+    {
+     "id": "power-triangle",
+     "title": "Power triangle, power factor, complex power",
+     "theory_md": "- **Active power** $P = VI\\cos\\phi = I^2R$ (W): useful, converted to heat or work.\n- **Reactive power** $Q = VI\\sin\\phi = I^2X$ (VAR): exchanged with L and C fields, does no work.\n- **Apparent power** $S = VI = I^2Z$ (VA).\n\n**Power triangle**: $S^2 = P^2 + Q^2$, $\\cos\\phi = P/S = R/Z$ is the **power factor**, stated lagging (inductive) or leading (capacitive).\n\n**Complex power** $\\bar S = \\bar V\\bar I^* = P + jQ$. A low pf means more current for the same $P$: higher $I^2R$ loss, thicker cables, larger kVA ratings.\n\n**Q factor of a coil**: $Q = \\omega L/R$.",
+     "basics_md": "Beer analogy: the liquid is real power, the foam is reactive power, and the glass holds both, which is apparent power. You pay for the liquid but the glass (the cable and the transformer) must carry the foam too. Power factor is liquid divided by glass.",
+     "key_points": [
+      "$P = VI\\cos\\phi$ (W), $Q = VI\\sin\\phi$ (VAR), $S = VI$ (VA); $S^2 = P^2+Q^2$",
+      "Power factor $= \\cos\\phi = P/S = R/Z$, with lagging or leading",
+      "Low pf: larger current, more copper loss, larger kVA, poor regulation",
+      "Complex power $\\bar S = \\bar V\\bar I^* = P + jQ$"
+     ],
+     "questions": [
+      {
+       "id": "t-q1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "The power factor of a pure capacitor is",
+       "options": [
+        "zero lagging",
+        "zero leading",
+        "unity",
+        "0.5 leading"
+       ],
+       "answer_index": 1,
+       "why": "$\\phi = 90^\\circ$ with current leading, so $\\cos\\phi = 0$ leading."
+      },
+      {
+       "id": "t-q2",
+       "kind": "mcq",
+       "level": 2,
+       "q": "A load takes 2 kW at 0.8 power factor lagging. Its reactive power is",
+       "options": [
+        "1.2 kVAR",
+        "1.5 kVAR",
+        "2.5 kVAR",
+        "1.6 kVAR"
+       ],
+       "answer_index": 1,
+       "why": "$S = 2/0.8 = 2.5$ kVA, $Q = \\sqrt{2.5^2 - 2^2} = 1.5$ kVAR."
+      },
+      {
+       "id": "t-q3",
+       "kind": "short",
+       "level": 2,
+       "marks": 4,
+       "q": "Define active, reactive and apparent power and deduce their relation using the power triangle. Why is a low power factor undesirable?",
+       "model_answer_md": "**Definitions** (RMS values, $\\phi$ = angle between $V$ and $I$)\n- Active power $P = VI\\cos\\phi$ W\n- Reactive power $Q = VI\\sin\\phi$ VAR\n- Apparent power $S = VI$ VA\n\n**Power triangle**: draw $P$ horizontal, $Q$ vertical, $S$ the hypotenuse at angle $\\phi$. Hence $S^2 = P^2 + Q^2$ and $\\cos\\phi = P/S$.\n\n**Low pf**: for the same $P$, $I = P/(V\\cos\\phi)$ rises, so $I^2R$ loss rises, conductors and machines must be larger (kVA rating), and voltage regulation worsens.",
+       "points": [
+        "Three definitions with units",
+        "Power triangle drawn or described",
+        "$S^2 = P^2+Q^2$, $\\cos\\phi = P/S$",
+        "Low pf means more current, loss and kVA"
+       ]
+      },
+      {
+       "id": "t-q4",
+       "kind": "numerical",
+       "level": 2,
+       "marks": 4,
+       "q": "A $(6 + j8)\\ \\Omega$ load is connected across 200 V (RMS). Find $I$, $P$, $Q$, $S$, the power factor, and the complex power.",
+       "model_answer_md": "$|Z| = 10\\ \\Omega$, $I = 200/10 = 20$ A, $\\phi = \\tan^{-1}(8/6) = 53.13^\\circ$ lagging.\n\n$P = I^2R = 400\\times6 = 2400$ W, $Q = I^2X = 400\\times8 = 3200$ VAR, $S = VI = 4000$ VA.\n\npf $= R/Z = 0.6$ lagging.\n\n$\\bar S = \\bar V\\bar I^* = 200\\angle0^\\circ\\times20\\angle53.13^\\circ = 2400 + j3200$ VA.",
+       "points": [
+        "$I = 20$ A",
+        "$P = 2400$ W, $Q = 3200$ VAR, $S = 4000$ VA",
+        "pf $0.6$ lagging",
+        "$\\bar S = 2400 + j3200$ VA"
+       ]
+      },
+      {
+       "id": "p-37f8aae8",
+       "pyq": "37f8aae8b8784bee",
+       "level": 2,
+       "points": [
+        "Q factor of a coil: $Q = \\omega L/R$ = reactance/resistance (also $2\\pi\\times$ max energy stored/energy lost per cycle)",
+        "Power factor: $\\cos\\phi = P/S = R/Z$, lagging for inductive, leading for capacitive",
+        "Active power $P = VI\\cos\\phi$ (W): real work, billed by the meter",
+        "Reactive power $Q = VI\\sin\\phi$ (VAR): exchanged with fields, average zero, but magnetic fields of motors and transformers need it; low pf raises current and loss"
+       ]
+      },
+      {
+       "id": "p-1108c718",
+       "pyq": "1108c718f8219d7a",
+       "level": 3,
+       "points": [
+        "$P = VI\\cos\\phi$ W, $Q = VI\\sin\\phi$ VAR, $S = VI$ VA",
+        "Power triangle: $S^2 = P^2 + Q^2$, $\\cos\\phi = P/S$",
+        "Resonance in series RLC: $X_L = X_C$, $Z = R$, current maximum, pf unity, $f_r = 1/2\\pi\\sqrt{LC}$"
+       ]
+      },
+      {
+       "id": "p-3b12b935",
+       "pyq": "3b12b935e834b696",
+       "level": 2,
+       "points": [
+        "Definitions of $P$, $Q$, $S$ with formulae and units",
+        "Power triangle with $P$ horizontal, $Q$ vertical, $S$ hypotenuse at $\\phi$",
+        "$S^2 = P^2+Q^2$"
+       ]
+      },
+      {
+       "id": "p-8f88c54e",
+       "pyq": "8f88c54e1aa386bd",
+       "level": 1,
+       "points": [
+        "Power factor $=\\cos\\phi = P/S = R/Z$: the fraction of the apparent power that does useful work",
+        "Low pf: a larger current is needed for the same useful power, more loss and larger conductors"
+       ]
+      },
+      {
+       "id": "p-9961b5bd",
+       "pyq": "9961b5bd85daca0c",
+       "level": 2,
+       "points": [
+        "Circuit $Z = V/I = 230/0.2546 = 903.2\\ \\Omega$ with $R = 2\\ \\Omega$",
+        "pf $= R/Z = 2/903.2 = 0.0022$ (almost zero)",
+        "Lagging for $C = 4.77\\ \\mu$F (net inductive), leading for $C = 1.29\\ \\mu$F"
+       ]
+      },
+      {
+       "id": "p-291bbd4c",
+       "pyq": "291bbd4c311cdc36",
+       "level": 3,
+       "points": [
+        "$Z_p = (5+j10)(-j10)/5 = 20 - j10\\ \\Omega$, $Z_T = 21 - j10\\ \\Omega$",
+        "$I = 120/Z_T = 5.159\\angle25.46^\\circ$ A",
+        "Current division: $I_1 = I\\cdot\\frac{-j10}{5} = 10.32$ A in the $5+j10$ branch",
+        "$\\bar S = |I_1|^2 Z_1 = 106.5(5+j10) = 532.3 + j1064.7$ VA ($P = 532.3$ W, $Q = 1064.7$ VAR), taking 120 V as RMS"
+       ]
+      }
+     ]
+    },
+    {
+     "id": "branch-power",
+     "title": "Power and power factor of parallel and mixed loads",
+     "theory_md": "Active and reactive powers **add** arithmetically (they are conserved); apparent powers do not.\n$$P_T = P_1 + P_2,\\quad Q_T = Q_1 + Q_2\\ (\\text{lagging } +,\\ \\text{leading } -),\\quad S_T = \\sqrt{P_T^2 + Q_T^2},\\quad \\text{pf} = P_T/S_T.$$\n\n**Parallel branches**: the voltage is common. Find $Z_{eq}$, then $V = I\\,Z_{eq}$, branch currents $I_k = V/|Z_k|$, branch powers $P_k = I_k^2R_k$, branch pf $= R_k/|Z_k|$. For a load of $P$ at power factor $\\cos\\phi$: $Q = P\\tan\\phi$.",
+     "basics_md": "Each load pulls a useful current (real part) and a reactive current. Real parts simply add. Reactive parts of opposite kinds (inductive and capacitive) partly cancel, which is how a capacitor improves the pf.",
+     "key_points": [
+      "$P_T = \\sum P$, $Q_T = \\sum Q$ with signs; $S_T = \\sqrt{P_T^2+Q_T^2}$",
+      "Parallel: common $V$; $I_k = V/|Z_k|$, $P_k = I_k^2R_k$, pf$_k = R_k/|Z_k|$",
+      "Inductive branch lags, capacitive branch leads; state it",
+      "Do not add VA values"
+     ],
+     "questions": [
+      {
+       "id": "b-q1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "When two loads are connected together, the total active power is",
+       "options": [
+        "the sum of the VA ratings",
+        "the sum of the individual active powers",
+        "the product of the two",
+        "the larger of the two"
+       ],
+       "answer_index": 1,
+       "why": "Active power is conserved and adds directly."
+      },
+      {
+       "id": "b-q2",
+       "kind": "mcq",
+       "level": 2,
+       "q": "Load 1 is 4 kW at 0.8 lagging, load 2 is 3 kW at unity pf. The combined pf is nearest to",
+       "options": [
+        "0.80",
+        "0.92",
+        "0.95",
+        "1.00"
+       ],
+       "answer_index": 1,
+       "why": "$P=7$ kW, $Q = 3$ kVAR, $S = 7.62$ kVA, pf $= 0.919$ lagging."
+      },
+      {
+       "id": "b-q3",
+       "kind": "numerical",
+       "level": 2,
+       "marks": 4,
+       "q": "Two loads are in parallel across the supply: 4 kW at 0.8 lagging and 3 kW at unity pf. Find the total kVA, kVAR and the overall power factor.",
+       "model_answer_md": "Load 1: $P_1 = 4$ kW, $Q_1 = P_1\\tan\\phi_1 = 4\\times0.75 = 3$ kVAR (lagging).\n\nLoad 2: $P_2 = 3$ kW, $Q_2 = 0$.\n\n$P_T = 7$ kW, $Q_T = 3$ kVAR, $S_T = \\sqrt{7^2 + 3^2} = 7.62$ kVA\n\npf $= 7/7.62 = 0.919$ lagging.",
+       "points": [
+        "$Q_1 = 3$ kVAR from $\\tan\\phi_1 = 0.75$",
+        "$P_T = 7$ kW, $Q_T = 3$ kVAR",
+        "$S_T = 7.62$ kVA",
+        "pf $0.919$ lagging"
+       ]
+      },
+      {
+       "id": "p-9ab54ba3",
+       "pyq": "9ab54ba38e8173aa",
+       "level": 3,
+       "points": [
+        "$Z_{eq} = Z_1Z_2/(Z_1+Z_2) = 9.67 - j3.61 = 10.32\\angle{-20.45^\\circ}\\ \\Omega$, $V = 15\\times10.32 = 154.8$ V",
+        "$I_1 = 154.8/18.03 = 8.59$ A, $I_2 = 154.8/10 = 15.48$ A",
+        "$P_1 = I_1^2R_1 = 737.7$ W, $P_2 = I_2^2R_2 = 1438.5$ W (total 2176 W)",
+        "pf: branch 1 $= 10/18.03 = 0.555$ lagging, branch 2 $= 6/10 = 0.6$ leading, combination $=\\cos20.45^\\circ = 0.937$ leading",
+        "Vector diagram: $V$ reference, $I_1$ at $56.3^\\circ$ below, $I_2$ at $53.1^\\circ$ above, $I$ at $20.45^\\circ$ above"
+       ]
+      },
+      {
+       "id": "p-dd00059c",
+       "pyq": "dd00059cd181a065",
+       "level": 3,
+       "points": [
+        "Voltages do not add arithmetically, so the coil has resistance $r$: $V_r^2 + V_X^2 = 150^2$ and $(170+V_r)^2 + (V_X-100)^2 = 200^2$",
+        "Solving: $V_r = 24.14$ V, $V_X = 148.04$ V",
+        "Coil pf $= V_r/V_{coil} = 24.14/150 = 0.161$ lagging",
+        "Circuit pf $= (170+24.14)/200 = 0.971$ lagging ($V_X > V_C$)"
+       ]
+      }
+     ]
+    },
+    {
+     "id": "three-phase-power",
+     "title": "Three-phase power and star-connected loads",
+     "theory_md": "**Star**: $V_L = \\sqrt3\\,V_{ph}$, $I_L = I_{ph}$. **Delta**: $V_L = V_{ph}$, $I_L = \\sqrt3\\,I_{ph}$.\n\nPower per phase $= V_{ph}I_{ph}\\cos\\phi$, with $\\phi$ the angle between phase voltage and phase current. Total:\n$$P = 3V_{ph}I_{ph}\\cos\\phi = \\sqrt3\\,V_LI_L\\cos\\phi,\\qquad S = \\sqrt3\\,V_LI_L,\\quad Q = \\sqrt3\\,V_LI_L\\sin\\phi.$$\nDerivation in line values: star gives $V_{ph} = V_L/\\sqrt3$, $I_{ph} = I_L$, so $3\\cdot\\dfrac{V_L}{\\sqrt3}I_L\\cos\\phi = \\sqrt3V_LI_L\\cos\\phi$.\n\n$\\cos\\phi$ is **not** the angle between line voltage and line current.",
+     "basics_md": "Three identical single-phase loads run one after another, 120 degrees apart. Total power is three times one phase. In a star connection each phase sees the line voltage divided by root three.",
+     "key_points": [
+      "Star: $V_L = \\sqrt3V_{ph}$, $I_L = I_{ph}$",
+      "$P = 3V_{ph}I_{ph}\\cos\\phi$ per phase values",
+      "$P = \\sqrt3V_LI_L\\cos\\phi$ in line values, $\\phi$ = phase angle of the load",
+      "Find $Z_{ph}$ first, then $V_{ph} = I_{ph}Z_{ph}$"
+     ],
+     "questions": [
+      {
+       "id": "h-q1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "The total power in a balanced three-phase load, in line values, is",
+       "options": [
+        "$3V_LI_L\\cos\\phi$",
+        "$\\sqrt3V_LI_L\\cos\\phi$",
+        "$V_LI_L\\cos\\phi$",
+        "$\\sqrt3V_LI_L\\sin\\phi$"
+       ],
+       "answer_index": 1,
+       "why": "$3\\cdot(V_L/\\sqrt3)I_L\\cos\\phi$."
+      },
+      {
+       "id": "h-q2",
+       "kind": "mcq",
+       "level": 2,
+       "q": "In a balanced delta connection",
+       "options": [
+        "$I_L = I_{ph}$",
+        "$I_L = \\sqrt3I_{ph}$",
+        "$V_L = \\sqrt3V_{ph}$",
+        "$I_L = I_{ph}/\\sqrt3$"
+       ],
+       "answer_index": 1,
+       "why": "Each line current is the phasor difference of two phase currents."
+      },
+      {
+       "id": "h-q3",
+       "kind": "numerical",
+       "level": 2,
+       "marks": 4,
+       "q": "Three coils, each of $8\\ \\Omega$ resistance and $6\\ \\Omega$ reactance, are star connected across a 400 V, 3-phase supply. Find the line current, power factor and total power.",
+       "model_answer_md": "$V_{ph} = 400/\\sqrt3 = 230.9$ V, $Z_{ph} = \\sqrt{8^2+6^2} = 10\\ \\Omega$.\n\n$I_L = I_{ph} = 230.9/10 = 23.09$ A\n\npf $= R/Z = 8/10 = 0.8$ lagging\n\n$P = \\sqrt3\\times400\\times23.09\\times0.8 = 12\\,800$ W $= 12.8$ kW (check: $3I^2R = 3\\times533.3\\times8 = 12\\,800$ W)",
+       "points": [
+        "$V_{ph} = 230.9$ V, $Z_{ph} = 10\\ \\Omega$",
+        "$I_L = 23.09$ A",
+        "pf $0.8$ lagging",
+        "$P = 12.8$ kW"
+       ]
+      },
+      {
+       "id": "p-1bf1909a",
+       "pyq": "1bf1909a660ef17a",
+       "level": 2,
+       "points": [
+        "Phase voltage $V_{ph}$, phase current $I_{ph}$, angle $\\phi$ between them",
+        "Power per phase $= V_{ph}I_{ph}\\cos\\phi$",
+        "Total $P = 3V_{ph}I_{ph}\\cos\\phi$"
+       ]
+      },
+      {
+       "id": "p-f302398d",
+       "pyq": "f302398db537e340",
+       "level": 2,
+       "points": [
+        "Star: $V_{ph} = V_L/\\sqrt3$, $I_{ph} = I_L$",
+        "$P = 3\\cdot\\frac{V_L}{\\sqrt3}I_L\\cos\\phi = \\sqrt3V_LI_L\\cos\\phi$",
+        "$\\phi$ is the load phase angle, not the angle between line quantities"
+       ]
+      },
+      {
+       "id": "p-3815dfd9",
+       "pyq": "3815dfd910c2593f",
+       "level": 2,
+       "points": [
+        "Per phase $X_L = 2\\pi\\times50\\times0.1273 = 40\\ \\Omega$, $Z_{ph} = \\sqrt{30^2+40^2} = 50\\ \\Omega$",
+        "Star: $I_{ph} = I_L = 5.08$ A, $V_{ph} = 5.08\\times50 = 254$ V",
+        "$V_L = \\sqrt3\\times254 = 440$ V (pf $0.6$ lagging)"
+       ]
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "topic": "Series AC circuits",
+   "subtopics": [
+    {
+     "id": "series-rlc",
+     "title": "Series R, L, C: impedance, phase angle, power",
+     "theory_md": "Take **current as the reference**. $V_R = IR$ (in phase), $V_L = IX_L$ (leads $I$ by $90^\\circ$), $V_C = IX_C$ (lags $I$ by $90^\\circ$), with $X_L = 2\\pi fL$, $X_C = 1/2\\pi fC$.\n\n$V_L$ and $V_C$ oppose, so\n$$V = \\sqrt{V_R^2 + (V_L - V_C)^2},\\quad Z = \\sqrt{R^2 + (X_L - X_C)^2},\\quad \\phi = \\tan^{-1}\\dfrac{X_L - X_C}{R}.$$\n$I = V/Z$, $\\cos\\phi = R/Z$, $P = VI\\cos\\phi = I^2R$. $X_L > X_C$: current lags; $X_L < X_C$: leads; equal: in phase, pf = 1.\n\nInstantaneous form: $v = V_m\\sin\\omega t$, $i = (V_m/Z)\\sin(\\omega t - \\phi)$. Convert $\\mu$F and mH to F and H.",
+     "basics_md": "Resistor voltage rides along with the current. Inductor voltage is ahead by a quarter turn and capacitor voltage is behind by a quarter turn, so the two fight each other. What is left of the fight, together with the resistor voltage, forms a right triangle.",
+     "key_points": [
+      "Phasor diagram with $I$ horizontal; $V_R$ along it, $V_L$ up, $V_C$ down",
+      "$Z = \\sqrt{R^2+(X_L-X_C)^2}$, $\\phi = \\tan^{-1}[(X_L-X_C)/R]$, $\\cos\\phi = R/Z$",
+      "$X_L>X_C$ lagging, $X_L<X_C$ leading, equal gives resonance",
+      "$P = VI\\cos\\phi = I^2R$; only R consumes power",
+      "Voltages add as phasors; $V_L$ or $V_C$ can exceed $V$"
+     ],
+     "questions": [
+      {
+       "id": "s-q1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "When the frequency of a series R-L-C circuit is raised, $X_L$ and $X_C$ respectively",
+       "options": [
+        "rise and rise",
+        "rise and fall",
+        "fall and rise",
+        "fall and fall"
+       ],
+       "answer_index": 1,
+       "why": "$X_L = 2\\pi fL$ rises; $X_C = 1/2\\pi fC$ falls."
+      },
+      {
+       "id": "s-q2",
+       "kind": "mcq",
+       "level": 2,
+       "q": "A series circuit has $R = 3\\ \\Omega$, $X_L = 8\\ \\Omega$, $X_C = 4\\ \\Omega$. Its impedance and the nature of the current are",
+       "options": [
+        "$5\\ \\Omega$, lagging",
+        "$5\\ \\Omega$, leading",
+        "$7\\ \\Omega$, lagging",
+        "$1\\ \\Omega$, in phase"
+       ],
+       "answer_index": 0,
+       "why": "$Z = \\sqrt{3^2+(8-4)^2} = 5\\ \\Omega$; $X_L>X_C$ so current lags."
+      },
+      {
+       "id": "s-q3",
+       "kind": "numerical",
+       "level": 2,
+       "marks": 5,
+       "q": "A series circuit of $R = 30\\ \\Omega$, $L = 0.2$ H and $C = 100\\ \\mu$F is connected to 200 V, 50 Hz. Find the current, phase angle, power factor and power.",
+       "model_answer_md": "$X_L = 2\\pi\\times50\\times0.2 = 62.83\\ \\Omega$, $X_C = \\dfrac{1}{2\\pi\\times50\\times100\\times10^{-6}} = 31.83\\ \\Omega$\n\n$X = X_L - X_C = 31.0\\ \\Omega$ (inductive), $Z = \\sqrt{30^2 + 31.0^2} = 43.14\\ \\Omega$\n\n$I = 200/43.14 = 4.64$ A\n\n$\\phi = \\tan^{-1}(31.0/30) = 45.9^\\circ$ lagging; pf $= 30/43.14 = 0.695$ lagging\n\n$P = I^2R = 4.64^2\\times30 = 645$ W",
+       "points": [
+        "$X_L = 62.83$, $X_C = 31.83\\ \\Omega$ with $C$ in farads",
+        "$Z = 43.14\\ \\Omega$, $I = 4.64$ A",
+        "$\\phi = 45.9^\\circ$ lagging, pf $0.695$",
+        "$P = 645$ W"
+       ]
+      },
+      {
+       "id": "s-q4",
+       "kind": "numerical",
+       "level": 2,
+       "marks": 3,
+       "q": "A coil of $10\\ \\Omega$ resistance and 0.05 H inductance is connected to a 240 V, 50 Hz supply. What series capacitor makes the current in phase with the voltage? Find the current then.",
+       "model_answer_md": "In phase means $\\phi = 0$, so $X_C = X_L = 2\\pi\\times50\\times0.05 = 15.71\\ \\Omega$.\n\n$C = \\dfrac{1}{2\\pi f X_C} = \\dfrac{1}{314.16\\times15.71} = 202.6\\ \\mu$F\n\nThen $Z = R = 10\\ \\Omega$ and $I = 240/10 = 24$ A, in phase with $V$.",
+       "points": [
+        "Zero phase needs $X_C = X_L = 15.71\\ \\Omega$",
+        "$C = 202.6\\ \\mu$F in series",
+        "$I = V/R = 24$ A"
+       ]
+      },
+      {
+       "id": "s-q5",
+       "kind": "short",
+       "level": 2,
+       "marks": 3,
+       "q": "For a series R-L-C circuit state, with the phasor relation, how the current compares with the voltage when (i) $X_L>X_C$, (ii) $X_L<X_C$, (iii) $X_L=X_C$.",
+       "model_answer_md": "(i) $X_L > X_C$: $V_L > V_C$, circuit inductive, current **lags** $V$ by $\\phi = \\tan^{-1}\\frac{X_L-X_C}{R}$, pf lagging.\n\n(ii) $X_L < X_C$: circuit capacitive, current **leads** $V$, pf leading.\n\n(iii) $X_L = X_C$: $V_L = V_C$ cancel, $Z = R$, current in phase with $V$, pf unity, current maximum (series resonance).",
+       "points": [
+        "(i) inductive, current lags",
+        "(ii) capacitive, current leads",
+        "(iii) in phase, $Z=R$, pf 1"
+       ]
+      },
+      {
+       "id": "p-c5cdf13d",
+       "pyq": "c5cdf13d1c6a36c1",
+       "level": 3,
+       "points": [
+        "Phasor diagram: $I$ reference; $V_R = IR$, $V_L = IX_L$ up, $V_C = IX_C$ down; $V = \\sqrt{V_R^2+(V_L-V_C)^2}$",
+        "$I = V/Z$, $Z = \\sqrt{R^2+(X_L-X_C)^2}$, $\\phi = \\tan^{-1}\\frac{X_L-X_C}{R}$",
+        "$p = \\frac{V_mI_m}{2}[\\cos\\phi - \\cos(2\\omega t-\\phi)]$, average $P = VI\\cos\\phi = I^2R$",
+        "Series resonance: $X_L = X_C$, $Z = R$, current maximum, pf 1, $f_r = 1/2\\pi\\sqrt{LC}$"
+       ]
+      },
+      {
+       "id": "p-42c88e3c",
+       "pyq": "42c88e3cffd37b89",
+       "level": 3,
+       "points": [
+        "Phasor diagram and $I = V/Z$ with $Z = \\sqrt{R^2+(X_L-X_C)^2}$",
+        "$P = VI\\cos\\phi = I^2R$ derived from $p = vi$",
+        "At series resonance $X_L = X_C$, so $\\phi = \\tan^{-1}0 = 0$ and $\\cos\\phi = R/Z = 1$: pf unity"
+       ]
+      },
+      {
+       "id": "p-9487047b",
+       "pyq": "9487047ba997f1a1",
+       "level": 3,
+       "points": [
+        "$Z = \\sqrt{R^2+(X_L-X_C)^2}$, $\\phi = \\tan^{-1}\\frac{X_L-X_C}{R}$, pf $=\\cos\\phi = R/Z$",
+        "$P = VI\\cos\\phi = I^2R$",
+        "Phasor diagram with $I$ reference",
+        "Resonance: $X_L = X_C$ gives $\\omega_r = 1/\\sqrt{LC}$, $f_r = 1/2\\pi\\sqrt{LC}$"
+       ]
+      },
+      {
+       "id": "p-bd0fbcc9",
+       "pyq": "bd0fbcc95daed069",
+       "level": 1,
+       "points": [
+        "(i) $X_L = 2\\pi\\times50\\times0.04 = 12.57\\ \\Omega$, $I = 240/12.57 = 19.1$ A lagging $90^\\circ$",
+        "(ii) $X_L = 2\\pi\\times1000\\times0.04 = 251.3\\ \\Omega$, $I = 100/251.3 = 0.398$ A"
+       ]
+      },
+      {
+       "id": "p-f23b8109",
+       "pyq": "f23b8109ef223f0d",
+       "level": 2,
+       "points": [
+        "$\\omega = 200$, $X_C = 1/(200\\times100\\times10^{-6}) = 50\\ \\Omega$",
+        "(a) $Z = \\sqrt{10^2+50^2} = 50.99\\ \\Omega$, current leads by $78.7^\\circ$",
+        "(b) $I_m = 210/50.99 = 4.12$ A ($2.91$ A RMS)",
+        "(c) $V_R = 41.2$ V peak ($29.1$ V RMS); (d) $V_C = 205.9$ V peak ($145.6$ V RMS)"
+       ]
+      },
+      {
+       "id": "p-bc33ede9",
+       "pyq": "bc33ede9b2f45457",
+       "level": 2,
+       "points": [
+        "$Z = V_m/I_m = 400/50 = 8\\ \\Omega$; current lags by $\\phi = 60^\\circ$",
+        "$R = Z\\cos60^\\circ = 4\\ \\Omega$",
+        "$X_L = Z\\sin60^\\circ = 6.93\\ \\Omega$, $L = 6.93/314 = 22.1$ mH"
+       ]
+      },
+      {
+       "id": "p-467d6e95",
+       "pyq": "467d6e951fa98e70",
+       "level": 2,
+       "points": [
+        "25 Hz: $X_L = 7.85$, $X_C = 21.22$, net $-13.37\\ \\Omega$, $Z = 16.69\\ \\Omega$, $I = 5.99$ A leading by $53.2^\\circ$",
+        "50 Hz: $X_L = 15.71$, $X_C = 10.61$, net $+5.10\\ \\Omega$, $Z = 11.22\\ \\Omega$, $I = 8.91$ A lagging by $27.0^\\circ$"
+       ]
+      },
+      {
+       "id": "p-f26e3662",
+       "pyq": "f26e3662d68c606f",
+       "level": 1,
+       "points": [
+        "$V_R$: $v_R = 100\\times1.414\\sin\\omega t = 141.4\\sin\\omega t$ V"
+       ]
+      },
+      {
+       "id": "p-f5751d55",
+       "pyq": "f5751d559c16d2da",
+       "level": 1,
+       "points": [
+        "$X_L = 2\\pi\\times50\\times0.3183 = 100\\ \\Omega$",
+        "$v_L = 141.4\\sin(\\omega t+90^\\circ)$ V"
+       ]
+      },
+      {
+       "id": "p-1f4d7cc1",
+       "pyq": "1f4d7cc19cc67a0e",
+       "level": 2,
+       "points": [
+        "$Z = \\sqrt{100^2+100^2} = 141.4\\ \\Omega$, $\\phi = 45^\\circ$ (voltage leads)",
+        "$V_m = 1.414\\times141.4 = 200$ V",
+        "$v = 200\\sin(\\omega t+45^\\circ)$ V"
+       ]
+      },
+      {
+       "id": "p-0efb0541",
+       "pyq": "0efb054114a5049c",
+       "level": 3,
+       "points": [
+        "$Z = V_m/I_m = 400/14.14 = 28.28\\ \\Omega$, $|\\phi| = 45^\\circ$, $R = Z\\cos45^\\circ = 20\\ \\Omega$, $|X| = 20\\ \\Omega$",
+        "$X_L = 300\\times0.01 = 3\\ \\Omega$, so the net reactance must be capacitive: $X_C = 3+20 = 23\\ \\Omega$",
+        "$C = 1/(300\\times23) = 144.9\\ \\mu$F (as printed; with $\\omega = 3000$ rad/s the textbook value is $6.67\\ \\mu$F)"
+       ]
+      },
+      {
+       "id": "p-a0f009b8",
+       "pyq": "a0f009b87329ab96",
+       "level": 2,
+       "points": [
+        "$X_L = 201.06\\ \\Omega$, $X_C = 265.26\\ \\Omega$ at 50 Hz",
+        "$V_{coil} = 1.5\\sqrt{40^2+201.06^2} = 307.5$ V; $V_C = 1.5\\times265.26 = 397.9$ V",
+        "Supply $V = 1.5\\sqrt{40^2+64.2^2} = 113.5$ V; net capacitive"
+       ]
+      },
+      {
+       "id": "p-a2158ff6",
+       "pyq": "a2158ff66893fdfa",
+       "level": 1,
+       "points": [
+        "$X_L = 201.06$, $X_C = 265.26\\ \\Omega$, $Z = \\sqrt{40^2+64.2^2} = 75.64\\ \\Omega$",
+        "$V = 1.5\\times75.64 = 113.5$ V (pf $0.529$ leading)"
+       ]
+      },
+      {
+       "id": "p-bc731388",
+       "pyq": "bc731388e7150367",
+       "level": 3,
+       "points": [
+        "$\\tan45^\\circ = X_L/R$, so $X_L = 1\\ \\Omega$ ($L = 3.18$ mH), $I = 240/1.414 = 169.7$ A lagging",
+        "Zero phase difference needs net reactance zero: add a capacitor in series with $X_C = X_L = 1\\ \\Omega$",
+        "$C = 1/(2\\pi\\times50\\times1) = 3183\\ \\mu$F; then $Z = R = 1\\ \\Omega$, $I = 240$ A in phase"
+       ]
+      }
+     ]
+    },
+    {
+     "id": "series-impedances",
+     "title": "Several impedances in series",
+     "theory_md": "Impedances in series add as **complex numbers**: $\\bar Z = \\sum(R_k + jX_k)$, with $X_L$ positive and $X_C$ negative. So $R_T = \\sum R$, $X_T = \\sum X$, $Z = \\sqrt{R_T^2 + X_T^2}$.\n\n$I = V/Z$, the same in every part. The voltage across part $k$ is $V_k = I\\,|Z_k|$, and it leads $I$ by $\\tan^{-1}(X_k/R_k)$. The part voltages add as **phasors**, not arithmetically. Each part's pf is $R_k/|Z_k|$; the circuit pf is $R_T/Z$; $P = I^2R_T$.\n\nSeries-parallel reduction at $\\omega$: $Z_L = j\\omega L$, $Z_C = 1/(j\\omega C)$.",
+     "basics_md": "A string of different resistors, coils and capacitors behaves like one single equivalent element. Add all the resistive parts together and all the reactive parts together, with coil reactance counted positive and capacitor reactance negative.",
+     "key_points": [
+      "Add impedances as complex numbers: $R_T=\\sum R$, $X_T=\\sum X$",
+      "$X_L$ positive, $X_C$ negative; $Z=\\sqrt{R_T^2+X_T^2}$",
+      "Same $I$ everywhere; $V_k = I|Z_k|$; voltages add as phasors",
+      "Pf of each part $R_k/|Z_k|$; circuit pf $R_T/Z$; $P=I^2R_T$"
+     ],
+     "questions": [
+      {
+       "id": "i-q1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "Impedances connected in series are combined by",
+       "options": [
+        "adding their magnitudes",
+        "adding them as complex numbers",
+        "adding reciprocals",
+        "multiplying them"
+       ],
+       "answer_index": 1,
+       "why": "$\\bar Z = \\bar Z_1 + \\bar Z_2$ with real and imaginary parts kept."
+      },
+      {
+       "id": "i-q2",
+       "kind": "mcq",
+       "level": 2,
+       "q": "In a series R-L circuit $V_R = 30$ V and $V_L = 40$ V. The supply voltage is",
+       "options": [
+        "70 V",
+        "50 V",
+        "10 V",
+        "35 V"
+       ],
+       "answer_index": 1,
+       "why": "$V = \\sqrt{30^2 + 40^2} = 50$ V: the voltages are $90^\\circ$ apart."
+      },
+      {
+       "id": "i-q3",
+       "kind": "numerical",
+       "level": 2,
+       "marks": 4,
+       "q": "Impedances $(4 + j3)\\ \\Omega$ and $(6 - j9)\\ \\Omega$ are in series across 100 V. Find the current, its phase, the voltage across each, and the power.",
+       "model_answer_md": "$\\bar Z = (4+6) + j(3-9) = 10 - j6\\ \\Omega$, $Z = 11.66\\ \\Omega$\n\n$I = 100/11.66 = 8.57$ A; $\\phi = \\tan^{-1}(6/10) = 31.0^\\circ$, current **leads** (net capacitive).\n\n$V_1 = I|Z_1| = 8.57\\times5 = 42.9$ V, $V_2 = I|Z_2| = 8.57\\times10.82 = 92.8$ V\n\n$P = I^2R_T = 8.57^2\\times10 = 735$ W",
+       "points": [
+        "$\\bar Z = 10 - j6\\ \\Omega$, $Z = 11.66\\ \\Omega$",
+        "$I = 8.57$ A leading $31.0^\\circ$",
+        "$V_1 = 42.9$ V, $V_2 = 92.8$ V",
+        "$P = 735$ W"
+       ]
+      },
+      {
+       "id": "i-q4",
+       "kind": "numerical",
+       "level": 2,
+       "marks": 2,
+       "q": "At $\\omega = 500$ rad/s, find the equivalent impedance of a 50 mH inductor in parallel with a $100\\ \\mu$F capacitor.",
+       "model_answer_md": "$Z_L = j\\omega L = j(500)(0.05) = j25\\ \\Omega$, $Z_C = \\dfrac{1}{j\\omega C} = \\dfrac{1}{j(500)(100\\times10^{-6})} = -j20\\ \\Omega$\n\n$Z = \\dfrac{Z_LZ_C}{Z_L + Z_C} = \\dfrac{(j25)(-j20)}{j5} = \\dfrac{500}{j5} = -j100\\ \\Omega$ (capacitive)",
+       "points": [
+        "$Z_L = j25$, $Z_C = -j20\\ \\Omega$",
+        "Parallel formula $Z_LZ_C/(Z_L+Z_C)$",
+        "$Z = -j100\\ \\Omega$"
+       ]
+      },
+      {
+       "id": "p-b3a5e346",
+       "pyq": "b3a5e34619c69c55",
+       "level": 2,
+       "points": [
+        "$R_T = 10+5+15 = 30\\ \\Omega$, $X_T = 15 - 25 = -10\\ \\Omega$",
+        "$Z = \\sqrt{30^2+10^2} = 31.62\\ \\Omega$, (i) $I = 200/31.62 = 6.32$ A",
+        "(ii) $\\phi = \\tan^{-1}(10/30) = 18.43^\\circ$ leading; (iii) pf $= 30/31.62 = 0.949$ leading",
+        "(iv) $P = I^2R_T = 1200$ W"
+       ]
+      },
+      {
+       "id": "p-4fec4e6c",
+       "pyq": "4fec4e6caf641303",
+       "level": 2,
+       "points": [
+        "Coil: $R_c = 50\\cos45^\\circ = 35.36\\ \\Omega$, $X_L = 50\\sin45^\\circ = 35.36\\ \\Omega$",
+        "Total $R = 75.36\\ \\Omega$, $X = 35.36\\ \\Omega$, $Z = 83.24\\ \\Omega$",
+        "(i) $V = 3\\times83.24 = 249.7$ V; (ii) $\\phi = \\tan^{-1}(35.36/75.36) = 25.1^\\circ$ lagging"
+       ]
+      },
+      {
+       "id": "p-e0a975b4",
+       "pyq": "e0a975b48001bbd5",
+       "level": 2,
+       "points": [
+        "Coil $Z_c = 50\\ \\Omega$ at $45^\\circ$: $R_c = X_L = 35.36\\ \\Omega$; add the $40\\ \\Omega$ resistor in series",
+        "$Z = \\sqrt{75.36^2+35.36^2} = 83.24\\ \\Omega$, $V = 3\\times83.24 = 249.7$ V",
+        "Circuit phase angle $25.1^\\circ$ lagging"
+       ]
+      },
+      {
+       "id": "p-3f4cd207",
+       "pyq": "3f4cd207b7a805ee",
+       "level": 3,
+       "points": [
+        "$\\omega = 314.16$; $Z_1 = 10 + j15.71$, $Z_2 = 20 + j(31.42-63.66) = 20 - j32.25$",
+        "$Z = 30 - j16.54 = 34.26\\ \\Omega$, (i) $I = 200/34.26 = 5.84$ A leading $28.9^\\circ$",
+        "(ii) $V_1 = 5.84\\times18.62 = 108.7$ V, $V_2 = 5.84\\times37.94 = 221.5$ V",
+        "(iii) pf $= 30/34.26 = 0.876$ leading; phasor diagram with $I$ horizontal, $V_1$ up at $57.5^\\circ$, $V_2$ down at $58.2^\\circ$"
+       ]
+      },
+      {
+       "id": "p-cb79a68d",
+       "pyq": "cb79a68d699e911e",
+       "level": 3,
+       "points": [
+        "$Z_1 = 15 + j12.57$, $Z_2 = 10 + j(31.42 - 31.83) = 10 - j0.415$; $Z = 25 + j12.15 = 27.8\\ \\Omega$",
+        "(i) $I = 230/27.8 = 8.27$ A",
+        "(ii) $V_1 = 8.27\\times19.57 = 161.9$ V, $V_2 = 8.27\\times10.01 = 82.8$ V",
+        "(iii) pf$_1 = 15/19.57 = 0.767$ lagging, pf$_2 = 0.999$ (leading, almost unity), total pf $= 25/27.8 = 0.899$ lagging"
+       ]
+      },
+      {
+       "id": "p-9a20d566",
+       "pyq": "9a20d566b6fad79c",
+       "level": 2,
+       "points": [
+        "$\\omega = 500$: $10\\ \\mu$F $\\to -j200\\ \\Omega$, $20\\ \\mu$F $\\to -j100\\ \\Omega$, 50 mH $\\to j25\\ \\Omega$",
+        "With c and d shorted: ($-j200$ in parallel with $j25$) $= j28.57$, in series with $-j100$ gives $-j71.43$",
+        "In parallel with the upper $j25$: $Z_{ab} = j38.46\\ \\Omega$"
+       ]
+      }
+     ]
+    },
+    {
+     "id": "coil-voltage-method",
+     "title": "Coil with resistance: voltage method",
+     "theory_md": "A real coil (iron-cored choke) has resistance $r$ as well as reactance. If measured voltages do not add for ideal elements, split the coil voltage into $V_r = Ir$ (in phase with $I$) and $V_X = IX_L$ (leads $I$ by $90^\\circ$).\n\nWith $I$ as reference and a voltmeter reading across R, the coil and C:\n1. $V_r^2 + V_X^2 = V_{coil}^2$\n2. $(V_R + V_r)^2 + (V_X - V_C)^2 = V^2$ (or, for R and coil only, $(V_R+V_r)^2 + V_X^2 = V_{R+coil}^2$)\n\nSolve for $V_r$, $V_X$. Then coil pf $= V_r/V_{coil}$, circuit pf $= (V_R+V_r)/V$, coil loss $= V_rI$, $f = 1/(2\\pi CX_C)$ with $X_C = V_C/I$.",
+     "basics_md": "If readings of a resistor, a coil and a capacitor in series add up in a way that breaks the rules, the coil is hiding a resistance. Treat the coil as a small resistor in series with a pure inductor, and let the phasor triangle find the hidden part.",
+     "key_points": [
+      "Coil voltage splits into $V_r$ (with $I$) and $V_X$ (ahead by $90^\\circ$)",
+      "Two equations from the voltage triangle give $V_r$ and $V_X$",
+      "Coil pf $=V_r/V_{coil}$; circuit pf $=(V_R+V_r)/V$; coil loss $V_rI$",
+      "$X_C = V_C/I$ gives frequency or $C$"
+     ],
+     "questions": [
+      {
+       "id": "c-q1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "The loss in an iron-cored choke carrying current $I$ is given by",
+       "options": [
+        "$V_{coil}I$",
+        "$V_rI$ (resistive component)",
+        "$V_XI$",
+        "zero"
+       ],
+       "answer_index": 1,
+       "why": "Only the component in phase with $I$ does work."
+      },
+      {
+       "id": "c-q2",
+       "kind": "mcq",
+       "level": 2,
+       "q": "A resistor, coil and capacitor in series read 82 V, 50 V and 20 V across a 100 V supply. Why do the readings not simply add?",
+       "options": [
+        "voltmeter error",
+        "they are phasors, and the coil also has resistance",
+        "the supply is not sinusoidal",
+        "capacitor voltages are subtracted"
+       ],
+       "answer_index": 1,
+       "why": "Voltages are $90^\\circ$ or $180^\\circ$ apart and the coil voltage has an in-phase part."
+      },
+      {
+       "id": "c-q3",
+       "kind": "numerical",
+       "level": 3,
+       "marks": 5,
+       "q": "A resistor, a coil and a capacitor in series carry 2 A across a 100 V supply. The voltages are 82 V across the resistor, 50 V across the coil and 20 V across the capacitor. Find the power factor of the coil and of the circuit, the coil resistance and the power taken.",
+       "model_answer_md": "Coil: $V_r^2 + V_X^2 = 50^2$ (1)\n\nCircuit: $(82 + V_r)^2 + (V_X - 20)^2 = 100^2$ (2)\n\nExpand (2) and use (1): $164V_r - 40V_X = 376$, so $V_X = 4.1V_r - 9.4$. Put in (1):\n$V_r = 14$ V, $V_X = 48$ V.\n\nCoil pf $= 14/50 = 0.28$ lagging. Circuit pf $= (82+14)/100 = 0.96$ lagging ($V_X > V_C$).\n\nCoil resistance $r = 14/2 = 7\\ \\Omega$. Power $P = VI\\cos\\phi = 100\\times2\\times0.96 = 192$ W (check: $I^2(R+r) = 4\\times(41+7) = 192$ W).",
+       "points": [
+        "Two equations from the voltage triangle",
+        "$V_r = 14$ V, $V_X = 48$ V",
+        "Coil pf $0.28$ lagging, circuit pf $0.96$ lagging",
+        "$r = 7\\ \\Omega$, $P = 192$ W"
+       ]
+      },
+      {
+       "id": "p-0a9d62f1",
+       "pyq": "0a9d62f12f18addd",
+       "level": 3,
+       "points": [
+        "$V_r^2+V_X^2 = 180^2$ and $(210+V_r)^2+(V_X-120)^2 = 230^2$",
+        "Solving: $V_r = 12.15$ V, $V_X = 179.6$ V",
+        "Coil pf $= 12.15/180 = 0.0675$ lagging",
+        "Circuit pf $= (210+12.15)/230 = 0.966$ lagging"
+       ]
+      },
+      {
+       "id": "p-0e4062ad",
+       "pyq": "0e4062adf3e23776",
+       "level": 3,
+       "points": [
+        "$X_C = 55/0.345 = 159.4\\ \\Omega$, (i) $f = 1/(2\\pi CX_C) = 49.9 \\approx 50$ Hz",
+        "R and coil: $V_r^2+V_X^2 = 40^2$, $(25+V_r)^2+V_X^2 = 50^2$ gives $V_r = 5.5$ V, $V_X = 39.62$ V",
+        "(ii) Loss in the inductor $= V_rI = 5.5\\times0.345 = 1.90$ W",
+        "(iii) $V = \\sqrt{30.5^2 + (39.62-55)^2} = 34.2$ V"
+       ]
+      },
+      {
+       "id": "p-9921b90e",
+       "pyq": "9921b90e6613dc3e",
+       "level": 3,
+       "points": [
+        "$X_C = 150/2.355 = 63.7\\ \\Omega$, $f = 1/(2\\pi\\times50\\times10^{-6}\\times63.7) \\approx 50$ Hz",
+        "$(70+V_r)^2 + V_X^2 = 140^2$ with $V_r^2+V_X^2 = 120^2$ gives $V_r = 2.14$ V, $V_X = 119.98$ V",
+        "Loss in choke $= V_rI = 2.14\\times2.355 = 5.05$ W",
+        "Applied voltage $V = \\sqrt{72.14^2 + (119.98-150)^2} = 78.1$ V"
+       ]
+      },
+      {
+       "id": "p-61bb6ea3",
+       "pyq": "61bb6ea32902ced9",
+       "level": 3,
+       "points": [
+        "With the meter: $C' = 0.1+0.02 = 0.12\\ \\mu$F, $X_C' = 1326\\ \\Omega$, $I' = 120/1326 = 0.0905$ A",
+        "$V_R = \\sqrt{230^2-120^2} = 196.2$ V, $R = 196.2/0.0905 = 2169\\ \\Omega$",
+        "Meter removed: $X_C = 1/(2\\pi\\times1000\\times0.1\\times10^{-6}) = 1591.5\\ \\Omega$, $Z = \\sqrt{2169^2+1591.5^2} = 2690\\ \\Omega$",
+        "$I = 230/2690 = 0.0855$ A $= 85.5$ mA"
+       ]
+      },
+      {
+       "id": "p-424410d4",
+       "pyq": "424410d4ef0c791c",
+       "level": 3,
+       "points": [
+        "$X_L = 2\\pi\\times50\\times5 = 1570.8\\ \\Omega$, $Z_{coil} \\approx 1570.8\\ \\Omega$, $I = 400/1570.8 = 0.2546$ A",
+        "$Z = 230/0.2546 = 903.2\\ \\Omega$, so $|X_L - X_C| = \\sqrt{903.2^2 - 2^2} \\approx 903.2\\ \\Omega$",
+        "Two answers: $X_C = 667.6\\ \\Omega$, $C = 4.77\\ \\mu$F; or $X_C = 2474\\ \\Omega$, $C = 1.29\\ \\mu$F"
+       ]
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "topic": "Resonance",
+   "subtopics": [
+    {
+     "id": "series-resonance",
+     "title": "Series resonance: condition and features",
+     "theory_md": "A series R-L-C circuit is in **resonance** when the current is in phase with the supply voltage, i.e. $X_L = X_C$:\n$$\\omega_rL = \\frac{1}{\\omega_rC}\\ \\Rightarrow\\ f_r = \\frac{1}{2\\pi\\sqrt{LC}}$$\nAt resonance: $Z = R$ (minimum), $I = V/R$ (maximum), pf = 1, and $V_L = V_C = I X_L$, equal and opposite, often much **larger than the supply voltage**. Below $f_r$ the circuit is capacitive, above it is inductive. A coil with resistance has $V_{coil} = I\\sqrt{R^2 + X_L^2}$. Resonance is reached by varying $f$, $L$ or $C$.",
+     "basics_md": "A child on a swing goes highest when you push at the swing's own rhythm. In the circuit, the energy sloshes between the inductor and the capacitor at one natural frequency. When the supply matches it, only the resistor limits the current.",
+     "key_points": [
+      "Condition $X_L = X_C$, $f_r = 1/(2\\pi\\sqrt{LC})$",
+      "At resonance $Z = R$ minimum, $I$ maximum, pf 1, $\\phi = 0$",
+      "$V_L = V_C$, equal and opposite, can exceed the supply voltage",
+      "Below $f_r$ capacitive, above $f_r$ inductive"
+     ],
+     "questions": [
+      {
+       "id": "sr-q1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "At series resonance the impedance of the circuit is",
+       "options": [
+        "maximum",
+        "minimum and equal to $R$",
+        "equal to $X_L$",
+        "zero"
+       ],
+       "answer_index": 1,
+       "why": "$Z = \\sqrt{R^2 + 0} = R$; parallel resonance is the one with maximum impedance."
+      },
+      {
+       "id": "sr-q2",
+       "kind": "mcq",
+       "level": 2,
+       "q": "The resonant frequency of a series circuit with $L = 1$ mH and $C = 1\\ \\mu$F is nearest to",
+       "options": [
+        "31.6 kHz",
+        "5.03 kHz",
+        "159 Hz",
+        "1 kHz"
+       ],
+       "answer_index": 1,
+       "why": "$f_r = 1/(2\\pi\\sqrt{10^{-9}}) = 5.03$ kHz; 31.6 krad/s is $\\omega_r$, not $f_r$."
+      },
+      {
+       "id": "sr-q3",
+       "kind": "short",
+       "level": 2,
+       "marks": 4,
+       "q": "State the condition of series resonance in an R-L-C circuit, derive the resonant frequency and list the features at resonance.",
+       "model_answer_md": "**Condition**: current in phase with voltage, i.e. $X_L = X_C$.\n\n**Derivation**: $\\omega_rL = \\dfrac{1}{\\omega_rC}$, so $\\omega_r = \\dfrac{1}{\\sqrt{LC}}$ and $f_r = \\dfrac{1}{2\\pi\\sqrt{LC}}$.\n\n**At resonance**\n- $Z = R$, minimum; $I = V/R$, maximum\n- pf = 1, $\\phi = 0$\n- $V_L = V_C = IX_L$, equal and opposite, may exceed $V$\n- Below $f_r$ the circuit is capacitive, above it inductive.",
+       "points": [
+        "Condition $X_L = X_C$",
+        "$f_r = 1/2\\pi\\sqrt{LC}$ derived",
+        "$Z=R$ minimum, $I$ maximum, pf 1",
+        "$V_L = V_C$ magnification"
+       ]
+      },
+      {
+       "id": "sr-q4",
+       "kind": "numerical",
+       "level": 2,
+       "marks": 4,
+       "q": "A series circuit has $R = 20\\ \\Omega$, $L = 50$ mH, $C = 20\\ \\mu$F and a 100 V variable-frequency supply. Find the resonant frequency, current and the voltage across L and C at resonance.",
+       "model_answer_md": "$f_r = \\dfrac{1}{2\\pi\\sqrt{50\\times10^{-3}\\times20\\times10^{-6}}} = \\dfrac{1}{2\\pi\\times10^{-3}} = 159.2$ Hz\n\n$\\omega_r = 1000$ rad/s, $X_L = X_C = 1000\\times0.05 = 50\\ \\Omega$\n\n$I = V/R = 100/20 = 5$ A\n\n$V_L = V_C = 5\\times50 = 250$ V (2.5 times the supply voltage, $Q = 2.5$).",
+       "points": [
+        "$f_r = 159.2$ Hz",
+        "$X_L = X_C = 50\\ \\Omega$",
+        "$I = V/R = 5$ A",
+        "$V_L = V_C = 250$ V"
+       ]
+      },
+      {
+       "id": "p-dac27516",
+       "pyq": "dac27516ef6d7fc2",
+       "level": 1,
+       "points": [
+        "$f_0 = \\dfrac{1}{2\\pi\\sqrt{0.64\\times12\\times10^{-6}}} = 57.43$ Hz"
+       ]
+      },
+      {
+       "id": "p-0107d288",
+       "pyq": "0107d288b80d2928",
+       "level": 2,
+       "points": [
+        "At $f_0$: $X_L = X_C = 230.9\\ \\Omega$",
+        "$V_{coil} = 1.5\\sqrt{40^2+230.9^2} = 351.6$ V; $V_C = 1.5\\times230.9 = 346.4$ V",
+        "Supply $V = IR = 1.5\\times40 = 60$ V (voltage magnification, $Q = 5.77$)"
+       ]
+      },
+      {
+       "id": "p-5ac572e4",
+       "pyq": "5ac572e49dd69aa6",
+       "level": 1,
+       "points": [
+        "$f_0 = 1/2\\pi\\sqrt{LC} = 57.43$ Hz"
+       ]
+      },
+      {
+       "id": "p-73265ab7",
+       "pyq": "73265ab733aa1d0a",
+       "level": 2,
+       "points": [
+        "$X_L = X_C = 230.9\\ \\Omega$ at 57.43 Hz",
+        "$V_{coil} = 351.6$ V, $V_C = 346.4$ V",
+        "Supply $V = IR = 60$ V"
+       ]
+      },
+      {
+       "id": "p-dfcccbea",
+       "pyq": "dfcccbea4391227c",
+       "level": 2,
+       "points": [
+        "$f_0 = 1/(2\\pi\\sqrt{0.125\\times60\\times10^{-6}}) = 58.1$ Hz",
+        "At resonance $Z = R = 10\\ \\Omega$, $I = 120/10 = 12$ A"
+       ]
+      },
+      {
+       "id": "p-768c0e15",
+       "pyq": "768c0e1580dcb8dc",
+       "level": 3,
+       "points": [
+        "Current maximum on varying L means resonance: $Z = R$",
+        "$R = V/I = 240/0.5 = 480\\ \\Omega$",
+        "$X_C = V_C/I = 250/0.5 = 500\\ \\Omega$, $C = 1/(2\\pi\\times50\\times500) = 6.37\\ \\mu$F",
+        "$X_L = X_C = 500\\ \\Omega$, $L = 500/314.16 = 1.59$ H"
+       ]
+      },
+      {
+       "id": "p-fb1c9353",
+       "pyq": "fb1c93532879443b",
+       "level": 2,
+       "points": [
+        "Resonance: $C = 1/(\\omega^2L) = 1/(314.16^2\\times0.4) = 25.3\\ \\mu$F"
+       ]
+      },
+      {
+       "id": "p-eb534e6a",
+       "pyq": "eb534e6a7b1805a5",
+       "level": 1,
+       "points": [
+        "At resonance $Z = R = 5\\ \\Omega$, $I = 110/5 = 22$ A"
+       ]
+      },
+      {
+       "id": "p-94719525",
+       "pyq": "94719525c5c92ce8",
+       "level": 2,
+       "points": [
+        "$X_L = 314.16\\times0.4 = 125.7\\ \\Omega$",
+        "$V_L = IX_L = 22\\times125.7 = 2765$ V (far above 110 V)"
+       ]
+      },
+      {
+       "id": "p-8050038a",
+       "pyq": "8050038ac6291d0d",
+       "level": 2,
+       "points": [
+        "$C = 1/\\left[(2\\pi f_0)^2L\\right]$ with $f_0 = 10$ kHz, $L = 10$ mH",
+        "$C = 1/\\left[(2\\pi\\times10^4)^2\\times0.01\\right] = 25.3$ nF"
+       ]
+      }
+     ]
+    },
+    {
+     "id": "resonance-detuning",
+     "title": "Detuned circuits and tuning to a station",
+     "theory_md": "For a fixed $R$, the resonance condition ties $f$, $L$ and $C$ together: $LC = 1/\\omega_r^2$.\n\n- **Tuning**: for a given $L$, $C = \\dfrac{1}{\\omega_r^2L}$. A different $f_r$ needs a different $C$; doubling $L$ at the same $f_r$ needs half the $C$.\n- **Detuned** ($f \\ne f_r$ or $L$, $C$ changed): $X = X_L - X_C \\ne 0$, $Z = \\sqrt{R^2+X^2}$, $\\phi = \\tan^{-1}(X/R)$; $X>0$ lagging, $X<0$ leading.\n- **R shorted at resonance**: $Z \\to 0$, the current is limited only by the source and winding resistance, and $V_L=V_C$ become dangerously large.\n- Resonance can occur at another frequency $f_r$ even if the supply is 50 Hz: it needs $f=f_r$.",
+     "basics_md": "A radio dial changes C to move f_r to the station you want. If L is changed instead, C must change in the opposite proportion to keep the same f_r. Away from f_r the circuit leans inductive or capacitive and the current falls.",
+     "key_points": [
+      "Tuning: $C = 1/(\\omega_r^2L)$; $LC$ fixed for a given $f_r$",
+      "Away from resonance $Z=\\sqrt{R^2+X^2}$, $\\phi = \\tan^{-1}(X/R)$",
+      "Doubling $L$ at the same $f_r$ means halving $C$",
+      "R shorted at resonance: very large current and voltages across L and C"
+     ],
+     "questions": [
+      {
+       "id": "rd-q1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "The resonant frequency of a series R-L-C circuit does not depend on",
+       "options": [
+        "L",
+        "C",
+        "R",
+        "$L \\times C$"
+       ],
+       "answer_index": 2,
+       "why": "$f_r = 1/2\\pi\\sqrt{LC}$ has no $R$; $R$ only sets the peak current and $Q$."
+      },
+      {
+       "id": "rd-q2",
+       "kind": "mcq",
+       "level": 2,
+       "q": "A series circuit is tuned to resonance. If $L$ is now doubled at the same frequency, the circuit becomes",
+       "options": [
+        "resistive",
+        "inductive, current lagging",
+        "capacitive, current leading",
+        "short-circuited"
+       ],
+       "answer_index": 1,
+       "why": "$X_L$ doubles while $X_C$ is unchanged, so $X_L > X_C$."
+      },
+      {
+       "id": "rd-q3",
+       "kind": "numerical",
+       "level": 2,
+       "marks": 4,
+       "q": "A tuning coil of 200 $\\mu$H is to tune a receiver from 1 MHz to 1.5 MHz. Find the range of capacitance needed.",
+       "model_answer_md": "$C = \\dfrac{1}{(2\\pi f)^2L}$\n\nAt 1 MHz: $C = \\dfrac{1}{(2\\pi\\times10^6)^2\\times200\\times10^{-6}} = 126.7$ pF\n\nAt 1.5 MHz: $C = \\dfrac{1}{(2\\pi\\times1.5\\times10^6)^2\\times200\\times10^{-6}} = 56.3$ pF\n\nSo $C$ varies from 56.3 pF to 126.7 pF (higher frequency needs smaller $C$).",
+       "points": [
+        "$C = 1/(\\omega^2L)$",
+        "126.7 pF at 1 MHz",
+        "56.3 pF at 1.5 MHz"
+       ]
+      },
+      {
+       "id": "rd-q4",
+       "kind": "numerical",
+       "level": 3,
+       "marks": 5,
+       "q": "A series circuit with $R = 25\\ \\Omega$, $L = 0.2$ H and $C = 20\\ \\mu$F is connected to 240 V, 50 Hz. Find the resonant frequency, the current and phase angle at 50 Hz, and the current at resonance.",
+       "model_answer_md": "$f_r = \\dfrac{1}{2\\pi\\sqrt{0.2\\times20\\times10^{-6}}} = 79.6$ Hz\n\nAt 50 Hz: $X_L = 62.83\\ \\Omega$, $X_C = \\dfrac{1}{2\\pi\\times50\\times20\\times10^{-6}} = 159.15\\ \\Omega$\n\n$X = -96.3\\ \\Omega$ (capacitive), $Z = \\sqrt{25^2 + 96.3^2} = 99.5\\ \\Omega$\n\n$I = 240/99.5 = 2.41$ A leading, $\\phi = \\tan^{-1}(96.3/25) = 75.5^\\circ$ (the circuit is below $f_r$).\n\nAt resonance $I = 240/25 = 9.6$ A in phase.",
+       "points": [
+        "$f_r = 79.6$ Hz",
+        "$X_L=62.83$, $X_C=159.15\\ \\Omega$, $Z=99.5\\ \\Omega$",
+        "$I = 2.41$ A leading $75.5^\\circ$",
+        "Resonance current $9.6$ A"
+       ]
+      },
+      {
+       "id": "p-1af2118e",
+       "pyq": "1af2118e8be9674e",
+       "level": 2,
+       "points": [
+        "$R = 240/10 = 24\\ \\Omega$; with $L = 20$ mH, $C = 25.33$ nF at 10 kHz: $X_L = 1256.6$, $X_C = 628.3\\ \\Omega$",
+        "$\\phi = \\tan^{-1}(628.3/24) = 87.8^\\circ$ lagging",
+        "Comment: nearly purely inductive, current falls from 10 A to 0.38 A, pf $0.038$, resonance lost"
+       ]
+      },
+      {
+       "id": "p-15c83bdb",
+       "pyq": "15c83bdbd14575b6",
+       "level": 2,
+       "points": [
+        "$LC$ must stay constant: $C' = 1/[(2\\pi\\times10^4)^2\\times0.02] = 12.67$ nF",
+        "Doubling L means halving C; current returns to 10 A at unity pf"
+       ]
+      },
+      {
+       "id": "p-6473b0b6",
+       "pyq": "6473b0b6924b6d02",
+       "level": 2,
+       "points": [
+        "$R = 240/10 = 24\\ \\Omega$; with R shorted, $Z = |X_L - X_C| = 0$ at resonance",
+        "Current $\\to\\infty$ (limited only by source and winding resistance); $V_L = V_C$ become very large, the fuse or breaker trips"
+       ]
+      },
+      {
+       "id": "p-fa49a9cc",
+       "pyq": "fa49a9cc7faf9bde",
+       "level": 3,
+       "points": [
+        "At 50 Hz, $X_L \\ne X_C$ for the C found (4.77 or 1.29 $\\mu$F), so the circuit is not in resonance at 50 Hz",
+        "Resonance occurs at $f_r = 1/(2\\pi\\sqrt{LC})$: $32.6$ Hz for 4.77 $\\mu$F, $62.7$ Hz for 1.29 $\\mu$F"
+       ]
+      },
+      {
+       "id": "p-da2cf6a3",
+       "pyq": "da2cf6a31ebc2061",
+       "level": 2,
+       "points": [
+        "$C = 1/(\\omega^2L)$ with $\\omega = 2\\pi\\times91\\times10^3 = 5.718\\times10^5$ rad/s",
+        "$C = 76.5$ pF"
+       ]
+      },
+      {
+       "id": "p-f8abbed2",
+       "pyq": "f8abbed2e5bf9daf",
+       "level": 2,
+       "points": [
+        "$\\omega = 2\\pi\\times96\\times10^3 = 6.032\\times10^5$ rad/s",
+        "$C = 1/(\\omega^2\\times0.04) = 68.7$ pF"
+       ]
+      },
+      {
+       "id": "p-15121ddb",
+       "pyq": "15121ddbdb3ef887",
+       "level": 2,
+       "points": [
+        "Resonance: $\\omega_r = 2\\pi\\times91\\ \\text{kHz}$, $C = 1/(\\omega_r^2L) = 76.5$ pF"
+       ]
+      },
+      {
+       "id": "p-a5eff277",
+       "pyq": "a5eff2772edea4b9",
+       "level": 2,
+       "points": [
+        "At 96 kHz: $C = 1/(\\omega_r^2L) = 68.7$ pF (smaller than for 91 kHz)"
+       ]
+      }
+     ]
+    },
+    {
+     "id": "q-factor-bandwidth",
+     "title": "Q factor, bandwidth and half-power points",
+     "theory_md": "**Q factor** (series): $Q = \\dfrac{\\omega_rL}{R} = \\dfrac{1}{\\omega_rCR} = \\dfrac1R\\sqrt{\\dfrac LC}$ = voltage magnification: $V_L = V_C = QV$.\n\n**Half-power points** $f_1, f_2$: where $I = I_0/\\sqrt2$ (the **-3 dB** line), i.e. $P = P_{max}/2$ and $|X_L - X_C| = R$.\n\n**Bandwidth** $BW = f_2 - f_1 = \\dfrac{R}{2\\pi L} = \\dfrac{f_r}{Q}$ (Hz), and $f_r = \\sqrt{f_1f_2}$.\n\nHigher $R$: lower $Q$, wider bandwidth, flatter curve. Higher $Q$: sharper tuning and better selectivity.",
+     "basics_md": "Picture the current-versus-frequency curve as a hill. A tall narrow hill (high Q) picks out one station only. A low wide hill (low Q) lets several stations through. Bandwidth is the width of the hill at 70.7 percent of its height.",
+     "key_points": [
+      "$Q = \\omega_rL/R = (1/R)\\sqrt{L/C}$, voltage magnification",
+      "Half-power points at $I_0/\\sqrt2$, the $-3$ dB line, where $|X|=R$",
+      "$BW = f_2-f_1 = R/2\\pi L = f_r/Q$",
+      "Larger $R$ lowers $Q$ and widens the band"
+     ],
+     "questions": [
+      {
+       "id": "q-q1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "The bandwidth of a series resonant circuit is",
+       "options": [
+        "$f_r\\,Q$",
+        "$f_r/Q$",
+        "$Q/f_r$",
+        "$f_r\\sqrt Q$"
+       ],
+       "answer_index": 1,
+       "why": "$BW = f_r/Q = R/2\\pi L$."
+      },
+      {
+       "id": "q-q2",
+       "kind": "mcq",
+       "level": 2,
+       "q": "If the resistance of a series resonant circuit is increased, then",
+       "options": [
+        "Q rises, bandwidth falls",
+        "Q falls, bandwidth rises",
+        "$f_r$ rises",
+        "Q and bandwidth both rise"
+       ],
+       "answer_index": 1,
+       "why": "$Q = \\omega_rL/R$ falls and $BW = R/2\\pi L$ rises."
+      },
+      {
+       "id": "q-q3",
+       "kind": "short",
+       "level": 2,
+       "marks": 3,
+       "q": "Define the Q factor of a series resonant circuit, its bandwidth and the -3 dB line. How are they related?",
+       "model_answer_md": "**Q factor**: $Q = \\omega_rL/R = \\frac1R\\sqrt{L/C}$; the voltage magnification, $V_L = V_C = QV$.\n\n**-3 dB line**: drawn at $I = I_0/\\sqrt2 = 0.707I_0$ on the resonance curve; there the power is half of the maximum. It cuts the curve at the half-power frequencies $f_1$ and $f_2$.\n\n**Bandwidth**: $BW = f_2 - f_1 = R/2\\pi L = f_r/Q$.\n\nA high $Q$ gives a narrow band and a sharp (selective) response.",
+       "points": [
+        "$Q = \\omega_rL/R$, voltage magnification",
+        "-3 dB line at $0.707I_0$, half power",
+        "$BW = f_2-f_1 = f_r/Q$"
+       ]
+      },
+      {
+       "id": "q-q4",
+       "kind": "numerical",
+       "level": 2,
+       "marks": 5,
+       "q": "A series circuit has $R = 20\\ \\Omega$, $L = 50$ mH and $C = 20\\ \\mu$F. Find $f_r$, $Q$, bandwidth and the half-power frequencies.",
+       "model_answer_md": "$f_r = \\dfrac{1}{2\\pi\\sqrt{LC}} = 159.15$ Hz, $\\omega_r = 1000$ rad/s\n\n$Q = \\dfrac{\\omega_rL}{R} = \\dfrac{1000\\times0.05}{20} = 2.5$\n\n$BW = \\dfrac{f_r}{Q} = 63.66$ Hz (check: $R/2\\pi L = 20/0.314 = 63.66$ Hz)\n\n$f_{1,2} = \\mp\\dfrac{R}{4\\pi L} + \\sqrt{\\left(\\dfrac{R}{4\\pi L}\\right)^2 + f_r^2}$ with $R/4\\pi L = 31.83$ Hz:\n\n$f_1 = 130.5$ Hz, $f_2 = 194.1$ Hz (check $\\sqrt{f_1f_2} = 159.15$ Hz).",
+       "points": [
+        "$f_r = 159.15$ Hz",
+        "$Q = 2.5$",
+        "$BW = 63.66$ Hz",
+        "$f_1 = 130.5$ Hz, $f_2 = 194.1$ Hz"
+       ]
+      },
+      {
+       "id": "p-b7d5517f",
+       "pyq": "b7d5517f5ed4e26a",
+       "level": 2,
+       "points": [
+        "$X_L = 125.7\\ \\Omega$ at resonance (50 Hz)",
+        "$Q = X_L/R = 125.7/5 = 25.1$ (also $V_L/V = 2765/110$)"
+       ]
+      },
+      {
+       "id": "p-6b57c1fb",
+       "pyq": "6b57c1fb1f043536",
+       "level": 2,
+       "points": [
+        "$BW = f_r/Q = 50/25.13 = 1.99$ Hz",
+        "Check: $R/2\\pi L = 5/(2\\pi\\times0.4) = 1.99$ Hz"
+       ]
+      },
+      {
+       "id": "p-3bbf9bca",
+       "pyq": "3bbf9bca22bbd851",
+       "level": 1,
+       "points": [
+        "-3 dB line at $I = I_0/\\sqrt2 = 0.707I_0$, power half of the maximum; it cuts the curve at the half-power frequencies $f_1$, $f_2$",
+        "Bandwidth $= f_2 - f_1 = R/2\\pi L = f_r/Q$"
+       ]
+      },
+      {
+       "id": "p-7b078156",
+       "pyq": "7b078156a870cc57",
+       "level": 1,
+       "points": [
+        "-3 dB line at $0.707I_0$ marks the half-power points $f_1$ and $f_2$ ($|X_L-X_C| = R$)",
+        "Bandwidth: the band of frequencies between them, $f_2-f_1 = f_r/Q$"
+       ]
+      },
+      {
+       "id": "p-f71d0bab",
+       "pyq": "f71d0bab3b9b715c",
+       "level": 2,
+       "points": [
+        "$Q = \\omega_rL/R$",
+        "Station 1 (91 kHz): $Q_1 = 5.718\\times10^5\\times0.04/500 = 45.7$",
+        "Station 2 (96 kHz): $Q_2 = 6.032\\times10^5\\times0.04/500 = 48.3$"
+       ]
+      },
+      {
+       "id": "p-bb8b2708",
+       "pyq": "bb8b270846950cf3",
+       "level": 2,
+       "points": [
+        "$Q = 2\\pi f_rL/R$",
+        "$Q_1 = 45.74$ at 91 kHz, $Q_2 = 48.25$ at 96 kHz"
+       ]
+      },
+      {
+       "id": "p-8e022b19",
+       "pyq": "8e022b19028de8db",
+       "level": 3,
+       "points": [
+        "(i) $f_r = 1/(2\\pi\\sqrt{100\\times10^{-6}\\times100\\times10^{-12}}) = 1.59$ MHz",
+        "(ii) $I_0 = V/R = 10/100 = 0.1$ A",
+        "(iii) $X_L = \\omega_rL = 1000\\ \\Omega$, $V_L = V_C = 0.1\\times1000 = 100$ V",
+        "(iv) $Q = \\omega_rL/R = 10$",
+        "Comment: $V_L = V_C = 10\\times$ supply voltage (magnification), current maximum, pf 1"
+       ]
+      }
+     ]
+    },
+    {
+     "id": "parallel-resonance",
+     "title": "Parallel resonance and the rejector circuit",
+     "theory_md": "A coil ($R$, $L$) in parallel with $C$ is in resonance when the supply current is in phase with $V$: the coil's quadrature current equals $I_C$.\n$$f_0 = \\frac{1}{2\\pi}\\sqrt{\\frac{1}{LC} - \\frac{R^2}{L^2}} \\approx \\frac{1}{2\\pi\\sqrt{LC}}\\ (\\text{small } R).$$\nAt resonance the **dynamic impedance** $Z_D = \\dfrac{L}{CR}$ is **maximum**, the line current is **minimum**, pf = 1.\n\n**Q factor** $= \\dfrac{\\omega_0L}{R}$ = current magnification: circulating current $= Q\\times$ line current.\n\nIt is a **rejector circuit**: its impedance is highest at $f_0$, so that frequency is blocked and others pass. Series resonance is the acceptor circuit.",
+     "basics_md": "A swing pushed by a tiny nudge each time keeps swinging with a big motion. In the parallel circuit a large current circulates between coil and capacitor while the supply only tops up the losses, so the line current is tiny at resonance.",
+     "key_points": [
+      "Condition: supply current in phase with $V$; $f_0\\approx1/2\\pi\\sqrt{LC}$",
+      "Dynamic impedance $L/CR$ maximum, line current minimum",
+      "Q = current magnification $\\omega_0L/R$",
+      "Rejector because it opposes (rejects) the resonant frequency"
+     ],
+     "questions": [
+      {
+       "id": "pr-q1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "At parallel resonance the line current is",
+       "options": [
+        "maximum",
+        "minimum",
+        "zero always",
+        "equal to $I_C$"
+       ],
+       "answer_index": 1,
+       "why": "Impedance is maximum, so the line current is minimum."
+      },
+      {
+       "id": "pr-q2",
+       "kind": "mcq",
+       "level": 2,
+       "q": "A parallel resonant circuit is called a rejector circuit because at resonance it",
+       "options": [
+        "has zero impedance",
+        "offers maximum impedance to that frequency",
+        "draws maximum current",
+        "blocks all frequencies"
+       ],
+       "answer_index": 1,
+       "why": "A very high $Z_D = L/CR$ stops that frequency from passing along the line."
+      },
+      {
+       "id": "pr-q3",
+       "kind": "numerical",
+       "level": 2,
+       "marks": 4,
+       "q": "A coil of $R = 10\\ \\Omega$ and $L = 100\\ \\mu$H is in parallel with a 100 pF capacitor. Find the resonant frequency, the dynamic impedance and the Q factor.",
+       "model_answer_md": "$f_0 \\approx \\dfrac{1}{2\\pi\\sqrt{LC}} = \\dfrac{1}{2\\pi\\sqrt{10^{-4}\\times10^{-10}}} = 1.59$ MHz (the $R^2/L^2 = 10^{10}$ term is negligible against $1/LC = 10^{14}$).\n\n$Z_D = \\dfrac{L}{CR} = \\dfrac{10^{-4}}{10^{-10}\\times10} = 10^5\\ \\Omega = 100\\ \\text{k}\\Omega$\n\n$Q = \\dfrac{\\omega_0L}{R} = \\dfrac{10^7\\times10^{-4}}{10} = 100$",
+       "points": [
+        "$f_0 = 1.59$ MHz",
+        "$Z_D = L/CR = 100\\ \\text{k}\\Omega$",
+        "$Q = 100$"
+       ]
+      },
+      {
+       "id": "p-8e44921e",
+       "pyq": "8e44921e2c224833",
+       "level": 3,
+       "points": [
+        "Parallel resonance: coil ($R$, $L$) in parallel with $C$; condition: supply current in phase with $V$, $f_0 = \\frac{1}{2\\pi}\\sqrt{\\frac{1}{LC}-\\frac{R^2}{L^2}}$",
+        "At resonance $Z_D = L/CR$ is maximum, line current minimum, pf unity",
+        "Q factor $=\\omega_0L/R$: current magnification, circulating current $= Q\\times$ line current; higher Q gives narrower bandwidth",
+        "Rejector circuit: maximum impedance at $f_0$ means the resonant frequency is rejected (blocked) from the line"
+       ]
+      }
+     ]
+    }
+   ]
+  }
+ ]
+}

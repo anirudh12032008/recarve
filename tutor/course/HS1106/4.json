@@ -1,0 +1,1363 @@
+{
+ "code": "HS1106",
+ "unit": "Developing Other Skills",
+ "written": "2026-10-19",
+ "by": "claude-sonnet-5-5, in a Claude Code session",
+ "topics": [
+  {
+   "topic": "Reading styles and strategies",
+   "subtopics": [
+    {
+     "id": "reading-techniques",
+     "title": "Reading techniques and their purpose",
+     "theory_md": "We read differently for different **purposes**.\n- **Skimming**: fast reading for the gist; read title, headings, first and last lines of paragraphs. Example: previewing a newspaper or a chapter.\n- **Scanning**: hunting for one fact, name, date or number. Example: a train time, a word in a dictionary.\n- **Intensive reading**: slow, detailed, with rereading, for full understanding. Example: textbook, legal agreement.\n- **Extensive reading**: long texts for pleasure and general understanding. Example: novel, magazine.\n- **Critical reading**: judging the author's purpose, evidence and bias. Example: editorial, research paper.\n\n**Bacon**: books to be *tasted* = skimming and scanning; *swallowed* = extensive; *chewed and digested* = intensive and critical.",
+     "basics_md": "You do not read a menu the way you read a novel. Pick the speed and care that match what you need from the text.",
+     "key_points": [
+      "Technique depends on the purpose of reading",
+      "Skimming gives the gist; scanning finds a specific fact",
+      "Intensive is slow and detailed; extensive is for pleasure and general idea",
+      "Critical reading evaluates purpose, evidence and bias",
+      "Each technique needs an example"
+     ],
+     "questions": [
+      {
+       "id": "rt-q1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "You look for the date of the Battle of Plassey in a history chapter. The best technique is",
+       "options": [
+        "Intensive reading",
+        "Scanning",
+        "Extensive reading",
+        "Critical reading"
+       ],
+       "answer_index": 1,
+       "why": "You want one fact, so you move your eyes over the page looking for it: scanning."
+      },
+      {
+       "id": "rt-q2",
+       "kind": "mcq",
+       "level": 1,
+       "q": "In Bacon's words, books to be 'swallowed' are read by",
+       "options": [
+        "Skimming",
+        "Scanning",
+        "Extensive reading",
+        "Intensive reading"
+       ],
+       "answer_index": 2,
+       "why": "Swallowed means read quickly and wholly for general enjoyment, like a novel: extensive reading."
+      },
+      {
+       "id": "rt-q3",
+       "kind": "short",
+       "level": 2,
+       "marks": 3,
+       "q": "Differentiate between skimming and scanning, with one example each.",
+       "model_answer_md": "| | Skimming | Scanning |\n|---|---|---|\n| Aim | General idea or gist | One specific fact |\n| Method | Reads headings, first and last lines, key words | Eyes run over the page looking for the keyword only |\n| Example | Previewing a chapter before a lecture | Finding a phone number in a directory |",
+       "points": [
+        "Skimming: gist, scanning: specific information",
+        "Method of each stated",
+        "One correct example each"
+       ]
+      },
+      {
+       "id": "rt-q4",
+       "kind": "short",
+       "level": 3,
+       "marks": 3,
+       "q": "A student reads (i) a novel on holiday, (ii) a lab manual before an experiment, (iii) an advertisement's claims about a product. Name the technique for each and justify.",
+       "model_answer_md": "(i) **Extensive reading**: long text read for pleasure and general understanding.\n(ii) **Intensive reading**: every step and precaution must be understood exactly.\n(iii) **Critical reading**: the reader judges the claims, evidence and the advertiser's purpose.\nThe technique changes because the **purpose** changes.",
+       "points": [
+        "Novel: extensive",
+        "Lab manual: intensive",
+        "Advertisement: critical",
+        "Justified by purpose"
+       ]
+      },
+      {
+       "id": "rt-p1",
+       "pyq": "abcb865dacfcce7c",
+       "level": 2,
+       "points": [
+        "Technique chosen by purpose and type of text",
+        "Skimming (gist) and scanning (specific fact) with examples",
+        "Intensive (detailed study) and extensive (pleasure) with examples",
+        "SQ3R and critical reading mentioned",
+        "Conclusion: good readers move between techniques"
+       ]
+      },
+      {
+       "id": "rt-p2",
+       "pyq": "41f0ade214857d89",
+       "level": 2,
+       "points": [
+        "Skimming, scanning, intensive, extensive (critical optional) defined",
+        "Each linked to a purpose",
+        "One example per technique",
+        "Technique depends on purpose, stated clearly"
+       ]
+      },
+      {
+       "id": "rt-p3",
+       "pyq": "6d7d193466360320",
+       "level": 2,
+       "points": [
+        "Skimming for the main idea, e.g. judging if an article is useful",
+        "Scanning for a specific fact, e.g. a date or phone number",
+        "Extensive for pleasure, intensive for exams or agreements",
+        "Critical reading for evaluating an editorial or paper; SQ3R as a method",
+        "Technique depends on purpose"
+       ]
+      },
+      {
+       "id": "rt-p4",
+       "pyq": "636d58c9ffb368b4",
+       "level": 3,
+       "points": [
+        "Metaphor: reading compared to eating; choose method by book and purpose",
+        "Tasted = skimming and scanning",
+        "Swallowed = extensive reading",
+        "Chewed and digested = intensive and critical reading",
+        "Examples of purpose and technique; a good reader is flexible"
+       ]
+      },
+      {
+       "id": "rt-p5",
+       "pyq": "f1ceedbceb48348a",
+       "level": 3,
+       "points": [
+        "Bacon (Of Studies): books like food",
+        "Tasted = skimming and scanning; swallowed = extensive; chewed and digested = intensive",
+        "Technique depends on purpose, with examples",
+        "Conclusion: be flexible"
+       ]
+      }
+     ]
+    },
+    {
+     "id": "sq3r-exam",
+     "title": "SQ3R and reading for an exam",
+     "theory_md": "**SQ3R** is a study method for textbooks:\n1. **Survey**: skim title, headings, summary, figures.\n2. **Question**: turn headings into questions.\n3. **Read**: read actively to answer them.\n4. **Recite**: say or write the answers from memory.\n5. **Review**: go over notes and questions again.\n\n**Long chapter, little time**: do not read word by word. Skim for structure, scan for definitions, formulae and PYQ topics, read the core parts intensively, make short notes, review.",
+     "basics_md": "Look at the map before the journey, ask where you are going, travel, tell someone what you saw, and look at the map again.",
+     "key_points": [
+      "SQ3R = Survey, Question, Read, Recite, Review",
+      "Exam reading: skim for structure first",
+      "Scan for definitions, formulae and frequently asked parts",
+      "Read intensively only the core parts",
+      "Notes and review for recall"
+     ],
+     "questions": [
+      {
+       "id": "sq-q1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "The first step of SQ3R is",
+       "options": [
+        "Read",
+        "Recite",
+        "Survey",
+        "Review"
+       ],
+       "answer_index": 2,
+       "why": "Survey comes first: skim the chapter structure."
+      },
+      {
+       "id": "sq-q2",
+       "kind": "mcq",
+       "level": 2,
+       "q": "With one hour for a 40-page chapter, the best plan is",
+       "options": [
+        "Read every line once from page 1",
+        "Skim for structure, scan key items, read the core parts intensively, then review",
+        "Read only the last page",
+        "Scan the whole chapter and stop"
+       ],
+       "answer_index": 1,
+       "why": "Combine techniques: structure first, then selective deep reading."
+      },
+      {
+       "id": "sq-q3",
+       "kind": "short",
+       "level": 2,
+       "marks": 3,
+       "q": "Explain the SQ3R method briefly.",
+       "model_answer_md": "**SQ3R** stands for:\n1. **Survey**: skim headings, summary, figures for an overview.\n2. **Question**: change headings into questions.\n3. **Read**: read actively to find the answers.\n4. **Recite**: answer aloud or in writing without looking.\n5. **Review**: revise the notes and questions later.",
+       "points": [
+        "Expansion of SQ3R correct",
+        "Five steps in order with one line each"
+       ]
+      },
+      {
+       "id": "sq-p1",
+       "pyq": "15b0925f0535ac99",
+       "level": 2,
+       "points": [
+        "Do not read word by word; combine techniques (SQ3R)",
+        "Skim to survey headings, summary, figures",
+        "Scan for definitions, formulae, previous-paper items",
+        "Intensive reading of core or unfamiliar parts only",
+        "Notes or recitation, then review",
+        "Each choice justified with an example"
+       ]
+      }
+     ]
+    },
+    {
+     "id": "comprehension-strategies",
+     "title": "Strategies that improve comprehension",
+     "theory_md": "**Comprehension** is understanding what is read. Strategies:\n- **Active engagement**: question, highlight, summarise, predict while reading.\n- **Prior knowledge**: link new ideas to what you already know; gives context, speeds understanding, aids memory.\n- **Main ideas and supporting details**: separate the central point from examples and evidence.\n- **Inference**: conclude what is not stated directly.\n\n**Benefits**: academic (complex texts), professional (reports, contracts), personal (novels), and stronger **critical thinking**, knowledge, communication and problem-solving.",
+     "basics_md": "Reading is not just seeing words. It is a conversation: you ask, connect, pick out what matters and read between the lines.",
+     "key_points": [
+      "Four strategies: active engagement, prior knowledge, main idea and details, inference",
+      "Prior knowledge gives context and aids memory",
+      "Inference trains analysis, so builds critical thinking",
+      "Benefits: academic, professional, personal, critical thinking"
+     ],
+     "questions": [
+      {
+       "id": "cs-q1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "Which is NOT a comprehension strategy?",
+       "options": [
+        "Predicting what comes next",
+        "Memorising the text word for word without understanding",
+        "Summarising each paragraph",
+        "Drawing inferences"
+       ],
+       "answer_index": 1,
+       "why": "Memorising without understanding is not comprehension."
+      },
+      {
+       "id": "cs-q2",
+       "kind": "mcq",
+       "level": 2,
+       "q": "'The streets were wet and everyone carried umbrellas.' The inference is that",
+       "options": [
+        "It is summer",
+        "It had rained or was raining",
+        "The shops were closed",
+        "It was night"
+       ],
+       "answer_index": 1,
+       "why": "An inference uses clues in the text to reach a conclusion not stated."
+      },
+      {
+       "id": "cs-q3",
+       "kind": "short",
+       "level": 2,
+       "marks": 2,
+       "q": "Distinguish the main idea from supporting details.",
+       "model_answer_md": "The **main idea** is the central point the passage makes. **Supporting details** are the examples, facts and reasons that explain or prove it. A reader finds the main idea first, then checks which details support it.",
+       "points": [
+        "Main idea = central point",
+        "Supporting details = examples, facts, reasons",
+        "Details support the main idea"
+       ]
+      },
+      {
+       "id": "cs-q4",
+       "kind": "short",
+       "level": 3,
+       "marks": 3,
+       "q": "How does reading comprehension build critical thinking?",
+       "model_answer_md": "Strong comprehension means the reader:\n1. Identifies **main ideas and supporting details**.\n2. **Connects** them with prior knowledge.\n3. **Draws inferences** and weighs evidence.\nDoing this repeatedly trains the mind to analyse, evaluate and reach reasoned conclusions, which is **critical thinking**.",
+       "points": [
+        "Identifies main ideas and details",
+        "Connects with prior knowledge",
+        "Draws inferences and evaluates evidence",
+        "Analysis and reasoned conclusions are critical thinking"
+       ]
+      },
+      {
+       "id": "cs-p1",
+       "pyq": "89f0e3fa31d53569",
+       "level": 1,
+       "points": [
+        "Active engagement with the text",
+        "Making connections to prior knowledge",
+        "Identifying main ideas and supporting details",
+        "Drawing inferences"
+       ]
+      },
+      {
+       "id": "cs-p2",
+       "pyq": "5bd06f9f865c6c67",
+       "level": 2,
+       "points": [
+        "Comprehension needs main ideas, details, prior knowledge, inferences",
+        "These train analysis and evaluation of evidence",
+        "Leads to reasoned conclusions: critical thinking"
+       ]
+      },
+      {
+       "id": "cs-p3",
+       "pyq": "f4e806707f20cc46",
+       "level": 2,
+       "points": [
+        "Academic: understand complex texts",
+        "Professional: extract key information from documents",
+        "Personal: enjoy and understand novels and reading for pleasure",
+        "Enhances critical thinking, knowledge, communication, problem-solving"
+       ]
+      },
+      {
+       "id": "cs-p4",
+       "pyq": "833a652270b805b1",
+       "level": 2,
+       "points": [
+        "Active engagement (questioning, highlighting, summarising, predicting) keeps focus",
+        "Prior knowledge gives context to understand and remember",
+        "Together: deeper comprehension and better retention"
+       ]
+      },
+      {
+       "id": "cs-p5",
+       "pyq": "5609c994c88160a3",
+       "level": 2,
+       "points": [
+        "Prior knowledge provides a framework for new information",
+        "Helps relate, predict, fill gaps",
+        "Understood faster, interpreted correctly, remembered longer; inferences easier"
+       ]
+      },
+      {
+       "id": "cs-p6",
+       "pyq": "3fc822155c56653d",
+       "level": 2,
+       "points": [
+        "Work: extract key information from reports, contracts, manuals",
+        "Sharpens critical thinking and weighs details",
+        "Expands knowledge base",
+        "Improves communication and problem-solving",
+        "Personal enjoyment of literature"
+       ]
+      }
+     ]
+    },
+    {
+     "id": "passage-answers",
+     "title": "Answering questions on a passage",
+     "theory_md": "1. Read the questions first, then skim the passage, then scan for each answer.\n2. **Marks = points**: a 1-mark answer needs one clear point, 2 marks two points. Write complete sentences in your **own words**; copy only names, numbers and key terms.\n3. **Main idea (MCQ)**: pick the option that covers the whole passage, not one detail.\n4. **Inference or opinion** (\"Do you think...?\"): say yes/no, then give reasons from the passage.\n5. Answer exactly what is asked (\"how\", \"why\", \"what are the advantages\").\n\nDo not add outside facts.",
+     "basics_md": "The answer is already in the passage. Your job is to find it, pick the right amount of it, and write it clearly.",
+     "key_points": [
+      "Answer only what is asked, in complete sentences",
+      "Number of points matches the marks",
+      "Facts, names and figures taken exactly from the passage",
+      "Main-idea option covers the whole passage",
+      "Opinion questions: yes/no plus reasons from the text"
+     ],
+     "questions": [
+      {
+       "id": "pa-q1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "A 2-mark question on a passage should normally be answered with",
+       "options": [
+        "One word",
+        "Two clear points in complete sentences",
+        "A full paragraph copied",
+        "Only an opinion"
+       ],
+       "answer_index": 1,
+       "why": "Roughly one point per mark, in sentences."
+      },
+      {
+       "id": "pa-q2",
+       "kind": "mcq",
+       "level": 2,
+       "q": "Passage: 'Honey never spoils. Jars found in Egyptian tombs were still edible. It has little water and is acidic, so bacteria cannot grow.' The main idea is",
+       "options": [
+        "Egyptian tombs held many jars",
+        "Why honey does not spoil",
+        "Bacteria are harmful",
+        "Honey is sweet"
+       ],
+       "answer_index": 1,
+       "why": "The whole passage explains why honey keeps; the other options are details or not stated."
+      },
+      {
+       "id": "pa-q3",
+       "kind": "short",
+       "level": 2,
+       "marks": 2,
+       "q": "Passage: 'Honey contains very little water and is acidic, so bacteria cannot grow in it. Bees also add an enzyme that makes a little hydrogen peroxide, which helps kill germs.'\nWhy does honey not spoil? Answer in your own words.",
+       "model_answer_md": "Honey does not spoil because it has **very little water** and is **acidic**, so bacteria cannot grow in it. The **enzyme added by bees** also forms a little **hydrogen peroxide**, which kills germs.",
+       "points": [
+        "Very little water",
+        "Acidic, so bacteria cannot grow",
+        "Enzyme from bees makes hydrogen peroxide"
+       ]
+      },
+      {
+       "id": "pa-q4",
+       "kind": "short",
+       "level": 3,
+       "marks": 2,
+       "q": "Passage: 'A town banned plastic bags. Within a year, shops reported fewer bags in the drains, but many shoppers began buying paper bags.'\nWhat can you infer about the ban? Give a reason from the passage.",
+       "model_answer_md": "The ban **worked partly**: fewer bags blocked the drains. But shoppers **switched to paper bags** instead of reusing bags, so the total use of bags may not have fallen. Both points come from the passage.",
+       "points": [
+        "Inference: ban partly successful",
+        "Reason: fewer bags in drains",
+        "Shoppers shifted to paper bags"
+       ]
+      },
+      {
+       "id": "pa-p1",
+       "pyq": "eee317f7c358f283",
+       "level": 2,
+       "points": [
+        "Linnaeus named the plant Theobroma",
+        "Meaning 'food of the gods'",
+        "Aztecs thought the bitter cacao drink a divine gift from heaven"
+       ]
+      },
+      {
+       "id": "pa-p2",
+       "pyq": "aa9c285497d927a7",
+       "level": 2,
+       "points": [
+        "First consumed as a drink",
+        "Aztecs drank bitter cacao; Montezuma had it with vanilla and spices",
+        "Spanish added chili peppers; Europeans later sweetened it with sugar"
+       ]
+      },
+      {
+       "id": "pa-p3",
+       "pyq": "5adfe59a8ab419f3",
+       "level": 2,
+       "points": [
+        "1828: van Houten's machine pressed the fat out of the cacao bean",
+        "Left a powder, called Dutch chocolate",
+        "Powder mixes better with water and easily with sugar",
+        "Led to new recipes and solid bars"
+       ]
+      },
+      {
+       "id": "pa-p4",
+       "pyq": "4482bdf92da78db5",
+       "level": 2,
+       "points": [
+        "Named Theobroma, 'food of the gods'",
+        "Aztecs regarded their cacao drink as a divine gift from heaven"
+       ]
+      },
+      {
+       "id": "pa-p5",
+       "pyq": "8bf528b7578b65d1",
+       "level": 2,
+       "points": [
+        "Bitter drink made from cacao",
+        "Aztecs drank it; Montezuma with vanilla and spices",
+        "Later chili peppers in Spain and sugar in Europe"
+       ]
+      },
+      {
+       "id": "pa-p6",
+       "pyq": "f1075117e29d52c9",
+       "level": 2,
+       "points": [
+        "Introduced in 1828 by Conrad van Houten",
+        "Machine pressed fat out of cacao beans, leaving powder",
+        "Powder mixes better with water and with sugar",
+        "Allowed new recipes, chocolate bars, milk chocolate"
+       ]
+      },
+      {
+       "id": "pa-p7",
+       "pyq": "ef32bc1606bc47fd",
+       "level": 2,
+       "points": [
+        "Harsh, curt, aggressive words dampen communication",
+        "They show harshness, aggression, apathy, cynicism",
+        "Cause animosity, bitterness, resentment and rebellion",
+        "Soft, considerate words give co-operation and harmony"
+       ]
+      },
+      {
+       "id": "pa-p8",
+       "pyq": "05fae01a075566f6",
+       "level": 2,
+       "points": [
+        "Pearl Strachan: words more powerful than atom bombs",
+        "Bomb destroys physically; words shape attitudes, relations, actions",
+        "Kind words comfort; bitter words breed bitterness and rebellion",
+        "Effect is lasting, so choose words carefully"
+       ]
+      },
+      {
+       "id": "pa-p9",
+       "pyq": "b1bb68be1fcc3de8",
+       "level": 2,
+       "points": [
+        "Pascal: kind words soothe, quiet and comfort the heart",
+        "Queen Elizabeth of Hungary: we have a mouth to encourage and comfort",
+        "Own example such as 'You did your best'"
+       ]
+      },
+      {
+       "id": "pa-p10",
+       "pyq": "69983d8a91956a74",
+       "level": 2,
+       "points": [
+        "Recording an inventory of words you speak most",
+        "Shows the quality of your language on paper",
+        "Lets you spot negative words and make a list of positive ones",
+        "More awareness gives more choice"
+       ]
+      },
+      {
+       "id": "pa-p11",
+       "pyq": "79140535d056a9ed",
+       "level": 2,
+       "points": [
+        "Answer C: describing the benefits of computerisation",
+        "Passage shows efficiency, productivity, employment, use in India",
+        "A, B are not discussed; D is only support"
+       ]
+      },
+      {
+       "id": "pa-p12",
+       "pyq": "fd7fc18f012c461b",
+       "level": 2,
+       "points": [
+        "No: the fear of job losses was proved wrong",
+        "Many jobs remain undone; unemployment is not too few jobs",
+        "Computerisation raised productivity and created additional employment",
+        "About 70,000 computer professionals graduate yearly and find jobs"
+       ]
+      },
+      {
+       "id": "pa-p13",
+       "pyq": "8e31bc455dc37310",
+       "level": 2,
+       "points": [
+        "Yes, there are advantages in large establishments",
+        "Efficiency, productivity and cost savings",
+        "Faster, better communication through networks",
+        "Managing vast data; tailored software; extra employment"
+       ]
+      },
+      {
+       "id": "pa-p14",
+       "pyq": "29ec2443e64087d4",
+       "level": 2,
+       "points": [
+        "Covid-19 pandemic, Russia-Ukraine war, climate crisis",
+        "Rising food inflation, slowing rural demand",
+        "Lower rural wages; supply-chain and heat-wave price rise"
+       ]
+      },
+      {
+       "id": "pa-p15",
+       "pyq": "e302e2c5adb173f1",
+       "level": 2,
+       "points": [
+        "Agriculture was the only strong sector in 2020-21, growing 3.3%",
+        "Added 11 million jobs 2019-22 while others lost 15 million",
+        "Enhanced MSP and procurement kept granaries full; bumper harvest exports"
+       ]
+      },
+      {
+       "id": "pa-p16",
+       "pyq": "0a540759c37ea2e6",
+       "level": 2,
+       "points": [
+        "Policy that incentivises overproduction of cereals and sugarcane (MSP, procurement)",
+        "It discourages diversification",
+        "Author: balance food security with diversification to raise farm income",
+        "Durable policy, not ad-hoc export bans"
+       ]
+      },
+      {
+       "id": "pa-p17",
+       "pyq": "3fe6ec85ec590b4a",
+       "level": 2,
+       "points": [
+        "Strong: enhanced MSP and procurement ensured food security in the pandemic",
+        "Prices of cereals and sugar insulated from global swings",
+        "Weak: overproduction of cereals and sugarcane, little diversification",
+        "Low farm incomes; exposure to inflation in neglected crops like edible oils"
+       ]
+      },
+      {
+       "id": "pa-p18",
+       "pyq": "1be5314e3e2d1503",
+       "level": 2,
+       "points": [
+        "Covid-19 pandemic, Russia-Ukraine war, climate crisis",
+        "Food inflation, slowing rural demand",
+        "Lower rural wages; supply-chain and heat-wave price rise"
+       ]
+      },
+      {
+       "id": "pa-p19",
+       "pyq": "3aecae3068be1796",
+       "level": 2,
+       "points": [
+        "Agriculture the only strong sector in 2020-21 (3.3% growth)",
+        "Added 11 million jobs 2019-22; others shed 15 million",
+        "MSP and procurement, good monsoon, bumper harvest exports"
+       ]
+      },
+      {
+       "id": "pa-p20",
+       "pyq": "1b6fe19c21c17735",
+       "level": 2,
+       "points": [
+        "Policy that incentivises overproduction of cereals and sugarcane",
+        "Discourages diversification",
+        "Author: balance food security and diversification for farm income",
+        "Durable policy beyond ad-hoc export bans"
+       ]
+      },
+      {
+       "id": "pa-p21",
+       "pyq": "e9e1aeebf70585f4",
+       "level": 2,
+       "points": [
+        "Strong: food security, full granaries, insulated cereal and sugar prices",
+        "Weak: overproduction, no diversification, low farm incomes",
+        "Ad-hoc export bans; exposed to inflation in items like edible oils"
+       ]
+      }
+     ]
+    },
+    {
+     "id": "gist-writing",
+     "title": "Writing the gist of a passage",
+     "theory_md": "The **gist** is the main message in a stated word limit, in your **own words**.\n1. Read once for the main idea; underline the key point of each paragraph.\n2. Keep: main ideas, important facts. Drop: examples, quotations, repetition, your opinion.\n3. Write one connected paragraph in the **third person, present tense** where possible.\n4. Stay within the limit (about 10 percent either way) and count the words.\n5. Give no title unless asked.",
+     "basics_md": "A gist is what you would tell a friend in two sentences if they asked what the passage was about.",
+     "key_points": [
+      "Own words, one paragraph, no opinion",
+      "Main ideas only: no examples or quotations",
+      "Word limit respected",
+      "Covers the beginning, middle and end of the passage"
+     ],
+     "questions": [
+      {
+       "id": "gw-q1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "A gist should NOT contain",
+       "options": [
+        "The main idea",
+        "Detailed examples and quotations",
+        "Key facts",
+        "Own words"
+       ],
+       "answer_index": 1,
+       "why": "A gist leaves out examples and quotations."
+      },
+      {
+       "id": "gw-q0",
+       "kind": "mcq",
+       "level": 2,
+       "q": "A gist of 50 words is asked. Your draft has 80 words. You should",
+       "options": [
+        "Submit it as it is",
+        "Cut examples and repetition to fit the limit",
+        "Cut the main idea",
+        "Add more detail"
+       ],
+       "answer_index": 1,
+       "why": "Keep the main ideas, drop examples and repetition, and meet the limit."
+      },
+      {
+       "id": "gw-q2",
+       "kind": "short",
+       "level": 2,
+       "marks": 2,
+       "q": "Write the gist in about 30 words: 'Honey never spoils. Jars in Egyptian tombs were still edible after thousands of years. Honey has little water and is acidic, so bacteria cannot grow. Bees also add an enzyme that makes hydrogen peroxide, which kills germs.'",
+       "model_answer_md": "Honey never spoils, even after thousands of years, because it has little water and is acidic, so bacteria cannot grow, and bees add an enzyme that helps kill germs.",
+       "points": [
+        "Main idea: honey does not spoil",
+        "Reasons: little water, acidic, bees' enzyme",
+        "Own words, about 25 words (checked)"
+       ]
+      },
+      {
+       "id": "gw-p1",
+       "pyq": "b4ebfb0ef296e8fb",
+       "level": 2,
+       "points": [
+        "About 30 words, own words",
+        "Cacao drink of the Aztecs sweetened in Europe",
+        "Dutch and Swiss inventions gave powder, bars, milk chocolate",
+        "May help the heart, fattening, toxic to animals"
+       ]
+      },
+      {
+       "id": "gw-p2",
+       "pyq": "1d4226c8ce5289ce",
+       "level": 2,
+       "points": [
+        "About 50 words, own words",
+        "Aztec cacao reached Europe in the sixteenth century and sugar made it popular",
+        "Dutch, English, Swiss inventions: powder, bars, milk chocolate",
+        "Loved today, may help the heart, but fattening and poisonous to animals"
+       ]
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "topic": "Vocabulary",
+   "subtopics": [
+    {
+     "id": "meaning-synonyms-usage",
+     "title": "Meaning, synonyms and use in a sentence",
+     "theory_md": "When asked for a word's **meaning and a sentence**:\n1. Give the **part of speech** and a short meaning.\n2. Give one or two **synonyms** (and an antonym if asked).\n3. Write one sentence in which the word is used correctly and its meaning is clear from the context.\n\nExample: **toxic** (adjective): poisonous. *The factory released toxic gases.* **Divine** (adjective): of or from God, heavenly. *The Aztecs thought the drink a divine gift.*\n\nWatch confusables: *affect* (verb) and *effect* (noun); *principal* (head, main) and *principle* (rule).",
+     "basics_md": "A word is learnt when you can swap it for a simpler one and still make sense, and when you can use it yourself.",
+     "key_points": [
+      "Part of speech and meaning",
+      "Synonyms correct",
+      "Sentence shows meaning in context",
+      "Spelling and grammar of the sentence correct"
+     ],
+     "questions": [
+      {
+       "id": "ms-q1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "The synonym of 'benevolent' is",
+       "options": [
+        "Cruel",
+        "Kind",
+        "Careless",
+        "Lazy"
+       ],
+       "answer_index": 1,
+       "why": "Benevolent means kind and well-meaning."
+      },
+      {
+       "id": "ms-q2",
+       "kind": "mcq",
+       "level": 2,
+       "q": "Choose the correct word: 'The new rule will ___ all students.'",
+       "options": [
+        "effect",
+        "affect",
+        "afect",
+        "effects"
+       ],
+       "answer_index": 1,
+       "why": "Affect is the verb meaning influence; effect is usually the noun."
+      },
+      {
+       "id": "ms-q3",
+       "kind": "short",
+       "level": 2,
+       "marks": 2,
+       "q": "Write the meaning of 'frugal' and 'obsolete' and use each in a sentence of your own.",
+       "model_answer_md": "**frugal** (adjective): careful with money or resources. *A frugal student saves part of his allowance every month.*\n**obsolete** (adjective): no longer used because something newer exists. *Floppy disks have become obsolete.*",
+       "points": [
+        "Frugal: careful with money",
+        "Obsolete: out of use, replaced",
+        "Correct sentence for each"
+       ]
+      },
+      {
+       "id": "ms-p1",
+       "pyq": "7c637b8ccf550d59",
+       "level": 2,
+       "points": [
+        "toxic (adjective): poisonous, harmful",
+        "divine (adjective): from or like God, heavenly",
+        "A correct sentence using each word"
+       ]
+      },
+      {
+       "id": "ms-p2",
+       "pyq": "0eeee48d9aade05c",
+       "level": 2,
+       "points": [
+        "toxic: poisonous, harmful, noxious",
+        "divine: godly, heavenly, holy, sacred",
+        "A correct sentence for each synonym or word"
+       ]
+      }
+     ]
+    },
+    {
+     "id": "context-and-devices",
+     "title": "Words from a passage, context clues and paradox",
+     "theory_md": "**Finding a word for a meaning**: read the meaning, scan the passage for a word that fits the same part of speech, then check it in the sentence. Example: *a situation of serious problems* = **crisis**; *a harmful or undesirable practice* = **perverse** (as in 'this perverse policy').\n\n**Context clues**: surrounding words explain an unknown word (definition, example, contrast).\n\n**Paradox**: a statement that seems self-contradictory but is true. Example: 'The more you learn, the less you know.' An **oxymoron** joins two opposites in two words: 'deafening silence'.",
+     "basics_md": "If you meet a strange word, the sentence around it usually tells you what it must mean.",
+     "key_points": [
+      "Match meaning and part of speech, then quote the word from the passage",
+      "Context clue: surrounding words explain meaning",
+      "Paradox: seems contradictory but is true, with an example",
+      "Oxymoron: two opposite words together"
+     ],
+     "questions": [
+      {
+       "id": "cd-q1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "A paradox is",
+       "options": [
+        "A statement that seems contradictory but is true",
+        "A comparison using 'like' or 'as'",
+        "Two opposite words together",
+        "A repeated sound"
+       ],
+       "answer_index": 0,
+       "why": "That is the definition. Oxymoron is the two-word form; simile uses like or as."
+      },
+      {
+       "id": "cd-q2",
+       "kind": "mcq",
+       "level": 2,
+       "q": "'Deafening silence' is an example of",
+       "options": [
+        "Simile",
+        "Oxymoron",
+        "Alliteration",
+        "Onomatopoeia"
+       ],
+       "answer_index": 1,
+       "why": "Two opposite words together: oxymoron."
+      },
+      {
+       "id": "cd-q3",
+       "kind": "short",
+       "level": 2,
+       "marks": 2,
+       "q": "What is a paradox? Give an example.",
+       "model_answer_md": "A **paradox** is a statement that seems self-contradictory or absurd but contains a truth. Example: 'India is a rich country with poor people' or 'Less is more': both look contradictory yet express something true.",
+       "points": [
+        "Definition: seems contradictory but true",
+        "Suitable example"
+       ]
+      },
+      {
+       "id": "cd-p1",
+       "pyq": "79020c84adcc26cf",
+       "level": 2,
+       "points": [
+        "(i) crisis: a situation of serious problems",
+        "(ii) perverse: a harmful or undesirable practice, quoted from the passage"
+       ]
+      },
+      {
+       "id": "cd-p2",
+       "pyq": "7e9abfe47d544d2b",
+       "level": 2,
+       "points": [
+        "crisis, as in pandemic induced economic crisis or the climate crisis"
+       ]
+      },
+      {
+       "id": "cd-p3",
+       "pyq": "4dae7bea97f9d001",
+       "level": 2,
+       "points": [
+        "perverse, as in 'this perverse policy'",
+        "Meaning: contrary to what is good or desirable"
+       ]
+      },
+      {
+       "id": "cd-p4",
+       "pyq": "1d9a751d257bd310",
+       "level": 3,
+       "points": [
+        "Paradox: seems self-contradictory or absurd but is true",
+        "Paradox in the passage: India is known worldwide for technology, yet millions are poor",
+        "Example: IT parks flourish while many people lack food or shelter"
+       ]
+      }
+     ]
+    },
+    {
+     "id": "word-formation",
+     "title": "Word formation, one-word substitutes and confusables",
+     "theory_md": "**Prefixes** change meaning: *un-*, *dis-*, *in-/im-/il-/ir-* (not), *mis-* (wrongly), *re-* (again). **Suffixes** change the word class: *-ness* (noun), *-able* (adjective), *-ly* (adverb), *-ize* (verb).\n\n**One-word substitutes**: vegetarian (one who eats no meat), bibliophile (lover of books), omniscient (knowing everything), illegible (cannot be read), autobiography (life story written by oneself), orphan (child without parents).\n\n**Homophones**: sound alike, spelt differently: *their/there*, *right/write*, *peace/piece*.",
+     "basics_md": "Many words are built from small parts. Learn the parts and you can decode new words.",
+     "key_points": [
+      "Prefix before a word changes meaning",
+      "Suffix after a word changes class",
+      "One-word substitutes are exact",
+      "Homophones differ in spelling and meaning"
+     ],
+     "questions": [
+      {
+       "id": "wf-q1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "One who loves books is a",
+       "options": [
+        "bibliophile",
+        "misogynist",
+        "philanthropist",
+        "pedant"
+       ],
+       "answer_index": 0,
+       "why": "Biblio means book, phile means lover."
+      },
+      {
+       "id": "wf-q2",
+       "kind": "mcq",
+       "level": 2,
+       "q": "The negative of 'legible' is",
+       "options": [
+        "unlegible",
+        "illegible",
+        "dislegible",
+        "mislegible"
+       ],
+       "answer_index": 1,
+       "why": "Before l, in- becomes il-: illegible."
+      },
+      {
+       "id": "wf-q3",
+       "kind": "short",
+       "level": 2,
+       "marks": 3,
+       "q": "Give one-word substitutes for: (a) a person who knows everything, (b) handwriting that cannot be read, (c) a child whose parents are dead.",
+       "model_answer_md": "(a) **omniscient**\n(b) **illegible**\n(c) **orphan**",
+       "points": [
+        "Omniscient",
+        "Illegible",
+        "Orphan"
+       ]
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "topic": "Idioms and phrases",
+   "subtopics": [
+    {
+     "id": "idioms-meaning-usage",
+     "title": "Common idioms: meaning and use",
+     "theory_md": "An **idiom** is a fixed expression whose meaning is not the sum of its words. Give the meaning, then use it in a sentence.\n- **break the ice**: start a conversation in an awkward situation\n- **a piece of cake**: very easy\n- **once in a blue moon**: very rarely\n- **hit the nail on the head**: say exactly the right thing\n- **spill the beans**: reveal a secret\n- **under the weather**: slightly unwell\n- **burn the midnight oil**: study or work late into the night\n- **cost an arm and a leg**: be very expensive\n- **beat around the bush**: avoid the main point\n- **call it a day**: stop working for now",
+     "basics_md": "Never translate an idiom word by word. 'It's raining cats and dogs' has nothing to do with animals.",
+     "key_points": [
+      "Idiom meaning is figurative, not literal",
+      "State the meaning, then a correct sentence",
+      "Do not change the words of the idiom"
+     ],
+     "questions": [
+      {
+       "id": "id-q1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "'Once in a blue moon' means",
+       "options": [
+        "Every night",
+        "Very rarely",
+        "At midnight",
+        "Very often"
+       ],
+       "answer_index": 1,
+       "why": "It describes something that happens very rarely."
+      },
+      {
+       "id": "id-q2",
+       "kind": "mcq",
+       "level": 2,
+       "q": "'He spilled the beans about the surprise party.' Here 'spilled the beans' means",
+       "options": [
+        "Wasted food",
+        "Revealed the secret",
+        "Cooked a meal",
+        "Made a mess"
+       ],
+       "answer_index": 1,
+       "why": "Spill the beans = reveal a secret."
+      },
+      {
+       "id": "id-q3",
+       "kind": "short",
+       "level": 2,
+       "marks": 3,
+       "q": "Explain the meaning of any three of: break the ice, a piece of cake, burn the midnight oil, beat around the bush. Use each in a sentence.",
+       "model_answer_md": "- **Break the ice**: start conversation among strangers. *A joke helped him break the ice at the meeting.*\n- **A piece of cake**: very easy. *The test was a piece of cake.*\n- **Burn the midnight oil**: study late at night. *She burnt the midnight oil before the exam.*",
+       "points": [
+        "Correct meaning of each of three idioms",
+        "Correct sentence for each"
+       ]
+      },
+      {
+       "id": "id-q4",
+       "kind": "short",
+       "level": 3,
+       "marks": 2,
+       "q": "Rewrite using an idiom: 'Please do not avoid the main point and tell us the result.'",
+       "model_answer_md": "'Please **do not beat around the bush** and tell us the result.'",
+       "points": [
+        "Idiom: beat around the bush",
+        "Sentence otherwise correct"
+       ]
+      }
+     ]
+    },
+    {
+     "id": "phrasal-verbs-proverbs",
+     "title": "Phrasal verbs and proverbs",
+     "theory_md": "A **phrasal verb** is a verb plus a particle with a new meaning.\n- **give up**: stop trying; **look after**: take care of; **put off**: postpone; **carry out**: perform; **turn down**: refuse; **call off**: cancel; **run out of**: have none left; **look into**: investigate; **come across**: find by chance; **take after**: resemble.\n\n**Proverbs** give advice: *A stitch in time saves nine* (act early); *Look before you leap* (think first); *All that glitters is not gold* (appearances deceive); *Empty vessels make the most noise* (the ignorant talk most); *Where there is a will there is a way*.",
+     "basics_md": "The particle changes the verb: 'look' is seeing, 'look after' is caring.",
+     "key_points": [
+      "Phrasal verb = verb + particle, new meaning",
+      "Know the meaning, use it correctly in a sentence",
+      "Proverb: state the advice it gives"
+     ],
+     "questions": [
+      {
+       "id": "pv-q1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "'The match was called off because of rain' means the match was",
+       "options": [
+        "Started",
+        "Cancelled",
+        "Won",
+        "Watched"
+       ],
+       "answer_index": 1,
+       "why": "Call off = cancel."
+      },
+      {
+       "id": "pv-q2",
+       "kind": "mcq",
+       "level": 2,
+       "q": "Which proverb means 'act early to avoid bigger trouble'?",
+       "options": [
+        "Look before you leap",
+        "A stitch in time saves nine",
+        "All that glitters is not gold",
+        "Empty vessels make the most noise"
+       ],
+       "answer_index": 1,
+       "why": "Mending early saves nine later stitches."
+      },
+      {
+       "id": "pv-q3",
+       "kind": "short",
+       "level": 2,
+       "marks": 3,
+       "q": "Use the phrasal verbs 'look after', 'put off' and 'turn down' in sentences that show their meaning.",
+       "model_answer_md": "- *She looks after her grandmother.* (takes care of)\n- *We put off the picnic till Sunday.* (postponed)\n- *He turned down the job offer.* (refused)",
+       "points": [
+        "Look after: take care of",
+        "Put off: postpone",
+        "Turn down: refuse",
+        "Sentences grammatical"
+       ]
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "topic": "Functional grammar and common errors",
+   "subtopics": [
+    {
+     "id": "phonetics-basics",
+     "title": "Phonetic symbols, vowels and consonants",
+     "theory_md": "English spelling does not show pronunciation (*though, through, cough*). The **IPA** gives **one symbol for one sound**, so pronunciation is recorded exactly. British RP has **44 sounds**: 20 vowels (12 pure vowels, 8 diphthongs) and 24 consonants.\n\n**Vowel**: air passes freely through the mouth, no obstruction; can form a syllable alone (/iː/, /e/, /ɔː/).\n**Consonant**: air stream partly or fully blocked by tongue, teeth or lips (/p/, /t/, /s/).\n\n**Bilabial** sounds use both lips: /p/, /b/, /m/ (also /w/).\n**Labio-dental**: /f/, /v/. **Dental**: /θ/, /ð/. **Velar**: /k/, /g/, /ŋ/.",
+     "basics_md": "Letters are what we write, sounds are what we say. 'Knee' has four letters but starts with /n/ and has three sounds, /niː/.",
+     "key_points": [
+      "IPA: one symbol per sound, exact and universal",
+      "44 sounds: 20 vowels, 24 consonants",
+      "Vowel: free passage; consonant: obstruction",
+      "Bilabial: both lips: /p b m/ (and /w/)"
+     ],
+     "questions": [
+      {
+       "id": "pb-q1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "How many sounds are there in the RP system of English?",
+       "options": [
+        "26",
+        "40",
+        "44",
+        "48"
+       ],
+       "answer_index": 2,
+       "why": "20 vowels and 24 consonants give 44."
+      },
+      {
+       "id": "pb-q2",
+       "kind": "mcq",
+       "level": 1,
+       "q": "Which pair of sounds is bilabial?",
+       "options": [
+        "/f/, /v/",
+        "/p/, /b/",
+        "/t/, /d/",
+        "/k/, /g/"
+       ],
+       "answer_index": 1,
+       "why": "/p/ and /b/ use both lips."
+      },
+      {
+       "id": "pb-q3",
+       "kind": "short",
+       "level": 2,
+       "marks": 2,
+       "q": "What is the difference between a vowel and a consonant sound?",
+       "model_answer_md": "A **vowel** sound is made with free passage of air through the mouth and can form a syllable by itself (/iː/, /e/). A **consonant** sound is made with partial or complete obstruction of the air stream by tongue, teeth or lips (/p/, /s/) and needs a vowel to form a syllable.",
+       "points": [
+        "Vowel: no obstruction, can form syllable",
+        "Consonant: obstruction by tongue, teeth or lips",
+        "One example of each"
+       ]
+      },
+      {
+       "id": "pb-q4",
+       "kind": "mcq",
+       "level": 3,
+       "q": "The word 'university' begins with which kind of sound?",
+       "options": [
+        "A vowel sound /uː/",
+        "A consonant sound /j/",
+        "A nasal sound",
+        "A bilabial sound"
+       ],
+       "answer_index": 1,
+       "why": "/j/ is a consonant; hence 'a university', not 'an university'."
+      },
+      {
+       "id": "pb-p1",
+       "pyq": "44f5f667dc338a57",
+       "level": 1,
+       "points": [
+        "Spelling is not a reliable guide to pronunciation (e.g. though, through, cough)",
+        "IPA gives one symbol for each sound and one sound for each symbol",
+        "Gives exact, universal record of pronunciation"
+       ]
+      },
+      {
+       "id": "pb-p2",
+       "pyq": "88deae012dc13f6a",
+       "level": 2,
+       "points": [
+        "Vowel: free passage of air, no obstruction, can form a syllable",
+        "Consonant: partial or complete obstruction by tongue, teeth, lips",
+        "Examples: vowels /iː/ /e/, consonants /p/ /t/"
+       ]
+      },
+      {
+       "id": "pb-p3",
+       "pyq": "8549d40ee8a68e74",
+       "level": 1,
+       "points": [
+        "Bilabial: made with both lips",
+        "Any two of /p/, /b/, /m/ (or /w/) with example words"
+       ]
+      }
+     ]
+    },
+    {
+     "id": "transcription",
+     "title": "Transcribing words into IPA",
+     "theory_md": "Transcribe **sounds**, not letters, and write the word in slashes. Mark **stress** with ˈ before the stressed syllable and length with ː.\n- Silent letters are dropped: *knowledge* /ˈnɒlɪdʒ/.\n- *th* is /θ/ (think) or /ð/ (this); *sh* /ʃ/; *ch* /tʃ/; *ng* /ŋ/.\n- *u* in *university* is /j/ + /uː/.\n\n**Answers**: University /ˌjuːnɪˈvɜːsəti/; culture /ˈkʌltʃə/; fight /faɪt/; English /ˈɪŋɡlɪʃ/; thought /θɔːt/. One mark each.",
+     "basics_md": "Say the word slowly, listen to each separate sound, and write one symbol for each.",
+     "key_points": [
+      "Write sounds, not spelling",
+      "Silent letters omitted",
+      "Stress mark and length mark used",
+      "Each word one mark"
+     ],
+     "questions": [
+      {
+       "id": "tr-q1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "The correct transcription of 'thought' is",
+       "options": [
+        "/θɔːt/",
+        "/ðɔːt/",
+        "/tɔːt/",
+        "/θaʊt/"
+       ],
+       "answer_index": 0,
+       "why": "Initial th is voiceless /θ/ and ough sounds /ɔː/; the final t is /t/."
+      },
+      {
+       "id": "tr-q2",
+       "kind": "short",
+       "level": 2,
+       "marks": 3,
+       "q": "Write the phonetic transcription (British RP) of: (a) think (b) church (c) knowledge.",
+       "model_answer_md": "(a) think /θɪŋk/\n(b) church /tʃɜːtʃ/\n(c) knowledge /ˈnɒlɪdʒ/",
+       "points": [
+        "think /θɪŋk/",
+        "church /tʃɜːtʃ/",
+        "knowledge /ˈnɒlɪdʒ/"
+       ]
+      },
+      {
+       "id": "tr-q3",
+       "kind": "short",
+       "level": 3,
+       "marks": 3,
+       "q": "Write the phonetic transcription of: (a) school (b) physics (c) though.",
+       "model_answer_md": "(a) school /skuːl/\n(b) physics /ˈfɪzɪks/\n(c) though /ðəʊ/",
+       "points": [
+        "school /skuːl/",
+        "physics /ˈfɪzɪks/",
+        "though /ðəʊ/"
+       ]
+      },
+      {
+       "id": "tr-p1",
+       "pyq": "d1c9bb14f964c937",
+       "level": 3,
+       "points": [
+        "University /ˌjuːnɪˈvɜːsəti/",
+        "Culture /ˈkʌltʃə/",
+        "Fight /faɪt/",
+        "English /ˈɪŋɡlɪʃ/",
+        "Thought /θɔːt/"
+       ]
+      }
+     ]
+    },
+    {
+     "id": "concord-tenses",
+     "title": "Subject-verb agreement and tenses",
+     "theory_md": "**Concord** (verb agrees with subject):\n- **Each, every, either, neither** + singular verb.\n- *One of the* + plural noun + **singular** verb: *One of my friends is a doctor.*\n- *A number of* + plural verb; *the number of* + singular verb.\n- Subjects joined by *and* take plural; *neither...nor*, *or* agree with the **nearer** subject.\n- *Along with, as well as*: verb agrees with the **first** subject.\n- Collective noun as one unit is singular: *The committee has decided.*\n- *News, mathematics, physics* are singular.\n\n**Tense errors**: no continuous with stative verbs (*I know*, not *am knowing*); no present perfect with a past time (*He went yesterday*); *since* + point of time, *for* + period; *If I go*, not *If I will go*.",
+     "basics_md": "Find the real subject first, ignore the words in between, then match the verb to it.",
+     "key_points": [
+      "Verb agrees with the real subject",
+      "Each/every/neither take singular",
+      "Nearer-subject rule for or, nor",
+      "Present perfect is not used with a finished time",
+      "Stative verbs are not continuous"
+     ],
+     "questions": [
+      {
+       "id": "ct-q1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "Choose the correct sentence.",
+       "options": [
+        "Each of the boys have a book.",
+        "Each of the boys has a book.",
+        "Each of the boy have a book.",
+        "Each of boys are having a book."
+       ],
+       "answer_index": 1,
+       "why": "Each takes a singular verb."
+      },
+      {
+       "id": "ct-q2",
+       "kind": "mcq",
+       "level": 2,
+       "q": "Choose the correct sentence.",
+       "options": [
+        "He has gone to Delhi yesterday.",
+        "He went to Delhi yesterday.",
+        "He is going to Delhi yesterday.",
+        "He goes to Delhi yesterday."
+       ],
+       "answer_index": 1,
+       "why": "A definite past time needs the simple past."
+      },
+      {
+       "id": "ct-q3",
+       "kind": "short",
+       "level": 2,
+       "marks": 3,
+       "q": "Correct the errors: (a) The news are good. (b) I am knowing him since 2015. (c) Neither the teacher nor the students was present.",
+       "model_answer_md": "(a) The news **is** good (news is singular).\n(b) I **have known** him **since** 2015 (know is stative; since with point of time).\n(c) Neither the teacher nor the students **were** present (verb agrees with the nearer subject, students).",
+       "points": [
+        "(a) news is",
+        "(b) have known him since 2015",
+        "(c) were present, nearer subject"
+       ]
+      },
+      {
+       "id": "ct-q4",
+       "kind": "short",
+       "level": 3,
+       "marks": 2,
+       "q": "Fill in with the correct verb: 'A number of students ___ absent, but the number of absentees ___ small.'",
+       "model_answer_md": "'A number of students **are** absent, but the number of absentees **is** small.' *A number of* is plural; *the number of* is singular.",
+       "points": [
+        "are",
+        "is",
+        "Reason: a number of vs the number of"
+       ]
+      }
+     ]
+    },
+    {
+     "id": "articles-prepositions-errors",
+     "title": "Articles, prepositions and common errors",
+     "theory_md": "**Articles**: *a/an* depend on the **sound**: *an hour, an MBA, a university, a European*. *The* is used for unique things (the sun), superlatives, rivers and ranges (the Ganga, the Himalayas). No article for languages, meals, or general plural nouns; *go to school/hospital* for their purpose.\n\n**Prepositions**: *at 5 o'clock, on Monday, in July*; *good at, interested in, afraid of, different from, senior to, married to*; *discuss* and *reach* take no preposition; *consists of*, not *comprises of*.\n\n**Other common errors**: *return back*, *more better*, *cope up*, *despite of*; *between you and me*; *fewer* (countable) and *less* (uncountable).",
+     "basics_md": "Most errors are repeated ones. Learn the common ones and you will spot them in any sentence.",
+     "key_points": [
+      "a/an by sound, not by letter",
+      "The for unique, superlative, rivers, ranges",
+      "Right preposition with adjective or verb",
+      "No double comparatives or redundant words",
+      "Fewer for countable, less for uncountable"
+     ],
+     "questions": [
+      {
+       "id": "ap-q1",
+       "kind": "mcq",
+       "level": 1,
+       "q": "Choose the correct article: '___ hour ago.'",
+       "options": [
+        "A",
+        "An",
+        "The",
+        "No article"
+       ],
+       "answer_index": 1,
+       "why": "Hour starts with a vowel sound (silent h): an hour."
+      },
+      {
+       "id": "ap-q2",
+       "kind": "mcq",
+       "level": 2,
+       "q": "Choose the correct sentence.",
+       "options": [
+        "We discussed about the plan.",
+        "We discussed the plan.",
+        "We discussed on the plan.",
+        "We discussed of the plan."
+       ],
+       "answer_index": 1,
+       "why": "Discuss is followed directly by its object."
+      },
+      {
+       "id": "ap-q3",
+       "kind": "short",
+       "level": 2,
+       "marks": 3,
+       "q": "Correct the sentences: (a) He is more better than me. (b) She is senior than me. (c) He returned back home.",
+       "model_answer_md": "(a) He is **better** than I (no double comparative).\n(b) She is senior **to** me (senior, junior, prefer take to).\n(c) He **returned** home (back is redundant).",
+       "points": [
+        "(a) better",
+        "(b) senior to",
+        "(c) returned, not returned back"
+       ]
+      },
+      {
+       "id": "ap-q4",
+       "kind": "short",
+       "level": 3,
+       "marks": 2,
+       "q": "Fill in the blanks: (a) He is ___ honest man. (b) ___ Ganga is ___ longest river in India.",
+       "model_answer_md": "(a) **an** honest man (silent h).\n(b) **The** Ganga is **the** longest river in India (river name and superlative).",
+       "points": [
+        "an honest",
+        "The Ganga, the longest"
+       ]
+      }
+     ]
+    }
+   ]
+  }
+ ]
+}
