@@ -142,6 +142,12 @@ create index pyq_questions_by_sitting
 
 -- ---------------------------------------------------------------------------
 -- Policies.
+--
+-- Every select is is_trusted() OR the owner. The owner clause is not
+-- redundant: RECARVE_TUTOR_ROLE picks who may teach, and if it were ever
+-- set below trusted, an owner who could write rows could not read them
+-- back -- and an upsert's ON CONFLICT DO UPDATE needs select to see the
+-- row it is updating, so their mastery would fail to save at all.
 
 alter table tutor_sessions enable row level security;
 alter table tutor_messages enable row level security;
@@ -150,7 +156,7 @@ alter table tutor_profile  enable row level security;
 alter table pyq_questions  enable row level security;
 
 create policy "trusted people read every lesson" on tutor_sessions for select
-  using (is_trusted());
+  using (is_trusted() or owner_id = auth.uid());
 create policy "you open your own lessons" on tutor_sessions for insert
   with check (is_approved() and owner_id = auth.uid());
 create policy "you change your own lessons" on tutor_sessions for update
@@ -162,7 +168,8 @@ create policy "you delete your own lessons" on tutor_sessions for delete
 -- yours. Checked through the session rather than by copying owner_id onto
 -- every message, so there is one place the answer lives.
 create policy "trusted people read every message" on tutor_messages for select
-  using (is_trusted());
+  using (is_trusted() or exists (select 1 from tutor_sessions s
+                                   where s.id = session_id and s.owner_id = auth.uid()));
 create policy "you write into your own lessons" on tutor_messages for insert
   with check (exists (select 1 from tutor_sessions s
                        where s.id = session_id and s.owner_id = auth.uid()));
@@ -171,7 +178,7 @@ create policy "you delete from your own lessons" on tutor_messages for delete
                   where s.id = session_id and s.owner_id = auth.uid()));
 
 create policy "trusted people read every mastery row" on tutor_mastery for select
-  using (is_trusted());
+  using (is_trusted() or owner_id = auth.uid());
 create policy "your own mastery" on tutor_mastery for insert
   with check (is_approved() and owner_id = auth.uid());
 create policy "your own mastery changes" on tutor_mastery for update
@@ -180,7 +187,7 @@ create policy "your own mastery goes" on tutor_mastery for delete
   using (owner_id = auth.uid());
 
 create policy "trusted people read every profile" on tutor_profile for select
-  using (is_trusted());
+  using (is_trusted() or owner_id = auth.uid());
 create policy "your own profile" on tutor_profile for insert
   with check (is_approved() and owner_id = auth.uid());
 create policy "your own profile changes" on tutor_profile for update
