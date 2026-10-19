@@ -6059,9 +6059,12 @@ function route() {
   // The tutor's own levels: '#tutor', '#tutor/CY1107', '#tutor/CY1107/s/<id>'
   // and '#tutor/CY1107/pyq'. Kept out of view.code on purpose -- render()
   // reads that as "draw the Classes subject screen".
+  // '#tutor/CY1107/p/4/1' is practice on unit 4, topic 1, by syllabus place.
   const tutorv = tab === 'tutor' ? {code: parts[1] || null,
     session: parts[2] === 's' ? parts[3] || null : null,
-    pyq: parts[2] === 'pyq'} : null;
+    pyq: parts[2] === 'pyq',
+    practice: parts[2] === 'p' && +parts[3] > 0 && +parts[4] > 0
+      ? [+parts[3], +parts[4]] : null} : null;
   const was = view;
   view = {tab, code: s ? s.code : null, title: title || null, att, compose,
           composeId, day: dayv, papers: papersv, cal: calv, me, sec, tutor: tutorv};
@@ -8514,10 +8517,12 @@ ROLE_REQUIRED = {
 TUTOR_ROLE = os.environ.get("RECARVE_TUTOR_ROLE", "admin").strip() or "admin"
 if TUTOR_ROLE not in ROLES:
     TUTOR_ROLE = "admin"
-TUTOR_READ_PATHS = ("/tutor", "/tutor/subject", "/tutor/session", "/tutor/pyq")
+TUTOR_READ_PATHS = ("/tutor", "/tutor/subject", "/tutor/session", "/tutor/pyq",
+                    "/tutor/practice")
 TUTOR_WRITE_PATHS = ("/tutor/start", "/tutor/say", "/tutor/mark", "/tutor/mastery",
                      "/tutor/settings", "/tutor/session/close",
-                     "/tutor/session/delete", "/tutor/pyq/import")
+                     "/tutor/session/delete", "/tutor/pyq/import", "/tutor/answer",
+                     "/tutor/doubt")
 ROLE_REQUIRED.update({p: "trusted" for p in TUTOR_READ_PATHS})
 ROLE_REQUIRED.update({p: TUTOR_ROLE for p in TUTOR_WRITE_PATHS})
 ROLE_REQUIRED["/tutor/pyq/import"] = "admin"

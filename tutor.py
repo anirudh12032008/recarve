@@ -11,10 +11,12 @@ tests can swap it for a canned lesson and nothing else needs to know.
 
 import ast
 import datetime
+import hashlib
 import json
 import os
 import re
 import threading
+import unicodedata
 import urllib.parse
 import uuid
 from pathlib import Path
@@ -38,14 +40,15 @@ EFFORTS = ("low", "medium", "high", "xhigh", "max")
 # in the lessons read on 2026-10-19.
 TIERS = ("standard", "advanced")
 TIER_DEFAULTS = {"standard": ("claude-sonnet-5-5", "medium"),
-                 "advanced": ("claude-opus-5-5", "medium")}
+                 "advanced": ("claude-sonnet-5-5", "medium")}
 TIER_ENV = {"standard": ("RECARVE_TUTOR_MODEL", "RECARVE_TUTOR_EFFORT"),
             "advanced": ("RECARVE_TUTOR_MODEL_ADVANCED", "RECARVE_TUTOR_EFFORT_ADVANCED")}
 DEFAULT_MODEL = TIER_DEFAULTS["standard"][0]
 MAX_TOKENS = 16000
 
-MODES = ("teach", "quiz", "pyq", "revise", "ask")
-MODE_LABEL = {"teach": "Teach", "quiz": "Quiz", "pyq": "PYQs", "revise": "Revise", "ask": "Ask"}
+MODES = ("teach", "quiz", "pyq", "revise", "ask")   # practice opens via /tutor/practice
+MODE_LABEL = {"teach": "Teach", "quiz": "Quiz", "pyq": "PYQs", "revise": "Revise", "ask": "Ask",
+              "practice": "Practice"}
 LANGS = ("english", "hinglish")
 DEPTHS = ("basics", "exam", "deep")
 IMPORTANCE = ("low", "medium", "high", "must")
@@ -110,9 +113,10 @@ def effort_level(tier="standard"):
 
 
 def tiers():
-    """What each tier runs on, for the screen to say before the spend."""
-    return {t: {"model": model_name(t), "effort": effort_level(t),
-                "price_in": notes.price_of(model_name(t))[0]} for t in TIERS}
+    """What each tier runs on, for the screen to say before the spend: the
+    practice models, which are what a student's money goes on now."""
+    return {t: {"model": practice_model(t), "effort": practice_effort(t),
+                "price_in": notes.price_of(practice_model(t))[0]} for t in TIERS}
 
 
 def may_write(me):
@@ -126,6 +130,16 @@ def may_write(me):
 
 _files = {}
 _files_lock = threading.Lock()
+
+
+def qkey(code, question_md):
+    """How a curriculum file names a past-paper question: the code and the
+    question text, normalised the way the importer does it (NFKC, case,
+    whitespace). Not the import fingerprint, which carries the archive row
+    and so differs between databases; the same question set in two sittings
+    shares a qkey, and the curriculum shows the newest."""
+    text = " ".join(unicodedata.normalize("NFKC", question_md or "").lower().split())
+    return hashlib.sha256(f"{(code or '').strip().upper()}\n{text}".encode()).hexdigest()[:16]
 
 
 def _read_json(path):
@@ -512,13 +526,13 @@ def db_bump_session(conn, session_id, cost, turn=True):
 
 def db_profile(conn, owner_id, code):
     row = conn.execute(
-        "select lang, depth, tier, notes, updated_at from tutor_profile"
+        "select lang, depth, tier, notes, updated_at, mix from tutor_profile"
         " where owner_id = %s and subject_code = %s", (owner_id, code)).fetchone()
     if not row:
         return {"code": code, "lang": "english", "depth": "exam", "tier": "standard",
-                "notes": None, "updated_at": None}
+                "mix": "questions", "notes": None, "updated_at": None}
     return {"code": code, "lang": row[0], "depth": row[1], "tier": row[2], "notes": row[3],
-            "updated_at": _iso(row[4])}
+            "updated_at": _iso(row[4]), "mix": row[5]}
 
 
 def db_profile_notes(conn, owner_id, but=None):
@@ -530,22 +544,26 @@ def db_profile_notes(conn, owner_id, but=None):
         " order by updated_at desc", (owner_id, but)).fetchall()]
 
 
-def db_set_profile(conn, owner_id, code, lang=None, depth=None, tier=None, notes_text=None):
+def db_set_profile(conn, owner_id, code, lang=None, depth=None, tier=None, notes_text=None,
+                   mix=None):
     if lang is not None and lang not in LANGS:
         raise ValueError(f"lang is one of {', '.join(LANGS)}")
     if depth is not None and depth not in DEPTHS:
         raise ValueError(f"depth is one of {', '.join(DEPTHS)}")
     if tier is not None and tier not in TIERS:
         raise ValueError(f"tier is one of {', '.join(TIERS)}")
+    if mix is not None and mix not in MIXES:
+        raise ValueError(f"mix is one of {', '.join(MIXES)}")
     conn.execute(
-        "insert into tutor_profile (owner_id, subject_code, lang, depth, tier, notes)"
+        "insert into tutor_profile (owner_id, subject_code, lang, depth, tier, notes, mix)"
         " values (%s, %s, coalesce(%s, 'english'), coalesce(%s, 'exam'),"
-        " coalesce(%s, 'standard'), %s)"
+        " coalesce(%s, 'standard'), %s, coalesce(%s, 'questions'))"
         " on conflict (owner_id, subject_code) do update set"
         " lang = coalesce(%s, tutor_profile.lang), depth = coalesce(%s, tutor_profile.depth),"
-        " tier = coalesce(%s, tutor_profile.tier),"
+        " tier = coalesce(%s, tutor_profile.tier), mix = coalesce(%s, tutor_profile.mix),"
         " notes = coalesce(%s, tutor_profile.notes), updated_at = now()",
-        (owner_id, code, lang, depth, tier, notes_text, lang, depth, tier, notes_text))
+        (owner_id, code, lang, depth, tier, notes_text, mix, lang, depth, tier, mix,
+         notes_text))
     return db_profile(conn, owner_id, code)
 
 
@@ -1356,18 +1374,19 @@ def _tutor_kind(session, action, parsed):
     return "lesson"
 
 
-def run_turn(handler, me, session, system, messages, action=None, first_line=None):
+def run_turn(handler, me, session, system, messages, action=None, first_line=None,
+             model=None, effort=None):
     """Stream one tutor turn and store it. The response is already ours from
     here on: every failure becomes an error line, never a second status."""
     tier = session.get("tier") or "standard"
-    model = session.get("model") or model_name(tier)
+    model = model or session.get("model") or model_name(tier)
     out = Stream(handler)
     out.open()
     try:
         if first_line:
             out.send(first_line)
         pieces = []
-        gen = model_stream(system, messages, model, effort_level(tier))
+        gen = model_stream(system, messages, model, effort or effort_level(tier))
         while True:
             try:
                 piece = next(gen)
@@ -1439,6 +1458,472 @@ def _readable(e):
     if name in ("APIConnectionError", "APITimeoutError"):
         return "The tutor could not reach the model. Check the connection and try again."
     return f"The tutor stopped: {name}: {e}"
+
+
+# ------------------------------------------------------------- practice
+# Question-first practice on a curriculum written ahead of time. The only
+# model calls are grading a written answer and answering a doubt; see
+# docs/specs/2026-10-19-tutor-practice.md.
+
+COURSE_DIR = HERE / "tutor" / "course"
+PRACTICE_DEFAULTS = {"standard": ("claude-haiku-5-5", "medium"),
+                     "advanced": ("claude-sonnet-5-5", "medium")}
+PRACTICE_ENV = {"standard": ("RECARVE_PRACTICE_MODEL", "RECARVE_PRACTICE_EFFORT"),
+                "advanced": ("RECARVE_PRACTICE_MODEL_ADVANCED",
+                             "RECARVE_PRACTICE_EFFORT_ADVANCED")}
+MIXES = ("questions", "mixed", "theory")
+WRITTEN = ("short", "long", "numerical")
+RIGHT_AT, PARTIAL_AT = 0.75, 0.4     # share of the marks: right, partly right
+DOUBT_HISTORY = 6                    # earlier doubt messages sent with a new one
+ANSWER_MAX = 6000
+
+
+def practice_model(tier="standard"):
+    tier = tier if tier in TIERS else "standard"
+    return os.environ.get(PRACTICE_ENV[tier][0], "").strip() or PRACTICE_DEFAULTS[tier][0]
+
+
+def practice_effort(tier="standard"):
+    tier = tier if tier in TIERS else "standard"
+    got = os.environ.get(PRACTICE_ENV[tier][1], "").strip().lower()
+    return got if got in EFFORTS else PRACTICE_DEFAULTS[tier][1]
+
+
+def course_unit(code, unit):
+    """The curriculum file for one unit, or None until its agent has written
+    it. Named by the unit's place in the syllabus, checked by its name."""
+    units, _ = syllabus(code)
+    for n, u in enumerate(units, 1):
+        if u["unit"] == unit:
+            got = _read_json(Path(COURSE_DIR) / code / f"{n}.json")
+            return got if isinstance(got, dict) and got.get("unit") == unit else None
+    return None
+
+
+def course_topic(code, unit, topic):
+    """(subtopics, source). The curriculum's when written; otherwise one
+    subtopic made from the pack's questions, so practice works on every topic
+    while the curriculum is still being written."""
+    for t in (course_unit(code, unit) or {}).get("topics") or []:
+        if isinstance(t, dict) and t.get("topic") == topic and t.get("subtopics"):
+            return [s for s in t["subtopics"] if isinstance(s, dict) and s.get("id")], "course"
+    p = pack_topic(code, unit, topic) or {}
+    qs = []
+    for n, q in enumerate(p.get("questions") or [], 1):
+        if not isinstance(q, dict) or not q.get("q"):
+            continue
+        kind = q.get("kind") if q.get("kind") in ("mcq",) + WRITTEN else "short"
+        item = {"id": f"p{n}", "kind": kind, "level": 1 if kind == "mcq" else 2, "q": q["q"]}
+        if kind == "mcq":
+            item.update(options=q.get("options"), answer_index=q.get("answer_index"),
+                        why=q.get("a"))
+        else:
+            item.update(marks=q.get("marks") or 2, model_answer_md=q.get("a"), points=[])
+        qs.append(item)
+    return [{"id": "all", "title": topic, "theory_md": p.get("gist") or "",
+             "key_points": p.get("key_points") or [], "questions": qs}], \
+        ("pack" if p else "none")
+
+
+def practice_topic(conn, code, unit, topic):
+    """The topic as the screen gets it: every subtopic with its questions
+    whole, past-paper ones filled from the bank (text, answer, figure, the
+    sittings it was set in). A qkey the bank does not have is dropped."""
+    subs, source = course_topic(code, unit, topic)
+    bank = {}
+    for r in db_pyqs(conn, code, unit):          # newest first: the first one wins
+        k = qkey(code, r["question_md"])
+        if k in bank:
+            bank[k]["sittings"].append(_sitting(r))
+            continue
+        bank[k] = dict(r, sittings=[_sitting(r)])
+    out = []
+    for s in subs:
+        qs = []
+        for q in s.get("questions") or []:
+            if not isinstance(q, dict) or not q.get("id"):
+                continue
+            if q.get("pyq"):
+                r = bank.get(q["pyq"])
+                if not r:
+                    continue
+                qs.append({"id": q["id"], "kind": "pyq", "level": q.get("level") or 2,
+                           "q": r["question_md"], "model_answer_md": r["answer_md"],
+                           "points": q.get("points") or [], "marks": r["marks"] or 2,
+                           "figure": r["figure"], "pyq_id": r["id"],
+                           "sittings": r["sittings"]})
+            else:
+                qs.append(dict(q))
+        if source == "pack":     # before the curriculum: the topic's own PYQs too
+            for k, r in bank.items():
+                if r["topic"] == topic:
+                    qs.append({"id": "y" + k[:8], "kind": "pyq", "level": 2,
+                               "q": r["question_md"], "model_answer_md": r["answer_md"],
+                               "points": [], "marks": r["marks"] or 2, "figure": r["figure"],
+                               "pyq_id": r["id"], "sittings": r["sittings"]})
+        out.append(dict(s, questions=qs))
+    return out, source
+
+
+def _sitting(r):
+    return " ".join(str(x) for x in (r["exam"], r["year"]) if x) or "past paper"
+
+
+def next_topic(code, unit, topic):
+    """The topic after this one in syllabus order, across units; None at the end."""
+    flat = [(u["unit"], t) for u in syllabus(code)[0] for t in u["topics"]]
+    try:
+        i = flat.index((unit, topic))
+    except ValueError:
+        return None
+    return {"unit": flat[i + 1][0], "topic": flat[i + 1][1]} if i + 1 < len(flat) else None
+
+
+PROGRESS_COLS = ("subtopic, status, right_count, wrong_count, streak, last_score,"
+                 " last_level, asked, notes, updated_at")
+
+
+def _progress(row):
+    return {"subtopic": row[0], "status": row[1], "right": row[2], "wrong": row[3],
+            "streak": row[4], "last_score": _num(row[5]), "last_level": row[6],
+            "asked": list(row[7] or []), "notes": list(row[8] or []),
+            "updated_at": _iso(row[9])}
+
+
+def db_progress(conn, owner_id, code, unit, topic):
+    return {r[0]: _progress(r) for r in conn.execute(
+        f"select {PROGRESS_COLS} from tutor_progress where owner_id = %s"
+        " and subject_code = %s and unit = %s and topic = %s",
+        (owner_id, code, unit, topic)).fetchall()}
+
+
+def outcome_of(score):
+    return "right" if score >= RIGHT_AT else "partial" if score >= PARTIAL_AT else "wrong"
+
+
+def step_progress(row, outcome, level):
+    """(status, right, wrong, streak) after one answer. Green: right twice in a
+    row, or right at level 2+ with nothing wrong yet. Red: wrong twice in a row.
+    A partly right answer breaks either run. Yellow is everything else tried."""
+    right, wrong, streak = row["right"], row["wrong"], row["streak"]
+    if outcome == "right":
+        right, streak = right + 1, (streak + 1 if streak > 0 else 1)
+    elif outcome == "wrong":
+        wrong, streak = wrong + 1, (streak - 1 if streak < 0 else -1)
+    else:
+        streak = 0
+    if outcome == "right" and (streak >= 2 or (wrong == 0 and (level or 1) >= 2)):
+        status = "green"
+    elif streak <= -2:
+        status = "red"
+    else:
+        status = "yellow"
+    return status, right, wrong, streak
+
+
+def topic_level(subs, progress):
+    """The topic's 0-5 meter from its subtopics, so the subject page and the
+    older lessons keep reading one number."""
+    seen = [progress[s["id"]]["status"] for s in subs if s["id"] in progress]
+    if not seen:
+        return 0
+    if "red" in seen:
+        return 2
+    greens = seen.count("green")
+    if greens == len(subs):
+        return 5
+    return 4 if greens * 2 >= len(subs) else 3
+
+
+def db_record_answer(conn, owner_id, code, unit, topic, subs, sub_id, qid, level,
+                     score, note):
+    """Fold one graded answer into the subtopic's row and the topic's mastery.
+    Returns (progress row, mastery)."""
+    prev = db_progress(conn, owner_id, code, unit, topic).get(sub_id) or {
+        "right": 0, "wrong": 0, "streak": 0, "asked": [], "notes": []}
+    status, right, wrong, streak = step_progress(prev, outcome_of(score), level)
+    asked = prev["asked"] + ([qid] if qid not in prev["asked"] else [])
+    kept = (prev["notes"] + [note.strip()[:200]])[-3:] if note and note.strip() else prev["notes"]
+    conn.execute(
+        "insert into tutor_progress (owner_id, subject_code, unit, topic, subtopic, status,"
+        " right_count, wrong_count, streak, last_score, last_level, asked, notes)"
+        " values (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)"
+        " on conflict (owner_id, subject_code, unit, topic, subtopic) do update set"
+        " status = excluded.status, right_count = excluded.right_count,"
+        " wrong_count = excluded.wrong_count, streak = excluded.streak,"
+        " last_score = excluded.last_score, last_level = excluded.last_level,"
+        " asked = excluded.asked, notes = excluded.notes, updated_at = now()",
+        (owner_id, code, unit, topic, sub_id, status, right, wrong, streak,
+         round(score, 2), level, asked, kept))
+    progress = db_progress(conn, owner_id, code, unit, topic)
+    titles = {s["id"]: s.get("title") or s["id"] for s in subs}
+    weak = [titles.get(k, k) for k, p in progress.items() if p["status"] == "red"]
+    shaky = [titles.get(k, k) for k, p in progress.items() if p["status"] == "yellow"]
+    note_line = "; ".join(x for x in (
+        ("weak on " + ", ".join(weak)) if weak else "",
+        ("shaky on " + ", ".join(shaky)) if shaky else "") if x) or "clear so far"
+    db_apply_state(conn, owner_id, code, unit, topic,
+                   {"level": topic_level(subs, progress), "note": note_line[:500]})
+    conn.execute("update tutor_mastery set attempts = attempts + 1,"
+                 " correct = correct + %s where owner_id = %s and subject_code = %s"
+                 " and unit = %s and topic = %s",
+                 (1 if outcome_of(score) == "right" else 0, owner_id, code, unit, topic))
+    return progress[sub_id], db_topic_mastery(conn, owner_id, code, unit, topic)
+
+
+def db_practice_session(conn, me, code, unit, topic, create=False):
+    """The topic's one practice session: the newest, reopened if it was
+    finished; made on the first answer or doubt when there is none."""
+    row = conn.execute(
+        "select id, status from tutor_sessions where owner_id = %s and subject_code = %s"
+        " and unit = %s and topic = %s and mode = 'practice'"
+        " order by updated_at desc limit 1", (me["id"], code, unit, topic)).fetchone()
+    if row:
+        if row[1] != "open" and create:
+            conn.execute("update tutor_sessions set status = 'open' where id = %s", (row[0],))
+        return db_session(conn, row[0], me["id"])
+    if not create:
+        return None
+    prof = db_profile(conn, me["id"], code)
+    sid = db_create_session(conn, me["id"], code, unit, topic, "practice", prof["lang"],
+                            prof["depth"], prof["tier"], f"Practice · {topic}",
+                            practice_model(prof["tier"]))
+    return db_session(conn, sid, me["id"])
+
+
+GRADER = """You mark answers by first-year B.Tech students at MANIT Bhopal the way their examiner does.
+
+Reply with one JSON object and nothing else:
+{"score": <0 to 1, the share of the marks this answer earns>,
+ "hit": ["each marking point the answer earns, a few words each"],
+ "missed": ["each marking point it misses or gets wrong, one line each, saying what the right point is"],
+ "verdict": "one or two sentences to the student, direct and kind, no praise padding",
+ "note": "one line on what this student does not know yet, or an empty string"}
+
+Credit a correct idea in other words; give nothing for a vague gesture at a point. Spelling, grammar and Hinglish do not cost marks. A numerical needs the method and the right value with units; a right method with an arithmetic slip earns most of the marks. "I don't know" or an empty answer scores 0."""
+
+
+def grade_written(question, answer, tier):
+    """(grade, usage) for one written answer, from the practice model. The
+    grade is the GRADER JSON, clamped; a reply that does not parse is a
+    zero-scored grade that says so rather than an error the student sees."""
+    import anthropic
+
+    pts = question.get("points") or []
+    prompt = (f"Question ({question.get('marks') or 2} marks):\n{question.get('q')}\n\n"
+              + ("Marking points:\n" + "\n".join(f"- {p}" for p in pts) + "\n\n" if pts else "")
+              + f"Model answer:\n{question.get('model_answer_md') or '(none written)'}\n\n"
+              + f"The student's answer:\n{answer}")
+    model = practice_model(tier)
+    r = anthropic.Anthropic().messages.create(
+        model=model, max_tokens=4000, system=GRADER,
+        messages=[{"role": "user", "content": prompt}],
+        output_config={"effort": practice_effort(tier)})
+    text = "".join(b.text for b in r.content if getattr(b, "type", "") == "text")
+    got = loose_json(text[text.find("{"):text.rfind("}") + 1]) if "{" in text else None
+    u = r.usage
+    usage = {"input_tokens": u.input_tokens or 0, "output_tokens": u.output_tokens or 0,
+             "cache_read_tokens": getattr(u, "cache_read_input_tokens", None) or 0,
+             "cache_write_tokens": getattr(u, "cache_creation_input_tokens", None) or 0,
+             "stop_reason": r.stop_reason, "model": getattr(r, "model", None) or model}
+    if not isinstance(got, dict):
+        return {"score": 0.0, "hit": [], "missed": [], "note": "",
+                "verdict": "I could not mark that one. Compare it with the model answer below."}, usage
+    try:
+        score = max(0.0, min(1.0, float(got.get("score") or 0)))
+    except (TypeError, ValueError):
+        score = 0.0
+    strs = lambda v: [str(x)[:300] for x in v if str(x).strip()] if isinstance(v, list) else []
+    return {"score": score, "hit": strs(got.get("hit"))[:12], "missed": strs(got.get("missed"))[:12],
+            "verdict": str(got.get("verdict") or "")[:600],
+            "note": str(got.get("note") or "")[:200]}, usage
+
+
+DOUBT_BRIEF = """You are the tutor inside recarve, answering a doubt from a first-year B.Tech student at MANIT Bhopal in the middle of practice. They have just been asked a question on the subtopic below; the notes are what the course teaches.
+
+- Answer what they asked, at the depth their exam asks. Usually under 120 words: steps or bullets where they help, one worked example only when it is what they need.
+- If they ask to go over it again, re-teach the subtopic from the notes in smaller steps, starting from the idea underneath.
+- Do not repeat the model answer unless they ask for it. Do not set them a new question; the screen does that.
+- Maths in $...$ or $$...$$, chemistry as $\\mathrm{H_2SO_4}$. No <check>, <pyq> or <state> tags.
+- Plain and exact. If the notes do not cover it and you are not sure, say so."""
+
+
+def doubt_context(session, sub, question, progress_notes):
+    out = [f"Subject: {subject_name(session['code'])}. Unit: {session['unit']}. "
+           f"Topic: {session['topic']}.",
+           f"Reply in {LANG_RULES.get(session['lang'], 'English.')}"]
+    if sub:
+        out.append(f"## Subtopic: {sub.get('title')}\n{sub.get('theory_md') or ''}")
+        if sub.get("key_points"):
+            out.append("Key points:\n" + "\n".join(f"- {k}" for k in sub["key_points"]))
+    if question:
+        out.append(f"## The question on their screen\n{question.get('q')}"
+                   + (f"\n\nModel answer:\n{question['model_answer_md']}"
+                      if question.get("model_answer_md") else ""))
+    if progress_notes:
+        out.append("What this student has got wrong in this topic: " + "; ".join(progress_notes))
+    return "\n\n".join(out)
+
+
+def _find(subs, sub_id, qid=None):
+    sub = next((s for s in subs if s["id"] == sub_id), None)
+    if sub_id and not sub:
+        raise ValueError(f"no subtopic {sub_id!r} in this topic")
+    q = next((x for x in (sub or {}).get("questions") or [] if x["id"] == qid), None)
+    if qid and not q:
+        raise ValueError(f"no question {qid!r} in that subtopic")
+    return sub, q
+
+
+def get_practice(h, me, write, q):
+    code = _code(q.get("code"))
+    unit, topic = place(code, _text(q, "unit"), _text(q, "topic"))
+    if not topic:
+        raise ValueError("name the topic")
+    with notes.db(me["id"]) as conn:
+        learner = db_learner(conn, me, write, q.get("who"))
+        subs, source = practice_topic(conn, code, unit, topic)
+        prof = db_profile(conn, learner["id"], code)
+        session = None
+        row = conn.execute(
+            "select id from tutor_sessions where owner_id = %s and subject_code = %s"
+            " and unit = %s and topic = %s and mode = 'practice'"
+            " order by updated_at desc limit 1", (learner["id"], code, unit, topic)).fetchone()
+        doubts = []
+        if row:
+            session = db_session(conn, row[0], me["id"])
+            doubts = [m for m in db_messages(conn, row[0]) if m["kind"] in ("say", "lesson")]
+        return {"owner": write and learner["id"] == me["id"], "learner": learner,
+                "code": code, "name": subject_name(code), "unit": unit, "topic": topic,
+                "source": source, "subtopics": subs,
+                "progress": db_progress(conn, learner["id"], code, unit, topic),
+                "mastery": db_topic_mastery(conn, learner["id"], code, unit, topic),
+                "mix": prof.get("mix") or "questions", "tier": prof["tier"],
+                "lang": prof["lang"], "model": practice_model(prof["tier"]),
+                "session": session, "doubts": doubts[-40:],
+                "next": next_topic(code, unit, topic),
+                "spend": db_spend(conn, learner["id"])}
+
+
+def post_answer(h, me, body):
+    """One answer to one practice question. MCQs and "I don't know" are marked
+    here for nothing; a written answer goes to the grader."""
+    code = _code(body.get("code"))
+    unit, topic = place(code, _text(body, "unit"), _text(body, "topic"))
+    if not topic:
+        raise ValueError("name the topic")
+    idk = body.get("idk") is True
+    reveal = body.get("reveal") is True
+    text = body.get("answer")
+    if text is not None and not isinstance(text, str):
+        raise ValueError("answer must be text")
+    text = (text or "").strip()
+    if len(text) > ANSWER_MAX:
+        raise ValueError(f"keep it under {ANSWER_MAX} characters")
+    with notes.db(me["id"]) as conn:
+        subs, _ = practice_topic(conn, code, unit, topic)
+        sub, question = _find(subs, _text(body, "subtopic", 80), _text(body, "qid", 80))
+        if not question:
+            raise ValueError("name the question")
+        prof = db_profile(conn, me["id"], code)
+        if reveal:
+            # Show solution: the stored answer and nothing else. No model call,
+            # no grade; the question counts as seen so it is not asked again.
+            conn.execute(
+                "insert into tutor_progress (owner_id, subject_code, unit, topic, subtopic,"
+                " asked) values (%s, %s, %s, %s, %s, %s) on conflict (owner_id, subject_code,"
+                " unit, topic, subtopic) do update set asked = case when %s::text = any("
+                "tutor_progress.asked) then tutor_progress.asked else"
+                " array_append(tutor_progress.asked, %s::text) end, updated_at = now()",
+                (me["id"], code, unit, topic, sub["id"], [question["id"]], question["id"],
+                 question["id"]))
+            return {"grade": None,
+                    "progress": db_progress(conn, me["id"], code, unit, topic)[sub["id"]],
+                    "mastery": db_topic_mastery(conn, me["id"], code, unit, topic),
+                    "cost_usd": 0.0, "session": None, "spend": db_spend(conn, me["id"])}
+    usage, cost = None, 0.0
+    if idk:
+        grade = {"score": 0.0, "hit": [], "missed": [], "verdict": "", "note": ""}
+        said = "I don't know."
+    elif question.get("kind") == "mcq":
+        picked = body.get("picked")
+        if isinstance(picked, bool) or not isinstance(picked, int):
+            raise ValueError("picked is the option's index")
+        ok = picked == question.get("answer_index")
+        grade = {"score": 1.0 if ok else 0.0, "hit": [], "missed": [], "verdict": "",
+                 "note": "", "picked": picked}
+        opts = question.get("options") or []
+        said = f"Picked {chr(65 + picked)}: {opts[picked] if 0 <= picked < len(opts) else '?'}"
+    else:
+        if not text:
+            raise ValueError("write an answer, or press I don't know")
+        grade, usage = grade_written(question, text, prof["tier"])
+        cost = cost_of(usage["model"], usage)
+        said = text
+    grade["outcome"] = outcome_of(grade["score"])
+    with notes.db(me["id"]) as conn:
+        with conn.transaction():
+            session = db_practice_session(conn, me, code, unit, topic, create=True)
+            db_add_message(conn, session["id"], "student", "answer", said,
+                           {"subtopic": sub["id"], "qid": question["id"]})
+            db_add_message(conn, session["id"], "tutor", "grade",
+                           grade.get("verdict") or grade["outcome"],
+                           {"subtopic": sub["id"], "qid": question["id"], "grade": grade},
+                           usage, cost)
+            db_bump_session(conn, session["id"], cost)
+            progress, mastery = db_record_answer(
+                conn, me["id"], code, unit, topic, subs, sub["id"], question["id"],
+                question.get("level") or 2, grade["score"], grade.get("note"))
+        return {"grade": grade, "progress": progress, "mastery": mastery,
+                "cost_usd": cost, "session": db_session(conn, session["id"], me["id"]),
+                "spend": db_spend(conn, me["id"])}
+
+
+def post_doubt(h, me, body):
+    """A doubt during practice, streamed like a lesson turn, on the practice
+    model with only this subtopic's notes for context."""
+    code = _code(body.get("code"))
+    unit, topic = place(code, _text(body, "unit"), _text(body, "topic"))
+    if not topic:
+        raise ValueError("name the topic")
+    text = body.get("body")
+    if not isinstance(text, str) or not text.strip():
+        raise ValueError("say something")
+    text = text.strip()
+    if len(text) > SAY_MAX:
+        raise ValueError(f"keep it under {SAY_MAX} characters")
+    with notes.db(me["id"]) as conn:
+        subs, _ = practice_topic(conn, code, unit, topic)
+        sub, question = _find(subs, _text(body, "subtopic", 80), _text(body, "qid", 80))
+        with conn.transaction():
+            session = db_practice_session(conn, me, code, unit, topic, create=True)
+        _claim(session["id"])
+        try:
+            db_add_message(conn, session["id"], "student", "say", text,
+                           {"subtopic": sub["id"] if sub else None,
+                            "qid": question["id"] if question else None})
+            history = [m for m in db_messages(conn, session["id"])
+                       if m["kind"] in ("say", "lesson")][-(DOUBT_HISTORY + 1):]
+            notes_ = [n for p in db_progress(conn, me["id"], code, unit, topic).values()
+                      for n in p["notes"]]
+        except BaseException:
+            _release(session["id"])
+            raise
+    system = [{"type": "text", "text": DOUBT_BRIEF},
+              {"type": "text", "text": doubt_context(session, sub, question, notes_)}]
+    messages = []
+    for m in history:
+        role = "assistant" if m["role"] == "tutor" else "user"
+        if messages and messages[-1]["role"] == role:
+            messages[-1]["content"] += "\n\n" + m["body"]
+        elif messages or role == "user":
+            messages.append({"role": role, "content": m["body"]})
+    tier = session.get("tier") or "standard"
+    try:
+        run_turn(h, me, session, system, messages,
+                 model=practice_model(tier), effort=practice_effort(tier))
+    finally:
+        _release(session["id"])
 
 
 # --------------------------------------------------------------- routes
@@ -1645,7 +2130,8 @@ def post_settings(h, me, body):
     code = _code(body.get("code"))
     with notes.db(me["id"]) as conn:
         return {"profile": db_set_profile(conn, me["id"], code, body.get("lang") or None,
-                                          body.get("depth") or None, body.get("tier") or None)}
+                                          body.get("depth") or None, body.get("tier") or None,
+                                          mix=body.get("mix") or None)}
 
 
 def post_close(h, me, body):
@@ -1677,11 +2163,12 @@ def post_import(h, me, body):
 
 
 GETS = {"/tutor": get_home, "/tutor/subject": get_subject,
-        "/tutor/session": get_session, "/tutor/pyq": get_pyq}
+        "/tutor/session": get_session, "/tutor/pyq": get_pyq, "/tutor/practice": get_practice}
 POSTS = {"/tutor/start": post_start, "/tutor/say": post_say, "/tutor/mark": post_mark,
          "/tutor/mastery": post_mastery, "/tutor/settings": post_settings,
          "/tutor/session/close": post_close, "/tutor/session/delete": post_delete,
-         "/tutor/pyq/import": post_import}
+         "/tutor/pyq/import": post_import, "/tutor/answer": post_answer,
+         "/tutor/doubt": post_doubt}
 
 
 def handle(handler, args):

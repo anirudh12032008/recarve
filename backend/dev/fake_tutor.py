@@ -26,7 +26,7 @@ MCQ = ('<check id="c%d" kind="mcq">\n{"q": "Which statement is part of the cell 
 SHORT = ('<check id="c%d" kind="short">\n{"q": "In two lines, state the three postulates of the cell theory.", "marks": 2}\n</check>\n')
 
 def turn(system, messages):
-    hing = "Hinglish" in system[3]["text"]
+    hing = any("Hinglish" in b["text"] for b in system)
     used = [int(m) for s in messages if s["role"] == "assistant"
             for m in re.findall(r'<check id="c(\d+)"', s["content"])]
     n = max(used or [0]) + 1

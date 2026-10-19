@@ -500,7 +500,7 @@ def test_teach_again_reopens_the_open_lesson_under_todays_settings(server, model
     again = lines[0]["session"]
     assert lines[0]["resumed"] and again["id"] == first["id"]
     assert (again["tier"], again["lang"], again["model"]) == ("advanced", "hinglish",
-                                                              "claude-opus-5-5")
+                                                              "claude-sonnet-5-5")
     assert len(model.calls) == 1
     assert start(server, fresh=False, mode="quiz")[0]["session"]["id"] != first["id"], \
         "quiz is its own lesson"
@@ -597,7 +597,7 @@ def test_the_overview(server, model):
     status, home = get(server, "Asha", "/tutor")
     assert status == 200
     assert home["owner"] is True and home["model"] == "claude-sonnet-5-5"
-    assert home["tiers"]["advanced"]["model"] == "claude-opus-5-5"
+    assert home["tiers"]["advanced"]["model"] == "claude-sonnet-5-5"
     assert home["tiers"]["advanced"]["effort"] == "medium"
     assert home["tiers"]["standard"]["price_in"] < home["tiers"]["advanced"]["price_in"]
     assert home["role_needed"] == notes.TUTOR_ROLE
@@ -679,14 +679,14 @@ def test_the_advanced_tier_is_the_best_model_with_the_whole_unit_in_view(server,
 
     lines = start(server)
     session = lines[0]["session"]
-    assert session["tier"] == "advanced" and session["model"] == "claude-opus-5-5"
+    assert session["tier"] == "advanced" and session["model"] == "claude-sonnet-5-5"
     asked = model.calls[-1]
-    assert asked["model"] == "claude-opus-5-5" and asked["effort"] == "medium"
+    assert asked["model"] == "claude-sonnet-5-5" and asked["effort"] == "medium"
     system = asked["system"]
     assert "Tier: advanced" in system[3]["text"] and "diagnostic" in system[3]["text"]
     assert "LEARNS-BY-DRAWING" in system[3]["text"], "how they learn elsewhere comes along"
     assert server.pyq in system[2]["text"]
-    assert lines[-1]["message"]["cost_usd"] == pytest.approx(0.0298), "priced at Opus"
+    assert lines[-1]["message"]["cost_usd"] == pytest.approx(0.0149), "priced at Sonnet"
 
     lines = start(server, tier="standard")
     assert lines[0]["session"]["tier"] == "standard", "a lesson may pick its own tier"
@@ -802,3 +802,125 @@ def test_model_stream_asks_for_fallbacks_and_falls_back_without_them(monkeypatch
     text, usage = drain(tutor.model_stream(system, messages, "claude-opus-5-5", "high"))
     assert [a[0] for a in asked[:2]] == ["beta", "plain"] and text == ["Hel", "lo"]
     assert "fallbacks" not in asked[1][1] and asked[1][1]["output_config"] == {"effort": "high"}
+
+
+# ------------------------------------------------------------- practice
+
+
+def test_a_subtopic_goes_green_on_evidence_and_red_on_two_misses():
+    fresh = {"right": 0, "wrong": 0, "streak": 0}
+    step = tutor.step_progress
+    assert step(fresh, "right", 2)[0] == "green", "right first time at exam level"
+    assert step(fresh, "right", 1)[0] == "yellow", "a recall question alone is not enough"
+    s, r, w, k = step(fresh, "wrong", 2)
+    assert (s, w, k) == ("yellow", 1, -1)
+    assert step({"right": r, "wrong": w, "streak": k}, "wrong", 2)[0] == "red"
+    s, r, w, k = step({"right": 0, "wrong": 1, "streak": -1}, "right", 2)
+    assert s == "yellow", "right after a miss needs a second one"
+    assert step({"right": r, "wrong": w, "streak": k}, "right", 1)[0] == "green"
+    assert step({"right": 1, "wrong": 0, "streak": 1}, "partial", 2)[3] == 0
+    subs = [{"id": "a"}, {"id": "b"}]
+    assert tutor.topic_level(subs, {}) == 0
+    assert tutor.topic_level(subs, {"a": {"status": "green"}, "b": {"status": "green"}}) == 5
+    assert tutor.topic_level(subs, {"a": {"status": "green"}}) == 4
+    assert tutor.topic_level(subs, {"a": {"status": "yellow"}}) == 3
+    assert tutor.topic_level(subs, {"a": {"status": "green"}, "b": {"status": "red"}}) == 2
+
+
+@pytest.fixture
+def course(server, tmp_path, monkeypatch):
+    k = tutor.qkey("BS1111", "State the postulates of cell theory.")
+    (tmp_path / "BS1111").mkdir()
+    (tmp_path / "BS1111" / "1.json").write_text(json.dumps({
+        "code": "BS1111", "unit": "Cell Biology", "topics": [{"topic": "Cell theory", "subtopics": [
+            {"id": "postulates", "title": "The postulates", "theory_md": "THEORY-MARKER three postulates",
+             "key_points": ["all life is cells"], "questions": [
+                {"id": "q1", "kind": "mcq", "level": 1, "q": "Who?", "options": ["A", "B", "C", "D"],
+                 "answer_index": 2, "why": "Virchow"},
+                {"id": "q2", "kind": "short", "level": 2, "marks": 2, "q": "State them.",
+                 "model_answer_md": "1. 2. 3.", "points": ["cells", "unit", "from cells"]},
+                {"id": "q3", "pyq": k, "level": 2, "points": ["three postulates"]},
+                {"id": "q4", "pyq": "0000000000000000", "level": 2, "points": ["gone"]}]},
+            {"id": "history", "title": "Who said what", "theory_md": "Hooke, Schleiden, Schwann",
+             "key_points": ["dates"], "questions": [
+                {"id": "q5", "kind": "mcq", "level": 1, "q": "1665?", "options": ["Hooke", "B", "C", "D"],
+                 "answer_index": 0, "why": "Hooke"}]}]}]}))
+    monkeypatch.setattr(tutor, "COURSE_DIR", tmp_path)
+    return k
+
+
+def practice(server, who="Asha", topic="Cell theory"):
+    return get(server, who, f"/tutor/practice?code=BS1111&topic={urllib.parse.quote(topic)}")
+
+
+def answer(server, who="Asha", **payload):
+    return post(server, who, "/tutor/answer",
+                {"code": "BS1111", "topic": "Cell theory", **payload})
+
+
+def test_practice_asks_first_and_marks_without_the_model_where_it_can(server, model, course,
+                                                                     monkeypatch):
+    status, d = practice(server)
+    assert status == 200 and d["source"] == "course" and d["owner"] is True
+    assert d["mix"] == "questions" and d["model"] == "claude-haiku-5-5"
+    post_ = {s["id"]: s for s in d["subtopics"]}["postulates"]
+    assert [q["id"] for q in post_["questions"]] == ["q1", "q2", "q3"], "an unknown qkey is dropped"
+    pyq = post_["questions"][2]
+    assert pyq["kind"] == "pyq" and pyq["model_answer_md"] == "Three postulates ..."
+    assert pyq["sittings"] == ["end 2024"] and pyq["pyq_id"] == server.pyq
+    assert d["next"] == {"unit": "Cell Biology", "topic": "Cell organelles: structure and function"}
+
+    status, got = answer(server, subtopic="postulates", qid="q1", picked=0)
+    assert status == 200 and got["grade"]["outcome"] == "wrong" and got["cost_usd"] == 0
+    assert got["progress"]["status"] == "yellow" and got["progress"]["asked"] == ["q1"]
+    assert model.calls == [], "an MCQ is marked here"
+
+    graded = []
+    monkeypatch.setattr(tutor, "grade_written", lambda q, a, tier: (graded.append((q["id"], a, tier)) or (
+        {"score": 0.9, "hit": ["cells"], "missed": ["from cells"], "verdict": "Nearly.",
+         "note": "forgets Virchow"},
+        {"input_tokens": 900, "output_tokens": 200, "model": "claude-haiku-5-5"})))
+    status, got = answer(server, subtopic="postulates", qid="q2", answer="All living things are cells.")
+    assert status == 200 and got["grade"]["outcome"] == "right" and got["cost_usd"] > 0
+    assert graded == [("q2", "All living things are cells.", "standard")]
+    assert got["progress"]["status"] == "yellow", "right after a miss is not yet clear"
+    status, got = answer(server, subtopic="postulates", qid="q3", answer="Three postulates.")
+    assert got["progress"]["status"] == "green" and got["progress"]["notes"] == ["forgets Virchow"] * 2
+    assert got["mastery"]["level"] == 4 and "clear so far" in got["mastery"]["note"]
+
+    status, got = answer(server, subtopic="history", qid="q5", reveal=True)
+    assert status == 200 and got["grade"] is None and got["cost_usd"] == 0
+    assert got["progress"]["asked"] == ["q5"] and got["progress"]["right"] == 0
+
+    status, err = answer(server, subtopic="postulates", qid="q2", answer="  ")
+    assert status == 400
+    status, err = answer(server, subtopic="nope", qid="q2", answer="x")
+    assert status == 400
+    assert answer(server, who="Chan", subtopic="postulates", qid="q1", picked=2)[0] == 403
+
+    status, d = practice(server)
+    assert d["session"]["mode"] == "practice" and d["session"]["title"] == "Practice · Cell theory"
+    assert d["progress"]["postulates"]["status"] == "green" and d["doubts"] == []
+
+    lines = stream(server, "Asha", "/tutor/doubt", {"code": "BS1111", "topic": "Cell theory",
+                                                    "subtopic": "postulates", "qid": "q2",
+                                                    "body": "Why does Virchow matter?"})
+    assert lines[-1]["t"] == "done"
+    asked = model.calls[-1]
+    assert asked["model"] == "claude-haiku-5-5" and asked["effort"] == "medium"
+    assert "THEORY-MARKER" in asked["system"][1]["text"] and "forgets Virchow" in asked["system"][1]["text"]
+    assert asked["messages"] == [{"role": "user", "content": "Why does Virchow matter?"}]
+    status, d = practice(server)
+    assert [m["role"] for m in d["doubts"]] == ["student", "tutor"]
+    sessions = get(server, "Asha", "/tutor/subject?code=BS1111")[1]["sessions"]
+    assert sum(1 for s in sessions if s["mode"] == "practice" and s["topic"] == "Cell theory") == 1
+
+
+def test_practice_runs_on_the_pack_before_the_curriculum_is_written(server, model, tmp_path,
+                                                                   monkeypatch):
+    monkeypatch.setattr(tutor, "COURSE_DIR", tmp_path)
+    status, d = practice(server)
+    assert status == 200 and d["source"] == "pack"
+    (sub,) = d["subtopics"]
+    assert sub["theory_md"].startswith("Cells come from cells")
+    assert any(q["kind"] == "pyq" and q["pyq_id"] == server.pyq for q in sub["questions"])

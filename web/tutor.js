@@ -10,6 +10,7 @@
 //   #tutor/CY1107              a subject: the syllabus as a tree
 //   #tutor/CY1107/s/<uuid>     a lesson: the conversation, streamed
 //   #tutor/CY1107/pyq          the past-paper bank for that subject
+//   #tutor/CY1107/p/4/1        practice on unit 4, topic 1 (syllabus places)
 //
 // render() wipes #nav on every refresh, so nothing on these screens is held
 // in the DOM. What the server said lives in TU_GOT by URL; the reply being
@@ -31,7 +32,8 @@ const tuScrolled = new Set(); // lessons already scrolled to their last line onc
 let tuSpend = null;           // the latest spend any answer carried
 let tuFollow = false;         // just sent something: the next draw goes to the end
 
-const TU_MODE = {teach: 'Teach', quiz: 'Quiz', pyq: 'PYQs', revise: 'Revise', ask: 'Ask'};
+const TU_MODE = {teach: 'Teach', quiz: 'Quiz', pyq: 'PYQs', revise: 'Revise', ask: 'Ask',
+                 practice: 'Practice'};
 const TU_EXAM = {mini: 'Mini test', mid: 'Mid term', end: 'End term'};
 const TU_IMP = {must: 'Must know', high: 'High', medium: 'Medium', low: 'Low'};
 const TU_ACTIONS = [
@@ -287,7 +289,7 @@ function tuPref(code) {
   let kept = {};
   try { kept = JSON.parse(localStorage.getItem('tutor:prefs:' + code) || '{}') || {}; } catch (e) {}
   return {lang: prof.lang || kept.lang || 'english', depth: prof.depth || kept.depth || 'exam',
-          tier: prof.tier || kept.tier || 'standard'};
+          tier: prof.tier || kept.tier || 'standard', mix: prof.mix || kept.mix || 'questions'};
 }
 
 async function tuSetPref(code, field, value) {
@@ -299,7 +301,7 @@ async function tuSetPref(code, field, value) {
     const d = await tuJSON('/tutor/settings', {code, [field]: value});
     const p = d.profile || {};
     tuPrefs[code] = {lang: p.lang || tuPrefs[code].lang, depth: p.depth || tuPrefs[code].depth,
-                     tier: p.tier || tuPrefs[code].tier};
+                     tier: p.tier || tuPrefs[code].tier, mix: p.mix || tuPrefs[code].mix};
   } catch (e) {
     tuPrefs[code] = was;
     oops('Not saved', e);
@@ -315,12 +317,12 @@ function tuTierNote(tier) {
   const other = (home.tiers || {})[tier === 'advanced' ? 'standard' : 'advanced'] || {};
   const times = t.price_in && other.price_in ? Math.round(t.price_in / other.price_in) : 0;
   if (tier === 'advanced') {
-    return 'The best model, with the whole unit\u2019s past papers and how you '
-      + 'learn in every subject in front of it' + (t.model ? ' (' + t.model + ')' : '')
+    return 'A stronger model marks your written answers and takes your doubts'
+      + (t.model ? ' (' + t.model + ')' : '')
       + (times > 1 ? ', about ' + times + '\u00d7 the spend.' : '.');
   }
-  return 'The everyday teacher' + (t.model ? ' (' + t.model + ')' : '')
-    + '. Switch to Advanced for a hard unit or the week before the exam.';
+  return 'A fast, cheap model marks your written answers and takes your doubts'
+    + (t.model ? ' (' + t.model + ')' : '') + '. MCQs and Show solution cost nothing.';
 }
 
 function tuSeg(label, options, value, pick) {
@@ -349,6 +351,10 @@ function tutorTitle() {
     return s ? s.topic || s.title || 'Lesson' : 'Lesson';
   }
   if (t.pyq) return 'Past-paper questions';
+  if (t.practice) {
+    const at = tuPlace(t.code, t.practice[0], t.practice[1]);
+    return at ? at.topic : 'Practice';
+  }
   if (t.code) {
     const d = TU_GOT[tuU.subj(t.code)];
     return (d && d.name) || (subjectOf(t.code) || {}).name || t.code;
@@ -358,7 +364,7 @@ function tutorTitle() {
 
 function tutorUp() {
   const t = view.tutor || {};
-  return t.session || t.pyq
+  return t.session || t.pyq || t.practice
     ? ['‹ ' + t.code, 'Back to ' + t.code + ' in the tutor']
     : ['‹ Tutor', 'Back to the tutor'];
 }
@@ -381,6 +387,7 @@ function renderTutor() {
       + 'An admin makes you a trusted member: ask in your class group.');
   }
   if (t.session) tuLesson(root, t.code, t.session);
+  else if (t.practice) tuPractice(root, t.code, t.practice[0], t.practice[1]);
   else if (t.pyq) tuBank(root, t.code);
   else if (t.code) tuSubject(root, t.code);
   else tuHome(root);
@@ -448,9 +455,8 @@ function tuPlanRow(p, owner) {
   const t = tuTopicView(p.code, p.unit, p.topic);
   b.appendChild(tuMeter(tuTopicLevel(p.code, p.unit, p.topic, t && t.level)));
   if (owner) b.appendChild(tuEl('span', 'tu-go', TU_MODE[p.suggested_mode] || 'Teach'));
-  b.onclick = owner
-    ? () => tuStart({code: p.code, unit: p.unit, topic: p.topic,
-                     mode: p.suggested_mode || 'teach'})
+  b.onclick = owner && p.topic
+    ? () => tuOpenTopic(p.code, p.unit, p.topic) || go('tutor', p.code)
     : () => go('tutor', p.code);
   return b;
 }
@@ -486,8 +492,15 @@ function tuSessionRow(x, withCode) {
   if (x.status === 'open') m.appendChild(tuEl('span', 'tu-open', 'Open'));
   m.appendChild(agoSpan(tuSecs(x.updated_at || x.created_at)));
   b.appendChild(m);
-  b.onclick = () => go('tutor', x.code, 's', x.id);
+  b.onclick = () => tuOpenLesson(x);
   return b;
+}
+
+// A practice session opens on its topic's practice screen; an older lesson
+// opens as the conversation it was.
+function tuOpenLesson(x) {
+  if (x.mode === 'practice' && tuOpenTopic(x.code, x.unit, x.topic)) return;
+  go('tutor', x.code, 's', x.id);
 }
 
 // ---- One subject --------------------------------------------------------
@@ -524,6 +537,7 @@ function tuSubject(root, code) {
       pref.depth, v => tuSetPref(code, 'depth', v)));
     prefs.appendChild(tuSeg('Tutor', [['standard', 'Standard'], ['advanced', 'Advanced']],
       pref.tier, v => tuSetPref(code, 'tier', v)));
+    prefs.appendChild(tuSeg('Lesson', TU_MIX, pref.mix, v => tuSetPref(code, 'mix', v)));
     prefs.appendChild(tuEl('p', 'tu-tiernote', tuTierNote(pref.tier)));
     root.appendChild(prefs);
   }
@@ -536,7 +550,7 @@ function tuSubject(root, code) {
     c.appendChild(tuEl('b', null, open.title || open.topic || 'Your last lesson'));
     const last = tuPlain(open.last_line);
     if (last) c.appendChild(tuEl('small', null, last));
-    c.onclick = () => go('tutor', code, 's', open.id);
+    c.onclick = () => tuOpenLesson(open);
     root.appendChild(c);
   }
 
@@ -615,12 +629,9 @@ function tuTopicRow(code, unit, t, owner) {
 
   const acts = tuEl('div', 'tu-acts');
   if (owner) {
-    const teach = tuEl('button', 'w tu-btn primary', 'Teach');
-    teach.onclick = () => tuStart({code, unit, topic: t.topic, mode: 'teach'});
-    const quiz = tuEl('button', 'w tu-btn', 'Quiz');
-    quiz.onclick = () => tuStart({code, unit, topic: t.topic, mode: 'quiz'});
-    acts.append(teach, quiz);
-    if (tuStreamOn) { teach.disabled = true; quiz.disabled = true; }
+    const teach = tuEl('button', 'w tu-btn primary', t.sessions ? 'Continue' : 'Teach');
+    teach.onclick = () => tuOpenTopic(code, unit, t.topic);
+    acts.append(teach);
   }
   if (t.pyq_count) {
     const pyq = tuEl('button', 'tu-btn', 'PYQs ' + t.pyq_count);
@@ -1093,8 +1104,9 @@ function tuPyqCard(p, ctx, inBank) {
   if (inBank && ctx.owner) {
     const t = tuEl('button', 'w tu-btn primary', 'Teach me this');
     t.disabled = !!tuStreamOn;
-    t.onclick = () => tuStart({code: p.code || ctx.code, unit: p.unit || null,
-                               topic: p.topic || null, mode: 'pyq', pyq_id: p.id});
+    t.onclick = () => (p.topic && tuOpenTopic(p.code || ctx.code, p.unit, p.topic))
+      || tuStart({code: p.code || ctx.code, unit: p.unit || null,
+                  topic: p.topic || null, mode: 'pyq', pyq_id: p.id});
     foot.appendChild(t);
   }
   if (foot.childElementCount) c.appendChild(foot);
@@ -1360,4 +1372,535 @@ function tuBank(root, code) {
   const ctx = {owner, code, sid: null, pyqs: {}};
   shown.forEach(p => list.appendChild(tuPyqCard(p, ctx, true)));
   root.appendChild(list);
+}
+
+// ---- Practice: one topic, question first --------------------------------
+// docs/specs/2026-10-19-tutor-practice.md. The content is written ahead of
+// time; this screen asks, marks MCQs itself, sends written answers to
+// /tutor/answer to be graded, and takes doubts on /tutor/doubt. What happened
+// on this visit lives in TU_PX (render() wipes the DOM); what the student has
+// done over every visit is the server's `progress`.
+
+const TU_PX = {};
+const TU_MIX = [['theory', 'Theory first'], ['mixed', 'Key points first'],
+                ['questions', 'Questions first']];
+const TU_STATUS = {green: 'Clear', yellow: 'Some gaps', red: 'Needs work'};
+const tuPxUrl = (code, unit, topic) => '/tutor/practice?code=' + encodeURIComponent(code)
+  + '&unit=' + encodeURIComponent(unit) + '&topic=' + encodeURIComponent(topic);
+
+function tuUnitsOf(code) {
+  const sv = TU_GOT[tuU.subj(code)];
+  if (sv && sv.units) return sv.units;
+  const h = TU_GOT[tuU.home()];
+  const v = h && (h.subjects || []).find(x => x.code === code);
+  return (v && v.units) || null;
+}
+
+function tuPlace(code, u, t) {
+  const unit = (tuUnitsOf(code) || [])[u - 1];
+  const topic = unit && (unit.topics || [])[t - 1];
+  return topic ? {unit: unit.unit, topic: topic.topic} : null;
+}
+
+// Opens a topic's practice; false when the syllabus is not loaded to place it.
+function tuOpenTopic(code, unit, topic) {
+  const units = tuUnitsOf(code) || [];
+  const ui = units.findIndex(x => !unit || x.unit === unit);
+  for (let i = Math.max(ui, 0); i < units.length; i++) {
+    const ti = (units[i].topics || []).findIndex(x => x.topic === topic);
+    if (ti >= 0) { go('tutor', code, 'p', i + 1, ti + 1); return true; }
+    if (unit) break;
+  }
+  return false;
+}
+
+function tuPx(code, unit, topic) {
+  const k = tuKey(code, unit, topic);
+  return TU_PX[k] || (TU_PX[k] = {feed: [], seen: new Set(), basics: false, busy: false,
+                                  again: false, visit: {}, lastSub: null, scroll: false,
+                                  timer: null, stay: false, doubt: ''});
+}
+
+// The subtopic is finished for now: nothing left to ask, or the evidence
+// says it is clear (green, or two tries with nothing badly wrong).
+function tuSubDone(d, P, s) {
+  const asked = new Set([...(P.again ? [] : ((d.progress[s.id] || {}).asked || [])), ...P.seen]);
+  if (!(s.questions || []).some(q => !asked.has(q.id))) return true;
+  if (P.again) return ((P.visit[s.id] || {}).right || 0) >= 1;
+  const p = d.progress[s.id];
+  if (!p || !(p.right + p.wrong)) return false;
+  return p.status === 'green' || (p.status === 'yellow' && p.right + p.wrong >= 2);
+}
+
+function tuNextQ(d, P) {
+  const subs = d.subtopics || [];
+  const from = P.focus ? Math.max(0, subs.findIndex(s => s.id === P.focus)) : 0;
+  for (const s of [...subs.slice(from), ...subs.slice(0, from)]) {
+    if (s.id !== P.focus && tuSubDone(d, P, s)) continue;
+    const p = d.progress[s.id] || {};
+    const asked = new Set([...(P.again ? [] : (p.asked || [])), ...P.seen]);
+    // Fast by default: the exam-level question first. Back to basics after a
+    // miss at recall level, two struggling subtopics, or in a red one.
+    const order = P.basics || p.status === 'red' ? [1, 2, 3] : [2, 3, 1];
+    const left = (s.questions || []).filter(q => !asked.has(q.id)).sort((a, b) =>
+      order.indexOf(a.level || 2) - order.indexOf(b.level || 2)
+      || (b.kind === 'pyq') - (a.kind === 'pyq'));
+    if (left.length) return {s, q: left[0]};
+  }
+  return null;
+}
+
+function tuPxAdvance(d, P) {
+  const nx = tuNextQ(d, P);
+  P.focus = null;
+  if (!nx) {
+    P.feed.push({k: 'done'});
+    P.scroll = true;
+    return;
+  }
+  if (P.lastSub !== nx.s.id) {
+    P.lastSub = nx.s.id;
+    const mix = tuPref(d.code).mix;
+    if (mix !== 'questions') P.feed.push({k: 'intro', s: nx.s, mix});
+  }
+  P.seen.add(nx.q.id);
+  P.feed.push({k: 'q', s: nx.s, q: nx.q, st: 'open', text: ''});
+  P.scroll = true;
+}
+
+async function tuPxSend(d, P, c, payload) {
+  if (P.busy) return;
+  P.busy = true;
+  c.st = 'sending';
+  tuRender();
+  try {
+    const r = await tuJSON('/tutor/answer', Object.assign({code: d.code, unit: d.unit,
+      topic: d.topic, subtopic: c.s.id, qid: c.q.id}, payload));
+    d.progress[c.s.id] = r.progress;
+    tuMastery(r.mastery);
+    if (r.spend) tuSpend = r.spend;
+    c.grade = r.grade;
+    c.st = payload.reveal ? 'revealed' : 'graded';
+    if (payload.picked !== undefined) c.picked = payload.picked;
+    const out = r.grade && r.grade.outcome;
+    const v = P.visit[c.s.id] || (P.visit[c.s.id] = {right: 0, wrong: 0});
+    if (out === 'right') v.right++;
+    if (out === 'wrong') {
+      v.wrong++;
+      const reds = Object.values(d.progress).filter(p => p.status === 'red').length;
+      if ((c.q.level || 2) === 1 || reds >= 2) P.basics = true;
+      P.feed.push({k: 'teach', s: c.s, q: c.q, idk: !!payload.idk});
+    }
+    if (out === 'right') tuPxAdvance(d, P);       // no click: the next card comes
+    P.scroll = true;
+    tuStale(tuU.subj(d.code));
+    tuStale(tuU.home());
+  } catch (e) {
+    c.st = 'open';
+    oops('That was not marked', e);
+  }
+  P.busy = false;
+  tuRender();
+}
+
+// A doubt, streamed into the feed. Painted in place as it arrives; the full
+// render (with the maths typeset) comes at the end.
+async function tuPxDoubt(d, P, body) {
+  const at = [...P.feed].reverse().find(c => c.k === 'q');
+  P.feed.push({k: 'said', body});
+  const live = {k: 'reply', body: '', live: true};
+  P.feed.push(live);
+  P.busy = true;
+  P.scroll = true;
+  tuRender();
+  try {
+    const r = await fetch('/tutor/doubt', {method: 'POST',
+      headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify({code: d.code, unit: d.unit, topic: d.topic,
+                            subtopic: at ? at.s.id : null, qid: at ? at.q.id : null, body})});
+    if (!r.ok) {
+      const e = await r.json().catch(() => ({}));
+      throw new Error(e.error || 'the server said ' + r.status);
+    }
+    const reader = r.body.getReader(), dec = new TextDecoder();
+    let buf = '';
+    const take = ln => {
+      if (!ln.trim()) return;
+      let ev;
+      try { ev = JSON.parse(ln); } catch (e) { return; }
+      if (ev.t === 'delta') {
+        live.body += ev.text || '';
+        const el = document.getElementById('tu-px-live');
+        if (el) el.innerHTML = tuSafe(live.body);
+      } else if (ev.t === 'error') live.error = ev.error;
+      else if (ev.t === 'done' && ev.spend) tuSpend = ev.spend;
+    };
+    for (;;) {
+      const {value, done} = await reader.read();
+      if (done) break;
+      buf += dec.decode(value, {stream: true});
+      let nl;
+      while ((nl = buf.indexOf('\n')) >= 0) { take(buf.slice(0, nl)); buf = buf.slice(nl + 1); }
+    }
+    take(buf + dec.decode());
+  } catch (e) {
+    live.error = tuWhy(e);
+  }
+  live.live = false;
+  P.busy = false;
+  tuRender();
+}
+
+// ---- Drawing it
+
+let tuSmilesP = null;
+function tuMolecule(f) {
+  const fig = tuEl('figure', 'tu-mol');
+  const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+  svg.setAttribute('role', 'img');
+  svg.setAttribute('aria-label', f.caption || f.smiles);
+  fig.appendChild(svg);
+  if (f.caption) fig.appendChild(tuInline(f.caption));
+  tuSmilesP = tuSmilesP || new Promise((ok, no) => {
+    const el = document.createElement('script');
+    el.src = 'https://cdn.jsdelivr.net/npm/smiles-drawer@2.1.7/dist/smiles-drawer.min.js';
+    el.onload = () => ok(window.SmilesDrawer);
+    el.onerror = no;
+    document.head.appendChild(el);
+  });
+  const dark = document.documentElement.dataset.theme === 'dark'
+    || (!document.documentElement.dataset.theme && matchMedia('(prefers-color-scheme: dark)').matches);
+  tuSmilesP.then(SD => {
+    const sd = new SD.SmiDrawer({width: 300, height: 180, bondThickness: 1.2},
+                                {weights: {normalize: true}});
+    sd.draw(f.smiles, svg, dark ? 'dark' : 'light');
+  }).catch(() => svg.replaceWith(tuEl('code', null, f.smiles)));
+  return fig;
+}
+
+function tuFigures(s) {
+  const figs = (s.figures || []).filter(f => f && f.smiles);
+  if (!figs.length) return null;
+  const row = tuEl('div', 'tu-mols');
+  figs.forEach(f => row.appendChild(tuMolecule(f)));
+  return row;
+}
+
+function tuList(items, cls, mark) {
+  const ul = tuEl('ul', 'tu-list ' + (cls || ''));
+  for (const x of items || []) {
+    const li = tuEl('li');
+    if (mark) li.appendChild(tuEl('span', 'tu-mark', mark));
+    li.appendChild(tuInline(x));
+    ul.appendChild(li);
+  }
+  return ul;
+}
+
+function tuModel(q, open) {
+  const det = tuEl('details', 'tu-ans');
+  det.open = !!open;
+  det.appendChild(tuEl('summary', null, 'Model answer'));
+  if (q.kind === 'mcq') {
+    const ans = (q.options || [])[q.answer_index];
+    det.appendChild(tuMd('**' + TU_LETTER[q.answer_index] + '.** ' + (ans || '')
+                         + (q.why ? '\n\n' + q.why : '')));
+  } else det.appendChild(q.model_answer_md ? tuMd(q.model_answer_md)
+                         : tuEl('p', 'tu-note', 'No model answer written for this one yet.'));
+  return det;
+}
+
+function tuQHead(c) {
+  const q = c.q;
+  const head = tuEl('p', 'tu-k');
+  head.appendChild(tuEl('span', null, q.kind === 'pyq'
+    ? 'Past paper · ' + (q.sittings || []).slice(0, 3).join(', ')
+      + ((q.sittings || []).length > 3 ? ' +' + (q.sittings.length - 3) : '')
+    : c.s.title));
+  if (q.marks && q.kind !== 'mcq') head.appendChild(tuEl('span', 'tu-marks',
+    '[' + (+q.marks) + ' mark' + (+q.marks === 1 ? '' : 's') + ']'));
+  return head;
+}
+
+function tuPxQ(d, P, c, owner) {
+  const q = c.q;
+  const card = tuEl('div', 'tu-card');
+  card.appendChild(tuQHead(c));
+  card.appendChild(tuMd(q.q || ''));
+  if (q.figure) {
+    const img = tuEl('img', 'tu-fig');
+    img.src = q.figure;
+    img.alt = 'The figure printed with this question';
+    img.loading = 'lazy';
+    card.appendChild(img);
+  }
+  const g = c.grade;
+  if (q.kind === 'mcq') {
+    const list = tuEl('div', 'tu-opts');
+    (q.options || []).forEach((o, i) => {
+      const b = tuEl('button', 'tu-opt');
+      b.appendChild(tuEl('span', 'tu-letter', TU_LETTER[i]));
+      b.appendChild(tuInline(o));
+      if (c.st !== 'open') {
+        b.disabled = true;
+        if (i === q.answer_index && (c.st !== 'sending')) b.classList.add('right');
+        else if (i === c.picked) b.classList.add('wrong');
+      } else if (owner) b.onclick = () => { c.picked = i; tuPxSend(d, P, c, {picked: i}); };
+      list.appendChild(b);
+    });
+    card.appendChild(list);
+  } else if (c.st === 'open' || c.st === 'sending') {
+    if (owner) {
+      const ta = tuEl('textarea', 'tu-px-ta');
+      ta.rows = q.kind === 'long' ? 6 : 3;
+      ta.maxLength = 6000;
+      ta.placeholder = 'Write it the way you would in the exam';
+      ta.setAttribute('aria-label', 'Your answer');
+      ta.value = c.text || '';
+      ta.disabled = c.st === 'sending';
+      ta.oninput = () => { c.text = ta.value; };
+      card.appendChild(ta);
+    }
+  } else if (c.text && c.st === 'graded') {
+    card.appendChild(tuEl('p', 'said tu-mine', c.text));
+  }
+  if (c.st === 'open' && owner) {
+    const row = tuEl('div', 'tu-acts');
+    if (q.kind !== 'mcq') {
+      const check = tuEl('button', 'w tu-btn primary', 'Check my answer');
+      check.onclick = () => {
+        if (!(c.text || '').trim()) return void card.querySelector('textarea').focus();
+        tuPxSend(d, P, c, {answer: c.text});
+      };
+      row.appendChild(check);
+    }
+    const idk = tuEl('button', 'w tu-btn', 'I don’t know');
+    idk.onclick = () => tuPxSend(d, P, c, {idk: true});
+    const sol = tuEl('button', 'w tu-btn', 'Show solution');
+    sol.onclick = () => tuPxSend(d, P, c, {reveal: true});
+    row.append(idk, sol);
+    if (P.busy) row.querySelectorAll('button').forEach(b => { b.disabled = true; });
+    card.appendChild(row);
+  }
+  if (c.st === 'sending') card.appendChild(tuEl('p', 'tu-note',
+    q.kind === 'mcq' || c.picked !== undefined ? 'Marking…' : 'Marking your answer…'));
+  if (c.st === 'revealed') card.appendChild(tuModel(q, true));
+  if (g && c.st === 'graded') {
+    const out = g.outcome;
+    const word = out === 'right' ? 'Right.' : out === 'partial' ? 'Partly right.' : 'Not quite.';
+    if (!(q.kind === 'mcq' && out === 'wrong')) {
+      card.appendChild(tuEl('p', 'tu-verdict ' + (out === 'right' ? 'right' : out === 'wrong' ? 'wrong' : 'part'),
+        (g.verdict && q.kind !== 'mcq' ? g.verdict : word)
+        + (q.kind !== 'mcq' && g.score != null ? ' (' + Math.round(g.score * (+q.marks || 1) * 2) / 2
+           + '/' + (+q.marks || 1) + ')' : '')));
+    } else card.appendChild(tuEl('p', 'tu-verdict wrong', 'Not quite. It is '
+      + TU_LETTER[q.answer_index] + '.'));
+    if (q.kind === 'mcq' && q.why && out === 'right') card.appendChild(tuMd(q.why, 'md tu-md tu-why'));
+    if ((g.missed || []).length && out !== 'wrong') {
+      card.appendChild(tuEl('p', 'tu-k', 'You missed'));
+      card.appendChild(tuList(g.missed, 'miss', '✕'));
+    }
+    if (out !== 'wrong') {
+      if (out === 'right' && (c.s.key_points || []).length) {
+        card.appendChild(tuEl('p', 'tu-k', 'Remember'));
+        card.appendChild(tuList(c.s.key_points, 'keep', '•'));
+      }
+      if (q.kind !== 'mcq') card.appendChild(tuModel(q, out === 'partial'));
+    }
+  }
+  return card;
+}
+
+function tuPxTeach(d, P, c) {
+  const card = tuEl('div', 'tu-card teach');
+  card.appendChild(tuEl('p', 'tu-k', (c.idk ? 'Here is how it works' : 'Let’s fix this')
+                                     + ' · ' + c.s.title));
+  if (P.basics && c.s.basics_md) {
+    card.appendChild(tuMd(c.s.basics_md));
+    card.appendChild(tuEl('hr', 'tu-hr'));
+  }
+  if (c.s.theory_md) card.appendChild(tuMd(c.s.theory_md));
+  const figs = tuFigures(c.s);
+  if (figs) card.appendChild(figs);
+  card.appendChild(tuModel(c.q, true));
+  card.appendChild(tuEl('p', 'tu-note', 'Anything unclear? Ask below, or carry on.'));
+  return card;
+}
+
+function tuPxIntro(c) {
+  const card = tuEl('div', 'tu-card intro');
+  card.appendChild(tuEl('p', 'tu-k', c.s.title));
+  if (c.mix === 'theory' && c.s.theory_md) card.appendChild(tuMd(c.s.theory_md));
+  if ((c.s.key_points || []).length) card.appendChild(tuList(c.s.key_points, 'keep', '•'));
+  const figs = c.mix === 'theory' && tuFigures(c.s);
+  if (figs) card.appendChild(figs);
+  return card;
+}
+
+function tuPxDone(d, P) {
+  const card = tuEl('div', 'tu-card done');
+  const subs = d.subtopics || [];
+  const counts = {green: 0, yellow: 0, red: 0};
+  subs.forEach(s => { const p = d.progress[s.id]; if (p && counts[p.status] != null) counts[p.status]++; });
+  card.appendChild(tuEl('p', 'tu-k', 'Topic done'));
+  card.appendChild(tuEl('p', 'tu-lead-line', counts.red
+    ? 'Done, with ' + counts.red + ' part' + (counts.red === 1 ? '' : 's') + ' to come back to. '
+      + 'The tutor remembers which, and brings them up next time.'
+    : counts.yellow ? 'Done. A couple of small gaps, noted for revision.'
+    : 'All clear. Every part of this topic, including what the papers ask.'));
+  const row = tuEl('div', 'tu-acts');
+  if (d.next && d.owner) {
+    const nx = tuEl('button', 'w tu-btn primary', 'Next: ' + d.next.topic);
+    nx.onclick = () => { P.stay = true; tuOpenTopic(d.code, d.next.unit, d.next.topic); };
+    row.appendChild(nx);
+    if (!P.stay && !P.timer) {
+      P.timer = setTimeout(() => {
+        P.timer = null;
+        const t = view.tutor || {};
+        const at = t.practice && tuPlace(t.code, t.practice[0], t.practice[1]);
+        if (!P.stay && at && at.topic === d.topic) tuOpenTopic(d.code, d.next.unit, d.next.topic);
+      }, 8000);
+      row.appendChild(tuEl('span', 'tu-note', 'Moving on in a few seconds…'));
+    }
+  }
+  const again = tuEl('button', 'w tu-btn', 'Practise this again');
+  again.onclick = () => {
+    P.stay = true;
+    clearTimeout(P.timer);
+    P.timer = null;
+    Object.assign(P, {again: true, seen: new Set(), visit: {}, lastSub: null,
+                      feed: P.feed.filter(x => x.k !== 'done')});
+    tuPxAdvance(d, P);
+    tuRender();
+  };
+  if (d.owner) row.appendChild(again);
+  if (!P.stay && P.timer) {
+    const stay = tuEl('button', 'w tu-btn', 'Stay here');
+    stay.onclick = () => { P.stay = true; clearTimeout(P.timer); P.timer = null; tuRender(); };
+    row.appendChild(stay);
+  }
+  card.appendChild(row);
+  return card;
+}
+
+function tuPxSide(d, P) {
+  const side = tuEl('nav', 'tu-side');
+  side.setAttribute('aria-label', 'Parts of this topic');
+  const subs = d.subtopics || [];
+  const cur = [...P.feed].reverse().find(c => c.k === 'q');
+  let done = 0;
+  for (const s of subs) {
+    const p = d.progress[s.id];
+    if (p && (p.right + p.wrong) && tuSubDone(Object.assign({}, d), Object.assign({}, P, {again: false}), s)) done++;
+    const b = tuEl('button', cur && cur.s.id === s.id ? 'on' : '');
+    const dot = tuEl('i', 'tu-dot' + (p && (p.right + p.wrong) ? ' ' + p.status : ''));
+    dot.title = p && (p.right + p.wrong) ? TU_STATUS[p.status] : 'Not started';
+    b.appendChild(dot);
+    b.appendChild(tuInline(s.title));
+    if (p && (p.right + p.wrong)) b.appendChild(tuEl('small', null, p.right + '/' + (p.right + p.wrong)));
+    if (d.owner) b.onclick = () => {
+      if (P.busy) return;
+      P.feed = P.feed.filter(c => !(c.k === 'q' && c.st === 'open'));
+      P.focus = s.id;
+      P.lastSub = null;
+      tuPxAdvance(d, P);
+      tuRender();
+    };
+    side.appendChild(b);
+  }
+  side.prepend(tuEl('p', 'tu-k', done + ' of ' + subs.length + ' done'));
+  return side;
+}
+
+function tuPractice(root, code, u, t) {
+  const sv = tuNeed(tuU.subj(code));
+  if (sv === undefined) return void root.appendChild(waitline('Opening the topic…'));
+  if (sv.error) return void tuFailed(root, sv, 'This subject did not open.');
+  const at = tuPlace(code, u, t);
+  if (!at) return void tuBlank(root, 'No such topic.', 'The syllabus has moved; go back and pick it again.');
+  const d = tuNeed(tuPxUrl(code, at.unit, at.topic));
+  if (d === undefined) return void root.appendChild(waitline('Opening the topic…'));
+  if (d.error) return void tuFailed(root, d, 'This topic did not open.');
+  const P = tuPx(code, at.unit, at.topic);
+  if (!P.feed.length) tuPxAdvance(d, P);
+
+  const head = tuEl('div', 'tu-px-head');
+  head.appendChild(tuEl('p', 'tu-k', at.unit));
+  const meta = [];
+  if (d.source === 'pack') meta.push('From the teaching pack; the full course for this topic is being written');
+  if (d.mastery && d.mastery.note && d.mastery.note !== 'clear so far') meta.push(d.mastery.note);
+  if (meta.length) head.appendChild(tuEl('p', 'tu-note', meta.join(' · ')));
+  if (d.owner) {
+    const prefs = tuEl('div', 'tu-prefs w');
+    prefs.appendChild(tuSeg('Lesson', TU_MIX, tuPref(code).mix, v => tuSetPref(code, 'mix', v)));
+    head.appendChild(prefs);
+  }
+  root.appendChild(head);
+
+  const grid = tuEl('div', 'tu-px');
+  grid.appendChild(tuPxSide(d, P));
+  const feed = tuEl('div', 'tu-feed');
+  if ((d.doubts || []).length) {
+    const old = tuEl('details', 'tu-ans tu-old');
+    old.appendChild(tuEl('summary', null, 'Earlier doubts in this topic (' + Math.ceil(d.doubts.length / 2) + ')'));
+    for (const m of d.doubts) old.appendChild(m.role === 'student'
+      ? tuEl('p', 'said tu-mine', m.body) : tuMd(m.body));
+    feed.appendChild(old);
+  }
+  for (const c of P.feed) {
+    if (c.k === 'q') feed.appendChild(tuPxQ(d, P, c, d.owner));
+    else if (c.k === 'teach') feed.appendChild(tuPxTeach(d, P, c));
+    else if (c.k === 'intro') feed.appendChild(tuPxIntro(c));
+    else if (c.k === 'done') feed.appendChild(tuPxDone(d, P));
+    else if (c.k === 'said') feed.appendChild(tuEl('p', 'said tu-mine tu-doubt', c.body));
+    else if (c.k === 'reply') {
+      const r = c.live ? tuEl('div', 'md tu-md tu-reply') : tuMd(c.body || '', 'md tu-md tu-reply');
+      if (c.live) { r.id = 'tu-px-live'; r.innerHTML = tuSafe(c.body) || '<p class="tu-note">Thinking…</p>'; }
+      feed.appendChild(r);
+      if (c.error) feed.appendChild(tuEl('p', 'tu-note bad', c.error));
+    }
+  }
+  const last = P.feed[P.feed.length - 1];
+  if (d.owner && last && !(last.k === 'q' && last.st !== 'graded' && last.st !== 'revealed')
+      && last.k !== 'done' && !P.busy) {
+    const row = tuEl('div', 'tu-acts tu-cont');
+    const cont = tuEl('button', 'w tu-btn primary', 'Continue');
+    cont.onclick = () => { tuPxAdvance(d, P); tuRender(); };
+    row.appendChild(cont);
+    feed.appendChild(row);
+  }
+  if (d.owner) {
+    const box = tuEl('div', 'tu-compose tu-px-ask w');
+    const ta = tuEl('textarea');
+    ta.rows = 1;
+    ta.maxLength = 4000;
+    ta.placeholder = P.busy ? 'Working…' : 'A doubt? Ask here, or say "explain this again"';
+    ta.setAttribute('aria-label', 'Ask a doubt');
+    ta.value = P.doubt;
+    ta.oninput = () => { P.doubt = ta.value; };
+    const send = tuEl('button', 'tu-send', 'Ask');
+    const fire = () => {
+      const body = ta.value.trim();
+      if (!body || P.busy) return;
+      P.doubt = '';
+      tuPxDoubt(d, P, body);
+    };
+    ta.onkeydown = e => {
+      if (e.key === 'Enter' && !e.shiftKey && !e.isComposing) { e.preventDefault(); fire(); }
+    };
+    send.disabled = P.busy;
+    send.onclick = fire;
+    box.append(ta, send);
+    feed.appendChild(box);
+  }
+  grid.appendChild(feed);
+  root.appendChild(grid);
+  if (P.scroll) {
+    P.scroll = false;
+    requestAnimationFrame(() => {
+      const cards = root.querySelectorAll('.tu-feed > .tu-card, .tu-feed > .tu-reply');
+      const el = cards[cards.length - 1];
+      if (el) el.scrollIntoView({block: 'start', behavior: 'smooth'});
+    });
+  }
 }
