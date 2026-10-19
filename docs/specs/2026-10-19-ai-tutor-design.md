@@ -224,7 +224,7 @@ Importance for a topic: if any PYQs are mapped to the topic, derive it from coun
 
 ## 6. The screen (`#tutor`)
 
-A fifth top-level tab, "Tutor", with its own icon, drawer row, bottom-bar button, and a tour step. Routes:
+A fifth top-level tab, "Tutor", with its own icon, a bottom-bar button, and a tour step. In the drawer it is a row inside Classes, after Past papers, not a fifth section: the page tests count the drawer's sections (four for a student, five for an admin) and a tab that is part of studying belongs under Classes anyway. Routes:
 
 - `#tutor` — Home: "Next up" (the plan, tap to start), subject cards (progress ring, importance source, spend), recent sessions.
 - `#tutor/CY1107` — Subject: the syllabus as a tree; each topic row shows a mastery dot (0–5), an importance chip (must/high/medium/low, with its source on hover/tap), PYQ count; actions Teach / Quiz / PYQs; "Continue" on the last open session; lang + depth segmented controls (saved via `/tutor/settings`).
