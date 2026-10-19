@@ -268,3 +268,26 @@ need one. All of it is live.
   with a pack; MC1101 and the others without packs rely on the bank alone.
 - The PDFs stay on the server as the archive and as the link on each card;
   the bank no longer needs them to be read.
+
+## Practice replaces the free-form lesson (2026-10-19, live)
+
+Anirudh's feedback after a real lesson: too much theory, PYQ answers shown
+before he could try, a click after every answer, no view of what is left, and
+about $1 a topic. The spec is `docs/specs/2026-10-19-tutor-practice.md`.
+
+- Teach opens `#tutor/<CODE>/p/<unit n>/<topic n>`: one practice session per
+  topic, question first, MCQs marked in the browser, written answers graded
+  by `POST /tutor/answer`, doubts on `POST /tutor/doubt`, Show solution free.
+- The course is static: `tutor/course/<CODE>/<unit n>.json`, 49 units, 891
+  subtopics, 5149 questions, 2141 of them past papers referenced by qkey
+  (all resolve against the live bank). Written by in-session Sonnet agents,
+  one per unit; `backend/dev/check_course.py` must pass on any edit.
+- Progress per subtopic is `tutor_progress` (migration 0058, applied live
+  after a pg_dump to `~/backups/db-2026-10-19-pre0058.sql.gz`).
+- Models: practice Standard `claude-haiku-5-5`, Advanced `claude-sonnet-5-5`;
+  the older lessons' Advanced also moved off Opus to Sonnet.
+- Rollback: `~/app/{notes.py,tutor.py,web/tutor.js,web/tutor.css}.pre-0057479`
+  and restart; the new table and column can stay.
+- Agents flagged facts they could not check and a few bank answers that look
+  wrong (a cone-section ellipse, transformer data in kW). Their marking points
+  say which reading they took. Worth a human pass per subject over time.
