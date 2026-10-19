@@ -1,0 +1,108 @@
+{
+ "items": [
+  {
+   "code": "CY1110",
+   "path": "library/archive/CY1110/2025-2026 Papers/Mid Term 2025-26 Sem 1 ALL.pdf",
+   "exam": "mid",
+   "year": 2025,
+   "section": null,
+   "qno": "A1",
+   "marks": 1,
+   "unit": "Water Pollution",
+   "topic": "Classification and effects of water pollutants",
+   "question_md": "Assertion (A): Heavy metal pollution from mining can enter the food chain through bioaccumulation.\n\nReason (R): Metals like mercury, cadmium, and arsenic cannot be metabolized or excreted efficiently by organisms.\n\n(a) Both A and R are true, and R is the correct explanation of A\n(b) Both A and R are true, but R is not the correct explanation of A\n(c) A is true, R is false\n(d) A is false, R is true",
+   "answer_md": "**(a)** Both A and R are true, and R is the correct explanation of A. Mercury, cadmium and arsenic are not broken down or excreted quickly, so they accumulate in tissue (bioaccumulation) and are passed up the food chain, increasing in concentration at each trophic level (biomagnification)."
+  },
+  {
+   "code": "CY1110",
+   "path": "library/archive/CY1110/2025-2026 Papers/Mid Term 2025-26 Sem 1 ALL.pdf",
+   "exam": "mid",
+   "year": 2025,
+   "section": null,
+   "qno": "A2",
+   "marks": 2,
+   "unit": "Water Pollution",
+   "topic": "Classification and effects of water pollutants",
+   "question_md": "Is eutrophication healthy or unhealthy for lakes? Lake A receives untreated sewage, while Lake B receives only agricultural runoffs rich in nutrients. Which lake is more likely to experience faster eutrophication, and why? [Max 35-40 words]",
+   "answer_md": "Eutrophication is **unhealthy**: nutrient enrichment causes algal blooms, which die and decay, depleting dissolved oxygen and killing fish. **Lake A** eutrophicates faster because untreated sewage carries nitrogen and phosphorus plus a heavy organic load, so decay also consumes oxygen directly (high BOD)."
+  },
+  {
+   "code": "CY1110",
+   "path": "library/archive/CY1110/2025-2026 Papers/Mid Term 2025-26 Sem 1 ALL.pdf",
+   "exam": "mid",
+   "year": 2025,
+   "section": null,
+   "qno": "A3",
+   "marks": 3,
+   "unit": "Air Pollution",
+   "topic": "Sources and effects of air pollutants",
+   "question_md": "Write balanced chemical reactions for the formation of inorganic particulate matter (PMs) by mentioning the processes (heat or combustion) involved therein.\n(i) Coal Containing Pyrite\n(ii) Coal Containing Limestone\n(iii) Automobiles Containing Leaded Gasoline",
+   "answer_md": "**(i) Coal containing pyrite (combustion):** pyrite is oxidised to iron(III) oxide, which leaves as fly ash, and $SO_2$ gas.\n$$4FeS_2 + 11O_2 \\xrightarrow{\\text{combustion}} 2Fe_2O_3 + 8SO_2$$\n\n**(ii) Coal containing limestone (heat):** limestone is calcined; the lime formed is carried out as fine particulate (and can also capture $SO_2$ as sulphite/sulphate particles).\n$$CaCO_3 \\xrightarrow{\\text{heat}} CaO + CO_2$$\n$$CaO + SO_2 \\rightarrow CaSO_3,\\quad 2CaSO_3 + O_2 \\rightarrow 2CaSO_4$$\n\n**(iii) Automobiles with leaded gasoline (combustion):** the antiknock additive tetraethyl lead burns to lead oxide; with the scavenger ethylene dibromide it forms volatile $PbBr_2$ that condenses into fine lead-halide particles in the exhaust.\n$$2Pb(C_2H_5)_4 + 27O_2 \\rightarrow 2PbO + 16CO_2 + 20H_2O$$\n$$PbO + C_2H_4Br_2 \\rightarrow PbBr_2 + \\text{(organic products)}$$"
+  },
+  {
+   "code": "CY1110",
+   "path": "library/archive/CY1110/2025-2026 Papers/Mid Term 2025-26 Sem 1 ALL.pdf",
+   "exam": "mid",
+   "year": 2025,
+   "section": null,
+   "qno": "B1",
+   "marks": 1,
+   "unit": "Air Pollution",
+   "topic": "Sources and effects of air pollutants",
+   "question_md": "How does deforestation contribute to global warming? [Max 25-30 words]",
+   "answer_md": "Trees absorb $CO_2$ by photosynthesis. Cutting and burning or decaying them removes this sink and releases stored carbon as $CO_2$, raising the greenhouse effect and so global warming."
+  },
+  {
+   "code": "CY1110",
+   "path": "library/archive/CY1110/2025-2026 Papers/Mid Term 2025-26 Sem 1 ALL.pdf",
+   "exam": "mid",
+   "year": 2025,
+   "section": null,
+   "qno": "B2",
+   "marks": 2,
+   "unit": "Air Pollution",
+   "topic": "Control of gaseous and particulate pollutants",
+   "question_md": "For soot/dust/aerosol control, which scrubber is preferable between dry and wet scrubbers and why? Give one real-world example of each used in air pollution control. [Max 35-40 words]",
+   "answer_md": "A **wet scrubber** is preferable for soot, dust and aerosols: water droplets capture fine particles and also absorb soluble gases (e.g. $SO_2$), and sticky or explosive dust is handled safely. Its drawback is sludge and wastewater. Example: venturi scrubber on steel-plant/thermal-plant flue gas. A **dry scrubber** injects dry lime or sorbent and gives dry waste with no water; example: lime-injection / spray-dryer absorber in coal power plants."
+  },
+  {
+   "code": "CY1110",
+   "path": "library/archive/CY1110/2025-2026 Papers/Mid Term 2025-26 Sem 1 ALL.pdf",
+   "exam": "mid",
+   "year": 2025,
+   "section": null,
+   "qno": "B3",
+   "marks": 3,
+   "unit": "Air Pollution",
+   "topic": "Spheres of the atmosphere",
+   "question_md": "Identify the atmospheric layer that is referred to by two names and mention them. Why does the temperature increase sharply with altitude in the thermosphere layer? [Max 45-50 words]",
+   "answer_md": "The **thermosphere** is also called the **ionosphere** (it contains the ionised layers, and extends from about 80 km upward). Temperature rises sharply with altitude because the very thin gas there (mainly $O_2$ and $N_2$) absorbs highly energetic solar X-rays and extreme UV (wavelengths below about 200 nm), which ionises and dissociates molecules and gives the few particles very high kinetic energy, up to 1500 degrees C or more."
+  },
+  {
+   "code": "CY1110",
+   "path": "library/archive/CY1110/2025-2026 Papers/Mid Term 2025-26 Sem 1 ALL.pdf",
+   "exam": "mid",
+   "year": 2025,
+   "section": null,
+   "qno": "C1",
+   "marks": 3,
+   "unit": "Air Pollution",
+   "topic": "Photochemical smog",
+   "question_md": "How the concentration (in ppm) of NO, $NO_2$, and $O_2$ gas changes with time (0:00 to 24:00 hr). Also, explain this by sketching a diagram. [Max 45-50 words]",
+   "answer_md": "This is the diurnal pattern of photochemical smog. (Ozone is the secondary product, so the third curve is normally $O_3$; the paper prints $O_2$, which stays essentially constant.)\n\n**Diagram (concentration in ppm vs time, 0 to 24 h):** NO peaks sharply in the morning rush hour (about 6-9 h) and falls to near zero by midday; $NO_2$ rises as NO is oxidised, peaks a little after NO (about 8-10 h), dips at noon and shows a smaller evening peak; $O_3$ stays low at night, rises after sunrise, peaks in the early afternoon (about 12-15 h) and falls after sunset.\n\n**Explanation:**\n$$NO_2 \\xrightarrow{h\\nu} NO + O,\\qquad O + O_2 \\rightarrow O_3,\\qquad NO + O_3 \\rightarrow NO_2 + O_2$$\nTraffic emits NO in the morning; sunlight photolyses $NO_2$ and drives ozone formation (with hydrocarbons giving PAN and aldehydes) to a midday maximum; at night, with no sunlight, ozone is consumed by NO and the cycle resets. Atmospheric $O_2$ stays about constant (about 210000 ppm)."
+  },
+  {
+   "code": "CY1110",
+   "path": "library/archive/CY1110/2025-2026 Papers/Mid Term 2025-26 Sem 1 ALL.pdf",
+   "exam": "mid",
+   "year": 2025,
+   "section": null,
+   "qno": "C2",
+   "marks": 5,
+   "unit": "Natural Resources",
+   "topic": "Energy resources",
+   "question_md": "What is the tactic behind the Fractional Distillation Approach? Draw an evident layout and explain why it is used in petroleum refining from crude oil. Compose at least one environmental concern linked with this process? [Max 65-70 words]",
+   "answer_md": "**Principle:** crude oil is a mixture of hydrocarbons with different boiling points. It is heated to about 350-400 degrees C in a furnace and the vapour enters a tall fractionating column that is hot at the bottom and cooler at the top. Each component rises until the temperature falls below its boiling point, condenses on a tray and is drawn off.\n\n**Layout (draw):** furnace feeding the column near the bottom; trays with bubble caps; outlets from top to bottom: refinery gas (below 40 degrees C), petrol/gasoline (40-180), kerosene (180-250), diesel/gas oil (250-350), lubricating oil and fuel oil, and bitumen/residue at the bottom, with temperature falling upward.\n\n**Why used:** it separates the mixture continuously and on a large scale into useful fractions with different uses (fuels, lubricants, petrochemical feedstock, road tar) without chemical change, using differences in boiling point.\n\n**Environmental concern:** burning refinery fuel and flaring release $CO_2$, $SO_2$ and $NO_x$ (air pollution, acid rain, global warming); also oily wastewater and spills contaminate water bodies, and VOC leaks form smog."
+  }
+ ]
+}
