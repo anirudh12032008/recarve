@@ -11,6 +11,7 @@
 //   #tutor/CY1107/s/<uuid>     a lesson: the conversation, streamed
 //   #tutor/CY1107/pyq          the past-paper bank for that subject
 //   #tutor/CY1107/p/4/1        practice on unit 4, topic 1 (syllabus places)
+//   #tutor/CY1107/l/4/1        the same topic to read: notes and questions, no model
 //
 // render() wipes #nav on every refresh, so nothing on these screens is held
 // in the DOM. What the server said lives in TU_GOT by URL; the reply being
@@ -351,8 +352,9 @@ function tutorTitle() {
     return s ? s.topic || s.title || 'Lesson' : 'Lesson';
   }
   if (t.pyq) return 'Past-paper questions';
-  if (t.practice) {
-    const at = tuPlace(t.code, t.practice[0], t.practice[1]);
+  if (t.practice || t.learn) {
+    const p = t.practice || t.learn;
+    const at = tuPlace(t.code, p[0], p[1]);
     return at ? at.topic : 'Practice';
   }
   if (t.code) {
@@ -364,7 +366,7 @@ function tutorTitle() {
 
 function tutorUp() {
   const t = view.tutor || {};
-  return t.session || t.pyq || t.practice
+  return t.session || t.pyq || t.practice || t.learn
     ? ['‹ ' + t.code, 'Back to ' + t.code + ' in the tutor']
     : ['‹ Tutor', 'Back to the tutor'];
 }
@@ -388,6 +390,7 @@ function renderTutor() {
   }
   if (t.session) tuLesson(root, t.code, t.session);
   else if (t.practice) tuPractice(root, t.code, t.practice[0], t.practice[1]);
+  else if (t.learn) tuLearn(root, t.code, t.learn[0], t.learn[1]);
   else if (t.pyq) tuBank(root, t.code);
   else if (t.code) tuSubject(root, t.code);
   else tuHome(root);
@@ -633,6 +636,9 @@ function tuTopicRow(code, unit, t, owner) {
     teach.onclick = () => tuOpenTopic(code, unit, t.topic);
     acts.append(teach);
   }
+  const learn = tuEl('button', 'w tu-btn', 'Learn');
+  learn.onclick = () => tuOpenTopic(code, unit, t.topic, 'l');
+  acts.appendChild(learn);
   if (t.pyq_count) {
     const pyq = tuEl('button', 'tu-btn', 'PYQs ' + t.pyq_count);
     pyq.onclick = () => {
@@ -1403,12 +1409,12 @@ function tuPlace(code, u, t) {
 }
 
 // Opens a topic's practice; false when the syllabus is not loaded to place it.
-function tuOpenTopic(code, unit, topic) {
+function tuOpenTopic(code, unit, topic, how) {
   const units = tuUnitsOf(code) || [];
   const ui = units.findIndex(x => !unit || x.unit === unit);
   for (let i = Math.max(ui, 0); i < units.length; i++) {
     const ti = (units[i].topics || []).findIndex(x => x.topic === topic);
-    if (ti >= 0) { go('tutor', code, 'p', i + 1, ti + 1); return true; }
+    if (ti >= 0) { go('tutor', code, how || 'p', i + 1, ti + 1); return true; }
     if (unit) break;
   }
   return false;
@@ -1903,4 +1909,113 @@ function tuPractice(root, code, u, t) {
       if (el) el.scrollIntoView({block: 'start', behavior: 'smooth'});
     });
   }
+}
+
+// ---- Learn: the topic to read --------------------------------------------
+// The written course as a page: each subtopic's notes, then its questions,
+// every one with Show solution and MCQs that mark themselves here. Nothing is
+// sent anywhere and nothing is recorded, so it costs nothing and any trusted
+// reader can use it.
+
+const TU_SHOWN = new Set();     // question keys whose solution is open
+const TU_PICKED = {};           // question key -> option picked
+
+function tuLearnQ(key, q, n) {
+  const card = tuEl('div', 'tu-card');
+  const head = tuEl('p', 'tu-k');
+  head.appendChild(tuEl('span', null, 'Q' + n + (q.kind === 'pyq'
+    ? ' · Past paper · ' + (q.sittings || []).slice(0, 3).join(', ') : '')));
+  if (q.marks && q.kind !== 'mcq') head.appendChild(tuEl('span', 'tu-marks',
+    '[' + (+q.marks) + ' mark' + (+q.marks === 1 ? '' : 's') + ']'));
+  card.appendChild(head);
+  card.appendChild(tuMd(q.q || ''));
+  if (q.figure) {
+    const img = tuEl('img', 'tu-fig');
+    img.src = q.figure;
+    img.alt = 'The figure printed with this question';
+    img.loading = 'lazy';
+    card.appendChild(img);
+  }
+  const picked = TU_PICKED[key];
+  if (q.kind === 'mcq') {
+    const list = tuEl('div', 'tu-opts');
+    (q.options || []).forEach((o, i) => {
+      const b = tuEl('button', 'tu-opt');
+      b.appendChild(tuEl('span', 'tu-letter', TU_LETTER[i]));
+      b.appendChild(tuInline(o));
+      if (picked !== undefined) {
+        b.disabled = true;
+        if (i === q.answer_index) b.classList.add('right');
+        else if (i === picked) b.classList.add('wrong');
+      } else b.onclick = () => { TU_PICKED[key] = i; TU_SHOWN.add(key); tuRender(); };
+      list.appendChild(b);
+    });
+    card.appendChild(list);
+  }
+  if (TU_SHOWN.has(key)) card.appendChild(tuModel(q, true));
+  else {
+    const row = tuEl('div', 'tu-acts');
+    const sol = tuEl('button', 'w tu-btn', 'Show solution');
+    sol.onclick = () => { TU_SHOWN.add(key); tuRender(); };
+    row.appendChild(sol);
+    card.appendChild(row);
+  }
+  return card;
+}
+
+function tuLearn(root, code, u, t) {
+  const sv = tuNeed(tuU.subj(code));
+  if (sv === undefined) return void root.appendChild(waitline('Opening the topic…'));
+  if (sv.error) return void tuFailed(root, sv, 'This subject did not open.');
+  const at = tuPlace(code, u, t);
+  if (!at) return void tuBlank(root, 'No such topic.', 'The syllabus has moved; go back and pick it again.');
+  const d = tuNeed(tuPxUrl(code, at.unit, at.topic));
+  if (d === undefined) return void root.appendChild(waitline('Opening the topic…'));
+  if (d.error) return void tuFailed(root, d, 'This topic did not open.');
+
+  const head = tuEl('div', 'tu-px-head');
+  head.appendChild(tuEl('p', 'tu-k', at.unit + ' · Learn'));
+  head.appendChild(tuEl('p', 'tu-note', 'The notes and every question for this topic. '
+    + 'Nothing here is marked or sent anywhere.'));
+  const row = tuEl('div', 'tu-acts');
+  if (d.owner) {
+    const p = tuEl('button', 'w tu-btn primary', 'Practise this topic');
+    p.onclick = () => tuOpenTopic(code, at.unit, at.topic, 'p');
+    row.appendChild(p);
+  }
+  if (d.next) {
+    const nx = tuEl('button', 'w tu-btn', 'Next: ' + d.next.topic);
+    nx.onclick = () => tuOpenTopic(code, d.next.unit, d.next.topic, 'l');
+    row.appendChild(nx);
+  }
+  head.appendChild(row);
+  root.appendChild(head);
+
+  const grid = tuEl('div', 'tu-px');
+  const side = tuEl('nav', 'tu-side');
+  side.setAttribute('aria-label', 'Parts of this topic');
+  side.appendChild(tuEl('p', 'tu-k', (d.subtopics || []).length + ' parts'));
+  const feed = tuEl('div', 'tu-feed');
+  let n = 0;
+  (d.subtopics || []).forEach((s, i) => {
+    const id = 'tu-l-' + i;
+    const b = tuEl('button');
+    b.appendChild(tuInline(s.title));
+    b.onclick = () => document.getElementById(id)?.scrollIntoView({block: 'start', behavior: 'smooth'});
+    side.appendChild(b);
+    const notes = tuEl('div', 'tu-card intro');
+    notes.id = id;
+    notes.appendChild(tuEl('p', 'tu-k', s.title));
+    if (s.theory_md) notes.appendChild(tuMd(s.theory_md));
+    const figs = tuFigures(s);
+    if (figs) notes.appendChild(figs);
+    if ((s.key_points || []).length) {
+      notes.appendChild(tuEl('p', 'tu-k', 'Remember'));
+      notes.appendChild(tuList(s.key_points, 'keep', '•'));
+    }
+    feed.appendChild(notes);
+    for (const q of s.questions || []) feed.appendChild(tuLearnQ(d.code + '|' + s.id + '|' + q.id, q, ++n));
+  });
+  grid.append(side, feed);
+  root.appendChild(grid);
 }

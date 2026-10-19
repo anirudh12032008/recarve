@@ -6064,6 +6064,8 @@ function route() {
     session: parts[2] === 's' ? parts[3] || null : null,
     pyq: parts[2] === 'pyq',
     practice: parts[2] === 'p' && +parts[3] > 0 && +parts[4] > 0
+      ? [+parts[3], +parts[4]] : null,
+    learn: parts[2] === 'l' && +parts[3] > 0 && +parts[4] > 0
       ? [+parts[3], +parts[4]] : null} : null;
   const was = view;
   view = {tab, code: s ? s.code : null, title: title || null, att, compose,

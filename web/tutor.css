@@ -341,3 +341,4 @@ body:has(.tutor) #fab{display:none}
   .tu-side .tu-k{display:none}
   .tu-side button{flex:none;max-width:70vw;background:var(--surface);font-size:13px}
 }
+.tu-px-head .tu-acts{padding-left:0}
