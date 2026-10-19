@@ -70,7 +70,7 @@ tutor_mastery
 
 tutor_profile
   owner_id, subject_code  pk
-  lang, depth (same checks as sessions)
+  lang, depth, tier (same checks as sessions)
   notes text                          -- the tutor's running picture of the learner (updated by <state>)
   updated_at
 
@@ -141,7 +141,7 @@ SubjectView = {code, name, syllabus_estimated: bool, progress: 0..1, importance_
                units: [{unit, progress, topics: [{topic, level, attempts, correct, last_seen,
                         importance: 'low'|'medium'|'high'|'must'|null, importance_source, why, pyq_count, pyq_marks,
                         has_pack: bool, sessions: n}]}]}
-SessionRow  = {id, code, unit, topic, mode, lang, depth, title, status, turns, cost_usd, created_at, updated_at, last_line}
+SessionRow  = {id, code, unit, topic, mode, lang, depth, tier, title, status, turns, cost_usd, created_at, updated_at, last_line}
 MessageRow  = {id, role, kind, body, meta, cost_usd, created_at}
 PlanItem    = {code, unit, topic, reason, score, suggested_mode}
 PyqRow      = {id, code, exam, year, section, qno, marks, unit, topic, question_md, answer_md, title (archive doc title), path (archive file path or null)}
@@ -202,13 +202,13 @@ Rules the prompt states and the server enforces:
 
 ## 4. The call
 
-`claude-opus-5-5` by default (`RECARVE_TUTOR_MODEL` overrides), streaming, adaptive thinking (omit the parameter), `output_config.effort` from `RECARVE_TUTOR_EFFORT` (default `medium`), `max_tokens` 16000, `betas=["server-side-fallback-2026-07-01"], fallbacks="default"` via `client.beta.messages.stream`, falling back to `client.messages.stream` on `TypeError`/`BadRequestError` the way `make_notes` does. `stop_reason == "refusal"` becomes a readable error line.
+Two tiers, chosen per subject (saved on `tutor_profile.tier`) and per lesson (`tutor_sessions.tier`). **Standard** runs `claude-sonnet-5-5` at effort `medium` (`RECARVE_TUTOR_MODEL` / `RECARVE_TUTOR_EFFORT` override) with the topic's pack and the topic's PYQs. **Advanced** runs `claude-opus-5-5` at effort `high` (`RECARVE_TUTOR_MODEL_ADVANCED` / `RECARVE_TUTOR_EFFORT_ADVANCED`) with the whole unit's PYQs and the tutor's profile notes from the student's other subjects, and its tier line in the learner block asks for a diagnostic opener, anticipated misconceptions and worked examples. `/tutor` returns `tiers: {standard: {model, effort, price_in}, advanced: {...}}` so the screen can say what each costs. Both: streaming, adaptive thinking (omit the parameter), `output_config.effort` per tier, `max_tokens` 16000, `betas=["server-side-fallback-2026-07-01"], fallbacks="default"` via `client.beta.messages.stream`, falling back to `client.messages.stream` on `TypeError`/`BadRequestError` the way `make_notes` does. `stop_reason == "refusal"` becomes a readable error line.
 
 System prompt, in this order, with `cache_control` on the last stable block:
 1. Persona and rules (stable).
 2. The exam scheme and the subject's full syllabus (stable per subject).
 3. The pack entry for this topic, and the PYQs mapped to this topic (ids, exam, year, marks, question, answer), capped at ~40 questions / 60k characters, newest first.
-4. The learner: `tutor_profile.notes`, the mastery row for this topic and the unit's other topics, lang, depth, mode.
+4. The learner: `tutor_profile.notes`, the mastery row for this topic and the unit's other topics, lang, depth, tier, mode; on advanced, the profile notes from every other subject too (how they learn carries over).
 
 Then the session's messages, student/tutor alternating, tutor turns verbatim (tags included, so the model sees what it asked).
 

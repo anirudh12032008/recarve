@@ -286,7 +286,8 @@ function tuPref(code) {
   const prof = (sv && sv.profile) || {};
   let kept = {};
   try { kept = JSON.parse(localStorage.getItem('tutor:prefs:' + code) || '{}') || {}; } catch (e) {}
-  return {lang: prof.lang || kept.lang || 'english', depth: prof.depth || kept.depth || 'exam'};
+  return {lang: prof.lang || kept.lang || 'english', depth: prof.depth || kept.depth || 'exam',
+          tier: prof.tier || kept.tier || 'standard'};
 }
 
 async function tuSetPref(code, field, value) {
@@ -297,12 +298,29 @@ async function tuSetPref(code, field, value) {
   try {
     const d = await tuJSON('/tutor/settings', {code, [field]: value});
     const p = d.profile || {};
-    tuPrefs[code] = {lang: p.lang || tuPrefs[code].lang, depth: p.depth || tuPrefs[code].depth};
+    tuPrefs[code] = {lang: p.lang || tuPrefs[code].lang, depth: p.depth || tuPrefs[code].depth,
+                     tier: p.tier || tuPrefs[code].tier};
   } catch (e) {
     tuPrefs[code] = was;
     oops('Not saved', e);
   }
   tuRender();
+}
+
+// What the chosen tier runs on and what it costs, from /tutor's `tiers`.
+const TU_TIER = {standard: 'Standard', advanced: 'Advanced'};
+function tuTierNote(tier) {
+  const home = TU_GOT[tuU.home()] || {};
+  const t = (home.tiers || {})[tier] || {};
+  const other = (home.tiers || {})[tier === 'advanced' ? 'standard' : 'advanced'] || {};
+  const times = t.price_in && other.price_in ? Math.round(t.price_in / other.price_in) : 0;
+  if (tier === 'advanced') {
+    return 'The best model, thinking harder, with the whole unit\u2019s past papers and how you '
+      + 'learn in every subject in front of it' + (t.model ? ' (' + t.model + ')' : '')
+      + (times > 1 ? ', about ' + times + '\u00d7 the spend.' : '.');
+  }
+  return 'The everyday teacher' + (t.model ? ' (' + t.model + ')' : '')
+    + '. Switch to Advanced for a hard unit or the week before the exam.';
 }
 
 function tuSeg(label, options, value, pick) {
@@ -386,7 +404,10 @@ function tuHome(root) {
   const bits = [];
   if (sp.total != null) bits.push(tuMoney(sp.total) + ' spent in all');
   if (sp.today != null) bits.push(tuMoney(sp.today) + ' today');
-  if (d.model) bits.push(d.model);
+  const tiers = d.tiers || {};
+  if (tiers.standard && tiers.advanced) {
+    bits.push('Standard ' + tiers.standard.model + ' · Advanced ' + tiers.advanced.model);
+  } else if (d.model) bits.push(d.model);
   if (bits.length) lead.appendChild(tuEl('p', 'tu-spend', bits.join(' · ')));
   root.appendChild(lead);
 
@@ -501,6 +522,9 @@ function tuSubject(root, code) {
       pref.lang, v => tuSetPref(code, 'lang', v)));
     prefs.appendChild(tuSeg('Depth', [['basics', 'Basics'], ['exam', 'Exam'], ['deep', 'Deep']],
       pref.depth, v => tuSetPref(code, 'depth', v)));
+    prefs.appendChild(tuSeg('Tutor', [['standard', 'Standard'], ['advanced', 'Advanced']],
+      pref.tier, v => tuSetPref(code, 'tier', v)));
+    prefs.appendChild(tuEl('p', 'tu-tiernote', tuTierNote(pref.tier)));
     root.appendChild(prefs);
   }
 
@@ -616,7 +640,7 @@ function tuStart(o) {
   if (tuStreamOn) return void busyDone('The tutor is still writing. One lesson at a time.');
   const pref = tuPref(o.code);
   busy('Starting the lesson…', true);
-  tuStream('/tutor/start', Object.assign({lang: pref.lang, depth: pref.depth}, o),
+  tuStream('/tutor/start', Object.assign({lang: pref.lang, depth: pref.depth, tier: pref.tier}, o),
            {sid: null, code: o.code, start: true});
 }
 
@@ -1082,6 +1106,7 @@ function tuLesson(root, code, sid) {
   const col = tuEl('div', 'tu-lesson');
   const meta = tuEl('div', 'tu-lmeta');
   const facts = [s.unit, TU_MODE[s.mode] || s.mode,
+                 s.tier === 'advanced' ? 'Advanced' : '',
                  s.lang === 'hinglish' ? 'Hinglish' : s.lang ? 'English' : '',
                  s.depth ? s.depth[0].toUpperCase() + s.depth.slice(1) + ' depth' : '',
                  tuMoney(s.cost_usd) + ' this lesson'].filter(Boolean);

@@ -127,8 +127,10 @@ server because that is where the 295 PDFs are.
 4. **Deploy**: `python backend/dev/migrate.py` is dev-only; apply
    `0056_the_tutor.sql` to the live database the way the earlier ones were.
    `.env` needs `ANTHROPIC_API_KEY`; optional `RECARVE_TUTOR_ROLE`
-   (default `admin`), `RECARVE_TUTOR_MODEL` (default `claude-opus-5-5`),
-   `RECARVE_TUTOR_EFFORT` (default `medium`).
+   (default `admin`), `RECARVE_TUTOR_MODEL` / `RECARVE_TUTOR_EFFORT` for the
+   Standard tier (defaults `claude-sonnet-5-5`, `medium`) and
+   `RECARVE_TUTOR_MODEL_ADVANCED` / `RECARVE_TUTOR_EFFORT_ADVANCED` for
+   Advanced (defaults `claude-opus-5-5`, `high`).
 
 ## Running locally
 

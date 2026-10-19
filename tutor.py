@@ -30,8 +30,16 @@ HERE = Path(__file__).resolve().parent
 PACK_DIR = HERE / "tutor" / "packs"
 SCHEME_PATH = HERE / "tutor" / "exam-scheme.json"
 
-DEFAULT_MODEL = "claude-opus-5-5"
 EFFORTS = ("low", "medium", "high", "xhigh", "max")
+# Two teachers. Standard is the everyday one; advanced is the best model
+# thinking harder, with the whole unit's past papers and the student's
+# picture from every subject in front of it, at several times the spend.
+TIERS = ("standard", "advanced")
+TIER_DEFAULTS = {"standard": ("claude-sonnet-5-5", "medium"),
+                 "advanced": ("claude-opus-5-5", "high")}
+TIER_ENV = {"standard": ("RECARVE_TUTOR_MODEL", "RECARVE_TUTOR_EFFORT"),
+            "advanced": ("RECARVE_TUTOR_MODEL_ADVANCED", "RECARVE_TUTOR_EFFORT_ADVANCED")}
+DEFAULT_MODEL = TIER_DEFAULTS["standard"][0]
 MAX_TOKENS = 16000
 
 MODES = ("teach", "quiz", "pyq", "revise", "ask")
@@ -87,13 +95,21 @@ class Busy(Exception):
     """The tutor is still answering this lesson: a 409."""
 
 
-def model_name():
-    return os.environ.get("RECARVE_TUTOR_MODEL", "").strip() or DEFAULT_MODEL
+def model_name(tier="standard"):
+    tier = tier if tier in TIERS else "standard"
+    return os.environ.get(TIER_ENV[tier][0], "").strip() or TIER_DEFAULTS[tier][0]
 
 
-def effort_level():
-    got = os.environ.get("RECARVE_TUTOR_EFFORT", "").strip().lower()
-    return got if got in EFFORTS else "medium"
+def effort_level(tier="standard"):
+    tier = tier if tier in TIERS else "standard"
+    got = os.environ.get(TIER_ENV[tier][1], "").strip().lower()
+    return got if got in EFFORTS else TIER_DEFAULTS[tier][1]
+
+
+def tiers():
+    """What each tier runs on, for the screen to say before the spend."""
+    return {t: {"model": model_name(t), "effort": effort_level(t),
+                "price_in": notes.price_of(model_name(t))[0]} for t in TIERS}
 
 
 def may_write(me):
@@ -379,7 +395,7 @@ def _uuid(v, what="id"):
 SESSION_SQL = (
     "select s.id, s.subject_code, s.unit, s.topic, s.mode, s.lang, s.depth, s.title,"
     " s.status, s.turns, s.cost_usd, s.created_at, s.updated_at, s.owner_id, p.name,"
-    " s.model, (select m.body from tutor_messages m where m.session_id = s.id"
+    " s.model, s.tier, (select m.body from tutor_messages m where m.session_id = s.id"
     "           order by m.id desc limit 1)"
     " from tutor_sessions s left join profiles p on p.id = s.owner_id")
 
@@ -390,8 +406,9 @@ def _session(row, me_id=None):
             "status": row[8], "turns": row[9], "cost_usd": _num(row[10]),
             "created_at": _iso(row[11]), "updated_at": _iso(row[12]),
             "owner_id": str(row[13]), "owner_name": row[14], "model": row[15],
+            "tier": row[16],
             "mine": me_id is not None and str(row[13]) == str(me_id),
-            "last_line": last_line(row[16]) if row[16] else ""}
+            "last_line": last_line(row[17]) if row[17] else ""}
 
 
 def _message(row):
@@ -472,11 +489,12 @@ def db_add_message(conn, session_id, role, kind, body, meta=None, usage=None, co
     return _message(row)
 
 
-def db_create_session(conn, owner_id, code, unit, topic, mode, lang, depth, title, model):
+def db_create_session(conn, owner_id, code, unit, topic, mode, lang, depth, tier, title, model):
     row = conn.execute(
         "insert into tutor_sessions (owner_id, subject_code, unit, topic, mode, lang,"
-        " depth, title, model) values (%s, %s, %s, %s, %s, %s, %s, %s, %s) returning id",
-        (owner_id, code, unit, topic, mode, lang, depth, title[:200], model)).fetchone()
+        " depth, tier, title, model) values (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s)"
+        " returning id",
+        (owner_id, code, unit, topic, mode, lang, depth, tier, title[:200], model)).fetchone()
     return str(row[0])
 
 
@@ -489,27 +507,40 @@ def db_bump_session(conn, session_id, cost, turn=True):
 
 def db_profile(conn, owner_id, code):
     row = conn.execute(
-        "select lang, depth, notes, updated_at from tutor_profile"
+        "select lang, depth, tier, notes, updated_at from tutor_profile"
         " where owner_id = %s and subject_code = %s", (owner_id, code)).fetchone()
     if not row:
-        return {"code": code, "lang": "english", "depth": "exam", "notes": None,
-                "updated_at": None}
-    return {"code": code, "lang": row[0], "depth": row[1], "notes": row[2],
-            "updated_at": _iso(row[3])}
+        return {"code": code, "lang": "english", "depth": "exam", "tier": "standard",
+                "notes": None, "updated_at": None}
+    return {"code": code, "lang": row[0], "depth": row[1], "tier": row[2], "notes": row[3],
+            "updated_at": _iso(row[4])}
 
 
-def db_set_profile(conn, owner_id, code, lang=None, depth=None, notes_text=None):
+def db_profile_notes(conn, owner_id, but=None):
+    """The tutor's picture of this learner in every other subject: how they
+    learn carries across, even when what they know does not."""
+    return [{"code": r[0], "notes": r[1]} for r in conn.execute(
+        "select subject_code, notes from tutor_profile where owner_id = %s"
+        " and notes is not null and notes <> '' and subject_code <> coalesce(%s, '')"
+        " order by updated_at desc", (owner_id, but)).fetchall()]
+
+
+def db_set_profile(conn, owner_id, code, lang=None, depth=None, tier=None, notes_text=None):
     if lang is not None and lang not in LANGS:
         raise ValueError(f"lang is one of {', '.join(LANGS)}")
     if depth is not None and depth not in DEPTHS:
         raise ValueError(f"depth is one of {', '.join(DEPTHS)}")
+    if tier is not None and tier not in TIERS:
+        raise ValueError(f"tier is one of {', '.join(TIERS)}")
     conn.execute(
-        "insert into tutor_profile (owner_id, subject_code, lang, depth, notes)"
-        " values (%s, %s, coalesce(%s, 'english'), coalesce(%s, 'exam'), %s)"
+        "insert into tutor_profile (owner_id, subject_code, lang, depth, tier, notes)"
+        " values (%s, %s, coalesce(%s, 'english'), coalesce(%s, 'exam'),"
+        " coalesce(%s, 'standard'), %s)"
         " on conflict (owner_id, subject_code) do update set"
         " lang = coalesce(%s, tutor_profile.lang), depth = coalesce(%s, tutor_profile.depth),"
+        " tier = coalesce(%s, tutor_profile.tier),"
         " notes = coalesce(%s, tutor_profile.notes), updated_at = now()",
-        (owner_id, code, lang, depth, notes_text, lang, depth, notes_text))
+        (owner_id, code, lang, depth, tier, notes_text, lang, depth, tier, notes_text))
     return db_profile(conn, owner_id, code)
 
 
@@ -1085,15 +1116,31 @@ def topic_block(code, unit, topic, pyqs):
     return "\n\n".join(out)
 
 
-def learner_block(session, profile, mastery, unit_mastery):
+TIER_RULES = {
+    "standard": "standard: the everyday lesson. Keep turns short and move on evidence.",
+    "advanced": "advanced: the student chose the best teacher and is paying for it. Use "
+                "the room: if you do not know them yet, open with one sharp diagnostic "
+                "question before teaching; anticipate the mistakes their profile and the "
+                "past papers predict; prefer a worked example to a restatement; when they "
+                "are wrong, find the misconception underneath, not just the slip; tie "
+                "every step to how the unit's past papers ask it.",
+}
+
+
+def learner_block(session, profile, mastery, unit_mastery, others=()):
     """Section 4: the student as of this turn. After the breakpoint, because
     it changes every turn."""
     out = ["# This student, now",
            f"Lesson: {session['title']} (mode {session['mode']}).",
            f"Language: {LANG_RULES.get(session['lang'], session['lang'])}",
            f"Depth: {DEPTH_RULES.get(session['depth'], session['depth'])}",
+           f"Tier: {TIER_RULES.get(session.get('tier'), TIER_RULES['standard'])}",
            "What you have learnt about how they learn (your own earlier <state> profile): "
            + ((profile or {}).get("notes") or "nothing yet; find out.")]
+    if others:
+        out.append("How they learn in other subjects, from your notes there (the habits carry "
+                   "over; the knowledge does not): " + " ".join(
+                       f"[{o['code']}] {o['notes']}" for o in others))
     if session["topic"]:
         m = mastery or {}
         out.append(
@@ -1155,14 +1202,14 @@ def build_messages(session, history):
     return out
 
 
-def build_system(session, profile, mastery, unit_mastery, pyqs):
+def build_system(session, profile, mastery, unit_mastery, pyqs, others=()):
     return [
         {"type": "text", "text": PERSONA},
         {"type": "text", "text": scheme_block(session["code"])},
         {"type": "text", "text": topic_block(session["code"], session["unit"],
                                              session["topic"], pyqs),
          "cache_control": {"type": "ephemeral"}},
-        {"type": "text", "text": learner_block(session, profile, mastery, unit_mastery)},
+        {"type": "text", "text": learner_block(session, profile, mastery, unit_mastery, others)},
     ]
 
 
@@ -1273,9 +1320,13 @@ def _context(conn, session):
     unit_mastery = (list(db_mastery(conn, owner, session["code"]).values())
                     if session["unit"] else [])
     unit_mastery = [m for m in unit_mastery if m["unit"] == session["unit"]]
-    pyqs = db_pyqs(conn, session["code"], session["unit"], session["topic"],
-                   limit=PYQ_PROMPT_MAX)
-    return build_system(session, profile, mastery, unit_mastery, pyqs)
+    advanced = session.get("tier") == "advanced"
+    # Advanced reads the whole unit's past papers, not only this topic's: the
+    # question that spans two topics is the one students are not ready for.
+    pyqs = db_pyqs(conn, session["code"], session["unit"],
+                   None if advanced else session["topic"], limit=PYQ_PROMPT_MAX)
+    others = db_profile_notes(conn, owner, session["code"]) if advanced else ()
+    return build_system(session, profile, mastery, unit_mastery, pyqs, others)
 
 
 def _tutor_kind(session, action, parsed):
@@ -1289,14 +1340,15 @@ def _tutor_kind(session, action, parsed):
 def run_turn(handler, me, session, system, messages, action=None, first_line=None):
     """Stream one tutor turn and store it. The response is already ours from
     here on: every failure becomes an error line, never a second status."""
-    model = model_name()
+    tier = session.get("tier") or "standard"
+    model = session.get("model") or model_name(tier)
     out = Stream(handler)
     out.open()
     try:
         if first_line:
             out.send(first_line)
         pieces = []
-        gen = model_stream(system, messages, model, effort_level())
+        gen = model_stream(system, messages, model, effort_level(tier))
         while True:
             try:
                 piece = next(gen)
@@ -1399,7 +1451,8 @@ def get_home(h, me, write, q):
     with notes.db(me["id"]) as conn:
         learner = db_learner(conn, me, write, q.get("who"))
         views = subject_views(conn, learner["id"])
-        return {"owner": write, "model": model_name(), "role_needed": notes.TUTOR_ROLE,
+        return {"owner": write, "model": model_name(), "tiers": tiers(),
+                "role_needed": notes.TUTOR_ROLE,
                 "learner": learner, "subjects": views,
                 "recent": db_sessions(conn, me["id"], limit=20),
                 "plan": plan(views), "spend": db_spend(conn, learner["id"])}
@@ -1470,16 +1523,20 @@ def post_start(h, me, body):
         raise ValueError(f"mode is one of {', '.join(MODES)}")
     unit, topic = place(code, _text(body, "unit"), _text(body, "topic"))
     lang, depth = body.get("lang") or None, body.get("depth") or None
+    tier = body.get("tier") or None
     if lang is not None and lang not in LANGS:
         raise ValueError(f"lang is one of {', '.join(LANGS)}")
     if depth is not None and depth not in DEPTHS:
         raise ValueError(f"depth is one of {', '.join(DEPTHS)}")
+    if tier is not None and tier not in TIERS:
+        raise ValueError(f"tier is one of {', '.join(TIERS)}")
     title = f"{MODE_LABEL[mode]} · {topic or unit or subject_name(code)}"
     with notes.db(me["id"]) as conn:
         profile = db_profile(conn, me["id"], code)
+        tier = tier or profile["tier"]
         sid = db_create_session(conn, me["id"], code, unit, topic, mode,
                                 lang or profile["lang"], depth or profile["depth"],
-                                title, model_name())
+                                tier, title, model_name(tier))
         session = db_session(conn, sid, me["id"])
         system = _context(conn, session)
     _claim(sid)
@@ -1552,7 +1609,7 @@ def post_settings(h, me, body):
     code = _code(body.get("code"))
     with notes.db(me["id"]) as conn:
         return {"profile": db_set_profile(conn, me["id"], code, body.get("lang") or None,
-                                          body.get("depth") or None)}
+                                          body.get("depth") or None, body.get("tier") or None)}
 
 
 def post_close(h, me, body):

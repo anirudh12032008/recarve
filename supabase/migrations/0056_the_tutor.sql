@@ -31,6 +31,10 @@ create table tutor_sessions (
   mode         text not null check (mode in ('teach','quiz','pyq','revise','ask')),
   lang         text not null default 'english' check (lang in ('english','hinglish')),
   depth        text not null default 'exam' check (depth in ('basics','exam','deep')),
+  -- Standard is the everyday teacher; advanced is the best model, thinking
+  -- harder, with the whole unit's past papers and the student's picture
+  -- from every subject in front of it, at several times the spend.
+  tier         text not null default 'standard' check (tier in ('standard','advanced')),
   title        text not null check (length(title) between 1 and 200),
   model        text,
   status       text not null default 'open' check (status in ('open','done')),
@@ -103,6 +107,7 @@ create table tutor_profile (
   subject_code text not null references subjects(code),
   lang         text not null default 'english' check (lang in ('english','hinglish')),
   depth        text not null default 'exam' check (depth in ('basics','exam','deep')),
+  tier         text not null default 'standard' check (tier in ('standard','advanced')),
   notes        text,
   updated_at   timestamptz not null default now(),
   primary key (owner_id, subject_code)

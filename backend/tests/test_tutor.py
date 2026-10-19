@@ -117,7 +117,7 @@ def test_past_paper_questions_are_read_by_members_and_written_by_admins(db):
 def test_two_marks_the_same_way_move_the_level_one_step(db):
     owner = member(db, "admin")
     as_user(db, owner)
-    sid = tutor.db_create_session(db, owner, *BIO, "teach", "english", "exam",
+    sid = tutor.db_create_session(db, owner, *BIO, "teach", "english", "exam", "standard",
                                   "Teach · Cell theory", "m")
     session = tutor.db_session(db, sid, owner)
     tutor.db_apply_state(db, owner, *BIO, {"level": 2})
@@ -437,16 +437,18 @@ def test_start_streams_a_lesson_and_stores_what_it_said(server, model):
     assert msg["meta"]["pyqs"] == [server.pyq], "an id that is not in the table is not cited"
     assert msg["meta"]["checks"][0]["id"] == "c1"
     assert msg["meta"]["state"]["level"] == 2
-    assert msg["cost_usd"] == pytest.approx(0.0298)
+    assert msg["cost_usd"] == pytest.approx(0.0149), "priced at the standard tier's model"
     assert done["session"]["turns"] == 1
-    assert done["session"]["cost_usd"] == pytest.approx(0.0298)
+    assert done["session"]["cost_usd"] == pytest.approx(0.0149)
     (mastery,) = done["mastery"]
     assert (mastery["level"], mastery["importance"], mastery["note"]) == (2, "high", "knows the names")
     assert mastery["last_seen"]
-    assert done["spend"]["today"] >= 0.0298
+    assert done["spend"]["today"] >= 0.0149
 
     (asked,) = model.calls
-    assert asked["model"] == "claude-opus-5-5" and asked["effort"] == "medium"
+    assert session["tier"] == "standard"
+    assert asked["model"] == "claude-sonnet-5-5" and asked["effort"] == "medium"
+    assert "Tier: standard" in asked["system"][3]["text"]
     system = asked["system"]
     assert [("cache_control" in b) for b in system] == [False, False, True, False], \
         "one breakpoint, on the last stable block"
@@ -551,7 +553,10 @@ def test_the_overview(server, model):
     start(server)
     status, home = get(server, "Asha", "/tutor")
     assert status == 200
-    assert home["owner"] is True and home["model"] == "claude-opus-5-5"
+    assert home["owner"] is True and home["model"] == "claude-sonnet-5-5"
+    assert home["tiers"]["advanced"]["model"] == "claude-opus-5-5"
+    assert home["tiers"]["advanced"]["effort"] == "high"
+    assert home["tiers"]["standard"]["price_in"] < home["tiers"]["advanced"]["price_in"]
     assert home["role_needed"] == notes.TUTOR_ROLE
     bio = next(s for s in home["subjects"] if s["code"] == "BS1111")
     theory = bio["units"][0]["topics"][0]
@@ -617,6 +622,34 @@ def test_settings_override_close_and_delete(server, model):
     assert post(server, "Asha", "/tutor/session/delete", {"id": sid}) == (200, {"ok": True})
     assert get(server, "Asha", f"/tutor/session?id={sid}")[0] == 404
     post(server, "Asha", "/tutor/settings", {"code": "BS1111", "lang": "english", "depth": "exam"})
+
+
+def test_the_advanced_tier_is_the_best_model_with_the_whole_unit_in_view(server, model):
+    status, got = post(server, "Asha", "/tutor/settings", {"code": "BS1111", "tier": "advanced"})
+    assert status == 200 and got["profile"]["tier"] == "advanced"
+    assert post(server, "Asha", "/tutor/settings", {"code": "BS1111", "tier": "premium"})[0] == 400
+    # A picture of the learner from another subject, for the tutor to carry over.
+    post(server, "Asha", "/tutor/settings", {"code": "CY1107", "lang": "english"})
+    with psycopg.connect(DB_URL, autocommit=True) as conn:
+        conn.execute("update tutor_profile set notes = 'LEARNS-BY-DRAWING'"
+                     " where subject_code = 'CY1107' and owner_id = %s", (server.ids["Asha"],))
+
+    lines = start(server)
+    session = lines[0]["session"]
+    assert session["tier"] == "advanced" and session["model"] == "claude-opus-5-5"
+    asked = model.calls[-1]
+    assert asked["model"] == "claude-opus-5-5" and asked["effort"] == "high"
+    system = asked["system"]
+    assert "Tier: advanced" in system[3]["text"] and "diagnostic" in system[3]["text"]
+    assert "LEARNS-BY-DRAWING" in system[3]["text"], "how they learn elsewhere comes along"
+    assert server.pyq in system[2]["text"]
+    assert lines[-1]["message"]["cost_usd"] == pytest.approx(0.0298), "priced at Opus"
+
+    lines = start(server, tier="standard")
+    assert lines[0]["session"]["tier"] == "standard", "a lesson may pick its own tier"
+    assert model.calls[-1]["model"] == "claude-sonnet-5-5"
+    assert "LEARNS-BY-DRAWING" not in model.calls[-1]["system"][3]["text"]
+    post(server, "Asha", "/tutor/settings", {"code": "BS1111", "tier": "standard"})
 
 
 def test_bad_requests(server, model):
