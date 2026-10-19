@@ -82,6 +82,7 @@ SAY_MAX = 20000                   # one student turn, in characters
 PYQ_PROMPT_MAX = 40               # questions in the system prompt, newest first
 PYQ_PROMPT_CHARS = 60000
 HISTORY_CHARS = 600000            # a lesson longer than this loses its middle
+KEEP_MESSAGES = 10                # past this, older turns are sent as the tutor's recap
 IST = "Asia/Kolkata"              # what "today" means on the spend line
 
 
@@ -331,7 +332,8 @@ def _clean_state(data):
     imp = str(data.get("importance") or "").strip().lower()
     if imp in IMPORTANCE:
         out["importance"] = imp
-    for key, cap in (("why", 300), ("note", 500), ("profile", 1500), ("next", 200)):
+    for key, cap in (("why", 300), ("note", 500), ("profile", 1500), ("next", 200),
+                     ("recap", 2000)):
         v = data.get(key)
         if isinstance(v, str) and v.strip():
             out[key] = v.strip()[:cap]
@@ -983,6 +985,7 @@ The app turns three tags in your text into interface. Put each on its own line(s
    - note: one line about this student and this topic.
    - profile: your running picture of how this student learns, across topics, at most three sentences. It replaces the previous one, so carry forward what still holds.
    - next: the topic to study after this one, by its exact syllabus name. done: true when this topic is finished for now.
+   - recap: this lesson so far, for you alone: what you have taught, what they got right and wrong, the highest check id used, and where you are now. At most five sentences; it replaces the previous one. Write it every turn: once the lesson is long, the older turns are taken out of what you see and your latest recap stands in for them.
 """
 
 DEPTH_RULES = {
@@ -1190,7 +1193,20 @@ def build_messages(session, history):
     tutor turns verbatim (tags and all, so the model sees what it asked).
     Same-role neighbours are joined -- a mark followed by a typed answer is
     one student turn -- and an over-long lesson loses its oldest middle."""
-    out = [{"role": "user", "content": opener(session)}]
+    first = opener(session)
+    # A long lesson is sent as the newest recap plus every turn after it. The
+    # recap is the tutor's own, from <state>, so trimming costs no extra call;
+    # a lesson with no recap yet (or none old enough) goes whole, as before.
+    limit = len(history) - KEEP_MESSAGES
+    for i in range(limit - 1, -1, -1):
+        recap = ((history[i].get("meta") or {}).get("state") or {}).get("recap") \
+            if history[i]["role"] == "tutor" else None
+        if recap:
+            first += ("\n\n(Where this lesson has got to, from your own recap; the "
+                      "earlier turns are not shown: " + recap + ")")
+            history = history[i + 1:]
+            break
+    out = [{"role": "user", "content": first}]
     for m in history:
         role = "assistant" if m["role"] == "tutor" else "user"
         text = m["body"]
@@ -1537,9 +1553,26 @@ def post_start(h, me, body):
     with notes.db(me["id"]) as conn:
         profile = db_profile(conn, me["id"], code)
         tier = tier or profile["tier"]
+        lang, depth = lang or profile["lang"], depth or profile["depth"]
+        # The open lesson on this topic, if there is one, is picked up where it
+        # stopped, under today's settings, and costs nothing to reopen.
+        row = conn.execute(
+            "select id from tutor_sessions where owner_id = %s and subject_code = %s"
+            " and unit is not distinct from %s and topic is not distinct from %s"
+            " and mode = %s and status = 'open' and turns > 0"
+            " order by updated_at desc limit 1", (me["id"], code, unit, topic, mode)).fetchone()
+        if row:
+            conn.execute("update tutor_sessions set lang = %s, depth = %s, tier = %s,"
+                         " model = %s, updated_at = now() where id = %s",
+                         (lang, depth, tier, model_name(tier), row[0]))
+            session = db_session(conn, row[0], me["id"])
+            out = Stream(h)
+            out.open()
+            out.send({"t": "session", "session": session, "resumed": True})
+            out.send({"t": "done", "session": session})
+            return out.close()
         sid = db_create_session(conn, me["id"], code, unit, topic, mode,
-                                lang or profile["lang"], depth or profile["depth"],
-                                tier, title, model_name(tier))
+                                lang, depth, tier, title, model_name(tier))
         session = db_session(conn, sid, me["id"])
         system = _context(conn, session)
     _claim(sid)

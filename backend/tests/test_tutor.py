@@ -417,9 +417,16 @@ def stream(server, who, path, payload):
     return [json.loads(line) for line in body.splitlines() if line.strip()]
 
 
-def start(server, who="Asha", **payload):
+def start(server, who="Asha", fresh=True, **payload):
+    """A new lesson: the server is shared by the module, so the lesson an
+    earlier test left open is finished first, or Teach would reopen it."""
     payload = {"code": "BS1111", "unit": "Cell Biology", "topic": "Cell theory",
                "mode": "teach", **payload}
+    if fresh:
+        status, d = get(server, who, f"/tutor/subject?code={payload['code']}")
+        for s in d.get("sessions") or []:
+            if s.get("mine") and s["status"] == "open":
+                post(server, who, "/tutor/session/close", {"id": s["id"]})
     return stream(server, who, "/tutor/start", payload)
 
 
@@ -484,6 +491,42 @@ def test_say_continues_the_lesson_and_a_quick_action_is_a_sentence(server, model
     assert model.calls[-1]["messages"][-1]["content"] == "Why Virchow?"
     status, err = post(server, "Asha", "/tutor/say", {"session_id": sid, "body": "  "})
     assert status == 400
+
+
+def test_teach_again_reopens_the_open_lesson_under_todays_settings(server, model):
+    first = start(server)[0]["session"]
+    lines = start(server, fresh=False, tier="advanced", lang="hinglish")
+    assert [x["t"] for x in lines] == ["session", "done"], "reopening calls no model"
+    again = lines[0]["session"]
+    assert lines[0]["resumed"] and again["id"] == first["id"]
+    assert (again["tier"], again["lang"], again["model"]) == ("advanced", "hinglish",
+                                                              "claude-opus-5-5")
+    assert len(model.calls) == 1
+    assert start(server, fresh=False, mode="quiz")[0]["session"]["id"] != first["id"], \
+        "quiz is its own lesson"
+    status, _ = post(server, "Asha", "/tutor/session/close", {"id": first["id"]})
+    assert status == 200
+    assert start(server, fresh=False)[0]["session"]["id"] != first["id"], \
+        "a finished lesson is not reopened"
+
+
+def test_a_long_lesson_is_sent_as_the_last_recap_and_the_turns_after_it():
+    session = {"code": "BS1111", "unit": "Cell Biology", "topic": "Cell theory",
+               "mode": "teach", "lang": "english"}
+    history = []
+    for n in range(15):
+        history.append({"role": "student", "body": f"answer {n}", "meta": {}})
+        state = {"recap": f"RECAP-{n}"} if n % 4 == 0 else None
+        history.append({"role": "tutor", "body": f"lesson {n}", "meta": {"state": state}})
+    out = tutor.build_messages(session, history)
+    # 30 messages, keep at least 10: the newest recap before the last 10 is
+    # turn 8's (index 17), so the tail starts at index 18 (answer 9).
+    assert "RECAP-8" in out[0]["content"] and "RECAP-12" not in out[0]["content"]
+    assert out[0]["content"].endswith("answer 9"), "the student's next turn joins the opener"
+    assert out[1]["content"] == "lesson 9" and out[-1]["content"] == "lesson 14"
+    assert len(out) == 1 + 11
+    short = tutor.build_messages(session, history[:10])
+    assert len(short) == 10 and "recap" not in short[0]["content"], "short lessons go whole"
 
 
 def test_mark_counts_the_card_once_and_shows_the_tutor_the_pick(server, model):

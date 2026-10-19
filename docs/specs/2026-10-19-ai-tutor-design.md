@@ -151,7 +151,7 @@ PyqRow      = {id, code, exam, year, section, qno, marks, unit, topic, question_
 
 | Path | Body | Response |
 |---|---|---|
-| `/tutor/start` | `{code, unit?, topic?, mode, lang?, depth?}` | **stream** (below). Creates the session and streams the tutor's first turn. |
+| `/tutor/start` | `{code, unit?, topic?, mode, lang?, depth?, tier?}` | **stream** (below). Creates the session and streams the tutor's first turn. If the caller already has an open session with turns on the same code, unit, topic and mode, it is reopened instead: its lang, depth and tier are set to today's, and the stream is just `{"t":"session","session":…,"resumed":true}` then `{"t":"done","session":…}`, with no model call. Finish (`/tutor/session/close`) is how to start that topic afresh. |
 | `/tutor/say` | `{session_id, body, kind?: 'say'|'answer'|'action', action?: 'deeper'|'example'|'simpler'|'quiz'|'pyq'|'summary'|'next'}` | **stream** |
 | `/tutor/mark` | `{session_id, check_id, picked, correct: bool}` | `{mastery: TopicMastery}` — an MCQ graded on the client; updates attempts/correct and nudges level. |
 | `/tutor/mastery` | `{code, unit, topic, level}` | `{mastery}` — the student overrides ("I know this"). |
@@ -197,6 +197,7 @@ The tutor writes markdown (KaTeX maths with `$...$`/`$$...$$`). Three tags, each
 
 Rules the prompt states and the server enforces:
 - At most one `<state>` per turn, last thing in the turn. Every field optional. `level` is the tutor's current estimate of the student's mastery of THIS topic, 0 (never seen) to 5 (exam-ready). `profile` replaces `tutor_profile.notes`. `done: true` means the topic is finished for now.
+- `recap` is the tutor's own summary of the lesson so far (at most five sentences, every turn). Once a lesson has more than 10 stored messages, the request sends the newest recap that is at least 10 messages old, folded into the opening user turn, and only the messages after it. A lesson with no recap old enough is sent whole, as before; `HISTORY_CHARS` stays as the backstop.
 - The client hides `<state>`, renders `<check>` as a card (MCQ: tap an option, instant grade, "Explain" sends the choice to the tutor as kind `answer`; short: a textarea whose text goes to `/tutor/say` as kind `answer`), renders `<pyq>` from the `pyqs` map.
 - The server stores the raw text and `meta = {state, checks: [...], pyqs: [...]}`.
 

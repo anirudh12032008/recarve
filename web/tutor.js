@@ -721,8 +721,11 @@ function tuTake(st, ev) {
     const s = ev.session;
     st.sid = s.id;
     st.code = s.code || st.code;
-    TU_GOT[tuU.sess(s.id)] = {session: s, messages: [], pyqs: {}, owner: true};
-    tuScrolled.add(s.id);         // a new lesson is read from its top
+    if (ev.resumed) tuStale(tuU.sess(s.id));   // reopened: load what was said
+    else {
+      TU_GOT[tuU.sess(s.id)] = {session: s, messages: [], pyqs: {}, owner: true};
+      tuScrolled.add(s.id);       // a new lesson is read from its top
+    }
     busyDone();
     if (view.tab === 'tutor') {
       // From Home, step through the subject, so Back climbs to it.
