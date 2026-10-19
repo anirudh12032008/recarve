@@ -1064,6 +1064,15 @@ function tuPyqCard(p, ctx, inBank) {
     '[' + (+p.marks) + ' mark' + (+p.marks === 1 ? '' : 's') + ']'));
   c.appendChild(head);
   c.appendChild(tuMd(p.question_md || ''));
+  if (p.figure) {
+    // The figure as printed, cut from the scanned paper: the question is
+    // whole without the PDF.
+    const img = tuEl('img', 'tu-fig');
+    img.src = p.figure;
+    img.alt = 'The figure printed with this question';
+    img.loading = 'lazy';
+    c.appendChild(img);
+  }
   const det = tuEl('details', 'tu-ans');
   det.appendChild(tuEl('summary', null, 'Answer'));
   det.appendChild(p.answer_md ? tuMd(p.answer_md)

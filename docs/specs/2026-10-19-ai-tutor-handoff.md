@@ -235,3 +235,36 @@ Problems to fix, none blocking:
 4. 186 rows (12%) have null marks, nearly all MCQ parts of end-term Q1
    where the paper prints one total for the block. Expected; the chip
    counts questions, not marks, when marks are missing.
+
+## Past papers, finished on 2026-10-19 (afternoon)
+
+The API run was stopped at 171 papers ($4.18) because the same work runs
+on the Claude Code plan: Sonnet agents read the other 125 scans with the
+Read tool and wrote ImportItems, Opus agents wrote full-marks answers for
+the 1556 API-extracted questions (every number computed in Python first),
+and Sonnet agents located the printed figure for the 217 questions that
+need one. All of it is live.
+
+| what | count |
+|---|---|
+| papers extracted | 295 of 296 (the last is a note page, not a paper) |
+| questions in the bank | 2382 |
+| answered | 2358 (22 ME1104 drawing questions with unreadable figures, 1 MC1101, 1 PY1102 left null) |
+| with a figure crop | 217 (CE1103 112, EE1108 66, ME1104 29, CS1105 5, HS1106 2, CY1107 2, CY1110 1) |
+
+- `tutor/pyq/<code>.json` is now an export of the whole bank from the live
+  database, questions and answers, in ImportItem shape: importing it on a
+  fresh database rebuilds the bank. Regenerate it the same way after the
+  next extraction rather than editing by hand.
+- Figures: migration `0057_pyq_figures.sql` adds `pyq_questions.figure`, a
+  path under the library like `file_key`; the crops live at
+  `~/app/library/pyq-figures/<question id>.png` on the server (14 MB, in
+  the nightly library tarball, not in the repo). The crop boxes were read
+  off 110-dpi page renders by agents and cut with `pdftoppm -x -y -W -H`;
+  four were eyeballed and are right, the rest were not individually
+  checked. The bank card and the lesson card show the image under the
+  question (`.tu-fig`). The deploy now also copies `library/pyq-figures/`.
+- Importance on the live site reads from past papers for every subject
+  with a pack; MC1101 and the others without packs rely on the bank alone.
+- The PDFs stay on the server as the archive and as the link on each card;
+  the bank no longer needs them to be read.

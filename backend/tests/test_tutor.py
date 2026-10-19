@@ -662,6 +662,18 @@ def test_bad_requests(server, model):
     assert not model.calls, "nothing reached the model"
 
 
+def test_a_past_paper_question_carries_its_figure_as_a_library_path(server):
+    with psycopg.connect(DB_URL, autocommit=True) as conn:
+        conn.execute("update pyq_questions set figure = 'library/pyq-figures/x.png' where id = %s",
+                     (server.pyq,))
+    status, got = get(server, "Asha", "/tutor/pyq?code=BS1111")
+    assert status == 200
+    (row,) = [q for q in got["questions"] if q["id"] == server.pyq]
+    assert row["figure"] == "/library/pyq-figures/x.png", "served like the paper itself"
+    with psycopg.connect(DB_URL, autocommit=True) as conn:
+        conn.execute("update pyq_questions set figure = null where id = %s", (server.pyq,))
+
+
 def test_pyq_import_is_idempotent_and_the_bank_shows_it(server):
     items = [{"code": "BS1111", "exam": "mid", "year": 2023, "marks": 2,
               "unit": "Cell Biology", "topic": "Cell theory",

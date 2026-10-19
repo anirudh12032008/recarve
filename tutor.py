@@ -421,7 +421,7 @@ MESSAGE_SQL = ("select id, role, kind, body, meta, cost_usd, created_at"
 
 PYQ_SQL = (
     "select q.id, q.subject_code, q.exam, q.year, q.set_for_section, q.qno, q.marks,"
-    " q.unit, q.topic, q.question_md, q.answer_md, d.title, d.file_key"
+    " q.unit, q.topic, q.question_md, q.answer_md, d.title, d.file_key, q.figure"
     " from pyq_questions q left join archive_documents d on d.id = q.document_id")
 PYQ_ORDER = (" order by q.year desc nulls last,"
              " case q.exam when 'end' then 0 when 'mid' then 1 when 'mini' then 2 else 3 end,"
@@ -432,7 +432,8 @@ def _pyq(row):
     return {"id": str(row[0]), "code": row[1], "exam": row[2], "year": row[3],
             "section": row[4], "qno": row[5], "marks": _num(row[6]), "unit": row[7],
             "topic": row[8], "question_md": row[9], "answer_md": row[10],
-            "title": row[11], "path": ("/" + row[12].lstrip("/")) if row[12] else None}
+            "title": row[11], "path": ("/" + row[12].lstrip("/")) if row[12] else None,
+            "figure": ("/" + row[13].lstrip("/")) if row[13] else None}
 
 
 MASTERY_COLS = ("subject_code, unit, topic, level, attempts, correct, importance,"
