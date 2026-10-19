@@ -1,0 +1,934 @@
+{
+  "code": "HS1112",
+  "name": "Indian Knowledge Systems",
+  "written": "2026-10-19",
+  "source": "agent-written from the AICTE model 'Indian Knowledge System' course outline (the IKS course most NITs adopted after NEP 2020) and its standard text, B. Mahadevan, V.R. Bhat and Nagendra Pavana R.N., 'Introduction to Indian Knowledge System: Concepts and Applications' (PHI, 2022). NOT taken from MANIT's own HS1112 scheme page, which was not available: syllabus.json has no entry for HS1112, so the units and topics below are an estimate of what MANIT teaches. Importance is an ESTIMATE until past papers are imported.",
+  "exam_notes": "No HS1112 past papers have been imported and the seniors' book list is empty, so everything here is an estimate. IKS papers at NITs are usually descriptive: 2-mark definitions and 'name/expand/who wrote' items, 5-mark 'explain / write a short note' questions and 10-mark essays (e.g. 'contributions of ancient Indian mathematicians'); mini tests often use MCQs. Under the MANIT scheme the mid term is 20 marks in 1 hour and the end term 40 marks in 2 hours, so write point-wise with names, texts and dates (use 'c.' where dates are uncertain) and avoid unsupported 'ancient India had everything' claims.",
+  "syllabus_estimated": true,
+  "units": [
+    {
+      "unit": "Introduction to Indian Knowledge Systems",
+      "topics": [
+        {
+          "topic": "What is IKS: meaning, scope and relevance",
+          "importance": "high",
+          "why": "Nearly every IKS paper opens with 'define IKS' (2 marks) or 'relevance of IKS in the light of NEP 2020' (5-10 marks).",
+          "gist": "**Indian Knowledge Systems (IKS)** means the body of knowledge developed in the Indian subcontinent over roughly three thousand years — not only religious and philosophical texts but mathematics, astronomy, medicine, metallurgy, architecture, linguistics, governance and the arts, and also the practical know-how of farmers, artisans and communities. The standard AICTE text frames IKS in three parts: **jnana** (knowledge), **vijnana** (science and its application) and **jivana darshana** (a philosophy and way of life).\n\nKnowledge travelled in two streams: the **classical/textual** (shastra, in Sanskrit, Prakrit, Pali, Tamil and other languages) and the **folk/tacit** (loka-parampara: crafts, farming, healing, passed on by apprenticeship). The tradition itself organised learning as the **14 vidyasthanas** — 4 Vedas, 6 Vedangas, Purana, Nyaya, Mimamsa and Dharmashastra — which become **18** when the 4 Upavedas are added. IKS includes Vedic, Buddhist, Jain, Charvaka and regional traditions.\n\nNEP 2020 asks that IKS be part of the curriculum, and the Ministry of Education set up an **IKS Division at AICTE in 2020**. For an engineer the point is threefold: know what was actually achieved, find ideas still useful today (water harvesting, passive cooling, sustainable materials), and learn to test claims with evidence — avoiding both blanket dismissal and exaggeration.",
+          "key_points": [
+            "Definition: the knowledge, sciences, arts and practices developed in India over about three millennia, both textual and folk.",
+            "Three components: jnana (knowledge), vijnana (science/applied knowledge), jivana darshana (philosophy of life).",
+            "Two streams: classical/shastric (written, many languages) and folk/tacit (oral, practice-based).",
+            "14 vidyasthanas = 4 Vedas + 6 Vedangas + Purana + Nyaya + Mimamsa + Dharmashastra; 18 with the 4 Upavedas.",
+            "IKS is plural: Vedic, Buddhist, Jain, Charvaka, Tamil Sangam and other regional traditions.",
+            "NEP 2020 recommends IKS in education; IKS Division of the Ministry of Education set up at AICTE in 2020.",
+            "Relevance: sustainability, holistic health, interdisciplinary thinking, cultural self-understanding, ideas for design.",
+            "Method: treat traditional claims as hypotheses and test them; no blind glorification or dismissal."
+          ],
+          "formulas": [],
+          "traps": [
+            "Reducing IKS to 'Hindu religious knowledge' — it covers secular sciences and Buddhist, Jain and folk traditions too.",
+            "Writing unsupported claims (aircraft or nuclear weapons in the Vedas): examiners and the course itself ask for evidence-based statements.",
+            "The IKS Division is under the Ministry of Education, housed at AICTE, and dates from 2020 — not UGC, not 2014.",
+            "Ayurveda is an Upaveda, so it is in the list of 18, not the list of 14 vidyasthanas."
+          ],
+          "asked_as": "'Define Indian Knowledge System' (2 marks); 'Explain the scope and classification of IKS' (5 marks); 'Discuss the relevance of IKS for an engineering student in the light of NEP 2020' (10 marks).",
+          "questions": [
+            {"q": "Define Indian Knowledge System (IKS).", "a": "IKS is the body of knowledge — philosophy, sciences, technologies, arts, governance and everyday practices — developed in the Indian subcontinent over about three millennia and transmitted through texts (shastra) and through oral, folk and craft traditions. It is commonly described as **jnana** (knowledge), **vijnana** (science) and **jivana darshana** (philosophy of life).", "marks": 2, "kind": "short"},
+            {"q": "What are the chaturdasha (14) vidyasthanas? How do they become 18?", "a": "The 14 sources of knowledge are: the **4 Vedas** (Rig, Sama, Yajur, Atharva), the **6 Vedangas** (Shiksha, Chandas, Vyakarana, Nirukta, Kalpa, Jyotisha), and **Purana, Nyaya, Mimamsa and Dharmashastra**. Adding the **4 Upavedas** — Ayurveda, Dhanurveda, Gandharvaveda and Arthashastra — gives the **ashtadasha (18) vidyasthanas**.", "marks": 3, "kind": "short"},
+            {"q": "Distinguish between the classical and the folk (tacit) streams of IKS with one example each.", "a": "**Classical/textual**: knowledge codified in shastras, usually in Sanskrit, Tamil, Pali or Prakrit, taught formally and commented on — e.g. Aryabhatiya in astronomy, Charaka Samhita in medicine. **Folk/tacit**: knowledge held by communities and artisans, passed orally or by apprenticeship, often undocumented — e.g. traditional water harvesting such as johads, or the dyeing skills of block printers. Both are part of IKS; the folk stream is most at risk of being lost.", "marks": 3, "kind": "short"},
+            {"q": "Discuss the relevance of Indian Knowledge Systems for a modern engineering student.", "a": "**Introduction**: IKS is India's accumulated knowledge in philosophy, science, technology and arts; NEP 2020 asks it to be taught, and AICTE's IKS Division (2020) supports this.\n\n**Relevance**:\n1. **Sustainability** — traditional water harvesting (tanks, johads, stepwells), passive cooling (courtyards, jalis) and local materials offer low-energy designs.\n2. **Materials and processes** — the corrosion-resistant Delhi iron pillar, wootz crucible steel and zinc distillation at Zawar are case studies in metallurgy.\n3. **Mathematics and computing** — place value and zero, Pingala's combinatorics, Madhava's infinite series and Panini's rule-based grammar show algorithmic thinking.\n4. **Health** — Ayurveda's preventive routines and Yoga support well-being; their remedies are leads for scientific testing.\n5. **Ethics** — dharma, nishkama karma and ahimsa give a basis for professional ethics and safety.\n6. **Identity and innovation** — understanding one's tradition builds confidence and suggests local solutions.\n\n**Caution**: claims must be tested with evidence; IKS is not a substitute for modern science but a resource.\n\n**Conclusion**: studied critically, IKS widens an engineer's toolkit and connects technology with society and environment.", "marks": 10, "kind": "long"},
+            {"q": "The IKS Division of the Ministry of Education was established in:", "options": ["2014", "2017", "2020", "2023"], "answer_index": 2, "a": "It was set up in 2020, the year of NEP 2020, and is housed at AICTE, New Delhi.", "marks": 1, "kind": "mcq"},
+            {"q": "Which of the following is NOT among the 14 vidyasthanas?", "options": ["Nyaya", "Mimamsa", "Dharmashastra", "Ayurveda"], "answer_index": 3, "a": "Ayurveda is an Upaveda; the four Upavedas are added to the 14 to make 18.", "marks": 1, "kind": "mcq"},
+            {"q": "In the triad used to describe IKS, 'vijnana' refers to:", "options": ["Philosophy of life", "Science and applied knowledge", "Ritual", "Poetry"], "answer_index": 1, "a": "Jnana is knowledge, vijnana is science/applied knowledge, jivana darshana is philosophy of life.", "marks": 1, "kind": "mcq"}
+          ]
+        },
+        {
+          "topic": "The Vedic corpus: Vedas, Vedangas and Upavedas",
+          "importance": "must",
+          "why": "'Name the Vedangas', 'Vedanga vs Upaveda' and 'structure of the Vedas' are the most predictable 2- and 5-mark questions in Unit 1.",
+          "gist": "The **Vedas** are the oldest layer of Indian literature, composed in Vedic Sanskrit and transmitted orally for many centuries before being written down; they are classed as **shruti** ('what is heard'). There are four: **Rigveda** (hymns to deities; about 1,028 suktas in 10 mandalas, composed c. 1500–1200 BCE on the mainstream view — some argue for earlier dates), **Samaveda** (verses, nearly all from the Rigveda, set to melody for chanting), **Yajurveda** (prose formulae for sacrifice; Shukla/white and Krishna/black recensions) and **Atharvaveda** (spells, healing, household and social life). Each Veda has four layers: **Samhita** (hymns), **Brahmana** (ritual prose), **Aranyaka** ('forest' texts) and **Upanishad** (philosophy; hence Vedanta, 'end of the Veda').\n\nTo preserve and use the Vedas correctly, six auxiliary sciences — the **Vedangas**, 'limbs of the Veda' — developed: **Shiksha** (phonetics), **Chandas** (metre), **Vyakarana** (grammar), **Nirukta** (etymology), **Kalpa** (ritual, including the Sulbasutras) and **Jyotisha** (time-keeping and astronomy).\n\nThe **Upavedas** ('subsidiary Vedas') are applied disciplines traditionally attached to a Veda: **Ayurveda** (medicine), **Dhanurveda** (archery and warfare — Yajurveda), **Gandharvaveda** (music and dance — Samaveda) and **Arthashastra** (polity — Atharvaveda; some lists give Sthapatyaveda, architecture). Ayurveda is linked to the Rigveda in some lists and to the Atharvaveda in others, so state these mappings as 'traditionally'.",
+          "key_points": [
+            "Four Vedas: Rig (hymns), Sama (chants), Yajur (sacrificial formulae; Shukla and Krishna), Atharva (spells, healing, daily life).",
+            "Rigveda: 10 mandalas, about 1,028 suktas; c. 1500–1200 BCE (mainstream; dates disputed).",
+            "Four layers of each Veda: Samhita, Brahmana, Aranyaka, Upanishad.",
+            "Six Vedangas: Shiksha, Chandas, Vyakarana, Nirukta, Kalpa, Jyotisha — tools to recite, understand and apply the Vedas.",
+            "Kalpa has Shrauta, Grihya, Dharma and Sulba sutras; the Sulbasutras contain the altar geometry.",
+            "Four Upavedas: Ayurveda, Dhanurveda, Gandharvaveda, Arthashastra (or Sthapatyaveda).",
+            "Traditional links: Gandharvaveda–Samaveda, Dhanurveda–Yajurveda, Arthashastra/Sthapatya–Atharvaveda, Ayurveda–Rig or Atharva (sources differ).",
+            "Shruti (Vedas, incl. Upanishads) vs smriti (Dharmashastras, epics, Puranas)."
+          ],
+          "formulas": [],
+          "traps": [
+            "Vedanga vs Upaveda: Jyotisha and Vyakarana are Vedangas; Ayurveda and Gandharvaveda are Upavedas. Mixing them is the commonest error.",
+            "The Upanishads are the last layer of the Vedas themselves, not separate later books; the Puranas and epics are smriti, not Vedas.",
+            "Do not write a confident date like '10,000 BCE' for the Rigveda; write c. 1500–1200 BCE and say dating is debated.",
+            "Samaveda is not an independent hymn collection — almost all its verses come from the Rigveda."
+          ],
+          "asked_as": "'Name the six Vedangas and state the purpose of each' (5 marks); 'Differentiate between Vedanga and Upaveda' (2-3 marks); 'Describe the structure of the Vedic literature' (5-10 marks).",
+          "questions": [
+            {"q": "Name the six Vedangas and give the subject of each.", "a": "1. **Shiksha** — phonetics and correct pronunciation.\n2. **Chandas** — metre (prosody).\n3. **Vyakarana** — grammar.\n4. **Nirukta** — etymology, meaning of difficult words.\n5. **Kalpa** — ritual procedure (Shrauta, Grihya, Dharma, Sulba sutras).\n6. **Jyotisha** — time-keeping and astronomy for fixing ritual times.", "marks": 5, "kind": "short"},
+            {"q": "Differentiate between a Vedanga and an Upaveda.", "a": "A **Vedanga** ('limb of the Veda') is an auxiliary discipline needed to recite, understand and apply the Vedas correctly — six of them, e.g. Shiksha, Jyotisha. An **Upaveda** ('subsidiary Veda') is an applied knowledge system traditionally attached to a particular Veda but serving worldly ends — four of them, e.g. Ayurveda, Gandharvaveda.", "marks": 3, "kind": "short"},
+            {"q": "Name the four layers of each Veda and state what each contains.", "a": "**Samhita** — collection of hymns/mantras; **Brahmana** — prose explaining rituals; **Aranyaka** — 'forest texts' on the symbolic meaning of ritual; **Upanishad** — philosophical enquiry into Brahman and Atman (Vedanta).", "marks": 3, "kind": "short"},
+            {"q": "Write a note on the four Vedas and their Upavedas.", "a": "**Rigveda** — oldest, about 1,028 hymns in 10 mandalas (c. 1500–1200 BCE, dates debated); traditionally linked in some lists to **Ayurveda**.\n**Samaveda** — Rigvedic verses set to melody for chanting; linked to **Gandharvaveda** (music, dance).\n**Yajurveda** — prose formulae for sacrifices, Shukla and Krishna recensions; linked to **Dhanurveda** (archery, warfare).\n**Atharvaveda** — spells, healing, household and social life; linked to **Arthashastra** or Sthapatyaveda (polity/architecture), and in some lists to Ayurveda.\nThe mappings differ between sources, so they are traditional associations. Each Veda has Samhita, Brahmana, Aranyaka and Upanishad layers.", "marks": 5, "kind": "long"},
+            {"q": "Which of the following is a Vedanga?", "options": ["Ayurveda", "Jyotisha", "Gandharvaveda", "Dhanurveda"], "answer_index": 1, "a": "Jyotisha is one of the six Vedangas; the other three options are Upavedas.", "marks": 1, "kind": "mcq"},
+            {"q": "The Upaveda traditionally associated with the Samaveda is:", "options": ["Dhanurveda", "Ayurveda", "Gandharvaveda", "Arthashastra"], "answer_index": 2, "a": "Gandharvaveda (music and dance) fits the Samaveda, the Veda of chant.", "marks": 1, "kind": "mcq"},
+            {"q": "The Sulbasutras, which contain altar geometry, belong to which Vedanga?", "options": ["Jyotisha", "Kalpa", "Nirukta", "Shiksha"], "answer_index": 1, "a": "Kalpa (ritual) includes the Shrauta, Grihya, Dharma and Sulba sutras.", "marks": 1, "kind": "mcq"}
+          ]
+        },
+        {
+          "topic": "Pramanas: the means of valid knowledge",
+          "importance": "high",
+          "why": "'List the six pramanas with examples' is a standard 5-mark question and the pramana-per-school table gives easy MCQs.",
+          "gist": "Every Indian philosophical school begins by asking how we know. A **pramana** is a means of valid knowledge (**prama**); the knower is the **pramata** and the object known the **prameya**. Six pramanas are recognised across the schools:\n\n1. **Pratyaksha** — perception through the senses (seeing a pot).\n2. **Anumana** — inference from a sign (hetu/linga) to what it indicates, based on **vyapti** (invariable concomitance): smoke on the hill, so fire.\n3. **Upamana** — comparison/analogy: told that a gavaya (wild ox) resembles a cow, you recognise one in the forest.\n4. **Shabda** — reliable verbal testimony (apta-vachana), including scripture.\n5. **Arthapatti** — postulation: 'Devadatta is fat but does not eat by day', so he must eat at night.\n6. **Anupalabdhi** — non-apprehension: knowing absence (there is no pot on the floor).\n\nSchools accept different numbers: **Charvaka 1** (perception only); **Vaisheshika and Buddhists 2** (+ inference); **Samkhya and Yoga 3** (+ testimony); **Nyaya 4** (+ comparison); **Prabhakara Mimamsa 5** (+ postulation); **Bhatta Mimamsa and Advaita Vedanta 6** (+ non-apprehension). For engineers the framework maps neatly onto practice: measurement (perception aided by instruments), modelling and deduction (inference), standards and handbooks (testimony) and analogy-based design (comparison).",
+          "key_points": [
+            "Pramana = means of valid knowledge; prama = valid knowledge; pramata = knower; prameya = object known.",
+            "Six pramanas: pratyaksha, anumana, upamana, shabda, arthapatti, anupalabdhi — with one example each.",
+            "Anumana rests on vyapti (invariable concomitance), e.g. wherever smoke, there fire.",
+            "Arthapatti explains an apparent conflict by assuming a fact (fat but not eating by day → eats at night).",
+            "Anupalabdhi gives knowledge of absence.",
+            "Counts: Charvaka 1, Vaisheshika/Buddhist 2, Samkhya/Yoga 3, Nyaya 4, Prabhakara 5, Bhatta/Advaita 6.",
+            "Engineering parallel: measurement, inference/modelling, standards, analogy."
+          ],
+          "formulas": [],
+          "traps": [
+            "Nyaya accepts four pramanas, not six; six is Bhatta Mimamsa and Advaita Vedanta.",
+            "Arthapatti is not the same as anumana: it postulates the only fact that resolves a contradiction.",
+            "Charvaka accepts only perception — writing that it accepts inference loses the mark.",
+            "Do not confuse pramana (means) with prameya (object) or prama (the knowledge itself)."
+          ],
+          "asked_as": "'What is a pramana?' (2 marks); 'Explain the six pramanas with examples' (5 marks); 'Which pramanas are accepted by the different darshanas?' (5 marks).",
+          "questions": [
+            {"q": "What is a pramana? Distinguish prama, pramata and prameya.", "a": "A **pramana** is a valid means of knowledge. **Prama** is the valid knowledge produced, **pramata** is the knower, and **prameya** is the object that is known.", "marks": 2, "kind": "short"},
+            {"q": "Explain the six pramanas with one example each.", "a": "1. **Pratyaksha** (perception) — seeing a pot on the table.\n2. **Anumana** (inference) — seeing smoke on a hill and inferring fire, based on the vyapti 'wherever smoke, there fire'.\n3. **Upamana** (comparison) — recognising a gavaya because you were told it looks like a cow.\n4. **Shabda** (testimony) — knowing the boiling point of water from a reliable textbook or expert.\n5. **Arthapatti** (postulation) — Devadatta is fat but does not eat by day, so he eats at night.\n6. **Anupalabdhi** (non-apprehension) — not perceiving a pot on the floor, you know it is absent.", "marks": 5, "kind": "long"},
+            {"q": "State how many pramanas each school accepts: Charvaka, Vaisheshika, Samkhya, Nyaya, Advaita Vedanta.", "a": "Charvaka — 1 (pratyaksha); Vaisheshika — 2 (pratyaksha, anumana); Samkhya — 3 (+ shabda); Nyaya — 4 (+ upamana); Advaita Vedanta — 6 (+ arthapatti and anupalabdhi).", "marks": 3, "kind": "short"},
+            {"q": "Relate the pramanas to the way an engineer acquires knowledge.", "a": "Pratyaksha corresponds to observation and measurement with instruments; anumana to inference from data and models (e.g. inferring a crack from vibration readings); shabda to codes, standards and expert literature; upamana to design by analogy and similitude (scale models); arthapatti to diagnosis — postulating the only cause that explains an observed fault; anupalabdhi to tests that confirm absence (no leakage detected).", "marks": 5, "kind": "short"},
+            {"q": "'Devadatta is fat but does not eat during the day; therefore he eats at night.' This is an example of:", "options": ["Anumana", "Upamana", "Arthapatti", "Anupalabdhi"], "answer_index": 2, "a": "Arthapatti (postulation) assumes the one fact that resolves the apparent contradiction.", "marks": 1, "kind": "mcq"},
+            {"q": "How many pramanas does the Nyaya school accept?", "options": ["One", "Two", "Four", "Six"], "answer_index": 2, "a": "Nyaya accepts pratyaksha, anumana, upamana and shabda — four.", "marks": 1, "kind": "mcq"},
+            {"q": "The Charvaka school accepts only:", "options": ["Pratyaksha", "Anumana", "Shabda", "Upamana"], "answer_index": 0, "a": "Charvaka (Lokayata) materialism accepts only perception as a valid means of knowledge.", "marks": 1, "kind": "mcq"}
+          ]
+        },
+        {
+          "topic": "The six darshanas in brief",
+          "importance": "high",
+          "why": "A table of the six darshanas (founder, root text, central idea) is a favourite 5-mark question, and astika/nastika is a common 2-marker.",
+          "gist": "**Darshana** ('seeing', a view) is the Indian term for a philosophical system. Schools that accept the authority of the Vedas are **astika**; those that do not are **nastika** — **Charvaka/Lokayata** (materialism), **Buddhism** and **Jainism** (also the Ajivikas). The division is about the Vedas, not about God: Samkhya and Purva Mimamsa are astika yet largely non-theistic.\n\nThe six astika darshanas form three traditional pairs:\n- **Nyaya** (Akshapada Gautama, Nyaya Sutra) — logic and epistemology; 16 categories, four pramanas, the five-step syllogism.\n- **Vaisheshika** (Kanada, Vaisheshika Sutra) — categories of reality and atomism (paramanu).\n- **Samkhya** (Kapila; earliest surviving text Ishvarakrishna's Samkhya Karika, c. 4th–5th c. CE) — dualism of **purusha** (consciousness) and **prakriti** (matter), with three gunas (sattva, rajas, tamas) and 25 tattvas.\n- **Yoga** (Patanjali, Yoga Sutra) — discipline of the mind through eight limbs; accepts Samkhya metaphysics and adds Ishvara.\n- **Purva Mimamsa** (Jaimini, Mimamsa Sutra) — rules for interpreting Vedic injunctions; dharma as duty.\n- **Uttara Mimamsa / Vedanta** (Badarayana, Brahma Sutra) — nature of Brahman and Atman; later sub-schools Advaita (Shankara, c. 8th c.), Vishishtadvaita (Ramanuja, c. 11th–12th c.) and Dvaita (Madhva, c. 13th c.).\n\nEach school has a root sutra text and commentaries (bhashyas). For exams, know each darshana's founder, root text, central idea and number of pramanas.",
+          "key_points": [
+            "Astika = accepts Vedic authority; nastika = rejects it (Charvaka, Buddhism, Jainism, Ajivika).",
+            "Pairs: Nyaya–Vaisheshika, Samkhya–Yoga, Purva Mimamsa–Vedanta.",
+            "Nyaya: Gautama, logic; Vaisheshika: Kanada, atomism and categories.",
+            "Samkhya: Kapila, purusha and prakriti, three gunas, 25 tattvas.",
+            "Yoga: Patanjali, chitta-vritti-nirodha, eight limbs, Ishvara.",
+            "Purva Mimamsa: Jaimini, Vedic injunctions and ritual; Vedanta: Badarayana's Brahma Sutra.",
+            "Vedanta sub-schools: Advaita (Shankara), Vishishtadvaita (Ramanuja), Dvaita (Madhva)."
+          ],
+          "formulas": [],
+          "traps": [
+            "Astika does not mean 'believes in God' — Samkhya is astika and non-theistic.",
+            "Nyaya's founder is Akshapada Gautama, not Gautama Buddha.",
+            "Yoga darshana is a philosophy of mind, not modern postural yoga.",
+            "Vedanta's root text is the Brahma Sutra of Badarayana; Shankara is a later commentator, not the founder of Vedanta."
+          ],
+          "asked_as": "'Distinguish astika and nastika darshanas' (2 marks); 'Tabulate the six darshanas with founders and key ideas' (5 marks); 'Write an essay on the Indian philosophical systems' (10 marks).",
+          "questions": [
+            {"q": "Distinguish between astika and nastika darshanas with examples.", "a": "**Astika** darshanas accept the authority of the Vedas — Nyaya, Vaisheshika, Samkhya, Yoga, Purva Mimamsa, Vedanta. **Nastika** darshanas reject it — Charvaka, Buddhism, Jainism. The criterion is the Vedas, not belief in God.", "marks": 2, "kind": "short"},
+            {"q": "Tabulate the six astika darshanas with founder, root text and central idea.", "a": "| Darshana | Founder | Root text | Central idea |\n|---|---|---|---|\n| Nyaya | Akshapada Gautama | Nyaya Sutra | Logic, four pramanas, five-membered inference |\n| Vaisheshika | Kanada | Vaisheshika Sutra | Six/seven categories, atomism |\n| Samkhya | Kapila | (Samkhya Karika of Ishvarakrishna) | Purusha–prakriti dualism, three gunas, 25 tattvas |\n| Yoga | Patanjali | Yoga Sutra | Stilling the mind, eight limbs |\n| Purva Mimamsa | Jaimini | Mimamsa Sutra | Interpretation of Vedic injunctions, dharma |\n| Vedanta | Badarayana | Brahma Sutra | Brahman and Atman; Advaita, Vishishtadvaita, Dvaita |", "marks": 5, "kind": "long"},
+            {"q": "Explain purusha, prakriti and the three gunas in Samkhya.", "a": "Samkhya is dualist. **Purusha** is pure consciousness — many, inactive witnesses. **Prakriti** is primordial matter, the source of the mind, senses and elements. Prakriti consists of three **gunas**: **sattva** (lightness, clarity), **rajas** (activity, passion) and **tamas** (inertia, heaviness). When their balance is disturbed in the presence of purusha, evolution of the 23 other tattvas begins (mahat, ahankara, manas, senses, subtle and gross elements) — 25 tattvas in all. Liberation (kaivalya) is discrimination of purusha from prakriti.", "marks": 5, "kind": "short"},
+            {"q": "Name the three sub-schools of Vedanta and their main teachers.", "a": "**Advaita** (non-dualism) — Shankara (c. 8th c.); **Vishishtadvaita** (qualified non-dualism) — Ramanuja (c. 11th–12th c.); **Dvaita** (dualism) — Madhva (c. 13th c.).", "marks": 3, "kind": "short"},
+            {"q": "The Vaisheshika darshana was founded by:", "options": ["Kapila", "Jaimini", "Kanada", "Badarayana"], "answer_index": 2, "a": "Kanada composed the Vaisheshika Sutra.", "marks": 1, "kind": "mcq"},
+            {"q": "Which of these is a nastika school?", "options": ["Samkhya", "Charvaka", "Mimamsa", "Nyaya"], "answer_index": 1, "a": "Charvaka (Lokayata) rejects Vedic authority; the others are astika.", "marks": 1, "kind": "mcq"},
+            {"q": "The Brahma Sutra is the root text of:", "options": ["Purva Mimamsa", "Yoga", "Vedanta", "Nyaya"], "answer_index": 2, "a": "Badarayana's Brahma Sutra is the root text of Uttara Mimamsa (Vedanta).", "marks": 1, "kind": "mcq"}
+          ]
+        },
+        {
+          "topic": "Oral tradition and the manuscript heritage",
+          "importance": "medium",
+          "why": "Asked as a 5-mark note on how the Vedas were preserved (pathas) or on manuscripts and their conservation; lower weight than the corpus itself.",
+          "gist": "For many centuries the Vedas were preserved without writing. Students memorised them from a teacher (**guru-shishya parampara**) using recitation patterns (**pathas**) that cross-check each other. In **samhita-patha** the text is recited continuously; in **pada-patha** each word is separated; in **krama-patha** words are recited in overlapping pairs (ab, bc, cd …); and in complex **vikriti** forms such as **jata** (ab ba ab …) and **ghana** (ab ba abc cba abc …) words are woven forwards and backwards. Because every word is recited in several orders, an error in one shows up in the others — redundancy for error detection, comparable in spirit to checks in data transmission. The pitch accents (udatta, anudatta, svarita) were preserved too. UNESCO proclaimed the tradition of Vedic chanting a Masterpiece of the Oral and Intangible Heritage of Humanity in **2003**.\n\nWriting: the **Brahmi** and **Kharosthi** scripts are clearly attested from Ashoka's edicts (3rd c. BCE; some finds may be earlier); Brahmi was deciphered by **James Prinsep** in 1837. Texts were later copied on **palm leaf** (south and east), **birch bark** (bhurja-patra, north-west) and, increasingly from about the 13th century, paper. These decay within a few centuries, so texts survived only by repeated recopying; the **Gilgit manuscripts** (c. 5th–7th c. CE) are among the oldest surviving. The **National Mission for Manuscripts** (2003) estimates India holds up to about ten million manuscripts, most uncatalogued; the **Gyan Bharatam Mission** announced in the 2025 Union Budget extends survey, digitisation and conservation.",
+          "key_points": [
+            "Guru-shishya parampara: oral transmission by memorisation.",
+            "Pathas: samhita (continuous), pada (word by word), krama (ab bc cd), jata, ghana — error-checking by redundancy.",
+            "Svaras (accents) preserved: udatta, anudatta, svarita.",
+            "UNESCO: Vedic chanting proclaimed Masterpiece of Oral and Intangible Heritage, 2003.",
+            "Scripts: Brahmi, Kharosthi (Ashokan edicts, 3rd c. BCE); Brahmi deciphered by James Prinsep, 1837.",
+            "Materials: palm leaf, birch bark, later paper; repeated recopying needed.",
+            "National Mission for Manuscripts (2003): up to ~10 million manuscripts estimated; Gyan Bharatam Mission (2025)."
+          ],
+          "formulas": [],
+          "traps": [
+            "Krama-patha is overlapping pairs (ab, bc, cd), not reversed pairs — that is part of jata/ghana.",
+            "The surviving manuscript of a text is usually much later than its composition; do not date a text by its oldest manuscript or vice versa.",
+            "The Indus script is undeciphered — do not call it the ancestor of Brahmi as a fact.",
+            "Do not claim the oral tradition was 'error-free'; say it was designed to detect and prevent errors."
+          ],
+          "asked_as": "'Explain the methods used to preserve the Vedas orally' (5 marks); 'What is krama-patha?' (2 marks); 'Write a note on India's manuscript heritage and its conservation' (5 marks).",
+          "questions": [
+            {"q": "What is pada-patha? How does it differ from krama-patha?", "a": "In **pada-patha** each word of the hymn is recited separately in its original form, with sandhi undone. In **krama-patha** the words are recited in overlapping pairs: for words a b c d, the recitation is ab, bc, cd.", "marks": 2, "kind": "short"},
+            {"q": "Explain how the Vedic recitation methods protected the text from corruption.", "a": "The same text was memorised in several patterns: **samhita** (continuous), **pada** (word by word), **krama** (ab bc cd), and complex vikritis such as **jata** (ab ba ab) and **ghana** (ab ba abc cba abc). Each word thus occurs in many contexts and orders, and the accents (udatta, anudatta, svarita) are fixed. A change in one pattern would conflict with the others and be noticed when reciters compared versions — a redundancy-based error-detection system. Strict teacher-student repetition and community recitation added further checks. The result is a text preserved with remarkable fidelity; UNESCO recognised Vedic chanting in 2003.", "marks": 5, "kind": "long"},
+            {"q": "Name three writing materials used for Indian manuscripts and the regions where each was common.", "a": "**Palm leaf** (tala-patra) — south India and Odisha; **birch bark** (bhurja-patra) — Kashmir and the north-west; **paper** — widespread from about the 13th century, especially in the north. Cloth and copper plates were used for some records.", "marks": 3, "kind": "short"},
+            {"q": "Why is manuscript conservation important for IKS? Mention the national efforts.", "a": "Most Indian texts survive only in manuscripts, many uncatalogued, unread and decaying (palm leaf and birch bark last only a few centuries). Losing them loses knowledge in mathematics, medicine, astronomy and literature. The **National Mission for Manuscripts** (2003) surveys, catalogues, conserves and digitises manuscripts and estimates up to about ten million exist; the **Gyan Bharatam Mission** (2025 Budget) expands this. Digitisation and critical editions let scholars and engineers study the content.", "marks": 5, "kind": "short"},
+            {"q": "In krama-patha, the words a b c d are recited as:", "options": ["a b c d", "ab bc cd", "ab ba ab", "d c b a"], "answer_index": 1, "a": "Krama-patha recites overlapping pairs: ab, bc, cd.", "marks": 1, "kind": "mcq"},
+            {"q": "The Brahmi script was deciphered by:", "options": ["William Jones", "James Prinsep", "Max Muller", "Alexander Cunningham"], "answer_index": 1, "a": "James Prinsep deciphered Brahmi in 1837, which made Ashoka's edicts readable.", "marks": 1, "kind": "mcq"},
+            {"q": "UNESCO proclaimed the tradition of Vedic chanting a Masterpiece of the Oral and Intangible Heritage of Humanity in:", "options": ["1993", "2003", "2013", "2016"], "answer_index": 1, "a": "2003 (it was later inscribed on the Representative List in 2008).", "marks": 1, "kind": "mcq"}
+          ]
+        }
+      ]
+    },
+    {
+      "unit": "Indian Mathematics and Astronomy",
+      "topics": [
+        {
+          "topic": "Decimal place-value system and zero (Brahmagupta)",
+          "importance": "must",
+          "why": "Zero and the decimal system are the single most-asked IKS mathematics question, as a 2-mark fact or a 10-mark 'contributions' essay.",
+          "gist": "Modern arithmetic rests on two ideas: **place value** (a digit's value depends on its position, base 10) and **zero**, both as a place-holder and as a number. Indians named large powers of ten early (the Taittiriya Samhita of the Yajurveda lists names up to $10^{12}$, parardha), and by about the 5th century CE used a fully positional decimal system with nine digits and zero; the Jain text *Lokavibhaga* (458 CE) uses place value written in number-words.\n\nEarly written zeros: the **Bakhshali manuscript** uses a dot (its folios were radiocarbon dated in 2017 to between roughly the 3rd and 10th centuries — the dates are contested), and the **Gwalior Chaturbhuj temple inscription (876 CE)** has a clear circular zero in '270'.\n\nThe decisive step was **Brahmagupta's Brahmasphutasiddhanta (628 CE)**, the first known text to treat zero (**shunya**) as a number with rules: $a+0=a$, $a-0=a$, $a\\times 0=0$, $a-a=0$, together with rules for positive (**dhana**, 'fortunes') and negative (**rina**, 'debts') numbers, e.g. 'the product of two debts is a fortune'. He got division by zero wrong by modern standards ($0/0 = 0$, and $a/0$ left as a fraction); Bhaskara II later called $a/0$ **khahara**, an infinite quantity. Brahmagupta also gave the area of a cyclic quadrilateral and solved $Nx^2+1=y^2$ in special cases. The system reached Baghdad (al-Khwarizmi, c. 825) and Europe (Fibonacci's *Liber Abaci*, 1202) — hence 'Hindu-Arabic numerals'.",
+          "key_points": [
+            "Place value + zero = efficient arithmetic and algorithms.",
+            "Large number names in the Yajurveda (up to $10^{12}$); place value in words in Lokavibhaga (458 CE).",
+            "Early zeros: Bakhshali manuscript dot (date disputed), Gwalior inscription 876 CE ('270').",
+            "Brahmagupta, Brahmasphutasiddhanta, 628 CE: zero as a number, rules for zero, positives (dhana) and negatives (rina).",
+            "Brahmagupta's error: $0/0 = 0$; Bhaskara II's khahara for $a/0$.",
+            "Brahmagupta's cyclic quadrilateral formula and work on $Nx^2+1=y^2$.",
+            "Transmission: al-Khwarizmi (c. 825) → Fibonacci, Liber Abaci (1202) → Europe."
+          ],
+          "formulas": [
+            "$a + 0 = a,\\; a - 0 = a,\\; a \\times 0 = 0,\\; a - a = 0$ — Brahmagupta's rules for zero",
+            "$(-a)(-b) = ab,\\; (-a)(b) = -ab$ — 'two debts make a fortune'",
+            "$A = \\sqrt{(s-a)(s-b)(s-c)(s-d)},\\; s = \\frac{a+b+c+d}{2}$ — Brahmagupta's area of a cyclic quadrilateral"
+          ],
+          "traps": [
+            "Aryabhata did not 'invent zero': he used place value; Brahmagupta first gave rules for zero as a number.",
+            "Brahmagupta's $0/0 = 0$ is wrong in modern mathematics — mention it, do not present it as correct.",
+            "Do not give the Bakhshali dates as settled; write 'dates disputed'.",
+            "'Arabic numerals' are of Indian origin, transmitted through the Arab world — call them Hindu-Arabic."
+          ],
+          "asked_as": "'Who first gave rules for operations with zero?' (1-2 marks); 'Explain the contribution of India to the decimal system and zero' (5 marks); 'Discuss the contributions of Brahmagupta' (5-10 marks).",
+          "questions": [
+            {"q": "What is a place-value number system? Why is zero essential to it?", "a": "In a place-value system the value of a digit depends on its position: in base 10, $305 = 3\\times10^2 + 0\\times10^1 + 5\\times10^0$. Zero is needed as a place-holder to mark an empty position (to distinguish 305 from 35), and as a number it allows arithmetic rules to work uniformly.", "marks": 2, "kind": "short"},
+            {"q": "State Brahmagupta's rules for zero and for negative numbers. Which of his rules is not accepted today?", "a": "In the **Brahmasphutasiddhanta (628 CE)**: $a+0=a$; $a-0=a$; $a-a=0$; $a\\times0=0$; $0\\times0=0$. For fortunes (positive) and debts (negative): a debt minus zero is a debt; zero minus a debt is a fortune; product or quotient of two debts is a fortune; of a fortune and a debt is a debt. He stated $0/0 = 0$ and left $a/0$ as a fraction with zero denominator; today $a/0$ is undefined and $0/0$ indeterminate, so these are not accepted.", "marks": 5, "kind": "long"},
+            {"q": "Trace the transmission of Indian numerals to Europe.", "a": "By about the 5th–6th c. CE Indians used nine digits with place value and zero. Brahmagupta's works were translated into Arabic in Baghdad in the 8th c.; **al-Khwarizmi** (c. 825) wrote on calculation with Hindu numerals, which spread through the Islamic world. **Fibonacci's Liber Abaci (1202)** introduced the system to Europe, where it replaced Roman numerals over the next centuries. Hence the name Hindu-Arabic numerals.", "marks": 5, "kind": "short"},
+            {"q": "Using Brahmagupta's formula, find the area of a cyclic quadrilateral with sides 3, 4, 5 and 6 units.", "a": "$s = \\frac{3+4+5+6}{2} = 9$.\n$A = \\sqrt{(9-3)(9-4)(9-5)(9-6)} = \\sqrt{6\\times5\\times4\\times3} = \\sqrt{360} \\approx 18.97$ square units.", "marks": 3, "kind": "numerical"},
+            {"q": "The first known text to give rules for arithmetic with zero as a number is:", "options": ["Aryabhatiya", "Brahmasphutasiddhanta", "Lilavati", "Surya Siddhanta"], "answer_index": 1, "a": "Brahmagupta's Brahmasphutasiddhanta (628 CE).", "marks": 1, "kind": "mcq"},
+            {"q": "Bhaskara II called a quantity divided by zero:", "options": ["Shunya", "Rina", "Khahara", "Dhana"], "answer_index": 2, "a": "Khahara — a quantity with zero as divisor, which he treated as infinite.", "marks": 1, "kind": "mcq"},
+            {"q": "The Gwalior inscription showing a circular zero in the number 270 is dated:", "options": ["499 CE", "628 CE", "876 CE", "1150 CE"], "answer_index": 2, "a": "876 CE, Chaturbhuj temple, Gwalior.", "marks": 1, "kind": "mcq"}
+          ]
+        },
+        {
+          "topic": "Baudhayana and the Sulbasutras",
+          "importance": "high",
+          "why": "Baudhayana's diagonal rule and his value of √2 are standard 5-mark questions and give one of the few genuine numericals in the paper.",
+          "gist": "The **Sulbasutras** ('rules of the cord') are manuals within the **Kalpa** Vedanga for building fire altars (vedi, chiti) of exact shapes and areas using only a cord (rajju) and pegs (shanku). The main ones are by **Baudhayana**, Apastamba, Katyayana and Manava; Baudhayana's is the oldest, usually dated c. 800–500 BCE (uncertain). Since altars of different shapes — square, circle, the falcon-shaped *shyenachiti* — had to have equal or exactly multiplied areas, the authors needed geometry: drawing right angles and east-west lines, turning a square into a rectangle or circle of equal area, and doubling a square.\n\nBaudhayana states the result now called the Pythagorean theorem: 'the diagonal of a rectangle produces both the areas which its length and breadth produce separately', i.e. $d^2 = l^2 + b^2$, and lists triples such as (3, 4, 5), (5, 12, 13), (8, 15, 17), (7, 24, 25), (12, 35, 37). To double a square he needs the diagonal of a unit square, and gives\n$$\\sqrt2 \\approx 1 + \\frac13 + \\frac{1}{3\\cdot4} - \\frac{1}{3\\cdot4\\cdot34} = \\frac{577}{408} \\approx 1.4142157,$$\ncorrect to five decimal places (true value 1.4142136). It is a statement and a construction rule, not a deductive proof like Euclid's, and Babylonian tablets (e.g. Plimpton 322, c. 1800 BCE) also show such triples. The honest claim: the Sulbasutras contain one of the earliest explicit general statements of the theorem, applied in practical construction.",
+          "key_points": [
+            "Sulbasutras: part of Kalpa Vedanga; altar construction with cord and pegs.",
+            "Authors: Baudhayana (oldest, c. 800–500 BCE, uncertain), Apastamba, Katyayana, Manava.",
+            "Diagonal rule $d^2 = l^2 + b^2$ stated as a general rule; triples (3,4,5), (5,12,13), (8,15,17), (7,24,25), (12,35,37).",
+            "√2 ≈ 577/408, correct to 5 decimal places.",
+            "Constructions: right angles, doubling a square, square to circle ('circling the square') and back, equal-area transformations.",
+            "Statement and construction, not formal proof; Babylonian triples are older."
+          ],
+          "formulas": [
+            "$d^2 = l^2 + b^2$ — Baudhayana's diagonal rule",
+            "$\\sqrt{2} \\approx 1 + \\frac{1}{3} + \\frac{1}{3\\cdot4} - \\frac{1}{3\\cdot4\\cdot34} = \\frac{577}{408} \\approx 1.4142157$ — Sulbasutra value of √2",
+            "$r \\approx \\frac{a}{2} + \\frac{1}{3}\\left(\\frac{a\\sqrt2}{2} - \\frac{a}{2}\\right) = \\frac{a(2+\\sqrt2)}{6}$ — circling a square of side $a$"
+          ],
+          "traps": [
+            "Saying 'Baudhayana proved Pythagoras' theorem' — he stated it and used it; write 'stated'.",
+            "Sulbasutras belong to Kalpa, not Jyotisha.",
+            "577/408 is an approximation, not the exact value; give its accuracy (5 decimal places).",
+            "Do not claim Pythagoras copied Baudhayana — no evidence either way."
+          ],
+          "asked_as": "'State Baudhayana's theorem' (2 marks); 'What value of √2 is given in the Sulbasutras? Comment on its accuracy' (3-5 marks); 'Write a note on the geometry of the Sulbasutras' (5 marks).",
+          "questions": [
+            {"q": "State Baudhayana's diagonal rule.", "a": "'The diagonal (rope) of a rectangle produces both the areas which the length and breadth produce separately' — the square on the diagonal equals the sum of the squares on the two sides: $d^2 = l^2 + b^2$.", "marks": 2, "kind": "short"},
+            {"q": "Show that the Sulbasutra approximation of √2 equals 577/408 and find its error.", "a": "$1 + \\frac13 + \\frac{1}{12} - \\frac{1}{408}$. With denominator 408: $\\frac{408 + 136 + 34 - 1}{408} = \\frac{577}{408} = 1.4142157$.\nTrue $\\sqrt2 = 1.4142136$. Error $\\approx 2.1\\times10^{-6}$ — correct to five decimal places.", "marks": 3, "kind": "numerical"},
+            {"q": "Check whether (12, 35, 37) is a Baudhayana triple.", "a": "$12^2 + 35^2 = 144 + 1225 = 1369 = 37^2$. Yes, it satisfies $d^2 = l^2 + b^2$.", "marks": 2, "kind": "numerical"},
+            {"q": "Write a note on the Sulbasutras and their geometry.", "a": "**What**: Sulbasutras ('rules of the cord') are part of the **Kalpa** Vedanga, giving rules for constructing Vedic fire altars of exact shapes and areas with a cord and pegs. **Authors**: Baudhayana (oldest, c. 800–500 BCE, uncertain), Apastamba, Katyayana, Manava.\n**Geometry**:\n1. Drawing east-west lines and perpendiculars using cords.\n2. The diagonal rule $d^2 = l^2 + b^2$ and triples (3,4,5), (5,12,13), (8,15,17), (7,24,25), (12,35,37).\n3. Doubling a square using its diagonal; $\\sqrt2 \\approx 577/408$, correct to 5 decimal places.\n4. Equal-area transformations: square to rectangle, square to circle and circle to square (approximate).\n5. Altars like the falcon-shaped shyenachiti built from bricks of fixed shapes and total area.\n**Assessment**: the rules are stated and used, not proved deductively; they are among the earliest explicit general statements of the theorem.", "marks": 5, "kind": "long"},
+            {"q": "The Sulbasutras give √2 approximately as:", "options": ["22/7", "577/408", "355/113", "99/70"], "answer_index": 1, "a": "577/408 ≈ 1.4142157.", "marks": 1, "kind": "mcq"},
+            {"q": "The Sulbasutras were written mainly for:", "options": ["Predicting eclipses", "Constructing fire altars", "Land revenue survey", "Temple music"], "answer_index": 1, "a": "They are ritual manuals (Kalpa) for building altars of exact shape and area.", "marks": 1, "kind": "mcq"}
+          ]
+        },
+        {
+          "topic": "Pingala: prosody, binary patterns and combinatorics",
+          "importance": "medium",
+          "why": "Pingala appears as a 5-mark note or an MCQ ('binary', 'meru-prastara'); fewer marks than zero or Aryabhata but easy numericals.",
+          "gist": "Pingala's **Chandahshastra** (Chandahsutra; c. 3rd–2nd century BCE, date uncertain) is a treatise on Sanskrit metre (chandas, a Vedanga). Each syllable is **laghu** (light, L, one unit) or **guru** (heavy, G, two units). A metre of $n$ syllables is a string of L's and G's, so there are $2^n$ patterns. Pingala gives procedures (pratyayas) for handling them: **prastara** — list all patterns in a fixed order (the first row is all G); **sankhya** — count them ($2^n$, computed by repeated halving and squaring, essentially fast exponentiation); **nashta** — from a row number recover the pattern; **uddishta** — from a pattern find its row number; **lagakriya** — count patterns with exactly $r$ laghus, $\\binom{n}{r}$; **adhvayoga** — the space needed to write the table.\n\nTaking G = 0 and L = 1, a pattern's row number is $1 +$ its binary value read with the leftmost syllable as the least significant digit, so Pingala's table is a binary-like enumeration. The commentator **Halayudha** (10th c. CE) describes the **meru-prastara**, the triangle we call Pascal's triangle, for the lagakriya counts. For metres counted by duration (matra), **Virahanka** (c. 6th–8th c.), **Gopala** and **Hemachandra** (12th c.) showed the number of patterns of total length $n$ obeys $M_n = M_{n-1} + M_{n-2}$ — the Fibonacci sequence, before Fibonacci (1202). Pingala had no binary arithmetic or computers; the honest claim is an early systematic combinatorics of two-symbol strings.",
+          "key_points": [
+            "Chandahshastra of Pingala, c. 3rd–2nd c. BCE; subject: metre (a Vedanga).",
+            "Laghu (L, 1 unit) and guru (G, 2 units); $n$ syllables give $2^n$ metres.",
+            "Six pratyayas: prastara, sankhya, nashta, uddishta, lagakriya, adhvayoga.",
+            "Row number $= 1 + \\sum 2^{i-1}$ over positions $i$ holding L (left to right): a binary-like code.",
+            "Lagakriya gives $\\binom{n}{r}$; meru-prastara (Pascal's triangle) explicit in Halayudha, 10th c.",
+            "Matra-meru: $M_n = M_{n-1} + M_{n-2}$ — Virahanka, Gopala, Hemachandra (Fibonacci numbers).",
+            "Sankhya computed $2^n$ by halving/squaring — an early efficient algorithm."
+          ],
+          "formulas": [
+            "$2^n$ — number of metres of $n$ syllables",
+            "$\\binom{n}{r} = \\frac{n!}{r!\\,(n-r)!}$ — metres with $r$ laghus (lagakriya)",
+            "$\\sum_{r=0}^{n}\\binom{n}{r} = 2^n$ — row sums of the meru-prastara",
+            "$\\text{row} = 1 + \\sum_{i:\\,\\text{L at } i} 2^{\\,i-1}$ — uddishta, positions counted from the left",
+            "$M_n = M_{n-1} + M_{n-2}$ — matra-meru (Virahanka–Fibonacci) count"
+          ],
+          "traps": [
+            "'Pingala invented binary numbers / the computer' is an overclaim; say binary-like enumeration of patterns.",
+            "The meru-prastara triangle is described explicitly by Halayudha (10th c.), not in Pingala's sutras themselves.",
+            "The Fibonacci-type count belongs to Virahanka/Gopala/Hemachandra, not Pingala.",
+            "Laghu is 1 unit and guru 2 units — reversing them breaks every numerical."
+          ],
+          "asked_as": "'Write a note on Pingala's contributions' (5 marks); 'What is meru-prastara?' (2 marks); small numericals on $2^n$, $\\binom{n}{r}$ or the row of a pattern (3 marks).",
+          "questions": [
+            {"q": "What are laghu and guru syllables? How many metres of 6 syllables are possible?", "a": "**Laghu** is a light (short) syllable of one unit; **guru** is a heavy (long) syllable of two units. Each of 6 positions is L or G, so $2^6 = 64$ metres.", "marks": 2, "kind": "short"},
+            {"q": "Find the row number of the pattern L G L in Pingala's prastara of 3-syllable metres.", "a": "Uddishta: assign 1, 2, 4 to positions 1, 2, 3 from the left. Laghus are at positions 1 and 3: $1 + 4 = 5$; add 1: row **6**.\nCheck with the prastara: GGG, LGG, GLG, LLG, GGL, **LGL**, GLL, LLL.", "marks": 3, "kind": "numerical"},
+            {"q": "How many 5-syllable metres have exactly 2 laghus? How many matra-patterns have a total duration of 5 units?", "a": "Lagakriya: $\\binom{5}{2} = 10$.\nMatra count: $M_1 = 1$, $M_2 = 2$, $M_3 = 3$, $M_4 = 5$, $M_5 = 8$. So 8 patterns.", "marks": 3, "kind": "numerical"},
+            {"q": "Explain Pingala's six pratyayas and why his work is called an early combinatorics.", "a": "1. **Prastara** — systematic listing of all L/G patterns of $n$ syllables, starting with all G.\n2. **Sankhya** — counting them, $2^n$, computed by halving and squaring.\n3. **Nashta** — recovering the pattern from its row number.\n4. **Uddishta** — finding the row number from the pattern (binary-like, L = 1).\n5. **Lagakriya** — counting patterns with $r$ laghus, $\\binom{n}{r}$; later shown as the meru-prastara (Pascal's triangle, Halayudha, 10th c.).\n6. **Adhvayoga** — space needed to write the prastara.\nThese are general algorithms for enumerating and counting two-symbol strings, which is combinatorics; the row-number method is a binary representation. Later prosodists (Virahanka, Hemachandra) found the Fibonacci recurrence for matra metres.", "marks": 5, "kind": "long"},
+            {"q": "The meru-prastara is equivalent to:", "options": ["Magic square", "Pascal's triangle", "Sine table", "Multiplication table"], "answer_index": 1, "a": "It gives the binomial coefficients $\\binom{n}{r}$ — Pascal's triangle.", "marks": 1, "kind": "mcq"},
+            {"q": "The number of metres with total duration $n$ (counting L = 1, G = 2) follows the sequence named after:", "options": ["Fibonacci", "Euler", "Fermat", "Gauss"], "answer_index": 0, "a": "Fibonacci numbers; Indian prosodists such as Virahanka and Hemachandra found it earlier.", "marks": 1, "kind": "mcq"}
+          ]
+        },
+        {
+          "topic": "Aryabhata and Bhaskara I",
+          "importance": "must",
+          "why": "Aryabhata's π, rotation of the Earth and eclipse theory are asked every year in some form; confusing Bhaskara I and II is a standard trap.",
+          "gist": "**Aryabhata** (born 476 CE) wrote the **Aryabhatiya** in **499 CE** at Kusumapura (near Pataliputra, modern Patna), at age 23 as he himself records. It has 121 verses in four sections: **Gitikapada** (large time units, an alphabetic numeral code, sine table), **Ganitapada** (mathematics), **Kalakriyapada** (time reckoning, planetary motion) and **Golapada** (the sphere, eclipses). Key results:\n- $\\pi$: 'add 4 to 100, multiply by 8 and add 62,000: this is the **approximate** (asanna) circumference of a circle of diameter 20,000', i.e. $\\pi \\approx 62832/20000 = 3.1416$.\n- A table of sine differences (jya, half-chords) at intervals of $3°45'$ with radius $R = 3438'$.\n- The **kuttaka** ('pulveriser') method for integer solutions of $ax + by = c$.\n- Sums of squares and cubes, areas and volumes.\n- The Earth rotates on its axis — like a man in a moving boat who sees the bank move backwards.\n- Eclipses are caused by the shadows of the Earth and Moon, not by the demon Rahu.\nHis model is **geocentric** with epicycles, not heliocentric.\n\n**Bhaskara I** (c. 600–680 CE) was his leading commentator (*Aryabhatiyabhashya*, 629 CE) and wrote the *Mahabhaskariya* and *Laghubhaskariya*. He gave a remarkably accurate rational approximation for the sine, and his commentary is often cited as one of the earliest to write numbers in decimal place value with a circle for zero. Do not confuse him with **Bhaskara II** (12th c., Lilavati). India's first satellite (1975) was named Aryabhata.",
+          "key_points": [
+            "Aryabhata: born 476 CE; Aryabhatiya 499 CE; Kusumapura; 121 verses in 4 padas.",
+            "π ≈ 62832/20000 = 3.1416, called asanna (approximate).",
+            "Sine (jya) table at 3°45' intervals, R = 3438'.",
+            "Kuttaka for linear indeterminate equations $ax + by = c$.",
+            "Earth's axial rotation (boat analogy); eclipses by shadows, not Rahu.",
+            "Geocentric with epicycles — not heliocentric.",
+            "Bhaskara I (7th c.): commentary of 629 CE, sine approximation formula, early written zero.",
+            "Satellite Aryabhata, 1975."
+          ],
+          "formulas": [
+            "$\\pi \\approx \\frac{(100+4)\\times 8 + 62000}{20000} = \\frac{62832}{20000} = 3.1416$ — Aryabhata",
+            "$\\sin x \\approx \\frac{16x(\\pi - x)}{5\\pi^2 - 4x(\\pi - x)},\\; 0 \\le x \\le \\pi$ — Bhaskara I's sine approximation",
+            "$\\sum_{k=1}^{n} k^2 = \\frac{n(n+1)(2n+1)}{6},\\; \\sum_{k=1}^{n} k^3 = \\left(\\frac{n(n+1)}{2}\\right)^2$ — Aryabhatiya",
+            "$R = 3438' \\approx \\frac{21600'}{2\\pi}$ — radius of Aryabhata's sine table"
+          ],
+          "traps": [
+            "Aryabhata's system is geocentric; he said the Earth rotates, not that it goes round the Sun.",
+            "Aryabhata did not invent zero; Brahmagupta gave rules for zero.",
+            "Bhaskara I (7th c., commentator, sine formula) ≠ Bhaskara II (12th c., Lilavati, Siddhanta Shiromani).",
+            "476 CE is his birth, 499 CE the date of the Aryabhatiya.",
+            "His π is 3.1416, not 22/7, and he himself called it approximate."
+          ],
+          "asked_as": "'What value of π did Aryabhata give?' (2 marks); 'Discuss the contributions of Aryabhata to mathematics and astronomy' (5-10 marks); 'Who was Bhaskara I?' (2 marks).",
+          "questions": [
+            {"q": "Quote Aryabhata's rule for π and compute the value.", "a": "'Add 4 to 100, multiply by 8 and add 62,000; this is the approximate circumference of a circle of diameter 20,000.' Circumference $= 104\\times8 + 62000 = 62832$; $\\pi \\approx 62832/20000 = 3.1416$.", "marks": 2, "kind": "short"},
+            {"q": "Use Bhaskara I's formula to compute $\\sin 30°$.", "a": "$x = \\pi/6$, $\\pi - x = 5\\pi/6$, so $x(\\pi - x) = 5\\pi^2/36$.\nNumerator $= 16\\cdot5\\pi^2/36 = 20\\pi^2/9$. Denominator $= 5\\pi^2 - 4\\cdot5\\pi^2/36 = 5\\pi^2 - 5\\pi^2/9 = 40\\pi^2/9$.\n$\\sin 30° \\approx \\frac{20}{40} = 0.5$ — exact here.", "marks": 3, "kind": "numerical"},
+            {"q": "Discuss the contributions of Aryabhata to mathematics and astronomy.", "a": "**Text**: Aryabhatiya (499 CE), 121 verses in four padas — Gitika, Ganita, Kalakriya, Gola.\n**Mathematics**:\n1. Alphabetic numeral notation for large numbers; work in decimal place value.\n2. $\\pi \\approx 3.1416$, explicitly called approximate.\n3. Sine (jya) table at 3°45' intervals, $R = 3438'$ — founding Indian trigonometry.\n4. Kuttaka method for $ax + by = c$ in integers.\n5. Formulas for $\\sum k^2$, $\\sum k^3$, areas of triangles and circles, arithmetic progressions.\n**Astronomy**:\n1. The Earth rotates on its axis daily; the apparent westward motion of stars is like the bank seen from a moving boat.\n2. Eclipses are due to the Moon entering Earth's shadow or covering the Sun, not Rahu and Ketu.\n3. Planetary models with epicycles (geocentric) and accurate periods; the Moon and planets shine by reflected sunlight.\n**Legacy**: commentaries by Bhaskara I and others; India's first satellite (1975) named after him.", "marks": 10, "kind": "long"},
+            {"q": "Distinguish between Bhaskara I and Bhaskara II.", "a": "**Bhaskara I** (c. 600–680 CE): commentator on the Aryabhatiya (629 CE), author of Mahabhaskariya and Laghubhaskariya, known for his rational sine approximation. **Bhaskara II** (1114–c. 1185): author of Siddhanta Shiromani (1150) including Lilavati and Bijaganita, known for the chakravala method and khahara.", "marks": 3, "kind": "short"},
+            {"q": "The Aryabhatiya was composed in:", "options": ["476 CE", "499 CE", "628 CE", "1150 CE"], "answer_index": 1, "a": "499 CE; 476 CE is Aryabhata's birth year.", "marks": 1, "kind": "mcq"},
+            {"q": "Which statement about Aryabhata is correct?", "options": ["He proposed a heliocentric model", "He stated that the Earth rotates on its axis", "He gave π = 22/7", "He wrote Lilavati"], "answer_index": 1, "a": "He held that the Earth rotates daily; his model remained geocentric, his π was 3.1416, and Lilavati is by Bhaskara II.", "marks": 1, "kind": "mcq"},
+            {"q": "The method Aryabhata gave for solving $ax + by = c$ in integers is called:", "options": ["Chakravala", "Kuttaka", "Prastara", "Bhavana"], "answer_index": 1, "a": "Kuttaka ('pulveriser'); chakravala is the later method for $Nx^2+1=y^2$.", "marks": 1, "kind": "mcq"}
+          ]
+        },
+        {
+          "topic": "Bhaskara II (Lilavati) and Madhava's Kerala school",
+          "importance": "high",
+          "why": "Lilavati and the Kerala series are standard parts of the 10-mark 'Indian mathematicians' essay and frequent MCQs.",
+          "gist": "**Bhaskara II** (Bhaskaracharya, 1114–c. 1185), associated with the astronomical tradition of Ujjain, wrote the **Siddhanta Shiromani** (1150) in four parts: **Lilavati** (arithmetic and mensuration), **Bijaganita** (algebra), **Grahaganita** (planetary mathematics) and **Goladhyaya** (spherics). Lilavati is written as problems addressed to 'Lilavati' — the story that she was his daughter is a later legend — and covers operations, fractions, rule of three, interest, permutations and combinations, progressions and geometry; it was a standard textbook for centuries. In Bijaganita he perfected the **chakravala** ('cyclic') method, built on Brahmagupta's work and Jayadeva's, to solve $Nx^2+1=y^2$ (later called Pell's equation), e.g. $61x^2+1=y^2$ with smallest solution $x = 226153980$, $y = 1766319049$. He treated $a/0$ as **khahara**, an infinite quantity unchanged by adding finite amounts, and used instantaneous velocity (tatkalika gati) — an anticipation of a differential idea, not calculus as a system.\n\nTwo centuries later **Madhava of Sangamagrama** (c. 1340–1425) founded the **Kerala school**: Parameshvara, Nilakantha Somayaji (*Tantrasangraha*, 1500) and Jyeshthadeva (*Yuktibhasha*, c. 1530, in Malayalam, with derivations). Madhava found infinite series for $\\pi$, sine, cosine and arctangent about 250 years before Gregory, Newton and Leibniz, and used correction terms to get $\\pi$ to 11 decimal places. Whether this reached Europe through Jesuit missionaries is a hypothesis, not established.",
+          "key_points": [
+            "Bhaskara II: 1114–c. 1185; Siddhanta Shiromani (1150) = Lilavati + Bijaganita + Grahaganita + Goladhyaya.",
+            "Lilavati: arithmetic, mensuration, permutations, progressions — a textbook for centuries.",
+            "Chakravala method for $Nx^2 + 1 = y^2$; $61x^2+1=y^2$ example.",
+            "Khahara (a/0) as infinite; tatkalika gati (instantaneous velocity).",
+            "Madhava (c. 1340–1425), Kerala school: Parameshvara, Nilakantha (Tantrasangraha 1500), Jyeshthadeva (Yuktibhasha c. 1530, Malayalam).",
+            "Series for π/4, sin, cos, arctan — before Gregory (1671), Newton (1660s), Leibniz (1670s).",
+            "π to 11 decimals using end-correction terms; transmission to Europe unproven."
+          ],
+          "formulas": [
+            "$\\frac{\\pi}{4} = 1 - \\frac13 + \\frac15 - \\frac17 + \\cdots$ — Madhava (Madhava–Leibniz series)",
+            "$\\sin x = x - \\frac{x^3}{3!} + \\frac{x^5}{5!} - \\cdots,\\quad \\cos x = 1 - \\frac{x^2}{2!} + \\frac{x^4}{4!} - \\cdots$ — Madhava",
+            "$\\arctan x = x - \\frac{x^3}{3} + \\frac{x^5}{5} - \\cdots,\\; |x| \\le 1$ — Madhava (Madhava–Gregory series)",
+            "$Nx^2 + 1 = y^2$ — varga-prakriti, solved by the chakravala method"
+          ],
+          "traps": [
+            "Bhaskara II is the 12th-century author of Lilavati, not the 7th-century Bhaskara I.",
+            "Lilavati is one part of Siddhanta Shiromani, not a separate treatise on astronomy.",
+            "'Bhaskara II / Madhava invented calculus' is an overclaim; they found key results (series, instantaneous motion) without the general theory.",
+            "Yuktibhasha is in Malayalam, not Sanskrit; Madhava's own works on the series are mostly known through later Kerala authors."
+          ],
+          "asked_as": "'Write a note on Lilavati' (5 marks); 'State Madhava's series for π' (2 marks); 'Contributions of the Kerala school of mathematics' (5-10 marks).",
+          "questions": [
+            {"q": "Name the four parts of Bhaskara II's Siddhanta Shiromani.", "a": "**Lilavati** (arithmetic and mensuration), **Bijaganita** (algebra), **Grahaganita** (mathematics of planets) and **Goladhyaya** (the sphere).", "marks": 2, "kind": "short"},
+            {"q": "Solve this Lilavati-style problem: one-fifth of a swarm of bees went to a kadamba flower, one-third to a silindhra flower, three times their difference to a kutaja flower, and one bee remained. How many bees were there?", "a": "Let the number be $x$. $\\frac{x}{5} + \\frac{x}{3} + 3\\left(\\frac{x}{3} - \\frac{x}{5}\\right) + 1 = x$.\n$\\frac{x}{5} + \\frac{x}{3} = \\frac{8x}{15}$; $3\\cdot\\frac{2x}{15} = \\frac{6x}{15}$. So $\\frac{14x}{15} + 1 = x \\Rightarrow x = 15$.", "marks": 3, "kind": "numerical"},
+            {"q": "Compute $4\\left(1 - \\frac13 + \\frac15 - \\frac17\\right)$ and explain why Madhava needed correction terms.", "a": "$1 - 0.33333 + 0.2 - 0.142857 = 0.72381$; $\\times 4 = 2.8952$. The series converges very slowly (after 4 terms it is still off by about 0.25), so Madhava added an end-correction term after stopping the series, which gave π accurately (to 11 decimal places with suitable forms).", "marks": 3, "kind": "numerical"},
+            {"q": "Discuss the contributions of the Kerala school of astronomy and mathematics.", "a": "**Founder**: Madhava of Sangamagrama (c. 1340–1425). **Members**: Parameshvara (observations, drik system), Nilakantha Somayaji (Tantrasangraha, 1500; revised planetary model), Jyeshthadeva (Yuktibhasha, c. 1530, Malayalam), Achyuta Pisharati.\n**Results**:\n1. Infinite series for $\\pi/4$, $\\sin x$, $\\cos x$, $\\arctan x$, about 250 years before Gregory, Newton and Leibniz.\n2. End-correction terms that sped up convergence; π to 11 decimal places.\n3. Accurate sine tables; methods akin to term-by-term summation of series.\n4. Yuktibhasha gives derivations (yukti) — rare in Indian texts — of these results.\n5. Improved planetary models from observation.\n**Assessment**: a major achievement in the history of analysis; whether it influenced European mathematics through Jesuits in Kerala is a hypothesis without firm evidence.", "marks": 10, "kind": "long"},
+            {"q": "Lilavati is part of:", "options": ["Aryabhatiya", "Brahmasphutasiddhanta", "Siddhanta Shiromani", "Surya Siddhanta"], "answer_index": 2, "a": "Lilavati is the arithmetic part of Bhaskara II's Siddhanta Shiromani (1150).", "marks": 1, "kind": "mcq"},
+            {"q": "The Yuktibhasha, which gives derivations of the Kerala series, was written by:", "options": ["Madhava", "Jyeshthadeva", "Bhaskara II", "Brahmagupta"], "answer_index": 1, "a": "Jyeshthadeva wrote the Yuktibhasha (c. 1530) in Malayalam.", "marks": 1, "kind": "mcq"},
+            {"q": "The chakravala method solves equations of the form:", "options": ["$ax + by = c$", "$Nx^2 + 1 = y^2$", "$x^n + y^n = z^n$", "$ax^2 + bx + c = 0$ only"], "answer_index": 1, "a": "Chakravala solves the varga-prakriti (Pell) equation $Nx^2 + 1 = y^2$.", "marks": 1, "kind": "mcq"}
+          ]
+        },
+        {
+          "topic": "Jyotisha, the Surya Siddhanta and the panchanga",
+          "importance": "high",
+          "why": "'Five elements of the panchanga' is a near-certain 2-5 mark question; the Surya Siddhanta and ganita vs phalita appear as notes and MCQs.",
+          "gist": "**Jyotisha**, one of the six Vedangas, began as calendrical astronomy for timing rituals. The **Vedanga Jyotisha** (attributed to Lagadha; some read its star positions as c. 1400–1200 BCE, while the text is usually dated to the later 1st millennium BCE — disputed) uses a 5-year yuga of 1,830 days with intercalary months. From the early centuries CE the **siddhanta** tradition brought computational astronomy with sine tables and epicycles; Varahamihira's *Pancha-siddhantika* (6th c.) summarised five siddhantas, including the Saura (Surya). The **Surya Siddhanta** as we have it was revised over centuries (core c. 4th–5th c. CE, updates to about the 10th–12th c.); it gives planetary periods, a sidereal year of about 365.2588 days (modern 365.2564), eclipse methods and the Earth's diameter as 1,600 yojanas.\n\nDistinguish **ganita jyotisha** (mathematical astronomy) from **phalita jyotisha** (astrology; horoscopy shows Greek influence — *hora* is from Greek).\n\nThe **panchanga** ('five limbs') is the almanac giving for each day: **tithi** (lunar day — each 12° gain of the Moon over the Sun; 30 per lunar month), **vara** (weekday), **nakshatra** (the Moon's position among 27 lunar mansions of $13°20'$), **yoga** (Sun + Moon longitude in units of $13°20'$; 27) and **karana** (half a tithi; 11 kinds). Twelve lunar months are about 354 days, so an **adhika masa** (extra month) is inserted roughly every 32–33 months to keep the lunisolar calendar with the seasons. India's national (Saka) calendar was adopted in 1957 on the recommendation of the Calendar Reform Committee headed by Meghnad Saha.",
+          "key_points": [
+            "Jyotisha is a Vedanga: time-keeping for ritual; Vedanga Jyotisha of Lagadha, 5-year yuga of 1,830 days.",
+            "Siddhantic astronomy: sine tables, epicycles; Pancha-siddhantika of Varahamihira (6th c.).",
+            "Surya Siddhanta: revised over centuries; sidereal year ≈ 365.2588 days.",
+            "Ganita (astronomy) vs phalita (astrology) jyotisha.",
+            "Panchanga: tithi, vara, nakshatra, yoga, karana.",
+            "Tithi = 12° of Moon–Sun elongation; nakshatra = 13°20'; 27 nakshatras; karana = half tithi, 11 kinds.",
+            "Lunisolar calendar: synodic month ≈ 29.53 days; adhika masa about every 32–33 months.",
+            "Saka national calendar adopted 1957 (Meghnad Saha committee)."
+          ],
+          "formulas": [
+            "$\\text{tithi} = \\left\\lceil \\frac{\\lambda_{Moon} - \\lambda_{Sun}}{12°} \\right\\rceil$ — current tithi number (1-30)",
+            "$\\frac{360°}{27} = 13°20'$ — span of a nakshatra (and of a yoga)",
+            "$\\text{yoga} = \\left\\lceil \\frac{\\lambda_{Sun} + \\lambda_{Moon}}{13°20'} \\right\\rceil$ (mod 27)",
+            "$12 \\times 29.53 \\approx 354.4$ days vs $365.25$ days — the gap behind adhika masa"
+          ],
+          "traps": [
+            "Jyotisha as a Vedanga is astronomy for the calendar, not only astrology — distinguish ganita and phalita.",
+            "A tithi is not a solar day; its length varies (roughly 19 to 26 hours).",
+            "The panchanga's 'yoga' is an astronomical quantity, unrelated to Patanjali's Yoga.",
+            "Do not treat the Surya Siddhanta as one fixed ancient text; it was revised over centuries.",
+            "27 nakshatras (28 when Abhijit is included) — say which convention you use."
+          ],
+          "asked_as": "'Name the five elements of a panchanga' (2-5 marks); 'Write a note on the Surya Siddhanta' (5 marks); 'Why is an adhika masa needed?' (2-3 marks).",
+          "questions": [
+            {"q": "Name and define the five elements (angas) of a panchanga.", "a": "1. **Tithi** — lunar day: the time for the Moon to gain 12° on the Sun; 30 in a lunar month.\n2. **Vara** — weekday (seven, named after Sun, Moon and five planets).\n3. **Nakshatra** — the lunar mansion (one of 27 divisions of 13°20') where the Moon is.\n4. **Yoga** — the sum of the Sun's and Moon's longitudes divided into 27 parts of 13°20'.\n5. **Karana** — half of a tithi; 11 kinds (7 movable, 4 fixed), 60 in a lunar month.", "marks": 5, "kind": "short"},
+            {"q": "Why does the Indian lunisolar calendar need an adhika masa?", "a": "Twelve synodic months (≈ 29.53 days each) total about 354 days, about 11 days short of the solar year of about 365.25 days. Without correction the festivals would drift through the seasons. Inserting an extra (adhika) lunar month roughly every 32–33 months (7 in 19 years) keeps lunar months aligned with the solar year and seasons.", "marks": 3, "kind": "short"},
+            {"q": "The Moon's longitude is 100° and the Sun's is 40°. Find the current tithi and nakshatra.", "a": "Elongation $= 100° - 40° = 60°$; $60/12 = 5$ tithis completed, so the **6th tithi** (Shukla Shashthi) is just beginning.\nNakshatra: $100°/13°20' = 7.5$, so the Moon is in the **8th nakshatra, Pushya** (93°20'–106°40').", "marks": 3, "kind": "numerical"},
+            {"q": "Write a note on the Surya Siddhanta.", "a": "The Surya Siddhanta is the best-known siddhanta (computational astronomy text). Varahamihira's Pancha-siddhantika (6th c.) already summarised a Saura (Surya) Siddhanta; the text we have was revised over centuries (core c. 4th–5th c. CE, updates to about the 10th–12th c.). Contents: mean and true motions of planets with epicycles; sine tables; sidereal year ≈ 365.2588 days (modern 365.2564); computation of eclipses, rising and setting, and time; Earth's diameter given as 1,600 yojanas; instruments. It remains the basis of many traditional panchangas. Its model is geocentric.", "marks": 5, "kind": "long"},
+            {"q": "One tithi corresponds to the Moon gaining on the Sun by:", "options": ["6°", "12°", "13°20'", "30°"], "answer_index": 1, "a": "12° of elongation; 30 tithis make 360°.", "marks": 1, "kind": "mcq"},
+            {"q": "Which of the following is NOT one of the five angas of the panchanga?", "options": ["Tithi", "Karana", "Rashi", "Nakshatra"], "answer_index": 2, "a": "The five are tithi, vara, nakshatra, yoga and karana; rashi (zodiac sign) is not one of them.", "marks": 1, "kind": "mcq"},
+            {"q": "India's national (Saka) calendar was adopted in 1957 on the recommendation of a committee headed by:", "options": ["C.V. Raman", "Meghnad Saha", "Homi Bhabha", "S. Chandrasekhar"], "answer_index": 1, "a": "The Calendar Reform Committee (1952) chaired by Meghnad Saha.", "marks": 1, "kind": "mcq"}
+          ]
+        }
+      ]
+    },
+    {
+      "unit": "Science, Engineering and Technology in India",
+      "topics": [
+        {
+          "topic": "Metallurgy: wootz steel, the Delhi iron pillar and zinc at Zawar",
+          "importance": "must",
+          "why": "The iron pillar's corrosion resistance and wootz steel are the most-asked engineering topics in IKS papers, as 5-mark notes and 10-mark essays.",
+          "gist": "Three case studies show Indian metallurgy at its best.\n\n**Delhi iron pillar** (Qutb complex, Mehrauli): about 7.2 m tall and 6 tonnes, forge-welded from lumps of **wrought iron**, with a Sanskrit inscription of a king 'Chandra', usually identified with **Chandragupta II** (c. 375–415 CE); it was probably moved from elsewhere (possibly Udayagiri). It has resisted rusting for about 1,600 years. R. Balasubramaniam (IIT Kanpur) explained why: **high phosphorus** (~0.1%) and very low sulphur in the iron help form, under alternate wetting and drying, a thin, adherent **passive layer** (misawite, δ-FeOOH, with crystalline iron hydrogen phosphate); Delhi's fairly dry climate helps.\n\n**Wootz steel** (from Tamil/Kannada *ukku*): **crucible steel** of about 1.5% carbon, made in south India and Sri Lanka by heating iron with carbonaceous matter in sealed clay crucibles; evidence goes back at least to the late centuries BCE (e.g. Kodumanal, Tamil Nadu). Exported to West Asia, it was forged into **Damascus blades** whose watered pattern comes from bands of cementite; a 2006 study reported carbon nanotubes in one such sabre.\n\n**Zinc at Zawar** (near Udaipur): zinc boils at 907°C, below the ~1000°C needed to reduce its oxide, so it leaves the furnace as vapour and re-oxidises. Zawar workers used **downward distillation** — roasted ore with charcoal in inverted clay retorts, the vapour condensing in vessels below. Radiocarbon dates put this roughly from the late 1st millennium CE (start debated), centuries before Europe (William Champion's Bristol patent, 1738).",
+          "key_points": [
+            "Iron pillar: wrought iron, ~7.2 m, ~6 t, Chandra (Chandragupta II, c. 4th–5th c. CE), forge-welded.",
+            "Rust resistance: high P, low S; protective misawite (δ-FeOOH) + iron hydrogen phosphate film; dry climate.",
+            "Wootz: crucible steel, ~1.5% C, sealed crucibles; south India and Sri Lanka; word from ukku.",
+            "Damascus blades from wootz; watered pattern from cementite bands.",
+            "Zinc: b.p. 907°C < reduction temperature → vapour; downward distillation in retorts at Zawar.",
+            "Zawar industrial zinc predates European zinc smelting (Champion, 1738).",
+            "Other evidence: Harappan lost-wax bronze casting (Dancing Girl), Sultanganj copper Buddha."
+          ],
+          "formulas": [
+            "$\\mathrm{2ZnS + 3O_2 \\rightarrow 2ZnO + 2SO_2}$ — roasting of sphalerite ore",
+            "$\\mathrm{ZnO + C \\rightarrow Zn(g) + CO}$ — reduction above ~1000 °C; zinc (b.p. 907 °C) leaves as vapour and is condensed"
+          ],
+          "traps": [
+            "The pillar is wrought iron, not steel or cast iron.",
+            "Its rust resistance is not 'pure iron' or magic — it is phosphorus-aided passivation plus climate.",
+            "Wootz is Indian crucible steel; 'Damascus' is where blades were traded and forged, not where the steel was made.",
+            "Zinc distillation was downward (retorts inverted over a cooled chamber); give dates with 'c.' and say the start is debated.",
+            "The nanotube finding is from one study of one sabre; do not generalise it."
+          ],
+          "asked_as": "'Why has the Delhi iron pillar not rusted?' (5 marks); 'Write a note on wootz steel' (5 marks); 'Discuss ancient Indian metallurgy with examples' (10 marks).",
+          "questions": [
+            {"q": "What is wootz steel?", "a": "Wootz is a high-carbon (~1.5% C) **crucible steel** made in south India and Sri Lanka by heating iron with carbonaceous material in sealed clay crucibles; the name comes from Tamil/Kannada *ukku*. It was exported and forged into Damascus blades with a watered pattern.", "marks": 2, "kind": "short"},
+            {"q": "Explain the reasons for the corrosion resistance of the Delhi iron pillar.", "a": "1. **Composition**: wrought iron with relatively high phosphorus (~0.1%), very low sulphur and little manganese.\n2. **Passive film**: under alternate wetting and drying, phosphorus promotes a thin, adherent, protective layer of misawite (δ-FeOOH) with crystalline iron hydrogen phosphate, which slows further corrosion (R. Balasubramaniam, IIT Kanpur).\n3. **Microstructure**: slag inclusions from forge-welding may aid passivation.\n4. **Environment**: Delhi's relatively dry climate with limited pollution.\n5. **Mass**: the large mass and heat capacity reduce condensation time.\nIt is therefore an example of skilled iron production plus favourable chemistry, not 'rust-proof' magic iron.", "marks": 5, "kind": "long"},
+            {"q": "Why must zinc be produced by distillation? Describe the Zawar process.", "a": "Zinc oxide is reduced by carbon only above about 1000°C, but zinc boils at 907°C, so zinc forms as a vapour that would re-oxidise in the furnace gases. At **Zawar** (Rajasthan) roasted sphalerite ore was mixed with charcoal and packed into clay retorts placed **inverted** in a furnace; the zinc vapour passed **downward** through a tube into a cooler collecting vessel below the furnace floor and condensed as metal. This is downward distillation, practised industrially from roughly the late 1st millennium CE (dates debated), long before Europe.", "marks": 5, "kind": "short"},
+            {"q": "Discuss ancient and medieval Indian metallurgy with suitable examples.", "a": "**Copper and bronze**: Harappan copper tools and lost-wax bronze casting (Dancing Girl, Mohenjo-daro, c. 2500 BCE); the Sultanganj copper Buddha (c. 500–700 CE).\n**Iron**: widespread iron from the late 2nd–early 1st millennium BCE; the **Delhi iron pillar** (c. 4th–5th c. CE), forge-welded wrought iron that resists corrosion due to phosphorus-aided passive films; iron beams at Konark and Puri temples.\n**Wootz steel**: crucible steel (~1.5% C) from south India and Sri Lanka, evidence from the late centuries BCE (Kodumanal); exported for Damascus blades; studied by European scientists (Faraday among them) in the 19th c.\n**Zinc**: downward distillation at **Zawar**, Rajasthan, from roughly the late 1st millennium CE — the earliest industrial zinc production known; brass making.\n**Texts**: Rasaratnasamuccaya and other rasashastra works describe metals and processes.\n**Assessment**: these show empirical mastery of high-temperature processes; many remain topics of active archaeometallurgy research.", "marks": 10, "kind": "long"},
+            {"q": "The Delhi iron pillar is made of:", "options": ["Cast iron", "Wrought iron", "Stainless steel", "Bronze"], "answer_index": 1, "a": "It is forge-welded wrought iron.", "marks": 1, "kind": "mcq"},
+            {"q": "The main compositional reason for the iron pillar's corrosion resistance is:", "options": ["High chromium", "High phosphorus, low sulphur", "High nickel", "Zinc coating"], "answer_index": 1, "a": "Phosphorus aids a protective passive film; there is no chromium or nickel alloying.", "marks": 1, "kind": "mcq"},
+            {"q": "Zawar, a historic centre of zinc distillation, is in:", "options": ["Tamil Nadu", "Rajasthan", "Odisha", "Bihar"], "answer_index": 1, "a": "Zawar is near Udaipur, Rajasthan.", "marks": 1, "kind": "mcq"}
+          ]
+        },
+        {
+          "topic": "Architecture and town planning: Harappan cities, Vastu, temples and stepwells",
+          "importance": "high",
+          "why": "'Features of Harappan town planning' and 'Nagara vs Dravida temples' are classic 5-mark questions; Vastu appears as a 2-mark definition.",
+          "gist": "**Harappan cities** (mature phase c. 2600–1900 BCE) — Mohenjo-daro, Harappa, Dholavira, Lothal, Kalibangan, Rakhigarhi — show planning: streets roughly on a north-south/east-west grid, a raised **citadel** and a **lower town**, standardised bricks in the ratio **1:2:4** (thickness : width : length), houses opening onto side lanes, **covered street drains** with inspection holes, many wells, and the bitumen-sealed **Great Bath** at Mohenjo-daro. Dholavira (UNESCO, 2021) is notable for its reservoirs.\n\nLater, **Vastu Shastra** texts (*Mayamata*, *Manasara*, Bhoja's *Samarangana Sutradhara*, 11th c.) codified site selection, orientation, proportion and the **vastu-purusha-mandala**, a square grid (8×8 = 64 or 9×9 = 81 cells) used to lay out houses and temples.\n\nTemples developed three styles: **Nagara** (north; curvilinear shikhara, e.g. Kandariya Mahadeva, Khajuraho, c. 1030), **Dravida** (south; pyramidal vimana and towering gopurams, e.g. Brihadeeswara, Thanjavur, completed c. 1010 under Rajaraja I) and **Vesara** (Deccan hybrid, e.g. Chalukya and Hoysala temples). The **Kailasa temple at Ellora** (8th c., Rashtrakuta) was carved top-down from a single basalt hill — subtractive construction on a huge scale.\n\n**Stepwells** (vav, baoli) such as **Rani ki Vav**, Patan (11th c., UNESCO 2014) and **Chand Baori**, Abhaneri (c. 9th c.) combine water storage with a cool, shaded public space. Treat Vastu as a traditional design canon; claims about 'cosmic energy' are not established science.",
+          "key_points": [
+            "Harappan: grid streets, citadel + lower town, 1:2:4 bricks, covered drains, wells, Great Bath, granary/warehouse (identification debated).",
+            "Dholavira reservoirs; Lothal basin; Kalibangan ploughed field.",
+            "Vastu texts: Mayamata, Manasara, Samarangana Sutradhara; vastu-purusha-mandala (64 or 81 squares).",
+            "Nagara (shikhara), Dravida (vimana, gopuram), Vesara (hybrid, Deccan).",
+            "Examples: Kandariya Mahadeva, Brihadeeswara (c. 1010), Kailasa at Ellora (rock-cut).",
+            "Stepwells: Rani ki Vav (Patan, 11th c.), Chand Baori (Abhaneri); storage + microclimate.",
+            "Engineering ideas: modular units, drainage, orientation for climate, load paths in corbelled stone towers."
+          ],
+          "formulas": [],
+          "traps": [
+            "Do not call the Harappan grid 'perfect' — streets were roughly, not exactly, aligned; say 'planned grid'.",
+            "Nagara = north (shikhara), Dravida = south (vimana + gopuram); swapping them is common.",
+            "Vastu is a traditional canon of design; claiming it is proven science loses credibility.",
+            "Rani ki Vav is in Patan, Gujarat; Chand Baori in Abhaneri, Rajasthan."
+          ],
+          "asked_as": "'Describe the town planning of the Harappan civilisation' (5 marks); 'Differentiate Nagara and Dravida styles' (3-5 marks); 'What is the vastu-purusha-mandala?' (2 marks).",
+          "questions": [
+            {"q": "What is the vastu-purusha-mandala?", "a": "It is the square grid diagram of Vastu Shastra — usually 8×8 = 64 or 9×9 = 81 cells — on which a cosmic being (vastu-purusha) is imagined lying, with deities assigned to cells. Architects use it to fix the plan, orientation and placement of rooms or of the temple sanctum.", "marks": 2, "kind": "short"},
+            {"q": "Describe the main features of Harappan town planning.", "a": "1. **Layout**: planned cities with streets roughly on a north-south/east-west grid, dividing them into blocks.\n2. **Zoning**: a raised citadel (public buildings) and a lower town (houses); Dholavira had a middle town too.\n3. **Standard bricks** of ratio 1:2:4, baked or sun-dried.\n4. **Drainage**: covered brick drains along streets, with inspection holes and soak pits; house drains connected to them.\n5. **Water**: many wells; the Great Bath at Mohenjo-daro, sealed with bitumen; reservoirs at Dholavira.\n6. **Houses**: courtyards, rooms around them, doors opening on side lanes, bathrooms.\n7. **Public buildings**: large structures identified as granaries/warehouses (identification debated), dockyard-like basin at Lothal.", "marks": 5, "kind": "long"},
+            {"q": "Differentiate between the Nagara and Dravida styles of temple architecture.", "a": "| | Nagara | Dravida |\n|---|---|---|\n| Region | North India | South India |\n| Tower | Curvilinear **shikhara** over sanctum | Pyramidal, stepped **vimana** |\n| Gateway | No large gateway towers | Tall **gopurams** at enclosure gates |\n| Plan | Often on a raised platform, no big enclosure | Large walled enclosures, water tank |\n| Example | Kandariya Mahadeva, Khajuraho | Brihadeeswara, Thanjavur |\nVesara is the hybrid style of the Deccan.", "marks": 5, "kind": "short"},
+            {"q": "Explain why stepwells are considered an engineering achievement.", "a": "Stepwells reach down to the groundwater table through flights of steps, so water can be reached as the level falls through the year. They store and give access to water in arid regions, their depth and shade create a cooler microclimate (social spaces), and their multi-storey stone structure must resist earth pressure on all sides. Examples: Rani ki Vav (Patan, 11th c.), Chand Baori (Abhaneri, c. 9th c.).", "marks": 3, "kind": "short"},
+            {"q": "The typical proportion of Harappan bricks (thickness : width : length) is:", "options": ["1:1:2", "1:2:3", "1:2:4", "1:3:6"], "answer_index": 2, "a": "1:2:4, e.g. about 7 × 14 × 28 cm.", "marks": 1, "kind": "mcq"},
+            {"q": "Rani ki Vav, a UNESCO World Heritage stepwell, is located in:", "options": ["Abhaneri, Rajasthan", "Patan, Gujarat", "Hampi, Karnataka", "Bhopal, Madhya Pradesh"], "answer_index": 1, "a": "Patan, Gujarat (11th c.; UNESCO 2014).", "marks": 1, "kind": "mcq"},
+            {"q": "The Kailasa temple at Ellora is remarkable because it is:", "options": ["Built of iron", "Carved from a single rock", "A stepwell", "A Harappan structure"], "answer_index": 1, "a": "It was excavated top-down out of a single basalt hill (8th c., Rashtrakuta).", "marks": 1, "kind": "mcq"}
+          ]
+        },
+        {
+          "topic": "Water management and irrigation",
+          "importance": "high",
+          "why": "'Traditional water harvesting systems of India' is a favourite 5- and 10-mark question because it links IKS to sustainability.",
+          "gist": "Water engineering runs through Indian history. **Dholavira** (Harappan, Kachchh) had a chain of large stone-cut reservoirs and channels fed by seasonal streams; Harappan cities had covered drains and many wells. The **Sudarshana lake** at Girnar (Junagadh) was built under Chandragupta Maurya by his governor Pushyagupta, given conduits under Ashoka, and repaired after storms under Rudradaman I (Junagadh inscription, c. 150 CE) and Skandagupta (c. 456 CE) — a 600-year record of maintenance. The **Kallanai** (Grand Anicut) on the Kaveri is traditionally attributed to Karikala Chola (c. 2nd c. CE); it is still in use, though much rebuilt in the 19th century by Arthur Cotton. Bhopal's own **Upper Lake (Bhojtal)** is traditionally credited to the Paramara king Bhoja (11th c.). The Arthashastra discusses irrigation dues and describes a rain gauge (varshamana).\n\nRegional systems fit local climate and terrain: **eris/tanks** (Tamil Nadu), **johads** and **khadins** (Rajasthan), **kunds/tankas** (covered cisterns), **ahar-pyne** (south Bihar), **kuls** (Himachal), **zabo** (Nagaland), **bamboo drip irrigation** (Meghalaya) and **stepwells** (Gujarat, Rajasthan). Common principles: harvest rain where it falls, reduce evaporation by storing underground or in shade, recharge aquifers, and manage water through community institutions. Many systems decayed under centralised colonial and modern schemes; some have been revived, e.g. johads in Alwar by Tarun Bharat Sangh.",
+          "key_points": [
+            "Harappan: Dholavira reservoirs, drains, wells.",
+            "Sudarshana lake: Chandragupta Maurya (Pushyagupta) → Ashoka → Rudradaman (c. 150 CE) → Skandagupta (c. 456 CE).",
+            "Kallanai (Grand Anicut), Kaveri, attributed to Karikala Chola (c. 2nd c. CE); rebuilt by Arthur Cotton.",
+            "Bhojtal (Bhopal Upper Lake), attributed to Raja Bhoja, 11th c.",
+            "Arthashastra: irrigation dues and rain gauge (varshamana).",
+            "Regional systems: eri, johad, khadin, kund/tanka, ahar-pyne, kul, zabo, bamboo drip, stepwell.",
+            "Principles: local harvesting, groundwater recharge, low evaporation, community management."
+          ],
+          "formulas": [],
+          "traps": [
+            "The present Grand Anicut is largely a 19th-century rebuild on an old foundation; its 2nd-century date is traditional.",
+            "Do not call the Lothal basin certainly a dockyard in a water-management answer — it is debated.",
+            "Match systems to regions correctly: johad (Rajasthan), zabo (Nagaland), ahar-pyne (Bihar), kul (Himachal).",
+            "Avoid saying traditional systems can replace modern infrastructure; say they complement it."
+          ],
+          "asked_as": "'Describe any five traditional water harvesting systems of India' (5 marks); 'Write a note on the Sudarshana lake / Grand Anicut' (3-5 marks); 'Relevance of traditional water management today' (10 marks).",
+          "questions": [
+            {"q": "What is a johad?", "a": "A johad is a crescent-shaped earthen check dam built across a slope in Rajasthan to hold monsoon run-off; the stored water is used and, more importantly, percolates to recharge groundwater and wells downstream.", "marks": 2, "kind": "short"},
+            {"q": "Describe any five traditional water harvesting systems of India.", "a": "1. **Eri/tank** (Tamil Nadu) — chains of earthen tanks storing run-off for irrigation, managed by village institutions.\n2. **Johad** (Rajasthan) — earthen check dam that stores run-off and recharges groundwater.\n3. **Kund/tanka** (Thar desert) — covered underground cistern with a sloped catchment collecting rainwater for drinking.\n4. **Ahar-pyne** (south Bihar) — ahars are embanked catchment basins, pynes are channels diverting river water to them.\n5. **Zabo** (Nagaland) — forest-protected catchment, ponds in the middle, and cattle yards and paddy below; combines forestry, animal care and farming.\nOthers: kuls (Himachal channels), bamboo drip (Meghalaya), stepwells (Gujarat).", "marks": 5, "kind": "long"},
+            {"q": "Write a short note on the Sudarshana lake.", "a": "An artificial reservoir near Girnar (Junagadh, Gujarat). It was built under **Chandragupta Maurya** by his governor **Pushyagupta**, fitted with conduits under **Ashoka** (by Tushaspha), breached by storms and repaired by the Shaka ruler **Rudradaman I** (Junagadh inscription, c. 150 CE) and again under **Skandagupta** (governor Chakrapalita, c. 456 CE). It shows long-term state investment in and maintenance of water infrastructure.", "marks": 3, "kind": "short"},
+            {"q": "Discuss the relevance of traditional Indian water management to present-day water problems.", "a": "**Problem**: falling groundwater, erratic monsoons, urban flooding and drying lakes.\n**Traditional principles**:\n1. Decentralised harvesting — catch rain where it falls (johads, kunds, tanks).\n2. Groundwater recharge rather than only surface storage.\n3. Reducing evaporation — underground cisterns, deep stepwells.\n4. Community ownership and maintenance (eri committees, kudimaramathu).\n5. Integration with land use (zabo, ahar-pyne).\n**Present use**: revival of johads in Alwar by Tarun Bharat Sangh raised water tables and revived rivers; rooftop rainwater harvesting rules in cities; tank restoration programmes; protection of lakes such as Bhopal's Bhojtal.\n**Limits**: they cannot alone meet urban/industrial demand and need good design and maintenance; best used alongside modern systems.\n**Conclusion**: they provide low-cost, sustainable, locally adapted solutions that engineers can improve with modern hydrology.", "marks": 10, "kind": "long"},
+            {"q": "The Kallanai (Grand Anicut) is built across the river:", "options": ["Godavari", "Krishna", "Kaveri", "Narmada"], "answer_index": 2, "a": "Kaveri, traditionally attributed to Karikala Chola.", "marks": 1, "kind": "mcq"},
+            {"q": "Zabo, a combined farming and water-harvesting system, belongs to:", "options": ["Rajasthan", "Nagaland", "Bihar", "Kerala"], "answer_index": 1, "a": "Zabo ('impounding run-off') is practised in Nagaland.", "marks": 1, "kind": "mcq"},
+            {"q": "The Upper Lake (Bhojtal) of Bhopal is traditionally attributed to:", "options": ["Raja Bhoja", "Ashoka", "Rajaraja Chola", "Akbar"], "answer_index": 0, "a": "The Paramara king Bhoja (11th c.), traditionally.", "marks": 1, "kind": "mcq"}
+          ]
+        },
+        {
+          "topic": "Textiles, dyes and shipbuilding",
+          "importance": "medium",
+          "why": "Asked as a 5-mark note on Indian textiles or mordant dyeing, and as MCQs (indigo, patola, sewn boats); rarely a full essay.",
+          "gist": "India was the world's leading cotton-textile producer for much of history. Mineralised cotton fibres from **Mehrgarh** (c. 6th–5th millennium BCE) are among the earliest evidence of cotton use, and a madder-dyed cotton fragment was found at **Mohenjo-daro**. Indian dyers mastered **mordant dyeing** — fixing dyes with metal salts such as alum (iron for blacks) — so colours were fast: red from madder (manjishtha) and lac, yellow from turmeric, blue from **indigo** (the word comes via Greek *indikon*, 'from India'). Techniques include **resist dyeing** — bandhani (tie-dye), ikat and the double-ikat **patola** of Patan — hand **block printing** (Gujarati prints found at Fustat, Egypt) and **kalamkari** (pen-drawn and printed, Andhra Pradesh). English words like calico (Calicut), chintz (chint), dungaree and shawl record this trade; Dhaka muslin was famed for its fineness.\n\nIn **shipbuilding**, Lothal (Gujarat) has a large brick basin often interpreted as a dockyard (some argue it was a reservoir — disputed). Indian Ocean ships were traditionally **sewn (stitched-plank) boats**, with planks tied by coir rope, flexible in surf and easy to repair. The *Yuktikalpataru* (attributed to King Bhoja, 11th c.; date uncertain) classifies ships and advises against iron fastenings in sea-going hulls. Monsoon-wind sailing linked India with Rome, Southeast Asia and East Africa; Rajendra Chola's naval expedition against Srivijaya (c. 1025 CE) shows naval power. In 2025 the Indian Navy inducted INSV *Kaundinya*, a stitched ship reconstructed from an Ajanta painting.",
+          "key_points": [
+            "Cotton: Mehrgarh fibres (c. 6th–5th millennium BCE), Mohenjo-daro madder-dyed fragment.",
+            "Mordant dyeing with alum/iron gives fast colours: madder, lac, turmeric, indigo.",
+            "Resist techniques: bandhani, ikat, patola (double ikat, Patan); block printing; kalamkari.",
+            "Trade words: calico, chintz, dungaree, shawl; Dhaka muslin; Fustat finds.",
+            "Lothal basin (dockyard interpretation debated).",
+            "Sewn-plank (stitched) ships with coir; Yuktikalpataru classifies ships.",
+            "Monsoon trade; Chola naval expedition c. 1025 CE; INSV Kaundinya (2025)."
+          ],
+          "formulas": [],
+          "traps": [
+            "A mordant fixes a dye to the fibre; it is not itself the colour.",
+            "Patola is double ikat (both warp and weft resist-dyed); bandhani is tie-dye.",
+            "Lothal as a dockyard is an interpretation, not a settled fact.",
+            "The Yuktikalpataru's date and authorship are uncertain; write 'attributed to Bhoja'."
+          ],
+          "asked_as": "'Write a note on traditional Indian textiles and dyeing' (5 marks); 'What is a mordant?' (2 marks); 'Describe ancient Indian shipbuilding' (5 marks).",
+          "questions": [
+            {"q": "What is mordant dyeing? Give an Indian example.", "a": "Mordant dyeing treats the fibre with a metal salt (mordant) such as alum or iron so that the dye forms an insoluble complex and becomes colour-fast. Example: cotton mordanted with alum and dyed with madder (manjishtha) gives a fast red; with iron, black or purple — the basis of chintz and kalamkari.", "marks": 2, "kind": "short"},
+            {"q": "Write a note on traditional Indian textile techniques.", "a": "1. **Cotton spinning and weaving** from Harappan times; fine muslins of Dhaka.\n2. **Mordant dyeing** with alum and iron for fast reds, blacks, purples; natural dyes — madder, lac, turmeric, indigo.\n3. **Resist dyeing**: bandhani (tie-dye, Gujarat/Rajasthan), ikat (yarn tied and dyed before weaving), patola (double ikat, Patan).\n4. **Block printing** (Gujarat, Rajasthan); Indian prints found at Fustat, Egypt.\n5. **Kalamkari** (pen-drawn with a kalam and dyed, Andhra).\n6. **Silk and wool**: Banarasi brocades, Kanchipuram silk, Kashmiri shawls.\nThe trade left words like calico, chintz and dungaree in English.", "marks": 5, "kind": "long"},
+            {"q": "Describe the main features of traditional Indian shipbuilding.", "a": "Ships of the Indian Ocean were mostly **sewn-plank** vessels: planks were edge-joined by stitching with coir rope and caulked, giving a flexible hull suited to surf and beaching, and repairable with local materials. Texts such as the Yuktikalpataru (attributed to Bhoja) classify ships by size and shape and advise against iron fastenings. Navigation used the monsoon winds and star positions. Archaeology at Lothal (a brick basin, interpreted by many as a dockyard) and art (Ajanta paintings, coins with ships) record vessels; Chola fleets reached Southeast Asia (c. 1025 CE). INSV Kaundinya (2025) reconstructs such a stitched ship.", "marks": 5, "kind": "short"},
+            {"q": "The word 'indigo' derives from a Greek word meaning:", "options": ["Blue stone", "From India", "Sea colour", "Plant juice"], "answer_index": 1, "a": "Greek *indikon*, 'from India'.", "marks": 1, "kind": "mcq"},
+            {"q": "Patola of Patan is an example of:", "options": ["Block printing", "Double ikat", "Kalamkari", "Embroidery"], "answer_index": 1, "a": "In patola both warp and weft are resist-dyed before weaving — double ikat.", "marks": 1, "kind": "mcq"},
+            {"q": "Traditional Indian Ocean ships were typically built by:", "options": ["Riveting iron plates", "Stitching planks with coir rope", "Welding", "Carving from one log only"], "answer_index": 1, "a": "Sewn-plank construction with coir stitching.", "marks": 1, "kind": "mcq"}
+          ]
+        },
+        {
+          "topic": "Kanada's atomism and the Vaisheshika categories",
+          "importance": "high",
+          "why": "'Explain Kanada's theory of paramanu' and 'compare with Dalton' are popular 5-mark questions; the padarthas give easy MCQs.",
+          "gist": "The **Vaisheshika** darshana, founded by **Kanada** (Vaisheshika Sutra; date uncertain, perhaps c. 2nd c. BCE, traditionally earlier), is a system of categories (**padarthas**) covering everything that exists: **dravya** (substance), **guna** (quality), **karma** (motion), **samanya** (generality), **vishesha** (particularity — what makes ultimate things distinct, hence the school's name) and **samavaya** (inherence); later writers added a seventh, **abhava** (non-existence). There are nine substances: earth (prithvi), water (ap), fire (tejas), air (vayu), ether (akasha), time (kala), direction/space (dik), self (atman) and mind (manas). Karma is of five kinds: upward, downward, contraction, expansion and general motion.\n\nEarth, water, fire and air are made of **paramanus** (atoms): eternal, indivisible, partless and imperceptible. Two atoms form a **dvyanuka** (dyad); three dyads form a **tryanuka** (triad), the smallest visible particle, like a mote in a sunbeam. Combination is set going by an unseen force (adrishta) and, in later theistic Vaisheshika, by Ishvara. Change by heat (**paka**) is explained at the atomic level: in **pilupaka** (Vaisheshika) heat breaks the object into atoms, changes their qualities and recombines them, as when a clay pot reddens in firing; the Nyaya **pitharapaka** view says heat acts on the whole object.\n\nCompare **Democritus** (5th c. BCE, Greece) and **Dalton** (1808). Kanada's theory was philosophical, based on reasoning rather than measurement; it had no atomic masses or laws of combination, so it should not be called modern atomic theory.",
+          "key_points": [
+            "Founder Kanada; Vaisheshika Sutra; date uncertain.",
+            "Six padarthas: dravya, guna, karma, samanya, vishesha, samavaya; abhava added later.",
+            "Nine dravyas: prithvi, ap, tejas, vayu, akasha, kala, dik, atman, manas.",
+            "Paramanu: eternal, indivisible, partless, imperceptible; only for earth, water, fire, air.",
+            "Dvyanuka (2 atoms) → tryanuka (3 dyads), the smallest perceptible unit.",
+            "Pilupaka (heat acts on atoms) vs pitharapaka (heat acts on the whole).",
+            "Five kinds of karma (motion); adrishta as unseen cause.",
+            "Similar to Democritus; unlike Dalton, no quantitative laws."
+          ],
+          "formulas": [],
+          "traps": [
+            "Akasha, kala, dik, atman and manas are not atomic — only the four elements have paramanus.",
+            "Do not equate Kanada's paramanu with Dalton's atom: no masses, no experiments, no chemical laws.",
+            "Vishesha (particularity) gives the school its name — not 'vishesh = special science'.",
+            "Claims that Vaisheshika 'contains Newton's laws of motion' are overreach; say it classified motion and its causes."
+          ],
+          "asked_as": "'Explain Kanada's theory of atoms' (5 marks); 'Name the padarthas of Vaisheshika' (2-3 marks); 'Compare Vaisheshika atomism with Dalton's theory' (5 marks).",
+          "questions": [
+            {"q": "Name the six padarthas of the Vaisheshika system.", "a": "Dravya (substance), guna (quality), karma (motion/action), samanya (generality), vishesha (particularity) and samavaya (inherence). Later Vaisheshika added abhava (non-existence) as the seventh.", "marks": 2, "kind": "short"},
+            {"q": "Explain Kanada's theory of paramanu.", "a": "1. Earth, water, fire and air are composed of **paramanus** — the ultimate, eternal, indivisible, partless and imperceptible particles; each element has its own kind.\n2. Paramanus combine in steps: two atoms form a **dvyanuka** (dyad); three dyads form a **tryanuka** (triad), the smallest perceptible particle (a mote seen in a sunbeam); larger objects form from these.\n3. Combination and separation are caused by motion set off by an unseen force (adrishta), and in later theistic Vaisheshika by Ishvara.\n4. Qualities of objects (colour, taste, smell, touch) derive from the qualities of their atoms; heat can change these qualities at the atomic level (**pilupaka**).\n5. Wholes are destroyed by separation into parts; atoms themselves are eternal.\nThe theory is a philosophical analysis based on reasoning, not experiment.", "marks": 5, "kind": "long"},
+            {"q": "Compare Kanada's atomism with Dalton's atomic theory.", "a": "**Similar**: both hold that matter is made of tiny indivisible particles, that each element has its own kind of particle, and that compound bodies form by combination of particles.\n**Different**: Kanada's paramanus are a metaphysical postulate reached by reasoning about divisibility; Dalton's atoms (1808) rest on quantitative laws (conservation of mass, definite and multiple proportions) and have relative masses. Kanada recognises only four atomic elements (earth, water, fire, air); Dalton has chemical elements identified experimentally. Kanada's combination is driven by adrishta; Dalton's by chemical combination in fixed ratios.", "marks": 5, "kind": "short"},
+            {"q": "Distinguish pilupaka and pitharapaka.", "a": "Both explain change of qualities by heating (paka), e.g. a clay pot turning red. **Pilupaka** (Vaisheshika): heat breaks the object down to its atoms, changes the atoms' qualities and the object is recombined. **Pitharapaka** (Nyaya): heat acts on the whole object, which changes without disintegrating to atoms.", "marks": 3, "kind": "short"},
+            {"q": "In Vaisheshika, a tryanuka is made of:", "options": ["Two atoms", "Three atoms", "Three dyads", "Nine dyads"], "answer_index": 2, "a": "Three dvyanukas (dyads), i.e. six atoms, form a tryanuka — the smallest visible unit.", "marks": 1, "kind": "mcq"},
+            {"q": "Which of these substances is NOT made of paramanus in Vaisheshika?", "options": ["Prithvi", "Ap", "Akasha", "Vayu"], "answer_index": 2, "a": "Akasha (ether) is one, all-pervading and non-atomic; only earth, water, fire and air are atomic.", "marks": 1, "kind": "mcq"},
+            {"q": "Which category was added later to the original six Vaisheshika padarthas?", "options": ["Samanya", "Abhava", "Samavaya", "Guna"], "answer_index": 1, "a": "Abhava (non-existence) was added by later Nyaya-Vaisheshika writers.", "marks": 1, "kind": "mcq"}
+          ]
+        }
+      ]
+    },
+    {
+      "unit": "Health, Wellness and the Environment",
+      "topics": [
+        {
+          "topic": "Ayurveda: tridosha and the Charaka Samhita",
+          "importance": "must",
+          "why": "Tridosha, the definition of health and the ashtanga branches are the most predictable questions in Unit 4 at 2, 5 and 10 marks.",
+          "gist": "**Ayurveda** (ayus = life, veda = knowledge) is the classical Indian system of medicine, counted as an Upaveda. Its core texts, the **Brihat-trayi**, are the **Charaka Samhita** (Charaka's redaction of Agnivesha's earlier treatise, c. 1st c. BCE–2nd c. CE, completed by Dridhabala c. 4th–5th c.; strongest in internal medicine), the **Sushruta Samhita** (surgery) and Vagbhata's **Ashtanga Hridaya** (c. 7th c., a synthesis). Its aim, in Charaka's words, is to protect the health of the healthy and relieve the disease of the sick.\n\nThe body is built from the five mahabhutas and regulated by three **doshas**: **vata** (air + space; movement, nerve impulses, circulation), **pitta** (fire + water; transformation, digestion, metabolism) and **kapha** (water + earth; structure, lubrication, stability). Health is their balance, together with balanced digestive fire (**agni**), the seven **dhatus** (rasa, rakta, mamsa, meda, asthi, majja, shukra), proper elimination of **malas** (faeces, urine, sweat) and a content self, senses and mind — Sushruta's definition of **svastha**. Each person has a constitution (**prakriti**).\n\nAyurveda has eight branches (**ashtanga**), stresses prevention through daily (**dinacharya**) and seasonal (**ritucharya**) routines, diet, sleep and conduct, and treats with herbs, minerals and cleansing (**panchakarma**). It is regulated under the Ministry of AYUSH (2014), and WHO's Global Centre for Traditional Medicine opened at Jamnagar (2022). The dosha theory is a traditional explanatory framework, not biochemistry; specific remedies must be tested by clinical trials, and some metal-based preparations raise safety concerns.",
+          "key_points": [
+            "Ayurveda = knowledge of life; an Upaveda.",
+            "Brihat-trayi: Charaka Samhita, Sushruta Samhita, Ashtanga Hridaya (Vagbhata).",
+            "Aim: preserve health of the healthy, cure the sick (Charaka).",
+            "Tridosha: vata (air+space, movement), pitta (fire+water, transformation), kapha (water+earth, structure).",
+            "Sapta dhatu, malas, agni, prakriti.",
+            "Svastha (Sushruta): balanced doshas, agni, dhatus, malas + content self, senses, mind.",
+            "Ashtanga: kaya, bala (kaumarabhritya), graha (bhuta vidya), urdhvanga (shalakya), shalya, damshtra (agada), jara (rasayana), vrisha (vajikarana).",
+            "Prevention: dinacharya, ritucharya; therapy: panchakarma (vamana, virechana, basti, nasya, raktamokshana).",
+            "AYUSH ministry (2014); WHO GCTM Jamnagar (2022)."
+          ],
+          "formulas": [],
+          "traps": [
+            "Doshas are functional principles; translating them as Greek 'humours' is approximate at best.",
+            "Charaka is mainly internal medicine (kaya chikitsa); Sushruta is surgery — do not swap.",
+            "Charaka Samhita is a redaction of Agnivesha's tantra, completed by Dridhabala — not a single-author book.",
+            "Do not write that Ayurveda 'cures everything' or is scientifically proven as a whole; say evidence varies and some preparations have safety issues."
+          ],
+          "asked_as": "'Explain the tridosha theory' (5 marks); 'Name the eight branches of Ayurveda' (2-5 marks); 'Define health according to Ayurveda' (2 marks); 'Discuss Ayurveda as a holistic system of health' (10 marks).",
+          "questions": [
+            {"q": "Define health (svastha) according to Ayurveda.", "a": "According to the Sushruta Samhita, a person is **svastha** (healthy) when the doshas are in balance, agni (digestive fire) is balanced, the dhatus (tissues) and the elimination of malas (wastes) function normally, and the self (atma), senses (indriya) and mind (manas) are content (prasanna).", "marks": 2, "kind": "short"},
+            {"q": "Explain the tridosha theory of Ayurveda.", "a": "Ayurveda explains the body's functions through three doshas, each a combination of the five mahabhutas:\n1. **Vata** (air + space) — movement: breathing, circulation, nerve impulses, elimination. Qualities: dry, light, cold, mobile. Excess: dryness, pain, anxiety, constipation.\n2. **Pitta** (fire + water) — transformation: digestion, metabolism, body heat, vision, intellect. Qualities: hot, sharp, oily. Excess: acidity, inflammation, anger.\n3. **Kapha** (water + earth) — structure and cohesion: lubrication of joints, immunity, stability. Qualities: heavy, slow, cold, oily. Excess: congestion, obesity, lethargy.\nEach person's **prakriti** is a particular proportion of the three. **Health** is their balance; **disease** is imbalance (vikriti), corrected by diet, routine, herbs and therapies such as panchakarma.", "marks": 5, "kind": "long"},
+            {"q": "Name the eight branches (ashtanga) of Ayurveda.", "a": "1. Kaya chikitsa — internal medicine\n2. Bala (Kaumarabhritya) — paediatrics and obstetrics\n3. Graha (Bhuta vidya) — psychiatry/disorders attributed to spirits\n4. Urdhvanga (Shalakya) — ENT and eye diseases\n5. Shalya — surgery\n6. Damshtra (Agada tantra) — toxicology\n7. Jara (Rasayana) — rejuvenation and geriatrics\n8. Vrisha (Vajikarana) — reproductive health and aphrodisiacs", "marks": 5, "kind": "short"},
+            {"q": "What are the seven dhatus of Ayurveda?", "a": "Rasa (plasma/chyle), rakta (blood), mamsa (muscle), meda (fat), asthi (bone), majja (marrow) and shukra (reproductive tissue).", "marks": 2, "kind": "short"},
+            {"q": "Which dosha is associated with digestion and metabolism?", "options": ["Vata", "Pitta", "Kapha", "Agni"], "answer_index": 1, "a": "Pitta (fire + water) governs transformation — digestion and metabolism. Agni is digestive fire, not a dosha.", "marks": 1, "kind": "mcq"},
+            {"q": "The Charaka Samhita is primarily a text on:", "options": ["Surgery", "Internal medicine", "Astronomy", "Grammar"], "answer_index": 1, "a": "Charaka Samhita is the chief text of kaya chikitsa (internal medicine); Sushruta Samhita covers surgery.", "marks": 1, "kind": "mcq"},
+            {"q": "WHO's Global Centre for Traditional Medicine was established in India at:", "options": ["Haridwar", "Jamnagar", "Pune", "Varanasi"], "answer_index": 1, "a": "Jamnagar, Gujarat (2022).", "marks": 1, "kind": "mcq"}
+          ]
+        },
+        {
+          "topic": "Sushruta and surgery",
+          "importance": "high",
+          "why": "Sushruta's rhinoplasty, instruments and surgical training are a standard 5-mark note; the 101/20 instrument numbers and eight procedures give MCQs.",
+          "gist": "The **Sushruta Samhita** is the foundational text of Indian surgery (**shalya tantra**). Its core may date from the later 1st millennium BCE, with layers added up to the early centuries CE (the Uttara-tantra is a later addition; dating is disputed). It describes **101 blunt instruments (yantras)** — the hand counted as the chief — and **20 sharp instruments (shastras)**, and groups surgical work into **eight procedures**: chedana (excision), bhedana (incision), lekhana (scraping), vedhana (puncturing), eshana (probing), aharana (extraction), visravana (draining) and sivana (suturing).\n\nIt describes **rhinoplasty** using a pedicled skin flap from the **cheek** to rebuild a nose cut off as punishment; the forehead-flap 'Indian method', reported from Pune in 1794 and influential in Europe, comes from a later craft tradition. It also describes cataract **couching** (pushing the clouded lens out of the visual axis with a needle — not modern extraction), removal of bladder stones, treatment of fractures and dislocations, wound care, leech therapy, and wine as an anaesthetic.\n\nSushruta insisted on practical training: students practised incision on gourds and cucumbers, puncturing on veins of dead animals and lotus stalks, suturing on cloth and leather, and learned anatomy by examining a body softened in a stream for about seven days and scraped with brushes. He is often called the 'father of surgery' (more precisely, of Indian surgery); the text also sets ethical standards — a surgeon must master both theory and practice.",
+          "key_points": [
+            "Sushruta Samhita: shalya tantra; core later 1st millennium BCE, layers to early CE (disputed).",
+            "101 yantras (blunt) and 20 shastras (sharp); the hand as chief instrument.",
+            "Eight procedures: chedana, bhedana, lekhana, vedhana, eshana, aharana, visravana, sivana.",
+            "Rhinoplasty with cheek flap; forehead flap is the later 'Indian method' (Pune, 1794).",
+            "Cataract couching, lithotomy, fractures, wound care, leeches, wine as anaesthetic.",
+            "Training on models: gourds, cucumbers, leather, lotus stalks; dissection of a body softened in water.",
+            "Emphasis on both theory and practical skill."
+          ],
+          "formulas": [],
+          "traps": [
+            "Sushruta's own rhinoplasty uses a cheek flap; the forehead flap is the 18th-century Pune method.",
+            "Couching is not cataract extraction or lens implantation.",
+            "101 is blunt (yantra), 20 is sharp (shastra) — do not swap them.",
+            "Date Sushruta with 'c.' and say the text is layered; '600 BCE' as a fact is not safe."
+          ],
+          "asked_as": "'Write a note on Sushruta's contributions to surgery' (5 marks); 'What is couching?' (2 marks); 'Describe the surgical training methods in the Sushruta Samhita' (5 marks).",
+          "questions": [
+            {"q": "Name the eight surgical procedures (ashtavidha shastra karma) of Sushruta.", "a": "Chedana (excision), bhedana (incision), lekhana (scraping), vedhana (puncturing), eshana (probing), aharana (extraction), visravana (draining) and sivana (suturing).", "marks": 3, "kind": "short"},
+            {"q": "Write a note on Sushruta's contributions to surgery.", "a": "1. **Text**: Sushruta Samhita, foundational text of shalya tantra (core later 1st millennium BCE, later layers).\n2. **Instruments**: 101 blunt yantras and 20 sharp shastras, described by shape and use (many named after animals they resemble).\n3. **Procedures**: eight types — excision, incision, scraping, puncturing, probing, extraction, drainage, suturing.\n4. **Operations**: rhinoplasty with a cheek flap, cataract couching, removal of bladder stones, management of fractures, dislocations and wounds, leech therapy.\n5. **Anaesthesia and care**: wine before surgery; attention to cleanliness and post-operative care.\n6. **Training**: practice on gourds, cucumbers, leather, lotus stalks and dead animals; anatomy by studying a body softened in water.\n7. **Ethics**: a surgeon must combine theory with practical skill.\nHe is often called the father of (Indian) surgery.", "marks": 5, "kind": "long"},
+            {"q": "What is cataract couching as described by Sushruta?", "a": "A needle is inserted at the side of the eye and the opaque lens is pushed downward and backward out of the line of sight, so light can reach the retina. It restores some vision but is not the removal of the lens, and needs strong spectacles today if done; modern surgery extracts the lens and implants an artificial one.", "marks": 2, "kind": "short"},
+            {"q": "How did the Sushruta Samhita train students in surgery?", "a": "By practice on models before patients: incision on gourds, cucumbers and melons; scraping on hairy leather; puncturing on veins of dead animals and lotus stalks; probing on worm-eaten wood or hollow reeds; suturing on cloth and leather; bandaging on dummies. Anatomy was learned by placing a body in a cage in flowing water for about seven days and scraping layers with brushes to observe structures.", "marks": 3, "kind": "short"},
+            {"q": "According to the Sushruta Samhita, the number of blunt instruments (yantras) is:", "options": ["20", "101", "108", "64"], "answer_index": 1, "a": "101 yantras (blunt) and 20 shastras (sharp).", "marks": 1, "kind": "mcq"},
+            {"q": "In Sushruta's rhinoplasty, the skin flap was taken from the:", "options": ["Forehead", "Cheek", "Thigh", "Arm"], "answer_index": 1, "a": "The cheek; the forehead flap is the later 'Indian method' reported in 1794.", "marks": 1, "kind": "mcq"}
+          ]
+        },
+        {
+          "topic": "Yoga: Patanjali's eight limbs",
+          "importance": "must",
+          "why": "'Explain ashtanga yoga' is among the most certain questions in any IKS paper (5-10 marks), with yamas/niyamas as 2-mark items.",
+          "gist": "**Yoga** ('yoking', union) is one of the six darshanas. Its root text, Patanjali's **Yoga Sutra** (c. 2nd c. BCE–4th c. CE; many scholars now favour c. 4th c. CE), has about 195 sutras in four padas: **Samadhi**, **Sadhana**, **Vibhuti** and **Kaivalya**. Sutra 1.2 defines yoga: *yogash chitta-vritti-nirodhah* — 'yoga is the stilling of the fluctuations of the mind'. The five vrittis are pramana (valid cognition), viparyaya (error), vikalpa (imagination), nidra (sleep) and smriti (memory); the five kleshas (afflictions) are avidya, asmita, raga, dvesha and abhinivesha.\n\nThe practical path is **ashtanga yoga**, the eight limbs:\n1. **Yama** — ahimsa, satya, asteya, brahmacharya, aparigraha.\n2. **Niyama** — shaucha, santosha, tapas, svadhyaya, ishvara-pranidhana.\n3. **Asana** — 'steady and comfortable posture' (*sthira-sukham asanam*, 2.46).\n4. **Pranayama** — regulation of breath.\n5. **Pratyahara** — withdrawal of the senses.\n6. **Dharana** — concentration on one point.\n7. **Dhyana** — meditation, unbroken flow of attention.\n8. **Samadhi** — absorption.\nThe first five are external (**bahiranga**), the last three internal (**antaranga**) and together called **samyama**.\n\nPatanjali says almost nothing about specific postures; the many asanas of modern yoga come from later **hatha yoga** texts (Hatha Yoga Pradipika, 15th c.) and 20th-century teachers. The UN declared **21 June** the International Day of Yoga in December 2014. Studies support benefits for stress, flexibility and some chronic conditions, though evidence quality varies.",
+          "key_points": [
+            "Yoga Sutra of Patanjali: ~195 sutras, 4 padas (Samadhi, Sadhana, Vibhuti, Kaivalya); date c. 2nd c. BCE–4th c. CE.",
+            "Definition 1.2: yogash chitta-vritti-nirodhah.",
+            "Five vrittis and five kleshas.",
+            "Eight limbs: yama, niyama, asana, pranayama, pratyahara, dharana, dhyana, samadhi.",
+            "Five yamas: ahimsa, satya, asteya, brahmacharya, aparigraha.",
+            "Five niyamas: shaucha, santosha, tapas, svadhyaya, ishvara-pranidhana.",
+            "Bahiranga (first 5) vs antaranga (last 3); samyama = dharana + dhyana + samadhi.",
+            "Modern postural yoga draws on hatha yoga (15th c. onward); International Day of Yoga, 21 June (UN, 2014)."
+          ],
+          "formulas": [],
+          "traps": [
+            "Ashtanga yoga in Patanjali means the eight limbs, not a style of vigorous asana practice.",
+            "Yamas are restraints (ethical, towards others), niyamas are observances (personal discipline) — do not mix their lists.",
+            "Patanjali's 'asana' is a steady seat for meditation; the long asana catalogue comes from hatha yoga texts.",
+            "Dharana (concentration) comes before dhyana (meditation); the order is examined."
+          ],
+          "asked_as": "'Explain the eight limbs of yoga' (5-10 marks); 'Name the five yamas / niyamas' (2 marks); 'Define yoga according to Patanjali' (2 marks); 'Relevance of yoga for students' (5 marks).",
+          "questions": [
+            {"q": "Define yoga according to Patanjali.", "a": "Yoga Sutra 1.2: *yogash chitta-vritti-nirodhah* — 'Yoga is the restraint (stilling) of the modifications (fluctuations) of the mind.' When the mind is still, the seer abides in its own nature (1.3).", "marks": 2, "kind": "short"},
+            {"q": "Name the five yamas and five niyamas.", "a": "**Yamas** (restraints): ahimsa (non-violence), satya (truthfulness), asteya (non-stealing), brahmacharya (continence/moderation), aparigraha (non-possessiveness).\n**Niyamas** (observances): shaucha (cleanliness), santosha (contentment), tapas (austerity, discipline), svadhyaya (self-study), ishvara-pranidhana (surrender to Ishvara).", "marks": 3, "kind": "short"},
+            {"q": "Explain Patanjali's ashtanga yoga.", "a": "Ashtanga yoga is the eight-limbed path of the Yoga Sutra (Sadhana and Vibhuti padas):\n1. **Yama** — five ethical restraints: ahimsa, satya, asteya, brahmacharya, aparigraha.\n2. **Niyama** — five observances: shaucha, santosha, tapas, svadhyaya, ishvara-pranidhana.\n3. **Asana** — a steady, comfortable seat (sthira-sukham asanam).\n4. **Pranayama** — regulation of inhalation, exhalation and retention of breath.\n5. **Pratyahara** — withdrawing the senses from their objects.\n6. **Dharana** — fixing the mind on one object or place.\n7. **Dhyana** — uninterrupted flow of awareness towards that object.\n8. **Samadhi** — absorption in which only the object shines, as if the mind were empty of itself.\nLimbs 1-5 are **bahiranga** (external aids), 6-8 **antaranga** (internal) and together **samyama**. The goal is **kaivalya**, the isolation of pure consciousness (purusha) from prakriti. The path moves from ethics and body to breath, senses and finally mind.", "marks": 10, "kind": "long"},
+            {"q": "Discuss the relevance of yoga for an engineering student.", "a": "1. **Stress management**: pranayama and dhyana reduce anxiety around exams and deadlines; studies show reduced stress markers.\n2. **Concentration**: dharana trains sustained attention useful for study and design work.\n3. **Physical health**: asanas counter long hours at desks and screens — posture, flexibility, back pain.\n4. **Ethics**: yamas such as satya, asteya and ahimsa map onto honest data, no plagiarism and safety-first engineering.\n5. **Self-discipline**: niyamas (tapas, svadhyaya) build regular study habits.\nEvidence varies by condition, so yoga complements, not replaces, medical care.", "marks": 5, "kind": "short"},
+            {"q": "Which limb of yoga means 'withdrawal of the senses'?", "options": ["Dharana", "Pratyahara", "Dhyana", "Pranayama"], "answer_index": 1, "a": "Pratyahara is withdrawal of the senses from their objects.", "marks": 1, "kind": "mcq"},
+            {"q": "Samyama refers to the combination of:", "options": ["Yama, niyama, asana", "Asana, pranayama, pratyahara", "Dharana, dhyana, samadhi", "All eight limbs"], "answer_index": 2, "a": "The three inner limbs — dharana, dhyana and samadhi — practised together are samyama.", "marks": 1, "kind": "mcq"},
+            {"q": "Aparigraha, one of the yamas, means:", "options": ["Non-stealing", "Non-possessiveness", "Truthfulness", "Cleanliness"], "answer_index": 1, "a": "Aparigraha is non-possessiveness (non-greed); asteya is non-stealing.", "marks": 1, "kind": "mcq"}
+          ]
+        },
+        {
+          "topic": "Traditional ecological knowledge and environmental conservation",
+          "importance": "medium",
+          "why": "Sacred groves, Bishnoi/Chipko and biopiracy cases (neem, turmeric) appear as 5-mark notes and MCQs; essays tie them to sustainability.",
+          "gist": "**Traditional ecological knowledge** (TEK) is the knowledge of plants, animals, soils and water that communities build over generations and keep through practice, belief and custom. India has many examples. **Sacred groves** — forest patches protected for a deity (devrai in Maharashtra, kavu in Kerala, sarna in Jharkhand, orans in Rajasthan, law kyntang in Meghalaya, e.g. Mawphlang) — number in the tens of thousands and often shelter rare species and springs. The **Bishnoi** community follows 29 principles laid down by Guru Jambheshwar (15th c.), including bans on felling green trees and killing animals; at **Khejarli** near Jodhpur (1730) Amrita Devi and 363 Bishnois are recorded to have died resisting the felling of khejri trees. The **Chipko** movement (from 1973, Uttarakhand; Gaura Devi, Chandi Prasad Bhatt, Sunderlal Bahuguna) drew on this tradition.\n\nTexts carry ecological ideas too: the Atharvaveda's **Prithvi Sukta** ('the earth is my mother, I am her son'), **Ashoka's fifth pillar edict** listing protected animals, and **Vrikshayurveda** (Surapala, c. 10th c.) on plant care.\n\nBecause TEK is often undocumented, it has been misappropriated (**biopiracy**): a US patent on turmeric's wound-healing use was revoked in 1997 after CSIR produced old Indian texts, and a European patent on a neem-based fungicide was revoked. India responded with the **Traditional Knowledge Digital Library** (TKDL, 2001, CSIR with the AYUSH department), which gives patent examiners prior art, and the **Biological Diversity Act, 2002**, with People's Biodiversity Registers and benefit-sharing.",
+          "key_points": [
+            "TEK: community knowledge of ecosystems kept by practice and custom.",
+            "Sacred groves: devrai, kavu, sarna, orans, law kyntang (Mawphlang).",
+            "Bishnois: 29 principles of Guru Jambheshwar; Khejarli sacrifice, 1730 (Amrita Devi, 363 people).",
+            "Chipko (1973 onward): Gaura Devi, Chandi Prasad Bhatt, Sunderlal Bahuguna.",
+            "Textual ideas: Prithvi Sukta, Ashoka's pillar edict V, Vrikshayurveda.",
+            "Biopiracy cases: turmeric (US patent revoked 1997), neem (European patent revoked), basmati.",
+            "TKDL (2001) and Biological Diversity Act 2002 (People's Biodiversity Registers, benefit-sharing)."
+          ],
+          "formulas": [],
+          "traps": [
+            "Khejarli (1730, Rajasthan) and Chipko (1973, Uttarakhand) are different events; Chipko was inspired by the Bishnoi story.",
+            "TKDL does not grant patents; it documents prior art so wrong patents are refused.",
+            "Do not romanticise: some traditional practices were unsustainable and groves are under pressure today.",
+            "Sacred grove names must be matched to the right state."
+          ],
+          "asked_as": "'What are sacred groves? Give examples' (3-5 marks); 'Write a note on the Bishnoi / Chipko movement' (5 marks); 'What is biopiracy? How does TKDL help?' (5 marks).",
+          "questions": [
+            {"q": "What are sacred groves? Give two examples with states.", "a": "Sacred groves are patches of natural forest protected by local communities because they are dedicated to a deity or ancestral spirit; felling and hunting are forbidden. Examples: **devrai** (Maharashtra), **kavu** (Kerala), **orans** (Rajasthan), **law kyntang** at Mawphlang (Meghalaya), **sarna** (Jharkhand).", "marks": 3, "kind": "short"},
+            {"q": "What is biopiracy? Explain how the TKDL helps prevent it.", "a": "**Biopiracy** is patenting or commercially exploiting traditional knowledge or biological resources without consent or benefit-sharing with the communities that developed them — e.g. the US patent on turmeric for wound healing (revoked 1997) and the European neem fungicide patent (revoked). The **Traditional Knowledge Digital Library** (2001, CSIR with AYUSH) translates and documents formulations from Ayurveda, Unani, Siddha and Yoga texts into searchable patent-office formats in several languages. Patent offices that have access agreements use it as **prior art**, so applications claiming known uses are rejected or withdrawn.", "marks": 5, "kind": "long"},
+            {"q": "Write a note on the Bishnoi tradition of conservation.", "a": "The Bishnoi community of western Rajasthan follows 29 principles (bis + noi) given by Guru Jambheshwar in the 15th century, including protection of green trees and compassion for animals (especially blackbuck and chinkara). In **1730 at Khejarli**, near Jodhpur, Amrita Devi and her daughters, followed by 363 Bishnois, are recorded to have given their lives hugging khejri trees to stop them being cut for the Maharaja's lime kiln; the Maharaja then banned felling in Bishnoi villages. The story inspired the Chipko movement and India's Amrita Devi Bishnoi wildlife protection award.", "marks": 5, "kind": "short"},
+            {"q": "The Khejarli sacrifice associated with Amrita Devi took place in:", "options": ["1730", "1857", "1973", "1985"], "answer_index": 0, "a": "1730, near Jodhpur; Chipko began in 1973.", "marks": 1, "kind": "mcq"},
+            {"q": "TKDL was created mainly to:", "options": ["Grant patents to Indian vaidyas", "Provide prior art to patent offices", "Sell herbal products", "Regulate Ayurvedic colleges"], "answer_index": 1, "a": "It documents traditional knowledge so patent examiners can reject claims on known uses.", "marks": 1, "kind": "mcq"},
+            {"q": "'Kavu' is the name for sacred groves in:", "options": ["Kerala", "Rajasthan", "Meghalaya", "Maharashtra"], "answer_index": 0, "a": "Kavu — Kerala; orans — Rajasthan; law kyntang — Meghalaya; devrai — Maharashtra.", "marks": 1, "kind": "mcq"}
+          ]
+        },
+        {
+          "topic": "Agriculture (Krishi Parashara) and food traditions",
+          "importance": "medium",
+          "why": "Krishi Parashara and the six rasas appear as 2-5 mark questions; essays on sustainable farming are occasional.",
+          "gist": "Agriculture in the subcontinent goes back to **Mehrgarh** (c. 7000 BCE; wheat, barley, cattle). At **Kalibangan** (Rajasthan) archaeologists found a ploughed field with criss-cross furrows (c. 2800 BCE), a pattern still used locally for mixed cropping. **Krishi Parashara**, a Sanskrit manual attributed to the sage Parashara (date uncertain; often placed in the later 1st millennium CE), covers rainfall forecasting from astronomical and weather signs, care of cattle, the parts and dimensions of the plough (hala), seed collection and storage, sowing, transplanting, weeding, manuring with cow dung, harvesting and threshing — a practical farm handbook. **Vrikshayurveda** texts (e.g. Surapala's) discuss seed treatment, grafting, watering and plant diseases and describe **kunapa jala**, a liquid manure fermented from animal remains. Practices such as crop rotation, mixed cropping, legumes and green manure, and seed saving are now studied as low-input sustainable farming, though claims and yields must be tested.\n\nIn **food**, Ayurveda treats **ahara** (diet) as one of three pillars of life (*trayopastambha*: ahara, nidra — sleep, brahmacharya — regulated conduct), classifies tastes into **six rasas** — madhura (sweet), amla (sour), lavana (salty), katu (pungent), tikta (bitter), kashaya (astringent) — and advises eating by season (**ritucharya**), constitution and digestive strength. India gave the world crystallised sugar (Sanskrit *sharkara* → 'sugar'; *khanda* → 'candy'), black pepper and many spices, and millets, which India championed for the UN **International Year of Millets (2023)**.",
+          "key_points": [
+            "Mehrgarh (c. 7000 BCE) early farming; Kalibangan ploughed field (c. 2800 BCE).",
+            "Krishi Parashara: rainfall prediction, cattle, plough parts, seeds, sowing, weeding, manure, harvest (date uncertain).",
+            "Vrikshayurveda: plant care, grafting, kunapa jala.",
+            "Sustainable practices: crop rotation, mixed cropping, legumes, green manure, seed saving.",
+            "Trayopastambha: ahara, nidra, brahmacharya.",
+            "Six rasas: madhura, amla, lavana, katu, tikta, kashaya.",
+            "Ritucharya diet; sugar (sharkara/khanda), pepper, spices; International Year of Millets 2023."
+          ],
+          "formulas": [],
+          "traps": [
+            "Krishi Parashara's date is uncertain — do not assign a precise BCE date.",
+            "Vrikshayurveda is about plants; it is not a branch of human Ayurveda's ashtanga.",
+            "Katu means pungent and tikta bitter — the two are often swapped.",
+            "Traditional farming is not automatically higher-yielding; present it as sustainable and worth testing."
+          ],
+          "asked_as": "'Write a note on Krishi Parashara' (5 marks); 'Name the six rasas of Ayurveda' (2 marks); 'Traditional Indian agricultural practices and their relevance' (5-10 marks).",
+          "questions": [
+            {"q": "Name the six rasas (tastes) in Ayurveda.", "a": "Madhura (sweet), amla (sour), lavana (salty), katu (pungent), tikta (bitter) and kashaya (astringent).", "marks": 2, "kind": "short"},
+            {"q": "Write a note on Krishi Parashara.", "a": "Krishi Parashara is a Sanskrit treatise on agriculture attributed to the sage Parashara (date uncertain; often placed in the later 1st millennium CE). It covers:\n1. **Weather**: predicting rainfall from planetary positions, clouds and winds.\n2. **Cattle**: care, cowsheds, cattle health — animals as the base of farming.\n3. **Implements**: parts and dimensions of the plough (hala) and other tools.\n4. **Seeds**: collection, drying and storage.\n5. **Operations**: ploughing, sowing, transplanting of paddy, weeding, irrigation.\n6. **Manure**: preparation and use of cow-dung manure.\n7. **Harvest**: harvesting, threshing (medhi) and storage.\nIt shows a practical, observation-based approach to farming, though its astrological weather rules are not scientific forecasting.", "marks": 5, "kind": "long"},
+            {"q": "What is trayopastambha in Ayurveda?", "a": "The 'three sub-pillars' of life that support health: **ahara** (proper diet), **nidra** (adequate sleep) and **brahmacharya** (regulated, disciplined conduct including sexual restraint).", "marks": 2, "kind": "short"},
+            {"q": "Discuss the relevance of traditional Indian agricultural practices today.", "a": "1. **Soil health**: green manure, legumes in rotation and farmyard manure maintain organic matter and nitrogen.\n2. **Risk reduction**: mixed cropping and intercropping (seen even at Kalibangan) spread risk against drought and pests.\n3. **Biodiversity**: seed saving and local varieties (millets, landraces) keep genetic diversity and climate resilience.\n4. **Low input**: organic inputs such as kunapa jala and botanical pesticides (neem) reduce cost and chemical load.\n5. **Water**: tank irrigation and rain-fed crops suit water-scarce regions.\nThese align with natural/organic farming schemes and the 2023 Year of Millets. Limits: yields may be lower, and claims need field trials; best combined with modern agronomy.", "marks": 5, "kind": "short"},
+            {"q": "Krishi Parashara is a traditional text on:", "options": ["Surgery", "Agriculture", "Grammar", "Metallurgy"], "answer_index": 1, "a": "It is an agricultural manual attributed to Parashara.", "marks": 1, "kind": "mcq"},
+            {"q": "In Ayurveda, 'tikta' rasa means:", "options": ["Pungent", "Bitter", "Astringent", "Sour"], "answer_index": 1, "a": "Tikta is bitter; katu is pungent; kashaya astringent; amla sour.", "marks": 1, "kind": "mcq"},
+            {"q": "The UN International Year of Millets, proposed by India, was:", "options": ["2015", "2020", "2023", "2025"], "answer_index": 2, "a": "2023.", "marks": 1, "kind": "mcq"}
+          ]
+        }
+      ]
+    },
+    {
+      "unit": "Society, Governance and the Arts",
+      "topics": [
+        {
+          "topic": "Arthashastra and statecraft",
+          "importance": "high",
+          "why": "The saptanga theory and Kautilya's administration are standard 5-10 mark questions; the four upayas and mandala give MCQs.",
+          "gist": "The **Arthashastra** is a treatise on statecraft, economics and law attributed to **Kautilya** (also called Chanakya or Vishnugupta), traditionally the minister of Chandragupta Maurya (c. 4th c. BCE). Many modern scholars (e.g. Patrick Olivelle) think the text as we have it was composed and edited between roughly the 1st c. BCE and 3rd c. CE from older material — the date is disputed. Lost for centuries, a manuscript was identified by **R. Shamasastry** in Mysore in **1905** and published in 1909. It has 15 books (adhikaranas).\n\nCore ideas: the **saptanga** (seven limbs) of the state — **swami** (ruler), **amatya** (ministers), **janapada** (territory and people), **durga** (fort), **kosha** (treasury), **danda** (army, coercive power), **mitra** (ally); the **mandala** theory of foreign relations — a neighbouring king is a natural enemy, the neighbour's neighbour a natural friend; the four **upayas** — **sama** (conciliation), **dana** (gifts), **bheda** (division) and **danda** (force); and the **shadgunya** (six-fold policy): sandhi (peace), vigraha (war), asana (staying put), yana (marching), samshraya (seeking shelter) and dvaidhibhava (double policy). Without a strong state, says Kautilya, **matsya-nyaya** (big fish eat small) prevails.\n\nIt details taxation, treasury and audit, weights and measures, labour and consumer protection, espionage, and the ways officials embezzle (it lists forty). Its welfare principle: 'in the happiness of the subjects lies the happiness of the king'. It is often compared to Machiavelli's *The Prince* (1513), but it is far broader — an administrative and economic manual.",
+          "key_points": [
+            "Author: Kautilya/Chanakya/Vishnugupta; traditional date c. 4th c. BCE; text perhaps c. 1st c. BCE–3rd c. CE (disputed).",
+            "Rediscovered by R. Shamasastry, 1905 (published 1909); 15 adhikaranas.",
+            "Saptanga: swami, amatya, janapada, durga, kosha, danda, mitra.",
+            "Mandala theory: vijigishu (would-be conqueror), ari (enemy), mitra (friend), madhyama, udasina.",
+            "Four upayas: sama, dana, bheda, danda.",
+            "Shadgunya: sandhi, vigraha, asana, yana, samshraya, dvaidhibhava.",
+            "Matsya-nyaya justifies the state; 'prajasukhe sukham rajnah' — welfare of subjects.",
+            "Administration: revenue, audit, trade, labour, espionage, 40 ways of embezzlement."
+          ],
+          "formulas": [],
+          "traps": [
+            "Kosha is treasury and durga is fort — commonly swapped.",
+            "Do not call it purely a book of ruthless politics; it is equally about economy, law and welfare.",
+            "Give the date as traditional c. 4th c. BCE with the scholarly later dating noted.",
+            "Upayas (4 means) and shadgunya (6 policies) are different lists."
+          ],
+          "asked_as": "'Explain the saptanga theory of the state' (5 marks); 'Write a note on Kautilya's Arthashastra' (5-10 marks); 'What are the four upayas?' (2 marks).",
+          "questions": [
+            {"q": "What are the four upayas of Kautilya?", "a": "**Sama** (conciliation, negotiation), **dana** (gifts, inducement), **bheda** (division, creating dissension) and **danda** (force, punishment) — means of dealing with rivals, in roughly increasing order of severity.", "marks": 2, "kind": "short"},
+            {"q": "Explain the saptanga theory of the state.", "a": "Kautilya describes the state as an organism with seven limbs (prakritis):\n1. **Swami** — the ruler, who must be wise, energetic and self-disciplined.\n2. **Amatya** — ministers and officials who run the administration.\n3. **Janapada** — territory and its people, the base of production and revenue.\n4. **Durga** — fortified towns for defence.\n5. **Kosha** — treasury, filled by just taxation; 'all undertakings depend on the treasury'.\n6. **Danda** — army and coercive power to protect and enforce law.\n7. **Mitra** — allies.\nEach limb supports the others; weakness in one endangers the whole. The theory is an early systematic model of the state's components.", "marks": 5, "kind": "long"},
+            {"q": "Name the six-fold policy (shadgunya) of the Arthashastra.", "a": "Sandhi (peace treaty), vigraha (war/hostility), asana (staying quiet, neutrality), yana (marching/preparing to attack), samshraya (seeking shelter with a stronger king) and dvaidhibhava (double policy — peace with one, war with another).", "marks": 3, "kind": "short"},
+            {"q": "What lessons does the Arthashastra offer for modern governance and management?", "a": "1. **Welfare as legitimacy**: the king's happiness lies in his subjects' happiness — public service orientation.\n2. **Fiscal discipline**: strong treasury, fair taxes, audits and accounts.\n3. **Anti-corruption**: it lists 40 ways officials embezzle and prescribes inspections and rotation.\n4. **Standards**: weights and measures, quality control, consumer protection.\n5. **Strategy**: mandala theory and the six-fold policy anticipate realist international relations; the four upayas apply to negotiation.\n6. **Information**: an intelligence system for informed decisions.\nThese must be read in their historical context; some methods (espionage, deceit) clash with modern ethics.", "marks": 5, "kind": "short"},
+            {"q": "In the saptanga theory, 'kosha' refers to:", "options": ["Fort", "Treasury", "Army", "Ally"], "answer_index": 1, "a": "Kosha is the treasury; durga is the fort, danda the army, mitra the ally.", "marks": 1, "kind": "mcq"},
+            {"q": "The Arthashastra manuscript was rediscovered in 1905 by:", "options": ["R. Shamasastry", "James Prinsep", "Max Muller", "R.G. Bhandarkar"], "answer_index": 0, "a": "R. Shamasastry, at the Oriental Research Institute, Mysore.", "marks": 1, "kind": "mcq"},
+            {"q": "'Matsya-nyaya' in the Arthashastra refers to:", "options": ["Fishing rights", "The strong devouring the weak in the absence of a state", "A water tax", "A naval doctrine"], "answer_index": 1, "a": "The 'law of the fishes' — the big eat the small — which a strong state prevents.", "marks": 1, "kind": "mcq"}
+          ]
+        },
+        {
+          "topic": "Nyaya: logic and the art of debate",
+          "importance": "medium",
+          "why": "The five-membered syllogism is a likely 5-mark question and vada/jalpa/vitanda a 2-3 marker; overlaps with pramanas in Unit 1.",
+          "gist": "**Nyaya** ('method', 'rule') is the darshana of logic and epistemology, founded on the **Nyaya Sutra** of **Akshapada Gautama** (c. 2nd c. BCE–2nd c. CE). It lists **16 padarthas** (topics) for correct reasoning and debate, from pramana and prameya to fallacies and points of defeat, and accepts four pramanas (perception, inference, comparison, testimony).\n\nIts signature is the **five-membered syllogism (panchavayava)**, used to convince others (parartha-anumana):\n1. **Pratijna** (thesis) — the hill has fire.\n2. **Hetu** (reason) — because it has smoke.\n3. **Udaharana** (example) — whatever has smoke has fire, as in a kitchen.\n4. **Upanaya** (application) — this hill has smoke, which is always accompanied by fire.\n5. **Nigamana** (conclusion) — therefore the hill has fire.\nThe inference rests on **vyapti**, invariable concomitance between the sign (smoke) and what is proved (fire); the example keeps the reasoning tied to experience, unlike Aristotle's purely formal three-part syllogism.\n\nFaulty reasons are **hetvabhasas**, traditionally five: savyabhichara (inconclusive), viruddha (contradictory), satpratipaksha (counterbalanced), asiddha (unproved) and badhita (contradicted by stronger evidence). Debate is classified as **vada** (honest discussion to find the truth), **jalpa** (debate to win, using tricks) and **vitanda** (only attacking the opponent, with no thesis of one's own). From the 14th c., **Navya-Nyaya** (Gangesha's *Tattvachintamani*, Mithila) built a precise technical language that shaped later Indian scholarship and is studied for parallels with formal logic and knowledge representation.",
+          "key_points": [
+            "Nyaya Sutra of Akshapada Gautama (c. 2nd c. BCE–2nd c. CE); 16 padarthas; 4 pramanas.",
+            "Panchavayava: pratijna, hetu, udaharana, upanaya, nigamana.",
+            "Vyapti: invariable concomitance between hetu and sadhya.",
+            "Svartha (for oneself) vs parartha (for others) anumana.",
+            "Five hetvabhasas: savyabhichara, viruddha, satpratipaksha, asiddha, badhita.",
+            "Vada, jalpa, vitanda.",
+            "Navya-Nyaya: Gangesha, Tattvachintamani (14th c.), technical language."
+          ],
+          "formulas": [],
+          "traps": [
+            "Udaharana is the general rule with an example ('wherever smoke, there fire, as in a kitchen'), not just 'a kitchen'.",
+            "Vada seeks truth; jalpa seeks victory — do not reverse them.",
+            "Nyaya's syllogism is five-membered; Aristotle's is three — comparing is fine, equating is not.",
+            "Gautama of Nyaya is not the Buddha."
+          ],
+          "asked_as": "'Explain the five-membered syllogism with an example' (5 marks); 'Distinguish vada, jalpa and vitanda' (3 marks); 'What is a hetvabhasa?' (2 marks).",
+          "questions": [
+            {"q": "Explain the Nyaya five-membered syllogism with an example.", "a": "1. **Pratijna** (proposition): The hill has fire.\n2. **Hetu** (reason): Because it has smoke.\n3. **Udaharana** (example with rule): Wherever there is smoke there is fire, as in a kitchen.\n4. **Upanaya** (application): This hill has smoke, which is invariably accompanied by fire.\n5. **Nigamana** (conclusion): Therefore the hill has fire.\nIts validity depends on **vyapti** between smoke and fire. Compared with Aristotle's three-part syllogism, it adds a thesis and an explicit empirical example, making it a method of persuasion as well as proof.", "marks": 5, "kind": "long"},
+            {"q": "Distinguish vada, jalpa and vitanda.", "a": "**Vada** — honest discussion between a teacher and student or equals, aimed at finding the truth, using valid means only. **Jalpa** — debate aimed at victory, where each side defends its thesis and may use quibbles (chala) and false rejoinders (jati). **Vitanda** — mere destructive criticism: one only attacks the opponent's position without establishing one's own.", "marks": 3, "kind": "short"},
+            {"q": "What is a hetvabhasa? Name the five types.", "a": "A hetvabhasa is a fallacious reason — something that looks like a valid hetu but is not. Types: **savyabhichara** (inconclusive, the reason occurs with and without the conclusion), **viruddha** (contradictory, proves the opposite), **satpratipaksha** (counterbalanced by an equally strong opposite reason), **asiddha** (unproved, the reason itself is not established) and **badhita** (contradicted by stronger evidence such as perception).", "marks": 3, "kind": "short"},
+            {"q": "What is vyapti, and why is it central to anumana?", "a": "Vyapti is the invariable concomitance between the reason (hetu, e.g. smoke) and what is to be proved (sadhya, e.g. fire): wherever the hetu is present, the sadhya is present. Inference is valid only if this universal relation holds; it is learned from repeated observation of co-presence (and co-absence) without counter-examples.", "marks": 2, "kind": "short"},
+            {"q": "In the Nyaya syllogism, 'because it has smoke' is the:", "options": ["Pratijna", "Hetu", "Upanaya", "Nigamana"], "answer_index": 1, "a": "Hetu — the reason.", "marks": 1, "kind": "mcq"},
+            {"q": "The founder text of Navya-Nyaya, the Tattvachintamani, was written by:", "options": ["Akshapada Gautama", "Gangesha Upadhyaya", "Dignaga", "Vatsyayana"], "answer_index": 1, "a": "Gangesha Upadhyaya of Mithila (14th c.).", "marks": 1, "kind": "mcq"},
+            {"q": "A debate in which one side only attacks and states no thesis is called:", "options": ["Vada", "Jalpa", "Vitanda", "Tarka"], "answer_index": 2, "a": "Vitanda.", "marks": 1, "kind": "mcq"}
+          ]
+        },
+        {
+          "topic": "Linguistics: Panini's Ashtadhyayi",
+          "importance": "high",
+          "why": "Panini is the standard 'Indian linguistics' question (5-10 marks) and links to computer science, which examiners like in an engineering IKS paper.",
+          "gist": "**Panini** (c. 5th–4th c. BCE; from Shalatula in the Gandhara region) composed the **Ashtadhyayi** ('eight chapters'), a grammar of Sanskrit in about 4,000 short rules (**sutras**; commonly counted as 3,959), each chapter having four padas. Working from a list of roots (**Dhatupatha**, about 2,000 roots) and affixes, the rules derive correct words and sentences — it is a **generative grammar**.\n\nIt opens with the 14 **Shiva Sutras** (Maheshvara Sutras), an arrangement of the sound inventory with a marker letter (**it**) at the end of each line; a sound plus a marker forms a **pratyahara**, a short name for a class of sounds — e.g. *ac* = all vowels, *hal* = all consonants, *ik* = i, u, ṛ, ḷ. The rules use **meta-rules (paribhasha)**, **headings (adhikara)** whose scope runs over following rules, **anuvritti** (words carried forward from earlier rules so they are not repeated) and conflict-resolution principles such as 1.4.2 *vipratishedhe param karyam* ('in a conflict, the later rule applies'). Example: 6.1.77 *iko yan aci* — i, u, ṛ, ḷ become y, v, r, l before a vowel: dadhi + atra → **dadhyatra**.\n\nThe main commentaries are Katyayana's **Varttikas** and Patanjali's **Mahabhashya** (c. 2nd c. BCE). Leonard Bloomfield called the Ashtadhyayi 'one of the greatest monuments of human intelligence', and computer scientists have compared its notation to Backus–Naur Form (Ingerman, 1967). The popular claim that NASA declared Sanskrit 'the best language for computers' is a myth, loosely based on a 1985 *AI Magazine* paper about knowledge representation.",
+          "key_points": [
+            "Panini, c. 5th–4th c. BCE, Gandhara region; Ashtadhyayi: 8 adhyayas × 4 padas, ~4,000 sutras.",
+            "Generative: roots (Dhatupatha) + affixes + rules → words.",
+            "Shiva Sutras (14) and pratyaharas (ac, hal, ik).",
+            "Devices: paribhasha, adhikara, anuvritti, it-markers; brevity.",
+            "Conflict rule 1.4.2: the later rule wins (interpretations debated).",
+            "Example: iko yan aci (6.1.77): dadhi + atra → dadhyatra.",
+            "Commentaries: Katyayana's Varttikas, Patanjali's Mahabhashya; later Bhartrhari (Vakyapadiya).",
+            "Influence: Bloomfield, Saussure; compared to Backus–Naur Form; NASA–Sanskrit claim is a myth."
+          ],
+          "formulas": [],
+          "traps": [
+            "Ashtadhyayi means eight chapters (adhyayas), not eight thousand sutras.",
+            "Patanjali of the Mahabhashya is usually treated by scholars as distinct from the Yoga Sutra's Patanjali (tradition identifies them).",
+            "Do not repeat the 'NASA says Sanskrit is best for computers' myth.",
+            "A pratyahara is a sound-class abbreviation, not a word or a root."
+          ],
+          "asked_as": "'Write a note on Panini's Ashtadhyayi' (5 marks); 'What are the Maheshvara Sutras / pratyaharas?' (2-3 marks); 'Relevance of Panini's grammar to computer science' (5-10 marks).",
+          "questions": [
+            {"q": "What is a pratyahara? Give two examples.", "a": "A pratyahara is a compact name for a class of sounds formed by taking a sound from the Shiva Sutras and the marker letter (it) ending a later sutra; it denotes all sounds in between. Examples: **ac** = all vowels; **hal** = all consonants; **ik** = i, u, ṛ, ḷ.", "marks": 2, "kind": "short"},
+            {"q": "Apply the rule 'iko yan aci' to dadhi + atra and explain.", "a": "Rule 6.1.77: an *ik* vowel (i, u, ṛ, ḷ) is replaced by the corresponding *yan* semivowel (y, v, r, l) when followed by an *ac* (any vowel). In dadhi + atra, final *i* is followed by *a*, so *i* → *y*: **dadhyatra**.", "marks": 3, "kind": "short"},
+            {"q": "Write a note on Panini's Ashtadhyayi.", "a": "1. **Author and date**: Panini, c. 5th–4th c. BCE, Gandhara region.\n2. **Structure**: 8 adhyayas, each of 4 padas; about 4,000 sutras; supported by the Shiva Sutras, Dhatupatha (~2,000 roots) and Ganapatha (lists of words).\n3. **Method**: generative — from roots and affixes, ordered rules derive every correct form of Sanskrit.\n4. **Techniques**: pratyaharas for sound classes; it-markers; paribhashas (meta-rules); adhikara (headings); anuvritti (carrying words forward) for extreme brevity; rule-conflict principles (1.4.2).\n5. **Coverage**: phonology (sandhi), morphology (declension, conjugation, compounds), derivation and syntax (karaka theory of semantic roles).\n6. **Commentaries**: Katyayana's Varttikas, Patanjali's Mahabhashya.\n7. **Influence**: modern linguistics (Bloomfield, Saussure); comparison with formal grammars in computer science (Backus–Naur Form).", "marks": 5, "kind": "long"},
+            {"q": "Discuss the relevance of Panini's grammar to computer science.", "a": "1. **Formal rule system**: the Ashtadhyayi is a finite set of ordered rewrite rules generating an infinite language — like a formal grammar used to define programming languages; Ingerman (1967) proposed the term 'Panini–Backus form'.\n2. **Abbreviations and markers**: pratyaharas and it-markers work like macros and metadata tags.\n3. **Context-sensitive rules**: rules apply in specified environments (before a vowel, after a root), similar to context-sensitive rewriting.\n4. **Conflict resolution**: principles for choosing between applicable rules resemble rule priority in expert systems and parsers.\n5. **Semantics**: karaka theory (agent, object, instrument…) resembles semantic role labelling and case grammar used in NLP; Sanskrit computational tools (parsers, morphological analysers) use Paninian rules.\n**Caution**: claims that Sanskrit is 'the best language for computers' (the NASA myth) are unfounded; the real contribution is the method of formal description.", "marks": 10, "kind": "long"},
+            {"q": "The Ashtadhyayi consists of:", "options": ["8 chapters", "18 chapters", "36 chapters", "4 chapters"], "answer_index": 0, "a": "Eight adhyayas (chapters), each with four padas.", "marks": 1, "kind": "mcq"},
+            {"q": "The Mahabhashya, the great commentary on Panini, was written by:", "options": ["Katyayana", "Patanjali", "Bhartrhari", "Yaska"], "answer_index": 1, "a": "Patanjali (c. 2nd c. BCE); Katyayana wrote the Varttikas, Yaska the Nirukta.", "marks": 1, "kind": "mcq"}
+          ]
+        },
+        {
+          "topic": "Education: gurukula, Takshashila and Nalanda",
+          "importance": "medium",
+          "why": "'Write a note on Nalanda / Takshashila' and 'features of the gurukula system' are common 5-mark questions; essays on ancient education occasionally.",
+          "gist": "Indian education ran in two settings. In the **gurukula**, students lived with a teacher, learned by **shravana** (listening), **manana** (reflection) and **nididhyasana** (contemplation), served the household and offered **guru-dakshina** at the end. Large monastic institutions (**mahaviharas**) later taught hundreds or thousands.\n\n**Takshashila** (Taxila, near Rawalpindi, Pakistan; UNESCO World Heritage site) was a famous centre from about the 5th c. BCE. Jataka stories and later traditions say students came to study the Vedas, grammar, medicine (the physician Jivaka), archery and statecraft; tradition links Panini and Kautilya to it. It was a cluster of independent teachers, not a single university with a campus and degrees.\n\n**Nalanda** (Bihar), founded in the 5th c. CE under the Gupta king Kumaragupta I and later supported by Harsha and the Palas, was a residential mahavihara with a large library (**Dharmaganja**). **Xuanzang** studied there in the 630s under **Shilabhadra**; he and **Yijing** describe thousands of monks and a strict entrance discussion with gatekeeper-scholars (**dvarapandita**) — the numbers they give may be inflated. Subjects included Buddhist philosophy, grammar, logic (hetuvidya), medicine and the Vedas. Other centres: **Vikramashila** (founded by the Pala king Dharmapala, c. 800), Odantapuri, **Valabhi** (Gujarat) and Kanchi.\n\nNalanda declined after Turkic raids around 1200 (associated with Bakhtiyar Khalji); a Tibetan visitor in 1235 still found a few teachers. Its ruins became a UNESCO World Heritage site in 2016, and a new Nalanda University opened its campus in 2024. NEP 2020 cites these as models for large multidisciplinary universities.",
+          "key_points": [
+            "Gurukula: residence with guru; shravana, manana, nididhyasana; guru-dakshina; oral learning.",
+            "Takshashila: from c. 5th c. BCE, Gandhara; independent teachers; Jivaka; UNESCO site.",
+            "Nalanda: 5th c. CE, Kumaragupta I; mahavihara; library Dharmaganja; Xuanzang (630s), Yijing; dvarapandita.",
+            "Other centres: Vikramashila (Dharmapala), Odantapuri, Valabhi, Kanchi.",
+            "Decline c. 1200 after Turkic raids (Bakhtiyar Khalji); Dharmasvamin's visit 1235.",
+            "UNESCO 2016 (Nalanda ruins); new Nalanda University campus 2024; NEP 2020 multidisciplinary vision."
+          ],
+          "formulas": [],
+          "traps": [
+            "Calling Takshashila 'the world's first university' with degrees and campus is an overclaim; describe it as a centre of learning with independent teachers.",
+            "Nalanda was founded c. 5th c. CE (Gupta), not by Ashoka or in the Maurya period.",
+            "Xuanzang's student/teacher numbers are reports, not verified counts.",
+            "Vikramashila was founded by the Pala king Dharmapala, not the Guptas."
+          ],
+          "asked_as": "'Write a note on Nalanda' (5 marks); 'Features of the gurukula system' (5 marks); 'Compare Takshashila and Nalanda' (5 marks); 'Ancient Indian education and NEP 2020' (10 marks).",
+          "questions": [
+            {"q": "What are shravana, manana and nididhyasana?", "a": "The three stages of learning in the Upanishadic tradition: **shravana** — listening to the teacher/text; **manana** — reflecting on and reasoning about what was heard to remove doubts; **nididhyasana** — deep contemplation until the knowledge is fully assimilated.", "marks": 2, "kind": "short"},
+            {"q": "Write a note on Nalanda Mahavihara.", "a": "1. **Location and founding**: near Rajgir, Bihar; founded in the 5th c. CE under the Gupta king Kumaragupta I; patronised by Harsha and the Pala kings.\n2. **Character**: a residential Buddhist monastic university with viharas, temples and lecture halls.\n3. **Admission**: by discussion with gatekeeper scholars (dvarapandita); Xuanzang reports most applicants failed.\n4. **Subjects**: Mahayana philosophy, logic (hetuvidya), grammar, medicine, Vedas, Samkhya and other systems.\n5. **Library**: the Dharmaganja, with buildings named in later Tibetan sources as Ratnasagara, Ratnodadhi and Ratnaranjaka.\n6. **Visitors**: Xuanzang (630s, studied under Shilabhadra), Yijing (670s); students from China, Korea, Tibet and Southeast Asia.\n7. **Decline**: after Turkic raids c. 1200 (Bakhtiyar Khalji); some teaching continued into the 1230s.\n8. **Today**: UNESCO World Heritage site (2016); new Nalanda University (Act 2010, campus 2024).", "marks": 5, "kind": "long"},
+            {"q": "State the main features of the gurukula system.", "a": "1. Students lived with the teacher's family (antevasin) after an initiation (upanayana).\n2. Personal, oral teaching by memorisation, recitation and discussion.\n3. Learning method: shravana, manana, nididhyasana.\n4. Emphasis on discipline, simple living, service to the guru and character formation.\n5. Free instruction; guru-dakshina offered at the end.\n6. Subjects: Vedas and Vedangas, and also practical arts depending on the teacher.\nLimitation: access was restricted by caste and gender in many periods.", "marks": 5, "kind": "short"},
+            {"q": "Nalanda was founded under the patronage of:", "options": ["Ashoka", "Kumaragupta I", "Harsha", "Dharmapala"], "answer_index": 1, "a": "Kumaragupta I (Gupta, 5th c. CE); Harsha and the Palas later supported it; Dharmapala founded Vikramashila.", "marks": 1, "kind": "mcq"},
+            {"q": "The Chinese pilgrim who studied at Nalanda under Shilabhadra was:", "options": ["Faxian", "Xuanzang", "Marco Polo", "Al-Biruni"], "answer_index": 1, "a": "Xuanzang (Hiuen Tsang), in the 630s CE.", "marks": 1, "kind": "mcq"},
+            {"q": "Takshashila is located in present-day:", "options": ["Bihar", "Afghanistan", "Pakistan", "Nepal"], "answer_index": 2, "a": "Taxila, near Rawalpindi in Pakistan.", "marks": 1, "kind": "mcq"}
+          ]
+        },
+        {
+          "topic": "Natyashastra and the arts",
+          "importance": "medium",
+          "why": "Rasa theory and the four kinds of abhinaya are frequent 2-5 mark questions; essays on the arts are less common in engineering IKS papers.",
+          "gist": "The **Natyashastra**, attributed to **Bharata Muni** (compiled c. 200 BCE–200 CE), is the oldest surviving treatise on Indian performing arts — drama, dance, music, stagecraft, costume and aesthetics — in 36 chapters (37 in some versions). It calls itself the 'fifth Veda' (**Natyaveda**), created by Brahma by taking recitation from the Rigveda, song from the Samaveda, acting from the Yajurveda and rasa from the Atharvaveda.\n\nIts central theory is **rasa** (aesthetic relish). The rasa-sutra says *vibhava-anubhava-vyabhichari-samyogad rasa-nishpattih* — rasa arises from the combination of **vibhavas** (causes: characters, setting), **anubhavas** (visible reactions) and **vyabhichari bhavas** (33 transitory states). Bharata names **eight rasas** — shringara (love), hasya (comic), karuna (pathos), raudra (fury), vira (heroic), bhayanaka (terror), bibhatsa (disgust) and adbhuta (wonder) — each based on a stable emotion (**sthayi bhava**: rati, hasa, shoka, krodha, utsaha, bhaya, jugupsa, vismaya). **Shanta** (peace) was later added as a ninth, defended by **Abhinavagupta** (c. 10th–11th c.) in his commentary *Abhinavabharati*, giving the **navarasa**.\n\nActing (**abhinaya**) is fourfold: **angika** (body), **vachika** (speech and song), **aharya** (costume and make-up) and **sattvika** (involuntary signs of inner feeling such as tears or trembling). The text also gives rules for theatre halls (rectangular, square and triangular, in three sizes, with the medium rectangular hall preferred so that actors are clearly seen and heard) and music theory (svaras, 22 shrutis, gramas). India's classical dance forms trace their grammar to it. In 2025 manuscripts of the Natyashastra and the Bhagavad Gita were added to UNESCO's Memory of the World Register.",
+          "key_points": [
+            "Bharata Muni; c. 200 BCE–200 CE; 36 (or 37) chapters; 'fifth Veda'.",
+            "Rasa-sutra: vibhava + anubhava + vyabhichari bhava → rasa.",
+            "Eight rasas and their sthayi bhavas; shanta added later (Abhinavagupta) → navarasa.",
+            "Four abhinayas: angika, vachika, aharya, sattvika.",
+            "Theatre architecture: three shapes, three sizes; acoustics and visibility.",
+            "Music: svaras, 22 shrutis, gramas.",
+            "UNESCO Memory of the World Register, 2025 (with the Bhagavad Gita)."
+          ],
+          "formulas": [],
+          "traps": [
+            "Bharata gives eight rasas; shanta as the ninth is a later addition.",
+            "Aharya abhinaya is costume and make-up, not speech (that is vachika).",
+            "Abhinavagupta is a commentator (10th–11th c.), not the author.",
+            "Rasa is the relished aesthetic experience of the audience, not simply the actor's emotion (bhava)."
+          ],
+          "asked_as": "'Explain Bharata's rasa theory' (5 marks); 'Name the four types of abhinaya' (2 marks); 'Write a note on the Natyashastra' (5 marks).",
+          "questions": [
+            {"q": "Name the four types of abhinaya in the Natyashastra.", "a": "**Angika** (through body, gestures, mudras), **vachika** (through speech, song, recitation), **aharya** (through costume, make-up, ornaments, stage properties) and **sattvika** (through involuntary expressions of inner feeling such as tears, trembling, change of colour).", "marks": 2, "kind": "short"},
+            {"q": "Explain Bharata's theory of rasa.", "a": "1. **Rasa-sutra**: *vibhava-anubhava-vyabhichari-samyogad rasa-nishpattih* — rasa is produced by the combination of vibhavas, anubhavas and vyabhichari bhavas.\n2. **Vibhava**: the causes of emotion — alambana (the character or object, e.g. the beloved) and uddipana (stimulating setting, e.g. moonlight).\n3. **Anubhava**: outward signs — glances, gestures, words.\n4. **Vyabhichari bhava**: 33 transient states (anxiety, joy, doubt…) that strengthen the dominant mood.\n5. **Sthayi bhava**: the stable emotion that is transformed into rasa: rati→shringara, hasa→hasya, shoka→karuna, krodha→raudra, utsaha→vira, bhaya→bhayanaka, jugupsa→bibhatsa, vismaya→adbhuta.\n6. **Navarasa**: later theorists, especially Abhinavagupta, added shanta (sthayi: shama/nirveda).\nRasa is the aesthetic relish experienced by the sensitive spectator (sahridaya), like the taste of a well-blended dish.", "marks": 5, "kind": "long"},
+            {"q": "Why is the Natyashastra called the 'fifth Veda'?", "a": "The text says Brahma created Natyaveda, accessible to all, by taking recitation (pathya) from the Rigveda, song (gita) from the Samaveda, acting (abhinaya) from the Yajurveda and rasa from the Atharvaveda. It thus presents itself as a Veda for performing arts.", "marks": 2, "kind": "short"},
+            {"q": "Which of these is NOT one of Bharata's original eight rasas?", "options": ["Karuna", "Adbhuta", "Shanta", "Bibhatsa"], "answer_index": 2, "a": "Shanta was added later; Bharata listed eight.", "marks": 1, "kind": "mcq"},
+            {"q": "Aharya abhinaya refers to:", "options": ["Gestures", "Speech", "Costume and make-up", "Involuntary emotional signs"], "answer_index": 2, "a": "Aharya is costume, make-up and props.", "marks": 1, "kind": "mcq"},
+            {"q": "The Abhinavabharati, the famous commentary on the Natyashastra, was written by:", "options": ["Bharata", "Abhinavagupta", "Kalidasa", "Bhartrhari"], "answer_index": 1, "a": "Abhinavagupta of Kashmir (c. 10th–11th c.).", "marks": 1, "kind": "mcq"}
+          ]
+        },
+        {
+          "topic": "Ethics and values (dharma, purusharthas) and IKS in modern engineering",
+          "importance": "high",
+          "why": "Purusharthas and nishkama karma are reliable 2-5 mark questions, and 'relevance of IKS to modern engineering' is the most likely 10-mark closing essay.",
+          "gist": "IKS links knowledge with values. **Dharma** (from *dhri*, 'to hold, sustain') is what upholds individual and social order — duty, righteousness, law; its Vedic forerunner is **rita**, cosmic order. The four **purusharthas** (goals of human life) are **dharma** (righteous conduct), **artha** (wealth, livelihood), **kama** (desire, enjoyment) and **moksha** (liberation); artha and kama are legitimate when pursued within dharma. The Bhagavad Gita (2.47) teaches **nishkama karma** — you have a right to your action, never to its fruits — and **lokasangraha**, acting for the welfare of the world (3.20). Patanjali's yamas (ahimsa, satya, asteya, aparigraha) and the ideal **vasudhaiva kutumbakam** ('the world is one family', Maha Upanishad; theme of India's G20 presidency, 2023) translate directly into professional ethics: safety (non-harm), honesty in data and reports, no plagiarism, and avoiding waste.\n\n**IKS in modern engineering** is about tested ideas, not pride:\n- passive cooling (courtyards, jalis, thick walls, stepwells) for low-energy buildings;\n- lime mortars with organic additives, studied for conservation;\n- rainwater harvesting (johads, tanks) for water security;\n- the Delhi pillar's phosphorus-aided passivation, studied for weathering steels;\n- drug leads from traditional medicine (reserpine from sarpagandha, *Rauvolfia serpentina*);\n- Panini's rule systems and Navya-Nyaya for language technology;\n- TKDL to protect traditional knowledge from wrongful patents.\nThe right method is to take a traditional claim as a hypothesis and test it with modern science, avoiding both blind glorification and blind dismissal.",
+          "key_points": [
+            "Dharma (dhri, to sustain); rita as cosmic order.",
+            "Purusharthas: dharma, artha, kama, moksha — artha and kama within dharma.",
+            "Four ashramas: brahmacharya, grihastha, vanaprastha, sannyasa.",
+            "Gita 2.47 nishkama karma; 3.20 lokasangraha.",
+            "Vasudhaiva kutumbakam (Maha Upanishad; G20 2023 theme).",
+            "Values → professional ethics: safety, honesty, integrity, sustainability (aparigraha).",
+            "Modern applications: passive cooling, lime mortar, water harvesting, corrosion studies, drug discovery (reserpine), NLP, TKDL.",
+            "Method: test traditional claims scientifically."
+          ],
+          "formulas": [],
+          "traps": [
+            "Moksha is liberation, not wealth or pleasure; artha is wealth, kama is desire.",
+            "Nishkama karma means acting without attachment to results — not acting without caring about quality or outcome.",
+            "Do not claim modern technologies came from ancient texts; say traditional ideas inspire or are being tested.",
+            "Dharma is not merely 'religion' — it means sustaining order, duty and right conduct."
+          ],
+          "asked_as": "'Name the four purusharthas' (2 marks); 'Explain nishkama karma and its relevance to professional life' (5 marks); 'Discuss the relevance of IKS to modern engineering with examples' (10 marks).",
+          "questions": [
+            {"q": "Name and explain the four purusharthas.", "a": "**Dharma** — righteous conduct, duty; the foundation that regulates the others. **Artha** — wealth, livelihood, material well-being. **Kama** — desire, pleasure, aesthetic enjoyment. **Moksha** — liberation from the cycle of birth and death, the highest goal. Artha and kama are legitimate when pursued within dharma.", "marks": 3, "kind": "short"},
+            {"q": "Explain nishkama karma and its relevance for an engineer.", "a": "**Nishkama karma** (Bhagavad Gita 2.47: *karmanye vadhikaraste ma phaleshu kadachana*) means doing one's duty with full effort but without attachment to personal reward. **Relevance**: (1) focus on doing the work right — design, testing, documentation — rather than on credit; (2) resistance to pressure to cut corners for quick results or bonuses; (3) equanimity under failure, helping learning from mistakes; (4) with **lokasangraha** (3.20), work aimed at public welfare — safety and sustainability above profit. It does not mean indifference to outcomes; it means not letting selfish desire for outcomes distort the action.", "marks": 5, "kind": "long"},
+            {"q": "Discuss the relevance of Indian Knowledge Systems to modern engineering with examples.", "a": "**Introduction**: IKS offers tested practices and ideas that, examined scientifically, can inform modern engineering.\n**Examples**:\n1. **Civil/architecture**: passive cooling through courtyards, jalis, thick walls and stepwells for low-energy buildings; Harappan drainage and modular bricks; lime mortars with organic additives for heritage conservation.\n2. **Water**: johads, tanks and stepwells inspire decentralised rainwater harvesting and aquifer recharge.\n3. **Materials**: the Delhi pillar's phosphorus-aided passive film is studied for corrosion-resistant steels; wootz crucible steel for high-carbon steel microstructures; zinc distillation as an early process technology.\n4. **Mathematics/computing**: place value and zero; Pingala's combinatorics; Madhava's series in numerical methods; Panini's formal grammar for NLP and language design.\n5. **Health and biotech**: drug leads from Ayurveda (reserpine from *Rauvolfia serpentina*); yoga for stress and ergonomics.\n6. **Environment**: sacred groves and community management for conservation; TKDL against biopiracy.\n7. **Ethics**: dharma, nishkama karma and ahimsa for professional responsibility.\n**Method and caution**: treat claims as hypotheses, test them, avoid exaggeration.\n**Conclusion**: IKS is a resource for sustainable, context-sensitive and ethical engineering.", "marks": 10, "kind": "long"},
+            {"q": "Which of the following is NOT one of the four purusharthas?", "options": ["Dharma", "Artha", "Karma", "Moksha"], "answer_index": 2, "a": "The four are dharma, artha, kama and moksha; karma (action) is not one of them.", "marks": 1, "kind": "mcq"},
+            {"q": "The word dharma is derived from the root 'dhri', meaning:", "options": ["To know", "To hold or sustain", "To give", "To fight"], "answer_index": 1, "a": "Dhri — to hold, support, sustain.", "marks": 1, "kind": "mcq"},
+            {"q": "Reserpine, an antihypertensive drug, was isolated from a plant used in traditional medicine:", "options": ["Neem", "Tulsi", "Sarpagandha", "Ashwagandha"], "answer_index": 2, "a": "Sarpagandha, *Rauvolfia serpentina* (reserpine isolated in 1952).", "marks": 1, "kind": "mcq"}
+          ]
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,102 @@
+{
+ "items": [
+  {
+   "code": "SA1141",
+   "path": "library/archive/SA1141/Previous Year Papers/End Term Sem 1 2023.pdf",
+   "exam": "end",
+   "year": 2023,
+   "section": null,
+   "qno": "1",
+   "marks": 20.0,
+   "unit": null,
+   "topic": null,
+   "question_md": "A marketing firm is struggling to come up with innovative strategies for a new campaign. Despite brainstorming sessions, the team seems stuck in conventional ideas. Analyze the stages of creative thinking and propose strategies to overcome barriers hindering their creative process.",
+   "answer_md": "## Case summary\nA marketing team repeats conventional ideas despite brainstorming. The problem is not a lack of talent but a stalled creative process, usually caused by barriers (habit, fear of judgement, groupthink, time pressure). We analyse the process (Wallas model) and then the barriers and remedies.\n\n## 1. Stages of creative thinking (Wallas)\n1. **Preparation**: define the problem and gather information. For the firm: the product, target audience, competitors, past campaigns, budget and the campaign objective. Weakness to check: was the brief clear, or were ideas generated before the problem was understood?\n2. **Incubation**: stepping away from the problem so the unconscious mind connects ideas. The team stays stuck because sessions are back-to-back with no break; they should pause, change activity, and return.\n3. **Illumination**: the sudden \"aha\" insight. It cannot be forced but can be invited by relaxed, varied stimuli (walks, other industries, random inputs).\n4. **Evaluation**: judge the ideas against the brief, audience and budget, and keep the promising ones.\n5. **Implementation / verification**: develop the best idea into a prototype or pilot campaign, test it, and refine it using feedback.\n\n## 2. Barriers hindering the team\n- **Mental/cognitive**: functional fixedness, habit and past-success thinking (\"this worked last time\"), rigid assumptions.\n- **Emotional**: fear of failure, fear of ridicule, low risk tolerance, perfectionism.\n- **Social/group**: groupthink, dominance of senior members, premature criticism, conformity.\n- **Environmental/organisational**: time pressure, rigid targets, no resources or autonomy, monotonous setting.\n- **Process**: judging ideas while generating them, stopping at the first workable idea.\n\n## 3. Strategies to overcome them\n| Barrier | Strategy |\n|---|---|\n| Habit, fixed thinking | Reframe the problem (\"How might we ...?\"), challenge assumptions, SCAMPER (substitute, combine, adapt, modify, put to other use, eliminate, reverse), analogies from other industries |\n| Fear of judgement | Brainstorming rules: defer judgement, quantity over quality, welcome wild ideas, build on others' ideas; anonymous idea writing (brainwriting) |\n| Groupthink / dominance | Individual ideation before group discussion, devil's advocate role, mind mapping, six thinking hats |\n| Lack of incubation | Schedule breaks, change location, sleep on the problem, a second session after a gap |\n| Time pressure, monotony | Relax deadlines for the ideation phase, change the environment, bring in outsiders, customers or cross-functional members |\n| Poor evaluation | Clear criteria (originality, feasibility, fit with brand, cost), prototype and pilot test |\n\n## 4. Conclusion\nFollowing the five stages deliberately, with an incubation gap, and removing mental, emotional and social barriers with structured techniques, will move the team from conventional ideas to an original and workable campaign.",
+   "extracted_by": "claude-code (read by eye)"
+  },
+  {
+   "code": "SA1141",
+   "path": "library/archive/SA1141/Previous Year Papers/End Term Sem 1 2023.pdf",
+   "exam": "end",
+   "year": 2023,
+   "section": null,
+   "qno": "2",
+   "marks": 20.0,
+   "unit": null,
+   "topic": null,
+   "question_md": "A manager in a high-stress environment needs to make critical decisions under pressure. Analyze the impact of stress on decision-making abilities and suggest stress management techniques that can enhance the quality of decisions made in such situations.",
+   "answer_md": "## Case summary\nA manager works in a high-stress environment and must take critical decisions under pressure. Stress changes both thinking and behaviour, so the quality of decisions can fall unless stress is managed.\n\n## 1. Impact of stress on decision-making\n**Level of stress matters (Yerkes-Dodson law):** a moderate amount of stress (eustress) sharpens attention and performance; too much (distress) reduces it.\n\nNegative effects of excessive stress:\n- **Cognitive**: narrowed attention (tunnel vision), poor concentration and memory, slower information processing, mental fatigue.\n- **Judgement**: rigid, rash or impulsive choices; reliance on habits and biases; choosing the first acceptable option; avoiding or delaying decisions; reduced creativity and fewer alternatives considered.\n- **Emotional**: anxiety, irritability and anger colour judgement; risk assessment becomes either too fearful or too reckless.\n- **Physical**: raised heart rate, headaches, poor sleep and exhaustion lower alertness (the fight-or-flight response puts the body in survival mode, not analytical mode).\n- **Social**: poor communication, conflicts with team, failure to consult or delegate.\n- **Long term**: burnout, which erodes confidence and decision quality.\n\n## 2. Stress management techniques\n**A. Immediate (in the moment)**\n- Pause and breathe deeply (for example 4-4-6 breathing), count to ten.\n- Short break or walk before a critical decision.\n- Write the problem and options down, which offloads working memory.\n- Use a decision checklist or framework (define the problem, options, pros and cons, consequences).\n\n**B. Cognitive**\n- Reframe the situation as a challenge, not a threat; positive self-talk.\n- Separate facts from fears; avoid catastrophising.\n- Seek a second opinion and consult the team (reduces bias).\n\n**C. Work and time management**\n- Prioritise (urgent versus important matrix), delegate, break big decisions into steps, set realistic deadlines, say no to excess load.\n- Prepare in advance: scenarios, standard procedures, contingency plans.\n\n**D. Lifestyle**\n- Regular exercise, adequate sleep, balanced diet, limit caffeine and alcohol.\n- Relaxation: meditation, yoga, progressive muscle relaxation, hobbies.\n\n**E. Social and organisational**\n- Social support from colleagues, friends, family or a mentor; counselling when required.\n- Organisation: clear roles, reasonable workloads, supportive culture, training in stress and decision skills.\n\n## 3. Conclusion\nExcess stress narrows thinking and raises emotional and impulsive responses, which lowers decision quality. By keeping stress at a moderate level through immediate calming methods, cognitive reframing, good time management, healthy lifestyle and support, the manager can think clearly and make sound decisions even under pressure.",
+   "extracted_by": "claude-code (read by eye)"
+  },
+  {
+   "code": "SA1141",
+   "path": "library/archive/SA1141/Previous Year Papers/Mid Term Sem1 2023.jpg",
+   "exam": "mid",
+   "year": 2023,
+   "section": null,
+   "qno": "1(a)",
+   "marks": 3.0,
+   "unit": null,
+   "topic": null,
+   "question_md": "Define life skills and explain their significance in personal and professional life.",
+   "answer_md": "**Definition.** Life skills are the abilities for adaptive and positive behaviour that enable individuals to deal effectively with the demands and challenges of everyday life (WHO). Examples: self-awareness, communication, critical and creative thinking, decision making, problem solving, empathy, interpersonal relationships, coping with stress and emotions.\n\n**Significance in personal life:** better self-awareness and self-esteem, healthy relationships, emotional balance and stress management, sound decisions and responsible behaviour.\n\n**Significance in professional life:** effective communication and teamwork, leadership, problem solving, adaptability to change, time management, conflict resolution and better employability and career growth.\n\nTechnical knowledge gets a person a job; life skills help the person perform, grow and be well in it.",
+   "extracted_by": "claude-code (read by eye)"
+  },
+  {
+   "code": "SA1141",
+   "path": "library/archive/SA1141/Previous Year Papers/Mid Term Sem1 2023.jpg",
+   "exam": "mid",
+   "year": 2023,
+   "section": null,
+   "qno": "1(b)",
+   "marks": 3.0,
+   "unit": null,
+   "topic": null,
+   "question_md": "Who can benefit from life skills development, and why is it essential in today's world?",
+   "answer_md": "**Who can benefit:** everyone, at every stage: children and adolescents (identity, peer pressure, learning), students (academics, career choice, stress), young adults and job seekers (employability, interviews), working professionals and managers (teamwork, leadership), parents and families, and also vulnerable groups such as people in transition, unemployed or at risk of substance abuse.\n\n**Why essential today:**\n- Fast change in technology and jobs demands adaptability and lifelong learning.\n- Rising stress, competition and mental health problems need coping skills.\n- Digital, global and diverse workplaces need communication, collaboration and cultural sensitivity.\n- Employers value soft skills as much as technical skills.\n- Ethical, responsible citizenship and healthy relationships depend on values, empathy and decision making.",
+   "extracted_by": "claude-code (read by eye)"
+  },
+  {
+   "code": "SA1141",
+   "path": "library/archive/SA1141/Previous Year Papers/Mid Term Sem1 2023.jpg",
+   "exam": "mid",
+   "year": 2023,
+   "section": null,
+   "qno": "2",
+   "marks": 5.0,
+   "unit": null,
+   "topic": null,
+   "question_md": "Identify and explain common sources of stress in everyday life and provide strategies to effectively manage and cope with stress.",
+   "answer_md": "**Stress** is the body's physical and psychological response to demands (stressors) that exceed or challenge a person's ability to cope.\n\n## Common sources (stressors)\n1. **Academic/work**: exams, deadlines, workload, competition, job insecurity, difficult bosses.\n2. **Personal/family**: conflicts, expectations, illness or death in the family, marriage or parenting issues.\n3. **Financial**: debt, fees, low income, unexpected expenses.\n4. **Social**: peer pressure, loneliness, relationship breakups, bullying, social media comparison.\n5. **Environmental**: noise, pollution, overcrowding, commuting, unsafe surroundings.\n6. **Life changes**: moving, new job or college, transitions.\n7. **Internal**: perfectionism, negative thinking, low self-esteem, poor time management, unhealthy habits.\n\n## Strategies to manage and cope\n- **Problem-focused**: identify the stressor, plan, prioritise, manage time, ask for help, set realistic goals, learn to say no.\n- **Emotion-focused / cognitive**: positive thinking and reframing, acceptance of what cannot be changed, expressing feelings (talking or journaling), humour.\n- **Physical/lifestyle**: regular exercise, 7-8 hours of sleep, balanced diet, avoiding excess caffeine, alcohol and tobacco.\n- **Relaxation**: deep breathing, meditation, yoga, progressive muscle relaxation, music, hobbies.\n- **Social support**: friends, family, mentors, counsellors; seek professional help when stress is persistent.\n- **Balance**: breaks and leisure, work-life balance, digital detox.",
+   "extracted_by": "claude-code (read by eye)"
+  },
+  {
+   "code": "SA1141",
+   "path": "library/archive/SA1141/Previous Year Papers/Mid Term Sem1 2023.jpg",
+   "exam": "mid",
+   "year": 2023,
+   "section": null,
+   "qno": "3",
+   "marks": 5.0,
+   "unit": null,
+   "topic": null,
+   "question_md": "List out various relationship types, with their qualities, explain why you need to keep healthy boundaries in each relationship.",
+   "answer_md": "## Types of relationships and their qualities\n| Relationship | Key qualities |\n|---|---|\n| **Family** (parents, siblings, relatives) | unconditional support, love, care, respect, trust, belonging |\n| **Friendship** | trust, honesty, loyalty, mutual support, shared interests, equality |\n| **Romantic / intimate** | love, commitment, trust, respect, communication, intimacy, understanding |\n| **Professional / workplace** (colleagues, boss, subordinates) | respect, cooperation, reliability, professionalism, clear communication, fairness |\n| **Academic** (teacher-student, classmates) | respect, guidance, discipline, honesty, support |\n| **Social / community** (neighbours, acquaintances) | courtesy, tolerance, helpfulness, civic sense |\n\n## Why healthy boundaries are needed in each\nBoundaries are limits that define what behaviour we accept and offer (physical, emotional, time, digital, financial).\n- **Family**: avoids over-dependence and interference; protects individuality and privacy while keeping closeness.\n- **Friendship**: prevents being used or taken for granted, one-sided giving and gossip; keeps trust and respect.\n- **Romantic**: prevents control, jealousy, emotional dependence, abuse; protects identity, consent and self-respect.\n- **Professional**: separates work from personal life, prevents burnout, harassment and favouritism; keeps professionalism.\n- **Academic**: maintains respect, authority and fairness; prevents exploitation or conflict of interest.\n- **Social**: protects privacy and safety, avoids unwanted intrusion.\n\nIn general, healthy boundaries protect self-esteem and mental health, reduce stress and resentment, promote mutual respect and clear expectations, and make relationships lasting.",
+   "extracted_by": "claude-code (read by eye)"
+  },
+  {
+   "code": "SA1141",
+   "path": "library/archive/SA1141/Previous Year Papers/Mid Term Sem1 2023.jpg",
+   "exam": "mid",
+   "year": 2023,
+   "section": null,
+   "qno": "4",
+   "marks": 4.0,
+   "unit": null,
+   "topic": null,
+   "question_md": "Define interpersonal relationship and identify the factors that can positively or negatively affect relationships.",
+   "answer_md": "**Definition.** An interpersonal relationship is a strong, deep or close association or acquaintance between two or more people, based on interaction, emotional connection, mutual dependence and shared experiences. It may be long or short term, and formal or informal (family, friends, partners, colleagues).\n\n## Factors that affect relationships positively\n- Effective, open communication and active listening\n- Trust, honesty and respect\n- Empathy and emotional support\n- Commitment, reliability, quality time\n- Appreciation and gratitude\n- Shared values, interests and goals\n- Healthy boundaries and conflict resolution skills; forgiveness\n\n## Factors that affect relationships negatively\n- Poor communication and misunderstandings\n- Lack of trust, dishonesty, betrayal\n- Disrespect, criticism, jealousy, possessiveness, ego\n- Unrealistic expectations, selfishness, dominance\n- Unresolved conflict, anger, resentment\n- Lack of time or attention, neglect\n- Differences in values, cultural or economic gaps, outside interference, stress and substance abuse",
+   "extracted_by": "claude-code (read by eye)"
+  }
+ ]
+}

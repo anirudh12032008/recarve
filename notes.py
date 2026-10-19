@@ -73,6 +73,9 @@ Rules:
 # guess never under-reports what a run cost.
 PRICES = {
     "claude-haiku-4-5": (1.0, 5.0),
+    "claude-haiku-5-5": (0.1, 0.5),
+    "claude-sonnet-5-5": (2.0, 10.0),
+    "claude-opus-5-5": (4.0, 20.0),
     "claude-sonnet-5": (2.0, 10.0),
     "claude-opus-5": (5.0, 25.0),
     "claude-opus-4-8": (5.0, 25.0),
@@ -613,6 +616,17 @@ def _themable(page: str) -> str:
     return page.replace("__PALETTES__",
                         ':root[data-theme="light"]{\n' + light + "\n}\n"
                         ':root[data-theme="dark"]{\n' + dark + "\n}")
+
+
+def _web_file(name):
+    """One file from web/, or nothing: the tutor's script and sheet are spliced
+    into PAGE from their own files so the screen can be written and read apart
+    from the sixteen thousand lines around it. A checkout without them still
+    serves the page; it just has no Tutor tab."""
+    try:
+        return (Path(__file__).parent / "web" / name).read_text()
+    except OSError:
+        return ""
 
 
 # Raw string: this is JavaScript, and its backslash escapes are not Python's.
@@ -1940,7 +1954,8 @@ body.visitor .vote{pointer-events:none}
 <!-- Tailwind's compiled sheet, inlined. It comes AFTER the token block above
      because these utilities are written in terms of those variables, and
      because the token block has to stay the page's first <style>. -->
-<style>__CSS__</style>
+<style>__CSS__
+__TUTOR_CSS__</style>
 
 <!-- The map. One element, two shapes: a drawer over the page on a phone and a
      rail beside it on a wide screen. It is first in the document so that a
@@ -2102,6 +2117,10 @@ body.visitor .vote{pointer-events:none}
     stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"
     ><circle cx="9" cy="8.6" r="3.3"/><path d="M2.9 19.6c.7-3.4 3.1-5.4 6.1-5.4s5.4 2 6.1 5.4"/><path d="M16.1 5.7a3.3 3.3 0 0 1 0 5.8M17 14.6c2.1.6 3.4 2.4 3.8 5"/></svg
     ><span>Community</span></button>
+  <button data-tab="tutor"><svg viewBox="0 0 24 24" aria-hidden="true" fill="none"
+    stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"
+    ><path d="M2.8 9.4 12 5l9.2 4.4-9.2 4.4z"/><path d="M6.6 11.4v4.4c1.4 1.3 3.3 2 5.4 2s4-.7 5.4-2v-4.4"/><path d="M21.2 9.4v4.8"/></svg
+    ><span>Tutor</span></button>
 </nav>
 
 <script>
@@ -2169,9 +2188,9 @@ const hue = code => HUES[code.slice(0, 2)] ?? 220;
 // in the header instead, because your own profile is not somewhere you go
 // between classes the way the other four are. It stays a tab as far as the
 // router is concerned, which is what keeps every '#me' link ever sent working.
-const TABS = ['home', 'classes', 'campus', 'community', 'me'];
+const TABS = ['home', 'classes', 'campus', 'community', 'tutor', 'me'];
 const TAB_TITLE = {classes: 'Subjects', campus: 'Campus', community: 'Community',
-                   me: 'You'};
+                   tutor: 'Tutor', me: 'You'};
 // Levels that changed tabs when each thing was given exactly one home. A link
 // sent before the move still opens the screen it named: route() rewrites the
 // hash in place and runs again, which is what the pre-tabs note links below
@@ -5905,7 +5924,10 @@ function render() {
   shead.hidden = view.tab === 'home' && !view.compose;
   lback.hidden = !s && !view.att && !view.compose && !view.day
                  && !view.me && !view.papers && !view.cal;
-  scode.hidden = !s;
+  // The tutor's levels below its home climb back up too.
+  const tcode = view.tutor ? view.tutor.code : null;
+  if (tcode) lback.hidden = false;
+  scode.hidden = !s && !tcode;
   // Search is the subject list's own tool. It must not answer over Community,
   // and it must not answer over the three screens inside Classes that are not
   // lists of notes -- where a word left in the box hijacked the whole screen.
@@ -5917,7 +5939,8 @@ function render() {
   jobsBox.hidden = view.tab === 'home';
   // The one back button at this depth serves several levels now, so it has to
   // say which one it climbs to.
-  const up = view.compose && view.tab === 'community'
+  const up = tcode ? tutorUp()
+    : view.compose && view.tab === 'community'
       ? ['‹ Community', 'Back to the section']
     : view.compose && !COMPOSERS[view.compose] ? ['‹ Home', 'Back to the notice board']
     : view.compose ? ['‹ Campus', 'Back to Campus']
@@ -5925,9 +5948,9 @@ function render() {
     : ['‹ Subjects', 'Back to all subjects'];
   lback.textContent = up[0];
   lback.setAttribute('aria-label', up[1]);
-  if (s) {
-    scode.textContent = s.code;
-    scode.style.setProperty('--h', hue(s.code));
+  if (s || tcode) {
+    scode.textContent = s ? s.code : tcode;
+    scode.style.setProperty('--h', hue(s ? s.code : tcode));
   }
   sname.textContent = s ? s.name
     : view.papers ? 'Past papers'
@@ -5942,6 +5965,7 @@ function render() {
     : view.compose ? (view.compose === 'new' ? 'New notice' : 'Edit notice')
     : view.me === 'saved' ? 'Saved'
     : view.me === 'points' ? 'Your contributions'
+    : view.tutor ? tutorTitle()
     : TAB_TITLE[view.tab];
   tabBtns.forEach(b => {
     if (b.dataset.tab === view.tab) b.setAttribute('aria-current', 'page');
@@ -5957,6 +5981,7 @@ function render() {
   else if (view.tab === 'campus') renderCampus();
   else if (view.tab === 'community') renderCommunity();
   else if (view.tab === 'me') renderMe();
+  else if (view.tab === 'tutor') renderTutor();
   else if (s) renderSubject(s);
   else renderSubjects();
 }
@@ -6031,15 +6056,22 @@ function route() {
   // Which of your own screens: the profile, what you saved, or what you have
   // put in. One level under '#me', so '#me' on its own still lands somewhere.
   const me = tab === 'me' ? parts[1] || null : null;
+  // The tutor's own levels: '#tutor', '#tutor/CY1107', '#tutor/CY1107/s/<id>'
+  // and '#tutor/CY1107/pyq'. Kept out of view.code on purpose -- render()
+  // reads that as "draw the Classes subject screen".
+  const tutorv = tab === 'tutor' ? {code: parts[1] || null,
+    session: parts[2] === 's' ? parts[3] || null : null,
+    pyq: parts[2] === 'pyq'} : null;
   const was = view;
   view = {tab, code: s ? s.code : null, title: title || null, att, compose,
-          composeId, day: dayv, papers: papersv, cal: calv, me, sec};
+          composeId, day: dayv, papers: papersv, cal: calv, me, sec, tutor: tutorv};
   // Not every render, and not every keystroke inside one: only a step to a
   // different tab, a different subject or a different level of one.
   const moving = !was || was.tab !== view.tab || was.code !== view.code
     || was.title !== view.title || was.att !== view.att
     || was.day !== view.day || was.me !== view.me || was.compose !== view.compose
-    || was.papers !== view.papers || was.cal !== view.cal || was.sec !== view.sec;
+    || was.papers !== view.papers || was.cal !== view.cal || was.sec !== view.sec
+    || JSON.stringify(was.tutor || null) !== JSON.stringify(view.tutor);
   if (!att) attDate = null;     // and re-opening it starts on today, not last week
   if (!dayv) dayDate = null;    // today by default, every time it is opened
   if (!calv && !dayv) calMonth = null;   // this month, unless back from a day in it
@@ -6832,6 +6864,7 @@ const ICON = {
   shield:    '<path d="M12 3.6 19 6.2v5.3c0 4.2-2.8 7.2-7 8.7-4.2-1.5-7-4.5-7-8.7V6.2z"/>',
   sun:       '<circle cx="12" cy="12" r="4.1"/><path d="M12 2.9v2.3M12 18.8v2.3M4.9 4.9l1.6 1.6M17.5 17.5l1.6 1.6M2.9 12h2.3M18.8 12h2.3M4.9 19.1l1.6-1.6M17.5 6.5l1.6-1.6"/>',
   moon:      '<path d="M20.4 14.2A8.6 8.6 0 0 1 9.8 3.6 8.6 8.6 0 1 0 20.4 14.2z"/>',
+  tutor:     '<path d="M2.8 9.4 12 5l9.2 4.4-9.2 4.4z"/><path d="M6.6 11.4v4.4c1.4 1.3 3.3 2 5.4 2s4-.7 5.4-2v-4.4"/><path d="M21.2 9.4v4.8"/>',
 };
 // One <svg> from one path string, and nothing else in the app draws one.
 const icon = (name) => {
@@ -6859,6 +6892,7 @@ const DRAWER = [
     ['Calendar',                  ['classes', 'calendar']],
     ['Catching up',               ['classes', 'attendance']],
     ['Past papers',               ['classes', 'papers']],
+    ['Tutor',                     ['tutor']],
   ]],
   ['Campus',    'pin',    null, [
     ['Everything on campus',      ['campus']],
@@ -7848,6 +7882,8 @@ const TOUR = [
    "What's on, clubs and societies, and where things are. Any event can go straight into your calendar."],
   [['community'], ['#tabs [data-tab=community]', '#dnav a[href="#community"]'], 'Community',
    'The notice board, doubts on any lecture (Ask AI answers each one once, for everybody), and who has contributed.'],
+  [['tutor'], ['#tabs [data-tab=tutor]', '#dnav a[href="#tutor"]'], 'Tutor',
+   'A patient teacher for the whole syllabus. It teaches one topic at a time, checks you understood, and says what the exam asks, from past papers where it has them.'],
   [['home'], ['#fab'], 'Add to the library',
    'The + records a class, uploads notes or photos, or makes a revision sheet. Trusted members add; everyone reads.'],
   [['home'], ['#menubtn', '#dyou'], 'Everything else',
@@ -7926,10 +7962,12 @@ function seedHistory() {
     history.pushState(null, '', '#' + deep.slice(0, k).join('/'));
   history.pushState(null, '', here);
 }
+__TUTOR_JS__
 seedHistory();
 route();
 </script>
 """.replace("__CSS__", (Path(__file__).parent / "web/app.css").read_text())\
+     .replace("__TUTOR_CSS__", _web_file("tutor.css")).replace("__TUTOR_JS__", _web_file("tutor.js"))\
      .replace("__AUDIO_MB__", str(MAX_AUDIO_BYTES // 1048576)).replace("__DOC_MB__", str(MAX_DOC_BYTES // 1048576)))
 
 
@@ -8468,6 +8506,21 @@ ROLE_REQUIRED = {
     "/place": "admin",
     "/event": "trusted",
 }
+
+# The tutor. Reading what it taught is for the people the section trusts;
+# making it teach is the one spend in this app that is meant to be large, so
+# it is behind RECARVE_TUTOR_ROLE (default: admin, the person running this).
+# GET and POST paths are disjoint on purpose: the gate keys on the path alone.
+TUTOR_ROLE = os.environ.get("RECARVE_TUTOR_ROLE", "admin").strip() or "admin"
+if TUTOR_ROLE not in ROLES:
+    TUTOR_ROLE = "admin"
+TUTOR_READ_PATHS = ("/tutor", "/tutor/subject", "/tutor/session", "/tutor/pyq")
+TUTOR_WRITE_PATHS = ("/tutor/start", "/tutor/say", "/tutor/mark", "/tutor/mastery",
+                     "/tutor/settings", "/tutor/session/close",
+                     "/tutor/session/delete", "/tutor/pyq/import")
+ROLE_REQUIRED.update({p: "trusted" for p in TUTOR_READ_PATHS})
+ROLE_REQUIRED.update({p: TUTOR_ROLE for p in TUTOR_WRITE_PATHS})
+ROLE_REQUIRED["/tutor/pyq/import"] = "admin"
 
 # Passwords are stored as typed. The one thing that goes with that decision is
 # on the screens where somebody picks one -- the join form and
@@ -14070,6 +14123,8 @@ def build_server(args):
                 return self.do_google_callback()
             if self.path.split("?")[0] == "/login":
                 return self.send_html(GATE_PAGE.replace("__BODY__", with_google(LOGIN_BODY)))
+            if where == "/tutor" or where.startswith("/tutor/"):
+                return self.do_tutor()
             if self.path == "/data":
                 subjects = library_data(args.library, args.out.parent)
                 # `now` is this machine's clock, and the mtimes in `subjects`
@@ -14297,6 +14352,8 @@ def build_server(args):
                     f"{SESSION_COOKIE}=; Path=/; HttpOnly; SameSite=Lax; Max-Age=0"))
             if self.path == "/password":
                 return self.do_password()
+            if where == "/tutor" or where.startswith("/tutor/"):
+                return self.do_tutor()
             if self.path == "/reset":
                 return self.do_reset()
             if self.path == "/approve":
@@ -15815,6 +15872,23 @@ def build_server(args):
                 return self.reply(500, {"error": f"{type(e).__name__}: {e}"})
             return self.reply(200, {"ok": True})
 
+        def do_tutor(self):
+            """Everything under /tutor, GET and POST, lives in tutor.py.
+
+            Imported here rather than at the top: the tutor needs the anthropic
+            package and a server without it should still open the library.
+            The handler is passed whole so tutor.py can stream through wfile;
+            `args` and `budget` are the serve() flags and the shared AI
+            budget, the latter deliberately NOT spent by the tutor.
+            """
+            if not self.me:
+                return self.reply(404, {"error": "this server is running with --no-auth"})
+            try:
+                import tutor
+            except ImportError as e:
+                return self.reply(500, {"error": f"tutor unavailable: {e}"})
+            return tutor.handle(self, args)
+
         def do_revise(self):
             import json as _json
             from argparse import Namespace
@@ -16544,6 +16618,11 @@ def main():
     tt.set_defaults(func=import_timetable)
 
     sub.add_parser("selftest").set_defaults(func=lambda _: selftest())
+
+    tu = sub.add_parser("tutor", help="the AI tutor's housekeeping: PYQ extraction and import")
+    tu.add_argument("rest", nargs=argparse.REMAINDER,
+                    help="pyq extract|answer|import|status ... (see tutor_pyq.py)")
+    tu.set_defaults(func=lambda a: __import__("tutor_pyq").cli(a.rest, a.library))
 
     # Bare `notes.py lecture.m4a` means transcribe.
     argv = sys.argv[1:]

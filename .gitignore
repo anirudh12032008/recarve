@@ -5,7 +5,9 @@ site/
 .env
 *.partial.json
 .worker/
-.claude/
+# Local Claude settings stay out; the repo's own agent skills ship.
+.claude/*
+!.claude/skills/
 
 # The registrar's published list: 1054 real students, names and ID numbers.
 # Applied to the live database by hand, never committed. See
