@@ -162,7 +162,7 @@ python notes.py serve --port 8000       # then open the Tutor tab
 
 ## Decisions worth knowing
 
-- Writes under `/tutor` need `RECARVE_TUTOR_ROLE` (admin by default);
+- Writes under `/tutor` need `RECARVE_TUTOR_ROLE` (admin by default; live has `trusted` since 2026-10-19, so Anirudh's trusted login can teach);
   reads need `trusted`; the DB additionally lets an owner read their own
   rows whatever their rung.
 - Trusted readers see the progress of whoever the tutor taught most
@@ -249,7 +249,7 @@ need one. All of it is live.
 |---|---|
 | papers extracted | 295 of 296 (the last is a note page, not a paper) |
 | questions in the bank | 2382 |
-| answered | 2358 (22 ME1104 drawing questions with unreadable figures, 1 MC1101, 1 PY1102 left null) |
+| answered | 2382 (the last 24, ME1104 drawing constructions plus one MC1101 and one PY1102, were written by an in-session agent from the figure crops; the assumed dimensions are stated inside those answers) |
 | with a figure crop | 217 (CE1103 112, EE1108 66, ME1104 29, CS1105 5, HS1106 2, CY1107 2, CY1110 1) |
 
 - `tutor/pyq/<code>.json` is now an export of the whole bank from the live
